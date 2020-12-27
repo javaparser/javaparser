@@ -20,6 +20,11 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -38,9 +43,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LambdaExprMetaModel;
-import java.util.Optional;
-import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>A lambda expression</h1>
@@ -261,5 +263,13 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LambdaExpr> toLambdaExpr() {
         return Optional.of(this);
+    }
+    
+    /*
+     * Lambda expressions are always poly expressions
+     */
+    @Override
+    public boolean isPolyExpression() {
+        return true;
     }
 }

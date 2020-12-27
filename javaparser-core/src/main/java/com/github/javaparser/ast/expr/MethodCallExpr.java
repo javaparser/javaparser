@@ -20,7 +20,15 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
@@ -29,21 +37,16 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * A method call on an object or a class. <br>{@code circle.circumference()} <br>In <code>a.&lt;String&gt;bb(15);</code> a
@@ -317,5 +320,69 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MethodCallExpr> toMethodCallExpr() {
         return Optional.of(this);
+    }
+    
+    /*
+     * A method invocation expression is a poly expression if all of the following are true:
+     * 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
+     * 2. If the invocation is qualified (that is, any form of MethodInvocation except for the first), then
+     *    the invocation elides TypeArguments to the left of the Identifier.
+     * 3. The method to be invoked, as determined by the following subsections, is generic (§8.4.4) and has a
+     *    return type that mentions at least one of the method's type parameters.
+     * Otherwise, the method invocation expression is a standalone expression.
+     */
+    @Override
+    public boolean isPolyExpression() {
+        // A method invocation expression is a poly expression if all of the following are true:
+        //
+        // 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
+
+        if (!(appearsInAssignmentContext() || appearsInInvocationContext())) {
+            return false;
+        }
+
+        // 2. If the invocation is qualified (that is, any form of MethodInvocation except for the form [MethodName (
+        // [ArgumentList] )]), then the invocation elides TypeArguments to the left of the Identifier.
+
+        if (isQualified() && !elidesTypeArguments()) {
+            return false;
+        }
+
+        // 3. The method to be invoked, as determined by the following subsections, is generic (§8.4.4) and has a
+        // return type that mentions at least one of the method's type parameters.
+        // A method is generic if it declares one or more type variables (§4.4).
+        if (isGenericMethod() && hasParameterwithSameTypeThanResultType(resolve().getReturnType())) {
+            return true; // it's a poly expression
+        }
+
+        // Otherwise, the method invocation expression is a standalone expression.
+         return false;
+    }
+    
+    /*
+     *  A method is generic if it declares one or more type variables (§4.4).
+     *  Not sure it's enough to verify that the type arguments list is empty or not.
+     */
+    private boolean isGenericMethod() {
+        return getTypeArguments().isPresent() && !getTypeArguments().get().isEmpty();
+    }
+    
+    /*
+     *  return true if at least one of the method's type parameters has the same type as the specified type .
+     */
+    private boolean hasParameterwithSameTypeThanResultType(ResolvedType resolvedReturnType) {
+        return getTypeArguments().isPresent() && getTypeArguments().get().stream().anyMatch(argType -> argType.resolve().isAssignableBy(resolvedReturnType));
+    }
+    
+    
+    
+    /*
+     * Returns true if the expression is an invocation context.
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3
+     * 5.3. Invocation Contexts
+     */
+    @Override
+    protected boolean isInvocationContext() {
+        return true;
     }
 }

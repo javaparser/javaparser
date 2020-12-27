@@ -328,8 +328,19 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         
         /*
          * Otherwise, the conditional expression is a reference conditional expression.
-         * A reference conditional expression is a poly expression if it appears in an assignment context or an invocation context (§5.2. §5.3). 
+         * A reference conditional expression is a poly expression if it appears in an assignment context or an
+         * invocation context (§5.2. §5.3).
          * Otherwise, it is a standalone expression.
+         * The type of a poly reference conditional expression is the same as its target type.
+         * The type of a standalone reference conditional expression is determined as follows:
+         * If the second and third operands have the same type (which may be the null type), then that is the type of
+         * the conditional expression.
+         * If the type of one of the second and third operands is the null type, and the type of the other operand is a
+         * reference type, then the type of the conditional expression is that reference type.
+         * Otherwise, the second and third operands are of types S1 and S2 respectively. Let T1 be the type that
+         * results from applying boxing conversion to S1, and let T2 be the type that results from applying boxing
+         * conversion to S2. The type of the conditional expression is the result of applying capture conversion
+         * (§5.1.10) to lub(T1, T2).
          * TODO : must be implemented
          */
         return node.getThenExpr().accept(this, solveLambdas);

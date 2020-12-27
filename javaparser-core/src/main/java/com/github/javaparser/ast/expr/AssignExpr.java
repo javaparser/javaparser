@@ -20,20 +20,22 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.AssignExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Stringable;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.ast.Generated;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -252,5 +254,15 @@ public class AssignExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AssignExpr> toAssignExpr() {
         return Optional.of(this);
+    }
+    
+    /*
+     * Returns true if the expression is an assignment context
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.2
+     * 5.2. Assignment Contexts: Assignment contexts allow the value of an expression to be assigned (§15.26) to a variable;...
+     */
+    @Override
+    protected boolean isAssignmentContext() {
+        return true;
     }
 }

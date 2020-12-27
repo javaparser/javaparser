@@ -40,7 +40,7 @@ public class ReferenceTypeResolutionTest extends AbstractResolutionTest {
     }
 	
 	@Test
-    void cannotUnboxTypeTest() {
+    void cannotUnboxReferenceTypeTest() {
         String code = "class A { Object o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();
         assertFalse(rt.isUnboxable());

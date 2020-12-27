@@ -20,20 +20,22 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ConditionalExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The ternary conditional expression.
@@ -200,5 +202,14 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ConditionalExpr> toConditionalExpr() {
         return Optional.of(this);
+    }
+    
+    /*
+     * A reference conditional expression is a poly expression if it appears in an assignment context or an invocation context (§5.2. §5.3). 
+     * Otherwise, it is a standalone expression.
+     */
+    @Override
+    public boolean isPolyExpression() {
+        return appearsInAssignmentContext() || appearsInInvocationContext();
     }
 }

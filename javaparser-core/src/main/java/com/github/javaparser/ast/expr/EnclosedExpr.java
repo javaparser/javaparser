@@ -20,19 +20,21 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.EnclosedExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
 
 /**
  * An expression between ( ).
@@ -153,5 +155,14 @@ public class EnclosedExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnclosedExpr> toEnclosedExpr() {
         return Optional.of(this);
+    }
+    
+    /*
+     * On Parenthesized Expressions, if the contained expression is a poly expression (§15.2), the parenthesized expression is also a poly expression. Otherwise, it is a standalone expression.
+     * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.8.5)
+     */
+    @Override
+    public boolean isPolyExpression() {
+        return getInner().isPolyExpression();
     }
 }
