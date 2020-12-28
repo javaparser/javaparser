@@ -66,6 +66,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.printer.lexicalpreservation.PhantomNodeLogic;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
@@ -851,5 +852,13 @@ public class CompilationUnit extends Node {
             }
         }
         return super.replace(node, replacementNode);
+    }
+    
+    /*
+     * Cleanup lexical preservation cache just before the compilation unit is GCed.
+     */
+    @Override
+    protected  void finalize() throws Throwable {
+        PhantomNodeLogic.cleanUpCache();
     }
 }
