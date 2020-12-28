@@ -859,6 +859,6 @@ public class CompilationUnit extends Node {
      */
     @Override
     protected  void finalize() throws Throwable {
-        PhantomNodeLogic.cleanUpCache();
+        PhantomNodeLogic.cleanUpCache(this);
     }
 }

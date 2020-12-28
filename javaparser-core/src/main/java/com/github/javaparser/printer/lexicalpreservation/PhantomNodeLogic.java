@@ -25,7 +25,9 @@ import static java.util.Collections.synchronizedMap;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
@@ -37,19 +39,66 @@ import com.github.javaparser.ast.type.UnknownType;
 public class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
+    
+    private static final int DEFAULT_CACHE_REGION = -1;
 
+    /*
+     * This global cache is deprecated to offer the possibility to partially clean the cache  
+     * @deprecated @see isPhantomNodeCachePerCU
+     */
+    @Deprecated
     private static final Map<Node, Boolean> isPhantomNodeCache = synchronizedMap(new IdentityHashMap<>());
+    
+    /*
+     * This is a cache per CompilationUnit to offer the possibility to partially clean the cache.
+     */
+    private static final Map<Integer, Map<Node, Boolean>> isPhantomNodeCachePerCU = new IdentityHashMap<>();
 
     private static final AstObserver cacheCleaner = new AstObserverAdapter() {
         @Override
         public void parentChange(Node observedNode, Node previousParent, Node newParent) {
-            isPhantomNodeCache.remove(observedNode);
+            removeNode(observedNode);
         }
     };
+    
+    /*
+     * Get the specific cache
+     */
+    private static Map<Node, Boolean> getCache(int identifier) {
+        Map<Node, Boolean> cache = isPhantomNodeCachePerCU.get(identifier);
+        if (cache == null) {
+            cache = synchronizedMap(new IdentityHashMap<>());
+            isPhantomNodeCachePerCU.put(identifier,  cache);
+        }
+        return cache;
+    }
+    
+    /*
+     * Remove a node from the CompilationUnit cache
+     */
+    private static void removeNode(Node node) {
+        getCache(getCacheIdentifier(node)).remove(node);
+    }
+    
+    /*
+     * Return the cache identifier from the compilationUnit.hashCode() method or DEFAULT_CACHE_REGION identifier
+     */
+    private static int getCacheIdentifier(Node node) {
+        Optional<CompilationUnit> cu = node.findCompilationUnit();
+        return cu.isPresent() ? cu.get().hashCode() : DEFAULT_CACHE_REGION;
+    }
+    
+    /*
+     * Remove the cache entries corresponding to the node's CompilationUnit 
+     */
+    private static void removeCache(Node node) {
+        isPhantomNodeCachePerCU.get(getCacheIdentifier(node)).clear();
+    }
 
     static boolean isPhantomNode(Node node) {
-        if (isPhantomNodeCache.containsKey(node)) {
-            return isPhantomNodeCache.get(node);
+        Map<Node, Boolean> cache = getCache(getCacheIdentifier(node));
+        if (cache.containsKey(node)) {
+            return cache.get(node);
         } else {
             if (node instanceof UnknownType) {
                 return true;
@@ -59,7 +108,7 @@ public class PhantomNodeLogic {
                     && node.hasRange()
                     && !node.getParentNode().get().getRange().get().contains(node.getRange().get())
                     || inPhantomNode(node, LEVELS_TO_EXPLORE));
-            isPhantomNodeCache.put(node, res);
+            cache.put(node, res);
             node.register(cacheCleaner);
             return res;
         }
@@ -77,9 +126,18 @@ public class PhantomNodeLogic {
     /**
      * Clean up the cache used by the LexicalPreserving logic. This should only be used once you're done printing all parsed data with
      * a JavaParser's configuration setLexicalPreservationEnabled=true.
+     * @deprecated @see cleanUpCache(CompilationUnit cu)
      */
+    @Deprecated
     public static void cleanUpCache() {
         System.out.println("Clearing Phantom node cache...");
         isPhantomNodeCache.clear();
+    }
+    
+    /*
+     * Allow to clear the cache linked to the specified CompilationUnit
+     */
+    public static void cleanUpCache(CompilationUnit cu) {
+        removeCache(cu);;
     }
 }
