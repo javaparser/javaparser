@@ -23,6 +23,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static java.util.Collections.synchronizedMap;
 
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
     
-    private static final int DEFAULT_CACHE_REGION = -1;
+    private static final Integer DEFAULT_CACHE_REGION = Integer.valueOf(-1);
 
     /*
      * This global cache is deprecated to offer the possibility to partially clean the cache  
@@ -52,7 +53,7 @@ public class PhantomNodeLogic {
     /*
      * This is a cache per CompilationUnit to offer the possibility to partially clean the cache.
      */
-    private static final Map<Integer, Map<Node, Boolean>> isPhantomNodeCachePerCU = new IdentityHashMap<>();
+    private static final Map<Integer, Map<Node, Boolean>> isPhantomNodeCachePerCU = new HashMap<>();
 
     private static final AstObserver cacheCleaner = new AstObserverAdapter() {
         @Override
@@ -64,7 +65,7 @@ public class PhantomNodeLogic {
     /*
      * Get the specific cache
      */
-    private static Map<Node, Boolean> getCache(int identifier) {
+    private static Map<Node, Boolean> getCache(Integer identifier) {
         Map<Node, Boolean> cache = isPhantomNodeCachePerCU.get(identifier);
         if (cache == null) {
             cache = synchronizedMap(new IdentityHashMap<>());
@@ -83,16 +84,16 @@ public class PhantomNodeLogic {
     /*
      * Return the cache identifier from the compilationUnit.hashCode() method or DEFAULT_CACHE_REGION identifier
      */
-    private static int getCacheIdentifier(Node node) {
+    private static Integer getCacheIdentifier(Node node) {
         Optional<CompilationUnit> cu = node.findCompilationUnit();
-        return cu.isPresent() ? cu.get().hashCode() : DEFAULT_CACHE_REGION;
+        return cu.isPresent() ? Integer.valueOf(cu.get().hashCode()) : DEFAULT_CACHE_REGION;
     }
     
     /*
      * Remove the cache entries corresponding to the node's CompilationUnit 
      */
     private static void removeCache(Node node) {
-        isPhantomNodeCachePerCU.get(getCacheIdentifier(node)).clear();
+        isPhantomNodeCachePerCU.remove(getCacheIdentifier(node));
     }
 
     static boolean isPhantomNode(Node node) {
@@ -130,14 +131,13 @@ public class PhantomNodeLogic {
      */
     @Deprecated
     public static void cleanUpCache() {
-        System.out.println("Clearing Phantom node cache...");
         isPhantomNodeCache.clear();
     }
     
     /*
-     * Allow to clear the cache linked to the specified CompilationUnit
+     * Allow to clean the phantom nodes cache linked to the specified CompilationUnit
      */
     public static void cleanUpCache(CompilationUnit cu) {
-        removeCache(cu);;
+        removeCache(cu);
     }
 }
