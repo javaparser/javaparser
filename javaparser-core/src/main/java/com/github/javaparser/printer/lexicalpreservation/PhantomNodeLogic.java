@@ -79,6 +79,7 @@ public class PhantomNodeLogic {
      * a JavaParser's configuration setLexicalPreservationEnabled=true.
      */
     public static void cleanUpCache() {
+        System.out.println("Clearing Phantom node cache...");
         isPhantomNodeCache.clear();
     }
 }
