@@ -23,8 +23,8 @@ install:
   # Setup environment variables for Maven and Java
   - cmd: SET JAVA_HOME=C:\Program Files\Java\jdk10
   - cmd: SET M2_HOME=C:\maven\apache-maven-3.6.3
-  - cmd: SET MAVEN_OPTS=-Xmx1g
-  - cmd: SET JAVA_OPTS=-Xmx1g
+  - cmd: SET MAVEN_OPTS="-Xms256m -Xmx1g -verbose:gc"
+  - cmd: SET JAVA_OPTS="-Xms512m -Xmx1g -verbose:gc"
   - cmd: SET PATH=C:\maven\apache-maven-3.6.3\bin;%JAVA_HOME%\bin;%PATH%
   # Output the git config re: autocrlf to verify the "current" setting
   - cmd: git config core.autocrlf
