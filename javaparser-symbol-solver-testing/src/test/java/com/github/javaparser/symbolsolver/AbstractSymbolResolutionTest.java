@@ -39,6 +39,7 @@ public abstract class AbstractSymbolResolutionTest {
     public static void tearDown() {
         // clear internal caches
         JavaParserFacade.clearInstances();
+        Runtime.getRuntime().runFinalization();
     }
     
     @AfterEach
