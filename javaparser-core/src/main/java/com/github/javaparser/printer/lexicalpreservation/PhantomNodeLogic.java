@@ -54,6 +54,8 @@ public class PhantomNodeLogic {
      * This is a cache per CompilationUnit to offer the possibility to partially clean the cache.
      */
     private static final Map<Integer, Map<Node, Boolean>> isPhantomNodeCachePerCU = new HashMap<>();
+    
+    private static final Map<Integer, CacheStats> stats = new HashMap<>(); 
 
     private static final AstObserver cacheCleaner = new AstObserverAdapter() {
         @Override
@@ -70,6 +72,8 @@ public class PhantomNodeLogic {
         if (cache == null) {
             cache = synchronizedMap(new IdentityHashMap<>());
             isPhantomNodeCachePerCU.put(identifier,  cache);
+            stats.put(identifier, new CacheStats());
+//            System.out.println("Creating cache whith id "+identifier);
         }
         return cache;
     }
@@ -93,12 +97,16 @@ public class PhantomNodeLogic {
      * Remove the cache entries corresponding to the node's CompilationUnit 
      */
     private static void removeCache(Node node) {
-        isPhantomNodeCachePerCU.remove(getCacheIdentifier(node));
+        Integer identifier = getCacheIdentifier(node);
+        System.out.println(String.format("Removing cache %s, %s", identifier, stats.get(identifier).toString()));
+        isPhantomNodeCachePerCU.remove(identifier);
     }
 
     static boolean isPhantomNode(Node node) {
-        Map<Node, Boolean> cache = getCache(getCacheIdentifier(node));
+        Integer identifier = getCacheIdentifier(node);
+        Map<Node, Boolean> cache = getCache(identifier);
         if (cache.containsKey(node)) {
+            stats.get(identifier).hit();
             return cache.get(node);
         } else {
             if (node instanceof UnknownType) {
@@ -111,6 +119,7 @@ public class PhantomNodeLogic {
                     || inPhantomNode(node, LEVELS_TO_EXPLORE));
             cache.put(node, res);
             node.register(cacheCleaner);
+            stats.get(identifier).miss();
             return res;
         }
     }
@@ -139,5 +148,23 @@ public class PhantomNodeLogic {
      */
     public static void cleanUpCache(CompilationUnit cu) {
         removeCache(cu);
+    }
+    
+    public static class CacheStats {
+        int hits =0;
+        int cachemiss = 0;
+        
+        public void hit() {
+            hits++;
+        }
+        
+        public void miss() {
+            cachemiss++;
+        }
+        
+        public String toString() {
+            return String.format("hits=%s, cache miss=%s, efficiency=%s", hits, cachemiss, 100-((cachemiss*100)/hits));
+        }
+        
     }
 }
