@@ -39,6 +39,7 @@
                             <excludedGroups>com.github.javaparser.SlowTest</excludedGroups>
                             <parallel>methods</parallel>
                             <threadCount>4</threadCount>
+                            <argLine>-Xms512m -Xmx2g -verbose:gc</argLine>
                         </configuration>
                     </plugin>
                 </plugins>
