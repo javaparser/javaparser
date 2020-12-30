@@ -39,6 +39,7 @@
                             <excludedGroups>com.github.javaparser.SlowTest</excludedGroups>
                             <parallel>methods</parallel>
                             <threadCount>4</threadCount>
+                            <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -47,6 +48,18 @@
         </profile>
         <profile>
             <id>AlsoSlowTests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+
+            </build>
         </profile>
     </profiles>
 
