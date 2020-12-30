@@ -37,6 +37,8 @@ jobs:
       ## Checkout the current version of the code from the repo.
       - name: Checkout latest code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
 
       ## Setup the specified version of Java (includes maven/gradle).
       - name: Set up JDK ${{ matrix.jdk }}
