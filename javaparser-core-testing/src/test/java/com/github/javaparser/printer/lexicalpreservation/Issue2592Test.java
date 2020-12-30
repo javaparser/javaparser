@@ -1,4 +1,4 @@
-package com.github.javaparser.symbolsolver;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
