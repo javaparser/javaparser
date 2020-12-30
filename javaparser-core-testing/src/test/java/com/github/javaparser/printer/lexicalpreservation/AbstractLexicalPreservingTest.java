@@ -26,6 +26,7 @@ import static com.github.javaparser.utils.TestUtils.readResource;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 
 import com.github.javaparser.ParserConfiguration;
@@ -38,6 +39,12 @@ public abstract class AbstractLexicalPreservingTest {
 
     protected CompilationUnit cu;
     protected Expression expression;
+    
+    @AfterAll
+    public static void tearDown() {
+        // clear internal caches
+        PhantomNodeLogic.cleanUpCache();
+    }
     
     @AfterEach
     public void reset() {

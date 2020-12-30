@@ -25,14 +25,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.utils.CodeGenerationUtils;
 
 public abstract class AbstractSymbolResolutionTest {
 
+    @AfterAll
+    public static void tearDown() {
+        // clear internal caches
+        JavaParserFacade.clearInstances();
+    }
+    
     @AfterEach
     public void reset() {
         // reset configuration to not potentially disturb others tests.
