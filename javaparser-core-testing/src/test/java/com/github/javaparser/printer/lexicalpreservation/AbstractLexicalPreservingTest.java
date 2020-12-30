@@ -42,8 +42,6 @@ public abstract class AbstractLexicalPreservingTest {
     
     @AfterAll
     public static void tearDown() {
-        // clear internal caches
-        PhantomNodeLogic.cleanUpCache();
     }
     
     @AfterEach

@@ -33,7 +33,9 @@ import com.github.javaparser.ast.type.UnknownType;
 
 /**
  * We want to recognize and ignore "phantom" nodes, like the fake type of variable in FieldDeclaration
+ * @deprecated This class is no longer used phantom node are now an attribute of each node
  */
+@Deprecated
 public class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
