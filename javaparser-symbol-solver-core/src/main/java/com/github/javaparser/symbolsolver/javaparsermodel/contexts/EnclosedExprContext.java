@@ -51,7 +51,9 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
         if(!wrappedNode.getInner().isAssignExpr()) {
             // Propagate any pattern expressions "up" without modification
             Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
-            results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+            if (!this.equals(innerContext)) {
+                results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+            }
         }
         return results;
     }
