@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -89,6 +90,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
@@ -343,6 +345,47 @@ public class TypeExtractor extends DefaultVisitorAdapter {
          * (§5.1.10) to lub(T1, T2).
          * TODO : must be implemented
          */
+        if (node.isPolyExpression()) {
+            // The type of a poly reference conditional expression is the same as its target type.
+            Optional<Node> parentNode = node.getParentNode();
+            if (parentNode.isPresent()) {
+                Node parent = parentNode.get();
+                if (parent instanceof AssignExpr) {
+                    return ((AssignExpr)parent).getTarget().accept(this, solveLambdas);
+                } else if (parent instanceof MethodCallExpr) {
+                    // how to define the target type?
+                    // a priori it is the type of the parameter of the method which takes the value of the conditional expression
+                    // TODO for the moment we keep the original return type
+                    return thenExpr;
+                }
+                throw new RuntimeException("Cannot resolve type of poly expression "+ node.toString());
+            } else {
+                throw new RuntimeException("Parent node unexpectedly empty");
+            }
+            
+        }
+        
+        // The type of a standalone reference conditional expression is determined as follows:
+        
+        // If the second and third operands have the same type (which may be the null type), then that is the type of
+        // the conditional expression.
+        if (thenExpr.equals(elseExpr)) {
+            return thenExpr;
+        }
+        // If the type of one of the second and third operands is the null type, and the type of the other operand is a
+        // reference type, then the type of the conditional expression is that reference type.
+        // this case is already supported above
+        
+        // Otherwise, the second and third operands are of types S1 and S2 respectively. Let T1 be the type that
+        // results from applying boxing conversion to S1, and let T2 be the type that results from applying boxing
+        // conversion to S2. The type of the conditional expression is the result of applying capture conversion
+        // (§5.1.10) to lub(T1, T2).
+        ResolvedType resolvedThenType = thenExpr.isPrimitive() ? TypeHelper.toBoxedType(thenExpr.asPrimitive(), typeSolver) : thenExpr;
+        ResolvedType resolvedElseType = elseExpr.isPrimitive() ? TypeHelper.toBoxedType(elseExpr.asPrimitive(), typeSolver) : elseExpr;
+        
+        // TypeHelper.leastUpperBound method is not yet implemented so for the moment we keep the original return type of this method
+        // TODO implement TypeHelper.leastUpperBound method
+        // return TypeHelper.leastUpperBound(new HashSet<ResolvedType>(Arrays.asList(resolvedThenType, resolvedElseType)));
         return node.getThenExpr().accept(this, solveLambdas);
     }
     
