@@ -161,6 +161,28 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     }
     
     /*
+     * Unary primitive promotion (see https://docs.oracle.com/javase/specs/jls/se9/html/jls-5.html#jls-5.6.1)
+     */
+    public static ResolvedType unp(ResolvedType type) {
+        boolean isUnboxable = type.isReferenceType() && type.asReferenceType().isUnboxable();
+        // If the operand is of compile-time type Byte, Short, Character, or Integer, it is subjected to unboxing conversion (§5.1.8). 
+        // The result is then promoted to a value of type int by a widening primitive conversion (§5.1.2) or an identity conversion (§5.1.1).
+        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.INT})) {
+            return ResolvedPrimitiveType.INT;
+        }
+        // Otherwise, if the operand is of compile-time type Long, Float, or Double, it is subjected to unboxing conversion (§5.1.8).
+        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.DOUBLE})) {
+            return type.asReferenceType().toUnboxedType().get();
+        }
+        // Otherwise, if the operand is of compile-time type byte, short, or char, it is promoted to a value of type int by a widening primitive conversion (§5.1.2).
+        if (type.isPrimitive() && type.asPrimitive().in(new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.SHORT})) {
+            return ResolvedPrimitiveType.INT;
+        }
+        // Otherwise, a unary numeric operand remains as is and is not converted.
+        return type;
+    }
+    
+    /*
      * Verify if the ResolvedPrimitiveType is in the list of ResolvedPrimitiveType
      */
     public boolean in(ResolvedPrimitiveType[] types) {
