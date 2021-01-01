@@ -160,6 +160,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case MINUS:
             case DIVIDE:
             case MULTIPLY:
+            case REMAINDER:
+            case BINARY_AND:
+            case BINARY_OR:
+            case XOR:
                 return facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas, node.getOperator());
             case LESS_EQUALS:
             case LESS:
@@ -170,14 +174,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case OR:
             case AND:
                 return ResolvedPrimitiveType.BOOLEAN;
-            case BINARY_AND:
-            case BINARY_OR:
             case SIGNED_RIGHT_SHIFT:
             case UNSIGNED_RIGHT_SHIFT:
             case LEFT_SHIFT:
-            case REMAINDER:
-            case XOR:
-                return node.getLeft().accept(this, solveLambdas);
+                ResolvedType rt = node.getLeft().accept(this, solveLambdas);
+                // apply unary primitive promotion
+                return ResolvedPrimitiveType.unp(rt);
             default:
                 throw new UnsupportedOperationException("Operator " + node.getOperator().name());
         }
@@ -351,7 +353,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (parentNode.isPresent()) {
                 Node parent = parentNode.get();
                 if (parent instanceof AssignExpr) {
-                    return ((AssignExpr)parent).getTarget().accept(this, solveLambdas);
+                    return visit((AssignExpr)parent, solveLambdas);
                 } else if (parent instanceof MethodCallExpr) {
                     // how to define the target type?
                     // a priori it is the type of the parameter of the method which takes the value of the conditional expression
