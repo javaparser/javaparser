@@ -22,8 +22,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Node.TreeTraversal;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
+import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
@@ -71,17 +76,12 @@ public class JavaParserTypeDeclarationAdapter {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
 
-        // Internal classes
-        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
-                if (internalType.getName().getId().equals(name)) {
-                    return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
-                } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1));
-                } else if (name.startsWith(String.format("%s.", internalType.getName()))) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1));
-                }
+        List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class, TreeTraversal.BREADTHFIRST);
+        for (TypeDeclaration<?> localType : localTypes) {
+            if (localType.getName().getId().equals(name)) {
+                return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
+            } else if (name.startsWith(String.format("%s.", localType.getName()))) {
+                return JavaParserFactory.getContext(localType, typeSolver).solveType(name.substring(localType.getName().getId().length() + 1));
             }
         }
 
@@ -91,6 +91,28 @@ public class JavaParserTypeDeclarationAdapter {
                 TypeParameter astTp = astTpRaw;
                 if (astTp.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(astTp, typeSolver));
+                }
+            }
+        }
+
+        if (wrappedNode instanceof NodeWithImplements) {
+            NodeWithImplements<?> nodeWithImplements = (NodeWithImplements<?>) wrappedNode;
+            for (ClassOrInterfaceType implementedType : nodeWithImplements.getImplementedTypes()) {
+                if (implementedType.getName().getId().equals(name)) {
+                    return context.getParent()
+                        .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                        .solveType(implementedType.getNameWithScope());
+                }
+            }
+        }
+
+        if (wrappedNode instanceof NodeWithExtends) {
+            NodeWithExtends<?> nodeWithExtends = (NodeWithExtends<?>) wrappedNode;
+            for (ClassOrInterfaceType extendedType : nodeWithExtends.getExtendedTypes()) {
+                if (extendedType.getName().getId().equals(name)) {
+                    return context.getParent()
+                        .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                        .solveType(extendedType.getNameWithScope());
                 }
             }
         }
