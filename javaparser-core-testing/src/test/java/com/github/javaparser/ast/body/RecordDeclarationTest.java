@@ -3,6 +3,7 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -49,8 +50,10 @@ public class RecordDeclarationTest {
 
         Parameter parameter0 = parameters.get(0);
         assertEquals("x", parameter0.getNameAsString());
+        assertEquals("int", parameter0.getTypeAsString());
         Parameter parameter1 = parameters.get(1);
         assertEquals("y", parameter1.getNameAsString());
+        assertEquals("int", parameter1.getTypeAsString());
     }
 
     @Test
@@ -66,6 +69,30 @@ public class RecordDeclarationTest {
         assertEqualsStringIgnoringEol(expected, cu.toString());
     }
 
+    @Test
+    void recordWithVarArgs() {
+        String s = "record R(T1 c1, Tn... cn){ }";
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
+
+        RecordDeclaration recordDeclaration = recordDeclarations.get(0);
+        NodeList<Parameter> parameters = recordDeclaration.getParameters();
+        assertFalse(parameters.isEmpty());
+        assertEquals(2, parameters.size());
+
+        Parameter parameter0 = parameters.get(0);
+        assertEquals("c1", parameter0.getNameAsString());
+        assertEquals("T1", parameter0.getTypeAsString());
+        assertFalse(parameter0.isVarArgs());
+        Parameter parameter1 = parameters.get(1);
+        assertEquals("cn", parameter1.getNameAsString());
+        assertEquals("Tn", parameter1.getTypeAsString());
+        assertTrue(parameter1.isVarArgs());
+    }
+
+    @Disabled
     // https://bugs.openjdk.java.net/browse/JDK-8222777
     @Test
     void recordDeclarationFromTheJDK8222777() {
