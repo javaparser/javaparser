@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -255,7 +253,7 @@ public class AssignExpr extends Expression {
     public Optional<AssignExpr> toAssignExpr() {
         return Optional.of(this);
     }
-    
+
     /*
      * Returns true if the expression is an assignment context
      * https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.2

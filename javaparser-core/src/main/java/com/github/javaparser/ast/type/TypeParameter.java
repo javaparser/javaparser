@@ -22,10 +22,8 @@ package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -176,8 +174,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         getTypeBound().ifNonEmpty(l -> str.append(l.stream().map(ClassOrInterfaceType::asString).collect(joining("&", " extends ", ""))));
         return str.toString();
     }
-    
-    
+
     @Override
     public String toDescriptor() {
         return String.format("L%s;", resolve().qualifiedName());

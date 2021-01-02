@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -245,7 +243,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         sb.append(appendThrowsIfRequested(includingThrows));
         return sb.toString();
     }
-    
+
     /*
      * Returns the method descriptor (https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3)
      * The method descriptor for the method: {@code Object m(int i, double d, Thread t) {...}}

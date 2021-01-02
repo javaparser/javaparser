@@ -22,7 +22,6 @@ package com.github.javaparser.ast.type;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -142,7 +141,7 @@ public class UnknownType extends Type {
     public Optional<UnknownType> toUnknownType() {
         return Optional.of(this);
     }
-    
+
     /*
      * A "phantom" node, is a node that is not really an AST node (like the fake type of variable in FieldDeclaration)
      */

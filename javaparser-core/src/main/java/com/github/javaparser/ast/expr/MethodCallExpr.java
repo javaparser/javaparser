@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -321,7 +319,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     public Optional<MethodCallExpr> toMethodCallExpr() {
         return Optional.of(this);
     }
-    
+
     /*
      * A method invocation expression is a poly expression if all of the following are true:
      * 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
@@ -334,31 +332,27 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Override
     public boolean isPolyExpression() {
         // A method invocation expression is a poly expression if all of the following are true:
-        //
+        // 
         // 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
-
         if (!(appearsInAssignmentContext() || appearsInInvocationContext())) {
             return false;
         }
-
         // 2. If the invocation is qualified (that is, any form of MethodInvocation except for the form [MethodName (
         // [ArgumentList] )]), then the invocation elides TypeArguments to the left of the Identifier.
-
         if (isQualified() && !elidesTypeArguments()) {
             return false;
         }
-
         // 3. The method to be invoked, as determined by the following subsections, is generic (§8.4.4) and has a
         // return type that mentions at least one of the method's type parameters.
         // A method is generic if it declares one or more type variables (§4.4).
         if (isGenericMethod() && hasParameterwithSameTypeThanResultType(resolve().getReturnType())) {
-            return true; // it's a poly expression
+            // it's a poly expression
+            return true;
         }
-
         // Otherwise, the method invocation expression is a standalone expression.
-         return false;
+        return false;
     }
-    
+
     /*
      *  A method is generic if it declares one or more type variables (§4.4).
      *  Not sure it's enough to verify that the type arguments list is empty or not.
@@ -366,16 +360,14 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     private boolean isGenericMethod() {
         return getTypeArguments().isPresent() && !getTypeArguments().get().isEmpty();
     }
-    
+
     /*
      *  return true if at least one of the method's type parameters has the same type as the specified type .
      */
     private boolean hasParameterwithSameTypeThanResultType(ResolvedType resolvedReturnType) {
         return getTypeArguments().isPresent() && getTypeArguments().get().stream().anyMatch(argType -> argType.resolve().isAssignableBy(resolvedReturnType));
     }
-    
-    
-    
+
     /*
      * Returns true if the expression is an invocation context.
      * https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3

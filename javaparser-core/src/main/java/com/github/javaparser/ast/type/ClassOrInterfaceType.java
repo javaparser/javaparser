@@ -22,10 +22,8 @@ package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -237,7 +235,7 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
         getTypeArguments().ifPresent(ta -> str.append(ta.stream().map(Type::asString).collect(joining(",", "<", ">"))));
         return str.toString();
     }
-    
+
     /*
      * Note that the internal forms of the binary names of object are used.
      * for example java/lang/Object

@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -794,7 +792,7 @@ public abstract class Expression extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPatternExpr(Consumer<PatternExpr> action) {
     }
-    
+
     /**
      * See https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.2
      * @return true if the expression is a standalone expression
@@ -802,7 +800,7 @@ public abstract class Expression extends Node {
     public boolean isStandaloneExpression() {
         return !isPolyExpression();
     }
-    
+
     /**
      * See https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.2
      * @return true if the expression is a poly expression
@@ -810,25 +808,25 @@ public abstract class Expression extends Node {
     public boolean isPolyExpression() {
         return false;
     }
-    
+
     /*
      * 6.5.6.2. Qualified Expression Names
      * https://docs.oracle.com/javase/specs/jls/se7/html/jls-6.html#jls-6.5.6.2
      */
     public boolean isQualified() {
-        return this instanceof NodeWithOptionalScope && ((NodeWithOptionalScope)this).getScope().isPresent();
+        return this instanceof NodeWithOptionalScope && ((NodeWithOptionalScope) this).getScope().isPresent();
     }
-    
+
     /*
      * Verify if the parent node is an assignment context. 
      */
     public final boolean appearsInAssignmentContext() {
         if (getParentNode().isPresent() && getParentNode().get() instanceof Expression) {
-            return ((Expression)getParentNode().get()).isAssignmentContext();
+            return ((Expression) getParentNode().get()).isAssignmentContext();
         }
         return false;
     }
-    
+
     /*
      * Returns true if the expression is an assignment context. Default is false.
      * https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.2
@@ -837,17 +835,17 @@ public abstract class Expression extends Node {
     protected boolean isAssignmentContext() {
         return false;
     }
-    
+
     /*
      * Verify if the parent node is an invocation context. 
      */
     public final boolean appearsInInvocationContext() {
         if (getParentNode().isPresent() && getParentNode().get() instanceof Expression) {
-            return ((Expression)getParentNode().get()).isInvocationContext();
+            return ((Expression) getParentNode().get()).isInvocationContext();
         }
         return false;
     }
-    
+
     /*
      * Returns true if the expression is an invocation context. Default is false.
      * https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3
@@ -856,7 +854,7 @@ public abstract class Expression extends Node {
     protected boolean isInvocationContext() {
         return false;
     }
-    
+
     /*
      * returns true if the scope of this expression does not define an type argument or if the expression has not a scope (the expression is not qualified) 
      * or if there is a scope it uses <> to elide class type arguments
@@ -867,14 +865,11 @@ public abstract class Expression extends Node {
      * a<T>.m() ==> false because the type argument is not elided
      */
     public final boolean elidesTypeArguments() {
-        if (!(this instanceof NodeWithOptionalScope 
-                && ((NodeWithOptionalScope) this).getScope().isPresent()
-                && this instanceof NodeWithTypeArguments)) {
+        if (!(this instanceof NodeWithOptionalScope && ((NodeWithOptionalScope) this).getScope().isPresent() && this instanceof NodeWithTypeArguments)) {
             return true;
         }
         Expression scope = (Expression) ((NodeWithOptionalScope) this).getScope().get();
-        NodeWithTypeArguments nwta = (NodeWithTypeArguments)this;
-        return scope.elidesTypeArguments() 
-                && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
+        NodeWithTypeArguments nwta = (NodeWithTypeArguments) this;
+        return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
     }
 }

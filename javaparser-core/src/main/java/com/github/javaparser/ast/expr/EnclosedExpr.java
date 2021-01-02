@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -156,7 +154,7 @@ public class EnclosedExpr extends Expression {
     public Optional<EnclosedExpr> toEnclosedExpr() {
         return Optional.of(this);
     }
-    
+
     /*
      * On Parenthesized Expressions, if the contained expression is a poly expression (§15.2), the parenthesized expression is also a poly expression. Otherwise, it is a standalone expression.
      * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.8.5)

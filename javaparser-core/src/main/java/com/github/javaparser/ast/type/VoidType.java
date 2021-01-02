@@ -22,7 +22,6 @@ package com.github.javaparser.ast.type;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -89,7 +88,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     public String asString() {
         return "void";
     }
-    
+
     @Override
     public String toDescriptor() {
         return "V";
