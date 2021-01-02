@@ -1,12 +1,54 @@
-Next Release (Version 3.18.1)
+Next Release (Version 3.19.0)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/180?closed=1)
 
 ### Added
+* Adding test case on PrettyPrinter indentation
+  (PR [#2950](https://github.com/javaparser/javaparser/pull/2950), by [@jlerbsc](https://github.com/jlerbsc))
+* Adding interface Printable for printer
+  (PR [#2971](https://github.com/javaparser/javaparser/pull/2971), by [@jlerbsc](https://github.com/jlerbsc))
+* Major update for pretty print, adding interfaces for printer configuration, printer, ... and deprecated old PrettyPrinter API 
+  (PR [#2974](https://github.com/javaparser/javaparser/pull/2974), by [@jlerbsc](https://github.com/jlerbsc))
+* Adding method descriptor resolution closes #2059
+  (PR [#2976](https://github.com/javaparser/javaparser/pull/2976), by [@jlerbsc](https://github.com/jlerbsc))
+* Adding management of the poly and standalone expression
+  (PR [#2994](https://github.com/javaparser/javaparser/pull/2994), by [@jlerbsc](https://github.com/jlerbsc))
+* Add test case for issue #1770 UnaryExpr failing to resolve BITWISE_COMPLEMENT operator   
+  (PR [#3005](https://github.com/javaparser/javaparser/pull/3005), by [@jlerbsc](https://github.com/jlerbsc))
 ### Changed
+* Minor refactoring regarding indentation management
+  (PR [#2969](https://github.com/javaparser/javaparser/pull/2969), by [@jlerbsc](https://github.com/jlerbsc))
+* Minor refactoring regarding indentation management (part2)
+  (PR [#2970](https://github.com/javaparser/javaparser/pull/2970), by [@jlerbsc](https://github.com/jlerbsc))
+* Minor refactoring moving Indentation class to configuration package - preparation for other refactoring on Printer
+  (PR [#2972](https://github.com/javaparser/javaparser/pull/2972), by [@jlerbsc](https://github.com/jlerbsc))
+* Refactoring: relocation of boxing/unboxing methods
+  (PR [#2983](https://github.com/javaparser/javaparser/pull/2983), by [@jlerbsc](https://github.com/jlerbsc))
+* Improve boxing/unboxing unit tests and remove useless code in isUnbox...
+  (PR [#2984](https://github.com/javaparser/javaparser/pull/2984), by [@jlerbsc](https://github.com/jlerbsc))
+* Add JVM memory settings for surefire (seems that forked mode is the default running mode)
+  (PR [#2999](https://github.com/javaparser/javaparser/pull/2999), by [@jlerbsc](https://github.com/jlerbsc))
+* Move unit test Issue2592Test because it's not related to symbol solver
+  (PR [#3000](https://github.com/javaparser/javaparser/pull/3000), by [@jlerbsc](https://github.com/jlerbsc))
+* Manage memory on test suite (clear internal cache to release memory)
+  (PR [#3001](https://github.com/javaparser/javaparser/pull/3001), by [@jlerbsc](https://github.com/jlerbsc))
+* Remove the PhantomNodeLogic that generates memory issues when LexicalPreservingPrinter is used. Phantom node is now an attribut of each node. This is an optimization of the JP memory usage.
+  (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
 ### Deprecated
 ### Removed
 ### Fixed
+* Fix issue on pretty configuration change
+  (PR [#2979](https://github.com/javaparser/javaparser/pull/2979), by [@jlerbsc](https://github.com/jlerbsc))
+* Fix trivial poly expression lambda, method reference, and parenthesized expressions
+  (PR [#2981](https://github.com/javaparser/javaparser/pull/2981), by [@jlerbsc](https://github.com/jlerbsc))
+* Partially fix the issue #1743 ConditionalExpr resolves to wrong type
+  (PR [#2982](https://github.com/javaparser/javaparser/pull/2982), by [@jlerbsc](https://github.com/jlerbsc))
+* Partially fix issue #1743 ConditionalExpr resolves to wrong type - trying to manage reference condition expression but lub (least upper bound) function is not yet implemented
+  (PR [#3004](https://github.com/javaparser/javaparser/pull/3004), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #2987 StackOverflow error 
+  (PR [#3006](https://github.com/javaparser/javaparser/pull/3006), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #1774 Ensure the correct type is calculated for all binary expressions and add unary primitive promotion   
+  (PR [#3007](https://github.com/javaparser/javaparser/pull/3007), by [@jlerbsc](https://github.com/jlerbsc))
 ### Security
 
 
