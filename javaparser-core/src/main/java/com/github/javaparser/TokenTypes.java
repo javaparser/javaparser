@@ -144,6 +144,7 @@ public class TokenTypes {
             case PRIVATE:
             case PROTECTED:
             case PUBLIC:
+            case RECORD:
             case RETURN:
             case SHORT:
             case STATIC:

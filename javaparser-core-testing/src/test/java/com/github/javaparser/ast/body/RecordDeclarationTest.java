@@ -2,12 +2,70 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RecordDeclarationTest {
+
+    @Test
+    void basicGrammarCompiles() {
+        /* https://openjdk.java.net/jeps/395#Description */
+        String s = "record Point(int x, int y) { }";
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
+    }
+
+    @Test
+    void basicGrammar() {
+        /* https://openjdk.java.net/jeps/395#Description */
+        String s = "record Point(int x, int y) { }";
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
+
+        RecordDeclaration recordDeclaration = recordDeclarations.get(0);
+        assertTrue(recordDeclaration.isRecordDeclaration());
+        assertTrue(recordDeclaration.getImplementedTypes().isEmpty());
+        assertTrue(recordDeclaration.getTypeParameters().isEmpty());
+        assertTrue(recordDeclaration.getFullyQualifiedName().isPresent());
+        assertEquals("Point", recordDeclaration.getFullyQualifiedName().get());
+        assertTrue(recordDeclaration.isRecordDeclaration());
+
+        NodeList<Parameter> parameters = recordDeclaration.getParameters();
+        assertFalse(parameters.isEmpty());
+        assertEquals(2, parameters.size());
+
+        Parameter parameter0 = parameters.get(0);
+        assertEquals("x", parameter0.getNameAsString());
+        Parameter parameter1 = parameters.get(1);
+        assertEquals("y", parameter1.getNameAsString());
+    }
+
+    @Test
+    void basicRecordPrints() {
+        /* https://openjdk.java.net/jeps/395#Description */
+        String s = "record Point(int x, int y) { }";
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        String expected = "" +
+                "record Point(int x, int y) {\n" +
+                "}\n" +
+                "";
+        assertEqualsStringIgnoringEol(expected, cu.toString());
+    }
+
     // https://bugs.openjdk.java.net/browse/JDK-8222777
     @Test
     void recordDeclarationFromTheJDK8222777() {

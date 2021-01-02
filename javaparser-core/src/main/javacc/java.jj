@@ -1112,13 +1112,13 @@ public CompilationUnit CompilationUnit():
                 (
                     typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
+                    typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
+                 |
                     typeDeclaration = EnumDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
                     typeDeclaration = AnnotationTypeDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
                     module = ModuleDeclaration(modifier)
-                 |
-                    typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
                  |
                     ";"
                 )
@@ -1371,9 +1371,7 @@ RecordDeclaration RecordDeclaration(ModifierHolder modifier):
     JavaToken begin = modifier.begin;
 }
 {
-    LOOKAHEAD({ getToken(1).image.equals("record") }) <IDENTIFIER> { begin = orIfInvalid(begin, token());
-        // TODO set token type to RECORD
-    }
+    "record" { begin = orIfInvalid(begin, token()); }
     name = SimpleName()
     parameters = Parameters()
     [ typePar = TypeParameters() ]

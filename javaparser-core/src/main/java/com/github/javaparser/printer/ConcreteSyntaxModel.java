@@ -141,10 +141,12 @@ public class ConcreteSyntaxModel {
                 comment(),
                 memberAnnotations(),
                 modifiers(),
-                // TODO must be RECORD token
-                token(GeneratedJavaParserConstants.INTERFACE),
+                token(GeneratedJavaParserConstants.RECORD),
                 space(),
                 child(ObservableProperty.NAME),
+                token(GeneratedJavaParserConstants.LPAREN),
+                list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
+                token(GeneratedJavaParserConstants.RPAREN),
                 list(TYPE_PARAMETERS, sequence(comma(), space()), string(GeneratedJavaParserConstants.LT), string(GeneratedJavaParserConstants.GT)),
                 list(ObservableProperty.IMPLEMENTED_TYPES, sequence(string(GeneratedJavaParserConstants.COMMA), space()), sequence(
                         space(),
