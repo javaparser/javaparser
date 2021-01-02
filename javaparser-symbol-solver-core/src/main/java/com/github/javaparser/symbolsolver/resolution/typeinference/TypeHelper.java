@@ -40,6 +40,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.utils.Pair;
@@ -166,6 +167,12 @@ public class TypeHelper {
 
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
         throw new UnsupportedOperationException();
+    }
+    
+    // get the resolved boxed type of the specified primitive type
+    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver ) {
+        SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration =  typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
+        return new ReferenceTypeImpl(typeDeclaration.getCorrespondingDeclaration(), typeSolver);
     }
 
     public static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
