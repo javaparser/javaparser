@@ -35,6 +35,8 @@ Next Release (Version 3.19.0)
 * Remove the PhantomNodeLogic that generates memory issues when LexicalPreservingPrinter is used. Phantom node is now an attribut of each node. This is an optimization of the JP memory usage.
   (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
 ### Deprecated
+* `PhantomNodeLogic` is now deprecated, with the logic now being handled by the node itself.
+  (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
 ### Removed
 ### Fixed
 * Fix issue on pretty configuration change
