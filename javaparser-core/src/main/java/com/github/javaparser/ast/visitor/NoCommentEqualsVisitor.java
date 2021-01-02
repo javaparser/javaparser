@@ -157,6 +157,28 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
+    public Boolean visit(final RecordDeclaration n, final Visitable arg) {
+        final RecordDeclaration n2 = (RecordDeclaration) arg;
+        if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
+            return false;
+        if (!nodesEquals(n.getParameters(), n2.getParameters()))
+            return false;
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
+            return false;
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
+            return false;
+        if (!nodesEquals(n.getMembers(), n2.getMembers()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return true;
+    }
+
+    @Override
     public Boolean visit(final EnumDeclaration n, final Visitable arg) {
         final EnumDeclaration n2 = (EnumDeclaration) arg;
         if (!nodesEquals(n.getEntries(), n2.getEntries()))

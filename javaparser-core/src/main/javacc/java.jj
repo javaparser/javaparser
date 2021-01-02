@@ -1096,7 +1096,7 @@ public CompilationUnit CompilationUnit():
     ImportDeclaration in = null;
     NodeList<TypeDeclaration<?>> types = emptyNodeList();
     ModifierHolder modifier;
-    TypeDeclaration<?> tn = null;
+    TypeDeclaration<?> typeDeclaration = null;
     ModuleDeclaration module = null;
 }
 {
@@ -1109,13 +1109,15 @@ public CompilationUnit CompilationUnit():
             (
                 modifier = Modifiers()
                 (
-                    tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+                    typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
-                    tn = EnumDeclaration(modifier) { types = add(types, tn); }
+                    typeDeclaration = EnumDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
-                    tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+                    typeDeclaration = AnnotationTypeDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
                     module = ModuleDeclaration(modifier)
+                 |
+                    typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
                  |
                     ";"
                 )
@@ -1324,6 +1326,60 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     members = ClassOrInterfaceBody()
 
     { return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
+}
+
+/**
+ * https://openjdk.java.net/jeps/395#Java-grammar
+ * <pre>{@code
+ *     RecordDeclaration:
+ *        {ClassModifier} `record` TypeIdentifier [TypeParameters]
+ *          RecordHeader [SuperInterfaces] RecordBody
+ *
+ *      RecordHeader:
+ *       `(` [RecordComponentList] `)`
+ *
+ *      RecordComponentList:
+ *       RecordComponent { `,` RecordComponent}
+ *
+ *      RecordComponent:
+ *       {Annotation} UnannType Identifier
+ *       VariableArityRecordComponent
+ *
+ *      VariableArityRecordComponent:
+ *       {Annotation} UnannType {Annotation} `...` Identifier
+ *
+ *      RecordBody:
+ *        `{` {RecordBodyDeclaration} `}`
+ *
+ *      RecordBodyDeclaration:
+ *        ClassBodyDeclaration
+ *        CompactConstructorDeclaration
+ *
+ *      CompactConstructorDeclaration:
+ *        {ConstructorModifier} SimpleTypeName ConstructorBody
+ * }</pre>
+ */
+
+RecordDeclaration RecordDeclaration(ModifierHolder modifier):
+{
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters;
+    RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyNodeList());
+    NodeList<ClassOrInterfaceType> impList = emptyNodeList();
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
+    JavaToken begin = modifier.begin;
+}
+{
+    LOOKAHEAD({ getToken(1).image.equals("record") }) <IDENTIFIER> { begin = orIfInvalid(begin, token());
+        // TODO set token type to RECORD
+    }
+    name = SimpleName()
+    parameters = Parameters()
+    [ typePar = TypeParameters() ]
+    [ impList = ImplementsList() ]
+    members = ClassOrInterfaceBody()
+
+    { return new RecordDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, parameters.a, typePar.list, impList, members, parameters.b); }
 }
 
 /**

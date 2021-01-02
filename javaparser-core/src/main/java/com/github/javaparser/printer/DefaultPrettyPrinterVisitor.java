@@ -43,20 +43,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.ReceiverParameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -165,7 +152,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public DefaultPrettyPrinterVisitor(PrinterConfiguration configuration) {
         this(configuration, new SourcePrinter(configuration));
     }
-    
+
     public DefaultPrettyPrinterVisitor(PrinterConfiguration configuration, SourcePrinter printer) {
         this.configuration = configuration;
         this.printer = printer;
@@ -399,6 +386,42 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 }
             }
         }
+
+        if (!n.getImplementedTypes().isEmpty()) {
+            printer.print(" implements ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+
+        printer.println(" {");
+        printer.indent();
+        if (!isNullOrEmpty(n.getMembers())) {
+            printMembers(n.getMembers(), arg);
+        }
+
+        printOrphanCommentsEnding(n);
+
+        printer.unindent();
+        printer.print("}");
+    }
+
+    @Override
+    public void visit(RecordDeclaration n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        printer.print("record ");
+
+        n.getName().accept(this, arg);
+
+        printTypeParameters(n.getTypeParameters(), arg);
 
         if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
@@ -1943,8 +1966,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if(expr)
             printer.unindent();
     }
-    
-    
+
+
     private Optional<ConfigurationOption> getOption(ConfigOption cOption) {
         return configuration.get(new DefaultConfigurationOption(cOption));
     }

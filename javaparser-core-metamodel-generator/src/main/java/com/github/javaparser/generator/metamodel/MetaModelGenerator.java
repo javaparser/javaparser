@@ -101,6 +101,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.body.MethodDeclaration.class);
         add(com.github.javaparser.ast.body.Parameter.class);
         add(com.github.javaparser.ast.body.ReceiverParameter.class);
+        add(com.github.javaparser.ast.body.RecordDeclaration.class);
         add(com.github.javaparser.ast.body.VariableDeclarator.class);
 
         add(com.github.javaparser.ast.comments.Comment.class); // First, as it is the base of other comment types

@@ -137,6 +137,23 @@ public class ConcreteSyntaxModel {
                 block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
         ));
 
+        concreteSyntaxModelByClass.put(RecordDeclaration.class, sequence(
+                comment(),
+                memberAnnotations(),
+                modifiers(),
+                // TODO must be RECORD token
+                token(GeneratedJavaParserConstants.INTERFACE),
+                space(),
+                child(ObservableProperty.NAME),
+                list(TYPE_PARAMETERS, sequence(comma(), space()), string(GeneratedJavaParserConstants.LT), string(GeneratedJavaParserConstants.GT)),
+                list(ObservableProperty.IMPLEMENTED_TYPES, sequence(string(GeneratedJavaParserConstants.COMMA), space()), sequence(
+                        space(),
+                        token(GeneratedJavaParserConstants.IMPLEMENTS),
+                        space()), none()),
+                space(),
+                block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
+        ));
+
         concreteSyntaxModelByClass.put(ConstructorDeclaration.class, sequence(
                 comment(),
                 memberAnnotations(),
