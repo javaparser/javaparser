@@ -162,6 +162,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         }
         return 0;
     };
+    
+    // usefull to find if the node is a phantom node
+    private static final int LEVELS_TO_EXPLORE = 3;
 
     protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
     
@@ -806,6 +809,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     
     protected static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
     };
+    
+    protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {
+    };
 
     public enum TreeTraversal {
 
@@ -1115,5 +1121,33 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             cursorStack.push(cursor + 1);
             return nodes.get(cursor);
         }
+    }
+    
+    /*
+     * A "phantom" node, is a node that is not really an AST node (like the fake type of variable in FieldDeclaration or an UnknownType)
+     */
+    public boolean isPhantom() {
+        return isPhantom(this);
+    }
+    
+    private boolean isPhantom(Node node) {
+        if (!node.containsData(PHANTOM_KEY)) {
+            boolean res = (node.getParentNode().isPresent() 
+                    && node.getParentNode().get().hasRange()
+                    && node.hasRange()
+                    && !node.getParentNode().get().getRange().get().contains(node.getRange().get())
+                    || inPhantomNode(node, LEVELS_TO_EXPLORE));
+            node.setData(PHANTOM_KEY, res);
+        }
+        return node.getData(PHANTOM_KEY);
+    }
+    
+    /**
+     * A node contained in a phantom node is also a phantom node. We limit how many levels up we check just for performance reasons.
+     */
+    private boolean inPhantomNode(Node node, int levels) {
+        return node.getParentNode().isPresent() &&
+                (isPhantom(node.getParentNode().get())
+                        || inPhantomNode(node.getParentNode().get(), levels - 1));
     }
 }

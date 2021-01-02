@@ -21,6 +21,27 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.decapitalize;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
@@ -46,27 +67,6 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.decapitalize;
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
@@ -353,7 +353,7 @@ public class LexicalPreservingPrinter {
             new TreeVisitor() {
                 @Override
                 public void process(Node node) {
-                    if (!PhantomNodeLogic.isPhantomNode(node)) {
+                    if (!node.isPhantom()) {
                         LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
                     }
                 }
@@ -362,7 +362,7 @@ public class LexicalPreservingPrinter {
     }
 
     private static Optional<Node> findNodeForToken(Node node, Range tokenRange) {
-        if (PhantomNodeLogic.isPhantomNode(node)) {
+        if (node.isPhantom()) {
             return Optional.empty();
         }
         if(!node.getRange().isPresent()) {
@@ -387,7 +387,7 @@ public class LexicalPreservingPrinter {
         }
         List<Pair<Range, TextElement>> elements = new LinkedList<>();
         for (Node child : node.getChildNodes()) {
-            if (!PhantomNodeLogic.isPhantomNode(child)) {
+            if (!child.isPhantom()) {
                 if (!child.getRange().isPresent()) {
                     throw new RuntimeException("Range not present on node " + child);
                 }
