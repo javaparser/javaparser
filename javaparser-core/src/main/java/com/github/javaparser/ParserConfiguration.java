@@ -95,7 +95,7 @@ public class ParserConfiguration {
         JAVA_10(new Java10Validator(), new Java10PostProcessor()),
         /**
          * Java 10 -- including incubator/preview/second preview features.
-         * Note that preview features, unless otherwise specified, follow the latest released JEP.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
         JAVA_10_PREVIEW(new Java10PreviewValidator(), new Java10PostProcessor()),
         /**
@@ -104,7 +104,7 @@ public class ParserConfiguration {
         JAVA_11(new Java11Validator(), null),
         /**
          * Java 11 -- including incubator/preview/second preview features.
-         * Note that preview features, unless otherwise specified, follow the latest released JEP.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
         JAVA_11_PREVIEW(new Java11PreviewValidator(), null),
         /**
@@ -113,7 +113,7 @@ public class ParserConfiguration {
         JAVA_12(new Java12Validator(), null),
         /**
          * Java 12 -- including incubator/preview/second preview features.
-         * Note that preview features, unless otherwise specified, follow the latest released JEP.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          * <ul>
          *     <li>Switch expressions are permitted, with a single label only and no yield.</li>
          * </ul>
@@ -125,7 +125,7 @@ public class ParserConfiguration {
         JAVA_13(new Java13Validator(), null),
         /**
          * Java 13 -- including incubator/preview/second preview features.
-         * Note that preview features, unless otherwise specified, follow the latest released JEP.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          * <ul>
          *     <li>Switch expressions are permitted, with a single label only.</li>
          * </ul>
@@ -137,7 +137,7 @@ public class ParserConfiguration {
         JAVA_14(new Java14Validator(), null),
         /**
          * Java 14 -- including incubator/preview/second preview features.
-         * Note that preview features, unless otherwise specified, follow the latest released JEP.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
         JAVA_14_PREVIEW(new Java14PreviewValidator(), null),
         /**
@@ -146,7 +146,7 @@ public class ParserConfiguration {
         JAVA_15(new Java15Validator(), null),
         /**
          * Java 15 -- including incubator/preview/second preview features.
-         * Note that preview features, unless otherwise specified, follow the latest released JEP.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
         JAVA_15_PREVIEW(new Java15PreviewValidator(), null),
         /**
@@ -155,7 +155,7 @@ public class ParserConfiguration {
         JAVA_16(new Java16Validator(), null),
         /**
          * Java 16 -- including incubator/preview/second preview features.
-         * Note that preview features, unless otherwise specified, follow the latest released JEP.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
         JAVA_16_PREVIEW(new Java16PreviewValidator(), null);
 
