@@ -29,6 +29,8 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Und
 
 /**
  * This validator validates according to Java 9 syntax rules.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk9/">https://openjdk.java.net/projects/jdk9/</a>
  */
 public class Java9Validator extends Java8Validator {
     final Validator underscoreKeywordValidator = new UnderscoreKeywordValidator();

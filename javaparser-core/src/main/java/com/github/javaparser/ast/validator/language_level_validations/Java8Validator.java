@@ -28,6 +28,9 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Mod
 
 /**
  * This validator validates according to Java 8 syntax rules.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk8/">https://openjdk.java.net/projects/jdk8/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk8/features">https://openjdk.java.net/projects/jdk8/features</a>
  */
 public class Java8Validator extends Java7Validator {
     final Validator modifiersWithoutPrivateInterfaceMethods = new ModifierValidator(true, true, false);
