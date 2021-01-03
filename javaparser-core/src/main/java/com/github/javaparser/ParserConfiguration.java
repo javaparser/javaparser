@@ -96,7 +96,7 @@ public class ParserConfiguration {
         /**
          * Java 10 -- including incubator, preview, and second preview features.
          */
-        JAVA_10_PREVIEW(new Java14PreviewValidator(), new Java10PostProcessor()),
+        JAVA_10_PREVIEW(new Java10PreviewValidator(), new Java10PostProcessor()),
         /**
          * Java 11
          */
@@ -104,7 +104,7 @@ public class ParserConfiguration {
         /**
          * Java 11 -- including incubator, preview, and second preview features.
          */
-        JAVA_11_PREVIEW(new Java11Validator(), null),
+        JAVA_11_PREVIEW(new Java11PreviewValidator(), null),
         /**
          * Java 12
          */
@@ -112,7 +112,7 @@ public class ParserConfiguration {
         /**
          * Java 12 -- including incubator, preview, and second preview features.
          */
-        JAVA_12_PREVIEW(new Java14PreviewValidator(), null),
+        JAVA_12_PREVIEW(new Java12PreviewValidator(), null),
         /**
          * Java 13
          */
@@ -120,7 +120,7 @@ public class ParserConfiguration {
         /**
          * Java 13 -- including incubator, preview, and second preview features.
          */
-        JAVA_13_PREVIEW(new Java14PreviewValidator(), null),
+        JAVA_13_PREVIEW(new Java13PreviewValidator(), null),
         /**
          * Java 14
          */
@@ -166,7 +166,12 @@ public class ParserConfiguration {
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{JAVA_13, JAVA_14, JAVA_15, JAVA_16};
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{
+                JAVA_13, JAVA_13_PREVIEW,
+                JAVA_14, JAVA_14_PREVIEW,
+                JAVA_15, JAVA_15_PREVIEW,
+                JAVA_16, JAVA_16_PREVIEW
+        };
 
         LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
             this.validator = validator;

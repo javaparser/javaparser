@@ -481,7 +481,7 @@ class PrettyPrintVisitorTest extends TestParser {
     @Test
     void printTextBlock() {
         CompilationUnit cu = parseCompilationUnit(
-                ParserConfiguration.LanguageLevel.JAVA_13,
+                ParserConfiguration.LanguageLevel.JAVA_13_PREVIEW,
                 "class X{String html = \"\"\"\n" +
                 "              <html>\n" +
                 "                  <body>\n" +
@@ -503,7 +503,7 @@ class PrettyPrintVisitorTest extends TestParser {
     @Test
     void printTextBlock2() {
         CompilationUnit cu = parseCompilationUnit(
-                ParserConfiguration.LanguageLevel.JAVA_13,
+                ParserConfiguration.LanguageLevel.JAVA_13_PREVIEW,
                 "class X{String html = \"\"\"\n" +
                 "              <html>\n" +
                 "              </html>\"\"\";}"
