@@ -1373,9 +1373,12 @@ RecordDeclaration RecordDeclaration(ModifierHolder modifier):
 {
     "record" { begin = orIfInvalid(begin, token()); }
     name = SimpleName()
-    parameters = Parameters()
     [ typePar = TypeParameters() ]
+    parameters = Parameters()
     [ impList = ImplementsList() ]
+
+    // Note: Permit all members within the grammar, then use validators.
+    // e.g. to check for non-static fields, incorrect component accessor types.
     members = ClassOrInterfaceBody()
 
     { return new RecordDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, parameters.a, typePar.list, impList, members, parameters.b); }
