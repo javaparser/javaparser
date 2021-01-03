@@ -41,7 +41,7 @@ import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
 import com.github.javaparser.ast.Generated;
 
 /**
- * The rather obscure <a href="http://blog.joda.org/2015/12/explicit-receiver-parameters.html">"receiver parameter" feature of Java</a>.
+ * The <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.1-220">receiver parameter</a> feature of Java.
  *
  * <br>All annotations preceding the type will be set on this object, not on the type.
  * JavaParser doesn't know if it they are applicable to the receiver parameter or the type.

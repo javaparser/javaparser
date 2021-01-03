@@ -54,7 +54,7 @@ class InstanceOfExprTest {
 
     @Test
     void annotationsOnTheType_patternExpression() {
-        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, "obj instanceof @A @DA String s");
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14_PREVIEW, "obj instanceof @A @DA String s");
 
         assertThat(expr.getType().getAnnotations())
                 .containsExactly(
@@ -77,7 +77,7 @@ class InstanceOfExprTest {
     @Test
     void instanceOf_patternExpression() {
         String x = "obj instanceof String s";
-        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, x);
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14_PREVIEW, x);
 
         assertEquals("obj", expr.getExpression().toString());
         assertEquals("String", expr.getType().asString());
@@ -95,7 +95,7 @@ class InstanceOfExprTest {
     @Test
     void instanceOf_patternExpression_prettyPrinter() {
         String x = "obj instanceof String s";
-        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, x);
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14_PREVIEW, x);
 
         assertEquals("obj instanceof String s", expr.toString());
     }
