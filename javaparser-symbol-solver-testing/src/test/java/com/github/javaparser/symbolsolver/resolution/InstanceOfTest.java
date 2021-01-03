@@ -190,7 +190,7 @@ public class InstanceOfTest {
 
     @BeforeEach
     public void setup() {
-        compilationUnit = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14, sourceCode);
+        compilationUnit = parseWithTypeSolver(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, sourceCode);
     }
 
 
