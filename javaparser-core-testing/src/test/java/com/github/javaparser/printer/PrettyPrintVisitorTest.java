@@ -33,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -51,8 +53,8 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
-class PrettyPrintVisitorTest {
-    
+class PrettyPrintVisitorTest extends TestParser {
+
     private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
         return config.get(new DefaultConfigurationOption(cOption));
     }
@@ -478,13 +480,16 @@ class PrettyPrintVisitorTest {
 
     @Test
     void printTextBlock() {
-        CompilationUnit cu = parse("class X{String html = \"\"\"\n" +
+        CompilationUnit cu = parseCompilationUnit(
+                ParserConfiguration.LanguageLevel.JAVA_13,
+                "class X{String html = \"\"\"\n" +
                 "              <html>\n" +
                 "                  <body>\n" +
                 "                      <p>Hello, world</p>\n" +
                 "                  </body>\n" +
                 "              </html>\n" +
-                "              \"\"\";}");
+                "              \"\"\";}"
+        );
 
         assertEqualsStringIgnoringEol("String html = \"\"\"\n" +
                 "    <html>\n" +
@@ -497,9 +502,12 @@ class PrettyPrintVisitorTest {
 
     @Test
     void printTextBlock2() {
-        CompilationUnit cu = parse("class X{String html = \"\"\"\n" +
+        CompilationUnit cu = parseCompilationUnit(
+                ParserConfiguration.LanguageLevel.JAVA_13,
+                "class X{String html = \"\"\"\n" +
                 "              <html>\n" +
-                "              </html>\"\"\";}");
+                "              </html>\"\"\";}"
+        );
 
         assertEqualsStringIgnoringEol("String html = \"\"\"\n" +
                 "    <html>\n" +
