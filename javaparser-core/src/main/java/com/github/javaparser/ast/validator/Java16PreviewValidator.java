@@ -19,10 +19,26 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.version;
+package com.github.javaparser.ast.validator;
 
 /**
- * Processes the generic AST into a Java 16 AST and validates it.
+ * This validator validates according to Java 16 syntax rules -- including incubator, preview, and second preview features.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk/16/">https://openjdk.java.net/projects/jdk/16/</a>
  */
-public class Java16PostProcessor extends Java15PostProcessor {
+public class Java16PreviewValidator extends Java16Validator {
+
+    public Java16PreviewValidator() {
+        super();
+
+        // Incubator
+        // No new incubator language features added in Java 16
+
+        // Preview
+        // No new preview language features added in Java 16
+
+        // 2nd Preview
+        // remove(noSealedClasses); // Sealed Classes - 2nd preview in Java 16 - https://openjdk.java.net/jeps/397
+
+    }
 }

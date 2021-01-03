@@ -40,6 +40,7 @@ public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemRep
     default ParseResult.PostProcessor postProcessor() {
         return (result, configuration) ->
                 result.getResult().ifPresent(node ->
-                        accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem))));
+                        accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem)))
+                );
     }
 }

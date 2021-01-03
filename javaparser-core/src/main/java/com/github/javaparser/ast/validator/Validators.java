@@ -42,9 +42,10 @@ public class Validators implements Validator {
     }
 
     public Validators remove(Validator validator) {
-        if (!validators.remove(validator)) {
-            throw new AssertionError("Trying to remove a validator that isn't there.");
-        }
+        validators.remove(validator);
+//        if (!validators.remove(validator)) {
+//            throw new AssertionError("Trying to remove a validator that isn't there.");
+//        }
         return this;
     }
 

@@ -30,6 +30,9 @@ public class Java14Validator extends Java13Validator {
 
     public Java14Validator() {
         super();
-        remove(noInstanceOfPattern);
+
+        // Released Language Features
+        remove(noSwitchExpressions); // Switch Expressions - released in Java 14 - https://openjdk.java.net/jeps/361
+        remove(noYield); // Switch Expressions - released in Java 14 - https://openjdk.java.net/jeps/361
     }
 }

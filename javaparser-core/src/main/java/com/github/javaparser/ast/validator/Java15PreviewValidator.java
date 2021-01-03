@@ -22,17 +22,24 @@
 package com.github.javaparser.ast.validator;
 
 /**
- * This validator validates according to Java 12 syntax rules.
+ * This validator validates according to Java 15 syntax rules -- including incubator, preview, and second preview features.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/12/">https://openjdk.java.net/projects/jdk/12/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
  */
-public class Java12Validator extends Java11Validator {
+public class Java15PreviewValidator extends Java15Validator {
 
-    public Java12Validator() {
+    public Java15PreviewValidator() {
         super();
 
-        // Released Language Features
-        // No new released language features added in Java 14
+        // Incubator
+        // No new incubator language features added in Java 15
+
+        // Preview
+        // remove(noSealedClasses); // Sealed Classes - first preview in Java 15 - https://openjdk.java.net/jeps/360
+
+        // 2nd Preview
+        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - 2nd preview in Java 15 - https://openjdk.java.net/jeps/305
+        // remove(noRecordDeclaration); // Records - 2nd preview in Java 15 - https://openjdk.java.net/jeps/384
 
     }
 }

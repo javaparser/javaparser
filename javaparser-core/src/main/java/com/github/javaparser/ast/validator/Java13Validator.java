@@ -30,6 +30,9 @@ public class Java13Validator extends Java12Validator {
 
     public Java13Validator() {
         super();
-        remove(noYield);
+
+        // Released Language Features
+        // No new released language features added in Java 13
+
     }
 }

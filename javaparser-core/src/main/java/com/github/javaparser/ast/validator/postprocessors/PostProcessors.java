@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.version;
+package com.github.javaparser.ast.validator.postprocessors;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;

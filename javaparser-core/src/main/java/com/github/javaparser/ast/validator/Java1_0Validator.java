@@ -125,9 +125,14 @@ public class Java1_0Validator extends Validators {
     );
 
 
-    final Validator noInstanceOfPattern = new SimpleValidator<>(InstanceOfExpr.class,
+    final Validator noPatternMatchingInstanceOf = new SimpleValidator<>(InstanceOfExpr.class,
             n -> n.getPattern().isPresent(),
             (n, reporter) -> reporter.report(n, "Use of patterns with instanceof is not supported.")
+    );
+
+    final Validator noTextBlockLiteral = new SimpleValidator<>(TextBlockLiteralExpr.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "Text Block Literals are not supported.")
     );
 
 
@@ -152,6 +157,7 @@ public class Java1_0Validator extends Validators {
         add(noLambdas);
         add(noModules);
         add(noSwitchExpressions);
-        add(noInstanceOfPattern);
+        add(noPatternMatchingInstanceOf);
+        add(noTextBlockLiteral);
     }
 }
