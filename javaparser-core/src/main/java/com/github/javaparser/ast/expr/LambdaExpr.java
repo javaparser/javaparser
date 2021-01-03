@@ -52,7 +52,7 @@ import com.github.javaparser.metamodel.LambdaExprMetaModel;
  * {@code (a, b) -> a + b}
  * <br>{@code a -> ...}
  * <br>{@code (Long a) -> { println(a); }}
- * <p/>The parameters are on the left side of the -&gt;.
+ * <p>The parameters are on the left side of the -&gt;.
  * If a parameter uses type inference (it has no type specified) then its type is set to {@code UnknownType}.
  * If they are in ( ), "isEnclosingParameters" is true.
  * <br>The body is to the right of the -&gt;.
