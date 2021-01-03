@@ -32,6 +32,6 @@ public class Java15Validator extends Java14Validator {
         super();
 
         // Released Language Features
-        remove(noTextBlockLiteral); // Text Block Literals - released in Java 15 - https://openjdk.java.net/jeps/378
+        remove(noTextBlockLiteral); // Text Block Literals - released within Java 15 - https://openjdk.java.net/jeps/378
     }
 }

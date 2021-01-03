@@ -32,15 +32,25 @@ public class Java13PreviewValidator extends Java13Validator {
         super();
 
         // Incubator
-        // No new incubator language features added in Java 13
+        // No new incubator language features added within Java 13
 
         // Preview
-        remove(noTextBlockLiteral); // Text Block Literals - first preview in Java 13 - https://openjdk.java.net/jeps/355
+        remove(noTextBlockLiteral); // Text Block Literals - first preview within Java 13 - https://openjdk.java.net/jeps/355
 
         // 2nd Preview
-        remove(onlyOneLabelInSwitchCase); // Switch Expressions - 2nd preview in Java 13 - https://openjdk.java.net/jeps/354
-        remove(noSwitchExpressions); // Switch Expressions - 2nd preview in Java 13 - https://openjdk.java.net/jeps/354
-        remove(noYield); // Switch Expressions - 2nd preview in Java 13 - https://openjdk.java.net/jeps/354
+        {
+            /*
+             * Switch Expressions (2nd Preview) - 2nd Preview within Java 13 - https://openjdk.java.net/jeps/354
+             * <ul>
+             *     <li>Switch permissions are added within this preview.</li>
+             *     <li>Multiple labels is NOT YET PERMITTED -- introduced within Java 14 release.</li>
+             *     <li>Yield keyword -- introduced within Java 13 preview.</li>
+             * </ul>
+             */
+            remove(noSwitchExpressions);
+            remove(onlyOneLabelInSwitchCase);
+            remove(noYield);
+        }
 
     }
 }

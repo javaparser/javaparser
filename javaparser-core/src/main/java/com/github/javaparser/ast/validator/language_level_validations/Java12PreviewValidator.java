@@ -32,15 +32,25 @@ public class Java12PreviewValidator extends Java12Validator {
         super();
 
         // Incubator
-        // No new incubator language features added in Java 12
+        // No new incubator language features added within Java 12
 
         // Preview
-        remove(noSwitchExpressions); // Switch Expressions - first preview in Java 12 - https://openjdk.java.net/jeps/325
-        remove(onlyOneLabelInSwitchCase); // Switch Expressions - first preview in Java 12 - https://openjdk.java.net/jeps/325
+
+        {
+            /*
+             * Switch Expressions (Preview) - first preview within Java 12 - https://openjdk.java.net/jeps/325
+             * <ul>
+             *     <li>Switch permissions are added within this preview.</li>
+             *     <li>Multiple labels is NOT YET PERMITTED -- introduced within Java 14 release.</li>
+             *     <li>Yield keyword is NOT YET PERMITTED -- introduced within Java 13 preview.</li>
+             * </ul>
+             */
+            remove(noSwitchExpressions);
+            remove(onlyOneLabelInSwitchCase);
+        }
 
         // 2nd Preview
-        // No new 2nd preview language features added in Java 12
-
+        // No new 2nd preview language features added within Java 12
 
     }
 }

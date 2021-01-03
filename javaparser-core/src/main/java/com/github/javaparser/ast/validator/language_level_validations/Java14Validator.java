@@ -32,8 +32,18 @@ public class Java14Validator extends Java13Validator {
         super();
 
         // Released Language Features
-        remove(onlyOneLabelInSwitchCase); // Switch Expressions - released in Java 14 - https://openjdk.java.net/jeps/361
-        remove(noSwitchExpressions); // Switch Expressions - released in Java 14 - https://openjdk.java.net/jeps/361
-        remove(noYield); // Switch Expressions - released in Java 14 - https://openjdk.java.net/jeps/361
+        {
+            /*
+             * Switch Expressions (Standard) - released within Java 14 - https://openjdk.java.net/jeps/361
+             * <ul>
+             *     <li>Switch permissions are permitted</li>
+             *     <li>Previous preview allowed only a single label - this permits multiple.</li>
+             *     <li>Yield is now permitted within a switch expression.</li>
+             * </ul>
+             */
+            remove(noSwitchExpressions);
+            remove(onlyOneLabelInSwitchCase);
+            remove(noYield);
+        }
     }
 }

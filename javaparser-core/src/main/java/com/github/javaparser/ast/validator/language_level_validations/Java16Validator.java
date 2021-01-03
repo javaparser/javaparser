@@ -32,7 +32,7 @@ public class Java16Validator extends Java15Validator {
         super();
 
         // Released Language Features
-        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released in Java 16 - https://openjdk.java.net/jeps/305
-//        remove(noRecordDeclaration); // Records released in Java 16 - https://openjdk.java.net/jeps/395
+        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
+//        remove(noRecordDeclaration); // Records released within Java 16 - https://openjdk.java.net/jeps/395
     }
 }
