@@ -32,14 +32,14 @@ public class Java15PreviewValidator extends Java15Validator {
         super();
 
         // Incubator
-        // No new incubator language features added in Java 15
+        // No new incubator language features added within Java 15
 
         // Preview
-        // remove(noSealedClasses); // Sealed Classes - first preview in Java 15 - https://openjdk.java.net/jeps/360
+        // remove(noSealedClasses); // Sealed Classes - first preview within Java 15 - https://openjdk.java.net/jeps/360
 
         // 2nd Preview
         remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - 2nd preview in Java 15 - https://openjdk.java.net/jeps/305
-        // remove(noRecordDeclaration); // Records - 2nd preview in Java 15 - https://openjdk.java.net/jeps/384
+        // TODO: remove(noRecordDeclaration); // Records - 2nd preview within Java 15 - https://openjdk.java.net/jeps/384
 
     }
 }

@@ -32,7 +32,7 @@ public class Java12Validator extends Java11Validator {
         super();
 
         // Released Language Features
-        // No new released language features added in Java 14
+        // No new released language features added within Java 12
 
     }
 }

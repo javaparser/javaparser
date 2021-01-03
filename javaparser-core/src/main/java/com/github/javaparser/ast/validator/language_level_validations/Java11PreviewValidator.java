@@ -36,6 +36,6 @@ public class Java11PreviewValidator extends Java11Validator {
 
     public Java11PreviewValidator() {
         super();
-        replace(varOnlyOnLocalVariableDefinitionAndForAndTry, varAlsoInLambdaParameters);
+        add(varAlsoInLambdaParameters);
     }
 }

@@ -38,7 +38,7 @@ public class Java16PreviewValidator extends Java16Validator {
         // No new preview language features added in Java 16
 
         // 2nd Preview
-        // remove(noSealedClasses); // Sealed Classes - 2nd preview in Java 16 - https://openjdk.java.net/jeps/397
+        // TODO: remove(noSealedClasses); // Sealed Classes - 2nd preview in Java 16 - https://openjdk.java.net/jeps/397
 
     }
 }

@@ -27,7 +27,6 @@ import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-//import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -140,11 +139,6 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "Text Block Literals are not supported.")
     );
-
-//    final Validator noRecordDeclaration = new SimpleValidator<>(RecordDeclaration.class,
-//            n -> true,
-//            (n, reporter) -> reporter.report(n, "Records are not supported.")
-//    );
 
 
     public Java1_0Validator() {
