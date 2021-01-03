@@ -147,6 +147,59 @@ public class RecordDeclarationTest {
         assertEquals(0, recordDeclaration.getMembers().size());
     }
 
+    @Test
+    void record_permitStaticFields() {
+        String s = "" +
+                "record ABC(int x, int y) {\n" +
+                "\n" +
+                "    static int z;\n" +
+                "\n" +
+                "    static {\n" +
+                "        int z = 10;\n" +
+                "    }\n" +
+                "\n" +
+                "    public int x() {\n" +
+                "        return x;\n" +
+                "    }\n" +
+                "\n" +
+                "}\n" +
+                "";
+        CompilationUnit cu = parseCompilationUnit(s);
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
+    }
+
+    @Test
+    void record_permitMethods() {
+        String s = "" +
+                "record ABC(int x, int y) {\n" +
+                "\n" +
+                "    public int x() {\n" +
+                "        return x;\n" +
+                "    }\n" +
+                "\n" +
+                "    public String xyz() {\n" +
+                "        return \"10\";\n" +
+                "    }\n" +
+                "\n" +
+                "}\n" +
+                "";
+        CompilationUnit cu = parseCompilationUnit(s);
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
+    }
+
+    @Disabled
+    @Test
+    void record_mustNotAllowFields() {
+        String s = "record Point(int x, int y) { int x; }";
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        RecordDeclaration recordDeclaration = recordDeclarations.get(0);
+
+        fail("Should not get to this point -- should be compilation failure.");
+    }
 
     @Disabled
     // https://bugs.openjdk.java.net/browse/JDK-8222777
