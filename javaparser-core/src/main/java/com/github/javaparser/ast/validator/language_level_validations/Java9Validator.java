@@ -45,6 +45,15 @@ public class Java9Validator extends Java8Validator {
 
     public Java9Validator() {
         super();
+
+        // Released Language Features
+
+        /*
+         * Note there is no validator that validates that "var" is not used in Java 9 and lower,
+         * since the parser will never create a VarType node, because that is done by the
+         * Java 10 postprocessor. You can add it by hand, but that is obscure enough to ignore.
+         */
+
         add(underscoreKeywordValidator);
         remove(noModules);
         replace(modifiersWithoutPrivateInterfaceMethods, modifiers);

@@ -32,10 +32,18 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Var
  * @see <a href="https://openjdk.java.net/projects/jdk/11/">https://openjdk.java.net/projects/jdk/11/</a>
  */
 public class Java11PreviewValidator extends Java11Validator {
-    final Validator varAlsoInLambdaParameters = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(true));
 
     public Java11PreviewValidator() {
         super();
-        add(varAlsoInLambdaParameters);
+
+        // Incubator
+        // No incubator language features added within Java 11
+
+        // Preview
+        // No preview language features added within Java 11
+
+        // 2nd Preview
+        // No 2nd preview language features added within Java 11
+
     }
 }

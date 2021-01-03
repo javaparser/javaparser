@@ -33,12 +33,17 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Var
  */
 public class Java10PreviewValidator extends Java10Validator {
 
-    final Validator varOnlyOnLocalVariableDefinitionAndForAndTry = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
-
     public Java10PreviewValidator() {
         super();
-        add(varOnlyOnLocalVariableDefinitionAndForAndTry);
-        /* There is no validator that validates that "var" is not used in Java 9 and lower, since the parser will never create a VarType node,
-           because that is done by the Java10 postprocessor. You can add it by hand, but that is obscure enough to ignore. */
+
+        // Incubator
+        // No incubator language features added within Java 10
+
+        // Preview
+        // No preview language features added within Java 10
+
+        // 2nd Preview
+        // No 2nd preview language features added within Java 10
+
     }
 }

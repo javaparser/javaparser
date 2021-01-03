@@ -37,8 +37,20 @@ public class Java10Validator extends Java9Validator {
 
     public Java10Validator() {
         super();
-        add(varOnlyOnLocalVariableDefinitionAndForAndTry);
-        /* There is no validator that validates that "var" is not used in Java 9 and lower, since the parser will never create a VarType node,
-           because that is done by the Java10 postprocessor. You can add it by hand, but that is obscure enough to ignore. */
+
+        // Released Language Features
+
+        {
+            /*
+             * Note there is no validator that validates that "var" is not used in Java 9 and lower,
+             * since the parser will never create a VarType node, because that is done by the
+             * Java 10 postprocessor. You can add it by hand, but that is obscure enough to ignore.
+             *
+             * Java 10 released local variable type inference in for and try-with (JEP286).
+             * Java 11 released local variable type inference for lambda parameters also (JEP323)
+             */
+            add(varOnlyOnLocalVariableDefinitionAndForAndTry);
+        }
+
     }
 }
