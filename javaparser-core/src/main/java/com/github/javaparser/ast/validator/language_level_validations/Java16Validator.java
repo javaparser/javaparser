@@ -19,14 +19,20 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 1.4 syntax rules.
+ * This validator validates according to Java 16 syntax rules.
+ *
+ * @see <a href="https://openjdk.java.net/projects/jdk/16/">https://openjdk.java.net/projects/jdk/16/</a>
  */
-public class Java1_4Validator extends Java1_3Validator {
-    public Java1_4Validator() {
+public class Java16Validator extends Java15Validator {
+
+    public Java16Validator() {
         super();
-        remove(noAssertKeyword);
+
+        // Released Language Features
+        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released in Java 16 - https://openjdk.java.net/jeps/305
+//        remove(noRecordDeclaration); // Records released in Java 16 - https://openjdk.java.net/jeps/395
     }
 }

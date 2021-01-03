@@ -19,21 +19,20 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
-
-import com.github.javaparser.ast.type.VarType;
-import com.github.javaparser.ast.validator.chunks.VarValidator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 11 syntax rules.
+ * This validator validates according to Java 14 syntax rules.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/11/">https://openjdk.java.net/projects/jdk/11/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/14/">https://openjdk.java.net/projects/jdk/14/</a>
  */
-public class Java11Validator extends Java10Validator {
-    final Validator varAlsoInLambdaParameters = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(true));
+public class Java14Validator extends Java13Validator {
 
-    public Java11Validator() {
+    public Java14Validator() {
         super();
-        replace(varOnlyOnLocalVariableDefinitionAndForAndTry, varAlsoInLambdaParameters);
+
+        // Released Language Features
+        remove(noSwitchExpressions); // Switch Expressions - released in Java 14 - https://openjdk.java.net/jeps/361
+        remove(noYield); // Switch Expressions - released in Java 14 - https://openjdk.java.net/jeps/361
     }
 }

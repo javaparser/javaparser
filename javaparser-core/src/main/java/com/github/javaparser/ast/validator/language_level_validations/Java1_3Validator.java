@@ -19,13 +19,13 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 6 syntax rules.
+ * This validator validates according to Java 1.3 syntax rules.
  */
-public class Java6Validator extends Java5Validator{
-    public Java6Validator() {
+public class Java1_3Validator extends Java1_2Validator {
+    public Java1_3Validator() {
         super();
     }
 }

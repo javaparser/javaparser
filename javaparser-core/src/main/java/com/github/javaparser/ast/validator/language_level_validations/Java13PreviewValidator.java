@@ -19,27 +19,27 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 15 syntax rules -- including incubator, preview, and second preview features.
+ * This validator validates according to Java 13 syntax rules -- including incubator, preview, and second preview features.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/13/">https://openjdk.java.net/projects/jdk/13/</a>
  */
-public class Java15PreviewValidator extends Java15Validator {
+public class Java13PreviewValidator extends Java13Validator {
 
-    public Java15PreviewValidator() {
+    public Java13PreviewValidator() {
         super();
 
         // Incubator
-        // No new incubator language features added in Java 15
+        // No new incubator language features added in Java 13
 
         // Preview
-        // remove(noSealedClasses); // Sealed Classes - first preview in Java 15 - https://openjdk.java.net/jeps/360
+        remove(noTextBlockLiteral); // Text Block Literals - first preview in Java 13 - https://openjdk.java.net/jeps/355
 
         // 2nd Preview
-        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - 2nd preview in Java 15 - https://openjdk.java.net/jeps/305
-        // remove(noRecordDeclaration); // Records - 2nd preview in Java 15 - https://openjdk.java.net/jeps/384
+        remove(noSwitchExpressions); // Switch Expressions - 2nd preview in Java 13 - https://openjdk.java.net/jeps/354
+        remove(noYield); // Switch Expressions - 2nd preview in Java 13 - https://openjdk.java.net/jeps/354
 
     }
 }

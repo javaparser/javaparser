@@ -19,27 +19,20 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 13 syntax rules -- including incubator, preview, and second preview features.
+ * This validator validates according to Java 13 syntax rules.
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/13/">https://openjdk.java.net/projects/jdk/13/</a>
  */
-public class Java13PreviewValidator extends Java13Validator {
+public class Java13Validator extends Java12Validator {
 
-    public Java13PreviewValidator() {
+    public Java13Validator() {
         super();
 
-        // Incubator
-        // No new incubator language features added in Java 13
-
-        // Preview
-        remove(noTextBlockLiteral); // Text Block Literals - first preview in Java 13 - https://openjdk.java.net/jeps/355
-
-        // 2nd Preview
-        remove(noSwitchExpressions); // Switch Expressions - 2nd preview in Java 13 - https://openjdk.java.net/jeps/354
-        remove(noYield); // Switch Expressions - 2nd preview in Java 13 - https://openjdk.java.net/jeps/354
+        // Released Language Features
+        // No new released language features added in Java 13
 
     }
 }

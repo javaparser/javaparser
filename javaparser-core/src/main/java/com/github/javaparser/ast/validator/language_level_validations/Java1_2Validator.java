@@ -19,9 +19,11 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
-import com.github.javaparser.ast.validator.chunks.ModifierValidator;
+import com.github.javaparser.ast.validator.ReservedKeywordValidator;
+import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.ModifierValidator;
 
 /**
  * This validator validates according to Java 1.2 syntax rules.
@@ -29,7 +31,7 @@ import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 public class Java1_2Validator extends Java1_1Validator {
     final Validator modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods = new ModifierValidator(true, false, false);
     final Validator strictfpNotAllowed = new ReservedKeywordValidator("strictfp");
-    
+
     public Java1_2Validator() {
         super();
         replace(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods, modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);

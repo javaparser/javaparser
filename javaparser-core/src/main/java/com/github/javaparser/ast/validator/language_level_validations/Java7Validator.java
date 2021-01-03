@@ -19,12 +19,12 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 
 /**
  * This validator validates according to Java 7 syntax rules.

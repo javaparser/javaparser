@@ -19,20 +19,13 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 12 syntax rules.
- *
- * @see <a href="https://openjdk.java.net/projects/jdk/12/">https://openjdk.java.net/projects/jdk/12/</a>
+ * This validator validates according to Java 6 syntax rules.
  */
-public class Java12Validator extends Java11Validator {
-
-    public Java12Validator() {
+public class Java6Validator extends Java5Validator{
+    public Java6Validator() {
         super();
-
-        // Released Language Features
-        // No new released language features added in Java 14
-
     }
 }

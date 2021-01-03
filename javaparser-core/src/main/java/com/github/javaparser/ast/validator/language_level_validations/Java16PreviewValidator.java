@@ -19,19 +19,26 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 15 syntax rules.
+ * This validator validates according to Java 16 syntax rules -- including incubator, preview, and second preview features.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/16/">https://openjdk.java.net/projects/jdk/16/</a>
  */
-public class Java15Validator extends Java14Validator {
+public class Java16PreviewValidator extends Java16Validator {
 
-    public Java15Validator() {
+    public Java16PreviewValidator() {
         super();
 
-        // Released Language Features
-        remove(noTextBlockLiteral); // Text Block Literals - released in Java 15 - https://openjdk.java.net/jeps/378
+        // Incubator
+        // No new incubator language features added in Java 16
+
+        // Preview
+        // No new preview language features added in Java 16
+
+        // 2nd Preview
+        // remove(noSealedClasses); // Sealed Classes - 2nd preview in Java 16 - https://openjdk.java.net/jeps/397
+
     }
 }

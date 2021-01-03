@@ -19,28 +19,14 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 12 syntax rules -- including incubator, preview, and second preview features.
- *
- * @see <a href="https://openjdk.java.net/projects/jdk/12/">https://openjdk.java.net/projects/jdk/12/</a>
+ * This validator validates according to Java 1.4 syntax rules.
  */
-public class Java12PreviewValidator extends Java12Validator {
-
-    public Java12PreviewValidator() {
+public class Java1_4Validator extends Java1_3Validator {
+    public Java1_4Validator() {
         super();
-
-        // Incubator
-        // No new incubator language features added in Java 12
-
-        // Preview
-        remove(noSwitchExpressions); // Switch Expressions - first preview in Java 12 - https://openjdk.java.net/jeps/325
-        remove(onlyOneLabelInSwitchCase); // Switch Expressions - first preview in Java 12 - https://openjdk.java.net/jeps/325
-
-        // 2nd Preview
-        // No new 2nd preview language features added in Java 12
-
-
+        remove(noAssertKeyword);
     }
 }

@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -27,16 +27,22 @@ import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+//import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.validator.chunks.CommonValidators;
-import com.github.javaparser.ast.validator.chunks.ModifierValidator;
-import com.github.javaparser.ast.validator.chunks.NoBinaryIntegerLiteralsValidator;
-import com.github.javaparser.ast.validator.chunks.NoUnderscoresInIntegerLiteralsValidator;
+import com.github.javaparser.ast.validator.SimpleValidator;
+import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
+import com.github.javaparser.ast.validator.TreeVisitorValidator;
+import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.validator.Validators;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.CommonValidators;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.ModifierValidator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.NoBinaryIntegerLiteralsValidator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.NoUnderscoresInIntegerLiteralsValidator;
 
 /**
  * This validator validates according to Java 1.0 syntax rules.
@@ -134,6 +140,11 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "Text Block Literals are not supported.")
     );
+
+//    final Validator noRecordDeclaration = new SimpleValidator<>(RecordDeclaration.class,
+//            n -> true,
+//            (n, reporter) -> reporter.report(n, "Records are not supported.")
+//    );
 
 
     public Java1_0Validator() {

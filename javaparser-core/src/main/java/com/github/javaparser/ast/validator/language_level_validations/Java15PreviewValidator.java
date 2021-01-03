@@ -19,27 +19,27 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 14 syntax rules -- including incubator, preview, and second preview features.
+ * This validator validates according to Java 15 syntax rules -- including incubator, preview, and second preview features.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/14/">https://openjdk.java.net/projects/jdk/14/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
  */
-public class Java14PreviewValidator extends Java14Validator {
+public class Java15PreviewValidator extends Java15Validator {
 
-    public Java14PreviewValidator() {
+    public Java15PreviewValidator() {
         super();
 
         // Incubator
-        // No new incubator language features added in Java 14
+        // No new incubator language features added in Java 15
 
         // Preview
-        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - first preview in Java 14 - https://openjdk.java.net/jeps/305
-        // remove(noRecordDeclaration); // Records - first preview in Java 14 - https://openjdk.java.net/jeps/359
+        // remove(noSealedClasses); // Sealed Classes - first preview in Java 15 - https://openjdk.java.net/jeps/360
 
         // 2nd Preview
-        remove(noTextBlockLiteral); // Text Block Literals - 2nd preview in Java 14 - https://openjdk.java.net/jeps/378
+        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - 2nd preview in Java 15 - https://openjdk.java.net/jeps/305
+        // remove(noRecordDeclaration); // Records - 2nd preview in Java 15 - https://openjdk.java.net/jeps/384
 
     }
 }

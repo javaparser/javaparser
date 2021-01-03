@@ -19,24 +19,23 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.type.VarType;
-import com.github.javaparser.ast.validator.chunks.VarValidator;
+import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
+import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.VarValidator;
 
 /**
- * This validator validates according to Java 10 syntax rules.
+ * This validator validates according to Java 11 syntax rules.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/10/">https://openjdk.java.net/projects/jdk/10/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/11/">https://openjdk.java.net/projects/jdk/11/</a>
  */
-public class Java10Validator extends Java9Validator {
+public class Java11Validator extends Java10Validator {
+    final Validator varAlsoInLambdaParameters = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(true));
 
-    final Validator varOnlyOnLocalVariableDefinitionAndForAndTry = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
-
-    public Java10Validator() {
+    public Java11Validator() {
         super();
-        add(varOnlyOnLocalVariableDefinitionAndForAndTry);
-        /* There is no validator that validates that "var" is not used in Java 9 and lower, since the parser will never create a VarType node,
-           because that is done by the Java10 postprocessor. You can add it by hand, but that is obscure enough to ignore. */
+        replace(varOnlyOnLocalVariableDefinitionAndForAndTry, varAlsoInLambdaParameters);
     }
 }
