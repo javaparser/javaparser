@@ -47,7 +47,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**
- * A definition of a class or interface.<br>{@code class X { ... }}
+ * A definition of a class or interface.<br>{@code class X { ... }}<br>{@code interface X { ... }}
  *
  * @author Julio Vilmar Gesser
  */
