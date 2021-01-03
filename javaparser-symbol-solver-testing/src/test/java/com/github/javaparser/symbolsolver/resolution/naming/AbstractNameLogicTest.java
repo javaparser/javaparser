@@ -53,7 +53,7 @@ public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
 
     protected <N extends Node> N parse(String code, ParseStart<N> parseStart, Optional<TypeSolver> typeSolver) {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_14);
+        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW);
         if (typeSolver.isPresent()) {
             parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver.get()));
         }

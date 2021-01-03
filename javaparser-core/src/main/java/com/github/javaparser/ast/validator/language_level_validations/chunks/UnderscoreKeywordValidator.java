@@ -19,39 +19,30 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.VisitorValidator;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
-/**
- * Validates that identifiers are not keywords - this for the few keywords that the parser
- * accepts because they were added after Java 1.0.
- */
-public class ReservedKeywordValidator extends VisitorValidator {
-    private final String keyword;
-    private final String error;
-
-    public ReservedKeywordValidator(String keyword) {
-        this.keyword = keyword;
-        error = f("'%s' cannot be used as an identifier as it is a keyword.", keyword);
-    }
-
+public class UnderscoreKeywordValidator extends VisitorValidator {
     @Override
     public void visit(Name n, ProblemReporter arg) {
-        if (n.getIdentifier().equals(keyword)) {
-            arg.report(n, error);
-        }
+        validateIdentifier(n, n.getIdentifier(), arg);
         super.visit(n, arg);
     }
 
     @Override
     public void visit(SimpleName n, ProblemReporter arg) {
-        if (n.getIdentifier().equals(keyword)) {
-            arg.report(n, error);
-        }
+        validateIdentifier(n, n.getIdentifier(), arg);
         super.visit(n, arg);
+    }
+
+    private static void validateIdentifier(Node n, String id, ProblemReporter arg) {
+        if (id.equals("_")) {
+            arg.report(n, "'_' is a reserved keyword.");
+        }
     }
 }

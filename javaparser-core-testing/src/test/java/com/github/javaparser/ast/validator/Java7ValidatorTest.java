@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.validator.language_level_validations.Java7Validator;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -105,7 +106,7 @@ class Java7ValidatorTest {
 
         List<Problem> problems = new ArrayList<>();
         new Java7Validator().accept(unionType, new ProblemReporter(problems::add));
-        
+
         assertProblems(problems, "UnionType.elements can not be empty.");
     }
 
@@ -116,7 +117,7 @@ class Java7ValidatorTest {
 
         List<Problem> problems = new ArrayList<>();
         new Java7Validator().accept(unionType, new ProblemReporter(problems::add));
-        
+
         assertProblems(problems, "Union type (multi catch) must have at least two elements.");
     }
 
