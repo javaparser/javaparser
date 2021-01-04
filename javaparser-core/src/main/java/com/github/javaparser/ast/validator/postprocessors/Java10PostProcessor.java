@@ -19,28 +19,27 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.postprocessors;
 
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.VarType;
 
-import java.util.function.BiConsumer;
+import static com.github.javaparser.ParseResult.PostProcessor;
 
 /**
- * A validator that validates a known node type.
+ * Processes the generic AST into a Java 10 AST and validates it.
  */
-public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemReporter> {
-    /**
-     * @param node the node that wants to be validated
-     * @param problemReporter when found, validation errors can be reported here
-     */
-    void accept(N node, ProblemReporter problemReporter);
+public class Java10PostProcessor extends PostProcessors {
+    protected final PostProcessor varNodeCreator = (result, configuration) ->
+            result.getResult().ifPresent(node -> {
+                node.findAll(ClassOrInterfaceType.class).forEach(n -> {
+                    if (n.getNameAsString().equals("var")) {
+                        n.replace(new VarType(n.getTokenRange().orElse(null)));
+                    }
+                });
+            });
 
-    @SuppressWarnings("unchecked")
-    default ParseResult.PostProcessor postProcessor() {
-        return (result, configuration) ->
-                result.getResult().ifPresent(node ->
-                        accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem)))
-                );
+    public Java10PostProcessor() {
+        add(varNodeCreator);
     }
 }
