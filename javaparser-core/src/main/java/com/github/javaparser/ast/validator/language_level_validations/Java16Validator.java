@@ -23,7 +23,11 @@ package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.ast.type.VarType;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
+import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.RecordDeclarationValidator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.VarValidator;
 
 import java.util.List;
 
@@ -34,38 +38,7 @@ import java.util.List;
  */
 public class Java16Validator extends Java15Validator {
 
-    final SingleNodeTypeValidator<RecordDeclaration> forbidNonStaticFieldsInRecords = new SingleNodeTypeValidator<>(RecordDeclaration.class, (n, reporter) -> {
-        long count = n.getFields().stream()
-                .filter(fieldDeclaration -> !fieldDeclaration.isStatic())
-                .count();
-
-        if (count > 0) {
-            reporter.report(n, "Record Declarations must have zero non-static fields.");
-        }
-    });
-
-    final SingleNodeTypeValidator<RecordDeclaration> validateRecordComponentAccessors = new SingleNodeTypeValidator<>(RecordDeclaration.class, (n, reporter) -> {
-
-        n.getParameters().forEach(parameter -> {
-            List<MethodDeclaration> methodsByName = n.getMethodsByName(parameter.getNameAsString());
-
-            methodsByName.stream()
-                    .filter(methodDeclaration -> methodDeclaration.getParameters().isEmpty())
-                    .forEach(methodDeclaration -> {
-                        if (!methodDeclaration.getType().equals(parameter.getType())) {
-                            reporter.report(
-                                    n,
-                                    String.format(
-                                            "Incorrect component accessor return type. Expected: '%s', found: '%s'.",
-                                            parameter.getTypeAsString(),
-                                            methodDeclaration.getTypeAsString()
-                                    )
-                            );
-                        }
-                    });
-        });
-
-    });
+    final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
 
     public Java16Validator() {
         super();
@@ -74,7 +47,6 @@ public class Java16Validator extends Java15Validator {
         remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
         remove(noRecordDeclaration); // Records released within Java 16 - https://openjdk.java.net/jeps/395
 
-        add(forbidNonStaticFieldsInRecords);
-        add(validateRecordComponentAccessors);
+        add(recordDeclarationValidator);
     }
 }
