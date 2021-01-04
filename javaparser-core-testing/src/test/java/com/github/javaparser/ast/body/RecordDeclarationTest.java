@@ -189,16 +189,74 @@ public class RecordDeclarationTest {
         assertEquals(1, recordDeclarations.size());
     }
 
-    @Disabled
     @Test
-    void record_mustNotAllowFields() {
-        String s = "record Point(int x, int y) { int x; }";
+    void record_mustNotAllowNonStaticFields() {
+        String s = "record Point(int x, int y) { int z; }";
+        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = parseCompilationUnit(s);
+        });
+    }
+
+    @Test
+    void record_mustAllowStaticFields() {
+        String s = "record Point(int x, int y) { static int z; }";
+        CompilationUnit cu = parseCompilationUnit(s);
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
+    }
+
+
+    @Test
+    void record_mustNotAllowMismatchedComponentAccessorReturnType() {
+        String s = "record Point(int x, int y) {\n" +
+                "    public String x() {\n" +
+                "        return \"10\";\n" +
+                "    }\n" +
+                " }";
+
+        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = parseCompilationUnit(s);
+        });
+
+    }
+
+    @Test
+    void record_allowMethodsWithSameNameAsRecordComponentButNotAnAccessorMethod() {
+        String s = "record Point(int x, int y) {\n" +
+                "    public String x(int a) {\n" +
+                "        return \"10\";\n" +
+                "    }\n" +
+                " }";
+
         CompilationUnit cu = parseCompilationUnit(s);
 
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        RecordDeclaration recordDeclaration = recordDeclarations.get(0);
+    }
 
-        fail("Should not get to this point -- should be compilation failure.");
+    @Test
+    void record_allowMethodsWithSameNameAsRecordComponentButNotAnAccessorMethod2() {
+        String s = "record Point(int x, int y) {\n" +
+                "    public int x(int a) {\n" +
+                "        return 10;\n" +
+                "    }\n" +
+                " }";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+
+    }
+
+
+    @Test
+    void record_allowComponentAccessorWithMatchingType() {
+        String s = "record Point(int x, int y) {\n" +
+                "    public int x() {\n" +
+                "        return 10;\n" +
+                "    }\n" +
+                " }";
+
+//        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = parseCompilationUnit(s);
+//        });
+
     }
 
     @Disabled
