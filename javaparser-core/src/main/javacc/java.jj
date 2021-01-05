@@ -1376,10 +1376,7 @@ RecordDeclaration RecordDeclaration(ModifierHolder modifier):
     [ typePar = TypeParameters() ]
     parameters = Parameters()
     [ impList = ImplementsList() ]
-
-    // Note: Permit all members within the grammar, then use validators.
-    // e.g. to check for non-static fields, incorrect component accessor types.
-    members = ClassOrInterfaceBody()
+    members = RecordBody()
 
     { return new RecordDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, parameters.a, typePar.list, impList, members, parameters.b); }
 }
@@ -1696,6 +1693,112 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
     )*
     "}"
     { return ret; }
+}
+
+/**
+* Everything that can go into a "regular" class or interface declaration,
+* can also (usually) be included within a record.
+* Exceptions to this are handled within the validators.
+* Note: This is HEAVILY based on ClassOrInterfaceBody() and ClassOrInterfaceBodyDeclaration()
+*/
+NodeList<BodyDeclaration<?>> RecordBody():
+{
+    NodeList<BodyDeclaration<?>> ret = emptyNodeList();
+    BodyDeclaration member;
+}
+{
+    "{"
+    (
+        member = RecordBodyDeclaration() { ret.add(member); }
+     |
+        ";"
+    )*
+    "}"
+    { return ret; }
+}
+
+BodyDeclaration<?> RecordBodyDeclaration():
+{
+    ModifierHolder modifiers;
+    BodyDeclaration<?> ret;
+}
+{
+    (
+        LOOKAHEAD(2)
+        ret = InitializerDeclaration()
+     |
+        // Just get all the modifiers out of the way. If you want to do
+        // more checks, pass the modifiers down to the member
+        modifiers = Modifiers()
+        (
+            ret = ClassOrInterfaceDeclaration(modifiers)
+         |
+            LOOKAHEAD("enum")
+            ret = EnumDeclaration(modifiers)
+         |
+            LOOKAHEAD("@" "interface")
+            ret = AnnotationTypeDeclaration(modifiers)
+         |
+            LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
+            ret = ConstructorDeclaration(modifiers)
+         |
+            LOOKAHEAD( [ TypeParameters() ] Identifier() "{" )
+            ret = RecordDeclarationConstructor(modifiers)
+         |
+            LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
+            ret = FieldDeclaration(modifiers)
+         |
+            ret = MethodDeclaration(modifiers)
+        )
+    )
+    { return ret; }
+}
+
+
+/**
+ * https://openjdk.java.net/jeps/359#Grammar
+ * <pre>{@code
+ *     RecordDeclarationConstructor:
+ *       {Annotation} {ConstructorModifier} [TypeParameters] SimpleTypeName
+ *         [Throws] ConstructorBody
+ * }</pre>
+ */
+RecordDeclarationConstructor RecordDeclarationConstructor(ModifierHolder modifier):
+{
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
+    NodeList<ReferenceType> throws_ = emptyNodeList();
+    ExplicitConstructorInvocationStmt exConsInv = null;
+    NodeList<Statement> stmts = emptyNodeList();
+    JavaToken begin = modifier.begin;
+    JavaToken blockBegin = INVALID;
+    ReferenceType throwType;
+}
+{
+    [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
+    // Modifiers matched in the caller
+    name = SimpleName() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); begin = orIfInvalid(begin, token()); }
+    //parameters = Parameters()
+    [
+        "throws"
+        throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+        ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
+    ]
+    "{" { blockBegin=token(); }
+    [
+        LOOKAHEAD(ExplicitConstructorInvocation())
+        exConsInv = ExplicitConstructorInvocation()
+    ]
+    stmts = Statements()
+    "}"
+
+    {
+    if (exConsInv != null) {
+        stmts = prepend(stmts, exConsInv);
+    }
+    return new RecordDeclarationConstructor(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
+}
 }
 
 /**

@@ -17,7 +17,9 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.ast.stmt, \
     com.github.javaparser.ast.type, \
     com.github.javaparser.ast.validator, \
-    com.github.javaparser.ast.validator.chunks, \
+    com.github.javaparser.ast.validator.language_level_validations, \
+    com.github.javaparser.ast.validator.language_level_validations.chunks, \
+    com.github.javaparser.ast.validator.postprocessors, \
     com.github.javaparser.ast.visitor, \
     com.github.javaparser.javadoc, \
     com.github.javaparser.javadoc.description, \
@@ -31,8 +33,7 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.resolution.declarations, \
     com.github.javaparser.resolution.types, \
     com.github.javaparser.resolution.types.parametrization, \
-    com.github.javaparser.utils, \
-    com.github.javaparser.version
+    com.github.javaparser.utils
 
 # Don't use the project's version for the packages
 # We prefer not setting a version as we don't follow OSGi version semantics

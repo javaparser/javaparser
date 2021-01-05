@@ -1,1 +1,7 @@
-0 problems in 0 files
+com/github/javaparser/symbolsolver/resolution/typeinference/constraintformulas/ExpressionCompatibleWithType.java
+(line 247,col 33) Parse error. Found ".", expected one of  "%=" "&=" "(" "*=" "++" "+=" "--" "-=" "/=" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+
+com/github/javaparser/symbolsolver/resolution/typeinference/TypeInferenceCache.java
+(line 38,col 19) Parse error. Found "record", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" "yield" <IDENTIFIER>
+
+2 problems in 2 files

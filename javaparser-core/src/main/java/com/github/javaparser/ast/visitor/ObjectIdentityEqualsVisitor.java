@@ -74,11 +74,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final RecordDeclaration n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
     public Boolean visit(final EnumDeclaration n, final Visitable arg) {
         return n == arg;
     }
@@ -530,6 +525,16 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final PatternExpr n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final RecordDeclaration n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final RecordDeclarationConstructor n, final Visitable arg) {
         return n == arg;
     }
 }

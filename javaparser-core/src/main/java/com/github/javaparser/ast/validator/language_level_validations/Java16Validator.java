@@ -21,15 +21,10 @@
 
 package com.github.javaparser.ast.validator.language_level_validations;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.RecordDeclaration;
-import com.github.javaparser.ast.type.VarType;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.chunks.RecordDeclarationValidator;
-import com.github.javaparser.ast.validator.language_level_validations.chunks.VarValidator;
-
-import java.util.List;
 
 /**
  * This validator validates according to Java 16 syntax rules.

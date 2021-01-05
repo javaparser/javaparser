@@ -332,16 +332,18 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Override
     public boolean isPolyExpression() {
         // A method invocation expression is a poly expression if all of the following are true:
-        // 
+        //
         // 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
         if (!(appearsInAssignmentContext() || appearsInInvocationContext())) {
             return false;
         }
+
         // 2. If the invocation is qualified (that is, any form of MethodInvocation except for the form [MethodName (
         // [ArgumentList] )]), then the invocation elides TypeArguments to the left of the Identifier.
         if (isQualified() && !elidesTypeArguments()) {
             return false;
         }
+
         // 3. The method to be invoked, as determined by the following subsections, is generic (§8.4.4) and has a
         // return type that mentions at least one of the method's type parameters.
         // A method is generic if it declares one or more type variables (§4.4).
@@ -349,6 +351,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
             // it's a poly expression
             return true;
         }
+
         // Otherwise, the method invocation expression is a standalone expression.
         return false;
     }

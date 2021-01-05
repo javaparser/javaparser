@@ -53,6 +53,8 @@ public interface GenericVisitor<R, A> {
 
     R visit(RecordDeclaration n, A arg);
 
+    R visit(RecordDeclarationConstructor n, A arg);
+
     R visit(EnumDeclaration n, A arg);
 
     R visit(EnumConstantDeclaration n, A arg);

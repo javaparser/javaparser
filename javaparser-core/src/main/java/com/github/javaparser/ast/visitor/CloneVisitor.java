@@ -114,24 +114,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final RecordDeclaration n, final Object arg) {
-        NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
-        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
-        ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
-        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
-        NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
-        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
-        SimpleName name = cloneNode(n.getName(), arg);
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
-        Comment comment = cloneNode(n.getComment(), arg);
-        RecordDeclaration r = new RecordDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, name, parameters, typeParameters, implementedTypes, members, receiverParameter);
-        r.setComment(comment);
-        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
-        copyData(n, r);
-        return r;
-    }
-
-    @Override
     public Visitable visit(final EnumDeclaration n, final Object arg) {
         NodeList<EnumConstantDeclaration> entries = cloneList(n.getEntries(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
@@ -1255,6 +1237,40 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         ReferenceType type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         PatternExpr r = new PatternExpr(n.getTokenRange().orElse(null), type, name);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final RecordDeclaration n, final Object arg) {
+        NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
+        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
+        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
+        NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        RecordDeclaration r = new RecordDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, name, parameters, typeParameters, implementedTypes, members, receiverParameter);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final RecordDeclarationConstructor n, final Object arg) {
+        BlockStmt body = cloneNode(n.getBody(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
+        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        RecordDeclarationConstructor r = new RecordDeclarationConstructor(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, name, thrownExceptions, body);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

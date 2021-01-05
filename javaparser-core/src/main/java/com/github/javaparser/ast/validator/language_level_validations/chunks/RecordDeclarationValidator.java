@@ -1,11 +1,8 @@
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.TypedValidator;
-
-import java.util.List;
 
 public class RecordDeclarationValidator implements TypedValidator<RecordDeclaration> {
 
@@ -30,21 +27,21 @@ public class RecordDeclarationValidator implements TypedValidator<RecordDeclarat
      * <pre>{@code
      *     record ABC(int x, int y) { }
      * }</pre>
-     *
+     * <p>
      * Permitted - shadows int x (matches name and return type)
      * <pre>{@code
      *     public int x() {
      *         return x;
      *     }
      * }</pre>
-     *
+     * <p>
      * Forbidden - shadows int x, but has a type mismatch (String vs int).
      * <pre>{@code
      *     public String x() {
      *         return "";
      *     }
      * }</pre>
-     *
+     * <p>
      * Permitted - shadows int x, but not considered a component accessor due to presence of parameter.
      * <pre>{@code
      *     public String x(int a) {

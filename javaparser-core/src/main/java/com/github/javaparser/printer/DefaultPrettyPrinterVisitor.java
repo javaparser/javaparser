@@ -1128,6 +1128,33 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(final RecordDeclarationConstructor n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        printTypeParameters(n.getTypeParameters(), arg);
+        if (n.isGeneric()) {
+            printer.print(" ");
+        }
+        n.getName().accept(this, arg);
+
+        if (!isNullOrEmpty(n.getThrownExceptions())) {
+            printer.print(" throws ");
+            for (final Iterator<ReferenceType> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
+                final ReferenceType name = i.next();
+                name.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+        printer.print(" ");
+        n.getBody().accept(this, arg);
+    }
+
+    @Override
     public void visit(final MethodDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
 

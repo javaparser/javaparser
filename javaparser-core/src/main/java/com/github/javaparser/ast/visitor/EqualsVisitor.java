@@ -216,30 +216,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final RecordDeclaration n, final Visitable arg) {
-        final RecordDeclaration n2 = (RecordDeclaration) arg;
-        if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
-            return false;
-        if (!nodesEquals(n.getParameters(), n2.getParameters()))
-            return false;
-        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
-            return false;
-        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
-            return false;
-        if (!nodesEquals(n.getMembers(), n2.getMembers()))
-            return false;
-        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
-            return false;
-        if (!nodeEquals(n.getName(), n2.getName()))
-            return false;
-        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
-            return false;
-        if (!nodeEquals(n.getComment(), n2.getComment()))
-            return false;
-        return true;
-    }
-
-    @Override
     public Boolean visit(final EnumDeclaration n, final Visitable arg) {
         final EnumDeclaration n2 = (EnumDeclaration) arg;
         if (!nodesEquals(n.getEntries(), n2.getEntries()))
@@ -1370,6 +1346,50 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         if (!nodeEquals(n.getType(), n2.getType()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final RecordDeclaration n, final Visitable arg) {
+        final RecordDeclaration n2 = (RecordDeclaration) arg;
+        if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
+            return false;
+        if (!nodesEquals(n.getParameters(), n2.getParameters()))
+            return false;
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
+            return false;
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
+            return false;
+        if (!nodesEquals(n.getMembers(), n2.getMembers()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final RecordDeclarationConstructor n, final Visitable arg) {
+        final RecordDeclarationConstructor n2 = (RecordDeclarationConstructor) arg;
+        if (!nodeEquals(n.getBody(), n2.getBody()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions()))
+            return false;
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;

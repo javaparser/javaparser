@@ -137,6 +137,20 @@ public class ConcreteSyntaxModel {
                 block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
         ));
 
+        concreteSyntaxModelByClass.put(ConstructorDeclaration.class, sequence(
+                comment(),
+                memberAnnotations(),
+                modifiers(),
+                typeParameters(),
+                child(ObservableProperty.NAME),
+                token(GeneratedJavaParserConstants.LPAREN),
+                list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
+                token(GeneratedJavaParserConstants.RPAREN),
+                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.THROWS), space()), none()),
+                space(),
+                child(ObservableProperty.BODY)
+        ));
+
         concreteSyntaxModelByClass.put(RecordDeclaration.class, sequence(
                 comment(),
                 memberAnnotations(),
@@ -156,15 +170,12 @@ public class ConcreteSyntaxModel {
                 block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
         ));
 
-        concreteSyntaxModelByClass.put(ConstructorDeclaration.class, sequence(
+        concreteSyntaxModelByClass.put(RecordDeclarationConstructor.class, sequence(
                 comment(),
                 memberAnnotations(),
                 modifiers(),
                 typeParameters(),
                 child(ObservableProperty.NAME),
-                token(GeneratedJavaParserConstants.LPAREN),
-                list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
-                token(GeneratedJavaParserConstants.RPAREN),
                 list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.THROWS), space()), none()),
                 space(),
                 child(ObservableProperty.BODY)

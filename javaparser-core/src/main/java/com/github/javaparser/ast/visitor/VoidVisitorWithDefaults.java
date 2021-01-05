@@ -134,11 +134,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final RecordDeclaration n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
     public void visit(final ClassOrInterfaceType n, final A arg) {
         defaultAction(n, arg);
     }
@@ -533,6 +528,16 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final PatternExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final RecordDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final RecordDeclarationConstructor n, final A arg) {
         defaultAction(n, arg);
     }
 }

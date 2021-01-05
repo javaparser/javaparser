@@ -179,6 +179,16 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isRecordDeclarationConstructor() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public RecordDeclarationConstructor asRecordDeclarationConstructor() {
+        throw new IllegalStateException(f("%s is not RecordDeclarationConstructor, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isEnumConstantDeclaration() {
         return false;
     }
@@ -283,6 +293,14 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifRecordDeclaration(Consumer<RecordDeclaration> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifRecordDeclarationConstructor(Consumer<RecordDeclarationConstructor> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
         return Optional.empty();
     }
@@ -353,6 +371,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifRecordDeclaration(Consumer<RecordDeclaration> action) {
+    public Optional<RecordDeclarationConstructor> toRecordDeclarationConstructor() {
+        return Optional.empty();
     }
 }

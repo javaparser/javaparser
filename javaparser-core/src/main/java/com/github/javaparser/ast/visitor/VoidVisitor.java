@@ -163,6 +163,8 @@ public interface VoidVisitor<A> {
 
     void visit(RecordDeclaration n, A arg);
 
+    void visit(RecordDeclarationConstructor n, A arg);
+
     void visit(ReturnStmt n, A arg);
 
     void visit(SimpleName n, A arg);

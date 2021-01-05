@@ -1,1 +1,4 @@
-0 problems in 0 files
+com/github/javaparser/ast/body/RecordDeclarationTest.java
+(line 276,col 10) Parse error. Found  "RecordDeclaration" <IDENTIFIER>, expected "}"
+
+1 problems in 1 files

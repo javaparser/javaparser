@@ -54,15 +54,15 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final AnnotationDeclaration n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
-        SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null)
             return null;
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
-        n.setName(name);
         n.setMembers(members);
+        n.setName(name);
         n.setComment(comment);
         return n;
     }
@@ -258,25 +258,25 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final RecordDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
         ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
-        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
-        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null)
             return null;
+        n.setAnnotations(annotations);
+        n.setModifiers(modifiers);
         n.setImplementedTypes(implementedTypes);
         n.setParameters(parameters);
         n.setReceiverParameter(receiverParameter);
         n.setTypeParameters(typeParameters);
         n.setMembers(members);
-        n.setModifiers(modifiers);
         n.setName(name);
-        n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
     }
@@ -347,6 +347,27 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setName(name);
         n.setParameters(parameters);
         n.setReceiverParameter(receiverParameter);
+        n.setThrownExceptions(thrownExceptions);
+        n.setTypeParameters(typeParameters);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final RecordDeclarationConstructor n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
+        NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null || name == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setModifiers(modifiers);
+        n.setBody(body);
+        n.setName(name);
         n.setThrownExceptions(thrownExceptions);
         n.setTypeParameters(typeParameters);
         n.setComment(comment);

@@ -4,7 +4,6 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -15,7 +14,10 @@ import java.util.List;
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RecordDeclarationTest {
 
@@ -229,7 +231,8 @@ public class RecordDeclarationTest {
                 " }";
 
         CompilationUnit cu = parseCompilationUnit(s);
-
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
     }
 
     @Test
@@ -241,7 +244,8 @@ public class RecordDeclarationTest {
                 " }";
 
         CompilationUnit cu = parseCompilationUnit(s);
-
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
     }
 
 
@@ -253,13 +257,11 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 " }";
 
-//        assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(s);
-//        });
-
+        CompilationUnit cu = parseCompilationUnit(s);
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
     }
 
-    @Disabled
     // https://bugs.openjdk.java.net/browse/JDK-8222777
     @Test
     void recordDeclarationFromTheJDK8222777() {

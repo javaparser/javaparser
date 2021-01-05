@@ -118,11 +118,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
-    @Override
-    public Integer visit(final RecordDeclaration n, final Void arg) {
-        return n.hashCode();
-    }
-
     public Integer visit(final ClassOrInterfaceType n, final Void arg) {
         return n.hashCode();
     }
@@ -444,6 +439,15 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final PatternExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final RecordDeclaration n, final Void arg) {
+        return n.hashCode();
+    }
+
+    public Integer visit(final RecordDeclarationConstructor n, final Void arg) {
         return n.hashCode();
     }
 }
