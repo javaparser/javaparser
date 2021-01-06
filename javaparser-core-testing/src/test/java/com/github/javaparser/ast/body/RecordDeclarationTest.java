@@ -248,6 +248,20 @@ public class RecordDeclarationTest {
         assertTrue(record.isFinal(), "Records are implicitly final.");
     }
 
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_canHaveGenerics() {
+        String s = "record Point <T> (T x, int y) { }";
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+        assertFalse(record.getTypeParameters().isEmpty());
+        assertEquals("T", record.getTypeParameters().get(0).getNameAsString());
+    }
+
 
     @Test
     void record_mustNotAllowMismatchedComponentAccessorReturnType() {
