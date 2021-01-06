@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.TypedValidator;
@@ -8,8 +9,15 @@ public class RecordDeclarationValidator implements TypedValidator<RecordDeclarat
 
     @Override
     public void accept(RecordDeclaration node, ProblemReporter reporter) {
+        forbidAbstractModifier(node, reporter);
         forbidNonStaticFieldsInRecords(node, reporter);
         validateRecordComponentAccessorMethods(node, reporter);
+    }
+
+    private void forbidAbstractModifier(RecordDeclaration n, ProblemReporter reporter) {
+        if (n.getModifiers().contains(Modifier.abstractModifier())) {
+            reporter.report(n, "Record Declarations must not be declared as abstract.");
+        }
     }
 
     private void forbidNonStaticFieldsInRecords(RecordDeclaration n, ProblemReporter reporter) {

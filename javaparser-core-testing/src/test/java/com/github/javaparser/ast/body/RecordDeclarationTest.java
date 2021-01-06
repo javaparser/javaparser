@@ -77,9 +77,11 @@ public class RecordDeclarationTest {
         assertEquals(0, recordDeclaration.getMembers().size());
     }
 
+    /**
+     * https://openjdk.java.net/jeps/395#Description
+     */
     @Test
     void basicRecordPrints() {
-        /* https://openjdk.java.net/jeps/395#Description */
         String s = "record Point(int x, int y) { }";
         CompilationUnit cu = parseCompilationUnit(s);
 
@@ -88,6 +90,28 @@ public class RecordDeclarationTest {
                 "}\n" +
                 "";
         assertEqualsStringIgnoringEol(expected, cu.toString());
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-record
+     */
+    @Test
+    void record_cannotExtend() {
+        String s = "record Point(int x, int y) extends OtherThing { }";
+        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = parseCompilationUnit(s);
+        });
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_cannotBeAbstract() {
+        String s = "abstract record Point(int x, int y) { }";
+        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = parseCompilationUnit(s);
+        });
     }
 
     @Test
