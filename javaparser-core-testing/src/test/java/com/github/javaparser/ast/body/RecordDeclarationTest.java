@@ -122,6 +122,17 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
     }
 
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_mayBeStatic() {
+        String s = "static record Point(int x, int y) { }";
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        assertOneRecordDeclaration(cu);
+    }
+
     @Test
     void recordWithVarArgs() {
         String s = "record R(T1 c1, Tn... cn){ }";
@@ -194,6 +205,21 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "\n" +
                 "    public int x() {\n" +
+                "        return x;\n" +
+                "    }\n" +
+                "\n" +
+                "}\n" +
+                "";
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    @Test
+    void record_permitStaticMethods() {
+        String s = "" +
+                "record ABC(int x, int y) {\n" +
+                "\n" +
+                "    static public int abc() {\n" +
                 "        return x;\n" +
                 "    }\n" +
                 "\n" +
