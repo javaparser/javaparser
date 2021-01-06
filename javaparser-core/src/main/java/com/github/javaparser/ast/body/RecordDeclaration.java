@@ -296,4 +296,15 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     public RecordDeclaration removeReceiverParameter() {
         return setReceiverParameter((ReceiverParameter) null);
     }
+
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     *
+     * @return always true -- Records are implicitly final, therefore can never not be final.
+     */
+    @Override
+    public boolean isFinal() {
+        return true;
+    }
 }

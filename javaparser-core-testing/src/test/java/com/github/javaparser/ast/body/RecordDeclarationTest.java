@@ -235,6 +235,19 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
     }
 
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_isImplicitlyFinal() {
+        String s = "record Point(int x, int y) { static int z; }";
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+        assertTrue(record.isFinal(), "Records are implicitly final.");
+    }
+
 
     @Test
     void record_mustNotAllowMismatchedComponentAccessorReturnType() {
