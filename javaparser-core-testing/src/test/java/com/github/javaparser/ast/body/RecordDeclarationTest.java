@@ -37,26 +37,26 @@ public class RecordDeclarationTest {
         CompilationUnit cu = parseCompilationUnit(languageLevel, s);
     }
 
+    /**
+     * https://openjdk.java.net/jeps/395#Description
+     */
     @Test
     void basicGrammarCompiles() {
-        /* https://openjdk.java.net/jeps/395#Description */
         String s = "record Point(int x, int y) { }";
-        CompilationUnit cu = parseCompilationUnit(s);
-
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        assertOneRecordDeclaration(parseCompilationUnit(s));
     }
 
+    /**
+     * https://openjdk.java.net/jeps/395#Description
+     */
     @Test
     void basicGrammar() {
-        /* https://openjdk.java.net/jeps/395#Description */
         String s = "record Point(int x, int y) { }";
         CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
 
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
 
-        RecordDeclaration recordDeclaration = recordDeclarations.get(0);
         assertTrue(recordDeclaration.isRecordDeclaration());
         assertTrue(recordDeclaration.getImplementedTypes().isEmpty());
         assertTrue(recordDeclaration.getTypeParameters().isEmpty());
@@ -84,6 +84,7 @@ public class RecordDeclarationTest {
     void basicRecordPrints() {
         String s = "record Point(int x, int y) { }";
         CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
 
         String expected = "" +
                 "record Point(int x, int y) {\n" +
@@ -98,9 +99,7 @@ public class RecordDeclarationTest {
     @Test
     void record_cannotExtend() {
         String s = "record Point(int x, int y) extends OtherThing { }";
-        assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(s);
-        });
+        assertCompilationFails(s);
     }
 
     /**
@@ -109,9 +108,18 @@ public class RecordDeclarationTest {
     @Test
     void record_cannotBeAbstract() {
         String s = "abstract record Point(int x, int y) { }";
-        assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(s);
-        });
+        assertCompilationFails(s);
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_mayImplementInterfaces() {
+        String s = "record Point(int x, int y) implements OtherInterface { }";
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        assertOneRecordDeclaration(cu);
     }
 
     @Test
@@ -166,6 +174,7 @@ public class RecordDeclarationTest {
     void record_emptyMembers() {
         String s = "record Point(int x, int y) { }";
         CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
 
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         RecordDeclaration recordDeclaration = recordDeclarations.get(0);
@@ -191,8 +200,7 @@ public class RecordDeclarationTest {
                 "}\n" +
                 "";
         CompilationUnit cu = parseCompilationUnit(s);
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        assertOneRecordDeclaration(cu);
     }
 
     @Test
@@ -211,24 +219,20 @@ public class RecordDeclarationTest {
                 "}\n" +
                 "";
         CompilationUnit cu = parseCompilationUnit(s);
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        assertOneRecordDeclaration(cu);
     }
 
     @Test
     void record_mustNotAllowNonStaticFields() {
         String s = "record Point(int x, int y) { int z; }";
-        assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(s);
-        });
+        assertCompilationFails(s);
     }
 
     @Test
     void record_mustAllowStaticFields() {
         String s = "record Point(int x, int y) { static int z; }";
         CompilationUnit cu = parseCompilationUnit(s);
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        assertOneRecordDeclaration(cu);
     }
 
 
@@ -239,11 +243,7 @@ public class RecordDeclarationTest {
                 "        return \"10\";\n" +
                 "    }\n" +
                 " }";
-
-        assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(s);
-        });
-
+        assertCompilationFails(s);
     }
 
     @Test
@@ -255,8 +255,7 @@ public class RecordDeclarationTest {
                 " }";
 
         CompilationUnit cu = parseCompilationUnit(s);
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        assertOneRecordDeclaration(cu);
     }
 
     @Test
@@ -268,10 +267,8 @@ public class RecordDeclarationTest {
                 " }";
 
         CompilationUnit cu = parseCompilationUnit(s);
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        assertOneRecordDeclaration(cu);
     }
-
 
     @Test
     void record_allowComponentAccessorWithMatchingType() {
@@ -282,8 +279,7 @@ public class RecordDeclarationTest {
                 " }";
 
         CompilationUnit cu = parseCompilationUnit(s);
-        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
-        assertEquals(1, recordDeclarations.size());
+        assertOneRecordDeclaration(cu);
     }
 
     // https://bugs.openjdk.java.net/browse/JDK-8222777
@@ -305,5 +301,17 @@ public class RecordDeclarationTest {
         // test parameters
         // get constructor
         // test parameters (none)
+    }
+
+
+    private void assertCompilationFails(String s) {
+        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = parseCompilationUnit(s);
+        });
+    }
+
+    private void assertOneRecordDeclaration(CompilationUnit cu) {
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
     }
 }
