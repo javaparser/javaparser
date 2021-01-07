@@ -335,7 +335,12 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
     }
 
-    // https://bugs.openjdk.java.net/browse/JDK-8222777
+    /**
+     * Note the Record Declaration Constructor does not include parameters.
+     * (parameters are, instead, included within the record declaration)
+     *
+     * https://bugs.openjdk.java.net/browse/JDK-8222777
+     */
     @Test
     void recordDeclarationFromTheJDK8222777() {
         CompilationUnit cu = parseCompilationUnit("" +
