@@ -629,7 +629,7 @@ public class NameLogic {
         //
         // 1. To the left of the "." in a qualified TypeName
 
-        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> p.hasScope() && p.getScope().get() == c && (isSyntacticallyATypeName(p) || isSyntacticallyAPackageOrTypeName(p)))) {
+        if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> p.getScope().isPresent() && p.getScope().get() == c && (isSyntacticallyATypeName(p) || isSyntacticallyAPackageOrTypeName(p)))) {
             return true;
         }
 
