@@ -334,7 +334,7 @@ public class NameLogic {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ObjectCreationExpr.class, name, (p, c) -> p.getType() == c ||
-                (p.hasScopes() && p.getScope().get() == c))) {
+                (p.hasScope() && p.getScope().get() == c))) {
             return NameRole.REFERENCE;
         }
         if (name.getParentNode().isPresent() && NameLogic.isAName(name.getParentNode().get())) {
