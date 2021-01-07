@@ -21,6 +21,15 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.Providers.provider;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -36,14 +45,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static com.github.javaparser.Providers.provider;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class Issue2044Test {
 
@@ -160,7 +161,7 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
 
                 // (new Object()).hashCode()
                 final MethodCallExpr object_hashCode = methodCalls.get(0);
-                assertTrue(object_hashCode.getScope().isPresent());
+                assertTrue(object_hashCode.hasScope());
                 Expression object_hashCode_scope = object_hashCode.getScope().get();
                 assertEquals("java.lang.Object", object_hashCode_scope.calculateResolvedType().describe());
 
@@ -169,7 +170,7 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
 
                 // key.hashCode()
                 final MethodCallExpr key_hashCode = methodCalls.get(1);
-                assertTrue(key_hashCode.getScope().isPresent());
+                assertTrue(key_hashCode.hasScope());
                 Expression key_hashCode_scope = key_hashCode.getScope().get();
                 assertEquals("K", key_hashCode_scope.calculateResolvedType().describe());
 
