@@ -816,7 +816,7 @@ public abstract class Expression extends Node {
      * https://docs.oracle.com/javase/specs/jls/se7/html/jls-6.html#jls-6.5.6.2
      */
     public boolean isQualified() {
-        return this instanceof NodeWithOptionalScope && ((NodeWithOptionalScope)this).getScope().isPresent();
+        return hasScope();
     }
     
     /*
@@ -867,9 +867,7 @@ public abstract class Expression extends Node {
      * a<T>.m() ==> false because the type argument is not elided
      */
     public final boolean elidesTypeArguments() {
-        if (!(this instanceof NodeWithOptionalScope 
-                && ((NodeWithOptionalScope) this).getScope().isPresent()
-                && this instanceof NodeWithTypeArguments)) {
+        if (!(hasScope() && this instanceof NodeWithTypeArguments)) {
             return true;
         }
         Expression scope = (Expression) ((NodeWithOptionalScope) this).getScope().get();

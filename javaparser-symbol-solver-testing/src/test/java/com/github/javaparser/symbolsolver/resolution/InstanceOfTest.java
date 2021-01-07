@@ -1,5 +1,15 @@
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -18,16 +28,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InstanceOfTest {
 
@@ -285,7 +285,7 @@ public class InstanceOfTest {
 
 
                 // Resolving the variable `s`
-                assertTrue(inScopeMethodCall.getScope().isPresent());
+                assertTrue(inScopeMethodCall.hasScope());
                 final Expression expression = inScopeMethodCall.getScope().get();
 
                 final ResolvedType resolvedType = expression.calculateResolvedType();
@@ -343,7 +343,7 @@ public class InstanceOfTest {
 
 
                 // Resolving the variable `s`
-                assertTrue(inScopeMethodCall.getScope().isPresent());
+                assertTrue(inScopeMethodCall.hasScope());
                 final Expression expression = inScopeMethodCall.getScope().get();
 
                 final ResolvedType resolvedType = expression.calculateResolvedType();
@@ -471,7 +471,7 @@ public class InstanceOfTest {
 
 
                 // Resolving the variable `s`
-                assertTrue(inScopeMethodCall.getScope().isPresent());
+                assertTrue(inScopeMethodCall.hasScope());
                 final Expression expression = inScopeMethodCall.getScope().get();
 
                 final ResolvedType resolvedType = expression.calculateResolvedType();

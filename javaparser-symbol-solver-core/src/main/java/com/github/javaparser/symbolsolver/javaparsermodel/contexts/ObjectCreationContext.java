@@ -49,7 +49,7 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if (wrappedNode.getScope().isPresent()) {
+        if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
             ResolvedType scopeType = JavaParserFacade.get(typeSolver).getType(scope);
             // Be careful, the scope can be an object creation expression like <code>new inner().new Other()</code>

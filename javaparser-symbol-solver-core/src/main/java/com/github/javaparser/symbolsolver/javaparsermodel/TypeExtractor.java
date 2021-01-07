@@ -653,7 +653,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 // The type parameter referred here should be the java.util.stream.Stream.T
                 ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
 
-                if (callExpr.getScope().isPresent()) {
+                if (callExpr.hasScope()) {
                     Expression scope = callExpr.getScope().get();
 
                     // If it is a static call we should not try to get the type of the scope
