@@ -38,6 +38,22 @@ public class RecordDeclarationTest {
         CompilationUnit cu = parseCompilationUnit(languageLevel, s);
     }
 
+    @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_14_PREVIEW", "JAVA_15_PREVIEW", "JAVA_16", "JAVA_16_PREVIEW"})
+    void languageLevelValidation_recordAsTypeIdentifier_permitted(ParserConfiguration.LanguageLevel languageLevel) {
+        String s = "class record {}";
+        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = parseCompilationUnit(languageLevel, s);
+        });
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_13", "JAVA_13_PREVIEW", "JAVA_14", "JAVA_15"})
+    void languageLevelValidation_recordAsTypeIdentifier_forbidden(ParserConfiguration.LanguageLevel languageLevel) {
+        String s = "class record {}";
+        CompilationUnit cu = parseCompilationUnit(languageLevel, s);
+    }
+
     /**
      * https://openjdk.java.net/jeps/395#Description
      */
@@ -549,19 +565,6 @@ public class RecordDeclarationTest {
         // test parameters
         // get constructor
         // test parameters (none)
-    }
-
-
-    @Test
-    void recordCanBeUsedAsIdentifier() {
-        String s = "public class record {}";
-        CompilationUnit cu = parseCompilationUnit(ParserConfiguration.LanguageLevel.JAVA_9, s);
-    }
-
-    @Test
-    void recordCanBeUsedAsIdentifier2() {
-        String s = "class X { int record; }";
-        CompilationUnit cu = parseCompilationUnit(ParserConfiguration.LanguageLevel.JAVA_9, s);
     }
 
     private void assertCompilationFails(String s) {

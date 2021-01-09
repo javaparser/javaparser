@@ -21,12 +21,18 @@
 
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ast.validator.ReservedKeywordValidator;
+import com.github.javaparser.ast.validator.Validator;
+
 /**
  * This validator validates according to Java 14 syntax rules.
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/14/">https://openjdk.java.net/projects/jdk/14/</a>
  */
 public class Java14Validator extends Java13Validator {
+
+    final Validator recordAsTypeIdentifierNotAllowed = new ReservedKeywordValidator("record");
+
 
     public Java14Validator() {
         super();

@@ -41,6 +41,7 @@ public class Java16Validator extends Java15Validator {
         // Released Language Features
         remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
         remove(noRecordDeclaration); // Records released within Java 16 - https://openjdk.java.net/jeps/395
+        add(recordAsTypeIdentifierNotAllowed);
 
         add(recordDeclarationValidator);
     }
