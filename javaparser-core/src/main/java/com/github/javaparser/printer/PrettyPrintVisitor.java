@@ -1059,7 +1059,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ObjectCreationExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        if (n.getScope().isPresent()) {
+        if (n.hasScope()) {
             n.getScope().get().accept(this, arg);
             printer.print(".");
         }

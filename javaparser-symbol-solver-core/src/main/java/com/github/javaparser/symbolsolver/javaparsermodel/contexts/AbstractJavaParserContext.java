@@ -36,6 +36,7 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -134,7 +135,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         Node notMethodNode = parentNode;
-        while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr) {
+        // to avoid an infinite loop if parent scope is the same as wrapped node 
+        while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
+                || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode)) ) {
             notMethodNode = notMethodNode.getParentNode().orElse(null);
         }
         if (notMethodNode == null) {
@@ -142,6 +145,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         }
         Context parentContext = JavaParserFactory.getContext(notMethodNode, typeSolver);
         return Optional.of(parentContext);
+    }
+    
+    // before to call this method verify the node has a scope 
+    protected Node getScope(Node node) {
+        return (Node) ((NodeWithOptionalScope)node).getScope().get();
     }
 
 
