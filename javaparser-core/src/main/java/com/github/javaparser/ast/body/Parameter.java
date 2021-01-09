@@ -336,7 +336,6 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
                 return true;
             }
         }
-
         // Otherwise use the default method.
         return NodeWithFinalModifier.super.isFinal();
     }

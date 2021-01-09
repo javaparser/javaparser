@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -1238,7 +1237,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.hasScope()) {
+        if (n.getScope().isPresent()) {
             tmp = n.getScope().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -1410,7 +1409,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.hasScope()) {
+        if (n.getScope().isPresent()) {
             tmp = n.getScope().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);

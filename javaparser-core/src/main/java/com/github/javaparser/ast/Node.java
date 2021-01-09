@@ -1126,10 +1126,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * returns true if the node defines a scope
      */
     public boolean hasScope() {
-        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass())
-                && ((NodeWithOptionalScope)this).getScope().isPresent();
+        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent();
     }
-    
+
     /*
      * A "phantom" node, is a node that is not really an AST node (like the fake type of variable in FieldDeclaration or an UnknownType)
      */

@@ -297,7 +297,6 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
         return setReceiverParameter((ReceiverParameter) null);
     }
 
-
     /**
      * https://openjdk.java.net/jeps/395#Restrictions-on-records
      *
@@ -307,7 +306,6 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     public boolean isFinal() {
         return true;
     }
-
 
     /**
      * Record components are implicitly static when nested (i.e. when the parent isn't a compilation unit).
@@ -322,7 +320,6 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
                 return true;
             }
         }
-
         // Otherwise use the default method.
         return super.isStatic();
     }
