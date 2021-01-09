@@ -37,7 +37,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
 
 /**
- * Any declaration that can appear between the { and } of a class, interface, or enum.
+ * Any declaration that can appear between the { and } of a class, interface, enum, or record.
  *
  * @author Julio Vilmar Gesser
  */

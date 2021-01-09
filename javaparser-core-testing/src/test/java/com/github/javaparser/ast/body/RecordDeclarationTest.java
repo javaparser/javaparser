@@ -354,6 +354,46 @@ public class RecordDeclarationTest {
      * https://openjdk.java.net/jeps/395#Restrictions-on-records
      */
     @Test
+    void record_componentsAreImplicitlyFinal() {
+        String s = "record Point(int x, int y) { }";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
+
+        NodeList<Parameter> parameters = recordDeclaration.getParameters();
+        assertTrue(parameters.get(0).isFinal());
+        assertTrue(parameters.get(1).isFinal());
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_allowClassWithinRecord() {
+        String s = "\n" +
+                "record Point(int x, int y) {\n" +
+                "    class X {\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(1, recordDeclarations.size());
+
+        RecordDeclaration recordDeclaration = recordDeclarations.get(0);
+        BodyDeclaration<?> member = recordDeclaration.getMember(0);
+
+        assertTrue(member.isClassOrInterfaceDeclaration());
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
     void record_allowNestedWithinInterface() {
         String s = "\n" +
                 "interface X {\n" +

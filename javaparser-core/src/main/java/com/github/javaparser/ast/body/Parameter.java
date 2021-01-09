@@ -322,4 +322,22 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     public ResolvedParameterDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedParameterDeclaration.class);
     }
+
+    /**
+     * Record components are implicitly final, even without the explicit modifier.
+     * https://openjdk.java.net/jeps/359#Restrictions-on-records
+     * @return If the parent is present and it is a record declaration, return true - otherwise use default method implementation.
+     */
+    @Override
+    public boolean isFinal() {
+        if (getParentNode().isPresent()) {
+            Node parentNode = getParentNode().get();
+            if (parentNode instanceof RecordDeclaration) {
+                return true;
+            }
+        }
+
+        // Otherwise use the default method.
+        return NodeWithFinalModifier.super.isFinal();
+    }
 }

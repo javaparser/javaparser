@@ -301,7 +301,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     /**
      * https://openjdk.java.net/jeps/395#Restrictions-on-records
      *
-     * @return always true -- Records are implicitly final, therefore can never not be final.
+     * @return always true -- Records are always implicitly final, therefore can never not be final.
      */
     @Override
     public boolean isFinal() {
