@@ -1371,6 +1371,7 @@ RecordDeclaration RecordDeclaration(ModifierHolder modifier):
     JavaToken begin = modifier.begin;
 }
 {
+    // Note that `record` is a "restricted identifier", not a keyword - JLS 3.9 has more detail.
     "record" { begin = orIfInvalid(begin, token()); }
     name = SimpleName()
     [ typePar = TypeParameters() ]
@@ -1717,6 +1718,12 @@ NodeList<BodyDeclaration<?>> RecordBody():
     { return ret; }
 }
 
+
+/**
+ * Almost identical to ClassOrInterfaceBodyDeclaration, but:
+ * - without a constructor
+ * - with a RecordDeclarationConstructor
+ */
 BodyDeclaration<?> RecordBodyDeclaration():
 {
     ModifierHolder modifiers;
@@ -1738,9 +1745,6 @@ BodyDeclaration<?> RecordBodyDeclaration():
          |
             LOOKAHEAD("@" "interface")
             ret = AnnotationTypeDeclaration(modifiers)
-         |
-            LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
-            ret = ConstructorDeclaration(modifiers)
          |
             LOOKAHEAD( [ TypeParameters() ] Identifier() "{" )
             ret = RecordDeclarationConstructor(modifiers)
@@ -2888,7 +2892,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> |
         // An actual plain old identifier
         <IDENTIFIER>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
@@ -5038,7 +5042,11 @@ NodeList<Expression> Resources():
     Expression expr;
 }
 {
-    expr = Resource() {expressions.add(expr);} (LOOKAHEAD(2) ";" expr = Resource() {expressions.add(expr);})*
+    expr = Resource() {expressions.add(expr);}
+    (LOOKAHEAD(2)
+        ";"
+        expr = Resource() {expressions.add(expr);}
+    )*
     { return expressions; }
 }
 

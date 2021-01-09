@@ -552,6 +552,18 @@ public class RecordDeclarationTest {
     }
 
 
+    @Test
+    void recordCanBeUsedAsIdentifier() {
+        String s = "public class record {}";
+        CompilationUnit cu = parseCompilationUnit(ParserConfiguration.LanguageLevel.JAVA_9, s);
+    }
+
+    @Test
+    void recordCanBeUsedAsIdentifier2() {
+        String s = "class X { int record; }";
+        CompilationUnit cu = parseCompilationUnit(ParserConfiguration.LanguageLevel.JAVA_9, s);
+    }
+
     private void assertCompilationFails(String s) {
         assertThrows(AssertionFailedError.class, () -> {
             CompilationUnit cu = parseCompilationUnit(s);
