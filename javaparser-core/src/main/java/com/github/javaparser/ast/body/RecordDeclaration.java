@@ -307,4 +307,23 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     public boolean isFinal() {
         return true;
     }
+
+
+    /**
+     * Record components are implicitly static when nested (i.e. when the parent isn't a compilation unit).
+     * https://openjdk.java.net/jeps/359#Restrictions-on-records
+     * @return True if the record declaration is nested, otherwise use the default method implementation.
+     */
+    @Override
+    public boolean isStatic() {
+        if (getParentNode().isPresent()) {
+            Node parentNode = getParentNode().get();
+            if (!(parentNode instanceof CompilationUnit)) {
+                return true;
+            }
+        }
+
+        // Otherwise use the default method.
+        return super.isStatic();
+    }
 }

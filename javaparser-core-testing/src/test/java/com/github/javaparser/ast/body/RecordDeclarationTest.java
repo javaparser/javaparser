@@ -271,6 +271,7 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+        assertFalse(record.hasModifier(Modifier.Keyword.FINAL));
         assertTrue(record.isFinal(), "Records are implicitly final.");
     }
 
@@ -461,6 +462,41 @@ public class RecordDeclarationTest {
 
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(3, recordDeclarations.size());
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_topLevelRecordsAreNotStatic() {
+        String s = "record Point(int x, int y) { }\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
+        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(recordDeclaration.isStatic(), "Top level Records are NOT implicitly static.");
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_nestedRecordsAreImplicitlyStatic() {
+        String s = "\n" +
+                "class X {\n" +
+                "    record Point(int x, int y) {\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
+        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.STATIC));
+        assertTrue(recordDeclaration.isStatic(), "Nested Records are implicitly static.");
+
     }
 
     /**
