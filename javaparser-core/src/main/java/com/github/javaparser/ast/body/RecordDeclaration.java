@@ -21,7 +21,12 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
@@ -40,12 +45,50 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.RecordDeclarationMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * A definition of a record.<br>{@code record X(...) { ... }}
+ * <h1>The record declaration</h1>
+ *
+ * <h2>Java 1.0 to 13</h2>
+ * Not available.
+ * <br>
+ * <h2>Java 14 (preview), Java 15 (2nd preview), Java 16</h2>
+ * <p>
+ * A definition of a record.<br>
+ * {@code record X(...) { ... }}
+ * </p><p>
+ * Note that the syntax of records is substantively different to standard classes/interfaces/enums. Specifically, note
+ * that record header contains the component declarations - where a "component" is defined as a non-static field.
+ * </p><p>
+ * This is in contrast to "normal" classes, where fields declarations are within the class body (optionally  then
+ * initialised
+ * within a constructor.
+ * </p><p>
+ * Also note that the constructor for records does not accept any parameters.
+ * </p>
+ *
+ * <p>
+ * Consider this example from https://openjdk.java.net/jeps/359
+ * <pre>{@code
+ *     record Range(int lo, int hi) {
+ *         public Range {
+ *             if (lo > hi)
+ *                 throw new IllegalArgumentException(String.format("(%d,%d)",lo,hi));
+ *         }
+ *     }
+ * }</pre>
+ * </p><p>
+ * To access these non-static field declarations, use {@link RecordDeclaration#getParameters()}
+ * </p>
+ *
+ * @author Roger Howell
+ * @see <a href="https://openjdk.java.net/jeps/359">https://openjdk.java.net/jeps/359</a>
+ * @since 3.19.0
  */
 public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implements NodeWithParameters<RecordDeclaration>, NodeWithImplements<RecordDeclaration>, NodeWithTypeParameters<RecordDeclaration>, NodeWithFinalModifier<RecordDeclaration>, Resolvable<ResolvedReferenceTypeDeclaration> {
 
@@ -255,6 +298,14 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
         return JavaParserMetaModel.recordDeclarationMetaModel;
     }
 
+    /**
+     * Type declarations do not normally have parameters - e.g. {@code class X {}} and {@code enum X {}}.
+     * Records are different, where the record declaration can include parameters e.g. {@code record X(int a) {}}.
+     * Additionally, note that the constructor for a record does not allow the declaration of parameters.
+     * See the JEP for details.
+     *
+     * @see <a href="https://openjdk.java.net/jeps/359">https://openjdk.java.net/jeps/359</a>
+     */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
         return parameters;
@@ -310,6 +361,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     /**
      * Record components are implicitly static when nested (i.e. when the parent isn't a compilation unit).
      * https://openjdk.java.net/jeps/359#Restrictions-on-records
+     *
      * @return True if the record declaration is nested, otherwise use the default method implementation.
      */
     @Override
