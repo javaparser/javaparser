@@ -1850,6 +1850,9 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         (
             ret = ClassOrInterfaceDeclaration(modifiers)
          |
+            LOOKAHEAD("record")
+            ret = RecordDeclaration(modifiers)
+         |
             LOOKAHEAD("enum")
             ret = EnumDeclaration(modifiers)
          |
@@ -4023,6 +4026,8 @@ Expression AllocationExpression(Expression scope):
             ]
             { ret = new ObjectCreationExpr(range(begin, token()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
         )
+//     |
+        // TODO: new RecordType
     )
     { return ret; }
 }

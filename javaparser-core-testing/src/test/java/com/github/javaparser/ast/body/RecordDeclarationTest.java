@@ -295,7 +295,7 @@ public class RecordDeclarationTest {
                 "    public String x() {\n" +
                 "        return \"10\";\n" +
                 "    }\n" +
-                " }";
+                "}";
         assertCompilationFails(s);
     }
 
@@ -305,7 +305,7 @@ public class RecordDeclarationTest {
                 "    public String x(int a) {\n" +
                 "        return \"10\";\n" +
                 "    }\n" +
-                " }";
+                "}";
 
         CompilationUnit cu = parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -317,7 +317,7 @@ public class RecordDeclarationTest {
                 "    public int x(int a) {\n" +
                 "        return 10;\n" +
                 "    }\n" +
-                " }";
+                "}";
 
         CompilationUnit cu = parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -329,16 +329,104 @@ public class RecordDeclarationTest {
                 "    public int x() {\n" +
                 "        return 10;\n" +
                 "    }\n" +
-                " }";
+                "}";
 
         CompilationUnit cu = parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
     /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_allowNestedWithinClass() {
+        String s = "\n" +
+                "class X {\n" +
+                "    record Point(int x, int y) {\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_allowNestedWithinInterface() {
+        String s = "\n" +
+                "interface X {\n" +
+                "    record Point(int x, int y) {\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_allowNestedWithinEnum() {
+        String s = "\n" +
+                "enum ABC {\n" +
+                "    ABC;\n" +
+                "    \n" +
+                "    record Point(int x, int y) {\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_allowNestedMultiple() {
+        String s = "\n" +
+                "interface Y {\n" +
+                "    class X {\n" +
+                "        record Point(int x, int y) {\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_allowNestedMultiple2() {
+        String s = "\n" +
+                "interface Y {\n" +
+                "    class X {\n" +
+                "        record Point(int x, int y) {\n" +
+                "        }\n" +
+                "        record PointB(int x, int y) {\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    record PointC(int x, int y) {\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(3, recordDeclarations.size());
+    }
+
+    /**
      * Note the Record Declaration Constructor does not include parameters.
      * (parameters are, instead, included within the record declaration)
-     *
+     * <p>
      * https://bugs.openjdk.java.net/browse/JDK-8222777
      */
     @Test
