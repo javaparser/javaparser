@@ -4,6 +4,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -497,6 +498,31 @@ public class RecordDeclarationTest {
         assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.STATIC));
         assertTrue(recordDeclaration.isStatic(), "Nested Records are implicitly static.");
 
+    }
+
+
+    @Test
+    void record_canBeCreatedUsingKeywordNew() {
+        String s = "\n" +
+                "\n" +
+                "record Point(int x, int y) {\n" +
+                "}\n" +
+                "\n" +
+                "class X {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        new Point(10, 3);\n" +
+                "    }\n" +
+                "}\n\n";
+
+        CompilationUnit cu = parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        ClassOrInterfaceDeclaration coid = cu.findAll(ClassOrInterfaceDeclaration.class).get(0);
+        List<ObjectCreationExpr> objectCreationExprs = coid.findAll(ObjectCreationExpr.class);
+
+        assertEquals(1, objectCreationExprs.size());
+        ObjectCreationExpr objectCreationExpr = objectCreationExprs.get(0);
+        assertEquals("Point", objectCreationExpr.getTypeAsString());
     }
 
     /**
