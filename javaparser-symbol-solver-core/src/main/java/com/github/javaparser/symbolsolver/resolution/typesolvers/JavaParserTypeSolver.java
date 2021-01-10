@@ -21,16 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
+import static com.github.javaparser.Providers.provider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,9 +37,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
-import static com.github.javaparser.Providers.provider;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.utils.FileUtils;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 /**
  * Defines a directory containing source code that should be used for solving symbols.
@@ -217,7 +218,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         for (int i = nameElements.length; i > 0; i--) {
             StringBuilder filePath = new StringBuilder(srcDir.toAbsolutePath().toString());
             for (int j = 0; j < i; j++) {
-                filePath.append("/")
+                filePath.append(File.separator)
                         .append(nameElements[j]);
             }
             filePath.append(".java");
@@ -230,26 +231,34 @@ public class JavaParserTypeSolver implements TypeSolver {
                 typeName.append(nameElements[j]);
             }
 
+            String dirToParse = null;
             // As an optimization we first try to look in the canonical position where we expect to find the file
-            Path srcFile = Paths.get(filePath.toString());
-            {
+            if (FileUtils.isValidPath(filePath.toString())) {
+                Path srcFile = Paths.get(filePath.toString());
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
                 if (compilationUnit.isPresent()) {
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit.get(), typeName.toString());
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator
+                            .findType(compilationUnit.get(), typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
-                        return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
+                        return SymbolReference
+                                .solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
                     }
                 }
+                dirToParse = srcFile.getParent().normalize().toString();
+            } else {
+                dirToParse = FileUtils.getParentPath(filePath.toString());
             }
 
             // If this is not possible we parse all files
             // We try just in the same package, for classes defined in a file not named as the class itself
-            {
-                List<CompilationUnit> compilationUnits = parseDirectory(srcFile.getParent());
+            if (FileUtils.isValidPath(dirToParse)) {
+                List<CompilationUnit> compilationUnits = parseDirectory(Paths.get(dirToParse));
                 for (CompilationUnit compilationUnit : compilationUnits) {
-                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator.findType(compilationUnit, typeName.toString());
+                    Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator
+                            .findType(compilationUnit, typeName.toString());
                     if (astTypeDeclaration.isPresent()) {
-                        return SymbolReference.solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
+                        return SymbolReference
+                                .solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
                     }
                 }
             }
