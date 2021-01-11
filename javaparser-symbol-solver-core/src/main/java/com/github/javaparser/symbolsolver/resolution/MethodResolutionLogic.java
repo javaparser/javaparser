@@ -623,6 +623,7 @@ public class MethodResolutionLogic {
         final int numberOfArgs = argumentTypes.size();
         final ResolvedType lastArgType = numberOfArgs > 0 ? argumentTypes.get(numberOfArgs - 1) : null;
         final boolean isLastArgArray = lastArgType != null && lastArgType.isArray();
+        int omittedArgs = 0;
 
         // If one method declaration has exactly the correct amount of parameters and is not variadic then it is always
         // preferred to a declaration that is variadic (and hence possibly also has a different amount of parameters).
@@ -633,12 +634,22 @@ public class MethodResolutionLogic {
                 !isLastArgArray))) {
             return false;
         }
+        
+        // If both methods are variadic but the calling method omits any varArgs, bump the omitted args to
+        // ensure the varargs type is considered when determining which method is more specific
+        if (aVariadic && bVariadic && aNumberOfParams == bNumberOfParams && numberOfArgs == aNumberOfParams - 1) {
+        	omittedArgs++;
+        }
 
         // Either both methods are variadic or neither is. So we must compare the parameter types.
-        for (int i = 0; i < numberOfArgs; i++) {
+        for (int i = 0; i < numberOfArgs + omittedArgs; i++) {
             ResolvedType paramTypeA = getMethodsExplicitAndVariadicParameterType(methodA, i);
             ResolvedType paramTypeB = getMethodsExplicitAndVariadicParameterType(methodB, i);
-            ResolvedType argType = argumentTypes.get(i);
+            
+            ResolvedType argType = null;
+            if (i < argumentTypes.size()) {
+            	argType = argumentTypes.get(i);
+            }
 
             // Safety: if a type is null it means a signature with too few parameters managed to get to this point.
             // This should not happen but it also means that this signature is immediately disqualified.
@@ -652,12 +663,14 @@ public class MethodResolutionLogic {
             // The method call will call foo(long), as it requires a widening primitive conversion from int to long
             // instead of a boxing conversion from int to Integer. See JLS §15.12.2.
             // This is what we check here.
-            else if (paramTypeA.isPrimitive() == argType.isPrimitive() &&
+            else if (argType != null &&
+            		paramTypeA.isPrimitive() == argType.isPrimitive() &&
                     paramTypeB.isPrimitive() != argType.isPrimitive() &&
                     paramTypeA.isAssignableBy(argType)) {
 
                 return true;
-            } else if (paramTypeB.isPrimitive() == argType.isPrimitive() &&
+            } else if (argType != null &&
+            		paramTypeB.isPrimitive() == argType.isPrimitive() &&
                     paramTypeA.isPrimitive() != argType.isPrimitive() &&
                     paramTypeB.isAssignableBy(argType)) {
 
