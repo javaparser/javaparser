@@ -33,9 +33,9 @@ import java.util.Optional;
  */
 public class SymbolReference<S extends ResolvedDeclaration> {
 
-    private Optional<? extends S> correspondingDeclaration;
+    private final S correspondingDeclaration;
 
-    private SymbolReference(Optional<? extends S> correspondingDeclaration) {
+    private SymbolReference(S correspondingDeclaration) {
         this.correspondingDeclaration = correspondingDeclaration;
     }
 
@@ -43,14 +43,14 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * Create a solve reference to the given symbol.
      */
     public static <S extends ResolvedDeclaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration) {
-        return new SymbolReference<S>(Optional.of(symbolDeclaration));
+        return new SymbolReference<>(symbolDeclaration);
     }
 
     /**
      * Create an unsolved reference specifying the type of the value expected.
      */
     public static <S extends ResolvedDeclaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz) {
-        return new SymbolReference<>(Optional.empty());
+        return new SymbolReference<>(null);
     }
 
     @Override
@@ -60,27 +60,21 @@ public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
-     * // TODO: Convert this to returning Optional.
      */
-    public S getCorrespondingDeclaration() {
-        if (!isSolved()) {
-            throw new UnsupportedOperationException("CorrespondingDeclaration not available for unsolved symbol.");
-        }
-        return correspondingDeclaration.get();
+    public Optional<S> getCorrespondingDeclaration() {
+        return Optional.ofNullable(correspondingDeclaration);
     }
 
     /**
      * Is the reference solved?
      */
     public boolean isSolved() {
-        return correspondingDeclaration.isPresent();
+        return correspondingDeclaration != null;
     }
 
     public static <O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<? extends O> ref, Class<O> clazz) {
-        if (ref.isSolved()) {
-            return SymbolReference.solved(ref.getCorrespondingDeclaration());
-        } else {
-            return SymbolReference.unsolved(clazz);
-        }
+        return ref.getCorrespondingDeclaration()
+                .<SymbolReference<O>>map(SymbolReference::solved)
+                .orElseGet(() -> SymbolReference.unsolved(clazz));
     }
 }
