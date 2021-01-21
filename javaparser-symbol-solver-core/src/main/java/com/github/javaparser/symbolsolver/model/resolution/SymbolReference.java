@@ -59,7 +59,9 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     }
 
     /**
-     * The corresponding declaration. If not solve this throws UnsupportedOperationException.
+     * Get the declaration associated with the Symbol.
+     *
+     * @return an {@link Optional} with a present value if the symbol is solved, otherwise an empty {@link Optional}.
      */
     public Optional<S> getCorrespondingDeclaration() {
         return Optional.ofNullable(correspondingDeclaration);
