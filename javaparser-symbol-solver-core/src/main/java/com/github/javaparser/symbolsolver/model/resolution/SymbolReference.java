@@ -61,7 +61,7 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     /**
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
      */
-    public Optional<? extends S> getCorrespondingDeclaration() {
+    public Optional<S> getCorrespondingDeclaration() {
         return Optional.ofNullable(correspondingDeclaration);
     }
 

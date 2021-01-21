@@ -268,7 +268,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             // look for the qualified name (for example class of type Rectangle2D.Double)
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
-        Optional<? extends ResolvedTypeDeclaration> ref = solveType(className).getCorrespondingDeclaration();
+        Optional<ResolvedTypeDeclaration> ref = solveType(className).getCorrespondingDeclaration();
         if (!ref.isPresent()) {
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }

@@ -65,7 +65,7 @@ public interface TypeSolver {
      * Solve the given type. Either the type is found and returned or an UnsolvedSymbolException is thrown.
      */
     default ResolvedReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        Optional<? extends ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name).getCorrespondingDeclaration();
+        Optional<ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name).getCorrespondingDeclaration();
         if (ref.isPresent()) {
             return ref.get();
         } else {

@@ -159,7 +159,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof MethodCallExpr) {
-            Optional<? extends ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver)
+            Optional<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver)
                     .solve((MethodCallExpr) node)
                     .getCorrespondingDeclaration();
             if (result.isPresent()) {
@@ -189,7 +189,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof MethodReferenceExpr) {
-            Optional<? extends ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver)
+            Optional<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver)
                     .solve((MethodReferenceExpr) node)
                     .getCorrespondingDeclaration();
             if (result.isPresent()) {

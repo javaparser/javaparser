@@ -86,7 +86,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 Optional<? extends ResolvedTypeDeclaration> ref = solveType(className)
                         .getCorrespondingDeclaration();
                 if (ref.isPresent()) {
-                    Optional<? extends ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.get(), name, argumentsTypes)
+                    Optional<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.get(), name, argumentsTypes)
                             .getCorrespondingDeclaration();
                     if (m.isPresent()) {
                         MethodUsage methodUsage = new MethodUsage(m.get());

@@ -172,7 +172,7 @@ public class SourceFileInfoExtractor {
     }
 
     private String toString(SymbolReference<ResolvedMethodDeclaration> methodDeclarationSymbolReference) {
-        Optional<? extends ResolvedMethodDeclaration> declaration = methodDeclarationSymbolReference.getCorrespondingDeclaration();
+        Optional<ResolvedMethodDeclaration> declaration = methodDeclarationSymbolReference.getCorrespondingDeclaration();
         if (declaration.isPresent()) {
             return declaration.get().getQualifiedSignature();
         } else {

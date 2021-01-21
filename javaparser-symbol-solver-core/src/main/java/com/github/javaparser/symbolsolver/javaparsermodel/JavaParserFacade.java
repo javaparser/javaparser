@@ -204,7 +204,7 @@ public class JavaParserFacade {
             // Get the class name
             String className = node.getTypeName().get().asString();
             // Attempt to resolve using a typeSolver
-            Optional<? extends ResolvedReferenceTypeDeclaration> resolvedReferenceTypeDeclaration = typeSolver.tryToSolveType(className).getCorrespondingDeclaration();
+            Optional<ResolvedReferenceTypeDeclaration> resolvedReferenceTypeDeclaration = typeSolver.tryToSolveType(className).getCorrespondingDeclaration();
             if (resolvedReferenceTypeDeclaration.isPresent()) {
                 return solved(resolvedReferenceTypeDeclaration.get());
             }
@@ -297,7 +297,7 @@ public class JavaParserFacade {
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
         Context context = JavaParserFactory.getContext(annotationExpr, typeSolver);
-        Optional<? extends ResolvedTypeDeclaration> typeDeclarationSymbolReference = context.solveType(annotationExpr.getNameAsString()).getCorrespondingDeclaration();
+        Optional<ResolvedTypeDeclaration> typeDeclarationSymbolReference = context.solveType(annotationExpr.getNameAsString()).getCorrespondingDeclaration();
         if (typeDeclarationSymbolReference.isPresent()) {
             ResolvedAnnotationDeclaration annotationDeclaration = (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.get();
             return solved(annotationDeclaration);
@@ -626,7 +626,7 @@ public class JavaParserFacade {
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
-            Optional<? extends ResolvedTypeDeclaration> ref = context.solveType(name).getCorrespondingDeclaration();
+            Optional<ResolvedTypeDeclaration> ref = context.solveType(name).getCorrespondingDeclaration();
             if (!ref.isPresent()) {
                 throw new UnsolvedSymbolException(name);
             }

@@ -622,7 +622,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (demandParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
-            Optional<? extends ResolvedMethodDeclaration> refMethod = facade.solve(callExpr).getCorrespondingDeclaration();
+            Optional<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr).getCorrespondingDeclaration();
             if (!refMethod.isPresent()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
@@ -733,7 +733,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (demandParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
-            Optional<? extends ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false)
+            Optional<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false)
                     .getCorrespondingDeclaration();
             if (!refMethod.isPresent()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());

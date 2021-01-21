@@ -440,7 +440,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             // look for the qualified name (for example class of type Rectangle2D.Double)
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
-        Optional<? extends ResolvedTypeDeclaration> ref = solveType(className).getCorrespondingDeclaration();
+        Optional<ResolvedTypeDeclaration> ref = solveType(className).getCorrespondingDeclaration();
 
         // If unable to solve by the class name alone, attempt to qualify it.
         if (!ref.isPresent()) {

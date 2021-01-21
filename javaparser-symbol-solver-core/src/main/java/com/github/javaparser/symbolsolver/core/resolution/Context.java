@@ -365,7 +365,7 @@ public interface Context {
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
-            Optional<? extends ResolvedMethodDeclaration> optionalResolvedMethodDeclaration = methodSolved.getCorrespondingDeclaration();
+            Optional<ResolvedMethodDeclaration> optionalResolvedMethodDeclaration = methodSolved.getCorrespondingDeclaration();
             if (!optionalResolvedMethodDeclaration.isPresent()) {
                 return Optional.empty();
             }

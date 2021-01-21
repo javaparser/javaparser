@@ -197,7 +197,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId());
                 if (symbolReference.isSolved()) {
 
-                    Optional<? extends ResolvedTypeDeclaration> declaration = symbolReference.getCorrespondingDeclaration();
+                    Optional<ResolvedTypeDeclaration> declaration = symbolReference.getCorrespondingDeclaration();
                     if (declaration.isPresent() && declaration.get().isType()) {
                         return singletonList(declaration.get().asReferenceType());
                     }

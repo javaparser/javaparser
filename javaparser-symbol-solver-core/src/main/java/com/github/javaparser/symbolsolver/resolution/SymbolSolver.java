@@ -88,7 +88,7 @@ public class SymbolSolver {
     }
 
     public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context) {
-        Optional<? extends ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false)
+        Optional<ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false)
                 .getCorrespondingDeclaration();
         if (!decl.isPresent()) {
             throw new UnsolvedSymbolException(context.toString(), methodName);
