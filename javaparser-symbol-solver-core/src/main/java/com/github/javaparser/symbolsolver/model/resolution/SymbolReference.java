@@ -67,9 +67,12 @@ public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
      * Is the reference solved?
+     *
+     * @deprecated Use {@link SymbolReference#getCorrespondingDeclaration()} and check if the declaration is present.
      */
+    @Deprecated
     public boolean isSolved() {
-        return correspondingDeclaration != null;
+        return getCorrespondingDeclaration().isPresent();
     }
 
     public static <O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<? extends O> ref, Class<O> clazz) {
