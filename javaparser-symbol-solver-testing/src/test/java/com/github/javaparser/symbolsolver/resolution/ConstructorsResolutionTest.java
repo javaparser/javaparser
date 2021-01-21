@@ -69,7 +69,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
         ConstructorDeclaration actualConstructor =
-                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration()).getWrappedNode();
+                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration().get()).getWrappedNode();
 
         ClassOrInterfaceDeclaration otherClazz = Navigator.demandClass(cu, "OtherClass");
         ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(otherClazz, 0);
@@ -88,7 +88,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
         ConstructorDeclaration actualConstructor =
-                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration()).getWrappedNode();
+                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration().get()).getWrappedNode();
 
         ClassOrInterfaceDeclaration innerClazz = Navigator.demandClass(cu, "OtherClass.InnerClass");
         ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(innerClazz, 0);
@@ -107,7 +107,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
         ConstructorDeclaration actualConstructor =
-                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration()).getWrappedNode();
+                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration().get()).getWrappedNode();
 
         ClassOrInterfaceDeclaration innerClazz = Navigator.demandClass(cu, "OtherClass.InnerClass");
         ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(innerClazz, 0);
@@ -126,7 +126,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
         ConstructorDeclaration actualConstructor =
-                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration()).getWrappedNode();
+                ((JavaParserConstructorDeclaration) ref.getCorrespondingDeclaration().get()).getWrappedNode();
 
         ClassOrInterfaceDeclaration innerClazz = Navigator.demandClass(cu, "OtherClass.InnerClass.InnerInnerClass");
         ConstructorDeclaration expectedConstructor = Navigator.demandConstructor(innerClazz, 0);
@@ -146,7 +146,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
 
         assertTrue(ref.isSolved());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals(0, ref.getCorrespondingDeclaration().get().getNumberOfParams());
     }
 
     @Test
@@ -161,7 +161,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
 
         assertTrue(ref.isSolved());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals(0, ref.getCorrespondingDeclaration().get().getNumberOfParams());
     }
 
     @Test
@@ -176,8 +176,8 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
 
         assertTrue(ref.isSolved());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getParam(0).getType().describe());
+        assertEquals(1, ref.getCorrespondingDeclaration().get().getNumberOfParams());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().get().getParam(0).getType().describe());
     }
 
     @Test
@@ -201,12 +201,12 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedConstructorDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(0)); // new TypeA();
         assertTrue(ref.isSolved());
-        assertEquals("TypeA", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
+        assertEquals("TypeA", ref.getCorrespondingDeclaration().get().declaringType().getQualifiedName());
 
         ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(1)); // new TypeIfc() {}
         assertTrue(ref.isSolved());
-        //assertEquals("B$1", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
-        assertTrue(ref.getCorrespondingDeclaration().declaringType().getQualifiedName().startsWith("B.Anonymous-"));
+        //assertEquals("B$1", ref.getCorrespondingDeclaration().get().declaringType().getQualifiedName());
+        assertTrue(ref.getCorrespondingDeclaration().get().declaringType().getQualifiedName().startsWith("B.Anonymous-"));
     }
 
     @Test

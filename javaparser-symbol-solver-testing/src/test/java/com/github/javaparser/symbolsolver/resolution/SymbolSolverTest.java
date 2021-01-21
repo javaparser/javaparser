@@ -72,7 +72,7 @@ class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "name");
         assertTrue(res.isSolved());
-        assertTrue(res.getCorrespondingDeclaration().isField());
+        assertTrue(res.getCorrespondingDeclaration().get().isField());
     }
 
     @Test
@@ -81,7 +81,7 @@ class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "NODE_BY_BEGIN_POSITION");
         assertTrue(res.isSolved());
-        assertTrue(res.getCorrespondingDeclaration().isField());
+        assertTrue(res.getCorrespondingDeclaration().get().isField());
     }
 
     @Test

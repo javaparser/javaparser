@@ -58,7 +58,7 @@ class Issue300Test extends AbstractResolutionTest {
                 new JavaParserTypeSolver(adaptPath("src/test/resources/issue300"), new LeanParserConfiguration()));
         final JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         final SymbolReference<? extends ResolvedValueDeclaration> ref = javaParserFacade.solve(fieldAccess);
-        assertEquals(ResolvedPrimitiveType.INT, ref.getCorrespondingDeclaration().getType().asPrimitive());
+        assertEquals(ResolvedPrimitiveType.INT, ref.getCorrespondingDeclaration().get().getType().asPrimitive());
     }
 }
 

@@ -67,7 +67,7 @@ class JarTypeSolverTest extends AbstractSymbolResolutionTest {
         assertThrows(UnsolvedSymbolException.class, () -> {
             Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
         JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
-        ResolvedReferenceTypeDeclaration b = jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
+        ResolvedReferenceTypeDeclaration b = jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration().get();
         b.getAncestors();
     });
         
@@ -83,7 +83,7 @@ class JarTypeSolverTest extends AbstractSymbolResolutionTest {
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(jarTypeSolver1, jarTypeSolver2);
 
-        ResolvedReferenceTypeDeclaration b = combinedTypeSolver.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
+        ResolvedReferenceTypeDeclaration b = combinedTypeSolver.tryToSolveType("foo.zum.B").getCorrespondingDeclaration().get();
         List<ResolvedReferenceType> ancestors = b.getAncestors();
         assertEquals(1, ancestors.size());
     }

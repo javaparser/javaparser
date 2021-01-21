@@ -85,7 +85,7 @@ class Issue1491Test {
         cu.accept(new VoidVisitorAdapter() {
 
             public void visit(MethodCallExpr n, Object arg) {
-                ResolvedMethodDeclaration decl = JavaParserFacade.get(localCts).solve(n).getCorrespondingDeclaration();
+                ResolvedMethodDeclaration decl = JavaParserFacade.get(localCts).solve(n).getCorrespondingDeclaration().get();
                 super.visit(n, arg);
             }
         }, null);
@@ -117,7 +117,7 @@ class Issue1491Test {
             }
 
             public void visit(MethodCallExpr n, Void arg) {
-                ResolvedMethodDeclaration decl = JavaParserFacade.get(localCts).solve(n).getCorrespondingDeclaration();
+                ResolvedMethodDeclaration decl = JavaParserFacade.get(localCts).solve(n).getCorrespondingDeclaration().get();
                 super.visit(n, arg);
             }
         }, null);

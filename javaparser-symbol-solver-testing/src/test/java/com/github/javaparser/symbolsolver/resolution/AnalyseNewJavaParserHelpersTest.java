@@ -65,14 +65,14 @@ class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 //    public void o1TypeIsCorrect() throws IOException, ParseException {
 //        CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
 //        NameExpr o1 = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName()!=null && it.getName().equals("o1")).findFirst().get();
-//        System.out.println(JavaParserFacade.get(TYPESOLVER).solve(o1).getCorrespondingDeclaration().getType());
+//        System.out.println(JavaParserFacade.get(TYPESOLVER).solve(o1).getCorrespondingDeclaration().get().getType());
 //    }
 //
 //    @Test
 //    public void o2TypeIsCorrect() throws IOException, ParseException {
 //        CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
 //        NameExpr o2 = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName()!=null && it.getName().equals("o2")).findFirst().get();
-//        System.out.println(JavaParserFacade.get(TYPESOLVER).solve(o2).getCorrespondingDeclaration().getType());
+//        System.out.println(JavaParserFacade.get(TYPESOLVER).solve(o2).getCorrespondingDeclaration().get().getType());
 //    }
 //
 //    // To calculate the type of o1 and o2 I need to first calculate the type of the lambda
@@ -87,7 +87,7 @@ class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
     void nodesTypeIsCorrect() throws IOException {
         CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
         NameExpr nodes = cu.findAll(NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().getId().equals("nodes")).findFirst().get();
-        ResolvedType type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
+        ResolvedType type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().get().getType();
         assertEquals("java.util.List<T>", type.describe());
         assertEquals(1, type.asReferenceType().typeParametersValues().size());
         assertEquals(true, type.asReferenceType().typeParametersValues().get(0).isTypeVariable());

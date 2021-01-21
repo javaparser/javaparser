@@ -61,8 +61,8 @@ class Issue144Test extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
         assertEquals(true, javaParserFacade.solve(firstParameter).isSolved());
-        assertEquals(true, javaParserFacade.solve(firstParameter).getCorrespondingDeclaration().isField());
-        assertEquals("hw", javaParserFacade.solve(firstParameter).getCorrespondingDeclaration().getName());
+        assertEquals(true, javaParserFacade.solve(firstParameter).getCorrespondingDeclaration().get().isField());
+        assertEquals("hw", javaParserFacade.solve(firstParameter).getCorrespondingDeclaration().get().getName());
     }
 
     @Test

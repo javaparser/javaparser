@@ -47,7 +47,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -107,7 +108,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("out");
 
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().get().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -121,7 +122,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         Context context = new CompilationUnitContext(cu, typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("err");
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().get().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -131,7 +132,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("java.lang.System.out");
         assertEquals(true, ref.isSolved());
-        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals("java.io.PrintStream", ref.getCorrespondingDeclaration().get().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -183,7 +184,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType("OtherClassInSamePackage");
 
         assertEquals(true, ref.isSolved());
-        assertEquals("com.foo.OtherClassInSamePackage", ref.getCorrespondingDeclaration().getQualifiedName());
+        assertEquals("com.foo.OtherClassInSamePackage", ref.getCorrespondingDeclaration().get().getQualifiedName());
     }
 
     @Test
@@ -193,7 +194,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType("Assert");
         assertEquals(true, ref.isSolved());
-        assertEquals("org.junit.Assert", ref.getCorrespondingDeclaration().getQualifiedName());
+        assertEquals("org.junit.Assert", ref.getCorrespondingDeclaration().get().getQualifiedName());
     }
 
     @Test
@@ -203,7 +204,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType("org.junit.Assume");
         assertEquals(true, ref.isSolved());
-        assertEquals("org.junit.Assume", ref.getCorrespondingDeclaration().getQualifiedName());
+        assertEquals("org.junit.Assume", ref.getCorrespondingDeclaration().get().getQualifiedName());
     }
 
     @Test
@@ -218,10 +219,10 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(ResolvedPrimitiveType.BOOLEAN), false);
         assertEquals(true, ref.isSolved());
-        assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
-        assertEquals("boolean", ref.getCorrespondingDeclaration().getParam(0).getType().describe());
-        assertEquals(true, ref.getCorrespondingDeclaration().getParam(0).getType().isPrimitive());
+        assertEquals("assertFalse", ref.getCorrespondingDeclaration().get().getName());
+        assertEquals(1, ref.getCorrespondingDeclaration().get().getNumberOfParams());
+        assertEquals("boolean", ref.getCorrespondingDeclaration().get().getParam(0).getType().describe());
+        assertEquals(true, ref.getCorrespondingDeclaration().get().getParam(0).getType().isPrimitive());
     }
 
     @Test
@@ -236,10 +237,10 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false);
         assertEquals(true, ref.isSolved());
-        assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
-        assertEquals(2, ref.getCorrespondingDeclaration().getNumberOfParams());
-        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(0).getType().asReferenceType().getQualifiedName());
-        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().getParam(1).getType().asReferenceType().getQualifiedName());
+        assertEquals("assertEquals", ref.getCorrespondingDeclaration().get().getName());
+        assertEquals(2, ref.getCorrespondingDeclaration().get().getNumberOfParams());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().get().getParam(0).getType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.Object", ref.getCorrespondingDeclaration().get().getParam(1).getType().asReferenceType().getQualifiedName());
 
     }
 

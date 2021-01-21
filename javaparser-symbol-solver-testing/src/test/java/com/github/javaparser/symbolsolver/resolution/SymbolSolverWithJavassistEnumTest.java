@@ -87,7 +87,7 @@ class SymbolSolverWithJavassistEnumTest extends AbstractSymbolResolutionTest {
         assertFalse(solvedSymbol.isSolved());
 
         try {
-            solvedSymbol.getCorrespondingDeclaration();
+            solvedSymbol.getCorrespondingDeclaration().get();
         } catch (Exception e) {
             assertTrue(e instanceof UnsupportedOperationException);
             assertEquals("CorrespondingDeclaration not available for unsolved symbol.", e.getMessage());
@@ -122,6 +122,6 @@ class SymbolSolverWithJavassistEnumTest extends AbstractSymbolResolutionTest {
         SymbolReference<? extends ResolvedValueDeclaration> solvedSymbol = symbolSolver.solveSymbolInType(enumDeclaration, symbolName);
 
         assertTrue(solvedSymbol.isSolved());
-        assertEquals(symbolName, solvedSymbol.getCorrespondingDeclaration().asField().getName());
+        assertEquals(symbolName, solvedSymbol.getCorrespondingDeclaration().get().asField().getName());
     }
 }

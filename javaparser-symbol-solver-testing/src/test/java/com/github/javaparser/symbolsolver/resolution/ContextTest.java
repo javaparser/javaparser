@@ -21,28 +21,15 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.StringProvider;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -52,13 +39,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -69,9 +51,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -93,11 +73,11 @@ class ContextTest extends AbstractSymbolResolutionTest {
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
+        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertTrue(symbolReference.isSolved());
-        assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
-        assertTrue(symbolReference.getCorrespondingDeclaration().isField());
+        assertEquals("i", symbolReference.getCorrespondingDeclaration().get().getName());
+        assertTrue(symbolReference.getCorrespondingDeclaration().get().isField());
     }
 
     @Test
@@ -109,11 +89,11 @@ class ContextTest extends AbstractSymbolResolutionTest {
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
+        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertTrue(symbolReference.isSolved());
-        assertEquals("i", symbolReference.getCorrespondingDeclaration().getName());
-        assertTrue(symbolReference.getCorrespondingDeclaration().isField());
+        assertEquals("i", symbolReference.getCorrespondingDeclaration().get().getName());
+        assertTrue(symbolReference.getCorrespondingDeclaration().get().isField());
     }
 
     @Test
@@ -124,11 +104,11 @@ class ContextTest extends AbstractSymbolResolutionTest {
         NameExpr foo = Navigator.findNameExpression(method1, "foo").get();
 
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference symbolReference = symbolSolver.solveSymbol("foo", foo);
+        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = symbolSolver.solveSymbol("foo", foo);
 
         assertTrue(symbolReference.isSolved());
-        assertEquals("foo", symbolReference.getCorrespondingDeclaration().getName());
-        assertTrue(symbolReference.getCorrespondingDeclaration().isParameter());
+        assertEquals("foo", symbolReference.getCorrespondingDeclaration().get().getName());
+        assertTrue(symbolReference.getCorrespondingDeclaration().get().isParameter());
     }
 
     @Test
@@ -151,8 +131,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
         assertTrue(ref.isSolved());
-        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
-        assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
+        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().get().getName());
+        assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().get().getQualifiedName());
     }
 
     @Test
@@ -176,8 +156,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
         assertTrue(ref.isSolved());
-        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
-        assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
+        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().get().getName());
+        assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().get().getQualifiedName());
     }
 
     @Test
@@ -200,8 +180,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
         assertTrue(ref.isSolved());
-        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
-        assertEquals("my.packagez.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
+        assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().get().getName());
+        assertEquals("my.packagez.CompilationUnit", ref.getCorrespondingDeclaration().get().getQualifiedName());
     }
 
     @Test
@@ -225,8 +205,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("String", param);
 
         assertTrue(ref.isSolved());
-        assertEquals("String", ref.getCorrespondingDeclaration().getName());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getQualifiedName());
+        assertEquals("String", ref.getCorrespondingDeclaration().get().getName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().get().getQualifiedName());
     }
 
     @Test
@@ -1280,7 +1260,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 System.out.println("symbolReference = " + symbolReference);
 
                 assertTrue(symbolReference.isSolved(), "symbol not solved");
-                ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration();
+                ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration().get();
                 assertEquals("s", correspondingDeclaration.getName(), "unexpected name for the solved symbol");
                 assertTrue(correspondingDeclaration.isPattern());
                 assertEquals("s", correspondingDeclaration.asPattern().getName(), "unexpected name for the solved pattern");
@@ -1354,7 +1334,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                     SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
                     assertTrue(s.isSolved());
-                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s.getCorrespondingDeclaration().get().isPattern());
                 }
 
                 @Test
@@ -1375,7 +1355,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                     SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
                     assertTrue(s.isSolved());
-                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s.getCorrespondingDeclaration().get().isPattern());
                 }
 
                 @Test
@@ -1441,15 +1421,15 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
-//                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
+                    assertFalse(s_list.getCorrespondingDeclaration().get().isPattern());
+//                    assertTrue(s_list.getCorrespondingDeclaration().get().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string.getCorrespondingDeclaration().get().isPattern());
                 }
 
                 @Test
@@ -1479,29 +1459,29 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
-//                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
+                    assertFalse(s_list.getCorrespondingDeclaration().get().isPattern());
+//                    assertTrue(s_list.getCorrespondingDeclaration().get().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string.getCorrespondingDeclaration().get().isPattern());
 
                     // The third one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
                     assertTrue(s_string2.isSolved());
-                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string2.getCorrespondingDeclaration().get().isPattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
                     assertTrue(s_string3.isSolved());
-                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string3.getCorrespondingDeclaration().get().isPattern());
                 }
 
                 @Test
@@ -1531,28 +1511,28 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_list.getCorrespondingDeclaration().get().isPattern());
 
                     // The second one should resolve to the standard variable (the list).
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertFalse(s_string.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_string.getCorrespondingDeclaration().get().isPattern());
 
                     // The third one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
                     assertTrue(s_string2.isSolved());
-                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string2.getCorrespondingDeclaration().get().isPattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
                     assertTrue(s_string3.isSolved());
-                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string3.getCorrespondingDeclaration().get().isPattern());
                 }
             }
         }

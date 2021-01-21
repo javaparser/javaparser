@@ -47,7 +47,7 @@ class MethodLikeSignaturesTest extends AbstractResolutionTest {
                                                         .getVariable(0).getInitializer().get().asObjectCreationExpr();
 
         ResolvedConstructorDeclaration resolvedConstructorDeclaration =
-                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr).getCorrespondingDeclaration();
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr).getCorrespondingDeclaration().get();
 
         assertEquals("File", resolvedConstructorDeclaration.getName());
         assertEquals("File(java.lang.String)", resolvedConstructorDeclaration.getSignature());
@@ -63,7 +63,7 @@ class MethodLikeSignaturesTest extends AbstractResolutionTest {
                                                 .asExpressionStmt().getExpression().asMethodCallExpr();
 
         ResolvedMethodDeclaration resolvedMethodDeclaration =
-                JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr).getCorrespondingDeclaration();
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr).getCorrespondingDeclaration().get();
 
         assertEquals("delete", resolvedMethodDeclaration.getName());
         assertEquals("delete()", resolvedMethodDeclaration.getSignature());

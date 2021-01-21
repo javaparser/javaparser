@@ -21,15 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodAmbiguityException;
@@ -52,6 +43,12 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Federico Tomassetti
@@ -114,7 +111,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("i");
         assertEquals(true, ref.isSolved());
-        assertEquals("int", ref.getCorrespondingDeclaration().getType().describe());
+        assertEquals("int", ref.getCorrespondingDeclaration().get().getType().describe());
     }
 
     @Test
@@ -125,7 +122,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("j");
         assertEquals(true, ref.isSolved());
-        assertEquals("long", ref.getCorrespondingDeclaration().getType().describe());
+        assertEquals("long", ref.getCorrespondingDeclaration().get().getType().describe());
     }
 
     @Test
@@ -136,7 +133,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("k");
         assertEquals(true, ref.isSolved());
-        assertEquals("boolean", ref.getCorrespondingDeclaration().getType().describe());
+        assertEquals("boolean", ref.getCorrespondingDeclaration().get().getType().describe());
     }
 
     @Test
@@ -147,7 +144,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("o");
         assertEquals(true, ref.isSolved());
-        assertEquals("int", ref.getCorrespondingDeclaration().getType().describe());
+        assertEquals("int", ref.getCorrespondingDeclaration().get().getType().describe());
     }
 
     @Test
@@ -158,7 +155,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = context.solveSymbol("m");
         assertEquals(true, ref.isSolved());
-        assertEquals("char", ref.getCorrespondingDeclaration().getType().describe());
+        assertEquals("char", ref.getCorrespondingDeclaration().get().getType().describe());
     }
 
     @Test
@@ -354,8 +351,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo0", ImmutableList.of(), false);
         assertEquals(true, ref.isSolved());
-        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals("A", ref.getCorrespondingDeclaration().get().declaringType().getName());
+        assertEquals(0, ref.getCorrespondingDeclaration().get().getNumberOfParams());
     }
 
     @Test
@@ -366,8 +363,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo1", ImmutableList.of(), false);
         assertEquals(true, ref.isSolved());
-        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals("A", ref.getCorrespondingDeclaration().get().declaringType().getName());
+        assertEquals(0, ref.getCorrespondingDeclaration().get().getNumberOfParams());
     }
 
     @Test
@@ -378,8 +375,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo2", ImmutableList.of(), false);
         assertEquals(true, ref.isSolved());
-        assertEquals("Super", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals("Super", ref.getCorrespondingDeclaration().get().declaringType().getName());
+        assertEquals(0, ref.getCorrespondingDeclaration().get().getNumberOfParams());
     }
 
     @Test
@@ -392,8 +389,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo3", ImmutableList.of(intType), false);
         assertEquals(true, ref.isSolved());
-        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals("A", ref.getCorrespondingDeclaration().get().declaringType().getName());
+        assertEquals(1, ref.getCorrespondingDeclaration().get().getNumberOfParams());
     }
 
     @Test
@@ -406,8 +403,8 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), false);
         assertEquals(true, ref.isSolved());
-        assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
-        assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
+        assertEquals("A", ref.getCorrespondingDeclaration().get().declaringType().getName());
+        assertEquals(1, ref.getCorrespondingDeclaration().get().getNumberOfParams());
     }
 
     @Test

@@ -21,19 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
@@ -41,6 +28,15 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.github.javaparser.utils.CodeGenerationUtils;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
 
@@ -54,7 +50,7 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
 
         SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver");
 
-        JavaParserClassDeclaration declaration = (JavaParserClassDeclaration) x.getCorrespondingDeclaration();
+        JavaParserClassDeclaration declaration = (JavaParserClassDeclaration) x.getCorrespondingDeclaration().get();
         Node wrappedNode = declaration.getWrappedNode();
         assertEquals("JavaParserTypeSolver.java", wrappedNode.findCompilationUnit().get().getStorage().get().getFileName());
     }
@@ -80,8 +76,8 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
         SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit");
 
         assertTrue(x.isSolved());
-        assertNotNull(x.getCorrespondingDeclaration());
-        assertTrue(x.getCorrespondingDeclaration().isClass());
+        assertNotNull(x.getCorrespondingDeclaration().get());
+        assertTrue(x.getCorrespondingDeclaration().get().isClass());
     }
 
     @Test
@@ -92,8 +88,8 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
         SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ParseResult");
 
         assertTrue(x.isSolved());
-        assertNotNull(x.getCorrespondingDeclaration());
-        assertTrue(x.getCorrespondingDeclaration().isClass());
+        assertNotNull(x.getCorrespondingDeclaration().get());
+        assertTrue(x.getCorrespondingDeclaration().get().isClass());
     }
 
     @Test
@@ -104,8 +100,8 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
         SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.Modifier");
 
         assertTrue(x.isSolved());
-        assertNotNull(x.getCorrespondingDeclaration());
-        assertTrue(x.getCorrespondingDeclaration().isEnum());
+        assertNotNull(x.getCorrespondingDeclaration().get());
+        assertTrue(x.getCorrespondingDeclaration().get().isEnum());
     }
 
     @Test
@@ -116,8 +112,8 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
         SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.nodeTypes.NodeWithDeclaration");
 
         assertTrue(x.isSolved());
-        assertNotNull(x.getCorrespondingDeclaration());
-        assertTrue(x.getCorrespondingDeclaration().isInterface());
+        assertNotNull(x.getCorrespondingDeclaration().get());
+        assertTrue(x.getCorrespondingDeclaration().get().isInterface());
     }
 
     @Test
@@ -128,8 +124,8 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
         SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.nodeTypes.NodeWithName");
 
         assertTrue(x.isSolved());
-        assertNotNull(x.getCorrespondingDeclaration());
-        assertTrue(x.getCorrespondingDeclaration().isInterface());
+        assertNotNull(x.getCorrespondingDeclaration().get());
+        assertTrue(x.getCorrespondingDeclaration().get().isInterface());
     }
     
     @Test

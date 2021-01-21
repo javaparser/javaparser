@@ -84,7 +84,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         SymbolReference<? extends ResolvedValueDeclaration> ref = symbolSolver.solveSymbol(fieldAccessExpr.getName().getId(), fieldAccessExpr);
 
         assertTrue(ref.isSolved());
-        assertTrue(ref.getCorrespondingDeclaration().isField());
+        assertTrue(ref.getCorrespondingDeclaration().get().isField());
     }
 
     @Test
@@ -94,9 +94,9 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(enumDecl, "getLabel");
         SimpleName expression = Navigator.findSimpleName(method, "label").get();
 
-        SymbolReference ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
-        assertEquals("label", ref.getCorrespondingDeclaration().getName());
+        assertEquals("label", ref.getCorrespondingDeclaration().get().getName());
     }
 
     @Test

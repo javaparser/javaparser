@@ -21,17 +21,18 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @interface OuterAnnotation {
   @interface InnerAnnotation {}
@@ -75,6 +76,6 @@ class ReflectionAnnotationDeclarationTest {
         (ReflectionAnnotationDeclaration) typeSolver.solveType(WithValue.class.getCanonicalName());
     final SymbolReference<ResolvedMethodDeclaration> symbolReference =
         annotation.solveMethod("value", Collections.emptyList(), false);
-    assertEquals("value", symbolReference.getCorrespondingDeclaration().getName());
+    assertEquals("value", symbolReference.getCorrespondingDeclaration().get().getName());
   }
 }

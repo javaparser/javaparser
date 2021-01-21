@@ -48,7 +48,7 @@ class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().get().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -60,7 +60,7 @@ class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().get().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -72,7 +72,7 @@ class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().get().getType().asReferenceType().getQualifiedName());
     }
 
     @Test
@@ -86,7 +86,7 @@ class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
         assertTrue(ref.isSolved());
-        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().get().getType().describe());
 
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
         assertEquals("add", methodUsage.getName());
@@ -103,7 +103,7 @@ class StatementContextResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(typeSolver).solve(call.getScope().get());
         assertTrue(ref.isSolved());
-        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().getType().describe());
+        assertEquals("java.util.List<Comment>", ref.getCorrespondingDeclaration().get().getType().describe());
 
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
         assertEquals("add", methodUsage.getName());

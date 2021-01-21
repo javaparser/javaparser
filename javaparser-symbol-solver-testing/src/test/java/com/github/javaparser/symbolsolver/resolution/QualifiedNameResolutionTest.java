@@ -45,7 +45,7 @@ class QualifiedNameResolutionTest extends AbstractResolutionTest {
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().get().getType().asReferenceType().getQualifiedName());
     }
 
 }

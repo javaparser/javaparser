@@ -21,7 +21,10 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -45,9 +48,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
@@ -104,9 +105,9 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         NameExpr nameE = (NameExpr) methodCallExpr.getScope().get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
         assertTrue(symbolReference.isSolved());
-        assertTrue(symbolReference.getCorrespondingDeclaration().isParameter());
-        assertEquals("e", symbolReference.getCorrespondingDeclaration().asParameter().getName());
-        assertEquals("java.lang.UnsupportedOperationException", symbolReference.getCorrespondingDeclaration().asParameter().getType().asReferenceType().getQualifiedName());
+        assertTrue(symbolReference.getCorrespondingDeclaration().get().isParameter());
+        assertEquals("e", symbolReference.getCorrespondingDeclaration().get().asParameter().getName());
+        assertEquals("java.lang.UnsupportedOperationException", symbolReference.getCorrespondingDeclaration().get().asParameter().getType().asReferenceType().getQualifiedName());
     }
 
     // See issue 47
