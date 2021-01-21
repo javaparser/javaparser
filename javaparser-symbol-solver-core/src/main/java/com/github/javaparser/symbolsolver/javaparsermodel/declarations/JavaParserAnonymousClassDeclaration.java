@@ -29,6 +29,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -72,7 +73,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
                 JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver)
                         .solveType(superTypeName)
                         .getCorrespondingDeclaration()
-                        .orElse(null);
+                        .orElseThrow(() -> new UnsolvedSymbolException("Unable to solve anonymous class parent"));
     }
 
     public ResolvedTypeDeclaration getSuperTypeDeclaration() {
