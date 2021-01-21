@@ -35,8 +35,9 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.Optional;
 
 /**
  * This implementation of the SymbolResolver wraps the functionality of the library to make them easily usable
@@ -158,51 +159,51 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof MethodCallExpr) {
-            SymbolReference<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver).solve((MethodCallExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((MethodCallExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
             }
         }
         if (node instanceof ObjectCreationExpr) {
-            SymbolReference<ResolvedConstructorDeclaration> result = JavaParserFacade.get(typeSolver).solve((ObjectCreationExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedConstructorDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((ObjectCreationExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the constructor declaration corresponding to " + node);
             }
         }
         if (node instanceof NameExpr) {
-            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((NameExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((NameExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the value declaration corresponding to " + node);
             }
         }
         if (node instanceof MethodReferenceExpr) {
-            SymbolReference<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver).solve((MethodReferenceExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((MethodReferenceExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
             }
         }
         if (node instanceof FieldAccessExpr) {
-            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((FieldAccessExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((FieldAccessExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 if (((FieldAccessExpr) node).getName().getId().equals("length")) {
                     ResolvedType scopeType = ((FieldAccessExpr) node).getScope().calculateResolvedType();
@@ -216,21 +217,21 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof ThisExpr) {
-            SymbolReference<ResolvedTypeDeclaration> result = JavaParserFacade.get(typeSolver).solve((ThisExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedTypeDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((ThisExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the type declaration corresponding to " + node);
             }
         }
         if (node instanceof ExplicitConstructorInvocationStmt) {
-            SymbolReference<ResolvedConstructorDeclaration> result = JavaParserFacade.get(typeSolver).solve((ExplicitConstructorInvocationStmt) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedConstructorDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((ExplicitConstructorInvocationStmt) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the constructor declaration corresponding to " + node);
             }
@@ -253,21 +254,20 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof AnnotationExpr) {
-            SymbolReference<ResolvedAnnotationDeclaration> result = JavaParserFacade.get(typeSolver).solve((AnnotationExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedAnnotationDeclaration> result = JavaParserFacade.get(typeSolver)
+                    .solve((AnnotationExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the annotation declaration corresponding to " + node);
             }
         }
         if (node instanceof PatternExpr) {
-            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((PatternExpr) node);
-            if (result.isSolved()) {
-                if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
-                    return resultClass.cast(result.getCorrespondingDeclaration());
-                }
+            Optional<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((PatternExpr) node)
+                    .getCorrespondingDeclaration();
+            if (result.isPresent()) {
+                return resultClass.cast(result.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
             }

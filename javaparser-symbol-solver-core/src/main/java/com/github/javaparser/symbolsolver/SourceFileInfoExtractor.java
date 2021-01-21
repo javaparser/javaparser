@@ -49,6 +49,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
@@ -171,8 +172,9 @@ public class SourceFileInfoExtractor {
     }
 
     private String toString(SymbolReference<ResolvedMethodDeclaration> methodDeclarationSymbolReference) {
-        if (methodDeclarationSymbolReference.isSolved()) {
-            return methodDeclarationSymbolReference.getCorrespondingDeclaration().getQualifiedSignature();
+        Optional<? extends ResolvedMethodDeclaration> declaration = methodDeclarationSymbolReference.getCorrespondingDeclaration();
+        if (declaration.isPresent()) {
+            return declaration.get().getQualifiedSignature();
         } else {
             return "UNSOLVED";
         }

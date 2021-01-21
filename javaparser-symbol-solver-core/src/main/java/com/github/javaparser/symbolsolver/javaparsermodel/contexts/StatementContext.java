@@ -109,9 +109,9 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
         for (int i = position - 1; i >= 0; i--) {
             SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver);
-            SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
-            if (symbolReference.isSolved()) {
-                return Optional.of(Value.from(symbolReference.getCorrespondingDeclaration()));
+            Optional<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name).getCorrespondingDeclaration();
+            if (symbolReference.isPresent()) {
+                return Optional.of(Value.from(symbolReference.get()));
             }
         }
 

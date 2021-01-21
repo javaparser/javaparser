@@ -21,15 +21,16 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * A container for type solvers. All solving is done by the contained type solvers.
@@ -115,9 +116,10 @@ public class CombinedTypeSolver implements TypeSolver {
 
     @Override
     public ResolvedReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        SymbolReference<ResolvedReferenceTypeDeclaration> res = tryToSolveType(name);
-        if (res.isSolved()) {
-            return res.getCorrespondingDeclaration();
+        Optional<? extends ResolvedReferenceTypeDeclaration> res = tryToSolveType(name)
+                .getCorrespondingDeclaration();
+        if (res.isPresent()) {
+            return res.get();
         } else {
             throw new UnsolvedSymbolException(name);
         }

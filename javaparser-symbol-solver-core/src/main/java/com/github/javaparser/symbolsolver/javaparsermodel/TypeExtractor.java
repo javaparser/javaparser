@@ -21,46 +21,12 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.ArrayAccessExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
@@ -69,11 +35,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -95,6 +57,12 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
@@ -425,19 +393,23 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (node.getScope() instanceof NameExpr ||
                 node.getScope() instanceof FieldAccessExpr) {
             Expression staticValue = node.getScope();
-            SymbolReference<ResolvedTypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(node, typeSolver).solveType(staticValue.toString());
-            if (typeAccessedStatically.isSolved()) {
+            Optional<? extends ResolvedTypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(node, typeSolver)
+                    .solveType(staticValue.toString())
+                    .getCorrespondingDeclaration();
+            if (typeAccessedStatically.isPresent()) {
                 // TODO here maybe we have to substitute type typeParametersValues
                 return solveDotExpressionType(
-                        typeAccessedStatically.getCorrespondingDeclaration().asReferenceType(), node);
+                        typeAccessedStatically.get().asReferenceType(), node);
             }
         } else if (node.getScope() instanceof ThisExpr) {
             // If we are accessing through a 'this' expression, first resolve the type
             // corresponding to 'this'
-            SymbolReference<ResolvedTypeDeclaration> solve = facade.solve((ThisExpr) node.getScope());
+            Optional<? extends ResolvedTypeDeclaration> solve = facade
+                    .solve((ThisExpr) node.getScope())
+                    .getCorrespondingDeclaration();
             // If found get it's declaration and get the field in there
-            if (solve.isSolved()) {
-                ResolvedTypeDeclaration correspondingDeclaration = solve.getCorrespondingDeclaration();
+            if (solve.isPresent()) {
+                ResolvedTypeDeclaration correspondingDeclaration = solve.get();
                 if (correspondingDeclaration instanceof ResolvedReferenceTypeDeclaration) {
                     return solveDotExpressionType(correspondingDeclaration.asReferenceType(), node);
                 }
@@ -445,9 +417,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
         } else if (node.getScope().toString().indexOf('.') > 0) {
             // try to find fully qualified name
-            SymbolReference<ResolvedReferenceTypeDeclaration> sr = typeSolver.tryToSolveType(node.getScope().toString());
-            if (sr.isSolved()) {
-                return solveDotExpressionType(sr.getCorrespondingDeclaration(), node);
+            Optional<? extends ResolvedReferenceTypeDeclaration> sr = typeSolver
+                    .tryToSolveType(node.getScope().toString())
+                    .getCorrespondingDeclaration();
+            if (sr.isPresent()) {
+                return solveDotExpressionType(sr.get(), node);
             }
         }
         Optional<Value> value = Optional.empty();
@@ -456,9 +430,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         } catch (UnsolvedSymbolException use) {
             // This node may have a package name as part of its fully qualified name.
             // We should solve for the type declaration inside this package.
-            SymbolReference<ResolvedReferenceTypeDeclaration> sref = typeSolver.tryToSolveType(node.toString());
-            if (sref.isSolved()) {
-                return new ReferenceTypeImpl(sref.getCorrespondingDeclaration(), typeSolver);
+            Optional<? extends ResolvedReferenceTypeDeclaration> sref = typeSolver
+                    .tryToSolveType(node.toString())
+                    .getCorrespondingDeclaration();
+            if (sref.isPresent()) {
+                return new ReferenceTypeImpl(sref.get(), typeSolver);
             }
         }
         if (value.isPresent()) {
@@ -540,13 +516,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
         }
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) node.getType();
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory
+        Optional<? extends ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory
                 .getContext(classOrInterfaceType, typeSolver)
-                .solveType(classOrInterfaceType.getName().getId());
-        if (!typeDeclarationSymbolReference.isSolved()) {
+                .solveType(classOrInterfaceType.getName().getId())
+                .getCorrespondingDeclaration();
+        if (!typeDeclarationSymbolReference.isPresent()) {
             throw new UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
         } else {
-            return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType(), typeSolver);
+            return new ReferenceTypeImpl(typeDeclarationSymbolReference.get().asReferenceType(), typeSolver);
         }
     }
 
@@ -570,9 +547,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             } catch (IllegalStateException e) {
                 // trying another approach from type solver
                 Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
-                SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
-                if (clazz.isSolved()) {
-                    return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
+                Optional<? extends ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className)
+                        .getCorrespondingDeclaration();
+                if (clazz.isPresent()) {
+                    return new ReferenceTypeImpl(clazz.get(), typeSolver);
                 }
             }
         }
@@ -584,10 +562,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         // If 'super' is prefixed by a class eg. MyClass.this
         if (node.getTypeName().isPresent()) {
             String className = node.getTypeName().get().asString();
-            SymbolReference<ResolvedTypeDeclaration> resolvedTypeNameRef = JavaParserFactory.getContext(node, typeSolver).solveType(className);
-            if (resolvedTypeNameRef.isSolved()) {
+            Optional<? extends ResolvedTypeDeclaration> resolvedTypeNameRef = JavaParserFactory.getContext(node, typeSolver).solveType(className)
+                    .getCorrespondingDeclaration();
+            if (resolvedTypeNameRef.isPresent()) {
                 // Cfr JLS $15.12.1
-                ResolvedTypeDeclaration resolvedTypeName = resolvedTypeNameRef.getCorrespondingDeclaration();
+                ResolvedTypeDeclaration resolvedTypeName = resolvedTypeNameRef.get();
                 if (resolvedTypeName.isInterface()) {
                     return new ReferenceTypeImpl(resolvedTypeName.asInterface(), typeSolver);
                 } else if (resolvedTypeName.isClass()) {
@@ -643,15 +622,15 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (demandParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
-            SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
-            if (!refMethod.isSolved()) {
+            Optional<? extends ResolvedMethodDeclaration> refMethod = facade.solve(callExpr).getCorrespondingDeclaration();
+            if (!refMethod.isPresent()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on lambda expr %s", ()-> refMethod.get().getName());
             if (solveLambdas) {
 
                 // The type parameter referred here should be the java.util.stream.Stream.T
-                ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                ResolvedType result = refMethod.get().getParam(pos).getType();
 
                 if (callExpr.hasScope()) {
                     Expression scope = callExpr.getScope().get();
@@ -742,7 +721,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
                 return result;
             } else {
-                return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                return refMethod.get().getParam(pos).getType();
             }
         } else {
             throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
@@ -754,11 +733,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (demandParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
-            SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
-            if (!refMethod.isSolved()) {
+            Optional<? extends ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false)
+                    .getCorrespondingDeclaration();
+            if (!refMethod.isPresent()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on method reference expr %s", ()-> refMethod.get().getName());
             if (solveLambdas) {
                 MethodUsage usage = facade.solveMethodAsUsage(callExpr);
                 ResolvedType result = usage.getParamType(pos);
@@ -796,7 +776,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
                 return result;
             }
-            return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+            return refMethod.get().getParam(pos).getType();
         }
         throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");
     }

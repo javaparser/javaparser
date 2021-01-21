@@ -22,14 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 
-
-import static com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.isQualifiedName;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -39,12 +31,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -55,6 +42,11 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -85,9 +77,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         while (itName.contains(".")) {
             String typeName = getType(itName);
             String memberName = getMember(itName);
-            SymbolReference<ResolvedTypeDeclaration> type = this.solveType(typeName);
-            if (type.isSolved()) {
-                return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
+            Optional<? extends ResolvedTypeDeclaration> type = this.solveType(typeName)
+                    .getCorrespondingDeclaration();
+            if (type.isPresent()) {
+                return new SymbolSolver(typeSolver).solveSymbolInType(type.get(), memberName);
             } else {
                 itName = typeName;
             }
@@ -152,19 +145,19 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             // ("A.B.C.D"), we look for the outermost type ("A" in the previous example) first, then recursively invoke
             // this method for the remaining part of the given name.
             if (name.indexOf('.') > -1) {
+
                 SymbolReference<ResolvedTypeDeclaration> ref = null;
-                SymbolReference<ResolvedTypeDeclaration> outerMostRef =
-                    solveType(name.substring(0, name.indexOf(".")));
-                if (outerMostRef != null && outerMostRef.isSolved() &&
-                    outerMostRef.getCorrespondingDeclaration() instanceof JavaParserClassDeclaration) {
-                    ref = ((JavaParserClassDeclaration) outerMostRef.getCorrespondingDeclaration())
-                        .solveType(name.substring(name.indexOf(".") + 1));
-                } else if (outerMostRef != null && outerMostRef.isSolved() &&
-                    outerMostRef.getCorrespondingDeclaration() instanceof JavaParserInterfaceDeclaration) {
-                    ref = ((JavaParserInterfaceDeclaration) outerMostRef.getCorrespondingDeclaration())
-                        .solveType(name.substring(name.indexOf(".") + 1));
+                Optional<? extends ResolvedTypeDeclaration> outerMostRef = solveType(name.substring(0, name.indexOf(".")))
+                        .getCorrespondingDeclaration();
+
+                if (outerMostRef.isPresent() && outerMostRef.get() instanceof JavaParserClassDeclaration) {
+                    ref = ((JavaParserClassDeclaration) outerMostRef.get())
+                            .solveType(name.substring(name.indexOf(".") + 1));
+                } else if (outerMostRef.isPresent() && outerMostRef.get() instanceof JavaParserInterfaceDeclaration) {
+                    ref = ((JavaParserInterfaceDeclaration) outerMostRef.get())
+                            .solveType(name.substring(name.indexOf(".") + 1));
                 }
-                if (ref != null && ref.isSolved()) {
+                if (ref != null && ref.getCorrespondingDeclaration().isPresent()) {
                     return ref;
                 }
             }

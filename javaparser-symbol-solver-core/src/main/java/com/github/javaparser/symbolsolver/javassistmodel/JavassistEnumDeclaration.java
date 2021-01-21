@@ -193,11 +193,10 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
         try {
             for (CtClass iface : ctClass.getInterfaces()) {
-                SymbolReference<ResolvedMethodDeclaration> ref = new JavassistInterfaceDeclaration(iface, typeSolver)
-                        .solveMethod(name, argumentsTypes, staticOnly);
-                if (ref.isSolved()) {
-                    candidates.add(ref.getCorrespondingDeclaration());
-                }
+                new JavassistInterfaceDeclaration(iface, typeSolver)
+                        .solveMethod(name, argumentsTypes, staticOnly)
+                        .getCorrespondingDeclaration()
+                        .ifPresent(candidates::add);
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
@@ -206,10 +205,10 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                SymbolReference<ResolvedMethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
-                if (ref.isSolved()) {
-                    candidates.add(ref.getCorrespondingDeclaration());
-                }
+                new JavassistClassDeclaration(superClass, typeSolver)
+                        .solveMethod(name, argumentsTypes, staticOnly)
+                        .getCorrespondingDeclaration()
+                        .ifPresent(candidates::add);
             }
         } catch (NotFoundException e) {
             throw new RuntimeException(e);

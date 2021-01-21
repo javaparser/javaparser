@@ -32,7 +32,6 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.google.common.collect.ImmutableList;
 
@@ -99,10 +98,10 @@ class AstResolutionUtils {
     static boolean hasDirectlyAnnotation(NodeWithAnnotations<?> nodeWithAnnotations, TypeSolver typeSolver,
                                          String canonicalName) {
         for (AnnotationExpr annotationExpr : nodeWithAnnotations.getAnnotations()) {
-            SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(annotationExpr, typeSolver)
-                    .solveType(annotationExpr.getNameAsString());
-            if (ref.isSolved()) {
-                if (ref.getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
+            Optional<? extends ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(annotationExpr, typeSolver)
+                    .solveType(annotationExpr.getNameAsString()).getCorrespondingDeclaration();
+            if (ref.isPresent()) {
+                if (ref.get().getQualifiedName().equals(canonicalName)) {
                     return true;
                 }
             } else {

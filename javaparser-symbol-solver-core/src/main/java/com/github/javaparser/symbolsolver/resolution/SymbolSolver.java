@@ -21,19 +21,12 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -50,6 +43,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -92,11 +88,12 @@ public class SymbolSolver {
     }
 
     public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context) {
-        SymbolReference<ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false);
-        if (!decl.isSolved()) {
+        Optional<? extends ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false)
+                .getCorrespondingDeclaration();
+        if (!decl.isPresent()) {
             throw new UnsolvedSymbolException(context.toString(), methodName);
         }
-        return new MethodUsage(decl.getCorrespondingDeclaration());
+        return new MethodUsage(decl.get());
     }
 
     public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Node node) {
@@ -109,11 +106,12 @@ public class SymbolSolver {
             // FIXME should call typesolver here!
 
             String name = ((ClassOrInterfaceType) type).getName().getId();
-            SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name);
-            if (!ref.isSolved()) {
+            Optional<? extends ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name)
+                    .getCorrespondingDeclaration();
+            if (!ref.isPresent()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver).toString(), name);
             }
-            return ref.getCorrespondingDeclaration();
+            return ref.get();
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }

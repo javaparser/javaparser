@@ -24,6 +24,8 @@ package com.github.javaparser.symbolsolver.model.resolution;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 
+import java.util.Optional;
+
 /**
  * An element able to find TypeDeclaration from their name.
  * TypeSolvers are organized in hierarchies.
@@ -63,9 +65,9 @@ public interface TypeSolver {
      * Solve the given type. Either the type is found and returned or an UnsolvedSymbolException is thrown.
      */
     default ResolvedReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        SymbolReference<ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name);
-        if (ref.isSolved()) {
-            return ref.getCorrespondingDeclaration();
+        Optional<? extends ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name).getCorrespondingDeclaration();
+        if (ref.isPresent()) {
+            return ref.get();
         } else {
             throw new UnsolvedSymbolException(name, this.toString());
         }

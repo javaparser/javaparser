@@ -21,31 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.ResolvedArrayType;
-import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.resolution.types.ResolvedUnionType;
-import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -56,6 +38,8 @@ import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
+
+import java.util.*;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -99,16 +83,18 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // Consider static method calls
             if (scope instanceof NameExpr) {
                 String className = ((NameExpr) scope).getName().getId();
-                SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
-                if (ref.isSolved()) {
-                    SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
-                    if (m.isSolved()) {
-                        MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
+                Optional<? extends ResolvedTypeDeclaration> ref = solveType(className)
+                        .getCorrespondingDeclaration();
+                if (ref.isPresent()) {
+                    Optional<? extends ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.get(), name, argumentsTypes)
+                            .getCorrespondingDeclaration();
+                    if (m.isPresent()) {
+                        MethodUsage methodUsage = new MethodUsage(m.get());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
                         return Optional.of(methodUsage);
                     } else {
-                        throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
+                        throw new UnsolvedSymbolException(ref.get().toString(),
                                 "Method '" + name + "' with parameterTypes " + argumentsTypes);
                     }
                 }

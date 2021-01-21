@@ -21,21 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static java.util.Collections.singletonList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -54,6 +41,11 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+
+import java.util.*;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static java.util.Collections.singletonList;
 
 /**
  * @author Federico Tomassetti
@@ -203,8 +195,12 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             if (scope instanceof NameExpr) {
                 NameExpr scopeAsName = scope.asNameExpr();
                 SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId());
-                if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
-                    return singletonList(symbolReference.getCorrespondingDeclaration().asReferenceType());
+                if (symbolReference.isSolved()) {
+
+                    Optional<? extends ResolvedTypeDeclaration> declaration = symbolReference.getCorrespondingDeclaration();
+                    if (declaration.isPresent() && declaration.get().isType()) {
+                        return singletonList(declaration.get().asReferenceType());
+                    }
                 }
             }
 

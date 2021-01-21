@@ -25,12 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -175,10 +170,9 @@ public class JavaParserTypeDeclarationAdapter {
                     // consider methods from superclasses and only default methods from interfaces :
                     // not true, we should keep abstract as a valid candidate
                     // abstract are removed in MethodResolutionLogic.isApplicable is necessary
-                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly);
-                    if (res.isSolved()) {
-                        candidateMethods.add(res.getCorrespondingDeclaration());
-                    }
+                    MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration.get(), name, argumentsTypes, staticOnly)
+                            .getCorrespondingDeclaration()
+                            .ifPresent(candidateMethods::add);
                 }
             }
         }
@@ -187,20 +181,18 @@ public class JavaParserTypeDeclarationAdapter {
         // This is relevant e.g. with nested classes.
         // Note that we want to avoid infinite recursion when a class is using its own method - see issue #75
         if (candidateMethods.isEmpty()) {
-            SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent()
+            context.getParent()
                     .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                    .solveMethod(name, argumentsTypes, staticOnly);
-            if (parentSolution.isSolved()) {
-                candidateMethods.add(parentSolution.getCorrespondingDeclaration());
-            }
+                    .solveMethod(name, argumentsTypes, staticOnly)
+                    .getCorrespondingDeclaration()
+                    .ifPresent(candidateMethods::add);
         }
 
         // if is interface and candidate method list is empty, we should check the Object Methods
         if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
-            SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false);
-            if (res.isSolved()) {
-                candidateMethods.add(res.getCorrespondingDeclaration());
-            }
+            MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false)
+                    .getCorrespondingDeclaration()
+                    .ifPresent(candidateMethods::add);
         }
 
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);

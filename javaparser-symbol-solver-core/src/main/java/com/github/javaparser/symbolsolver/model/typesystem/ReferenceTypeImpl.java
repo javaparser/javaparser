@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -40,8 +34,13 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -108,8 +107,10 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 if (isCorrespondingBoxingType(other.describe())) return true;
 
                 // Resolve the boxed type and check if it can be assigned via widening reference conversion
-                SymbolReference<ResolvedReferenceTypeDeclaration> type = typeSolver.tryToSolveType(other.asPrimitive().getBoxTypeQName());
-                return type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration);
+                return typeSolver.tryToSolveType(other.asPrimitive().getBoxTypeQName())
+                        .getCorrespondingDeclaration()
+                        .map(declaration -> declaration.canBeAssignedTo(super.typeDeclaration))
+                        .orElse(false);
             }
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {

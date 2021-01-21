@@ -26,12 +26,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -136,7 +131,8 @@ public interface Context {
             return Optional.empty();
         }
 
-        return Optional.of(Value.from(ref.getCorrespondingDeclaration()));
+        return ref.getCorrespondingDeclaration()
+                .map(Value::from);
     }
 
     default Optional<Value> solveSymbolAsValueInParentContext(String name) {
@@ -145,7 +141,8 @@ public interface Context {
             return Optional.empty();
         }
 
-        return Optional.of(Value.from(ref.getCorrespondingDeclaration()));
+        return ref.getCorrespondingDeclaration()
+                .map(Value::from);
     }
 
 
@@ -368,7 +365,12 @@ public interface Context {
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
-            ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
+            Optional<? extends ResolvedMethodDeclaration> optionalResolvedMethodDeclaration = methodSolved.getCorrespondingDeclaration();
+            if (!optionalResolvedMethodDeclaration.isPresent()) {
+                return Optional.empty();
+            }
+
+            ResolvedMethodDeclaration methodDeclaration = optionalResolvedMethodDeclaration.get();
             if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {
                 throw new UnsupportedOperationException(String.format(
                         "Resolved method declarations must implement %s.",
@@ -376,7 +378,8 @@ public interface Context {
                 ));
             }
 
-            MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(this, argumentsTypes);
+            MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration)
+                    .resolveTypeVariables(this, argumentsTypes);
             return Optional.of(methodUsage);
         } else {
             return Optional.empty();

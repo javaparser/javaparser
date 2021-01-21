@@ -25,12 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -52,11 +47,7 @@ import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -227,30 +218,24 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         // add the method declaration of the superclass to the candidates, if present
         getSuperClass()
                 .flatMap(ResolvedReferenceType::getTypeDeclaration)
-                .ifPresent(superclassTypeDeclaration -> {
-                    SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInType(
+                .flatMap(superclassTypeDeclaration ->
+                        MethodResolutionLogic.solveMethodInType(
                             superclassTypeDeclaration,
                             name,
                             argumentsTypes,
                             staticOnly
-                    );
-                    if (superClassMethodRef.isSolved()) {
-                        candidates.add(superClassMethodRef.getCorrespondingDeclaration());
-                    }
-                });
+                        ).getCorrespondingDeclaration()
+                ).ifPresent(candidates::add);
 
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {
             if (interfaceRef.getTypeDeclaration().isPresent()) {
-                SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
+                MethodResolutionLogic.solveMethodInType(
                         interfaceRef.getTypeDeclaration().get(),
                         name,
                         argumentsTypes,
                         staticOnly
-                );
-                if (interfaceMethodRef.isSolved()) {
-                    candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
-                }
+                ).getCorrespondingDeclaration().ifPresent(candidates::add);
             } else {
                 // Consider IllegalStateException or similar?
             }

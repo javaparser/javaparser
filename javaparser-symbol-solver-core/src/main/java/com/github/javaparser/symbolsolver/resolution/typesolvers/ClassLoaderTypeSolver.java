@@ -95,9 +95,10 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                 } else {
                     String parentName = name.substring(0, lastDot);
                     String childName = name.substring(lastDot + 1);
-                    SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
-                    if (parent.isSolved()) {
-                        Optional<ResolvedReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration()
+                    Optional<? extends ResolvedReferenceTypeDeclaration> resolvedDeclaration = tryToSolveType(parentName)
+                            .getCorrespondingDeclaration();
+                    if (resolvedDeclaration.isPresent()) {
+                        Optional<ResolvedReferenceTypeDeclaration> innerClass = resolvedDeclaration.get()
                                 .internalTypes()
                                 .stream().filter(it -> it.getName().equals(childName)).findFirst();
                         return innerClass.map(SymbolReference::solved)
