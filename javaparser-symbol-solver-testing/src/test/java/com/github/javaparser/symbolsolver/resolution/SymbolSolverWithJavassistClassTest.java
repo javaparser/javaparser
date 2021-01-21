@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,8 +86,8 @@ class SymbolSolverWithJavassistClassTest extends AbstractSymbolResolutionTest {
         try {
             solvedSymbol.getCorrespondingDeclaration().get();
         } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-            assertEquals("CorrespondingDeclaration not available for unsolved symbol.", e.getMessage());
+            assertTrue(e instanceof NoSuchElementException);
+            assertEquals("No value present", e.getMessage());
             return;
         }
         fail("Expected UnsupportedOperationException when requesting CorrespondingDeclaration on unsolved SymbolRefernce");
