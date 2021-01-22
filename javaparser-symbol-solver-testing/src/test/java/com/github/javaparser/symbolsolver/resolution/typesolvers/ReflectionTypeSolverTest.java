@@ -41,7 +41,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ReflectionTypeSolverTest extends AbstractTypeSolverTest<ReflectionTypeSolver> {
+class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeSolver> {
 
     @Test
     void testHasType() {
