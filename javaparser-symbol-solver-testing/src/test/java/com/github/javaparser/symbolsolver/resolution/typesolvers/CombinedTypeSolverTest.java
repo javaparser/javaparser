@@ -39,6 +39,10 @@ import static org.mockito.Mockito.*;
 
 class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> {
 
+    public CombinedTypeSolverTest() {
+        super(CombinedTypeSolver::new);
+    }
+
     static List<Object[]> parameters() {
         // Why these classes? NFE is a subclass, IOOBE is a superclass and ISE is a class without children (by default)
         Predicate<Exception> whitelistTestFilter = ExceptionHandlers.getTypeBasedWhitelist(NumberFormatException.class,
@@ -94,10 +98,5 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
         }
 
         verify(secondaryTypeSolver, times(expectForward ? 1 : 0)).tryToSolveType(any(String.class));
-    }
-
-    @Override
-    public CombinedTypeSolver tryCreateTypeSolver() throws Exception {
-        return new CombinedTypeSolver();
     }
 }

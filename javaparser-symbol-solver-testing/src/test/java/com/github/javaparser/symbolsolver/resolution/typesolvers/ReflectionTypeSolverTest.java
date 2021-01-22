@@ -43,6 +43,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeSolver> {
 
+    public ReflectionTypeSolverTest() {
+        super(ReflectionTypeSolver::new);
+    }
+
     @Test
     void testHasType() {
         ReflectionTypeSolver ts = new ReflectionTypeSolver();
@@ -73,11 +77,6 @@ class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeS
                 exp.resolve().getSignature();
             }            
         }, null));
-    }
-
-    @Override
-    public ReflectionTypeSolver tryCreateTypeSolver() throws Exception {
-        return new ReflectionTypeSolver();
     }
 
 }

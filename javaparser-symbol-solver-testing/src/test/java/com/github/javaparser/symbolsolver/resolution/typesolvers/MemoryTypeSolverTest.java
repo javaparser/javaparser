@@ -8,6 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryTypeSolverTest extends AbstractTypeSolverTest<MemoryTypeSolver> {
 
+    public MemoryTypeSolverTest() {
+        super(MemoryTypeSolver::new);
+    }
+
     /**
      * When solving a type that isn't registered in the memory should fail, while
      * a existing type should be solved.
@@ -54,11 +58,6 @@ class MemoryTypeSolverTest extends AbstractTypeSolverTest<MemoryTypeSolver> {
 
         registerClassInMemory(solver2, String.class);
         assertEquals(solver1.hashCode(), solver2.hashCode());
-    }
-
-    @Override
-    public MemoryTypeSolver tryCreateTypeSolver() {
-        return new MemoryTypeSolver();
     }
 
     /**

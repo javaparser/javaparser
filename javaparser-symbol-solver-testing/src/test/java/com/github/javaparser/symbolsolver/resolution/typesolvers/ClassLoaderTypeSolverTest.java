@@ -5,11 +5,16 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 abstract class ClassLoaderTypeSolverTest<T extends ClassLoaderTypeSolver> extends AbstractTypeSolverTest<T> {
+
+    public ClassLoaderTypeSolverTest(Supplier<T> solverSupplier) {
+        super(solverSupplier);
+    }
 
     /**
      * When solving a nested type the argument may be a nested class but not in a canonical format.

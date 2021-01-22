@@ -34,10 +34,20 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolver> {
+
+    private static final Supplier<JavaParserTypeSolver> JAVA_PARSER_PROVIDER = () -> {
+        Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
+        return new JavaParserTypeSolver(src);
+    };
+
+    public JavaParserTypeSolverTest() {
+        super(JAVA_PARSER_PROVIDER);
+    }
 
     @Disabled // Unsure why this test is disabled -- passes locally.
     @Test
@@ -137,9 +147,4 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         assertFalse(x.isSolved());
     }
 
-    @Override
-    public JavaParserTypeSolver tryCreateTypeSolver() throws Exception {
-        Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
-        return new JavaParserTypeSolver(src);
-    }
 }

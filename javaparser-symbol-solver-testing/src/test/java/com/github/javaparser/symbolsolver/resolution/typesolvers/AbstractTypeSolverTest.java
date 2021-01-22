@@ -4,10 +4,32 @@ import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Supplier;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 abstract class AbstractTypeSolverTest<T extends TypeSolver> extends AbstractSymbolResolutionTest {
+
+    private final Supplier<T> solverSupplier;
+
+    /**
+     * Create new tests for the type solver.
+     *
+     * @param solverSupplier The supplier of solvers
+     */
+    public AbstractTypeSolverTest(Supplier<T> solverSupplier) {
+        this.solverSupplier = solverSupplier;
+    }
+
+    /**
+     * Get the supplier of solvers.
+     *
+     * @return The supplier.
+     */
+    public Supplier<T> getSolverSupplier() {
+        return solverSupplier;
+    }
 
     /**
      * Setting self as parent should throw an {@link IllegalArgumentException}.
@@ -54,21 +76,7 @@ abstract class AbstractTypeSolverTest<T extends TypeSolver> extends AbstractSymb
      * @return The newly created {@see T}
      */
     public T createTypeSolver() {
-        try {
-            return tryCreateTypeSolver();
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to create the type solver due to an exception.", e);
-        }
+        return getSolverSupplier().get();
     }
-
-    /**
-     * Try to create a new instance of {@link T}.
-     * If the creation succeeds the new instance is returned, otherwise will throw an exception with the cause.
-     *
-     * @return The newly created {@see T}
-     *
-     * @throws Exception If unable to create the solver.
-     */
-    public abstract T tryCreateTypeSolver() throws Exception;
 
 }
