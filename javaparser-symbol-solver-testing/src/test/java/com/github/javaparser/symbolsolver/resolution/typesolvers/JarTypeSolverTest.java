@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -35,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class JarTypeSolverTest extends AbstractSymbolResolutionTest {
+class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
 
     @Test
     void initial() throws IOException {
@@ -86,6 +85,12 @@ class JarTypeSolverTest extends AbstractSymbolResolutionTest {
         ResolvedReferenceTypeDeclaration b = combinedTypeSolver.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
         List<ResolvedReferenceType> ancestors = b.getAncestors();
         assertEquals(1, ancestors.size());
+    }
+
+    @Override
+    public JarTypeSolver tryCreateTypeSolver() throws Exception {
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+        return new JarTypeSolver(pathToJar);
     }
 
 }

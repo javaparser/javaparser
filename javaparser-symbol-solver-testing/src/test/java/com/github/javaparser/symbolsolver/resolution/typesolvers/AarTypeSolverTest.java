@@ -21,7 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AarTypeSolverTest extends AbstractSymbolResolutionTest {
+class AarTypeSolverTest extends AbstractTypeSolverTest<AarTypeSolver> {
 
     @Test
     void initial() throws IOException {
@@ -43,6 +42,12 @@ class AarTypeSolverTest extends AbstractSymbolResolutionTest {
         assertEquals(false, aarTypeSolver.tryToSolveType("com.github.javaparser.ASTParser.Foo").isSolved());
         assertEquals(false, aarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
         assertEquals(false, aarTypeSolver.tryToSolveType("Foo").isSolved());
+    }
+
+    @Override
+    public AarTypeSolver tryCreateTypeSolver() throws Exception {
+        Path pathToJar = adaptPath("src/test/resources/aars/support-compat-24.2.0.aar");
+        return new AarTypeSolver(pathToJar);
     }
 
 }

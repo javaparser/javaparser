@@ -21,28 +21,23 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import com.github.javaparser.utils.CodeGenerationUtils;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import com.github.javaparser.utils.CodeGenerationUtils;
-
-class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
+class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolver> {
 
     @Disabled // Unsure why this test is disabled -- passes locally.
     @Test
@@ -142,4 +137,9 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
         assertFalse(x.isSolved());
     }
 
+    @Override
+    public JavaParserTypeSolver tryCreateTypeSolver() throws Exception {
+        Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
+        return new JavaParserTypeSolver(src);
+    }
 }

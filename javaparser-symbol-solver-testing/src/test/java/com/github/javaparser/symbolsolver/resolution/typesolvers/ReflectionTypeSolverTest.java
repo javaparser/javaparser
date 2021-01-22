@@ -24,27 +24,24 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
+import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ReflectionTypeSolverTest extends AbstractSymbolResolutionTest {
+class ReflectionTypeSolverTest extends AbstractTypeSolverTest<ReflectionTypeSolver> {
 
     @Test
     void testHasType() {
@@ -76,6 +73,11 @@ class ReflectionTypeSolverTest extends AbstractSymbolResolutionTest {
                 exp.resolve().getSignature();
             }            
         }, null));
+    }
+
+    @Override
+    public ReflectionTypeSolver tryCreateTypeSolver() throws Exception {
+        return new ReflectionTypeSolver();
     }
 
 }
