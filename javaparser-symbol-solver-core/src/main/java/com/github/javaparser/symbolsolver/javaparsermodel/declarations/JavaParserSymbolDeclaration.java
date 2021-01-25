@@ -22,21 +22,10 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.resolution.types.ResolvedArrayType;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
@@ -48,17 +37,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandPare
  *
  * @author Federico Tomassetti
  */
-public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
-
-    private String name;
-    private Node wrappedNode;
-    private TypeSolver typeSolver;
-
-    private JavaParserSymbolDeclaration(Node wrappedNode, String name, TypeSolver typeSolver) {
-        this.name = name;
-        this.wrappedNode = wrappedNode;
-        this.typeSolver = typeSolver;
-    }
+public final class JavaParserSymbolDeclaration {
 
     public static JavaParserFieldDeclaration field(VariableDeclarator wrappedNode, TypeSolver typeSolver) {
         return new JavaParserFieldDeclaration(wrappedNode, typeSolver);
@@ -68,8 +47,8 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
         return new JavaParserParameterDeclaration(parameter, typeSolver);
     }
 
-    public static JavaParserSymbolDeclaration localVar(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
-        return new JavaParserSymbolDeclaration(variableDeclarator, variableDeclarator.getName().getId(), typeSolver);
+    public static JavaParserVariableDeclaration localVar(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
+        return new JavaParserVariableDeclaration(variableDeclarator, typeSolver);
     }
 
     public static JavaParserPatternDeclaration patternVar(PatternExpr patternExpr, TypeSolver typeSolver) {
@@ -99,95 +78,8 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
         throw new IllegalArgumentException();
     }
 
-    @Override
-    public String toString() {
-        return "JavaParserSymbolDeclaration{" +
-                "name='" + name + '\'' +
-                ", wrappedNode=" + wrappedNode +
-                '}';
+    private JavaParserSymbolDeclaration() {
+        // This private constructor is used to hide the public one
     }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public boolean isField() {
-        return false;
-    }
-
-    @Override
-    public boolean isParameter() {
-        return false;
-    }
-
-    @Override
-    public boolean isPattern() {
-//        return getWrappedNode() instanceof PatternExpr;
-        return false;
-    }
-
-    @Override
-    public boolean isType() {
-        return false;
-    }
-
-    @Override
-    public ResolvedType getType() {
-        if (wrappedNode instanceof Parameter) {
-            Parameter parameter = (Parameter) wrappedNode;
-            if (demandParentNode(wrappedNode) instanceof LambdaExpr) {
-                int pos = getParamPos(parameter);
-                ResolvedType lambdaType = JavaParserFacade.get(typeSolver).getType(demandParentNode(wrappedNode));
-
-                // TODO understand from the context to which method this corresponds
-                //MethodDeclaration methodDeclaration = JavaParserFacade.get(typeSolver).getMethodCalled
-                //MethodDeclaration methodCalled = JavaParserFacade.get(typeSolver).solve()
-                throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
-            } else {
-                final ResolvedType rawType;
-                if (parameter.getType() instanceof PrimitiveType) {
-                    rawType = ResolvedPrimitiveType.byName(((PrimitiveType) parameter.getType()).getType().name());
-                } else {
-                    rawType = JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), wrappedNode);
-                }
-                if (parameter.isVarArgs()) {
-                    return new ResolvedArrayType(rawType);
-                }
-                return rawType;
-            }
-        } else if (wrappedNode instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode;
-            if (demandParentNode(wrappedNode) instanceof VariableDeclarationExpr) {
-                return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
-            } else if (demandParentNode(wrappedNode) instanceof FieldDeclaration) {
-                return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
-            }
-        } else if (wrappedNode instanceof PatternExpr) {
-            PatternExpr patternExpr = (PatternExpr) wrappedNode;
-
-            final ResolvedType rawType = JavaParserFacade.get(typeSolver)
-                    .convertToUsage(patternExpr.getType(), wrappedNode);
-
-            return rawType;
-        }
-        throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedTypeDeclaration asType() {
-        throw new UnsupportedOperationException(this.getClass().getCanonicalName() + ": wrapping " + this.getWrappedNode().getClass().getCanonicalName());
-    }
-
-    /**
-     * Returns the JavaParser node associated with this JavaParserSymbolDeclaration.
-     *
-     * @return A visitable JavaParser node wrapped by this object.
-     */
-    public Node getWrappedNode() {
-        return wrappedNode;
-    }
-
 
 }
