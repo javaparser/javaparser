@@ -21,49 +21,34 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class JavaParserTypeVariableDeclarationTest {
+class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest {
 
-    private JavaParserTypeVariableDeclaration createValue() {
-        TypeParameter typeParameter = new TypeParameter();
+    @Override
+    public JavaParserTypeVariableDeclaration createValue() {
+        CompilationUnit cu = StaticJavaParser.parse("class A<T>{}");
+        TypeParameter typeParameter = cu.findFirst(TypeParameter.class).get();
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         return new JavaParserTypeVariableDeclaration(typeParameter, typeSolver);
     }
 
-    @Test
-    void isTypeShouldBeTrue() {
-        assertTrue(createValue().isType());
+    @Override
+    public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
+        return false;
     }
 
     @Test
-    void isTypeParameterShouldBeTrue() {
-        assertTrue(createValue().isTypeParameter());
-    }
-
-    @Test
-    void isParameterShouldBeFalse() {
-        assertFalse(createValue().isParameter());
-    }
-
-    @Test
-    void isFieldShouldBeFalse() {
-        assertFalse(createValue().isField());
-    }
-
-    @Test
-    void isClassShouldBeFalse() {
-        assertFalse(createValue().isClass());
-    }
-
-    @Test
-    void isInterfaceShouldBeFalse() {
-        assertFalse(createValue().isInterface());
+    void getWrappedNodeShouldNotBeNull() {
+        assertNotNull(createValue().getWrappedNode());
     }
 
 }
