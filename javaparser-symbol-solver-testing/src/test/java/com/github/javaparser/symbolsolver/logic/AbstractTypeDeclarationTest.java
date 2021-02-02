@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclarationTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,8 +40,6 @@ public abstract class AbstractTypeDeclarationTest implements ResolvedReferenceTy
      */
     public abstract boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration);
 
-    // TODO: Fix implementation
-    @Disabled(value = "JavaParserTypeDeclaration doesn't implement the getAncestors method.")
     @Test
     void checkIfMatchedExpectedFunctionalInterface() {
         AbstractTypeDeclaration abstractTypeDeclaration = createValue();

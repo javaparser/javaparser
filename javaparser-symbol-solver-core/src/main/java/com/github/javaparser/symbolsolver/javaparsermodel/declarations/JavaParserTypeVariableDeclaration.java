@@ -117,7 +117,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        throw new UnsupportedOperationException();
+        return Collections.emptyList();
     }
 
     @Override
