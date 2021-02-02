@@ -21,7 +21,6 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,7 +98,6 @@ public interface ResolvedDeclarationTest {
      *
      * @see AssociableToAST#toAst()
      */
-    @Disabled(value = "This test is disabled, since not all of the classes implement this yet!")
     @Test
     default void declarationMustBeAssociableToAST() {
         ResolvedDeclaration resolvedDeclaration = createValue();

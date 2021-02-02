@@ -24,6 +24,8 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.declarations.AssociableToASTTest;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -31,7 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest {
+class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<TypeParameter> {
 
     @Override
     public JavaParserTypeVariableDeclaration createValue() {
@@ -39,6 +41,14 @@ class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest 
         TypeParameter typeParameter = cu.findFirst(TypeParameter.class).get();
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         return new JavaParserTypeVariableDeclaration(typeParameter, typeSolver);
+    }
+
+    @Override
+    public TypeParameter getWrappedDeclaration(AssociableToAST<TypeParameter> associableToAST) {
+        if (associableToAST instanceof JavaParserTypeVariableDeclaration)
+            return ((JavaParserTypeVariableDeclaration) associableToAST).getWrappedNode();
+        else
+            throw new UnsupportedOperationException("Unable to get wrapped node for class " + associableToAST.getClass().getName());
     }
 
     @Override
