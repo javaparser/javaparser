@@ -193,12 +193,6 @@
             <artifactId>javaparser-symbol-solver-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-core-testing</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-        </dependency>
     </dependencies>
 
 </project>
