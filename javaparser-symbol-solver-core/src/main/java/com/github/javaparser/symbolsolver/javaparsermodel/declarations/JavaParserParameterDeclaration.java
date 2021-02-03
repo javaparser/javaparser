@@ -40,8 +40,8 @@ import java.util.Optional;
  */
 public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration, AssociableToAST<Parameter> {
 
-    private Parameter wrappedNode;
-    private TypeSolver typeSolver;
+    private final Parameter wrappedNode;
+    private final TypeSolver typeSolver;
 
     public JavaParserParameterDeclaration(Parameter wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
@@ -51,16 +51,6 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
     @Override
     public String getName() {
         return wrappedNode.getName().getId();
-    }
-
-    @Override
-    public boolean isField() {
-        return false;
-    }
-
-    @Override
-    public boolean isParameter() {
-        return true;
     }
 
     @Override
@@ -81,11 +71,6 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
             res = new ResolvedArrayType(res);
         }
         return res;
-    }
-
-    @Override
-    public ResolvedParameterDeclaration asParameter() {
-        return this;
     }
 
     /**
