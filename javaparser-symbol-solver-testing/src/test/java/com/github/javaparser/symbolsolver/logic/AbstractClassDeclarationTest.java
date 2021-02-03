@@ -19,13 +19,14 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.declarations;
+package com.github.javaparser.symbolsolver.logic;
 
-public interface ResolvedTypeParameterDeclarationTest extends ResolvedTypeDeclarationTest {
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclarationTest;
+
+public abstract class AbstractClassDeclarationTest extends AbstractTypeDeclarationTest implements ResolvedClassDeclarationTest,
+        MethodResolutionCapabilityTest {
 
     @Override
-    ResolvedTypeParameterDeclaration createValue();
-
-    // TODO: Test ResolvedTypeParameterDeclaration
+    public abstract AbstractClassDeclaration createValue();
 
 }

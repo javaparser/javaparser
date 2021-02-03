@@ -21,7 +21,7 @@
 
 package com.github.javaparser.resolution.declarations;
 
-public interface ResolvedConstructorDeclarationTest extends ResolvedMethodLikeDeclarationTest {
+public interface ResolvedConstructorDeclarationTest extends ResolvedMethodLikeDeclarationTest, AssociableToASTTest {
 
     @Override
     ResolvedConstructorDeclaration createValue();
