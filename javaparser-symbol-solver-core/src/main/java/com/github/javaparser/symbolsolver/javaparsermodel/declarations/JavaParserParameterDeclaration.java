@@ -69,11 +69,6 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
     }
 
     @Override
-    public boolean isType() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public ResolvedType getType() {
         if (wrappedNode.getType() instanceof UnknownType && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
             Optional<Value> value = JavaParserFactory.getContext(wrappedNode, typeSolver).solveSymbolAsValue(wrappedNode.getNameAsString());

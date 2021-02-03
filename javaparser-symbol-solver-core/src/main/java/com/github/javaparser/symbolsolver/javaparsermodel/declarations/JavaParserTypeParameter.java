@@ -34,11 +34,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
@@ -191,6 +187,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     @Override
     public boolean isTypeParameter() {
         return true;
+    }
+
+    @Override
+    public ResolvedTypeParameterDeclaration asTypeParameter() {
+        return this;
     }
 
     @Override
