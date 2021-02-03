@@ -37,8 +37,8 @@ import java.util.Optional;
  */
 public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration, AssociableToAST<PatternExpr> {
 
-    private PatternExpr wrappedNode;
-    private TypeSolver typeSolver;
+    private final PatternExpr wrappedNode;
+    private final TypeSolver typeSolver;
 
     public JavaParserPatternDeclaration(PatternExpr wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
@@ -48,11 +48,6 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration,
     @Override
     public String getName() {
         return wrappedNode.getName().getId();
-    }
-
-    @Override
-    public boolean isPattern() {
-        return true;
     }
 
     @Override
@@ -67,11 +62,6 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration,
      */
     public PatternExpr getWrappedNode() {
         return wrappedNode;
-    }
-
-    @Override
-    public ResolvedPatternDeclaration asPattern() {
-        return this;
     }
 
     @Override
