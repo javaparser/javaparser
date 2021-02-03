@@ -21,36 +21,11 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Test;
+public interface ResolvedMethodLikeDeclarationTest extends ResolvedDeclarationTest, ResolvedTypeParametrizableTest, HasAccessSpecifierTest {
 
-import static org.junit.jupiter.api.Assertions.*;
-
-public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest, AssociableToASTTest {
-
-    /**
-     * Create a new non-static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The non-static value.
-     */
     @Override
-    ResolvedFieldDeclaration createValue();
+    ResolvedMethodLikeDeclaration createValue();
 
-    /**
-     * Create a new static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The static value.
-     */
-    ResolvedFieldDeclaration createStaticValue();
-
-    @Test
-    default void whenAFieldIsStaticShouldBeMarkedAsSuch() {
-        assertFalse(createValue().isStatic());
-        assertTrue(createStaticValue().isStatic());
-    }
-
-    @Test
-    default void theDeclaringTypeCantBeNull() {
-        assertNotNull(createValue().declaringType());
-    }
+    // TODO: Implement tests for ResolvedMethodLikeDeclaration
 
 }

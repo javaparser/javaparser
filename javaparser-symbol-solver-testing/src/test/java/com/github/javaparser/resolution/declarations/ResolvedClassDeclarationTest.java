@@ -23,34 +23,38 @@ package com.github.javaparser.resolution.declarations;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest, AssociableToASTTest {
+public interface ResolvedClassDeclarationTest extends ResolvedReferenceTypeDeclarationTest, ResolvedTypeParametrizableTest,
+        HasAccessSpecifierTest {
 
-    /**
-     * Create a new non-static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The non-static value.
-     */
     @Override
-    ResolvedFieldDeclaration createValue();
-
-    /**
-     * Create a new static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The static value.
-     */
-    ResolvedFieldDeclaration createStaticValue();
+    ResolvedClassDeclaration createValue();
 
     @Test
-    default void whenAFieldIsStaticShouldBeMarkedAsSuch() {
-        assertFalse(createValue().isStatic());
-        assertTrue(createStaticValue().isStatic());
+    default void resolvedClassShouldBeMarkedAsClass() {
+        assertTrue(createValue().isClass());
     }
 
     @Test
-    default void theDeclaringTypeCantBeNull() {
-        assertNotNull(createValue().declaringType());
+    default void getSuperClassShouldNotBeNull() {
+        assertNotNull(createValue().getSuperClass());
+    }
+
+    @Test
+    default void getInterfacesShouldNotBeNull() {
+        assertNotNull(createValue().getInterfaces());
+    }
+
+    @Test
+    default void getAllSuperClasses() {
+        assertNotNull(createValue().getAllSuperClasses());
+    }
+
+    @Test
+    default void getAllInterfaces() {
+        assertNotNull(createValue().getAllInterfaces());
     }
 
 }
