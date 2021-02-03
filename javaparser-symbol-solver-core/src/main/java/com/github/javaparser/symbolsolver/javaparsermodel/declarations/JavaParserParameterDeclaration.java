@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -37,7 +38,7 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration {
+public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration, AssociableToAST<Parameter> {
 
     private Parameter wrappedNode;
     private TypeSolver typeSolver;
@@ -101,5 +102,9 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
         return wrappedNode;
     }
 
+    @Override
+    public Optional<Parameter> toAst() {
+        return Optional.of(wrappedNode);
+    }
 
 }
