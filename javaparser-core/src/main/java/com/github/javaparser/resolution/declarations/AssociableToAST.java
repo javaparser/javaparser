@@ -27,9 +27,8 @@ import java.util.Optional;
 
 /**
  * A declaration that can be potentially associated with an AST node.
- * @param <N> type of AST Node that can be associated
  */
-public interface AssociableToAST<N extends Node> {
+public interface AssociableToAST {
 
     /**
      * If the declaration is associated to an AST node return it, otherwise it return empty.
@@ -52,7 +51,23 @@ public interface AssociableToAST<N extends Node> {
      * In these cases getWrappedNode is particularly nice because it returns the right type of AST node,
      * not just a Node.
      */
-    default Optional<N> toAst() {
-        throw new UnsupportedOperationException();
+    Optional<Node> toAst();
+
+    /**
+     * If the declaration is associated to an AST node and the type matches the expected {@link Class} return it,
+     * otherwise it returns empty.
+     *
+     * @param clazz The expected class of the AST Node.
+     * @param <N>   The expected type of AST Node.
+     *
+     * @return The declaration with the expected {@link Class}.
+     *
+     * @see AssociableToAST#toAst()
+     */
+    default <N extends Node> Optional<N> toAst(Class<N> clazz) {
+        return toAst()
+                .filter(clazz::isInstance)
+                .map(clazz::cast);
     }
+
 }
