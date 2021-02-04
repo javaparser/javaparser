@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,35 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.declarations;
+package com.github.javaparser.symbolsolver.core.resolution;
 
-/**
- * Declaration of a pattern expression.
- * <p>
- * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
- *
- * @author Roger Howell
- * @see com.github.javaparser.ast.expr.PatternExpr
- */
-public interface ResolvedPatternDeclaration extends ResolvedValueDeclaration {
+public interface TypeVariableResolutionCapabilityTest {
 
-    @Override
-    default boolean isPattern() {
-        return true;
-    }
+    // TODO: Create tests for TypeVariableResolutionCapability
 
-    @Override
-    default ResolvedPatternDeclaration asPattern() {
-        return this;
-    }
-
-    @Override
-    default boolean hasName() {
-        return true;
-    }
-
-
-    default String describeType() {
-        return getType().describe();
-    }
 }

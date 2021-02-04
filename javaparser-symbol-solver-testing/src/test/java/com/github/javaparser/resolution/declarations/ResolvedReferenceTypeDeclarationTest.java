@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,33 +21,28 @@
 
 package com.github.javaparser.resolution.declarations;
 
-/**
- * Declaration of a pattern expression.
- * <p>
- * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
- *
- * @author Roger Howell
- * @see com.github.javaparser.ast.expr.PatternExpr
- */
-public interface ResolvedPatternDeclaration extends ResolvedValueDeclaration {
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public interface ResolvedReferenceTypeDeclarationTest extends ResolvedTypeDeclarationTest, ResolvedTypeParametrizableTest {
 
     @Override
-    default boolean isPattern() {
-        return true;
+    ResolvedReferenceTypeDeclaration createValue();
+
+    @Test
+    default void getAllFieldsCantBeNull() {
+        assertNotNull(createValue().getAllFields());
     }
 
-    @Override
-    default ResolvedPatternDeclaration asPattern() {
-        return this;
+    @Test
+    default void getDeclaredMethodsCantBeNull() {
+        assertNotNull(createValue().getDeclaredMethods());
     }
 
-    @Override
-    default boolean hasName() {
-        return true;
+    @Test
+    default void getConstructorsCantBeNull() {
+        assertNotNull(createValue().getConstructors());
     }
 
-
-    default String describeType() {
-        return getType().describe();
-    }
 }
