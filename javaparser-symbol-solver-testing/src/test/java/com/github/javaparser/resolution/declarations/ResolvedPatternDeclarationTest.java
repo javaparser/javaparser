@@ -21,38 +21,23 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest,
-        AssociableToASTTest<FieldDeclaration> {
+public interface ResolvedPatternDeclarationTest extends ResolvedValueDeclarationTest {
 
-    /**
-     * Create a new non-static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The non-static value.
-     */
     @Override
-    ResolvedFieldDeclaration createValue();
-
-    /**
-     * Create a new static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The static value.
-     */
-    ResolvedFieldDeclaration createStaticValue();
+    ResolvedPatternDeclaration createValue();
 
     @Test
-    default void whenAFieldIsStaticShouldBeMarkedAsSuch() {
-        assertFalse(createValue().isStatic());
-        assertTrue(createStaticValue().isStatic());
+    default void resolvedPatternShouldBeMarkedAsPattern() {
+        assertTrue(createValue().isPattern());
     }
 
     @Test
-    default void theDeclaringTypeCantBeNull() {
-        assertNotNull(createValue().declaringType());
+    default void resolvedPatternShouldHaveAName() {
+        assertTrue(createValue().hasName());
     }
 
 }

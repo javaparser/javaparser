@@ -21,38 +21,24 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest,
-        AssociableToASTTest<FieldDeclaration> {
+public interface ResolvedEnumConstantDeclarationTest extends ResolvedValueDeclarationTest {
 
-    /**
-     * Create a new non-static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The non-static value.
-     */
     @Override
-    ResolvedFieldDeclaration createValue();
-
-    /**
-     * Create a new static {@link ResolvedFieldDeclaration}.
-     *
-     * @return The static value.
-     */
-    ResolvedFieldDeclaration createStaticValue();
+    ResolvedEnumConstantDeclaration createValue();
 
     @Test
-    default void whenAFieldIsStaticShouldBeMarkedAsSuch() {
-        assertFalse(createValue().isStatic());
-        assertTrue(createStaticValue().isStatic());
+    default void enumConstantShouldBeMarkedAsEnum() {
+        assertTrue(createValue().isEnumConstant());
     }
 
     @Test
-    default void theDeclaringTypeCantBeNull() {
-        assertNotNull(createValue().declaringType());
+    default void enumNameShouldNotBeNull() {
+        assertNotNull(createValue().getName());
     }
 
 }

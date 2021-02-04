@@ -22,12 +22,13 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclarationTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public abstract class AbstractTypeDeclarationTest implements ResolvedReferenceTypeDeclarationTest {
+public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResolutionTest implements ResolvedReferenceTypeDeclarationTest {
 
     @Override
     public abstract AbstractTypeDeclaration createValue();

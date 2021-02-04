@@ -24,10 +24,27 @@ package com.github.javaparser.resolution.declarations;
 import com.github.javaparser.ast.Node;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public interface AssociableToASTTest<T extends Node> {
+
+    /**
+     * Helper method to cast the instance to the correct {@link Class}.
+     *
+     * @param instance  The instance to be casted.
+     * @param clazz     The expected {@link Class}.
+     * @param <R>       The expected type.
+     *
+     * @return The instance casted as the correct type.
+     */
+    default <R extends AssociableToAST<T>> R safeCast(AssociableToAST<?> instance, Class<R> clazz) {
+        if (clazz.isInstance(instance))
+            return clazz.cast(instance);
+        throw new UnsupportedOperationException(String.format("Unable to cast %s into %s.", instance.getClass().getName(), clazz.getName()));
+    }
 
     AssociableToAST<T> createValue();
 
@@ -38,16 +55,16 @@ public interface AssociableToASTTest<T extends Node> {
      *
      * @return The node being wrapped.
      */
-    T getWrappedDeclaration(AssociableToAST<T> associableToAST);
+    Optional<T> getWrappedDeclaration(AssociableToAST<T> associableToAST);
 
     @Test
     default void checkThatToASTMatchesTheCorrectWrappedNode() {
         AssociableToAST<T> associableToAST = createValue();
-        T wrappedNode = getWrappedDeclaration(associableToAST);
-        if (wrappedNode == null)
-            assertFalse(associableToAST.toAst().isPresent());
+        Optional<T> wrappedNode = getWrappedDeclaration(associableToAST);
+        if (wrappedNode.isPresent())
+            assertEquals(wrappedNode, associableToAST.toAst());
         else
-            assertEquals(wrappedNode, associableToAST.toAst().get());
+            assertFalse(associableToAST.toAst().isPresent());
     }
 
 }
