@@ -22,12 +22,16 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclarationTest;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+
+import java.util.Optional;
 
 class JavaParserTypeParameterTest extends AbstractTypeDeclarationTest implements ResolvedTypeParameterDeclarationTest {
 
@@ -37,6 +41,13 @@ class JavaParserTypeParameterTest extends AbstractTypeDeclarationTest implements
                 .findFirst(TypeParameter.class).get();
         TypeSolver typeSolver = new ReflectionTypeSolver();
         return new JavaParserTypeParameter(typeParameter, typeSolver);
+    }
+
+    @Override
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.of(
+                safeCast(associableToAST, JavaParserTypeParameter.class).getWrappedNode()
+        );
     }
 
     @Override

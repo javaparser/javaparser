@@ -25,6 +25,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -58,7 +59,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<ClassOrInterfaceDeclaration> {
+class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
 
     private TypeSolver typeSolver;
 
@@ -905,7 +906,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest imp
     }
 
     @Override
-    public Optional<ClassOrInterfaceDeclaration> getWrappedDeclaration(AssociableToAST<ClassOrInterfaceDeclaration> associableToAST) {
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
                 safeCast(associableToAST, JavaParserInterfaceDeclaration.class).getWrappedNode()
         );
