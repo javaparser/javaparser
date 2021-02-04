@@ -37,7 +37,7 @@ import java.util.*;
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration implements AssociableToAST<TypeParameter> {
+public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     private TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -180,7 +180,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public Optional<TypeParameter> toAst() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
 

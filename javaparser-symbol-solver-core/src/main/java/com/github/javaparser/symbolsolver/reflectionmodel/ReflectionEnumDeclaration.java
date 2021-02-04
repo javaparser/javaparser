@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -223,5 +224,10 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   @Override
   public List<ResolvedConstructorDeclaration> getConstructors() {
     return reflectionClassAdapter.getConstructors();
+  }
+
+  @Override
+  public Optional<Node> toAst() {
+    return Optional.empty();
   }
 }

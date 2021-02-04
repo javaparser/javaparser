@@ -21,14 +21,12 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
-
 /**
  * Declaration of a field.
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier, AssociableToAST<FieldDeclaration> {
+public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier {
 
     /**
      * Is the field static?

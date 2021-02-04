@@ -22,9 +22,11 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Collections;
@@ -86,7 +88,7 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
     }
 
     @Override
-    public Optional<ConstructorDeclaration> toAst() {
+    public Optional<Node> toAst() {
         return Optional.empty();
     }
 }

@@ -21,15 +21,19 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtClass;
 
+import java.util.Optional;
+
 /**
  * @author Federico Tomassetti
  */
 public class JavassistParameterDeclaration implements ResolvedParameterDeclaration {
+
     private ResolvedType type;
     private TypeSolver typeSolver;
     private boolean variadic;
@@ -88,5 +92,10 @@ public class JavassistParameterDeclaration implements ResolvedParameterDeclarati
     @Override
     public ResolvedType getType() {
         return type;
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.empty();
     }
 }

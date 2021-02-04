@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
@@ -33,6 +34,7 @@ import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
 import java.lang.reflect.Modifier;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -93,5 +95,10 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public ResolvedTypeDeclaration declaringType() {
         return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.empty();
     }
 }

@@ -26,7 +26,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -56,8 +55,7 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
-        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
-        AssociableToAST<EnumDeclaration> {
+        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
 
     private TypeSolver typeSolver;
     private EnumDeclaration wrappedNode;
@@ -327,7 +325,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 .collect(Collectors.toList());
     }
 
-
     /**
      * Needed by ContextHelper
      *
@@ -417,7 +414,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
 
         @Override
-        public Optional<MethodDeclaration> toAst() {
+        public Optional<Node> toAst() {
             return Optional.empty();
         }
     }
@@ -461,6 +458,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         public ResolvedParameterDeclaration getParam(int i) {
             if (i == 0) {
                 return new ResolvedParameterDeclaration() {
+
                     @Override
                     public String getName() {
                         return "name";
@@ -475,6 +473,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                     public boolean isVariadic() {
                         return false;
                     }
+
+                    @Override
+                    public Optional<Node> toAst() {
+                        return Optional.empty();
+                    }
+
                 };
             }
 
@@ -531,7 +535,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
 
         @Override
-        public Optional<MethodDeclaration> toAst() {
+        public Optional<Node> toAst() {
             return Optional.empty();
         }
     }
@@ -563,7 +567,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public Optional<EnumDeclaration> toAst() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
 

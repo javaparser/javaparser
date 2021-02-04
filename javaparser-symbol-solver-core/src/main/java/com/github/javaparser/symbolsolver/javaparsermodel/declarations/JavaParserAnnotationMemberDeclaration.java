@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
@@ -29,6 +30,8 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -65,4 +68,10 @@ public class JavaParserAnnotationMemberDeclaration implements ResolvedAnnotation
     private Context getContext() {
         return JavaParserFactory.getContext(wrappedNode, typeSolver);
     }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.of(wrappedNode);
+    }
+
 }

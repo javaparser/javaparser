@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -130,6 +131,11 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
         if (container instanceof ResolvedReferenceTypeDeclaration) {
             return Optional.of((ResolvedReferenceTypeDeclaration) container);
         }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Node> toAst() {
         return Optional.empty();
     }
 }
