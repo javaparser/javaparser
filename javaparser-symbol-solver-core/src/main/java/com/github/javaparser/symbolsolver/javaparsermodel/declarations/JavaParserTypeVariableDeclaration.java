@@ -32,16 +32,12 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
+public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration implements AssociableToAST<TypeParameter> {
 
     private TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -135,16 +131,6 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public boolean isField() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isParameter() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isType() {
         return true;
     }
@@ -169,6 +155,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         return Collections.emptyList();
     }
 
+    @Override
     public ResolvedTypeParameterDeclaration asTypeParameter() {
         return new JavaParserTypeParameter(this.wrappedNode, typeSolver);
     }
@@ -191,4 +178,10 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Collections.emptyList();
     }
+
+    @Override
+    public Optional<TypeParameter> toAst() {
+        return Optional.of(wrappedNode);
+    }
+
 }
