@@ -24,18 +24,31 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class JarTypeSolverTest extends AbstractSymbolResolutionTest {
+class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
+
+    private static final Supplier<JarTypeSolver> JAR_TYPE_PROVIDER = () -> {
+        try {
+            Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+            return new JarTypeSolver(pathToJar);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to create the JarTypeSolver.", e);
+        }
+    };
+
+    public JarTypeSolverTest() {
+        super(JAR_TYPE_PROVIDER);
+    }
 
     @Test
     void initial() throws IOException {

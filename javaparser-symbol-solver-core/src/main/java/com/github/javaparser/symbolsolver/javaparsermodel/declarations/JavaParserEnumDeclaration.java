@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -48,22 +49,18 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
-        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
+        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
+        AssociableToAST<EnumDeclaration> {
 
     private TypeSolver typeSolver;
-    private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
+    private EnumDeclaration wrappedNode;
     private JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
 
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
@@ -564,4 +561,10 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
     }
+
+    @Override
+    public Optional<EnumDeclaration> toAst() {
+        return Optional.of(wrappedNode);
+    }
+
 }

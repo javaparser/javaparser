@@ -23,9 +23,9 @@ package com.github.javaparser.resolution.declarations;
 
 /**
  * Declaration of a pattern expression.
- *
+ * <p>
  * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
-
+ *
  * @author Roger Howell
  * @see com.github.javaparser.ast.expr.PatternExpr
  */
@@ -36,7 +36,12 @@ public interface ResolvedPatternDeclaration extends ResolvedValueDeclaration {
         return true;
     }
 
+    @Override
+    default ResolvedPatternDeclaration asPattern() {
+        return this;
+    }
 
+    @Override
     default boolean hasName() {
         return true;
     }
