@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.jar.JarEntry;
@@ -39,6 +41,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.utils.Log;
 
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -54,6 +57,38 @@ public class JarTypeSolver implements TypeSolver {
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
     private ClassPool classPool = new ClassPool(false);
+    
+    public static class ShutDownHookRegistry {
+        
+        private static ShutDownHookRegistry registry;
+        
+        private List<JarFile> jarfiles;
+        
+        private ShutDownHookRegistry() {
+            jarfiles = new ArrayList<>();
+            Thread haltedHook = new Thread(() -> jarfiles.stream()
+                    .forEach(file -> {
+                        try {
+                            file.close();
+                        } catch (IOException e) {
+                            // nothing to do except logging
+                            Log.error("Cannot close jar file %s", ()-> file.getName());
+                        }
+                    }));
+            Runtime.getRuntime().addShutdownHook(haltedHook);
+        }
+        
+        public static ShutDownHookRegistry getRegistry() {
+            if (registry == null) {
+                registry = new ShutDownHookRegistry();
+            }
+            return registry;
+        }
+        
+        public boolean add(JarFile jarFile) {
+            return jarfiles.add(jarFile);
+        }
+    }
 
     public JarTypeSolver(Path pathToJar) throws IOException {
         this(pathToJar.toFile());
@@ -110,6 +145,7 @@ public class JarTypeSolver implements TypeSolver {
             throw new RuntimeException(e);
         }
         JarFile jarFile = new JarFile(pathToJar);
+        ShutDownHookRegistry.getRegistry().add(jarFile);
         JarEntry entry;
         Enumeration<JarEntry> e = jarFile.entries();
         while (e.hasMoreElements()) {
