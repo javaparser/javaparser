@@ -58,35 +58,49 @@ public class JarTypeSolver implements TypeSolver {
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
     private ClassPool classPool = new ClassPool(false);
     
-    public static class ShutDownHookRegistry {
+    /*
+     * ResourceRegistry is useful for freeing up resources.
+     */
+    public static class ResourceRegistry {
         
-        private static ShutDownHookRegistry registry;
+        private static ResourceRegistry registry;
         
         private List<JarFile> jarfiles;
         
-        private ShutDownHookRegistry() {
+        private ResourceRegistry() {
             jarfiles = new ArrayList<>();
-            Thread haltedHook = new Thread(() -> jarfiles.stream()
+            // Add a ShutDownHook to free resources when the VM is shutting down
+            Thread cleanerHook = new Thread(() -> cleanUp());
+            Runtime.getRuntime().addShutdownHook(cleanerHook);
+        }
+        
+        public static ResourceRegistry getRegistry() {
+            if (registry == null) {
+                registry = new ResourceRegistry();
+            }
+            return registry;
+        }
+        
+        /*
+         * Add ressources (JarFile) in registry
+         */
+        public boolean add(JarFile jarFile) {
+            return jarfiles.add(jarFile);
+        }
+        
+        /*
+         * Clean up all resources
+         */
+        public void cleanUp() {
+            jarfiles.stream()
                     .forEach(file -> {
                         try {
                             file.close();
                         } catch (IOException e) {
                             // nothing to do except logging
-                            Log.error("Cannot close jar file %s", ()-> file.getName());
+                            Log.error("Cannot close jar file %s", () -> file.getName());
                         }
-                    }));
-            Runtime.getRuntime().addShutdownHook(haltedHook);
-        }
-        
-        public static ShutDownHookRegistry getRegistry() {
-            if (registry == null) {
-                registry = new ShutDownHookRegistry();
-            }
-            return registry;
-        }
-        
-        public boolean add(JarFile jarFile) {
-            return jarfiles.add(jarFile);
+                    });
         }
     }
 
@@ -145,7 +159,7 @@ public class JarTypeSolver implements TypeSolver {
             throw new RuntimeException(e);
         }
         JarFile jarFile = new JarFile(pathToJar);
-        ShutDownHookRegistry.getRegistry().add(jarFile);
+        ResourceRegistry.getRegistry().add(jarFile);
         JarEntry entry;
         Enumeration<JarEntry> e = jarFile.entries();
         while (e.hasMoreElements()) {
