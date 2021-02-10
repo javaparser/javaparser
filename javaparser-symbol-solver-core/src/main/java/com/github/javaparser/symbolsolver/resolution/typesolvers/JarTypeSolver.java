@@ -90,6 +90,8 @@ public class JarTypeSolver implements TypeSolver {
         
         /*
          * Clean up all resources
+         * Jar files can not be reused after this call so it's better to free all references to
+         * jar in the registry. Do we need to clean the classpool too?
          */
         public void cleanUp() {
             jarfiles.stream()
@@ -101,6 +103,7 @@ public class JarTypeSolver implements TypeSolver {
                             Log.error("Cannot close jar file %s", () -> file.getName());
                         }
                     });
+            jarfiles.clear();
         }
     }
 
