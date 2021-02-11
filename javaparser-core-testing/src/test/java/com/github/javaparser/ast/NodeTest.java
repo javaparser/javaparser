@@ -21,10 +21,7 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -35,7 +32,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
@@ -153,4 +149,23 @@ class NodeTest {
         // This will throw an exception if the parents are bad.
         unit.toString();
     }
+
+    @Test
+    void differentNodesShouldHaveDifferentIds() {
+        Node firstNode = new Parameter();
+        Node secondNode = new Parameter();
+
+        assertEquals(firstNode, secondNode);
+        assertNotEquals(firstNode.getId(), secondNode.getId());
+    }
+
+    @Test
+    void clonedNodesShouldHaveDifferentIds() {
+        Node firstNode = new Parameter();
+        Node secondNode = firstNode.clone();
+
+        assertEquals(firstNode, secondNode);
+        assertNotEquals(firstNode.getId(), secondNode.getId());
+    }
+
 }
