@@ -1153,7 +1153,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @return The unique id.
      */
-    public final String getId() {
+    public final String getUniqueID() {
         return uniqueID;
     }
 

@@ -156,7 +156,7 @@ class NodeTest {
         Node secondNode = new Parameter();
 
         assertEquals(firstNode, secondNode);
-        assertNotEquals(firstNode.getId(), secondNode.getId());
+        assertNotEquals(firstNode.getUniqueID(), secondNode.getUniqueID());
     }
 
     @Test
@@ -165,7 +165,7 @@ class NodeTest {
         Node secondNode = firstNode.clone();
 
         assertEquals(firstNode, secondNode);
-        assertNotEquals(firstNode.getId(), secondNode.getId());
+        assertNotEquals(firstNode.getUniqueID(), secondNode.getUniqueID());
     }
 
 }
