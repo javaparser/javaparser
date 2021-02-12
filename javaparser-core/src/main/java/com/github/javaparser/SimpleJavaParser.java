@@ -51,20 +51,20 @@ public final class SimpleJavaParser {
 
 	private final JavaParser parser;
 
-    /**
-     * Create a new instance of {@link SimpleJavaParser} with the default configuration.
-     */
+	/**
+	 * Create a new instance of {@link SimpleJavaParser} with the default configuration.
+	 */
 	public SimpleJavaParser() {
-        this( new JavaParser() );
+		this(new JavaParser());
 	}
 
-    /**
-     * Create a new instance of {@link SimpleJavaParser} with a custom configuration.
-     *
-     * @param configuration The configuration to be used in the parser.
-     */
+	/**
+	 * Create a new instance of {@link SimpleJavaParser} with a custom configuration.
+	 *
+	 * @param configuration The configuration to be used in the parser.
+	 */
 	public SimpleJavaParser(ParserConfiguration configuration) {
-        this( new JavaParser(configuration) );
+		this(new JavaParser(configuration));
 	}
 
 	/**
@@ -88,24 +88,23 @@ public final class SimpleJavaParser {
 	}
 
 	/**
-     * Helper function to handle the results in a simpler way.
-     *
-     * @param result The result to be processed.
-     *
-     * @param <T> The expected return type.
-     *
-     * @return The parsed value.
-     */
+	 * Helper function to handle the results in a simpler way.
+	 *
+	 * @param result The result to be processed.
+	 * @param <T>    The expected return type.
+	 *
+	 * @return The parsed value.
+	 */
 	private <T extends Node> T handleResult(ParseResult<T> result) {
-	    if (result.isSuccessful()) {
+		if (result.isSuccessful()) {
 
-            Optional<T> results = result.getResult();
-            if (results.isPresent())
-                return results.get();
-            else
-                throw new IllegalStateException("Parsed results is marked as successful but no result present.");
-        } else
-            throw new ParseProblemException(result.getProblems());
+			Optional<T> results = result.getResult();
+			if (results.isPresent())
+				return results.get();
+			else
+				throw new IllegalStateException("Parsed results is marked as successful but no result present.");
+		} else
+			throw new ParseProblemException(result.getProblems());
 	}
 
 	/**
