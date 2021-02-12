@@ -45,7 +45,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A simpler API than {@link JavaParser}.
+ * A simpler API for {@link JavaParser}.
  */
 public final class SimpleJavaParser {
 
