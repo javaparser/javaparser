@@ -180,7 +180,7 @@ public class MethodResolutionLogic {
                 matchedParameters.put(expectedDeclaredType.asTypeParameter().getName(), actualArgumentType);
                 continue;
             }
-
+            
             boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) ||
                     (methodDeclaration.getParam(i).isVariadic() && new ResolvedArrayType(expectedDeclaredType).isAssignableBy(actualArgumentType));
 
@@ -624,6 +624,7 @@ public class MethodResolutionLogic {
         final ResolvedType lastArgType = numberOfArgs > 0 ? argumentTypes.get(numberOfArgs - 1) : null;
         final boolean isLastArgArray = lastArgType != null && lastArgType.isArray();
         int omittedArgs = 0;
+        boolean isMethodAMoreSpecific = false;
 
         // If one method declaration has exactly the correct amount of parameters and is not variadic then it is always
         // preferred to a declaration that is variadic (and hence possibly also has a different amount of parameters).
@@ -679,9 +680,10 @@ public class MethodResolutionLogic {
             // and the type of paramA or paramB (which are not more specific at this stage) is java.lang.Object
             // then we have to consider others parameters before concluding
             } else if ((i < numberOfArgs - 1)
-                    && (paramTypeB.isReferenceType() && paramTypeB.asReferenceType().getQualifiedName().equals("java.lang.Object")
-                    || (paramTypeA.isReferenceType() && paramTypeA.asReferenceType().getQualifiedName().equals("java.lang.Object")))) {
+                    && (isJavaLangObject(paramTypeB) || (isJavaLangObject(paramTypeA)))) {
                 // consider others parameters
+                // but eventually mark the method A as more specific if the methodB has an argument of type java.lang.Object
+                isMethodAMoreSpecific = isMethodAMoreSpecific || isJavaLangObject(paramTypeB);
             }
             // If we get to this point then we check whether one of the methods contains a parameter type that is more
             // specific. If it does, we can assume the entire declaration is more specific as we would otherwise have
@@ -709,7 +711,11 @@ public class MethodResolutionLogic {
             return !isLastArgArray;
         }
 
-        return false;
+        return isMethodAMoreSpecific;
+    }
+    
+    private static boolean isJavaLangObject(ResolvedType paramType ) {
+        return paramType.isReferenceType() && paramType.asReferenceType().getQualifiedName().equals("java.lang.Object");
     }
 
     private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB) {
