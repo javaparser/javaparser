@@ -52,6 +52,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
@@ -1121,6 +1122,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             cursorStack.push(cursor + 1);
             return nodes.get(cursor);
         }
+    }
+    
+    /*
+     * returns true if the node defines a scope
+     */
+    public boolean hasScope() {
+        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass())
+                && ((NodeWithOptionalScope)this).getScope().isPresent();
     }
     
     /*

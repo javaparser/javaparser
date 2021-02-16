@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.validator.language_level_validations.Java1_0Validator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

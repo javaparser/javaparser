@@ -21,21 +21,35 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 
-class JarTypeSolverTest extends AbstractSymbolResolutionTest {
+class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
+
+    private static final Supplier<JarTypeSolver> JAR_TYPE_PROVIDER = () -> {
+        try {
+            Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+            return new JarTypeSolver(pathToJar);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to create the JarTypeSolver.", e);
+        }
+    };
+
+    public JarTypeSolverTest() {
+        super(JAR_TYPE_PROVIDER);
+    }
 
     @Test
     void initial() throws IOException {
@@ -86,6 +100,23 @@ class JarTypeSolverTest extends AbstractSymbolResolutionTest {
         ResolvedReferenceTypeDeclaration b = combinedTypeSolver.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
         List<ResolvedReferenceType> ancestors = b.getAncestors();
         assertEquals(1, ancestors.size());
+    }
+    
+    @Test
+    void cleanUp() throws IOException {
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+        JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
+        JarTypeSolver.ResourceRegistry.getRegistry().cleanUp();
+        jarTypeSolver = new JarTypeSolver(pathToJar);
+        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
+    }
+    
+    @Test
+    void cleanUpWithIllegalStateException() throws IOException {
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+        JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
+        JarTypeSolver.ResourceRegistry.getRegistry().cleanUp();
+        assertThrows(IllegalStateException.class, () -> jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
     }
 
 }

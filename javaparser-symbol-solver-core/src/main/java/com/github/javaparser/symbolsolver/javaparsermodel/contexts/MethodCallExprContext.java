@@ -94,7 +94,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         ResolvedType typeOfScope;
-        if (wrappedNode.getScope().isPresent()) {
+        if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
             // Consider static method calls
             if (scope instanceof NameExpr) {
