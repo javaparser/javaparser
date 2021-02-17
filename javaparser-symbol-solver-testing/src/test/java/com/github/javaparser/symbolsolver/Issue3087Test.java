@@ -11,7 +11,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
-public class Issue3088Test extends AbstractResolutionTest {
+public class Issue3087Test extends AbstractResolutionTest {
     
     @Test
     void testCompilationUnitWithTwoClassesWithTheSameName() {
