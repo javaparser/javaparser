@@ -125,9 +125,9 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
 
 /**
- * A visitor that has a return value of ({@link List List<R>}), and has a default implementation for all its visit
+ * A visitor that has a return value of {@link List List&lt;R&gt;}, and has a default implementation for all its visit
  * methods that visits their children in an unspecified order, and all visit methods
- * that returns a value be added to a flattened {@link List List<R>}.
+ * that returns a value be added to a flattened {@link List List&lt;R&gt;}.
  *
  * @author Enno Boland
  */
