@@ -891,6 +891,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         walk(nodeType, found::add);
         return found;
     }
+    
+    /**
+     * Walks the AST with specified traversal order, returning all nodes of type "nodeType".
+     */
+    public <T extends Node> List<T> findAll(Class<T> nodeType, TreeTraversal traversal) {
+        final List<T> found = new ArrayList<>();
+        walk(traversal, node -> {
+            if (nodeType.isAssignableFrom(node.getClass())) {
+                found.add(nodeType.cast(node));
+            }
+        });
+        return found;
+    }
 
     /**
      * Walks the AST with pre-order traversal, returning all nodes of type "nodeType" that match the predicate.
