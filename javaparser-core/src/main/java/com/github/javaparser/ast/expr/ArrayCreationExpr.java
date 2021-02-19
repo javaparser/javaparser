@@ -41,7 +41,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Generated;
 
 /**
- * {@code new int[5][4][][]} or <code>new int[][]{{1},{2,3}}</code>.
+ * {@code new int[5][4][][]} or {@code new int[][]{{1},{2,3}}}.
  *
  * <br>"int" is the element type.
  * <br>All the brackets are stored in the levels field, from left to right.
