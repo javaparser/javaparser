@@ -53,7 +53,7 @@ import com.github.javaparser.ast.Generated;
  * } catch(<b>IOException | NullPointerException ex</b>) {
  * ...
  * }
- * </pre>
+ * </code></pre>
  *
  * The types that make up the union type are its "elements"
  */
