@@ -146,20 +146,20 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             // this method for the remaining part of the given name.
             if (name.indexOf('.') > -1) {
 
-                SymbolReference<ResolvedTypeDeclaration> ref = null;
+                SymbolReference<ResolvedTypeDeclaration> typeDeclaration = null;
                 Optional<? extends ResolvedTypeDeclaration> outerDeclaration =
                         solveType(name.substring(0, name.indexOf(".")))
                         .getCorrespondingDeclaration();
 
                 if (outerDeclaration.isPresent() && outerDeclaration.get() instanceof JavaParserClassDeclaration) {
-                    ref = ((JavaParserClassDeclaration) outerDeclaration.get())
+                    typeDeclaration = ((JavaParserClassDeclaration) outerDeclaration.get())
                             .solveType(name.substring(name.indexOf(".") + 1));
                 } else if (outerDeclaration.isPresent() && outerDeclaration.get() instanceof JavaParserInterfaceDeclaration) {
-                    ref = ((JavaParserInterfaceDeclaration) outerDeclaration.get())
+                    typeDeclaration = ((JavaParserInterfaceDeclaration) outerDeclaration.get())
                             .solveType(name.substring(name.indexOf(".") + 1));
                 }
-                if (ref != null && ref.getCorrespondingDeclaration().isPresent()) {
-                    return ref;
+                if (typeDeclaration != null && typeDeclaration.getCorrespondingDeclaration().isPresent()) {
+                    return typeDeclaration;
                 }
             }
         }
