@@ -159,11 +159,11 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof MethodCallExpr) {
-            Optional<ResolvedMethodDeclaration> result = JavaParserFacade.get(typeSolver)
+            Optional<ResolvedMethodDeclaration> methodDeclaration = JavaParserFacade.get(typeSolver)
                     .solve((MethodCallExpr) node)
                     .getCorrespondingDeclaration();
-            if (result.isPresent()) {
-                return resultClass.cast(result.get());
+            if (methodDeclaration.isPresent()) {
+                return resultClass.cast(methodDeclaration.get());
             } else {
                 throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
             }
