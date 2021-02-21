@@ -59,11 +59,12 @@ class ReflectionMethodResolutionLogic {
         }
 
         for (ResolvedReferenceType ancestor : scopeType.getAncestors()) {
-            ancestor.getTypeDeclaration()
+            Optional<ResolvedMethodDeclaration> optionalMethod = ancestor.getTypeDeclaration()
                     .flatMap(ancestorTypeDeclaration ->
                             MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, parameterTypes, staticOnly)
                                     .getCorrespondingDeclaration()
-                    ).ifPresent(methods::add);
+                    );
+            optionalMethod.ifPresent(methods::add);
         }
 
         if (scopeType.getAncestors().isEmpty()){
