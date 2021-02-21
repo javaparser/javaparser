@@ -48,7 +48,9 @@ import java.nio.file.Path;
  * A simpler, static API than {@link JavaParser}.
  */
 public final class StaticJavaParser {
-    private static ParserConfiguration configuration = new ParserConfiguration();
+    
+    // use ThreadLocal to resolve possible concurrency issues.
+    private static ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(() -> new ParserConfiguration());
 
     private StaticJavaParser() {
     }
@@ -57,7 +59,7 @@ public final class StaticJavaParser {
      * Get the configuration for the parse... methods.
      */
     public static ParserConfiguration getConfiguration() {
-        return configuration;
+        return localConfiguration.get();
     }
 
     /**
@@ -65,11 +67,11 @@ public final class StaticJavaParser {
      * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
      */
     public static void setConfiguration(ParserConfiguration configuration) {
-        StaticJavaParser.configuration = configuration;
+        localConfiguration.set(configuration);
     }
 
     private static JavaParser newParser() {
-        return new JavaParser(configuration);
+        return new JavaParser(getConfiguration());
     }
 
     /**

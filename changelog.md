@@ -15,6 +15,20 @@ Next Release (Version 3.19.0)
   (PR [#2994](https://github.com/javaparser/javaparser/pull/2994), by [@jlerbsc](https://github.com/jlerbsc))
 * Add test case for issue #1770 UnaryExpr failing to resolve BITWISE_COMPLEMENT operator   
   (PR [#3005](https://github.com/javaparser/javaparser/pull/3005), by [@jlerbsc](https://github.com/jlerbsc))
+* Created additional validators to differentiate between enabling standard and preview features   
+  (PR [#3015](https://github.com/javaparser/javaparser/pull/3015), by [@MysterAitch](https://github.com/MysterAitch))
+* Added additional tests to TypeSolvers   
+  (PR [#3046](https://github.com/javaparser/javaparser/pull/3046), by [@4everTheOne](https://github.com/4everTheOne))
+* Improved JavaParserTypeVariableDeclaration tests   
+  (PR [#3059](https://github.com/javaparser/javaparser/pull/3059), by [@4everTheOne](https://github.com/4everTheOne))
+* Improved coverage for resolved declarations and fixed inconsistencies between them   
+  (PR [#3062](https://github.com/javaparser/javaparser/pull/3062), by [@4everTheOne](https://github.com/4everTheOne))
+* Additional GenericVisitorWithDefaults and VoidVisitorWithDefaults tests   
+  (PR [#3067](https://github.com/javaparser/javaparser/pull/3067), by [@4everTheOne](https://github.com/4everTheOne))
+* Additional tests for hash code visitors   
+  (PR [#3068](https://github.com/javaparser/javaparser/pull/3068), by [@4everTheOne](https://github.com/4everTheOne))
+* Add unit tests to issue #3074 Unable to delete .jar files after parsing and using symbol solver (re: #3074)   
+  (PR [#3076](https://github.com/javaparser/javaparser/pull/3076), by [@jlerbsc](https://github.com/jlerbsc))
 ### Changed
 * Minor refactoring regarding indentation management
   (PR [#2969](https://github.com/javaparser/javaparser/pull/2969), by [@jlerbsc](https://github.com/jlerbsc))
@@ -22,10 +36,14 @@ Next Release (Version 3.19.0)
   (PR [#2970](https://github.com/javaparser/javaparser/pull/2970), by [@jlerbsc](https://github.com/jlerbsc))
 * Minor refactoring moving Indentation class to configuration package - preparation for other refactoring on Printer
   (PR [#2972](https://github.com/javaparser/javaparser/pull/2972), by [@jlerbsc](https://github.com/jlerbsc))
+* Bump guava from 30.0-jre to 30.1-jre
+  (PR [#2977](https://github.com/javaparser/javaparser/pull/2977), by [@dependabot](https://github.com/dependabot))
 * Refactoring: relocation of boxing/unboxing methods
   (PR [#2983](https://github.com/javaparser/javaparser/pull/2983), by [@jlerbsc](https://github.com/jlerbsc))
 * Improve boxing/unboxing unit tests and remove useless code in isUnbox...
   (PR [#2984](https://github.com/javaparser/javaparser/pull/2984), by [@jlerbsc](https://github.com/jlerbsc))
+* Bump jbehave-core from 4.7 to 4.8.1
+  (PR [#2989](https://github.com/javaparser/javaparser/pull/2989), by [@dependabot](https://github.com/dependabot))
 * Add JVM memory settings for surefire (seems that forked mode is the default running mode)
   (PR [#2999](https://github.com/javaparser/javaparser/pull/2999), by [@jlerbsc](https://github.com/jlerbsc))
 * Move unit test Issue2592Test because it's not related to symbol solver
@@ -34,6 +52,14 @@ Next Release (Version 3.19.0)
   (PR [#3001](https://github.com/javaparser/javaparser/pull/3001), by [@jlerbsc](https://github.com/jlerbsc))
 * Remove the PhantomNodeLogic that generates memory issues when LexicalPreservingPrinter is used. Phantom node is now an attribut of each node. This is an optimization of the JP memory usage.
   (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
+* Make the visit order of ModifierVisitor more consistent.
+  (PR [#3011](https://github.com/javaparser/javaparser/pull/3011), by [@mernst](https://github.com/mernst))
+* Link to the specification, not to a random blog.
+  (PR [#3013](https://github.com/javaparser/javaparser/pull/3013), by [@mernst](https://github.com/mernst))
+* Minor refactoring change call to getScope().isPresent() to hasScope()
+  (PR [#3026](https://github.com/javaparser/javaparser/pull/3026), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #3050 - Minor improvement to thread safety
+  (PR [#3052](https://github.com/javaparser/javaparser/pull/3052), by [@jlerbsc](https://github.com/jlerbsc))
 ### Deprecated
 * `PhantomNodeLogic` is now deprecated, with the logic now being handled by the node itself.
   (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
@@ -51,6 +77,26 @@ Next Release (Version 3.19.0)
   (PR [#3006](https://github.com/javaparser/javaparser/pull/3006), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue #1774 Ensure the correct type is calculated for all binary expressions and add unary primitive promotion   
   (PR [#3007](https://github.com/javaparser/javaparser/pull/3007), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #2995 Cannot resolve ClassOrInterfaceType of nested ObjectCreationExpr  
+  (PR [#3019](https://github.com/javaparser/javaparser/pull/3019), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #1634 Missing EOL when add imports if the class not exist imports before 
+  (PR [#3020](https://github.com/javaparser/javaparser/pull/3020), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #3024 methodCallExpr.resolve() StackOverflowError 
+  (PR [#3025](https://github.com/javaparser/javaparser/pull/3025), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #3027 Unable to parse class with generic parameter using JavaParserTypeSolver 
+  (PR [#3029](https://github.com/javaparser/javaparser/pull/3029), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #3030 NoSuchElementException when solving type 
+  (PR [#3031](https://github.com/javaparser/javaparser/pull/3031), by [@4everTheOne](https://github.com/4everTheOne))
+* Issue 3028  -- Changed MethodResolutionLogic to deal with multiple candidates with varargs when varargs have not been specified in the call.
+  (PR [#3032](https://github.com/javaparser/javaparser/pull/3032), by [@greggers123](https://github.com/greggers123))
+* Issue #1834 Improving annotation support: Implement ResolvedAnnotationDeclaration#getDefaultValue()
+  (PR [#3055](https://github.com/javaparser/javaparser/pull/3055), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #3057 Removed redundant definition of method to inherit from super
+  (PR [#3058](https://github.com/javaparser/javaparser/pull/3058), by [@4everTheOne](https://github.com/4everTheOne))
+* Issue #3074 Unable to delete .jar files after parsing
+  (PR [#3075](https://github.com/javaparser/javaparser/pull/3075), by [@jlerbsc](https://github.com/jlerbsc))
+* Issue #3083 Fix choosing the most specific method in case of java.lang.Object argument type
+  (PR [#3084](https://github.com/javaparser/javaparser/pull/3084), by [@jlerbsc](https://github.com/jlerbsc))
 ### Security
 
 

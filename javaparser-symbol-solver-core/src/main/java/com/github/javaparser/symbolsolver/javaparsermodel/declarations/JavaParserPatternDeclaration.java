@@ -22,20 +22,23 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.Optional;
 
 /**
  * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
  *
  * @author Roger Howell
  */
-public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration {
+public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration, AssociableToAST<PatternExpr> {
 
-    private PatternExpr wrappedNode;
-    private TypeSolver typeSolver;
+    private final PatternExpr wrappedNode;
+    private final TypeSolver typeSolver;
 
     public JavaParserPatternDeclaration(PatternExpr wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
@@ -45,11 +48,6 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration 
     @Override
     public String getName() {
         return wrappedNode.getName().getId();
-    }
-
-    @Override
-    public boolean isPattern() {
-        return true;
     }
 
     @Override
@@ -67,8 +65,8 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration 
     }
 
     @Override
-    public ResolvedPatternDeclaration asPattern() {
-        return this;
+    public Optional<PatternExpr> toAst() {
+        return Optional.of(wrappedNode);
     }
 
 }

@@ -21,29 +21,15 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -52,6 +38,13 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDe
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests resolution of annotation expressions.
@@ -100,6 +93,21 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertEquals("foo.bar", resolved.getPackageName());
         assertEquals("MyAnnotationWithSingleValue", resolved.getName());
     }
+    
+    @Test
+    void solveJavaParserSingleMemberAnnotationAndDefaultvalue() {
+        // parse compilation unit and get annotation expression
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CF");
+        NormalAnnotationExpr annotationExpr = (NormalAnnotationExpr) clazz.getAnnotation(0);
+
+        // resolve annotation expression
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
+
+        // check that the expected annotation declaration equals the resolved annotation declaration
+        Expression memberValue = resolved.getAnnotationMembers().get(0).getDefaultValue();
+        assertEquals(IntegerLiteralExpr.class, memberValue.getClass());
+    }
 
     @Test
     void solveJavaParserNormalAnnotation() {
@@ -132,6 +140,28 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertEquals("java.lang.Override", resolved.getQualifiedName());
         assertEquals("java.lang", resolved.getPackageName());
         assertEquals("Override", resolved.getName());
+    }
+    
+    @Test
+    void solveReflectionMarkerAnnotationWithDefault() throws IOException {
+        // parse compilation unit and get annotation expression
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CH");
+        
+        VariableDeclarator decl = Navigator.demandField(clazz, "field");
+        FieldDeclaration fd = (FieldDeclaration)decl.getParentNode().get();
+        MarkerAnnotationExpr annotationExpr = (MarkerAnnotationExpr) fd.getAnnotation(0);
+
+        // resolve annotation expression
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
+        // get default value
+        Expression expr = resolved.getAnnotationMembers().get(0).getDefaultValue();
+        assertEquals("BooleanLiteralExpr", expr.getClass().getSimpleName());
+        assertEquals(true, ((BooleanLiteralExpr)expr).getValue());
+        
+        // resolve the type of the annotation member
+        ResolvedType rt = resolved.getAnnotationMembers().get(0).getType();
+        assertEquals("boolean", rt.describe());
     }
 
     @Test
@@ -203,6 +233,25 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertEquals("org.junit.Test", resolved.getQualifiedName());
         assertEquals("org.junit", resolved.getPackageName());
         assertEquals("Test", resolved.getName());
+    }
+    
+    @Test
+    void solveJavassistNormalAnnotationWithDefault() throws IOException {
+        // parse compilation unit and get annotation expression
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CG");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testSomething");
+        MarkerAnnotationExpr annotationExpr = (MarkerAnnotationExpr) method.getAnnotation(0);
+
+        // resolve annotation expression
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
+
+        // check that the expected annotation declaration equals the resolved annotation declaration
+        assertEquals("org.junit.Ignore", resolved.getQualifiedName());
+        Expression memberValue = resolved.getAnnotationMembers().get(0).getDefaultValue();
+        assertEquals(StringLiteralExpr.class, memberValue.getClass());
+        ResolvedType rt = resolved.getAnnotationMembers().get(0).getType();
+        assertEquals("java.lang.String", rt.describe());
     }
 
     @Test

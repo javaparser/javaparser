@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
@@ -31,17 +32,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
+import java.util.function.Consumer;
+
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
- * {@code new int[5][4][][]} or <code>new int[][]{{1},{2,3}}</code>.
+ * {@code new int[5][4][][]} or {@code new int[][]{{1},{2,3}}}.
  *
  * <br>"int" is the element type.
  * <br>All the brackets are stored in the levels field, from left to right.

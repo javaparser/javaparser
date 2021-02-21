@@ -32,9 +32,10 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
@@ -45,6 +46,7 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -56,7 +58,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
+class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<ClassOrInterfaceDeclaration> {
 
     private TypeSolver typeSolver;
 
@@ -900,5 +902,32 @@ class JavaParserInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         } finally {
             StaticJavaParser.setConfiguration(new ParserConfiguration());
         }
+    }
+
+    @Override
+    public Optional<ClassOrInterfaceDeclaration> getWrappedDeclaration(AssociableToAST<ClassOrInterfaceDeclaration> associableToAST) {
+        return Optional.of(
+                safeCast(associableToAST, JavaParserInterfaceDeclaration.class).getWrappedNode()
+        );
+    }
+
+    @Override
+    public JavaParserInterfaceDeclaration createValue() {
+        ClassOrInterfaceDeclaration classOrInterface = StaticJavaParser.parse("interface A {}")
+                        .findFirst(ClassOrInterfaceDeclaration.class).get();
+        return new JavaParserInterfaceDeclaration(classOrInterface, typeSolver);
+    }
+
+    @Override
+    public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
+        return false;
+    }
+
+    @Disabled(value = "This test was disable in this class due to a bug reported at https://github" +
+            ".com/javaparser/javaparser/issues/3061. It should be renabled when the issue is fixed.")
+    @Test
+    @Override
+    public void containerTypeCantBeNull() {
+        super.containerTypeCantBeNull();
     }
 }

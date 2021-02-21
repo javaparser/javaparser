@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
@@ -35,10 +34,20 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
+class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolver> {
+
+    private static final Supplier<JavaParserTypeSolver> JAVA_PARSER_PROVIDER = () -> {
+        Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
+        return new JavaParserTypeSolver(src);
+    };
+
+    public JavaParserTypeSolverTest() {
+        super(JAVA_PARSER_PROVIDER);
+    }
 
     @Disabled // Unsure why this test is disabled -- passes locally.
     @Test

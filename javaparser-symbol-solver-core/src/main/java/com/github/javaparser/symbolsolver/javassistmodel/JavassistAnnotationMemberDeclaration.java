@@ -21,16 +21,38 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.NotFoundException;
+import javassist.bytecode.AnnotationDefaultAttribute;
+import javassist.bytecode.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Malte Skoruppa
  */
 public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
+    
+    private static Map<Class<? extends MemberValue>, Function<MemberValue, ? extends Expression>> memberValueAsExressionConverter = new HashMap<>();
+    static {
+        memberValueAsExressionConverter.put(BooleanMemberValue.class, (memberValue) -> new BooleanLiteralExpr(BooleanMemberValue.class.cast(memberValue).getValue()));
+        memberValueAsExressionConverter.put(CharMemberValue.class, (memberValue) -> new CharLiteralExpr(CharMemberValue.class.cast(memberValue).getValue()));
+        memberValueAsExressionConverter.put(DoubleMemberValue.class, (memberValue) -> new DoubleLiteralExpr(DoubleMemberValue.class.cast(memberValue).getValue()));
+        memberValueAsExressionConverter.put(IntegerMemberValue.class, (memberValue) -> new IntegerLiteralExpr(IntegerMemberValue.class.cast(memberValue).getValue()));
+        memberValueAsExressionConverter.put(LongMemberValue.class, (memberValue) -> new LongLiteralExpr(LongMemberValue.class.cast(memberValue).getValue()));
+        memberValueAsExressionConverter.put(StringMemberValue.class, (memberValue) -> new StringLiteralExpr(StringMemberValue.class.cast(memberValue).getValue()));
+    }
 
     private CtMethod annotationMember;
     private TypeSolver typeSolver;
@@ -42,16 +64,29 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
 
     @Override
     public Expression getDefaultValue() {
-        // TODO we should do something like this:
-        // AnnotationDefaultAttribute defaultAttribute = (AnnotationDefaultAttribute) annotationMember.getMethodInfo().getAttribute(AnnotationDefaultAttribute.tag);
-        // return defaultAttribute != null ? defaultAttribute.getDefaultValue() : null;
-        // TODO ...but the interface wants us to return a JavaParser Expression node.
-        throw new UnsupportedOperationException("Obtaining the default value of a library annotation member is not supported yet.");
+         AnnotationDefaultAttribute defaultAttribute = (AnnotationDefaultAttribute) annotationMember.getMethodInfo().getAttribute(AnnotationDefaultAttribute.tag);
+         if (defaultAttribute == null) return null;
+         MemberValue memberValue = defaultAttribute.getDefaultValue();
+         Function<MemberValue, ? extends Expression> fn = memberValueAsExressionConverter.get(memberValue.getClass());
+         if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+         return fn.apply(memberValue);
     }
-
+    
     @Override
     public ResolvedType getType() {
-        throw new UnsupportedOperationException();
+        try {
+            CtClass returnType = annotationMember.getReturnType();
+            if (returnType.isPrimitive()) {
+                return ResolvedPrimitiveType.byName(returnType.getName());
+            }
+            SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
+            if (rrtd.isSolved()) {
+                return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration(), typeSolver);
+            }
+        } catch (NotFoundException e) {
+            // nothing to do
+        }
+        throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getLongName()));
     }
 
     @Override
