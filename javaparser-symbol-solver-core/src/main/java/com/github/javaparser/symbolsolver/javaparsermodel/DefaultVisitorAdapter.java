@@ -23,8 +23,10 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.JmlComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -222,6 +224,126 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     @Override
     public ResolvedType visit(PatternExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlComment n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlBindingExpr n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(AccessibleClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(AssignableClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(BreaksClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(ContinuesClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(DivergesClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(EnsuresClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlAssertStmt n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlAssumeStmt n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlLabel n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlLetExpr n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlMultiCompareExpr n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlSetStmt n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(LoopDecreasesClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(LoopInvariantClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(LoopVariantClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(MeasuredByClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(ModifiesClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(RequiresClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(ReturnsClause n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(Signals n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(SignalsOnly n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(UnreachableStmt n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
     @Override

@@ -30,6 +30,14 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.clauses.*;
 
 /**
  * A visitor that does not return anything.
@@ -232,7 +240,51 @@ public interface VoidVisitor<A> {
 
     void visit(PatternExpr n, A arg);
 
-    default void visit(JmlComment jmlComment, A arg);
+    void visit(JmlComment jmlComment, A arg);
 
-    default void visit(JmlBindingExpr jmlBindingExpr, A arg);
+    void visit(JmlBindingExpr jmlBindingExpr, A arg);
+
+    void visit(AccessibleClause n, A arg);
+
+    void visit(AssignableClause n, A arg);
+
+    void visit(BreaksClause n, A arg);
+
+    void visit(ContinuesClause n, A arg);
+
+    void visit(DivergesClause n, A arg);
+
+    void visit(EnsuresClause n, A arg);
+
+    void visit(JmlAssertStmt n, A arg);
+
+    void visit(JmlAssumeStmt n, A arg);
+
+    void visit(JmlLabel n, A arg);
+
+    void visit(JmlLetExpr n, A arg);
+
+    void visit(JmlMultiCompareExpr n, A arg);
+
+    void visit(JmlSetStmt n, A arg);
+
+    void visit(LoopDecreasesClause n, A arg);
+
+    void visit(LoopInvariantClause n, A arg);
+
+    void visit(LoopVariantClause n, A arg);
+
+    void visit(MeasuredByClause n, A arg);
+
+    void visit(ModifiesClause n, A arg);
+
+    void visit(RequiresClause n, A arg);
+
+    void visit(ReturnsClause n, A arg);
+
+    void visit(Signals n, A arg);
+
+    void visit(SignalsOnly n, A arg);
+
+    void visit(UnreachableStmt n, A arg);
 }

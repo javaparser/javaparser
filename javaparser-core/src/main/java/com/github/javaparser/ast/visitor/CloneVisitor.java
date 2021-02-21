@@ -22,6 +22,7 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -1245,10 +1246,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlBindingExpr n, final Object arg) {
-        Statement body = cloneNode(n.getBody(), arg);
-        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        NodeList<Expression> expressions = cloneList(n.getExpressions(), arg);
+        NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlBindingExpr r = new JmlBindingExpr(n.getTokenRange().orElse(null), parameters, body, n.isEnclosingParameters());
+        JmlBindingExpr r = new JmlBindingExpr(n.getTokenRange().orElse(null), variables, expressions);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1259,6 +1260,228 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final JmlComment n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         JmlComment r = new JmlComment(n.getTokenRange().orElse(null), n.getContent());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final AccessibleClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        AccessibleClause r = new AccessibleClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final AssignableClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        AssignableClause r = new AssignableClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final BreaksClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        BreaksClause r = new BreaksClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final ContinuesClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        ContinuesClause r = new ContinuesClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final DivergesClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        DivergesClause r = new DivergesClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final EnsuresClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        EnsuresClause r = new EnsuresClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlAssertStmt n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlAssertStmt r = new JmlAssertStmt(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlAssumeStmt n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlAssumeStmt r = new JmlAssumeStmt(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlLabel n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlLabel r = new JmlLabel(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlLetExpr n, final Object arg) {
+        Expression body = cloneNode(n.getBody(), arg);
+        NodeList<Parameter> variables = cloneList(n.getVariables(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlLetExpr r = new JmlLetExpr(n.getTokenRange().orElse(null), variables, body);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlMultiCompareExpr n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlMultiCompareExpr r = new JmlMultiCompareExpr(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlSetStmt n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlSetStmt r = new JmlSetStmt(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LoopDecreasesClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        LoopDecreasesClause r = new LoopDecreasesClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LoopInvariantClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        LoopInvariantClause r = new LoopInvariantClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LoopVariantClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        LoopVariantClause r = new LoopVariantClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final MeasuredByClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        MeasuredByClause r = new MeasuredByClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final ModifiesClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        ModifiesClause r = new ModifiesClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final RequiresClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        RequiresClause r = new RequiresClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final ReturnsClause n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        ReturnsClause r = new ReturnsClause(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final Signals n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        Signals r = new Signals(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final SignalsOnly n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        SignalsOnly r = new SignalsOnly(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final UnreachableStmt n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        UnreachableStmt r = new UnreachableStmt(n.getTokenRange().orElse(null));
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

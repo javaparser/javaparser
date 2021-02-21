@@ -22,13 +22,13 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import java.util.Optional;
 
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
@@ -449,6 +449,116 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlComment n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final AccessibleClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final AssignableClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final BreaksClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final ContinuesClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final DivergesClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final EnsuresClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlAssertStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlAssumeStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlLabel n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlLetExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlMultiCompareExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlSetStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LoopDecreasesClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LoopInvariantClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LoopVariantClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final MeasuredByClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final ModifiesClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final RequiresClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final ReturnsClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final Signals n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final SignalsOnly n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final UnreachableStmt n, final Void arg) {
         return n.hashCode();
     }
 }

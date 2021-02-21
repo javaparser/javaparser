@@ -29,6 +29,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.clauses.*;
 
 /**
  * A visitor that returns nothing, and has default methods that are used when a specific visit method is not
@@ -538,6 +540,116 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlComment n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final AccessibleClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final AssignableClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final BreaksClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final ContinuesClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final DivergesClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final EnsuresClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlAssertStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlAssumeStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlLabel n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlLetExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlMultiCompareExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlSetStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LoopDecreasesClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LoopInvariantClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LoopVariantClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final MeasuredByClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final ModifiesClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final RequiresClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final ReturnsClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final Signals n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final SignalsOnly n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final UnreachableStmt n, final A arg) {
         defaultAction(n, arg);
     }
 }

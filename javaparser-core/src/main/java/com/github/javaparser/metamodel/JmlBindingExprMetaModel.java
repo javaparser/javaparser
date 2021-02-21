@@ -41,7 +41,7 @@ public class JmlBindingExprMetaModel extends ExpressionMetaModel {
         super(superBaseNodeMetaModel, JmlBindingExpr.class, "JmlBindingExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
-    public PropertyMetaModel bodyPropertyMetaModel;
+    public PropertyMetaModel expressionsPropertyMetaModel;
 
     public PropertyMetaModel variablesPropertyMetaModel;
 }

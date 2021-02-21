@@ -237,18 +237,22 @@ public abstract class Comment extends Node {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlComment() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlComment asJmlComment() {
         throw new IllegalStateException(f("%s is not JmlComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlComment> toJmlComment() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlComment(Consumer<JmlComment> action) {
     }
 }

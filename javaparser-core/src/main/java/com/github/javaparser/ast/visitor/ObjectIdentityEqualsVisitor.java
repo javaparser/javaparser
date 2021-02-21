@@ -22,10 +22,9 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -534,7 +533,117 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
+    public Boolean visit(final AccessibleClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final AssignableClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final BreaksClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final ContinuesClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final DivergesClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final EnsuresClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlAssertStmt n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlAssumeStmt n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
     public Boolean visit(final JmlComment n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlLabel n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlLetExpr n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlMultiCompareExpr n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlSetStmt n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LoopDecreasesClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LoopInvariantClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LoopVariantClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final MeasuredByClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final ModifiesClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final RequiresClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final ReturnsClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final Signals n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final SignalsOnly n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final UnreachableStmt n, final Visitable arg) {
         return n == arg;
     }
 }

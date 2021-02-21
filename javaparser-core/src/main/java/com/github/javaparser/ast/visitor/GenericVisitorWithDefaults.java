@@ -22,9 +22,8 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -542,6 +541,116 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlComment n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final AccessibleClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final AssignableClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final BreaksClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final ContinuesClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final DivergesClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final EnsuresClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlAssertStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlAssumeStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlLabel n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlLetExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlMultiCompareExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlSetStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LoopDecreasesClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LoopInvariantClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LoopVariantClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final MeasuredByClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final ModifiesClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final RequiresClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final ReturnsClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final Signals n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final SignalsOnly n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final UnreachableStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 }

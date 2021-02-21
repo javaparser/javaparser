@@ -24,7 +24,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -59,7 +58,8 @@ public class JmlBindingExpr extends Expression {
     @NonEmptyProperty
     private NodeList<VariableDeclarator> variables;
 
-    private NodeList<Expression> body;
+    @NonEmptyProperty
+    private NodeList<Expression> expressions;
 
     public JmlBindingExpr() {
         this(null, new NodeList<>(), new NodeList<>());
@@ -68,26 +68,26 @@ public class JmlBindingExpr extends Expression {
     /**
      * Creates a single parameter lambda expression.
      */
-    public JmlBindingExpr(VariableDeclarator var, Expression body) {
-        this(null, new NodeList<>(var), new NodeList<>(body));
+    public JmlBindingExpr(VariableDeclarator var, Expression expressions) {
+        this(null, new NodeList<>(var), new NodeList<>(expressions));
     }
 
     /**
      * Creates a zero or multi-parameter lambda expression with its variables wrapped in ( ).
      */
     @AllFieldsConstructor
-    public JmlBindingExpr(NodeList<VariableDeclarator> variables, Expression body) {
-        this(null, variables, new NodeList<>(body));
+    public JmlBindingExpr(NodeList<VariableDeclarator> variables, Expression expressions) {
+        this(null, variables, new NodeList<>(expressions));
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlBindingExpr(TokenRange tokenRange, NodeList<VariableDeclarator> variables, NodeList<Expression> body) {
+    public JmlBindingExpr(TokenRange tokenRange, NodeList<VariableDeclarator> variables, NodeList<Expression> expressions) {
         super(tokenRange);
-        this.variables = variables;
-        this.body = body;
+        setVariables(variables);
+        setExpressions(expressions);
         customInitialization();
     }
 
@@ -105,91 +105,79 @@ public class JmlBindingExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isLambdaExpr() {
-        return true;
-    }
-
-    /*
-     * Lambda expressions are always poly expressions
-     */
-    @Override
-    public boolean isPolyExpression() {
-        return true;
-    }
-
-    @Override
     public boolean isJmlBindingExpr() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlBindingExpr asJmlBindingExpr() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlBindingExpr> toJmlBindingExpr() {
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBindingExpr(Consumer<JmlBindingExpr> action) {
         action.accept(this);
     }
 
-    public Statement getBody() {
-        return body;
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Expression> getExpressions() {
+        return expressions;
     }
 
-    public JmlBindingExpr setBody(final Statement body) {
-        assertNotNull(body);
-        if (body == this.body) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlBindingExpr setExpressions(final NodeList<Expression> expressions) {
+        assertNotNull(expressions);
+        if (expressions == this.expressions) {
             return (JmlBindingExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
-        this.body = body;
-        setAsParentNodeOf(body);
+        notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
+        if (this.expressions != null)
+            this.expressions.setParentNode(null);
+        this.expressions = expressions;
+        setAsParentNodeOf(expressions);
         return this;
     }
 
-    public boolean isEnclosingParameters() {
-        return isEnclosingParameters;
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<VariableDeclarator> getVariables() {
+        return variables;
     }
 
-    public JmlBindingExpr setEnclosingParameters(final boolean isEnclosingParameters) {
-        if (isEnclosingParameters == this.isEnclosingParameters) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlBindingExpr setVariables(final NodeList<VariableDeclarator> variables) {
+        assertNotNull(variables);
+        if (variables == this.variables) {
             return (JmlBindingExpr) this;
         }
-        notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, this.isEnclosingParameters, isEnclosingParameters);
-        this.isEnclosingParameters = isEnclosingParameters;
-        return this;
-    }
-
-    public NodeList<Parameter> getParameters() {
-        return parameters;
-    }
-
-    public JmlBindingExpr setParameters(final NodeList<Parameter> parameters) {
-        assertNotNull(parameters);
-        if (parameters == this.parameters) {
-            return (JmlBindingExpr) this;
-        }
-        notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        if (this.parameters != null)
-            this.parameters.setParentNode(null);
-        this.parameters = parameters;
-        setAsParentNodeOf(parameters);
+        notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
+        if (this.variables != null)
+            this.variables.setParentNode(null);
+        this.variables = variables;
+        setAsParentNodeOf(variables);
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < parameters.size(); i++) {
-            if (parameters.get(i) == node) {
-                parameters.remove(i);
+        for (int i = 0; i < expressions.size(); i++) {
+            if (expressions.get(i) == node) {
+                expressions.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.remove(i);
                 return true;
             }
         }
@@ -197,16 +185,19 @@ public class JmlBindingExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (node == body) {
-            setBody((Statement) replacementNode);
-            return true;
+        for (int i = 0; i < expressions.size(); i++) {
+            if (expressions.get(i) == node) {
+                expressions.set(i, (Expression) replacementNode);
+                return true;
+            }
         }
-        for (int i = 0; i < parameters.size(); i++) {
-            if (parameters.get(i) == node) {
-                parameters.set(i, (Parameter) replacementNode);
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.set(i, (VariableDeclarator) replacementNode);
                 return true;
             }
         }
@@ -214,23 +205,14 @@ public class JmlBindingExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlBindingExpr clone() {
         return (JmlBindingExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlBindingExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlBindingExprMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    public JmlBindingExpr(TokenRange tokenRange, NodeList<Parameter> parameters, Statement body, boolean isEnclosingParameters) {
-        super(tokenRange);
-        setParameters(parameters);
-        setBody(body);
-        setEnclosingParameters(isEnclosingParameters);
-        customInitialization();
     }
 }

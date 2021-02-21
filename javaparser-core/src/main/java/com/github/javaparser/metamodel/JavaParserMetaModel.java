@@ -206,7 +206,7 @@ public final class JavaParserMetaModel {
         variableDeclarationExprMetaModel.getConstructorParameters().add(variableDeclarationExprMetaModel.annotationsPropertyMetaModel);
         variableDeclarationExprMetaModel.getConstructorParameters().add(variableDeclarationExprMetaModel.variablesPropertyMetaModel);
         jmlBindingExprMetaModel.getConstructorParameters().add(jmlBindingExprMetaModel.variablesPropertyMetaModel);
-        jmlBindingExprMetaModel.getConstructorParameters().add(jmlBindingExprMetaModel.bodyPropertyMetaModel);
+        jmlBindingExprMetaModel.getConstructorParameters().add(jmlBindingExprMetaModel.expressionsPropertyMetaModel);
         jmlLetExprMetaModel.getConstructorParameters().add(jmlLetExprMetaModel.variablesPropertyMetaModel);
         jmlLetExprMetaModel.getConstructorParameters().add(jmlLetExprMetaModel.bodyPropertyMetaModel);
         assertStmtMetaModel.getConstructorParameters().add(assertStmtMetaModel.checkPropertyMetaModel);
@@ -252,10 +252,6 @@ public final class JavaParserMetaModel {
         whileStmtMetaModel.getConstructorParameters().add(whileStmtMetaModel.conditionPropertyMetaModel);
         whileStmtMetaModel.getConstructorParameters().add(whileStmtMetaModel.bodyPropertyMetaModel);
         yieldStmtMetaModel.getConstructorParameters().add(yieldStmtMetaModel.expressionPropertyMetaModel);
-        assignableClauseMetaModel.getConstructorParameters().add(nodeMetaModel.tokenRangePropertyMetaModel);
-        accessibleClauseMetaModel.getConstructorParameters().add(nodeMetaModel.tokenRangePropertyMetaModel);
-        divergesClauseMetaModel.getConstructorParameters().add(nodeMetaModel.tokenRangePropertyMetaModel);
-        continuesClauseMetaModel.getConstructorParameters().add(nodeMetaModel.tokenRangePropertyMetaModel);
         arrayTypeMetaModel.getConstructorParameters().add(arrayTypeMetaModel.componentTypePropertyMetaModel);
         arrayTypeMetaModel.getConstructorParameters().add(arrayTypeMetaModel.originPropertyMetaModel);
         arrayTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
@@ -694,8 +690,8 @@ public final class JavaParserMetaModel {
         variableDeclarationExprMetaModel.getDeclaredPropertyMetaModels().add(variableDeclarationExprMetaModel.variablesPropertyMetaModel);
         variableDeclarationExprMetaModel.maximumCommonTypePropertyMetaModel = new PropertyMetaModel(variableDeclarationExprMetaModel, "maximumCommonType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), true, false, false, false);
         variableDeclarationExprMetaModel.getDerivedPropertyMetaModels().add(variableDeclarationExprMetaModel.maximumCommonTypePropertyMetaModel);
-        jmlBindingExprMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(jmlBindingExprMetaModel, "body", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
-        jmlBindingExprMetaModel.getDeclaredPropertyMetaModels().add(jmlBindingExprMetaModel.bodyPropertyMetaModel);
+        jmlBindingExprMetaModel.expressionsPropertyMetaModel = new PropertyMetaModel(jmlBindingExprMetaModel, "expressions", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, true, true, false);
+        jmlBindingExprMetaModel.getDeclaredPropertyMetaModels().add(jmlBindingExprMetaModel.expressionsPropertyMetaModel);
         jmlBindingExprMetaModel.variablesPropertyMetaModel = new PropertyMetaModel(jmlBindingExprMetaModel, "variables", com.github.javaparser.ast.body.VariableDeclarator.class, Optional.of(variableDeclaratorMetaModel), false, true, true, false);
         jmlBindingExprMetaModel.getDeclaredPropertyMetaModels().add(jmlBindingExprMetaModel.variablesPropertyMetaModel);
         jmlLetExprMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(jmlLetExprMetaModel, "body", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
@@ -1199,7 +1195,7 @@ public final class JavaParserMetaModel {
     public static final BreaksClauseMetaModel breaksClauseMetaModel = new BreaksClauseMetaModel(Optional.of(clauseMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final ContinuesClauseMetaModel continuesClauseMetaModel = new ContinuesClauseMetaModel(Optional.of(nodeMetaModel));
+    public static final ContinuesClauseMetaModel continuesClauseMetaModel = new ContinuesClauseMetaModel(Optional.of(clauseMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LoopInvariantClauseMetaModel loopInvariantClauseMetaModel = new LoopInvariantClauseMetaModel(Optional.of(clauseMetaModel));

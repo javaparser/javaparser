@@ -30,6 +30,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.clauses.*;
 
 /**
  * A visitor that has a return value.
@@ -237,7 +239,51 @@ public interface GenericVisitor<R, A> {
 
     R visit(PatternExpr n, A arg);
 
-    default R visit(JmlComment jmlComment, A arg);
+    R visit(JmlComment n, A arg);
 
-    default R visit(JmlBindingExpr jmlBindingExpr, A arg);
+    R visit(JmlBindingExpr n, A arg);
+
+    R visit(AccessibleClause n, A arg);
+
+    R visit(AssignableClause n, A arg);
+
+    R visit(BreaksClause n, A arg);
+
+    R visit(ContinuesClause n, A arg);
+
+    R visit(DivergesClause n, A arg);
+
+    R visit(EnsuresClause n, A arg);
+
+    R visit(JmlAssertStmt n, A arg);
+
+    R visit(JmlAssumeStmt n, A arg);
+
+    R visit(JmlLabel n, A arg);
+
+    R visit(JmlLetExpr n, A arg);
+
+    R visit(JmlMultiCompareExpr n, A arg);
+
+    R visit(JmlSetStmt n, A arg);
+
+    R visit(LoopDecreasesClause n, A arg);
+
+    R visit(LoopInvariantClause n, A arg);
+
+    R visit(LoopVariantClause n, A arg);
+
+    R visit(MeasuredByClause n, A arg);
+
+    R visit(ModifiesClause n, A arg);
+
+    R visit(RequiresClause n, A arg);
+
+    R visit(ReturnsClause n, A arg);
+
+    R visit(Signals n, A arg);
+
+    R visit(SignalsOnly n, A arg);
+
+    R visit(UnreachableStmt n, A arg);
 }
