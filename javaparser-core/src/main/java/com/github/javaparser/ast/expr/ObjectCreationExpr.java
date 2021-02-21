@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -371,7 +369,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     public Optional<ObjectCreationExpr> toObjectCreationExpr() {
         return Optional.of(this);
     }
-    
+
     /*
      * A class instance creation expression is a poly expression (§15.2) if it uses the diamond form for type
      * arguments to the class, and it appears in an assignment context or an invocation context (§5.2, §5.3).

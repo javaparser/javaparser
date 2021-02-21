@@ -260,148 +260,150 @@ public class JavaToken {
         WINDOWS_EOL(2),
         UNIX_EOL(3),
         OLD_MAC_EOL(4),
-        SINGLE_LINE_COMMENT(5),
-        ENTER_JAVADOC_COMMENT(6),
-        ENTER_MULTILINE_COMMENT(7),
-        JAVADOC_COMMENT(8),
-        MULTI_LINE_COMMENT(9),
-        COMMENT_CONTENT(10),
-        ABSTRACT(11),
-        ASSERT(12),
-        BOOLEAN(13),
-        BREAK(14),
-        BYTE(15),
-        CASE(16),
-        CATCH(17),
-        CHAR(18),
-        CLASS(19),
-        CONST(20),
-        CONTINUE(21),
-        _DEFAULT(22),
-        DO(23),
-        DOUBLE(24),
-        ELSE(25),
-        ENUM(26),
-        EXTENDS(27),
-        FALSE(28),
-        FINAL(29),
-        FINALLY(30),
-        FLOAT(31),
-        FOR(32),
-        GOTO(33),
-        IF(34),
-        IMPLEMENTS(35),
-        IMPORT(36),
-        INSTANCEOF(37),
-        INT(38),
-        INTERFACE(39),
-        LONG(40),
-        NATIVE(41),
-        NEW(42),
-        NULL(43),
-        PACKAGE(44),
-        PRIVATE(45),
-        PROTECTED(46),
-        PUBLIC(47),
-        RETURN(48),
-        SHORT(49),
-        STATIC(50),
-        STRICTFP(51),
-        SUPER(52),
-        SWITCH(53),
-        SYNCHRONIZED(54),
-        THIS(55),
-        THROW(56),
-        THROWS(57),
-        TRANSIENT(58),
-        TRUE(59),
-        TRY(60),
-        VOID(61),
-        VOLATILE(62),
-        WHILE(63),
-        YIELD(64),
-        REQUIRES(65),
-        TO(66),
-        WITH(67),
-        OPEN(68),
-        OPENS(69),
-        USES(70),
-        MODULE(71),
-        EXPORTS(72),
-        PROVIDES(73),
-        TRANSITIVE(74),
-        LONG_LITERAL(75),
-        INTEGER_LITERAL(76),
-        DECIMAL_LITERAL(77),
-        HEX_LITERAL(78),
-        OCTAL_LITERAL(79),
-        BINARY_LITERAL(80),
-        FLOATING_POINT_LITERAL(81),
-        DECIMAL_FLOATING_POINT_LITERAL(82),
-        DECIMAL_EXPONENT(83),
-        HEXADECIMAL_FLOATING_POINT_LITERAL(84),
-        HEXADECIMAL_EXPONENT(85),
-        HEX_DIGITS(86),
-        UNICODE_ESCAPE(87),
-        CHARACTER_LITERAL(88),
-        STRING_LITERAL(89),
-        ENTER_TEXT_BLOCK(90),
-        TEXT_BLOCK_LITERAL(91),
-        TEXT_BLOCK_CONTENT(92),
-        IDENTIFIER(93),
-        LETTER(94),
-        PART_LETTER(95),
-        LPAREN(96),
-        RPAREN(97),
-        LBRACE(98),
-        RBRACE(99),
-        LBRACKET(100),
-        RBRACKET(101),
-        SEMICOLON(102),
-        COMMA(103),
-        DOT(104),
-        AT(105),
-        ASSIGN(106),
-        LT(107),
-        BANG(108),
-        TILDE(109),
-        HOOK(110),
-        COLON(111),
-        ARROW(112),
-        EQ(113),
-        GE(114),
-        LE(115),
-        NE(116),
-        SC_AND(117),
-        SC_OR(118),
-        INCR(119),
-        DECR(120),
-        PLUS(121),
-        MINUS(122),
-        STAR(123),
-        SLASH(124),
-        BIT_AND(125),
-        BIT_OR(126),
-        XOR(127),
-        REM(128),
-        LSHIFT(129),
-        PLUSASSIGN(130),
-        MINUSASSIGN(131),
-        STARASSIGN(132),
-        SLASHASSIGN(133),
-        ANDASSIGN(134),
-        ORASSIGN(135),
-        XORASSIGN(136),
-        REMASSIGN(137),
-        LSHIFTASSIGN(138),
-        RSIGNEDSHIFTASSIGN(139),
-        RUNSIGNEDSHIFTASSIGN(140),
-        ELLIPSIS(141),
-        DOUBLECOLON(142),
-        RUNSIGNEDSHIFT(143),
-        RSIGNEDSHIFT(144),
-        GT(145),
-        CTRL_Z(146);
+        SINGLE_LINE_JML(5),
+        SINGLE_LINE_COMMENT(6),
+        ENTER_JAVADOC_COMMENT(7),
+        ENTER_MULTILINE_JML(8),
+        ENTER_MULTILINE_COMMENT(9),
+        JAVADOC_COMMENT(10),
+        MULTI_LINE_COMMENT(11),
+        COMMENT_CONTENT(12),
+        ABSTRACT(13),
+        ASSERT(14),
+        BOOLEAN(15),
+        BREAK(16),
+        BYTE(17),
+        CASE(18),
+        CATCH(19),
+        CHAR(20),
+        CLASS(21),
+        CONST(22),
+        CONTINUE(23),
+        _DEFAULT(24),
+        DO(25),
+        DOUBLE(26),
+        ELSE(27),
+        ENUM(28),
+        EXTENDS(29),
+        FALSE(30),
+        FINAL(31),
+        FINALLY(32),
+        FLOAT(33),
+        FOR(34),
+        GOTO(35),
+        IF(36),
+        IMPLEMENTS(37),
+        IMPORT(38),
+        INSTANCEOF(39),
+        INT(40),
+        INTERFACE(41),
+        LONG(42),
+        NATIVE(43),
+        NEW(44),
+        NULL(45),
+        PACKAGE(46),
+        PRIVATE(47),
+        PROTECTED(48),
+        PUBLIC(49),
+        RETURN(50),
+        SHORT(51),
+        STATIC(52),
+        STRICTFP(53),
+        SUPER(54),
+        SWITCH(55),
+        SYNCHRONIZED(56),
+        THIS(57),
+        THROW(58),
+        THROWS(59),
+        TRANSIENT(60),
+        TRUE(61),
+        TRY(62),
+        VOID(63),
+        VOLATILE(64),
+        WHILE(65),
+        YIELD(66),
+        REQUIRES(67),
+        TO(68),
+        WITH(69),
+        OPEN(70),
+        OPENS(71),
+        USES(72),
+        MODULE(73),
+        EXPORTS(74),
+        PROVIDES(75),
+        TRANSITIVE(76),
+        LONG_LITERAL(77),
+        INTEGER_LITERAL(78),
+        DECIMAL_LITERAL(79),
+        HEX_LITERAL(80),
+        OCTAL_LITERAL(81),
+        BINARY_LITERAL(82),
+        FLOATING_POINT_LITERAL(83),
+        DECIMAL_FLOATING_POINT_LITERAL(84),
+        DECIMAL_EXPONENT(85),
+        HEXADECIMAL_FLOATING_POINT_LITERAL(86),
+        HEXADECIMAL_EXPONENT(87),
+        HEX_DIGITS(88),
+        UNICODE_ESCAPE(89),
+        CHARACTER_LITERAL(90),
+        STRING_LITERAL(91),
+        ENTER_TEXT_BLOCK(92),
+        TEXT_BLOCK_LITERAL(93),
+        TEXT_BLOCK_CONTENT(94),
+        IDENTIFIER(95),
+        LETTER(96),
+        PART_LETTER(97),
+        LPAREN(98),
+        RPAREN(99),
+        LBRACE(100),
+        RBRACE(101),
+        LBRACKET(102),
+        RBRACKET(103),
+        SEMICOLON(104),
+        COMMA(105),
+        DOT(106),
+        AT(107),
+        ASSIGN(108),
+        LT(109),
+        BANG(110),
+        TILDE(111),
+        HOOK(112),
+        COLON(113),
+        ARROW(114),
+        EQ(115),
+        GE(116),
+        LE(117),
+        NE(118),
+        SC_AND(119),
+        SC_OR(120),
+        INCR(121),
+        DECR(122),
+        PLUS(123),
+        MINUS(124),
+        STAR(125),
+        SLASH(126),
+        BIT_AND(127),
+        BIT_OR(128),
+        XOR(129),
+        REM(130),
+        LSHIFT(131),
+        PLUSASSIGN(132),
+        MINUSASSIGN(133),
+        STARASSIGN(134),
+        SLASHASSIGN(135),
+        ANDASSIGN(136),
+        ORASSIGN(137),
+        XORASSIGN(138),
+        REMASSIGN(139),
+        LSHIFTASSIGN(140),
+        RSIGNEDSHIFTASSIGN(141),
+        RUNSIGNEDSHIFTASSIGN(142),
+        ELLIPSIS(143),
+        DOUBLECOLON(144),
+        RUNSIGNEDSHIFT(145),
+        RSIGNEDSHIFT(146),
+        GT(147),
+        CTRL_Z(148);
 
         private final int kind;
 
@@ -411,290 +413,294 @@ public class JavaToken {
 
         public static Kind valueOf(int kind) {
             switch(kind) {
-                case 146:
+                case 148:
                     return CTRL_Z;
-                case 145:
+                case 147:
                     return GT;
-                case 144:
+                case 146:
                     return RSIGNEDSHIFT;
-                case 143:
+                case 145:
                     return RUNSIGNEDSHIFT;
-                case 142:
+                case 144:
                     return DOUBLECOLON;
-                case 141:
+                case 143:
                     return ELLIPSIS;
-                case 140:
+                case 142:
                     return RUNSIGNEDSHIFTASSIGN;
-                case 139:
+                case 141:
                     return RSIGNEDSHIFTASSIGN;
-                case 138:
+                case 140:
                     return LSHIFTASSIGN;
-                case 137:
+                case 139:
                     return REMASSIGN;
-                case 136:
+                case 138:
                     return XORASSIGN;
-                case 135:
+                case 137:
                     return ORASSIGN;
-                case 134:
+                case 136:
                     return ANDASSIGN;
-                case 133:
+                case 135:
                     return SLASHASSIGN;
-                case 132:
+                case 134:
                     return STARASSIGN;
-                case 131:
+                case 133:
                     return MINUSASSIGN;
-                case 130:
+                case 132:
                     return PLUSASSIGN;
-                case 129:
+                case 131:
                     return LSHIFT;
-                case 128:
+                case 130:
                     return REM;
-                case 127:
+                case 129:
                     return XOR;
-                case 126:
+                case 128:
                     return BIT_OR;
-                case 125:
+                case 127:
                     return BIT_AND;
-                case 124:
+                case 126:
                     return SLASH;
-                case 123:
+                case 125:
                     return STAR;
-                case 122:
+                case 124:
                     return MINUS;
-                case 121:
+                case 123:
                     return PLUS;
-                case 120:
+                case 122:
                     return DECR;
-                case 119:
+                case 121:
                     return INCR;
-                case 118:
+                case 120:
                     return SC_OR;
-                case 117:
+                case 119:
                     return SC_AND;
-                case 116:
+                case 118:
                     return NE;
-                case 115:
+                case 117:
                     return LE;
-                case 114:
+                case 116:
                     return GE;
-                case 113:
+                case 115:
                     return EQ;
-                case 112:
+                case 114:
                     return ARROW;
-                case 111:
+                case 113:
                     return COLON;
-                case 110:
+                case 112:
                     return HOOK;
-                case 109:
+                case 111:
                     return TILDE;
-                case 108:
+                case 110:
                     return BANG;
-                case 107:
+                case 109:
                     return LT;
-                case 106:
+                case 108:
                     return ASSIGN;
-                case 105:
+                case 107:
                     return AT;
-                case 104:
+                case 106:
                     return DOT;
-                case 103:
+                case 105:
                     return COMMA;
-                case 102:
+                case 104:
                     return SEMICOLON;
-                case 101:
+                case 103:
                     return RBRACKET;
-                case 100:
+                case 102:
                     return LBRACKET;
-                case 99:
+                case 101:
                     return RBRACE;
-                case 98:
+                case 100:
                     return LBRACE;
-                case 97:
+                case 99:
                     return RPAREN;
-                case 96:
+                case 98:
                     return LPAREN;
-                case 95:
+                case 97:
                     return PART_LETTER;
-                case 94:
+                case 96:
                     return LETTER;
-                case 93:
+                case 95:
                     return IDENTIFIER;
-                case 92:
+                case 94:
                     return TEXT_BLOCK_CONTENT;
-                case 91:
+                case 93:
                     return TEXT_BLOCK_LITERAL;
-                case 90:
+                case 92:
                     return ENTER_TEXT_BLOCK;
-                case 89:
+                case 91:
                     return STRING_LITERAL;
-                case 88:
+                case 90:
                     return CHARACTER_LITERAL;
-                case 87:
+                case 89:
                     return UNICODE_ESCAPE;
-                case 86:
+                case 88:
                     return HEX_DIGITS;
-                case 85:
+                case 87:
                     return HEXADECIMAL_EXPONENT;
-                case 84:
+                case 86:
                     return HEXADECIMAL_FLOATING_POINT_LITERAL;
-                case 83:
+                case 85:
                     return DECIMAL_EXPONENT;
-                case 82:
+                case 84:
                     return DECIMAL_FLOATING_POINT_LITERAL;
-                case 81:
+                case 83:
                     return FLOATING_POINT_LITERAL;
-                case 80:
+                case 82:
                     return BINARY_LITERAL;
-                case 79:
+                case 81:
                     return OCTAL_LITERAL;
-                case 78:
+                case 80:
                     return HEX_LITERAL;
-                case 77:
+                case 79:
                     return DECIMAL_LITERAL;
-                case 76:
+                case 78:
                     return INTEGER_LITERAL;
-                case 75:
+                case 77:
                     return LONG_LITERAL;
-                case 74:
+                case 76:
                     return TRANSITIVE;
-                case 73:
+                case 75:
                     return PROVIDES;
-                case 72:
+                case 74:
                     return EXPORTS;
-                case 71:
+                case 73:
                     return MODULE;
-                case 70:
+                case 72:
                     return USES;
-                case 69:
+                case 71:
                     return OPENS;
-                case 68:
+                case 70:
                     return OPEN;
-                case 67:
+                case 69:
                     return WITH;
-                case 66:
+                case 68:
                     return TO;
-                case 65:
+                case 67:
                     return REQUIRES;
-                case 64:
+                case 66:
                     return YIELD;
-                case 63:
+                case 65:
                     return WHILE;
-                case 62:
+                case 64:
                     return VOLATILE;
-                case 61:
+                case 63:
                     return VOID;
-                case 60:
+                case 62:
                     return TRY;
-                case 59:
+                case 61:
                     return TRUE;
-                case 58:
+                case 60:
                     return TRANSIENT;
-                case 57:
+                case 59:
                     return THROWS;
-                case 56:
+                case 58:
                     return THROW;
-                case 55:
+                case 57:
                     return THIS;
-                case 54:
+                case 56:
                     return SYNCHRONIZED;
-                case 53:
+                case 55:
                     return SWITCH;
-                case 52:
+                case 54:
                     return SUPER;
-                case 51:
+                case 53:
                     return STRICTFP;
-                case 50:
+                case 52:
                     return STATIC;
-                case 49:
+                case 51:
                     return SHORT;
-                case 48:
+                case 50:
                     return RETURN;
-                case 47:
+                case 49:
                     return PUBLIC;
-                case 46:
+                case 48:
                     return PROTECTED;
-                case 45:
+                case 47:
                     return PRIVATE;
-                case 44:
+                case 46:
                     return PACKAGE;
-                case 43:
+                case 45:
                     return NULL;
-                case 42:
+                case 44:
                     return NEW;
-                case 41:
+                case 43:
                     return NATIVE;
-                case 40:
+                case 42:
                     return LONG;
-                case 39:
+                case 41:
                     return INTERFACE;
-                case 38:
+                case 40:
                     return INT;
-                case 37:
+                case 39:
                     return INSTANCEOF;
-                case 36:
+                case 38:
                     return IMPORT;
-                case 35:
+                case 37:
                     return IMPLEMENTS;
-                case 34:
+                case 36:
                     return IF;
-                case 33:
+                case 35:
                     return GOTO;
-                case 32:
+                case 34:
                     return FOR;
-                case 31:
+                case 33:
                     return FLOAT;
-                case 30:
+                case 32:
                     return FINALLY;
-                case 29:
+                case 31:
                     return FINAL;
-                case 28:
+                case 30:
                     return FALSE;
-                case 27:
+                case 29:
                     return EXTENDS;
-                case 26:
+                case 28:
                     return ENUM;
-                case 25:
+                case 27:
                     return ELSE;
-                case 24:
+                case 26:
                     return DOUBLE;
-                case 23:
+                case 25:
                     return DO;
-                case 22:
+                case 24:
                     return _DEFAULT;
-                case 21:
+                case 23:
                     return CONTINUE;
-                case 20:
+                case 22:
                     return CONST;
-                case 19:
+                case 21:
                     return CLASS;
-                case 18:
+                case 20:
                     return CHAR;
-                case 17:
+                case 19:
                     return CATCH;
-                case 16:
+                case 18:
                     return CASE;
-                case 15:
+                case 17:
                     return BYTE;
-                case 14:
+                case 16:
                     return BREAK;
-                case 13:
+                case 15:
                     return BOOLEAN;
-                case 12:
+                case 14:
                     return ASSERT;
-                case 11:
+                case 13:
                     return ABSTRACT;
-                case 10:
+                case 12:
                     return COMMENT_CONTENT;
-                case 9:
+                case 11:
                     return MULTI_LINE_COMMENT;
-                case 8:
+                case 10:
                     return JAVADOC_COMMENT;
-                case 7:
+                case 9:
                     return ENTER_MULTILINE_COMMENT;
-                case 6:
+                case 8:
+                    return ENTER_MULTILINE_JML;
+                case 7:
                     return ENTER_JAVADOC_COMMENT;
-                case 5:
+                case 6:
                     return SINGLE_LINE_COMMENT;
+                case 5:
+                    return SINGLE_LINE_JML;
                 case 4:
                     return OLD_MAC_EOL;
                 case 3:

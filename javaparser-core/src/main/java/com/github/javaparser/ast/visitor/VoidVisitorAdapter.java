@@ -719,4 +719,16 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getType().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
+
+    @Override
+    public void visit(final JmlBindingExpr n, final A arg) {
+        n.getBody().accept(this, arg);
+        n.getParameters().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlComment n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
 }

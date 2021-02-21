@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -203,7 +201,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     public Optional<ConditionalExpr> toConditionalExpr() {
         return Optional.of(this);
     }
-    
+
     /*
      * A reference conditional expression is a poly expression if it appears in an assignment context or an invocation context (§5.2. §5.3). 
      * Otherwise, it is a standalone expression.

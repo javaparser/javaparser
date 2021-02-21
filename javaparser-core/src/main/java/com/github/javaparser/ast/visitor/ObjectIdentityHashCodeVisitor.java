@@ -441,4 +441,14 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final PatternExpr n, final Void arg) {
         return n.hashCode();
     }
+
+    @Override
+    public Integer visit(final JmlBindingExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlComment n, final Void arg) {
+        return n.hashCode();
+    }
 }

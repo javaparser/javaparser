@@ -24,6 +24,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.JmlComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -230,4 +231,8 @@ public interface VoidVisitor<A> {
     void visit(YieldStmt yieldStmt, A arg);
 
     void visit(PatternExpr n, A arg);
+
+    default void visit(JmlComment jmlComment, A arg);
+
+    default void visit(JmlBindingExpr jmlBindingExpr, A arg);
 }

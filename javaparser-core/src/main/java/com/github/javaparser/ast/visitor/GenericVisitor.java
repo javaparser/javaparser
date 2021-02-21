@@ -24,6 +24,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.JmlComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -235,4 +236,8 @@ public interface GenericVisitor<R, A> {
     R visit(TextBlockLiteralExpr n, A arg);
 
     R visit(PatternExpr n, A arg);
+
+    default R visit(JmlComment jmlComment, A arg);
+
+    default R visit(JmlBindingExpr jmlBindingExpr, A arg);
 }

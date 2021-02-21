@@ -37,6 +37,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.clauses.DivergesClause;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -107,6 +108,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.comments.BlockComment.class);
         add(com.github.javaparser.ast.comments.JavadocComment.class);
         add(com.github.javaparser.ast.comments.LineComment.class);
+        add(com.github.javaparser.ast.comments.JmlComment.class);
 
         add(com.github.javaparser.ast.expr.ArrayAccessExpr.class);
         add(com.github.javaparser.ast.expr.ArrayCreationExpr.class);
@@ -145,6 +147,12 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.UnaryExpr.class);
         add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
+        add(com.github.javaparser.ast.expr.JmlBindingExpr.class);
+        add(com.github.javaparser.ast.expr.JmlLetExpr.class);
+        add(com.github.javaparser.ast.expr.JmlMultiCompareExpr.class);
+        add(com.github.javaparser.ast.expr.JmlLabel.class);
+
+
         add(com.github.javaparser.ast.stmt.AssertStmt.class);
         add(com.github.javaparser.ast.stmt.BlockStmt.class);
         add(com.github.javaparser.ast.stmt.BreakStmt.class);
@@ -168,6 +176,30 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.UnparsableStmt.class);
         add(com.github.javaparser.ast.stmt.WhileStmt.class);
         add(com.github.javaparser.ast.stmt.YieldStmt.class);
+
+        add(com.github.javaparser.ast.stmt.JmlSetStmt.class);
+        add(com.github.javaparser.ast.stmt.JmlAssertStmt.class);
+        add(com.github.javaparser.ast.stmt.JmlAssumeStmt.class);
+        add(com.github.javaparser.ast.stmt.UnreachableStmt.class);
+
+        add(com.github.javaparser.ast.clauses.Clause.class);
+        add(com.github.javaparser.ast.clauses.EnsuresClause.class);
+        add(com.github.javaparser.ast.clauses.RequiresClause.class);
+        add(com.github.javaparser.ast.clauses.AssignableClause.class);
+        add(com.github.javaparser.ast.clauses.AccessibleClause.class);
+        add(com.github.javaparser.ast.clauses.ModifiesClause.class);
+        add(com.github.javaparser.ast.clauses.MeasuredByClause.class);
+        add(com.github.javaparser.ast.clauses.DivergesClause.class);
+        add(com.github.javaparser.ast.clauses.Signals.class);
+        add(com.github.javaparser.ast.clauses.SignalsOnly.class);
+        add(com.github.javaparser.ast.clauses.ReturnsClause.class);
+        add(com.github.javaparser.ast.clauses.BreaksClause.class);
+        add(com.github.javaparser.ast.clauses.ContinuesClause.class);
+        add(com.github.javaparser.ast.clauses.LoopInvariantClause.class);
+        add(com.github.javaparser.ast.clauses.LoopVariantClause.class);
+        add(com.github.javaparser.ast.clauses.LoopDecreasesClause.class);
+
+
 
         add(com.github.javaparser.ast.type.ArrayType.class);
         add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);

@@ -236,4 +236,19 @@ public abstract class Comment extends Node {
     public Optional<LineComment> toLineComment() {
         return Optional.empty();
     }
+
+    public boolean isJmlComment() {
+        return false;
+    }
+
+    public JmlComment asJmlComment() {
+        throw new IllegalStateException(f("%s is not JmlComment, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlComment> toJmlComment() {
+        return Optional.empty();
+    }
+
+    public void ifJmlComment(Consumer<JmlComment> action) {
+    }
 }

@@ -1106,4 +1106,24 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         return true;
     }
+
+    @Override
+    public Boolean visit(final JmlBindingExpr n, final Visitable arg) {
+        final JmlBindingExpr n2 = (JmlBindingExpr) arg;
+        if (!nodeEquals(n.getBody(), n2.getBody()))
+            return false;
+        if (!objEquals(n.isEnclosingParameters(), n2.isEnclosingParameters()))
+            return false;
+        if (!nodesEquals(n.getParameters(), n2.getParameters()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlComment n, final Visitable arg) {
+        final JmlComment n2 = (JmlComment) arg;
+        if (!objEquals(n.getContent(), n2.getContent()))
+            return false;
+        return true;
+    }
 }

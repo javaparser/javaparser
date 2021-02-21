@@ -1242,4 +1242,26 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         copyData(n, r);
         return r;
     }
+
+    @Override
+    public Visitable visit(final JmlBindingExpr n, final Object arg) {
+        Statement body = cloneNode(n.getBody(), arg);
+        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlBindingExpr r = new JmlBindingExpr(n.getTokenRange().orElse(null), parameters, body, n.isEnclosingParameters());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlComment n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlComment r = new JmlComment(n.getTokenRange().orElse(null), n.getContent());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
 }

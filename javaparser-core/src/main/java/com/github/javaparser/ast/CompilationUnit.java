@@ -29,7 +29,6 @@ import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -40,7 +39,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseResult;
@@ -101,7 +99,7 @@ public class CompilationUnit extends Node {
 
     @InternalProperty
     private Storage storage;
-    
+
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
     }
@@ -139,7 +137,7 @@ public class CompilationUnit extends Node {
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
-    
+
     /**
      * Declare a specific printer
      */
@@ -147,20 +145,20 @@ public class CompilationUnit extends Node {
         setData(PRINTER_KEY, printer);
         return this;
     }
-    
+
     /*
      * If there is no declared printer, returns a new default printer else returns a new printer with the current configuration
      */
     @Override
     protected Printer getPrinter() {
         if (!containsData(PRINTER_KEY)) {
-           // create a default printer
+            // create a default printer
             Printer printer = createDefaultPrinter();
             printer(printer);
         }
         return getData(PRINTER_KEY);
     }
-    
+
     /*
      * Return the printer initialized with the specified configuration
      */
@@ -544,9 +542,7 @@ public class CompilationUnit extends Node {
      * @param className the class name (case-sensitive)
      */
     public List<ClassOrInterfaceDeclaration> getLocalDeclarationFromClassname(String className) {
-        return findAll(ClassOrInterfaceDeclaration.class).stream()
-                .filter(cid->cid.getFullyQualifiedName().get().endsWith(className))
-                .collect(Collectors.toList());
+        return findAll(ClassOrInterfaceDeclaration.class).stream().filter(cid -> cid.getFullyQualifiedName().get().endsWith(className)).collect(Collectors.toList());
     }
 
     /**

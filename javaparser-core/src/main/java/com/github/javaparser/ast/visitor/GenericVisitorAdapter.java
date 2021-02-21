@@ -1093,7 +1093,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.hasScope()) {
+        if (n.getScope().isPresent()) {
             result = n.getScope().get().accept(this, arg);
             if (result != null)
                 return result;
@@ -1228,7 +1228,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.hasScope()) {
+        if (n.getScope().isPresent()) {
             result = n.getScope().get().accept(this, arg);
             if (result != null)
                 return result;
@@ -2172,6 +2172,38 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlBindingExpr n, final A arg) {
+        R result;
+        {
+            result = n.getBody().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getParameters().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlComment n, final A arg) {
+        R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)

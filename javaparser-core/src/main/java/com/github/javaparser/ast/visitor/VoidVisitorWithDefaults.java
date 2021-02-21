@@ -530,4 +530,14 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     public void visit(final PatternExpr n, final A arg) {
         defaultAction(n, arg);
     }
+
+    @Override
+    public void visit(final JmlBindingExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlComment n, final A arg) {
+        defaultAction(n, arg);
+    }
 }

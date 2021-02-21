@@ -22,7 +22,6 @@ package com.github.javaparser.ast.type;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -108,6 +107,6 @@ public abstract class ReferenceType extends Type {
     public Optional<ReferenceType> toReferenceType() {
         return Optional.of(this);
     }
-    
+
     public abstract String toDescriptor();
 }

@@ -534,4 +534,14 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     public R visit(final PatternExpr n, final A arg) {
         return defaultAction(n, arg);
     }
+
+    @Override
+    public R visit(final JmlBindingExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlComment n, final A arg) {
+        return defaultAction(n, arg);
+    }
 }
