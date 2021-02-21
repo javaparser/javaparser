@@ -27,11 +27,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModifierMetaModel;
+
 import java.util.Arrays;
+
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * A modifier, like private, public, or volatile.
@@ -86,6 +86,43 @@ public class Modifier extends Node {
         return new Modifier(Keyword.TRANSITIVE);
     }
 
+    public static Modifier jmlModelModifier() {
+        return new Modifier(Keyword.JML_MODEL);
+    }
+
+    public static Modifier jmlGhostModifier() {
+        return new Modifier(Keyword.JML_GOST);
+    }
+
+    public static Modifier jmlSpecPublicModifier() {
+        return new Modifier(Keyword.JML_SPEC_PUBLIC);
+    }
+
+    public static Modifier jmlHelperModifier() {
+        return new Modifier(Keyword.JML_HELPER);
+    }
+
+    public static Modifier jmlNullableModifier() {
+        return new Modifier(Keyword.JML_NULLABLE);
+    }
+
+    public static Modifier jmlNonNullModifier() {
+        return new Modifier(Keyword.JML_NON_NULL);
+    }
+
+    public static Modifier jmlSpecPackageModifier() {
+        return new Modifier(Keyword.JML_SPEC_PACKAGE);
+    }
+
+    public static Modifier jmlSpecProtectedModifier() {
+        return new Modifier(Keyword.JML_SPEC_PROTECTED);
+    }
+
+    public static Modifier jmlSpecPrivateModifier() {
+        return new Modifier(Keyword.JML_SPEC_PRIVATE);
+    }
+
+
     /**
      * The Java modifier keywords.
      */
@@ -103,7 +140,18 @@ public class Modifier extends Node {
         SYNCHRONIZED("synchronized"),
         NATIVE("native"),
         STRICTFP("strictfp"),
-        TRANSITIVE("transitive");
+        TRANSITIVE("transitive"),
+
+        //JML
+        JML_HELPER("helper"),
+        JML_NON_NULL("non_null"),
+        JML_NULLABLE("nullable"),
+        JML_GOST("ghost"),
+        JML_MODEL("model"),
+        JML_SPEC_PUBLIC("spec_public"),
+        JML_SPEC_PACKAGE("spec_package"),
+        JML_SPEC_PROTECTED("spec_protected"),
+        JML_SPEC_PRIVATE("spec_private");
 
         private final String codeRepresentation;
 
