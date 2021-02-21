@@ -147,14 +147,15 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             if (name.indexOf('.') > -1) {
 
                 SymbolReference<ResolvedTypeDeclaration> ref = null;
-                Optional<? extends ResolvedTypeDeclaration> outerMostRef = solveType(name.substring(0, name.indexOf(".")))
+                Optional<? extends ResolvedTypeDeclaration> outerDeclaration =
+                        solveType(name.substring(0, name.indexOf(".")))
                         .getCorrespondingDeclaration();
 
-                if (outerMostRef.isPresent() && outerMostRef.get() instanceof JavaParserClassDeclaration) {
-                    ref = ((JavaParserClassDeclaration) outerMostRef.get())
+                if (outerDeclaration.isPresent() && outerDeclaration.get() instanceof JavaParserClassDeclaration) {
+                    ref = ((JavaParserClassDeclaration) outerDeclaration.get())
                             .solveType(name.substring(name.indexOf(".") + 1));
-                } else if (outerMostRef.isPresent() && outerMostRef.get() instanceof JavaParserInterfaceDeclaration) {
-                    ref = ((JavaParserInterfaceDeclaration) outerMostRef.get())
+                } else if (outerDeclaration.isPresent() && outerDeclaration.get() instanceof JavaParserInterfaceDeclaration) {
+                    ref = ((JavaParserInterfaceDeclaration) outerDeclaration.get())
                             .solveType(name.substring(name.indexOf(".") + 1));
                 }
                 if (ref != null && ref.getCorrespondingDeclaration().isPresent()) {
