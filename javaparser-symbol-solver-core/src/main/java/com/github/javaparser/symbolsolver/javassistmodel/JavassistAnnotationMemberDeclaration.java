@@ -26,7 +26,6 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDec
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtClass;
@@ -37,6 +36,7 @@ import javassist.bytecode.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -79,9 +79,11 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
             if (returnType.isPrimitive()) {
                 return ResolvedPrimitiveType.byName(returnType.getName());
             }
-            SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
-            if (rrtd.isSolved()) {
-                return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration(), typeSolver);
+            Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration =
+                    typeSolver.tryToSolveType(returnType.getName())
+                    .getCorrespondingDeclaration();
+            if (optionalTypeDeclaration.isPresent()) {
+                return new ReferenceTypeImpl(optionalTypeDeclaration.get(), typeSolver);
             }
         } catch (NotFoundException e) {
             // nothing to do

@@ -26,13 +26,13 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDec
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -68,13 +68,15 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
 
     @Override
     public ResolvedType getType() {
-        Class returnType = annotationMember.getReturnType();
+        Class<?> returnType = annotationMember.getReturnType();
         if (returnType.isPrimitive()) {
             return ResolvedPrimitiveType.byName(returnType.getName());
         }
-        SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
-        if (rrtd.isSolved()) {
-            return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration(), typeSolver);
+        Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration =
+                typeSolver.tryToSolveType(returnType.getName())
+                        .getCorrespondingDeclaration();
+        if (optionalTypeDeclaration.isPresent()) {
+            return new ReferenceTypeImpl(optionalTypeDeclaration.get(), typeSolver);
         }
         throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
     }

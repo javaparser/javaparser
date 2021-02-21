@@ -1,10 +1,10 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,11 +26,10 @@ abstract class ClassLoaderTypeSolverTest<T extends ClassLoaderTypeSolver> extend
         String suppliedName = "java.util.Map.Entry";
 
         T typeSolver = createTypeSolver();
-        SymbolReference<ResolvedReferenceTypeDeclaration> solvedType = typeSolver.tryToSolveType(suppliedName);
-        assertTrue(solvedType.isSolved());
-
-        ResolvedReferenceTypeDeclaration resolvedDeclaration = solvedType.getCorrespondingDeclaration();
-        assertEquals(expectedCanonicalName, resolvedDeclaration.getQualifiedName());
+        Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = typeSolver.tryToSolveType(suppliedName)
+                .getCorrespondingDeclaration();
+        assertTrue(optionalTypeDeclaration.isPresent());
+        assertEquals(expectedCanonicalName, optionalTypeDeclaration.get().getQualifiedName());
     }
 
 }
