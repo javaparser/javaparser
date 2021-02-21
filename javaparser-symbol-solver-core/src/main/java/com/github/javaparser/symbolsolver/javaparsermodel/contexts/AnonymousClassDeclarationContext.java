@@ -32,6 +32,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
@@ -90,17 +91,21 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
         // We want to avoid infinite recursion when a class is using its own method
         // see issue #75
         if (candidateMethods.isEmpty()) {
-            getParent()
-                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                    .solveMethod(name, argumentsTypes, staticOnly).getCorrespondingDeclaration()
+            Context context = getParent()
+                    .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
+
+            context.solveMethod(name, argumentsTypes, staticOnly)
+                    .getCorrespondingDeclaration()
                     .ifPresent(candidateMethods::add);
         }
 
         // if is interface and candidate method list is empty, we should check the Object Methods
         if (candidateMethods.isEmpty() && myDeclaration.getSuperTypeDeclaration().isInterface()) {
-            MethodResolutionLogic.solveMethodInType(
+            SymbolReference<ResolvedMethodDeclaration> methodDeclaration = MethodResolutionLogic.solveMethodInType(
                     new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false
-            ).getCorrespondingDeclaration().ifPresent(candidateMethods::add);
+            );
+            methodDeclaration.getCorrespondingDeclaration()
+                    .ifPresent(candidateMethods::add);
         }
 
         return MethodResolutionLogic.findMostApplicable(candidateMethods,
