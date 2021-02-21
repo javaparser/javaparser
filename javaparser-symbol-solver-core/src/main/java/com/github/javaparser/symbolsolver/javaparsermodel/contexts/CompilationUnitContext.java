@@ -77,10 +77,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         while (itName.contains(".")) {
             String typeName = getType(itName);
             String memberName = getMember(itName);
-            Optional<? extends ResolvedTypeDeclaration> type = this.solveType(typeName)
+            Optional<? extends ResolvedTypeDeclaration> typeDeclaration = this.solveType(typeName)
                     .getCorrespondingDeclaration();
-            if (type.isPresent()) {
-                return new SymbolSolver(typeSolver).solveSymbolInType(type.get(), memberName);
+            if (typeDeclaration.isPresent()) {
+                return new SymbolSolver(typeSolver).solveSymbolInType(typeDeclaration.get(), memberName);
             } else {
                 itName = typeName;
             }
