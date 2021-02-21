@@ -230,12 +230,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         // add the method declaration of the interfaces to the candidates, if present
         for (ResolvedReferenceType interfaceRef : getInterfaces()) {
             if (interfaceRef.getTypeDeclaration().isPresent()) {
-                MethodResolutionLogic.solveMethodInType(
+                Optional<ResolvedMethodDeclaration> optionalMethodDeclaration = MethodResolutionLogic.solveMethodInType(
                         interfaceRef.getTypeDeclaration().get(),
                         name,
                         argumentsTypes,
                         staticOnly
-                ).getCorrespondingDeclaration().ifPresent(candidates::add);
+                ).getCorrespondingDeclaration();
+                optionalMethodDeclaration.ifPresent(candidates::add);
             } else {
                 // Consider IllegalStateException or similar?
             }
