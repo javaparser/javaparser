@@ -195,7 +195,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     /**
      * Used where a symbol is being used (e.g. solving {@code x} when used as an argument {@code doubleThis(x)}, or calculation {@code return x * 2;}).
      * @param name the variable / reference / identifier used.
-     * @param iterateAdjacentStmts flag to iterate adjacent statements, default to {@code true} except in cases to prevent repetitive checks.
+     * @param iterateAdjacentStmts flag to iterate adjacent statements, should be set to {@code true} except when calling itself in order to prevent revisiting already visited symbols.
      * @return // FIXME: Better documentation on how this is different to solveSymbolAsValue()
      */
     private SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, boolean iterateAdjacentStmts) {
@@ -258,8 +258,21 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             while(statementListIterator.hasPrevious()) {
                 Context prevContext = JavaParserFactory.getContext(statementListIterator.previous(), typeSolver);
                 if (prevContext instanceof StatementContext) {
-                    // Do not schedule each adjacent statement to do this exact same thing.
-                    // Since we are doing it here we will eventually cover all adjacent statements anyways.
+                    // We have an explicit check for "StatementContext" to prevent a factorial increase of visited statements.
+                    //
+                    // For example consider the following:
+                    //   String a = "a";
+                    //   String b = "b";
+                    //   String c = get();
+                    //
+                    // If we simply call "prevContext.solveSymbol(name)" we will call the current method with the adjacent statement "prevContext".
+                    // Then "prevContext" will look at its previous adjacent statement. And so on and so forth.
+                    // When there are no more previous statements in this chain of method calls, we come back to here...
+                    // Then we look at the next "prevContext" which causes the entire process to start again.
+                    // This is how we get a factorial increase in calls to "solveSymbol".
+                    //
+                    // So what we do instead with this check is we pass in a flag to say "Do not look at previous adjacent statements".
+                    // Since each visited "prevContext" does not look at its adjacent statements we only visit each statement once in this while loop.
                     symbolReference = ((StatementContext<?>)prevContext).solveSymbol(name, false);
                 } else {
                     symbolReference = prevContext.solveSymbol(name);

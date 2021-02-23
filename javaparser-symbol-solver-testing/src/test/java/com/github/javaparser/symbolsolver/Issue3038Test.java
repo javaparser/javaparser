@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * An issue when resolving some name when there are a series of many prior {@link NodeWithStatements}s.
- * Each queues up solving in the prior adjacent statement, which means we queue up duplicate resolve calls.
+ * Each queues up solving in the prior adjacent statement,
+ * which means we queue up a factorial number of duplicate resolve calls.
  * <br>
- * Naturally this will result in an exponential growth in number of calls with the more prior statements.
- * If not fixed the example test cases below take hours to complete
- * <i>(They were tested and ran up to 75 minutes before manually being stopped)</i>.
+ * This test verifies that parsing the given code below runs in an non-crazy amount of time <i>(Leeway for slow CI)</i>.
+ * Without any fixes applied, this takes multiple hours to run.
  */
 public class Issue3038Test extends AbstractResolutionTest {
 	// In no way should this take more than 2.5 seconds
