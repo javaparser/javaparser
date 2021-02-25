@@ -34,10 +34,11 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.YamlPrinter;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
@@ -317,4 +318,184 @@ class JavaParserTest {
             "}" +
             "@Target(java.lang.annotation.ElementType.TYPE_USE) @interface MyAnno {}");
     }
+
+    @Test
+    void getParserConfiguration_shouldReturnTheOriginalConfiguration() {
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        JavaParser javaParser = new JavaParser(parserConfiguration);
+        assertSame(parserConfiguration, javaParser.getParserConfiguration());
+    }
+
+    @Nested
+    @DisplayName("Tests for unpacked methods")
+    class UnpackedMethods {
+
+        private JavaParser parser;
+
+        @BeforeEach
+        void setup() {
+            ParserConfiguration configuration = new ParserConfiguration();
+            configuration.setLanguageLevel(BLEEDING_EDGE);
+            parser = new JavaParser(configuration);
+        }
+
+        @Test
+        void parseAndGet_shouldThrow() {
+            String sourceCode = "class enum interface A {}";
+            assertThrows(ParseProblemException.class, () -> parser.parseAndGet(sourceCode));
+        }
+
+        @Test
+        void parseAndGetWithInputStream_shouldNotBeNull() {
+            String sourceCode = "class A {}";
+            InputStream byteArrayInput = new ByteArrayInputStream(sourceCode.getBytes());
+            assertNotNull(parser.parseAndGet(byteArrayInput));
+        }
+
+        @Test
+        void parseAndGetWithPath_shouldNotBeNull() throws IOException {
+            Path path = Files.createTempFile("", "");
+            assertNotNull(parser.parseAndGet(path));
+        }
+
+        @Test
+        void parseAndGetWithFile_shouldNotBeNull() throws IOException {
+            File file = Files.createTempFile("", "").toFile();
+            assertNotNull(parser.parseAndGet(file));
+        }
+
+        @Test
+        void parseAndGetWithReader_shouldNotBeNull() {
+            Reader reader = new StringReader("class A {}");
+            assertNotNull(parser.parseAndGet(reader));
+        }
+
+        @Test
+        void parseAndGetWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "class A {}";
+            assertNotNull(parser.parseAndGet(sourceCode));
+        }
+
+        @Test
+        void parseAndGetBlockWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "{}";
+            assertNotNull(parser.parseAndGetBlock(sourceCode));
+        }
+
+        @Test
+        void parseAndGetStatementWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "int i = 0;";
+            assertNotNull(parser.parseAndGetStatement(sourceCode));
+        }
+
+        @Test
+        void parseAndGetImportWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "import com.example.Clazz;";
+            assertNotNull(parser.parseAndGetImport(sourceCode));
+        }
+
+        @Test
+        void parseAndGetExpressionWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "true";
+            assertNotNull(parser.parseAndGetExpression(sourceCode));
+        }
+
+        @Test
+        void parseAndGetAnnotationWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "@Test";
+            assertNotNull(parser.parseAndGetAnnotation(sourceCode));
+        }
+
+        @Test
+        void parseAndGetAnnotationBodyDeclarationWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "@interface Test {}";
+            assertNotNull(parser.parseAndGetAnnotationBodyDeclaration(sourceCode));
+        }
+
+        @Test
+        void parseAndGetBodyDeclarationWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "{}";
+            assertNotNull(parser.parseAndGetBodyDeclaration(sourceCode));
+        }
+
+        @Test
+        void parseAndGetClassOrInterfaceTypeWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "Object";
+            assertNotNull(parser.parseAndGetClassOrInterfaceType(sourceCode));
+        }
+
+        @Test
+        void parseAndGetTypeWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "Object";
+            assertNotNull(parser.parseAndGetType(sourceCode));
+        }
+
+        @Test
+        void parseAndGetVariableDeclarationExprWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "int i = 0";
+            assertNotNull(parser.parseAndGetVariableDeclarationExpr(sourceCode));
+        }
+
+        @Test
+        void parseAndGetExplicitConstructorInvocationStmtWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "super();";
+            assertNotNull(parser.parseAndGetExplicitConstructorInvocationStmt(sourceCode));
+        }
+
+        @Test
+        void parseAndGetNameWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "java.lang.Integer";
+            assertNotNull(parser.parseAndGetName(sourceCode));
+        }
+
+        @Test
+        void parseAndGetSimpleNameWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "Integer";
+            assertNotNull(parser.parseAndGetSimpleName(sourceCode));
+        }
+
+        @Test
+        void parseAndGetParameterWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "Integer param";
+            assertNotNull(parser.parseAndGetParameter(sourceCode));
+        }
+
+        @Test
+        void parseAndGetPackageDeclarationWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "package com.example;";
+            assertNotNull(parser.parseAndGetPackageDeclaration(sourceCode));
+        }
+
+        @Test
+        void parseAndGetTypeDeclarationWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "class A {}";
+            assertNotNull(parser.parseAndGetTypeDeclaration(sourceCode));
+        }
+
+        @Test
+        void parseAndGetModuleDeclarationWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "@Foo module com.github.abc { requires a.B; }";
+            assertNotNull(parser.parseAndGetModuleDeclaration(sourceCode));
+        }
+
+        @Test
+        void parseAndGetModuleDirectiveWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "opens C;";
+            assertNotNull(parser.parseAndGetModuleDirective(sourceCode));
+        }
+
+        @Test
+        void parseAndGetTypeParameterWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "T extends Serializable";
+            assertNotNull(parser.parseAndGetTypeParameter(sourceCode));
+        }
+
+        @Test
+        void parseAndGetMethodDeclarationWithSourceCode_shouldNotBeNull() {
+            String sourceCode = "void foo() {}";
+            assertNotNull(parser.parseAndGetMethodDeclaration(sourceCode));
+        }
+
+    }
+
 }
