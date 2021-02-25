@@ -1555,4 +1555,124 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         return true;
     }
+
+    @Override
+    public Boolean visit(final Callable n, final Visitable arg) {
+        final Callable n2 = (Callable) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final CapturesClause n, final Visitable arg) {
+        final CapturesClause n2 = (CapturesClause) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final Duration n, final Visitable arg) {
+        final Duration n2 = (Duration) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final ForallClause n, final Visitable arg) {
+        final ForallClause n2 = (ForallClause) arg;
+        if (!nodesEquals(n.getVariables(), n2.getVariables()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlDebugStmt n, final Visitable arg) {
+        final JmlDebugStmt n2 = (JmlDebugStmt) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlFunction n, final Visitable arg) {
+        final JmlFunction n2 = (JmlFunction) arg;
+        if (!nodesEquals(n.getArguments(), n2.getArguments()))
+            return false;
+        if (!nodeEquals(n.getFunctionName(), n2.getFunctionName()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlHenceByStmt n, final Visitable arg) {
+        final JmlHenceByStmt n2 = (JmlHenceByStmt) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlName n, final Visitable arg) {
+        final JmlName n2 = (JmlName) arg;
+        if (!objEquals(n.getIdentifier(), n2.getIdentifier()))
+            return false;
+        if (!nodeEquals(n.getQualifier(), n2.getQualifier()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlRefiningStmt n, final Visitable arg) {
+        final JmlRefiningStmt n2 = (JmlRefiningStmt) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final OldClause n, final Visitable arg) {
+        final OldClause n2 = (OldClause) arg;
+        if (!nodesEquals(n.getVariables(), n2.getVariables()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final WhenClause n, final Visitable arg) {
+        final WhenClause n2 = (WhenClause) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final WorkingSpaceClause n, final Visitable arg) {
+        final WorkingSpaceClause n2 = (WorkingSpaceClause) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlBoundVariable n, final Visitable arg) {
+        final JmlBoundVariable n2 = (JmlBoundVariable) arg;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getType(), n2.getType()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
 }

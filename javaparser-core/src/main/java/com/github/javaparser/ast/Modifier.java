@@ -27,9 +27,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModifierMetaModel;
-
 import java.util.Arrays;
-
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -122,7 +120,6 @@ public class Modifier extends Node {
         return new Modifier(Keyword.JML_SPEC_PRIVATE);
     }
 
-
     /**
      * The Java modifier keywords.
      */
@@ -141,8 +138,7 @@ public class Modifier extends Node {
         NATIVE("native"),
         STRICTFP("strictfp"),
         TRANSITIVE("transitive"),
-
-        //JML
+        // JML
         JML_HELPER("helper"),
         JML_NON_NULL("non_null"),
         JML_NULLABLE("nullable"),

@@ -837,6 +837,71 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(Callable n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(CapturesClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(Duration n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(ForallClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlDebugStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlFunction n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlHenceByStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlName n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlRefiningStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(OldClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(WhenClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(WorkingSpaceClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlBoundVariable n, Void arg) {
+
+    }
+
+    @Override
     public void visit(final CharLiteralExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);

@@ -653,4 +653,69 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     public R visit(final UnreachableStmt n, final A arg) {
         return defaultAction(n, arg);
     }
+
+    @Override
+    public R visit(final Callable n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final CapturesClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final Duration n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final ForallClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlDebugStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlFunction n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlHenceByStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlName n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlRefiningStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final OldClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final WhenClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final WorkingSpaceClause n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlBoundVariable n, final A arg) {
+        return defaultAction(n, arg);
+    }
 }

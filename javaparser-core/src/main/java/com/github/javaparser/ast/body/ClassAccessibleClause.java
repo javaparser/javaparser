@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.clauses;
+package com.github.javaparser.ast.body;
 
 /**
  * @author Alexander Weigl

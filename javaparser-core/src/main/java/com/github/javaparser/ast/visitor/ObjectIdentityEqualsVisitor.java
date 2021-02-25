@@ -646,4 +646,69 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     public Boolean visit(final UnreachableStmt n, final Visitable arg) {
         return n == arg;
     }
+
+    @Override
+    public Boolean visit(final Callable n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final CapturesClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final Duration n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final ForallClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlDebugStmt n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlFunction n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlHenceByStmt n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlName n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlRefiningStmt n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final OldClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final WhenClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final WorkingSpaceClause n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlBoundVariable n, final Visitable arg) {
+        return n == arg;
+    }
 }

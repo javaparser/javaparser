@@ -287,4 +287,30 @@ public interface VoidVisitor<A> {
     void visit(SignalsOnly n, A arg);
 
     void visit(UnreachableStmt n, A arg);
+
+    void visit(Callable n, A arg);
+
+    void visit(CapturesClause n, A arg);
+
+    void visit(Duration n, A arg);
+
+    void visit(ForallClause n, A arg);
+
+    void visit(JmlDebugStmt n, A arg);
+
+    void visit(JmlFunction n, A arg);
+
+    void visit(JmlHenceByStmt n, A arg);
+
+    void visit(JmlName n, A arg);
+
+    void visit(JmlRefiningStmt n, A arg);
+
+    void visit(OldClause n, A arg);
+
+    void visit(WhenClause n, A arg);
+
+    void visit(WorkingSpaceClause n, A arg);
+
+    void visit(JmlBoundVariable n, A arg);
 }

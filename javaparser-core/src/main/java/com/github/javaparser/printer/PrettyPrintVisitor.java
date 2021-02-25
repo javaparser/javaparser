@@ -37,13 +37,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -881,6 +875,71 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(UnreachableStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(Callable n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(CapturesClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(Duration n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(ForallClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlDebugStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlFunction n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlHenceByStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlName n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlRefiningStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(OldClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(WhenClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(WorkingSpaceClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlBoundVariable n, Void arg) {
 
     }
 

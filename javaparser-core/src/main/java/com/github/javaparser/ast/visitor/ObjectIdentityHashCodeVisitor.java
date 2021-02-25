@@ -561,4 +561,69 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final UnreachableStmt n, final Void arg) {
         return n.hashCode();
     }
+
+    @Override
+    public Integer visit(final Callable n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final CapturesClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final Duration n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final ForallClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlDebugStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlFunction n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlHenceByStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlName n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlRefiningStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final OldClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final WhenClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final WorkingSpaceClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlBoundVariable n, final Void arg) {
+        return n.hashCode();
+    }
 }

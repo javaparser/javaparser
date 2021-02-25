@@ -286,4 +286,30 @@ public interface GenericVisitor<R, A> {
     R visit(SignalsOnly n, A arg);
 
     R visit(UnreachableStmt n, A arg);
+
+    R visit(Callable n, A arg);
+
+    R visit(CapturesClause n, A arg);
+
+    R visit(Duration n, A arg);
+
+    R visit(ForallClause n, A arg);
+
+    R visit(JmlDebugStmt n, A arg);
+
+    R visit(JmlFunction n, A arg);
+
+    R visit(JmlHenceByStmt n, A arg);
+
+    R visit(JmlName n, A arg);
+
+    R visit(JmlRefiningStmt n, A arg);
+
+    R visit(OldClause n, A arg);
+
+    R visit(WhenClause n, A arg);
+
+    R visit(WorkingSpaceClause n, A arg);
+
+    R visit(JmlBoundVariable n, A arg);
 }

@@ -1238,4 +1238,90 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final UnreachableStmt n, final Visitable arg) {
         return true;
     }
+
+    @Override
+    public Boolean visit(final Callable n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final CapturesClause n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final Duration n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final ForallClause n, final Visitable arg) {
+        final ForallClause n2 = (ForallClause) arg;
+        if (!nodesEquals(n.getVariables(), n2.getVariables()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlDebugStmt n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlFunction n, final Visitable arg) {
+        final JmlFunction n2 = (JmlFunction) arg;
+        if (!nodesEquals(n.getArguments(), n2.getArguments()))
+            return false;
+        if (!nodeEquals(n.getFunctionName(), n2.getFunctionName()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlHenceByStmt n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlName n, final Visitable arg) {
+        final JmlName n2 = (JmlName) arg;
+        if (!objEquals(n.getIdentifier(), n2.getIdentifier()))
+            return false;
+        if (!nodeEquals(n.getQualifier(), n2.getQualifier()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlRefiningStmt n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final OldClause n, final Visitable arg) {
+        final OldClause n2 = (OldClause) arg;
+        if (!nodesEquals(n.getVariables(), n2.getVariables()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final WhenClause n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final WorkingSpaceClause n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlBoundVariable n, final Visitable arg) {
+        final JmlBoundVariable n2 = (JmlBoundVariable) arg;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getType(), n2.getType()))
+            return false;
+        return true;
+    }
 }

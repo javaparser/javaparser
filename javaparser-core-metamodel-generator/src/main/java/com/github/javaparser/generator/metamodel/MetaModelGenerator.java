@@ -151,7 +151,8 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.JmlLetExpr.class);
         add(com.github.javaparser.ast.expr.JmlMultiCompareExpr.class);
         add(com.github.javaparser.ast.expr.JmlLabel.class);
-
+        add(com.github.javaparser.ast.expr.JmlName.class);
+        add(com.github.javaparser.ast.expr.JmlFunction.class);
 
         add(com.github.javaparser.ast.stmt.AssertStmt.class);
         add(com.github.javaparser.ast.stmt.BlockStmt.class);
@@ -180,6 +181,9 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.JmlSetStmt.class);
         add(com.github.javaparser.ast.stmt.JmlAssertStmt.class);
         add(com.github.javaparser.ast.stmt.JmlAssumeStmt.class);
+        add(com.github.javaparser.ast.stmt.JmlHenceByStmt.class);
+        add(com.github.javaparser.ast.stmt.JmlDebugStmt.class);
+        add(com.github.javaparser.ast.stmt.JmlRefiningStmt.class);
         add(com.github.javaparser.ast.stmt.UnreachableStmt.class);
 
         add(com.github.javaparser.ast.clauses.Clause.class);
@@ -198,8 +202,15 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.clauses.LoopInvariantClause.class);
         add(com.github.javaparser.ast.clauses.LoopVariantClause.class);
         add(com.github.javaparser.ast.clauses.LoopDecreasesClause.class);
+        add(com.github.javaparser.ast.clauses.OldClause.class);
+        add(com.github.javaparser.ast.clauses.ForallClause.class);
+        add(com.github.javaparser.ast.clauses.WhenClause.class);
+        add(com.github.javaparser.ast.clauses.CapturesClause.class);
+        add(com.github.javaparser.ast.clauses.Duration.class);
+        add(com.github.javaparser.ast.clauses.WorkingSpaceClause.class);
+        add(com.github.javaparser.ast.clauses.Callable.class);
 
-
+        add(com.github.javaparser.ast.JmlBoundVariable.class);
 
         add(com.github.javaparser.ast.type.ArrayType.class);
         add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);

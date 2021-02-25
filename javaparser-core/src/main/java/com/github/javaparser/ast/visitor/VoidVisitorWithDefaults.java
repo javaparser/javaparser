@@ -652,4 +652,69 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     public void visit(final UnreachableStmt n, final A arg) {
         defaultAction(n, arg);
     }
+
+    @Override
+    public void visit(final Callable n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final CapturesClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final Duration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final ForallClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlDebugStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlFunction n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlHenceByStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlName n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlRefiningStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final OldClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final WhenClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final WorkingSpaceClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlBoundVariable n, final A arg) {
+        defaultAction(n, arg);
+    }
 }
