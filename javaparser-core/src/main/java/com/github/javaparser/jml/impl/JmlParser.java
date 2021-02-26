@@ -1,22 +1,36 @@
 package com.github.javaparser.jml.impl;
 
 import com.github.javaparser.ast.Jmlish;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.utils.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.parboiled.*;
+import org.parboiled.annotations.*;
+import org.parboiled.matchers.CustomMatcher;
+import org.parboiled.parserunners.ReportingParseRunner;
+import org.parboiled.support.ParseTreeUtils;
+import org.parboiled.support.ParsingResult;
 
 import java.util.List;
+import java.util.logging.Handler;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/3/20)
  */
 public class JmlParser {
-    public List<Jmlish> create(@NotNull Comment comment) {
-        return null;
+    JmlPeg parser = Parboiled.createParser(JmlPeg.class);
+
+    public List<Pair<Jmlish, Handler>> create(@NotNull Comment comment) {
+        ParsingResult<?> result = new ReportingParseRunner<>(parser.jmlEntry()).run(comment.getContent());
+        String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
+        System.out.println(parseTreePrintOut);
+        result.
     }
 }
 
-/*
+
 @SuppressWarnings("InfiniteRecursion")
 @BuildParseTree
 class JmlPeg extends BaseParser<Node> {
@@ -243,7 +257,7 @@ class JmlPeg extends BaseParser<Node> {
      * \seq
      * \locset
      * nullMod? id ('[]')
-     *
+     */
     Rule typeType() {
         return Sequence(
                 Optional(FirstOf("nullable", "non_null")),
@@ -285,7 +299,7 @@ class JmlPeg extends BaseParser<Node> {
      * <p>
      * Currently following comprehension are defined:
      * \sum, \product, \max, \min, \num_of, \exists, \foreach, \infinite_union
-     *
+     */
     @Label("QuantifiedExpression")
     Rule quantifiedExpr() {
         return Sequence("(",
@@ -1343,4 +1357,3 @@ class JavaLetterMatcher extends AbstractJavaCharacterMatcher {
         return Character.isJavaIdentifierStart(c);
     }
 }
-*/

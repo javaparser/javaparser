@@ -49,7 +49,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         PRINT_JAVADOC(Boolean.class),
 
         /**
-         * Print jml comments. If true, jml comments will be printed in combination with the
+         * Print jml comments. If true, jml comments will be printed in combination with the ast
          */
         PRINT_JML_COMMENTS(Boolean.class),
 

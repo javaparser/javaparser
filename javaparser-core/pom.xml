@@ -40,6 +40,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.18</version>
         </dependency>
+        <dependency>
+            <groupId>org.parboiled</groupId>
+            <artifactId>parboiled-java</artifactId>
+            <version>1.3.1</version>
+        </dependency>
     </dependencies>
 
     <properties>

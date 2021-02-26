@@ -49,6 +49,7 @@ import com.github.javaparser.ast.type.*;
 
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.jml.JmlPipeline;
 import com.github.javaparser.printer.configuration.ConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
@@ -1790,28 +1791,66 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final LineComment n, final Void arg) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
-            return;
+        boolean jml = JmlPipeline.checkIsJml(n);
+        if (jml) {
+            if (getOption(ConfigOption.NO_JML).isPresent()) {
+                return;
+            }
+            if (getOption(ConfigOption.PRINT_JML_COMMENTS).isPresent()) {
+                if (getOption(ConfigOption.DISCHARGE_JML_COMMENTS).isPresent()) {
+                    printer.print("// ");
+                } else {
+                    printer.print("//");
+
+                }
+                printer.println(normalizeEolInTextBlock(n.getContent(), "").trim());
+            }
+        } else {
+            if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
+                return;
+            }
+            printer
+                    .print("//")
+                    .println(normalizeEolInTextBlock(n.getContent(), "").trim());
         }
-        printer
-                .print("// ")
-                .println(normalizeEolInTextBlock(n.getContent(), "").trim());
     }
 
     @Override
     public void visit(final BlockComment n, final Void arg) {
-        if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
-            return;
-        }
         final String commentContent = normalizeEolInTextBlock(n.getContent(), getOption(ConfigOption.END_OF_LINE_CHARACTER).get().asString());
         String[] lines = commentContent.split("\\R", -1); // as BlockComment should not be formatted, -1 to preserve any trailing empty line if present
-        printer.print("/*");
-        for (int i = 0; i < (lines.length - 1); i++) {
-            printer.print(lines[i]);
-            printer.print(getOption(ConfigOption.END_OF_LINE_CHARACTER).get().asValue()); // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
+
+        boolean jml = JmlPipeline.checkIsJml(n);
+        if (jml) {
+            if (getOption(ConfigOption.NO_JML).isPresent()) {
+                return;
+            }
+            if (getOption(ConfigOption.PRINT_JML_COMMENTS).isPresent()) {
+                if (getOption(ConfigOption.DISCHARGE_JML_COMMENTS).isPresent()) {
+                    printer.print("/* ");
+                } else {
+                    printer.print("/*");
+
+                }
+                for (int i = 0; i < (lines.length - 1); i++) {
+                    printer.print(lines[i]);
+                    printer.print(getOption(ConfigOption.END_OF_LINE_CHARACTER).get().asValue()); // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
+                }
+                printer.print(lines[lines.length - 1]); // last line is not followed by a newline, and simply terminated with `*/`
+                printer.println("*/");
+            }
+        } else {
+            if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
+                return;
+            }
+            printer.print("/*");
+            for (int i = 0; i < (lines.length - 1); i++) {
+                printer.print(lines[i]);
+                printer.print(getOption(ConfigOption.END_OF_LINE_CHARACTER).get().asValue()); // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
+            }
+            printer.print(lines[lines.length - 1]); // last line is not followed by a newline, and simply terminated with `*/`
+            printer.println("*/");
         }
-        printer.print(lines[lines.length - 1]); // last line is not followed by a newline, and simply terminated with `*/`
-        printer.println("*/");
     }
 
     @Override

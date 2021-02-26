@@ -3,6 +3,7 @@ package com.github.javaparser.jml;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.jml.impl.JmlParser;
 import com.github.javaparser.utils.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,13 +58,18 @@ public class JmlPipeline {
      * @param comment a jml comment
      */
     private List<Pair<Jmlish, Handler>> parseComment(Comment comment) {
-        return null;
+        JmlParser jp = new JmlParser();
+        return jp.create(comment);
     }
 
     private static final Pattern JML_COMMENT_PATTERN
             = Pattern.compile("^\\s*(//|/[*])(([-+]\\w+)*)[@].*", Pattern.DOTALL);
 
     public boolean isJmlComment(@NotNull Comment comment) {
+        return checkIsJml(comment);
+    }
+
+    public static boolean checkIsJml(@NotNull Comment comment) {
         return getAnnotationKeys(comment.getContent()) != null;
     }
 
@@ -71,7 +77,7 @@ public class JmlPipeline {
      * @param comment
      * @return null if the given comment is non-jml, else a set with the annotation keys are returned.
      */
-    public Set<String> getAnnotationKeys(@NotNull String comment) {
+    public static Set<String> getAnnotationKeys(@NotNull String comment) {
         var m = JML_COMMENT_PATTERN.matcher(comment);
         if (m.matches()) {
             if (m.groupCount() >= 3 && !m.group(2).trim().isEmpty()) {
