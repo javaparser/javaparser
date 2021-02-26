@@ -1,57 +1,159 @@
 package com.github.javaparser.jml.impl;
 
-import jml.JmlAst;
-import jml.JmlComment;
-import jml.services.IJmlParser;
+import com.github.javaparser.ast.Jmlish;
+import com.github.javaparser.ast.comments.Comment;
 import org.jetbrains.annotations.NotNull;
-import org.parboiled.BaseParser;
-import org.parboiled.MatcherContext;
-import org.parboiled.Rule;
-import org.parboiled.annotations.*;
-import org.parboiled.matchers.CustomMatcher;
+
+import java.util.List;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/3/20)
  */
-public class JmlParser implements IJmlParser {
-
-    /*public KeyJmlParser createParser(String content) {
-        KeyJmlLexer lexer = createLexer(content);
-        KeyJmlParser parser = new KeyJmlParser(new CommonTokenStream(lexer));
-        return parser;
-    }*/
-
-/*    private KeyJmlLexer createLexer(String content) {
-        KeyJmlLexer lexer = new KeyJmlLexer(CharStreams.fromString(content));
-        return lexer;
-    }
-*/
-
-    @Override
-    public void create(@NotNull JmlComment comment) {
-        /*KeyJmlParser p = createParser(comment.getContent());
-        final KeyJmlParser.JmlAnyContext ctx = p.jmlAny();
-        if(0 != p.getNumberOfSyntaxErrors()) {
-            System.out.println(comment.getContent());
-        }
-        comment.setContext(ctx);
-        */
+public class JmlParser {
+    public List<Jmlish> create(@NotNull Comment comment) {
+        return null;
     }
 }
 
+/*
 @SuppressWarnings("InfiniteRecursion")
 @BuildParseTree
-class JmlPeg extends BaseParser<JmlAst> {
+class JmlPeg extends BaseParser<Node> {
+    public final Rule ASSERT = Keyword("assert");
+    public final Rule BREAK = Keyword("break");
+    public final Rule CASE = Keyword("case");
+    public final Rule CATCH = Keyword("catch");
+    public final Rule CLASS = Keyword("class");
+    public final Rule CONTINUE = Keyword("continue");
+    public final Rule DEFAULT = Keyword("default");
+    public final Rule DO = Keyword("do");
+    public final Rule ELSE = Keyword("else");
+    public final Rule ENUM = Keyword("enum");
+    public final Rule EXTENDS = Keyword("extends");
+    public final Rule FINALLY = Keyword("finally");
+    public final Rule FINAL = Keyword("final");
+    public final Rule FOR = Keyword("for");
+    public final Rule IF = Keyword("if");
+    public final Rule IMPLEMENTS = Keyword("implements");
+    public final Rule IMPORT = Keyword("import");
+    public final Rule INTERFACE = Keyword("interface");
+    public final Rule INSTANCEOF = Keyword("instanceof");
+    public final Rule NEW = Keyword("new");
+    public final Rule PACKAGE = Keyword("package");
+    public final Rule RETURN = Keyword("return");
+    public final Rule STATIC = Keyword("static");
+    public final Rule SUPER = Keyword("super");
+    public final Rule SWITCH = Keyword("switch");
+    public final Rule SYNCHRONIZED = Keyword("synchronized");
+    public final Rule THIS = Keyword("this");
+    public final Rule THROWS = Keyword("throws");
+    public final Rule THROW = Keyword("throw");
+
+    //-------------------------------------------------------------------------
+    //  Compilation Unit
+    //-------------------------------------------------------------------------
+    public final Rule TRY = Keyword("try");
+    public final Rule VOID = Keyword("void");
+    public final Rule WHILE = Keyword("while");
+    final Rule AT = Terminal("@");
+
+    //-------------------------------------------------------------------------
+    //  Class Declaration
+    //-------------------------------------------------------------------------
+    final Rule AND = Terminal("&", AnyOf("=&"));
+    final Rule ANDAND = Terminal("&&");
+    final Rule ANDEQU = Terminal("&=");
+    final Rule BANG = Terminal("!", Ch('='));
+    final Rule BSR = Terminal(">>>", Ch('='));
+    final Rule BSREQU = Terminal(">>>=");
+    final Rule COLON = Terminal(":");
+    final Rule COMMA = Terminal(",");
+    final Rule DEC = Terminal("--");
+
+    //-------------------------------------------------------------------------
+    //  Interface Declaration
+    //-------------------------------------------------------------------------
+    final Rule DIV = Terminal("/", Ch('='));
+    final Rule DIVEQU = Terminal("/=");
+    final Rule DOT = Terminal(".");
+    final Rule ELLIPSIS = Terminal("...");
+    final Rule EQU = Terminal("=", Ch('='));
+    final Rule EQUAL = Terminal("==");
+    final Rule GE = Terminal(">=");
+    final Rule GT = Terminal(">", AnyOf("=>"));
+    final Rule HAT = Terminal("^", Ch('='));
+    final Rule HATEQU = Terminal("^=");
+    final Rule INC = Terminal("++");
+    final Rule LBRK = Terminal("[");
+
+    //-------------------------------------------------------------------------
+    //  Enum Declaration
+    //-------------------------------------------------------------------------
+    final Rule LE = Terminal("<=");
+    final Rule LPAR = Terminal("(");
+    final Rule LPOINT = Terminal("<");
+    final Rule LT = Terminal("<", AnyOf("=<"));
+    final Rule LWING = Terminal("{");
+
+    //-------------------------------------------------------------------------
+    //  Variable Declarations
+    //-------------------------------------------------------------------------
+    final Rule MINUS = Terminal("-", AnyOf("=-"));
+    final Rule MINUSEQU = Terminal("-=");
+    final Rule MOD = Terminal("%", Ch('='));
+
+    //-------------------------------------------------------------------------
+    //  Formal Parameters
+    //-------------------------------------------------------------------------
+    final Rule MODEQU = Terminal("%=");
+    final Rule NOTEQUAL = Terminal("!=");
+    final Rule OR = Terminal("|", AnyOf("=|"));
+    final Rule OREQU = Terminal("|=");
+    final Rule OROR = Terminal("||");
+
+    //-------------------------------------------------------------------------
+    //  Statements
+    //-------------------------------------------------------------------------
+    final Rule PLUS = Terminal("+", AnyOf("=+"));
+    final Rule PLUSEQU = Terminal("+=");
+    final Rule QUERY = Terminal("?");
+    final Rule RBRK = Terminal("]");
+    final Rule RPAR = Terminal(")");
+    final Rule RPOINT = Terminal(">");
+    final Rule RWING = Terminal("}");
+    final Rule SEMI = Terminal(";");
+    final Rule SL = Terminal("<<", Ch('='));
+    final Rule SLEQU = Terminal("<<=");
+    final Rule SR = Terminal(">>", AnyOf("=>"));
+    final Rule SREQU = Terminal(">>=");
+
+    //-------------------------------------------------------------------------
+    //  Expressions
+    //-------------------------------------------------------------------------
+
+    // The following is more generous than the definition in section 14.8,
+    // which allows only specific forms of Expression.
+    final Rule STAR = Terminal("*", Ch('='));
+    final Rule STAREQU = Terminal("*=");
+
+    // The following definition is part of the modification in JLS Chapter 18
+    // to minimize look ahead. In JLS Chapter 15.27, Expression is defined
+    // as AssignmentExpression, which is effectively defined as
+    // (LeftHandSide AssignmentOperator)* ConditionalExpression.
+    // The following is obtained by allowing ANY ConditionalExpression
+    // as LeftHandSide, which results in accepting statements like 5 = a.
+    final Rule TILDA = Terminal("~");
     private final Rule NESTED_CONTRACT_START = Keyword("{|");
     private final Rule NESTED_CONTRACT_END = Keyword("|}");
     private final Rule ALSO = Keyword("also");
     private final Rule ASSIGNABLE = FirstOf("assignable", "modifiable", "modifies");
-
     private final Rule MODIFIER = FirstOf(
             "pure", "strictly_pure", "model", "helper",
             "nullable_by_default", "public", "private", "protected", "package",
             "non_null", "nullable");
+    private final Rule VISIBILITY = FirstOf("public", "private", "protected", "package");
+    private final Rule BEHAVIOR = FirstOf("BEHAVIOR", "normal_behavior", "exceptional_behavior");
 
     Rule Contract() {
         return Sequence(
@@ -141,7 +243,7 @@ class JmlPeg extends BaseParser<JmlAst> {
      * \seq
      * \locset
      * nullMod? id ('[]')
-     */
+     *
     Rule typeType() {
         return Sequence(
                 Optional(FirstOf("nullable", "non_null")),
@@ -160,13 +262,8 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Sequence("<", Identifier(), ">");
     }
 
-
-    private final Rule VISIBILITY = FirstOf("public", "private", "protected", "package");
-    private final Rule BEHAVIOR = FirstOf("BEHAVIOR", "normal_behavior", "exceptional_behavior");
-
-
     Rule jmlEnd() {
-        return FirstOf(EOI, "*/");
+        return FirstOf(EOI, "*-/");
     }
 
     Rule jmlStart() {
@@ -176,25 +273,6 @@ class JmlPeg extends BaseParser<JmlAst> {
     Rule expr() {
         return Expression();
     }
-
-    /*
-    // We start with the base cases, that have no degrees of freedom for selection to achieve a fast parser
-    |quantifiedExpr                                                                                  #exprComprehension
-    |
-
-    LPAREN(LBLPOS |LBLNEG) IDENTIFIER expr RPAREN                                                       #labeledExpr
-
-    expr LBRACK
-    expr DOTDOT
-    expr RBRACK                                                               #exprArryLocSet
-
-      expr(op=(LE|GE|GT|LT|INSTANCEOF|ST) expr)+                                                        #exprRelational
-  expr LBRACK
-    expr DOTDOT
-    expr RBRACK                                                               #exprSubSequence
-
-    |
-    */
 
     /**
      * A comprehension is a variable binder with a list of expression
@@ -207,8 +285,7 @@ class JmlPeg extends BaseParser<JmlAst> {
      * <p>
      * Currently following comprehension are defined:
      * \sum, \product, \max, \min, \num_of, \exists, \foreach, \infinite_union
-     */
-
+     *
     @Label("QuantifiedExpression")
     Rule quantifiedExpr() {
         return Sequence("(",
@@ -221,13 +298,6 @@ class JmlPeg extends BaseParser<JmlAst> {
                 OneOrMoreDelim(expr(), Keyword(";")),
                 ")");
     }
-
-    //  LPAREN '\\lblneg' id expr RPAREN
-    //   LPAREN '\\lblpos' id expr RPAREN
-
-    //-------------------------------------------------------------------------
-    //  Compilation Unit
-    //-------------------------------------------------------------------------
 
     public Rule CompilationUnit() {
         return Sequence(
@@ -268,10 +338,6 @@ class JmlPeg extends BaseParser<JmlAst> {
         );
     }
 
-    //-------------------------------------------------------------------------
-    //  Class Declaration
-    //-------------------------------------------------------------------------
-
     Rule ClassDeclaration() {
         return Sequence(
                 CLASS,
@@ -309,6 +375,10 @@ class JmlPeg extends BaseParser<JmlAst> {
         );
     }
 
+    //-------------------------------------------------------------------------
+    //  Types and Modifiers
+    //-------------------------------------------------------------------------
+
     Rule GenericMethodOrConstructorRest() {
         return FirstOf(
                 Sequence(FirstOf(Type(), VOID), Identifier(), MethodDeclaratorRest()),
@@ -340,10 +410,6 @@ class JmlPeg extends BaseParser<JmlAst> {
     Rule MethodBody() {
         return Block();
     }
-
-    //-------------------------------------------------------------------------
-    //  Interface Declaration
-    //-------------------------------------------------------------------------
 
     Rule InterfaceDeclaration() {
         return Sequence(
@@ -382,6 +448,10 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Sequence(Sequence(Type(), Identifier()), InterfaceMethodOrFieldRest());
     }
 
+    //-------------------------------------------------------------------------
+    //  Annotations
+    //-------------------------------------------------------------------------
+
     Rule InterfaceMethodOrFieldRest() {
         return FirstOf(
                 Sequence(ConstantDeclaratorsRest(), SEMI),
@@ -417,10 +487,6 @@ class JmlPeg extends BaseParser<JmlAst> {
     Rule ConstantDeclaratorRest() {
         return Sequence(ZeroOrMore(Dim()), EQU, VariableInitializer());
     }
-
-    //-------------------------------------------------------------------------
-    //  Enum Declaration
-    //-------------------------------------------------------------------------
 
     Rule EnumDeclaration() {
         return Sequence(
@@ -458,10 +524,6 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Sequence(SEMI, ZeroOrMore(ClassBodyDeclaration()));
     }
 
-    //-------------------------------------------------------------------------
-    //  Variable Declarations
-    //-------------------------------------------------------------------------
-
     Rule LocalVariableDeclarationStatement() {
         return Sequence(ZeroOrMore(FirstOf(FINAL, Annotation())), Type(), VariableDeclarators(), SEMI);
     }
@@ -474,10 +536,6 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Sequence(Identifier(), ZeroOrMore(Dim()), Optional(EQU, VariableInitializer()));
     }
 
-    //-------------------------------------------------------------------------
-    //  Formal Parameters
-    //-------------------------------------------------------------------------
-
     Rule FormalParameters() {
         return Sequence(LPAR, Optional(FormalParameterDecls()), RPAR);
     }
@@ -486,9 +544,17 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Sequence(ZeroOrMore(FirstOf(FINAL, Annotation())), Type(), VariableDeclaratorId());
     }
 
+    //-------------------------------------------------------------------------
+    //  JLS 3.6-7  Spacing
+    //-------------------------------------------------------------------------
+
     Rule FormalParameterDecls() {
         return Sequence(ZeroOrMore(FirstOf(FINAL, Annotation())), Type(), FormalParameterDeclsRest());
     }
+
+    //-------------------------------------------------------------------------
+    //  JLS 3.8  Identifiers
+    //-------------------------------------------------------------------------
 
     Rule FormalParameterDeclsRest() {
         return FirstOf(
@@ -497,17 +563,20 @@ class JmlPeg extends BaseParser<JmlAst> {
         );
     }
 
+    // JLS defines letters and digits as Unicode characters recognized
+    // as such by special Java procedures.
+
     Rule VariableDeclaratorId() {
         return Sequence(Identifier(), ZeroOrMore(Dim()));
     }
 
-    //-------------------------------------------------------------------------
-    //  Statements
-    //-------------------------------------------------------------------------
-
     Rule Block() {
         return Sequence(LWING, BlockStatements(), RWING);
     }
+
+    //-------------------------------------------------------------------------
+    //  JLS 3.9  Keywords
+    //-------------------------------------------------------------------------
 
     Rule BlockStatements() {
         return ZeroOrMore(BlockStatement());
@@ -584,13 +653,6 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Identifier();
     }
 
-    //-------------------------------------------------------------------------
-    //  Expressions
-    //-------------------------------------------------------------------------
-
-    // The following is more generous than the definition in section 14.8,
-    // which allows only specific forms of Expression.
-
     Rule StatementExpression() {
         return Expression();
     }
@@ -598,13 +660,6 @@ class JmlPeg extends BaseParser<JmlAst> {
     Rule ConstantExpression() {
         return Expression();
     }
-
-    // The following definition is part of the modification in JLS Chapter 18
-    // to minimize look ahead. In JLS Chapter 15.27, Expression is defined
-    // as AssignmentExpression, which is effectively defined as
-    // (LeftHandSide AssignmentOperator)* ConditionalExpression.
-    // The following is obtained by allowing ANY ConditionalExpression
-    // as LeftHandSide, which results in accepting statements like 5 = a.
 
     Rule Expression() {
         return Sequence(
@@ -782,6 +837,10 @@ class JmlPeg extends BaseParser<JmlAst> {
         );
     }
 
+    //-------------------------------------------------------------------------
+    //  JLS 3.10  Literals
+    //-------------------------------------------------------------------------
+
     Rule PrefixOp() {
         return FirstOf(INC, DEC, BANG, TILDA, PLUS, MINUS);
     }
@@ -888,13 +947,13 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Sequence(LBRK, Expression(), RBRK);
     }
 
-    //-------------------------------------------------------------------------
-    //  Types and Modifiers
-    //-------------------------------------------------------------------------
-
     Rule Type() {
         return Sequence(FirstOf(BasicType(), ClassType()), ZeroOrMore(Dim()));
     }
+
+    //-------------------------------------------------------------------------
+    //  JLS 3.11-12  Separators, Operators
+    //-------------------------------------------------------------------------
 
     Rule ReferenceType() {
         return FirstOf(
@@ -951,10 +1010,6 @@ class JmlPeg extends BaseParser<JmlAst> {
                 )
         );
     }
-
-    //-------------------------------------------------------------------------
-    //  Annotations
-    //-------------------------------------------------------------------------
 
     Rule AnnotationTypeDeclaration() {
         return Sequence(AT, INTERFACE, Identifier(), AnnotationTypeBody());
@@ -1034,10 +1089,6 @@ class JmlPeg extends BaseParser<JmlAst> {
         return Sequence(LPAR, ElementValue(), RPAR);
     }
 
-    //-------------------------------------------------------------------------
-    //  JLS 3.6-7  Spacing
-    //-------------------------------------------------------------------------
-
     @SuppressNode
     Rule Spacing() {
         return ZeroOrMore(FirstOf(
@@ -1046,7 +1097,7 @@ class JmlPeg extends BaseParser<JmlAst> {
                 OneOrMore(AnyOf(" \t\r\n\f").label("Whitespace")),
 
                 // traditional comment
-                Sequence("/*", ZeroOrMore(TestNot("*/"), ANY), "*/"),
+                Sequence("/*", ZeroOrMore(TestNot("*-/"), ANY), "*-/"),
 
                 // end of line comment
                 Sequence(
@@ -1057,18 +1108,11 @@ class JmlPeg extends BaseParser<JmlAst> {
         ));
     }
 
-    //-------------------------------------------------------------------------
-    //  JLS 3.8  Identifiers
-    //-------------------------------------------------------------------------
-
     @SuppressSubnodes
     @MemoMismatches
     Rule Identifier() {
         return Sequence(TestNot(Keyword()), Letter(), ZeroOrMore(LetterOrDigit()), Spacing());
     }
-
-    // JLS defines letters and digits as Unicode characters recognized
-    // as such by special Java procedures.
 
     Rule Letter() {
         // switch to this "reduced" character space version for a ~10% parser performance speedup
@@ -1083,10 +1127,6 @@ class JmlPeg extends BaseParser<JmlAst> {
         return FirstOf(Sequence('\\', UnicodeEscape()), new JavaLetterOrDigitMatcher());
     }
 
-    //-------------------------------------------------------------------------
-    //  JLS 3.9  Keywords
-    //-------------------------------------------------------------------------
-
     @MemoMismatches
     Rule Keyword() {
         return Sequence(
@@ -1098,48 +1138,11 @@ class JmlPeg extends BaseParser<JmlAst> {
         );
     }
 
-    public final Rule ASSERT = Keyword("assert");
-    public final Rule BREAK = Keyword("break");
-    public final Rule CASE = Keyword("case");
-    public final Rule CATCH = Keyword("catch");
-    public final Rule CLASS = Keyword("class");
-    public final Rule CONTINUE = Keyword("continue");
-    public final Rule DEFAULT = Keyword("default");
-    public final Rule DO = Keyword("do");
-    public final Rule ELSE = Keyword("else");
-    public final Rule ENUM = Keyword("enum");
-    public final Rule EXTENDS = Keyword("extends");
-    public final Rule FINALLY = Keyword("finally");
-    public final Rule FINAL = Keyword("final");
-    public final Rule FOR = Keyword("for");
-    public final Rule IF = Keyword("if");
-    public final Rule IMPLEMENTS = Keyword("implements");
-    public final Rule IMPORT = Keyword("import");
-    public final Rule INTERFACE = Keyword("interface");
-    public final Rule INSTANCEOF = Keyword("instanceof");
-    public final Rule NEW = Keyword("new");
-    public final Rule PACKAGE = Keyword("package");
-    public final Rule RETURN = Keyword("return");
-    public final Rule STATIC = Keyword("static");
-    public final Rule SUPER = Keyword("super");
-    public final Rule SWITCH = Keyword("switch");
-    public final Rule SYNCHRONIZED = Keyword("synchronized");
-    public final Rule THIS = Keyword("this");
-    public final Rule THROWS = Keyword("throws");
-    public final Rule THROW = Keyword("throw");
-    public final Rule TRY = Keyword("try");
-    public final Rule VOID = Keyword("void");
-    public final Rule WHILE = Keyword("while");
-
     @SuppressNode
     @DontLabel
     Rule Keyword(String keyword) {
         return Terminal(keyword, LetterOrDigit());
     }
-
-    //-------------------------------------------------------------------------
-    //  JLS 3.10  Literals
-    //-------------------------------------------------------------------------
 
     Rule Literal() {
         return Sequence(
@@ -1258,61 +1261,6 @@ class JmlPeg extends BaseParser<JmlAst> {
     }
 
     //-------------------------------------------------------------------------
-    //  JLS 3.11-12  Separators, Operators
-    //-------------------------------------------------------------------------
-
-    final Rule AT = Terminal("@");
-    final Rule AND = Terminal("&", AnyOf("=&"));
-    final Rule ANDAND = Terminal("&&");
-    final Rule ANDEQU = Terminal("&=");
-    final Rule BANG = Terminal("!", Ch('='));
-    final Rule BSR = Terminal(">>>", Ch('='));
-    final Rule BSREQU = Terminal(">>>=");
-    final Rule COLON = Terminal(":");
-    final Rule COMMA = Terminal(",");
-    final Rule DEC = Terminal("--");
-    final Rule DIV = Terminal("/", Ch('='));
-    final Rule DIVEQU = Terminal("/=");
-    final Rule DOT = Terminal(".");
-    final Rule ELLIPSIS = Terminal("...");
-    final Rule EQU = Terminal("=", Ch('='));
-    final Rule EQUAL = Terminal("==");
-    final Rule GE = Terminal(">=");
-    final Rule GT = Terminal(">", AnyOf("=>"));
-    final Rule HAT = Terminal("^", Ch('='));
-    final Rule HATEQU = Terminal("^=");
-    final Rule INC = Terminal("++");
-    final Rule LBRK = Terminal("[");
-    final Rule LE = Terminal("<=");
-    final Rule LPAR = Terminal("(");
-    final Rule LPOINT = Terminal("<");
-    final Rule LT = Terminal("<", AnyOf("=<"));
-    final Rule LWING = Terminal("{");
-    final Rule MINUS = Terminal("-", AnyOf("=-"));
-    final Rule MINUSEQU = Terminal("-=");
-    final Rule MOD = Terminal("%", Ch('='));
-    final Rule MODEQU = Terminal("%=");
-    final Rule NOTEQUAL = Terminal("!=");
-    final Rule OR = Terminal("|", AnyOf("=|"));
-    final Rule OREQU = Terminal("|=");
-    final Rule OROR = Terminal("||");
-    final Rule PLUS = Terminal("+", AnyOf("=+"));
-    final Rule PLUSEQU = Terminal("+=");
-    final Rule QUERY = Terminal("?");
-    final Rule RBRK = Terminal("]");
-    final Rule RPAR = Terminal(")");
-    final Rule RPOINT = Terminal(">");
-    final Rule RWING = Terminal("}");
-    final Rule SEMI = Terminal(";");
-    final Rule SL = Terminal("<<", Ch('='));
-    final Rule SLEQU = Terminal("<<=");
-    final Rule SR = Terminal(">>", AnyOf("=>"));
-    final Rule SREQU = Terminal(">>=");
-    final Rule STAR = Terminal("*", Ch('='));
-    final Rule STAREQU = Terminal("*=");
-    final Rule TILDA = Terminal("~");
-
-    //-------------------------------------------------------------------------
     //  helper methods
     //-------------------------------------------------------------------------
 
@@ -1376,11 +1324,9 @@ abstract class AbstractJavaCharacterMatcher extends CustomMatcher {
 
 
 class JavaLetterOrDigitMatcher extends AbstractJavaCharacterMatcher {
-
     public JavaLetterOrDigitMatcher() {
         super("LetterOrDigit");
     }
-
     @Override
     protected boolean acceptChar(char c) {
         return Character.isJavaIdentifierPart(c);
@@ -1389,13 +1335,12 @@ class JavaLetterOrDigitMatcher extends AbstractJavaCharacterMatcher {
 
 
 class JavaLetterMatcher extends AbstractJavaCharacterMatcher {
-
     public JavaLetterMatcher() {
         super("Letter");
     }
-
     @Override
     protected boolean acceptChar(char c) {
         return Character.isJavaIdentifierStart(c);
     }
 }
+*/

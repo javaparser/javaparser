@@ -18,7 +18,8 @@ import java.util.TreeSet;
  * @see jml.services.IJmlTagger
  */
 public class JmlAnnotations {
-    private @Nullable Set<String> set = null;
+    private @Nullable
+    Set<String> set = null;
 
     public JmlAnnotations() {
     }
@@ -39,7 +40,8 @@ public class JmlAnnotations {
         set.remove("-" + stripped);
     }
 
-    private @NotNull String stripTag(@NotNull String tag) {
+    private @NotNull
+    String stripTag(@NotNull String tag) {
         return (tag.charAt(0) == '-' || tag.charAt(0) == '+')
                 ? tag.substring(1) : tag;
     }

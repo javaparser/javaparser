@@ -1,14 +1,11 @@
 package com.github.javaparser.jml;
 
-import com.github.javaparser.jml.impl.JmlParser;
-import com.github.javaparser.jml.impl.JmlTagger;
-import com.github.javaparser.jml.impl.JmlTypeInference;
-import com.github.javaparser.jml.impl.SimpleJmlDetection;
-import com.github.javaparser.jml.services.*;
-import jml.impl.JmlAttacher;
 import lombok.SneakyThrows;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,17 +20,6 @@ import java.util.stream.Stream;
  * @version 1 (1/30/20)
  */
 public class JmlFacade {
-    static Lookup defaultServices = new Lookup();
-
-    static {
-        defaultServices.register(new SimpleJmlDetection(), IJmlDetection.class);
-        defaultServices.register(new JmlAttacher(), IJmlAttacher.class);
-        defaultServices.register(new JmlParser(), IJmlParser.class);
-        defaultServices.register(new JmlTagger(), IJmlTagger.class);
-        defaultServices.register(new JmlTypeInference(), IJmlTypeInference.class);
-
-    }
-
     public static String getVersion() {
         InputStream in = JmlFacade.class.getResourceAsStream("/jml-extract.version");
         if (in == null) return "n/a";
@@ -56,7 +42,7 @@ public class JmlFacade {
     static String readString(InputStream in) {
         StringWriter writer = new StringWriter();
         try (final InputStreamReader r = new InputStreamReader(in)) {
-            char b[] = new char[4 * 1024];
+            char[] b = new char[4 * 1024];
             int len = -1;
             while ((len = r.read(b)) > 0) {
                 writer.write(b, 0, len);

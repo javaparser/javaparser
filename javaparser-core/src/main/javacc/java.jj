@@ -84,11 +84,15 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.GeneratedJavaParser.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
+import static com.github.javaparser.ast.Node.Parsedness.*;
+import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+
 
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
@@ -107,8 +111,6 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase {
     GeneratedJavaParserTokenManager getTokenSource() {
         return token_source;
     }
-}}
-}}
 }
 PARSER_END(GeneratedJavaParser)
 
@@ -2598,21 +2600,21 @@ PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
 }
 {
     (
-        "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN, annotations); }
+        "boolean" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.BOOLEAN, annotations); }
      |
-        "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR, annotations); }
+        "char" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.CHAR, annotations); }
      |
-        "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE, annotations); }
+        "byte" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.BYTE, annotations); }
      |
-        "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT, annotations); }
+        "short" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.SHORT, annotations); }
      |
-        "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT, annotations); }
+        "int" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.INT, annotations); }
      |
-        "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG, annotations); }
+        "long" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.LONG, annotations); }
      |
-        "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
+        "float" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.FLOAT, annotations); }
      |
-        "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
+        "double" { ret = new PrimitiveType(tokenRange(), com.github.javaparser.ast.type.PrimitiveType.Primitive.DOUBLE, annotations); }
     )
     { return ret; }
 }
@@ -4780,15 +4782,15 @@ TryStmt TryStatement():
 
             catchBlock = Block()
             {
-                if (exceptionTypes.size() > 1) {
-                    type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
-                } else {
-                    type = (Type)exceptionTypes.get(0);
-                }
-                Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
-                catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
-                exceptionTypes = emptyNodeList();
-            }
+    if (exceptionTypes.size() > 1) {
+        type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
+    } else {
+        type = exceptionTypes.get(0);
+    }
+    Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
+    catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
+    exceptionTypes = emptyNodeList();
+}
         )*
         [
             "finally"

@@ -9,24 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * http://www.eecs.ucf.edu/~leavens/JML/jmlrefman/jmlrefman_6.html#SEC41
  */
 public class JmlSpecs {
-    /*private Map<ParserRuleContext, Object> types = new HashMap<>();
-    private List<ParserRuleContext>
-            classInvariant, axioms, models, loopInvariant, commands;
-*/
-    private BitSet modifiers = new BitSet();
-
-    public boolean hasModifier(int type) {
-        return modifiers.get(type);
-    }
-
-    public void setModifier(int type, boolean b) {
-        if (b) {
-            modifiers.set(type);
-        } else {
-            modifiers.clear(type);
-        }
-    }
-
     private static final AtomicInteger modifierCounter = new AtomicInteger();
     public static final int MODIFIER_PUBLIC = modifierCounter.getAndIncrement();
     public static final int MODIFIER_PRIVATE = modifierCounter.getAndIncrement();
@@ -59,9 +41,25 @@ public class JmlSpecs {
     public static final int MODIFIER_MODIFIER_NULLABLE_BY_DEFAULT = modifierCounter.getAndIncrement();
     public static final int MODIFIER_CODE = modifierCounter.getAndIncrement();
     public static final int MODIFIER_extract = modifierCounter.getAndIncrement();
-
     public static final int MODIFIER_PEER = modifierCounter.getAndIncrement();
     public static final int MODIFIER_REP = modifierCounter.getAndIncrement();
     public static final int MODIFIER_READONLY = modifierCounter.getAndIncrement();
+    /*private Map<ParserRuleContext, Object> types = new HashMap<>();
+    private List<ParserRuleContext>
+            classInvariant, axioms, models, loopInvariant, commands;
+*/
+    private final BitSet modifiers = new BitSet();
+
+    public boolean hasModifier(int type) {
+        return modifiers.get(type);
+    }
+
+    public void setModifier(int type, boolean b) {
+        if (b) {
+            modifiers.set(type);
+        } else {
+            modifiers.clear(type);
+        }
+    }
 
 }

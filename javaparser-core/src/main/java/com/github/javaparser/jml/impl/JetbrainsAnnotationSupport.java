@@ -1,33 +1,31 @@
 package com.github.javaparser.jml.impl;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.jml.Lookup;
-import com.github.javaparser.jml.services.IJmlAnnotationProcessor;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.visitor.TreeVisitor;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author Alexander Weigl
  * @version 1 (4/10/20)
  */
-public class JetbrainsAnnotationSupport implements IJmlAnnotationProcessor {
+public class JetbrainsAnnotationSupport {
     public static final String NOT_NULL = "org.jetbrains.annotations.NotNull";
     public static final String NULLABLE = "org.jetbrains.annotations.Nullable";
     public static final String CONTRACT = "org.jetbrains.annotations.Contract";
 
-    private final Lookup context;
-    private final CompilationUnit compilationUnit;
-
-    public JetbrainsAnnotationSupport(Lookup context, CompilationUnit compilationUnit) {
-        this.context = context;
-        this.compilationUnit = compilationUnit;
-    }
-
-
-    @Override
     public void process(@NotNull CompilationUnit ast) {
-        //ast.accept(new VisitorImpl());
+        TreeVisitor visitor = new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                if (node instanceof NodeWithAnnotations<?>) {
+                    var n = (NodeWithAnnotations<?>) node;
+                    //n.getAnnotationByName()
+                }
+            }
+        };
+        visitor.visitPreOrder(ast);
     }
 
     /*class VisitorImpl extends ASTVisitor {
@@ -56,9 +54,9 @@ public class JetbrainsAnnotationSupport implements IJmlAnnotationProcessor {
                 case JetbrainsAnnotationSupport.CONTRACT:
                     return null;
                 case JetbrainsAnnotationSupport.NOT_NULL:
-                    return createComment("/*@ non_null */");
+                    return createComment("/*@ non_null *");
                 case JetbrainsAnnotationSupport.NULLABLE:
-                    return createComment("/*@ nullable */");
+                    return createComment("/*@ nullable *");
             }
             return null;
         }

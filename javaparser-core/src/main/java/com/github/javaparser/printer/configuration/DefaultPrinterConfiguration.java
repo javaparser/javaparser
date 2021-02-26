@@ -38,17 +38,34 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         /**
          * Order imports alphabetically
          */
-        ORDER_IMPORTS(Boolean.class), 
+        ORDER_IMPORTS(Boolean.class),
         /**
          * Print comments only. It can be combined with {@code PRINT_JAVADOC} to print regular comments and javadoc.
          */
-        PRINT_COMMENTS(Boolean.class), 
+        PRINT_COMMENTS(Boolean.class),
         /**
          * Print javadoc comments only. It can be combined with {@code PRINT_COMMENTS} to print regular javadoc and comments
          */
-        PRINT_JAVADOC(Boolean.class), 
-        SPACE_AROUND_OPERATORS(Boolean.class), 
-        COLUMN_ALIGN_PARAMETERS(Boolean.class), 
+        PRINT_JAVADOC(Boolean.class),
+
+        /**
+         * Print jml comments. If true, jml comments will be printed in combination with the
+         */
+        PRINT_JML_COMMENTS(Boolean.class),
+
+        /**
+         * Print the original jml comments, but discharge them, s.t. they are not interpreted anymore
+         */
+        DISCHARGE_JML_COMMENTS(Boolean.class),
+
+        /**
+         * Does not print anything of jml, neither {@link com.github.javaparser.ast.Jmlish} nodes or jml comments.
+         */
+        NO_JML(Boolean.class),
+
+
+        SPACE_AROUND_OPERATORS(Boolean.class),
+        COLUMN_ALIGN_PARAMETERS(Boolean.class),
         COLUMN_ALIGN_FIRST_METHOD_CHAIN(Boolean.class),
         /**
          * Indent the case when it is true, don't if false
@@ -112,10 +129,11 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         
        
     }
-    
+
     // contains all available options
     // an option contained in the set is considered as activated
-    private Set<ConfigurationOption> defaultOptions = new HashSet<>(Arrays.asList(
+    private final Set<ConfigurationOption> defaultOptions = new HashSet<>(Arrays.asList(
+            new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, ConfigOption.PRINT_COMMENTS.defaultValue),
             new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, ConfigOption.PRINT_COMMENTS.defaultValue),
             new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC, ConfigOption.PRINT_JAVADOC.defaultValue),
             new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS, ConfigOption.SPACE_AROUND_OPERATORS.defaultValue),
@@ -123,7 +141,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
             new DefaultConfigurationOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY, ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.defaultValue),
             new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, ConfigOption.END_OF_LINE_CHARACTER.defaultValue),
             new DefaultConfigurationOption(ConfigOption.INDENTATION, ConfigOption.INDENTATION.defaultValue)
-            ));
+    ));
 
     public DefaultPrinterConfiguration() {
     }
