@@ -30,16 +30,13 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
+import com.github.javaparser.generator.core.utils.CodeUtils;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
@@ -100,7 +97,10 @@ public class PropertyGenerator extends NodeGenerator {
                 body.addStatement(f("assertNotNull(%s);", name));
             }
         }
-        body.addStatement(f("if (%s == this.%s) { return (%s) this; }", name, name, setter.getType()));
+
+        // Check if the new value is the same as the old value
+        String returnValue = CodeUtils.castValue("this", setter.getType(), nodeMetaModel.getTypeName());
+        body.addStatement(f("if (%s == this.%s) { return %s; }", name, name, returnValue));
 
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
         if (property.isNode()) {
