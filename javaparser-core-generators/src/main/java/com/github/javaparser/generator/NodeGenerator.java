@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,12 +22,16 @@
 package com.github.javaparser.generator;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
+
+import java.util.Arrays;
 
 /**
  * Makes it easier to generate code in the core AST nodes. The generateNode method will get every node type passed to
@@ -51,6 +55,23 @@ public abstract class NodeGenerator extends Generator {
         CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
         ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new AssertionError("Can't find class"));
         return new Pair<>(nodeCu, nodeCoid);
+    }
+
+    /**
+     * Annotate a method with the {@link Override} annotation, if it overrides other method.
+     *
+     * @param nodeMetaModel     The current meta model.
+     * @param methodDeclaration The method declaration.
+     */
+    protected void annotateWhenOverridden(BaseNodeMetaModel nodeMetaModel, MethodDeclaration methodDeclaration) {
+        Class<? extends Node> type = nodeMetaModel.getType();
+        Class<?> superClass = type.getSuperclass();
+
+        boolean isOverriding = Arrays.stream(superClass.getMethods())
+                .filter(m -> m.getName().equals(methodDeclaration.getNameAsString()))
+                .anyMatch(m -> m.getParameters().length == methodDeclaration.getParameters().size());
+        if (isOverriding)
+            annotateOverridden(methodDeclaration);
     }
 
     protected void after() throws Exception {
