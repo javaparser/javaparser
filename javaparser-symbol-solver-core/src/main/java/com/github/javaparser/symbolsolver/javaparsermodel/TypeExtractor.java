@@ -98,12 +98,18 @@ import com.google.common.collect.ImmutableList;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
+    private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
+    
+    private ReferenceTypeImpl StringReferenceType;
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
         this.facade = facade;
+        //pre-calculate the String reference (optimization)
+        StringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
     }
 
     @Override
@@ -474,7 +480,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(StringLiteralExpr node, Boolean solveLambdas) {
-        return new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
+        return StringReferenceType;
     }
 
     @Override
