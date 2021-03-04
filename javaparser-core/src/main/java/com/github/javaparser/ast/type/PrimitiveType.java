@@ -91,7 +91,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         BYTE("Byte" ,"B"),
         SHORT("Short" ,"S"),
         INT("Integer", "I"),
-        LONG("Long", "L"),
+        LONG("Long", "J"),
         FLOAT("Float", "F"),
         DOUBLE("Double", "D");
 

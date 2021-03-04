@@ -237,7 +237,7 @@ public class JarTypeSolver implements TypeSolver {
 
         CtClass toCtClass() throws IOException {
             try (InputStream is = jarFile.getInputStream(entry)) {
-                return classPool.makeClass(is);
+                return classPool.makeClassIfNew(is);
             }
         }
     }
