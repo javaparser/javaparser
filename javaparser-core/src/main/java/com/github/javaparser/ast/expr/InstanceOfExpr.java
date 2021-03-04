@@ -35,8 +35,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.InstanceOfExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -189,6 +191,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
         return type;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
         action.accept(this);
@@ -245,7 +248,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     public InstanceOfExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
-            return (InstanceOfExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
@@ -258,7 +261,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InstanceOfExpr setPattern(final PatternExpr pattern) {
         if (pattern == this.pattern) {
-            return (InstanceOfExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PATTERN, this.pattern, pattern);
         if (this.pattern != null)
@@ -272,7 +275,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     public InstanceOfExpr setType(final ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (InstanceOfExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)

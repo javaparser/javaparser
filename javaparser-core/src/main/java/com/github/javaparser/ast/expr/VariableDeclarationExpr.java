@@ -20,10 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
@@ -36,14 +34,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.VariableDeclarationExprMetaModel;
+
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.ast.Generated;
 
 /**
  * A declaration of variables.
@@ -147,7 +145,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (VariableDeclarationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -161,7 +159,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     public VariableDeclarationExpr setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (VariableDeclarationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         if (this.modifiers != null)
@@ -175,7 +173,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (VariableDeclarationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         if (this.variables != null)
@@ -261,6 +259,7 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
         action.accept(this);

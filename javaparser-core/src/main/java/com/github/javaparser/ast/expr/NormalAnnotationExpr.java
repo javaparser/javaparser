@@ -20,20 +20,22 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.NormalAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+import com.github.javaparser.metamodel.NormalAnnotationExprMetaModel;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An annotation that has zero or more key-value pairs.<br>{@code @Mapping(a=5, d=10)}
@@ -83,7 +85,7 @@ public class NormalAnnotationExpr extends AnnotationExpr {
     public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
         assertNotNull(pairs);
         if (pairs == this.pairs) {
-            return (NormalAnnotationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PAIRS, this.pairs, pairs);
         if (this.pairs != null)
@@ -165,6 +167,7 @@ public class NormalAnnotationExpr extends AnnotationExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNormalAnnotationExpr(Consumer<NormalAnnotationExpr> action) {
         action.accept(this);

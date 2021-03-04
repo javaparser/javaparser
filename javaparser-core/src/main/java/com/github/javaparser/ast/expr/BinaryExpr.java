@@ -20,20 +20,22 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BinaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Stringable;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
@@ -165,7 +167,7 @@ public class BinaryExpr extends Expression {
     public BinaryExpr setLeft(final Expression left) {
         assertNotNull(left);
         if (left == this.left) {
-            return (BinaryExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
         if (this.left != null)
@@ -179,7 +181,7 @@ public class BinaryExpr extends Expression {
     public BinaryExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
-            return (BinaryExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
@@ -190,7 +192,7 @@ public class BinaryExpr extends Expression {
     public BinaryExpr setRight(final Expression right) {
         assertNotNull(right);
         if (right == this.right) {
-            return (BinaryExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
         if (this.right != null)
@@ -248,6 +250,7 @@ public class BinaryExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBinaryExpr(Consumer<BinaryExpr> action) {
         action.accept(this);
