@@ -30,11 +30,7 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -59,8 +55,10 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-        // TODO #1837
-        throw new UnsupportedOperationException();
+         return wrappedNode.getFields().stream()
+                .flatMap(field -> field.getVariables().stream())
+                .map(var -> new JavaParserFieldDeclaration(var, typeSolver))
+                .collect(Collectors.toList());
     }
 
     @Override
