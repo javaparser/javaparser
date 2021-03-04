@@ -39,6 +39,9 @@ import com.github.javaparser.resolution.types.ResolvedType;
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration,
                                                                   ResolvedTypeParametrizable {
 
+    String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
+
     @Override
     default ResolvedReferenceTypeDeclaration asReferenceType() {
         return this;
@@ -291,7 +294,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         return this.isClass()
                 && !isAnonymousClass()
                 && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
+                && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -300,7 +303,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default boolean isJavaLangEnum() {
         return this.isEnum()
-                && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
+                && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
 }
