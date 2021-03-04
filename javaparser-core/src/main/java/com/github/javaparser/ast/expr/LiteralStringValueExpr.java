@@ -20,17 +20,19 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
-import java.util.function.Consumer;
+
 import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -63,7 +65,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
         if (value == this.value) {
-            return (LiteralStringValueExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
@@ -110,6 +112,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLiteralStringValueExpr(Consumer<LiteralStringValueExpr> action) {
         action.accept(this);

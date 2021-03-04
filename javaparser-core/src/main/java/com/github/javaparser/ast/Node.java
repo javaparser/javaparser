@@ -20,31 +20,6 @@
  */
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.ast.Node.Parsedness.PARSED;
-import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Spliterators;
-import java.util.Stack;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -62,11 +37,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.metamodel.InternalProperty;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -75,6 +46,20 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -163,12 +148,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         }
         return 0;
     };
-    
+
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
     protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
-    
+
     @InternalProperty
     private Range range;
 
@@ -207,37 +192,37 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     protected void customInitialization() {
     }
-    
+
     /*
      * If there is a printer defined in CompilationUnit, returns it
      * else create a new DefaultPrettyPrinter with default parameters
      */
     protected Printer getPrinter() {
-        return findCompilationUnit().map(c-> c.getPrinter()).orElse(createDefaultPrinter());
+        return findCompilationUnit().map(c -> c.getPrinter()).orElse(createDefaultPrinter());
     }
-    
+
     /*
      * Return the printer initialized with the specified configuration
      */
     protected Printer getPrinter(PrinterConfiguration configuration) {
-        return findCompilationUnit().map(c-> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
+        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
     }
-    
+
     protected Printer createDefaultPrinter() {
         return createDefaultPrinter(getDefaultPrinterConfiguration());
     }
-    
+
     protected Printer createDefaultPrinter(PrinterConfiguration configuration) {
         return new DefaultPrettyPrinter(configuration);
     }
-    
+
     /*
      * returns a default printer configuration
      */
-    protected  PrinterConfiguration getDefaultPrinterConfiguration() {
+    protected PrinterConfiguration getDefaultPrinterConfiguration() {
         return new DefaultPrinterConfiguration();
     }
-    
+
     /**
      * This is a comment associated with this node.
      *
@@ -807,10 +792,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
     };
-    
+
     protected static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
     };
-    
+
     protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {
     };
 
@@ -891,7 +876,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         walk(nodeType, found::add);
         return found;
     }
-    
+
     /**
      * Walks the AST with specified traversal order, returning all nodes of type "nodeType".
      */
@@ -1136,40 +1121,33 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             return nodes.get(cursor);
         }
     }
-    
+
     /*
      * returns true if the node defines a scope
      */
     public boolean hasScope() {
-        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass())
-                && ((NodeWithOptionalScope)this).getScope().isPresent();
+        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent();
     }
-    
+
     /*
      * A "phantom" node, is a node that is not really an AST node (like the fake type of variable in FieldDeclaration or an UnknownType)
      */
     public boolean isPhantom() {
         return isPhantom(this);
     }
-    
+
     private boolean isPhantom(Node node) {
         if (!node.containsData(PHANTOM_KEY)) {
-            boolean res = (node.getParentNode().isPresent() 
-                    && node.getParentNode().get().hasRange()
-                    && node.hasRange()
-                    && !node.getParentNode().get().getRange().get().contains(node.getRange().get())
-                    || inPhantomNode(node, LEVELS_TO_EXPLORE));
+            boolean res = (node.getParentNode().isPresent() && node.getParentNode().get().hasRange() && node.hasRange() && !node.getParentNode().get().getRange().get().contains(node.getRange().get()) || inPhantomNode(node, LEVELS_TO_EXPLORE));
             node.setData(PHANTOM_KEY, res);
         }
         return node.getData(PHANTOM_KEY);
     }
-    
+
     /**
      * A node contained in a phantom node is also a phantom node. We limit how many levels up we check just for performance reasons.
      */
     private boolean inPhantomNode(Node node, int levels) {
-        return node.getParentNode().isPresent() &&
-                (isPhantom(node.getParentNode().get())
-                        || inPhantomNode(node.getParentNode().get(), levels - 1));
+        return node.getParentNode().isPresent() && (isPhantom(node.getParentNode().get()) || inPhantomNode(node.getParentNode().get(), levels - 1));
     }
 }

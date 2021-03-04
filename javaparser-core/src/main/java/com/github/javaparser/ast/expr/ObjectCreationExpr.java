@@ -20,11 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -48,6 +43,11 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A constructor call.
@@ -157,7 +157,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         if (anonymousClassBody == this.anonymousClassBody) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
         if (this.anonymousClassBody != null)
@@ -171,7 +171,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
@@ -190,7 +190,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setScope(final Expression scope) {
         if (scope == this.scope) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
@@ -204,7 +204,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -228,7 +228,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (ObjectCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
@@ -343,6 +343,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifObjectCreationExpr(Consumer<ObjectCreationExpr> action) {
         action.accept(this);
@@ -371,7 +372,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     public Optional<ObjectCreationExpr> toObjectCreationExpr() {
         return Optional.of(this);
     }
-    
+
     /*
      * A class instance creation expression is a poly expression (§15.2) if it uses the diamond form for type
      * arguments to the class, and it appears in an assignment context or an invocation context (§5.2, §5.3).

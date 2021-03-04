@@ -20,18 +20,19 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BooleanLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
 
 /**
  * The boolean literals.
@@ -91,7 +92,7 @@ public class BooleanLiteralExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BooleanLiteralExpr setValue(final boolean value) {
         if (value == this.value) {
-            return (BooleanLiteralExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
@@ -138,6 +139,7 @@ public class BooleanLiteralExpr extends LiteralExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBooleanLiteralExpr(Consumer<BooleanLiteralExpr> action) {
         action.accept(this);

@@ -20,25 +20,27 @@
  */
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.UnionTypeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
-import java.util.function.Consumer;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * <h1>The union type</h1>
@@ -90,7 +92,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public UnionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
-            return (UnionType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
         if (this.elements != null)
@@ -174,6 +176,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnionType(Consumer<UnionType> action) {
         action.accept(this);
