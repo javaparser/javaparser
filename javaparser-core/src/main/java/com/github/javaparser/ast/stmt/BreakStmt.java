@@ -110,7 +110,7 @@ public class BreakStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BreakStmt setLabel(final SimpleName label) {
         if (label == this.label) {
-            return (BreakStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
         if (this.label != null)
@@ -177,6 +177,7 @@ public class BreakStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBreakStmt(Consumer<BreakStmt> action) {
         action.accept(this);

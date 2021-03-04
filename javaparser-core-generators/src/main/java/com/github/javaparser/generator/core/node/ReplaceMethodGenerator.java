@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -43,7 +43,7 @@ public class ReplaceMethodGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         MethodDeclaration replaceNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean replace(Node node, Node replacementNode) {}");
         nodeCu.addImport(Node.class);
-        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(replaceNodeMethod));
+        annotateWhenOverridden(nodeMetaModel, replaceNodeMethod);
 
         final BlockStmt body = replaceNodeMethod.getBody().get();
 

@@ -32,8 +32,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -73,7 +75,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     public AnnotationExpr setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (AnnotationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -127,6 +129,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationExpr(Consumer<AnnotationExpr> action) {
         action.accept(this);

@@ -90,8 +90,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-        // TODO #1837
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
