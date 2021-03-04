@@ -1,3 +1,4 @@
+import com.github.javaparser.quality.NotNull;
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2021 The JavaParser Team.
@@ -18,8 +19,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
-import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.quality.Preconditions;
 
 class A {
