@@ -70,8 +70,9 @@ public abstract class NodeGenerator extends Generator {
         boolean isOverriding = Arrays.stream(superClass.getMethods())
                 .filter(m -> m.getName().equals(methodDeclaration.getNameAsString()))
                 .anyMatch(m -> m.getParameters().length == methodDeclaration.getParameters().size());
-        if (isOverriding)
+        if (isOverriding) {
             annotateOverridden(methodDeclaration);
+        }
     }
 
     protected void after() throws Exception {
