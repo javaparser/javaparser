@@ -22,15 +22,23 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarationTest;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest implements ResolvedAnnotationDeclarationTest {
 
@@ -62,6 +70,16 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest imp
     @Override
     public void getDeclaredMethodsCantBeNull() {
         super.getDeclaredMethodsCantBeNull();
+    }
+
+    @Test
+    void getAncestors_shouldReturnAnnotation() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        ResolvedReferenceTypeDeclaration overrideAnnotation = ReflectionFactory.typeDeclarationFor(Override.class, typeSolver);
+
+        List<ResolvedReferenceType> ancestors = overrideAnnotation.getAncestors();
+        assertEquals(1, ancestors.size());
+        assertEquals(Annotation.class.getCanonicalName(), ancestors.get(0).getQualifiedName());
     }
 
 }
