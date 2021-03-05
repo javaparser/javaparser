@@ -29,8 +29,10 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.CompilationUnitGenerator;
 import com.github.javaparser.quality.NotNull;
@@ -170,10 +172,37 @@ public class NotNullGenerator extends CompilationUnitGenerator {
 		// Register assertions
 		for (int i = 0 ; i < assertions.size() ; i++) {
 			Statement assertion = assertions.get(i);
-			if (!statements.contains(assertion)) {
+
+			Optional<? extends Statement> optOldStmt = getSimilarAssertionInBlock(assertion, blockStmt);
+
+			if (optOldStmt.isPresent()) {
+				optOldStmt.get().replace(assertion);
+			} else {
 				blockStmt.addStatement(position + i, assertion);
 			}
 		}
+	}
+
+	private Optional<? extends Statement> getSimilarAssertionInBlock(Statement assertion, BlockStmt blockStmt) {
+
+		MethodCallExpr assertionCall = assertion.asExpressionStmt().getExpression().asMethodCallExpr();
+		List<MethodCallExpr> methodCallExpressions = blockStmt.findAll(MethodCallExpr.class);
+
+		for (MethodCallExpr blockMethodCall : methodCallExpressions) {
+
+			// Check if the method calls name match
+			if (
+				blockMethodCall.getNameAsExpression().equals(assertionCall.getNameAsExpression()) &&
+				blockMethodCall.getScope().equals(assertionCall.getScope()) &&
+				blockMethodCall.getArguments().size() == 2 &&
+				blockMethodCall.getArguments().get(0).equals(assertionCall.getArgument(0))
+			) {
+				return blockMethodCall.findAncestor(ExpressionStmt.class);
+			}
+
+		}
+		// TODO:
+		return Optional.empty();
 	}
 
 }
