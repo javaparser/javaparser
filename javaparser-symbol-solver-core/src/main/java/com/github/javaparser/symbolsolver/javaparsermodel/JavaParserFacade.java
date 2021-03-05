@@ -564,10 +564,10 @@ public class JavaParserFacade {
     protected TypeDeclaration<?> findContainingTypeDecl(Node node) {
         Node parent = node;
         while (true) {
+            parent = demandParentNode(parent);
             if (parent instanceof TypeDeclaration) {
                 return (TypeDeclaration<?>) parent;
             }
-            parent = demandParentNode(parent);
         }
     }
 
@@ -601,6 +601,7 @@ public class JavaParserFacade {
         Node parent = node;
         boolean detachFlag = false;
         while (true) {
+            parent = demandParentNode(parent);
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration) {
                     return parent;
@@ -612,7 +613,6 @@ public class JavaParserFacade {
                     return parent;
                 }
             }
-            parent = demandParentNode(parent);
         }
     }
 
@@ -624,6 +624,7 @@ public class JavaParserFacade {
         Node parent = node;
         boolean detachFlag = false;
         while (true) {
+            parent = demandParentNode(parent);
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
                     return parent;
@@ -635,7 +636,6 @@ public class JavaParserFacade {
                     return parent;
                 }
             }
-            parent = demandParentNode(parent);
         }
     }
 
