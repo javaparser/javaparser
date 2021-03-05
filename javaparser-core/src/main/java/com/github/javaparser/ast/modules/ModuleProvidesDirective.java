@@ -20,7 +20,9 @@
  */
 package com.github.javaparser.ast.modules;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
@@ -29,13 +31,13 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A provides directive in module-info.java. {@code provides X.Y with Z1.Z2, Z3.Z4;}
@@ -130,7 +132,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     public ModuleProvidesDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleProvidesDirective) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -144,7 +146,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     public ModuleProvidesDirective setWith(final NodeList<Name> with) {
         assertNotNull(with);
         if (with == this.with) {
-            return (ModuleProvidesDirective) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.WITH, this.with, with);
         if (this.with != null)
@@ -195,6 +197,7 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleProvidesDirective(Consumer<ModuleProvidesDirective> action) {
         action.accept(this);

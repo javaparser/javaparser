@@ -21,10 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -38,13 +35,14 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.ast.Generated;
+
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
@@ -395,6 +393,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCallableDeclaration(Consumer<CallableDeclaration> action) {
         action.accept(this);

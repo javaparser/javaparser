@@ -21,31 +21,21 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.utils.Log;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+
+import java.io.*;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Will let the symbol solver look inside a jar file while solving types.
@@ -56,7 +46,9 @@ public class JarTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
-    private ClassPool classPool = new ClassPool(false);
+    // Returns the default class pool. The returned object is always identical since this method is a singleton
+    // factory. The default class pool searches the system search path. This is a difference from the previous class pool instantiation.
+    private ClassPool classPool = ClassPool.getDefault();
     
     /*
      * ResourceRegistry is useful for freeing up resources.
@@ -237,7 +229,7 @@ public class JarTypeSolver implements TypeSolver {
 
         CtClass toCtClass() throws IOException {
             try (InputStream is = jarFile.getInputStream(entry)) {
-                return classPool.makeClass(is);
+                return classPool.makeClassIfNew(is);
             }
         }
     }
