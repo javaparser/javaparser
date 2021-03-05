@@ -63,8 +63,9 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        // TODO #1838
-        throw new UnsupportedOperationException();
+        // According to https://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6
+        // annotations can't have methods.
+        return Collections.emptySet();
     }
 
     @Override
