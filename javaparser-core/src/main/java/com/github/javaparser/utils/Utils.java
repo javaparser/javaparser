@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import com.github.javaparser.ast.Node;
@@ -29,7 +28,7 @@ import java.io.Reader;
 import java.util.*;
 import java.util.function.Function;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 /**
  * Any kind of utility.
@@ -50,7 +49,6 @@ public class Utils {
      * @deprecated Renamed from {@link #EOL} to make it explicit that we're using the system's line separator.
      *             New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
      *              else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
-     *
      */
     @Deprecated
     public static final String SYSTEM_EOL = LineSeparator.SYSTEM.asRawString();
@@ -93,7 +91,7 @@ public class Utils {
     public static String escapeEndOfLines(String string) {
         StringBuilder escapedString = new StringBuilder();
         for (char c : string.toCharArray()) {
-            switch (c) {
+            switch(c) {
                 case '\n':
                     escapedString.append("\\n");
                     break;
@@ -111,11 +109,9 @@ public class Utils {
         final StringBuilder result = new StringBuilder();
         final char[] buffer = new char[8 * 1024];
         int numChars;
-
         while ((numChars = reader.read(buffer, 0, buffer.length)) > 0) {
             result.append(buffer, 0, numChars);
         }
-
         return result.toString();
     }
 
@@ -140,7 +136,6 @@ public class Utils {
         }
         return sb.toString();
     }
-
 
     /**
      * @param input "aCamelCaseString"
@@ -199,8 +194,7 @@ public class Utils {
         if (s.isEmpty()) {
             throw new IllegalArgumentException(String.format("You cannot %s an empty string", operationDescription));
         }
-        return transformation.apply(s.substring(0, 1)) +
-                s.substring(1);
+        return transformation.apply(s.substring(0, 1)) + s.substring(1);
     }
 
     /**
@@ -303,7 +297,6 @@ public class Utils {
         int extensionIndex = filename.lastIndexOf(".");
         if (extensionIndex == -1)
             return filename;
-
         return filename.substring(0, extensionIndex);
     }
 
@@ -321,11 +314,6 @@ public class Utils {
      * Checks, if the parent is a unary expression with a minus operator. Used to check for negative literals.
      */
     public static boolean hasUnaryMinusAsParent(Node n) {
-        return n.getParentNode()
-                .filter(parent -> parent instanceof UnaryExpr)
-                .map(parent -> (UnaryExpr) parent)
-                .map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS)
-                .orElse(false);
+        return n.getParentNode().filter(parent -> parent instanceof UnaryExpr).map(parent -> (UnaryExpr) parent).map(unaryExpr -> unaryExpr.getOperator() == UnaryExpr.Operator.MINUS).orElse(false);
     }
-
 }

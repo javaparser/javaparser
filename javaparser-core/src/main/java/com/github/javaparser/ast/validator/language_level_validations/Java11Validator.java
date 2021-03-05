@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.type.VarType;
@@ -32,11 +31,11 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Var
  * @see <a href="https://openjdk.java.net/projects/jdk/11/">https://openjdk.java.net/projects/jdk/11/</a>
  */
 public class Java11Validator extends Java10Validator {
+
     final Validator varAlsoInLambdaParameters = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(true));
 
     public Java11Validator() {
         super();
-
         {
             /*
              * Java 10 released local variable type inference in for and try-with (JEP286).
@@ -44,6 +43,5 @@ public class Java11Validator extends Java10Validator {
              */
             replace(varOnlyOnLocalVariableDefinitionAndForAndTry, varAlsoInLambdaParameters);
         }
-
     }
 }

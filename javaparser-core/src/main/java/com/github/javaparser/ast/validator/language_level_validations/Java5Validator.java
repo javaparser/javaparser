@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.Node;
@@ -39,6 +38,7 @@ import java.util.Optional;
  * This validator validates according to Java 5 syntax rules.
  */
 public class Java5Validator extends Java1_4Validator {
+
     final Validator genericsWithoutDiamondOperator = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof NodeWithTypeArguments) {
             Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
@@ -65,8 +65,7 @@ public class Java5Validator extends Java1_4Validator {
         VariableDeclarationExpr declaration = node.getVariable();
         // assert that the variable declaration expression has exactly one variable declarator
         if (declaration.getVariables().size() != 1) {
-            reporter.report(node, "A foreach statement's variable declaration must have exactly one variable " +
-                    "declarator. Given: " + declaration.getVariables().size() + ".");
+            reporter.report(node, "A foreach statement's variable declaration must have exactly one variable " + "declarator. Given: " + declaration.getVariables().size() + ".");
         }
     });
 
@@ -78,11 +77,9 @@ public class Java5Validator extends Java1_4Validator {
         add(noPrimitiveGenericArguments);
         add(enumNotAllowed);
         add(forEachStmt);
-
         // TODO validate annotations on classes, fields and methods but nowhere else
         // The following is probably too simple.
         remove(noAnnotations);
-
         remove(noEnums);
         remove(noVarargs);
         remove(noForEach);

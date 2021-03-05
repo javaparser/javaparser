@@ -79,49 +79,15 @@ public final class StringEscapeUtils {
         return UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
     }
 
-    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(new String[][]{
-            {"\\b", "\b"},
-            {"\\n", "\n"},
-            {"\\t", "\t"},
-            {"\\f", "\f"},
-            {"\\r", "\r"}});
+    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(new String[][] { { "\\b", "\b" }, { "\\n", "\n" }, { "\\t", "\t" }, { "\\f", "\f" }, { "\\r", "\r" } });
 
-    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(new String[][]{
-            {"\b", "\\b"},
-            {"\n", "\\n"},
-            {"\t", "\\t"},
-            {"\f", "\\f"},
-            {"\r", "\\r"}});
+    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(new String[][] { { "\b", "\\b" }, { "\n", "\\n" }, { "\t", "\\t" }, { "\f", "\\f" }, { "\r", "\\r" } });
 
-    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
-            new LookupTranslator(
-                    new String[][]{
-                            {"\"", "\\\""},
-                            {"\\", "\\\\"},
-                    }),
-            JAVA_CTRL_CHARS_ESCAPE);
+    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(new LookupTranslator(new String[][] { { "\"", "\\\"" }, { "\\", "\\\\" } }), JAVA_CTRL_CHARS_ESCAPE);
 
-    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
-            new OctalUnescaper(),
-            new UnicodeUnescaper(),
-            JAVA_CTRL_CHARS_UNESCAPE,
-            new LookupTranslator(new String[][]{
-                    {"\\\\", "\\"},
-                    {"\\\"", "\""},
-                    {"\\'", "'"},
-                    {"\\", ""}}));
+    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(new OctalUnescaper(), new UnicodeUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][] { { "\\\\", "\\" }, { "\\\"", "\"" }, { "\\'", "'" }, { "\\", "" } }));
 
-    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(
-            new OctalUnescaper(),
-            new UnicodeUnescaper(),
-            JAVA_CTRL_CHARS_UNESCAPE,
-            new LookupTranslator(new String[][]{
-                    {"\\\\", "\\"},
-                    {"\\\"", "\""},
-                    {"\\'", "'"},
-                    {"\\", ""},
-                    {"\\s", " "},
-                    {"\\\n", ""}}));
+    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(new OctalUnescaper(), new UnicodeUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][] { { "\\\\", "\\" }, { "\\\"", "\"" }, { "\\'", "'" }, { "\\", "" }, { "\\s", " " }, { "\\\n", "" } }));
 
     /**
      * Adapted from apache commons-lang3 project.
@@ -221,8 +187,11 @@ public final class StringEscapeUtils {
     private static class LookupTranslator extends CharSequenceTranslator {
 
         private final HashMap<String, String> lookupMap;
+
         private final HashSet<Character> prefixSet;
+
         private final int shortest;
+
         private final int longest;
 
         /**
@@ -271,7 +240,6 @@ public final class StringEscapeUtils {
                 for (int i = max; i >= shortest; i--) {
                     final CharSequence subSeq = input.subSequence(index, index + i);
                     final String result = lookupMap.get(subSeq.toString());
-
                     if (result != null) {
                         out.write(result);
                         return i;
@@ -318,7 +286,6 @@ public final class StringEscapeUtils {
             }
             return 0;
         }
-
     }
 
     /**
@@ -340,23 +307,21 @@ public final class StringEscapeUtils {
          */
         @Override
         protected int translate(final CharSequence input, final int index, final Writer out) throws IOException {
-            final int remaining = input.length() - index - 1; // how many characters left, ignoring the first \
+            // how many characters left, ignoring the first \
+            final int remaining = input.length() - index - 1;
             final StringBuilder builder = new StringBuilder();
             if (input.charAt(index) == '\\' && remaining > 0 && isOctalDigit(input.charAt(index + 1))) {
                 final int next = index + 1;
                 final int next2 = index + 2;
                 final int next3 = index + 3;
-
                 // we know this is good as we checked it in the if block above
                 builder.append(input.charAt(next));
-
                 if (remaining > 1 && isOctalDigit(input.charAt(next2))) {
                     builder.append(input.charAt(next2));
                     if (remaining > 2 && isZeroToThree(input.charAt(next)) && isOctalDigit(input.charAt(next3))) {
                         builder.append(input.charAt(next3));
                     }
                 }
-
                 out.write(Integer.parseInt(builder.toString(), 8));
                 return 1 + builder.length();
             }
@@ -407,15 +372,12 @@ public final class StringEscapeUtils {
                 while (index + i < input.length() && input.charAt(index + i) == 'u') {
                     i++;
                 }
-
                 if (index + i < input.length() && input.charAt(index + i) == '+') {
                     i++;
                 }
-
                 if (index + i + 4 <= input.length()) {
                     // Get 4 hex digits
                     final CharSequence unicode = input.subSequence(index + i, index + i + 4);
-
                     try {
                         final int value = Integer.parseInt(unicode.toString(), 16);
                         out.write((char) value);
@@ -424,11 +386,9 @@ public final class StringEscapeUtils {
                     }
                     return i + 4;
                 }
-                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '" + input.subSequence(index, input.length())
-                        + "' due to end of CharSequence");
+                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '" + input.subSequence(index, input.length()) + "' due to end of CharSequence");
             }
             return 0;
         }
     }
-
 }

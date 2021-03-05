@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -32,6 +31,7 @@ import java.util.Optional;
  * A node that can be documented with a Javadoc comment.
  */
 public interface NodeWithJavadoc<N extends Node> {
+
     Optional<Comment> getComment();
 
     Node setComment(Comment comment);
@@ -43,9 +43,7 @@ public interface NodeWithJavadoc<N extends Node> {
      * @return The JavadocComment for this node wrapped in an optional as it may be absent.
      */
     default Optional<JavadocComment> getJavadocComment() {
-        return getComment()
-                .filter(comment -> comment instanceof JavadocComment)
-                .map(comment -> (JavadocComment) comment);
+        return getComment().filter(comment -> comment instanceof JavadocComment).map(comment -> (JavadocComment) comment);
     }
 
     /**
@@ -87,5 +85,4 @@ public interface NodeWithJavadoc<N extends Node> {
     default boolean hasJavaDocComment() {
         return getComment().isPresent() && getComment().get() instanceof JavadocComment;
     }
-
 }

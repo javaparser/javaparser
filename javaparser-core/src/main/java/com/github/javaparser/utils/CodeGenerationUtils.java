@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import java.io.File;
@@ -33,6 +32,7 @@ import static com.github.javaparser.utils.Utils.decapitalize;
  * Utilities that can be useful when generating code.
  */
 public final class CodeGenerationUtils {
+
     private CodeGenerationUtils() {
     }
 

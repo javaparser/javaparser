@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -49,5 +48,4 @@ public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasA
      * The type on which this field has been declared
      */
     ResolvedTypeDeclaration declaringType();
-
 }

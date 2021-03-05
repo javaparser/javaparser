@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.Problem;
@@ -33,6 +32,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * A simple interface where validators can report found problems.
  */
 public class ProblemReporter {
+
     private final Consumer<Problem> problemConsumer;
 
     public ProblemReporter(Consumer<Problem> problemConsumer) {

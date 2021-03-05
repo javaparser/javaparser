@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.JavaToken;
@@ -48,6 +47,7 @@ import java.util.stream.IntStream;
 final class RemovedGroup implements Iterable<Removed> {
 
     private final Integer firstElementIndex;
+
     private final List<Removed> removedList;
 
     private boolean isProcessed = false;
@@ -56,11 +56,9 @@ final class RemovedGroup implements Iterable<Removed> {
         if (firstElementIndex == null) {
             throw new IllegalArgumentException("firstElementIndex should not be null");
         }
-
         if (removedList == null || removedList.isEmpty()) {
             throw new IllegalArgumentException("removedList should not be null or empty");
         }
-
         this.firstElementIndex = firstElementIndex;
         this.removedList = removedList;
     }
@@ -94,9 +92,7 @@ final class RemovedGroup implements Iterable<Removed> {
     }
 
     private List<Integer> getIndicesBeingRemoved() {
-        return IntStream.range(firstElementIndex, firstElementIndex + removedList.size())
-                .boxed()
-                .collect(Collectors.toList());
+        return IntStream.range(firstElementIndex, firstElementIndex + removedList.size()).boxed().collect(Collectors.toList());
     }
 
     /**
@@ -141,13 +137,15 @@ final class RemovedGroup implements Iterable<Removed> {
      * @return true if the RemovedGroup equates to a complete line
      */
     final boolean isACompleteLine() {
-        return hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction)
-                && hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
+        return hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction) && hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
     }
 
     private final Function<JavaToken, Boolean> hasOnlyWhitespaceJavaTokenInFrontFunction = begin -> hasOnlyWhiteSpaceForTokenFunction(begin, token -> token.getPreviousToken());
+
     private final Function<JavaToken, Boolean> hasOnlyWhitespaceJavaTokenBehindFunction = end -> hasOnlyWhiteSpaceForTokenFunction(end, token -> token.getNextToken());
+
     private final Function<TokenRange, Boolean> hasOnlyWhitespaceInFrontFunction = tokenRange -> hasOnlyWhitespaceJavaTokenInFrontFunction.apply(tokenRange.getBegin());
+
     private final Function<TokenRange, Boolean> hasOnlyWhitespaceBehindFunction = tokenRange -> hasOnlyWhitespaceJavaTokenBehindFunction.apply(tokenRange.getEnd());
 
     private boolean hasOnlyWhitespace(Removed startElement, Function<TokenRange, Boolean> hasOnlyWhitespaceFunction) {
@@ -155,7 +153,6 @@ final class RemovedGroup implements Iterable<Removed> {
         if (startElement.isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) startElement.getElement();
             Node child = csmChild.getChild();
-
             Optional<TokenRange> tokenRange = child.getTokenRange();
             if (tokenRange.isPresent()) {
                 hasOnlyWhitespace = hasOnlyWhitespaceFunction.apply(tokenRange.get());
@@ -171,7 +168,6 @@ final class RemovedGroup implements Iterable<Removed> {
 
     private boolean hasOnlyWhiteSpaceForTokenFunction(JavaToken token, Function<JavaToken, Optional<JavaToken>> tokenFunction) {
         Optional<JavaToken> tokenResult = tokenFunction.apply(token);
-
         if (tokenResult.isPresent()) {
             if (TokenTypes.isWhitespaceButNotEndOfLine(tokenResult.get().getKind())) {
                 return hasOnlyWhiteSpaceForTokenFunction(tokenResult.get(), tokenFunction);
@@ -181,7 +177,6 @@ final class RemovedGroup implements Iterable<Removed> {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -193,25 +188,19 @@ final class RemovedGroup implements Iterable<Removed> {
      */
     final Optional<Integer> getIndentation() {
         Removed firstElement = getFirstElement();
-
         int indentation = 0;
         if (firstElement.isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) firstElement.getElement();
             Node child = csmChild.getChild();
-
             Optional<TokenRange> tokenRange = child.getTokenRange();
             if (tokenRange.isPresent()) {
                 JavaToken begin = tokenRange.get().getBegin();
-
                 if (hasOnlyWhitespaceJavaTokenInFrontFunction.apply(begin)) {
                     Optional<JavaToken> previousToken = begin.getPreviousToken();
-
-                    while(previousToken.isPresent() && (TokenTypes.isWhitespaceButNotEndOfLine(previousToken.get().getKind()))) {
+                    while (previousToken.isPresent() && (TokenTypes.isWhitespaceButNotEndOfLine(previousToken.get().getKind()))) {
                         indentation++;
-
                         previousToken = previousToken.get().getPreviousToken();
                     }
-
                     if (previousToken.isPresent()) {
                         if (TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
                             return Optional.of(Integer.valueOf(indentation));
@@ -224,13 +213,13 @@ final class RemovedGroup implements Iterable<Removed> {
                 }
             }
         }
-
         return Optional.empty();
     }
 
     @Override
     public final Iterator<Removed> iterator() {
         return new Iterator<Removed>() {
+
             private int currentIndex = 0;
 
             @Override
@@ -242,7 +231,6 @@ final class RemovedGroup implements Iterable<Removed> {
             public Removed next() {
                 return removedList.get(currentIndex++);
             }
-
         };
     }
 }

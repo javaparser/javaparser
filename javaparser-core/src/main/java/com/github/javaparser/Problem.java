@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import java.util.Comparator;
@@ -31,13 +30,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * A problem that was encountered during parsing.
  */
 public class Problem {
+
     private final String message;
+
     private final TokenRange location;
+
     private final Throwable cause;
 
     public Problem(String message, TokenRange location, Throwable cause) {
         assertNotNull(message);
-
         this.message = message;
         this.location = location;
         this.cause = cause;
@@ -90,9 +91,8 @@ public class Problem {
      * Sorts problems on position.
      */
     public static Comparator<Problem> PROBLEM_BY_BEGIN_POSITION = (a, b) -> {
-        final Optional<Position> aBegin= a.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
+        final Optional<Position> aBegin = a.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
         final Optional<Position> bBegin = b.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
-
         if (aBegin.isPresent() && bBegin.isPresent()) {
             return aBegin.get().compareTo(bBegin.get());
         }
@@ -104,6 +104,4 @@ public class Problem {
         }
         return 0;
     };
-
-
 }

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -55,6 +54,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see StaticJavaParser
  */
 public final class JavaParser {
+
     private final ParserConfiguration configuration;
 
     private GeneratedJavaParser astParser = null;
@@ -90,10 +90,9 @@ public final class JavaParser {
         }
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
-
         ParserConfiguration.LanguageLevel languageLevel = configuration.getLanguageLevel();
         if (languageLevel != null) {
-            if(languageLevel.isYieldSupported()) {
+            if (languageLevel.isYieldSupported()) {
                 astParser.setYieldSupported();
             }
         }
@@ -113,22 +112,15 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
-
         for (PreProcessor preProcessor : configuration.getPreProcessors()) {
             provider = preProcessor.process(provider);
         }
-
         final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getCommentsCollection());
-
-            configuration.getPostProcessors()
-                    .forEach(postProcessor -> postProcessor.process(result, configuration));
-
-            result.getProblems()
-                    .sort(PROBLEM_BY_BEGIN_POSITION);
-
+            configuration.getPostProcessors().forEach(postProcessor -> postProcessor.process(result, configuration));
+            result.getProblems().sort(PROBLEM_BY_BEGIN_POSITION);
             return result;
         } catch (Exception e) {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
@@ -516,7 +508,6 @@ public final class JavaParser {
         return parse(MODULE_DIRECTIVE, provider(moduleDirective));
     }
 
-
     /**
      * Parses a type parameter and returns it as a TypeParameter
      *
@@ -539,5 +530,4 @@ public final class JavaParser {
     public ParseResult<MethodDeclaration> parseMethodDeclaration(String methodDeclaration) {
         return parse(METHOD_DECLARATION, provider(methodDeclaration));
     }
-
 }

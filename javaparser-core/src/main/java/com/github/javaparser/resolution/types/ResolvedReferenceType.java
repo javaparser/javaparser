@@ -18,18 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
@@ -43,26 +32,27 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
  * specified for the type parameters.
  *
  * @author Federico Tomassetti
  */
-public abstract class ResolvedReferenceType implements ResolvedType,
-        ResolvedTypeParametrized, ResolvedTypeParameterValueProvider {
+public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTypeParametrized, ResolvedTypeParameterValueProvider {
 
-    //
+    // 
     // Fields
-    //
-
+    // 
     protected ResolvedReferenceTypeDeclaration typeDeclaration;
+
     protected ResolvedTypeParametersMap typeParametersMap;
 
-    //
+    // 
     // Constructors
-    //
-
+    // 
     public ResolvedReferenceType(ResolvedReferenceTypeDeclaration typeDeclaration) {
         this(typeDeclaration, deriveParams(typeDeclaration));
     }
@@ -75,9 +65,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
             throw new IllegalArgumentException("You should use only Classes, Interfaces and enums");
         }
         if (typeArguments.size() > 0 && typeArguments.size() != typeDeclaration.getTypeParameters().size()) {
-            throw new IllegalArgumentException(String.format(
-                    "expected either zero type arguments or has many as defined in the declaration (%d). Found %d",
-                    typeDeclaration.getTypeParameters().size(), typeArguments.size()));
+            throw new IllegalArgumentException(String.format("expected either zero type arguments or has many as defined in the declaration (%d). Found %d", typeDeclaration.getTypeParameters().size(), typeArguments.size()));
         }
         ResolvedTypeParametersMap.Builder typeParametersMapBuilder = new ResolvedTypeParametersMap.Builder();
         for (int i = 0; i < typeArguments.size(); i++) {
@@ -87,20 +75,20 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         this.typeDeclaration = typeDeclaration;
     }
 
-    //
+    // 
     // Public Object methods
-    //
-
+    // 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ResolvedReferenceType that = (ResolvedReferenceType) o;
-
-        if (!typeDeclaration.equals(that.typeDeclaration)) return false;
-        if (!typeParametersMap.equals(that.typeParametersMap)) return false;
-
+        if (!typeDeclaration.equals(that.typeDeclaration))
+            return false;
+        if (!typeParametersMap.equals(that.typeParametersMap))
+            return false;
         return true;
     }
 
@@ -113,33 +101,28 @@ public abstract class ResolvedReferenceType implements ResolvedType,
 
     @Override
     public String toString() {
-        return "ReferenceType{" + getQualifiedName() +
-                ", typeParametersMap=" + typeParametersMap +
-                '}';
+        return "ReferenceType{" + getQualifiedName() + ", typeParametersMap=" + typeParametersMap + '}';
     }
 
-    ///
-    /// Relation with other types
-    ///
-
+    // /
+    // / Relation with other types
+    // /
     @Override
     public final boolean isReferenceType() {
         return true;
     }
 
-    ///
-    /// Downcasting
-    ///
-
+    // /
+    // / Downcasting
+    // /
     @Override
     public ResolvedReferenceType asReferenceType() {
         return this;
     }
 
-    ///
-    /// Naming
-    ///
-
+    // /
+    // / Naming
+    // /
     @Override
     public String describe() {
         StringBuilder sb = new StringBuilder();
@@ -150,30 +133,25 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         }
         if (!typeParametersMap().isEmpty()) {
             sb.append("<");
-            sb.append(String.join(", ", typeDeclaration.getTypeParameters().stream()
-                    .map(tp -> typeParametersMap().getValue(tp).describe())
-                    .collect(Collectors.toList())));
+            sb.append(String.join(", ", typeDeclaration.getTypeParameters().stream().map(tp -> typeParametersMap().getValue(tp).describe()).collect(Collectors.toList())));
             sb.append(">");
         }
         return sb.toString();
     }
 
-    ///
-    /// TypeParameters
-    ///
-
+    // /
+    // / TypeParameters
+    // /
     /**
      * Execute a transformation on all the type parameters of this element.
      */
     public abstract ResolvedType transformTypeParameters(ResolvedTypeTransformer transformer);
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced,
-                                             Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
-
         ResolvedReferenceType result = this;
         int i = 0;
         for (ResolvedType tp : this.typeParametersValues()) {
@@ -190,34 +168,30 @@ public abstract class ResolvedReferenceType implements ResolvedType,
             }
             i++;
         }
-
         List<ResolvedType> values = result.typeParametersValues();
         // FIXME
         if (values.contains(tpToReplace)) {
             int index = values.indexOf(tpToReplace);
             values.set(index, replaced);
-            if(result.getTypeDeclaration().isPresent()) {
+            if (result.getTypeDeclaration().isPresent()) {
                 return create(result.getTypeDeclaration().get(), values);
             }
         }
-
         return result;
     }
 
-    ///
-    /// Assignability
-    ///
-
+    // /
+    // / Assignability
+    // /
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */
     @Override
     public abstract boolean isAssignableBy(ResolvedType other);
 
-    ///
-    /// Ancestors
-    ///
-
+    // /
+    // / Ancestors
+    // /
     /**
      * Return all ancestors, that means all superclasses and interfaces.
      * This list should always include Object (unless this is a reference to Object).
@@ -241,23 +215,16 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public abstract List<ResolvedReferenceType> getDirectAncestors();
 
     public final List<ResolvedReferenceType> getAllInterfacesAncestors() {
-        return getAllAncestors().stream()
-                .filter(it -> it.getTypeDeclaration().isPresent())
-                .filter(it -> it.getTypeDeclaration().get().isInterface())
-                .collect(Collectors.toList());
+        return getAllAncestors().stream().filter(it -> it.getTypeDeclaration().isPresent()).filter(it -> it.getTypeDeclaration().get().isInterface()).collect(Collectors.toList());
     }
 
     public final List<ResolvedReferenceType> getAllClassesAncestors() {
-        return getAllAncestors().stream()
-                .filter(it -> it.getTypeDeclaration().isPresent())
-                .filter(it -> it.getTypeDeclaration().get().isClass())
-                .collect(Collectors.toList());
+        return getAllAncestors().stream().filter(it -> it.getTypeDeclaration().isPresent()).filter(it -> it.getTypeDeclaration().get().isClass()).collect(Collectors.toList());
     }
 
-    ///
-    /// Type parameters
-    ///
-
+    // /
+    // / Type parameters
+    // /
     /**
      * Get the type associated with the type parameter with the given name.
      * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
@@ -298,10 +265,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         return typeParametersMap;
     }
 
-    ///
-    /// Other methods introduced by ReferenceType
-    ///
-
+    // /
+    // / Other methods introduced by ReferenceType
+    // /
     /**
      * Corresponding TypeDeclaration
      */
@@ -373,10 +339,10 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
         }
-        if(!this.getTypeDeclaration().isPresent()) {
-            return Optional.empty(); // TODO: Consider IllegalStateException or similar
+        if (!this.getTypeDeclaration().isPresent()) {
+            // TODO: Consider IllegalStateException or similar
+            return Optional.empty();
         }
-
         String typeId = this.getTypeDeclaration().get().getId();
         if (typeId.equals(typeParameterDeclaration.getContainerId())) {
             return Optional.of(this.typeParametersMap().getValue(typeParameterDeclaration));
@@ -397,17 +363,14 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
-        if(!this.getTypeDeclaration().isPresent()) {
-            return new ArrayList<>(); // empty list -- consider IllegalStateException or similar
+        if (!this.getTypeDeclaration().isPresent()) {
+            // empty list -- consider IllegalStateException or similar
+            return new ArrayList<>();
         }
-
         // Get the methods declared directly on this.
-        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(
-                this.getTypeDeclaration().get().getDeclaredMethods()
-        );
+        List<ResolvedMethodDeclaration> allMethods = new LinkedList<>(this.getTypeDeclaration().get().getDeclaredMethods());
         // Also get methods inherited from ancestors.
         getDirectAncestors().forEach(a -> allMethods.addAll(a.getAllMethods()));
-
         return allMethods;
     }
 
@@ -416,32 +379,22 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * type plus all declared fields which are not private.
      */
     public List<ResolvedFieldDeclaration> getAllFieldsVisibleToInheritors() {
-        List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream()
-                .filter(f -> f.accessSpecifier() != AccessSpecifier.PRIVATE)
-                .collect(Collectors.toList()));
-
-        getDirectAncestors().forEach(a ->
-                res.addAll(a.getAllFieldsVisibleToInheritors()));
-
+        List<ResolvedFieldDeclaration> res = new LinkedList<>(this.getDeclaredFields().stream().filter(f -> f.accessSpecifier() != AccessSpecifier.PRIVATE).collect(Collectors.toList()));
+        getDirectAncestors().forEach(a -> res.addAll(a.getAllFieldsVisibleToInheritors()));
         return res;
     }
 
     public List<ResolvedMethodDeclaration> getAllMethodsVisibleToInheritors() {
-        return this.getAllMethods().stream()
-                .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE)
-                .collect(Collectors.toList());
+        return this.getAllMethods().stream().filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE).collect(Collectors.toList());
     }
 
-    //
+    // 
     // Protected methods
-    //
-
+    // 
     protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParameters);
 
     protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, ResolvedTypeParametersMap typeParametersMap) {
-        return create(typeDeclaration, typeDeclaration.getTypeParameters().stream()
-                .map(typeParametersMap::getValue)
-                .collect(Collectors.toList()));
+        return create(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(typeParametersMap::getValue).collect(Collectors.toList()));
     }
 
     protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration);
@@ -483,15 +436,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                         }
                     } else {
                         if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
-                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds()
-                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
-                                    .collect(Collectors.toList());
-                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds()
-                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
-                                    .collect(Collectors.toList());
+                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
+                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
                         } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
-                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable)otherParam);
+                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable) otherParam);
                         } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
                             return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
                         }
@@ -504,22 +453,18 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         return false;
     }
 
-    //
+    // 
     // Private methods
-    //
-    
+    // 
     private boolean compareConsideringVariableTypeParameters(ResolvedType referenceType, ResolvedTypeVariable typeVariable) {
         // verify if the ResolvedTypeVariable has only one type variable and the bound is
-        // not a reference type with a bound parameter 
+        // not a reference type with a bound parameter
         // for example EnumSet<E> noneOf(Class<E> elementType)
         List<Bound> bounds = typeVariable.asTypeVariable().asTypeParameter().getBounds();
         if (bounds.size() == 1) {
             ResolvedType boundType = bounds.get(0).getType();
-            boolean hasTypeParameter = boundType.isReferenceType()
-                    && !boundType.asReferenceType().typeParametersMap.isEmpty();
-            return hasTypeParameter
-                    ? compareConsideringTypeParameters(boundType.asReferenceType())
-                    : boundType.isAssignableBy(referenceType);
+            boolean hasTypeParameter = boundType.isReferenceType() && !boundType.asReferenceType().typeParametersMap.isEmpty();
+            return hasTypeParameter ? compareConsideringTypeParameters(boundType.asReferenceType()) : boundType.isAssignableBy(referenceType);
         }
         return false;
     }
@@ -537,7 +482,6 @@ public abstract class ResolvedReferenceType implements ResolvedType,
 
     public abstract ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);
 
-
     /**
      * We don't make this _ex_plicit in the data representation because that would affect codegen
      * and make everything generate like {@code <T extends Object>} instead of {@code <T>}
@@ -547,9 +491,8 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     public boolean isJavaLangObject() {
-        return this.isReferenceType()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
+        return this.isReferenceType() && // Consider anonymous classes
+        hasName() && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
     }
 
     /**
@@ -557,16 +500,13 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
      */
     public boolean isJavaLangEnum() {
-        return this.isReferenceType()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
+        return this.isReferenceType() && // Consider anonymous classes
+        hasName() && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
     }
-    
-    
-    ///
-    /// boxing/unboxing capability
-    ///
-    
+
+    // /
+    // / boxing/unboxing capability
+    // /
     /*
      * Returns true if the reference type can be unboxed to the primitive type
      * For example : Integer to int
@@ -574,7 +514,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isUnboxable() {
         return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> getQualifiedName().equals(pt.getBoxTypeQName()));
     }
-    
+
     /*
      * Returns true if the reference type can be unboxed to the specified primitive type
      * For example : Integer to int
@@ -582,12 +522,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isUnboxableTo(ResolvedPrimitiveType primitiveType) {
         return primitiveType.getBoxTypeQName().equals(this.asReferenceType().describe());
     }
-    
+
     /*
      * Returns the optional corresponding primitive type 
      */
     public Optional<ResolvedPrimitiveType> toUnboxedType() {
         return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> this.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst();
     }
-
 }

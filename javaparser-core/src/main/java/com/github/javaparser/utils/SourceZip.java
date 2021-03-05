@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import com.github.javaparser.JavaParser;
@@ -42,11 +41,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * A collection of Java source files and its sub-directories located in a ZIP or JAR file on the file system.
  * Files can be parsed with a callback.
- *
  */
 public class SourceZip {
 
     private final Path zipPath;
+
     private ParserConfiguration parserConfiguration;
 
     /**
@@ -71,7 +70,7 @@ public class SourceZip {
         assertNotNull(configuration);
         this.zipPath = zipPath.normalize();
         this.parserConfiguration = configuration;
-        Log.info("New source zip at \"%s\"", ()->this.zipPath);
+        Log.info("New source zip at \"%s\"", () -> this.zipPath);
     }
 
     /**
@@ -83,7 +82,7 @@ public class SourceZip {
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
-        Log.info("Parsing zip at \"%s\"", ()-> zipPath);
+        Log.info("Parsing zip at \"%s\"", () -> zipPath);
         List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
         parse((path, result) -> results.add(new Pair<>(path, result)));
         return results;
@@ -98,14 +97,13 @@ public class SourceZip {
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public SourceZip parse(Callback callback) throws IOException {
-        Log.info("Parsing zip at \"%s\"", ()-> zipPath);
+        Log.info("Parsing zip at \"%s\"", () -> zipPath);
         JavaParser javaParser = new JavaParser(parserConfiguration);
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
             for (ZipEntry entry : Collections.list(zipFile.entries())) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
-                    Log.info("Parsing zip entry \"%s\"", ()-> entry.getName());
-                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT,
-                            provider(zipFile.getInputStream(entry)));
+                    Log.info("Parsing zip entry \"%s\"", () -> entry.getName());
+                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(zipFile.getInputStream(entry)));
                     callback.process(Paths.get(entry.getName()), result);
                 }
             }
@@ -136,7 +134,7 @@ public class SourceZip {
     public Path getZipPath() {
         return zipPath;
     }
-    
+
     public ParserConfiguration getParserConfiguration() {
         return parserConfiguration;
     }

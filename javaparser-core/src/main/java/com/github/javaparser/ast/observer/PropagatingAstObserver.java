@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.observer;
 
 import com.github.javaparser.ast.Node;
@@ -38,6 +37,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
             return (PropagatingAstObserver) observer;
         }
         return new PropagatingAstObserver() {
+
             @Override
             public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 observer.propertyChange(observedNode, property, oldValue, newValue);
@@ -114,5 +114,4 @@ public abstract class PropagatingAstObserver implements AstObserver {
             ((Observable) element).register(this);
         }
     }
-
 }

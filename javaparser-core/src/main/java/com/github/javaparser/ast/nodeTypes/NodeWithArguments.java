@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -31,6 +30,7 @@ import static com.github.javaparser.StaticJavaParser.parseExpression;
  * A node with arguments.
  */
 public interface NodeWithArguments<N extends Node> {
+
     N setArguments(NodeList<Expression> arguments);
 
     NodeList<Expression> getArguments();
@@ -55,5 +55,4 @@ public interface NodeWithArguments<N extends Node> {
         getArguments().set(i, arg);
         return (N) this;
     }
-
 }

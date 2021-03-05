@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
 import java.util.Arrays;
@@ -30,7 +29,6 @@ import java.util.List;
  */
 public enum ResolvedPrimitiveType implements ResolvedType {
 
-
     BYTE("byte", Byte.class.getCanonicalName(), Collections.emptyList()),
     SHORT("short", Short.class.getCanonicalName(), Collections.singletonList(BYTE)),
     CHAR("char", Character.class.getCanonicalName(), Collections.emptyList()),
@@ -40,12 +38,13 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     FLOAT("float", Float.class.getCanonicalName(), Arrays.asList(LONG, INT, SHORT, BYTE, CHAR)),
     DOUBLE("double", Double.class.getCanonicalName(), Arrays.asList(FLOAT, LONG, INT, SHORT, BYTE, CHAR));
 
-    ///
-    /// Fields
-    ///
-
+    // /
+    // / Fields
+    // /
     private String name;
+
     private String boxTypeQName;
+
     private List<ResolvedPrimitiveType> promotionTypes;
 
     ResolvedPrimitiveType(String name, String boxTypeQName, List<ResolvedPrimitiveType> promotionTypes) {
@@ -63,19 +62,17 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         }
         throw new IllegalArgumentException("Name " + name);
     }
-    
+
     /*
      * Returns an array containing all numeric types
      */
     public static ResolvedPrimitiveType[] getNumericPrimitiveTypes() {
-        return new ResolvedPrimitiveType[] {BYTE,SHORT,CHAR,INT,LONG,FLOAT,DOUBLE};
+        return new ResolvedPrimitiveType[] { BYTE, SHORT, CHAR, INT, LONG, FLOAT, DOUBLE };
     }
 
     @Override
     public String toString() {
-        return "PrimitiveTypeUsage{" +
-                "name='" + name + '\'' +
-                '}';
+        return "PrimitiveTypeUsage{" + "name='" + name + '\'' + '}';
     }
 
     public ResolvedPrimitiveType asPrimitive() {
@@ -133,14 +130,14 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     public boolean isNumeric() {
         return this != BOOLEAN;
     }
-    
+
     /**
      * Is this a boolean type?
      */
     public boolean isBoolean() {
         return this == BOOLEAN;
     }
-    
+
     /*
      * Binary primitive promotion (see https://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2)
      * If any operand is of a reference type, it is subjected to unboxing conversion (§5.1.8).
@@ -149,44 +146,43 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         // If either operand is of type double, the other is converted to double.
         if (this == ResolvedPrimitiveType.DOUBLE || other == ResolvedPrimitiveType.DOUBLE) {
             return ResolvedPrimitiveType.DOUBLE;
-        // Otherwise, if either operand is of type float, the other is converted to float.
+            // Otherwise, if either operand is of type float, the other is converted to float.
         } else if (this == ResolvedPrimitiveType.FLOAT || other == ResolvedPrimitiveType.FLOAT) {
             return ResolvedPrimitiveType.FLOAT;
-        // Otherwise, if either operand is of type long, the other is converted to long.
+            // Otherwise, if either operand is of type long, the other is converted to long.
         } else if (this == ResolvedPrimitiveType.LONG || other == ResolvedPrimitiveType.LONG) {
             return ResolvedPrimitiveType.LONG;
         }
         // Otherwise, both operands are converted to type int.
         return ResolvedPrimitiveType.INT;
     }
-    
+
     /*
      * Unary primitive promotion (see https://docs.oracle.com/javase/specs/jls/se9/html/jls-5.html#jls-5.6.1)
      */
     public static ResolvedType unp(ResolvedType type) {
         boolean isUnboxable = type.isReferenceType() && type.asReferenceType().isUnboxable();
-        // If the operand is of compile-time type Byte, Short, Character, or Integer, it is subjected to unboxing conversion (§5.1.8). 
+        // If the operand is of compile-time type Byte, Short, Character, or Integer, it is subjected to unboxing conversion (§5.1.8).
         // The result is then promoted to a value of type int by a widening primitive conversion (§5.1.2) or an identity conversion (§5.1.1).
-        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.INT})) {
+        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.INT })) {
             return ResolvedPrimitiveType.INT;
         }
         // Otherwise, if the operand is of compile-time type Long, Float, or Double, it is subjected to unboxing conversion (§5.1.8).
-        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.DOUBLE})) {
+        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.DOUBLE })) {
             return type.asReferenceType().toUnboxedType().get();
         }
         // Otherwise, if the operand is of compile-time type byte, short, or char, it is promoted to a value of type int by a widening primitive conversion (§5.1.2).
-        if (type.isPrimitive() && type.asPrimitive().in(new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.SHORT})) {
+        if (type.isPrimitive() && type.asPrimitive().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.SHORT })) {
             return ResolvedPrimitiveType.INT;
         }
         // Otherwise, a unary numeric operand remains as is and is not converted.
         return type;
     }
-    
+
     /*
      * Verify if the ResolvedPrimitiveType is in the list of ResolvedPrimitiveType
      */
     public boolean in(ResolvedPrimitiveType[] types) {
-        return Arrays.stream(types).anyMatch(type -> this == type); 
+        return Arrays.stream(types).anyMatch(type -> this == type);
     }
-    
 }

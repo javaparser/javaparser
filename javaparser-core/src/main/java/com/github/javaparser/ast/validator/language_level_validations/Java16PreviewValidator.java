@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -30,15 +29,11 @@ public class Java16PreviewValidator extends Java16Validator {
 
     public Java16PreviewValidator() {
         super();
-
         // Incubator
         // No new incubator language features added in Java 16
-
         // Preview
         // No new preview language features added in Java 16
-
         // 2nd Preview
         // TODO: remove(noSealedClasses); // Sealed Classes - 2nd preview in Java 16 - https://openjdk.java.net/jeps/397
-
     }
 }

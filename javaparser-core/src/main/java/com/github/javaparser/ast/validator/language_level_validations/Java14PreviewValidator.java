@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -30,16 +29,14 @@ public class Java14PreviewValidator extends Java14Validator {
 
     public Java14PreviewValidator() {
         super();
-
         // Incubator
         // No new incubator language features added within Java 14
-
         // Preview
-        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - first preview within Java 14 - https://openjdk.java.net/jeps/305
+        // Pattern Matching for instanceof - first preview within Java 14 - https://openjdk.java.net/jeps/305
+        remove(noPatternMatchingInstanceOf);
         // remove(noRecordDeclaration); // Records - first preview within Java 14 - https://openjdk.java.net/jeps/359
-
         // 2nd Preview
-        remove(noTextBlockLiteral); // Text Block Literals - 2nd preview within Java 14 - https://openjdk.java.net/jeps/378
-
+        // Text Block Literals - 2nd preview within Java 14 - https://openjdk.java.net/jeps/378
+        remove(noTextBlockLiteral);
     }
 }

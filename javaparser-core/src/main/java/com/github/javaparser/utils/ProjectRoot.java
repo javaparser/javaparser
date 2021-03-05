@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import com.github.javaparser.ParserConfiguration;
@@ -40,7 +39,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ProjectRoot {
 
     private final Path root;
+
     private final Map<Path, SourceRoot> cache = new ConcurrentHashMap<>();
+
     private final ParserConfiguration parserConfiguration;
 
     public ProjectRoot(Path root) {

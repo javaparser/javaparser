@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Node;
@@ -33,13 +32,21 @@ import static com.github.javaparser.utils.CodeGenerationUtils.setterName;
  * Meta-data about a property of a node in the AST.
  */
 public class PropertyMetaModel {
+
     private final BaseNodeMetaModel containingNodeMetaModel;
+
     private final String name;
+
     private final Class<?> type;
+
     private final Optional<BaseNodeMetaModel> nodeReference;
+
     private final boolean isOptional;
+
     private final boolean isNonEmpty;
+
     private final boolean isNodeList;
+
     private final boolean hasWildcard;
 
     public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNonEmpty, boolean isNodeList, boolean hasWildcard) {
@@ -158,14 +165,15 @@ public class PropertyMetaModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         PropertyMetaModel that = (PropertyMetaModel) o;
-
-        if (!name.equals(that.name)) return false;
-        if (!type.equals(that.type)) return false;
-
+        if (!name.equals(that.name))
+            return false;
+        if (!type.equals(that.type))
+            return false;
         return true;
     }
 

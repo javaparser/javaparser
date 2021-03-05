@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types.parametrization;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -35,7 +34,9 @@ import java.util.*;
 public class ResolvedTypeParametersMap {
 
     public static class Builder {
+
         private Map<String, ResolvedType> nameToValue;
+
         private Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration;
 
         public Builder() {
@@ -43,8 +44,7 @@ public class ResolvedTypeParametersMap {
             nameToDeclaration = new HashMap<>();
         }
 
-        private Builder(Map<String, ResolvedType> nameToValue,
-                        Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+        private Builder(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
             this.nameToValue = new HashMap<>();
             this.nameToValue.putAll(nameToValue);
             this.nameToDeclaration = new HashMap<>();
@@ -55,8 +55,7 @@ public class ResolvedTypeParametersMap {
             return new ResolvedTypeParametersMap(nameToValue, nameToDeclaration);
         }
 
-        public Builder setValue(ResolvedTypeParameterDeclaration typeParameter,
-                                ResolvedType value) {
+        public Builder setValue(ResolvedTypeParameterDeclaration typeParameter, ResolvedType value) {
             // TODO: we shouldn't just silently overwrite existing types!
             String qualifiedName = typeParameter.getQualifiedName();
             nameToValue.put(qualifiedName, value);
@@ -67,13 +66,12 @@ public class ResolvedTypeParametersMap {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResolvedTypeParametersMap)) return false;
-
+        if (this == o)
+            return true;
+        if (!(o instanceof ResolvedTypeParametersMap))
+            return false;
         ResolvedTypeParametersMap that = (ResolvedTypeParametersMap) o;
-
         return nameToValue.equals(that.nameToValue) && nameToDeclaration.equals(that.nameToDeclaration);
-
     }
 
     @Override
@@ -83,20 +81,18 @@ public class ResolvedTypeParametersMap {
 
     @Override
     public String toString() {
-        return "TypeParametersMap{" +
-                "nameToValue=" + nameToValue +
-                '}';
+        return "TypeParametersMap{" + "nameToValue=" + nameToValue + '}';
     }
 
     private Map<String, ResolvedType> nameToValue;
+
     private Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration;
 
     public static ResolvedTypeParametersMap empty() {
         return new Builder().build();
     }
 
-    private ResolvedTypeParametersMap(Map<String, ResolvedType> nameToValue,
-                                      Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+    private ResolvedTypeParametersMap(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
         this.nameToValue = new HashMap<>();
         this.nameToValue.putAll(nameToValue);
         this.nameToDeclaration = new HashMap<>();
@@ -120,11 +116,11 @@ public class ResolvedTypeParametersMap {
         }
     }
 
-    public List<String> getNames(){
+    public List<String> getNames() {
         return new ArrayList<>(nameToValue.keySet());
     }
 
-    public List<ResolvedType> getTypes(){
+    public List<ResolvedType> getTypes() {
         return new ArrayList<>(nameToValue.values());
     }
 

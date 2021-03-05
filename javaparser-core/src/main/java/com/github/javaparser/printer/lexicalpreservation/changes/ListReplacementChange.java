@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
@@ -33,7 +32,9 @@ import java.util.Optional;
 public class ListReplacementChange implements Change {
 
     private final ObservableProperty observableProperty;
+
     private final int index;
+
     private final Node newValue;
 
     public ListReplacementChange(ObservableProperty observableProperty, int index, Node newValue) {
@@ -54,15 +55,12 @@ public class ListReplacementChange implements Change {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
             NodeList<Node> currentNodeList = (NodeList<Node>) currentRawValue;
-
             // Note: When adding to a node list children get assigned the list's parent, thus we must set the list's parent before adding children (#2592).
             NodeList<Node> newNodeList = new NodeList<>();
             newNodeList.setParentNode(currentNodeList.getParentNodeForChildren());
             newNodeList.addAll(currentNodeList);
-
             // Perform modification -- replace an item in the list
             newNodeList.set(index, newValue);
-
             return newNodeList;
         } else {
             return new NoChange().getValue(property, node);

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ParseResult.PostProcessor;
@@ -26,12 +25,13 @@ import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.validator.*;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.*;
+import com.github.javaparser.ast.validator.postprocessors.Java10PostProcessor;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import com.github.javaparser.ast.validator.postprocessors.Java10PostProcessor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -49,6 +49,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_8;
 public class ParserConfiguration {
 
     public enum LanguageLevel {
+
         /**
          * Java 1.0
          */
@@ -163,28 +164,27 @@ public class ParserConfiguration {
          * Does no post processing or validation. Only for people wanting the fastest parsing.
          */
         public static LanguageLevel RAW = null;
+
         /**
          * The most used Java version.
          */
         public static LanguageLevel POPULAR = JAVA_8;
+
         /**
          * The latest Java version that is available.
          */
         public static LanguageLevel CURRENT = JAVA_15;
+
         /**
          * The newest Java features supported.
          */
         public static LanguageLevel BLEEDING_EDGE = JAVA_16_PREVIEW;
 
         final Validator validator;
+
         final ParseResult.PostProcessor postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{
-                JAVA_13, JAVA_13_PREVIEW,
-                JAVA_14, JAVA_14_PREVIEW,
-                JAVA_15, JAVA_15_PREVIEW,
-                JAVA_16, JAVA_16_PREVIEW
-        };
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW };
 
         LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
             this.validator = validator;
@@ -196,27 +196,36 @@ public class ParserConfiguration {
         }
     }
 
-
-
     // TODO: Add a configurable option e.g. setDesiredLineEnding(...) to replace/swap out existing line endings
     private boolean detectOriginalLineSeparator = true;
+
     private boolean storeTokens = true;
+
     private boolean attributeComments = true;
+
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
+
     private boolean ignoreAnnotationsWhenAttributingComments = false;
+
     private boolean lexicalPreservationEnabled = false;
+
     private boolean preprocessUnicodeEscapes = false;
+
     private SymbolResolver symbolResolver = null;
+
     private int tabSize = 1;
+
     private LanguageLevel languageLevel = JAVA_8;
+
     private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
+
     private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
-
         class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
+
             private UnicodeEscapeProcessingProvider _unicodeDecoder;
 
             @Override
@@ -229,24 +238,19 @@ public class ParserConfiguration {
             }
 
             @Override
-            public void process(ParseResult<? extends Node> result,
-                                ParserConfiguration configuration) {
+            public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 if (isPreprocessUnicodeEscapes()) {
-                    result.getResult().ifPresent(
-                            root -> {
-                                PositionMapping mapping = _unicodeDecoder.getPositionMapping();
-                                if (!mapping.isEmpty()) {
-                                    root.walk(
-                                            node -> node.getRange().ifPresent(
-                                                    range -> node.setRange(mapping.transform(range))));
-                                }
-                            }
-                    );
+                    result.getResult().ifPresent(root -> {
+                        PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+                        if (!mapping.isEmpty()) {
+                            root.walk(node -> node.getRange().ifPresent(range -> node.setRange(mapping.transform(range))));
+                        }
+                    });
                 }
             }
         }
-
         class LineEndingProcessor implements PreProcessor, PostProcessor {
+
             private LineEndingProcessingProvider _lineEndingProcessingProvider;
 
             @Override
@@ -261,36 +265,26 @@ public class ParserConfiguration {
             @Override
             public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 if (isDetectOriginalLineSeparator()) {
-                    result.getResult().ifPresent(
-                            rootNode -> {
-                                LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
-
-                                // Set the line ending on the root node
-                                rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);
-
-//                                // Set the line ending on all children of the root node -- FIXME: Should ignore """textblocks"""
-//                                rootNode.findAll(Node.class)
-//                                        .forEach(node -> node.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator));
-                            }
-                    );
+                    result.getResult().ifPresent(rootNode -> {
+                        LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
+                        // Set the line ending on the root node
+                        rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);
+                        // // Set the line ending on all children of the root node -- FIXME: Should ignore """textblocks"""
+                        // rootNode.findAll(Node.class)
+                        // .forEach(node -> node.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator));
+                    });
                 }
             }
         }
-
         UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
         preProcessors.add(unicodeProcessor);
         postProcessors.add(unicodeProcessor);
-
         LineEndingProcessor lineEndingProcessor = new LineEndingProcessor();
         preProcessors.add(lineEndingProcessor);
         postProcessors.add(lineEndingProcessor);
-
-
         postProcessors.add((result, configuration) -> {
             if (configuration.isAttributeComments()) {
-                result.ifSuccessful(resultNode -> result
-                        .getCommentsCollection().ifPresent(comments ->
-                                new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
+                result.ifSuccessful(resultNode -> result.getCommentsCollection().ifPresent(comments -> new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
             }
         });
         postProcessors.add((result, configuration) -> {
@@ -304,13 +298,11 @@ public class ParserConfiguration {
                 }
             }
         });
-        postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver ->
-                result.ifSuccessful(resultNode -> {
-                    if (resultNode instanceof CompilationUnit) {
-                        resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
-                    }
-                })
-        ));
+        postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver -> result.ifSuccessful(resultNode -> {
+            if (resultNode instanceof CompilationUnit) {
+                resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+            }
+        })));
         postProcessors.add((result, configuration) -> {
             if (configuration.isLexicalPreservationEnabled()) {
                 result.ifSuccessful(LexicalPreservingPrinter::setup);
@@ -456,5 +448,4 @@ public class ParserConfiguration {
         this.characterEncoding = characterEncoding;
         return this;
     }
-
 }

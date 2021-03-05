@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -33,6 +32,7 @@ import java.util.Optional;
  * The common interface of {@link com.github.javaparser.ast.expr.SwitchExpr} and {@link com.github.javaparser.ast.stmt.SwitchStmt}
  */
 public interface SwitchNode {
+
     NodeList<SwitchEntry> getEntries();
 
     SwitchEntry getEntry(int i);
@@ -57,8 +57,6 @@ public interface SwitchNode {
     default boolean isEmpty() {
         return getEntries().isEmpty();
     }
-
-
     // Too bad Node isn't an interface, or this could have easily inherited all of its methods.
     // Add more when required.
 }

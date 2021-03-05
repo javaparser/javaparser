@@ -13,6 +13,7 @@ import java.util.Optional;
  * @see <a href="https://github.com/javaparser/javaparser/issues/2647">https://github.com/javaparser/javaparser/issues/2647</a>
  */
 public enum LineSeparator {
+
     /**
      * The CR {@code \r} line ending is the default line separator for classic MacOS
      */
@@ -28,13 +29,7 @@ public enum LineSeparator {
     /**
      * This line ending is set to whatever the host system's line separator is
      */
-    SYSTEM(
-            System.getProperty("line.separator"),
-            "SYSTEM : (" + System.getProperty("line.separator")
-                    .replace("\r", "\\r")
-                    .replace("\n", "\\n") +
-                    ")"
-    ),
+    SYSTEM(System.getProperty("line.separator"), "SYSTEM : (" + System.getProperty("line.separator").replace("\r", "\\r").replace("\n", "\\n") + ")"),
     /**
      * The ARBITRARY line ending can be used where we do not care about the line separator,
      * only that we use the same one consistently
@@ -56,6 +51,7 @@ public enum LineSeparator {
     NONE("", "NONE");
 
     private final String text;
+
     private final String description;
 
     LineSeparator(String text, String description) {
@@ -75,7 +71,6 @@ public enum LineSeparator {
         int countCr = count(string, "\r");
         int countLf = count(string, "\n");
         int countCrLf = count(string, "\r\n");
-
         return getLineEnding(countCr, countLf, countCrLf);
     }
 
@@ -84,7 +79,6 @@ public enum LineSeparator {
         if (noLineEndings) {
             return NONE;
         }
-
         boolean crOnly = countCr > 0 && countLf == 0 && countCrLf == 0;
         if (crOnly) {
             return CR;
@@ -93,13 +87,11 @@ public enum LineSeparator {
         if (lfOnly) {
             return LF;
         }
-
         // Note that wherever \r\n are found, there will also be an equal number of \r and \n characters found.
         boolean crLfOnly = countCr == countLf && countLf == countCrLf;
         if (crLfOnly) {
             return CRLF;
         }
-
         // Not zero line endings, and not a single line ending, thus is mixed.
         return MIXED;
     }
@@ -148,10 +140,7 @@ public enum LineSeparator {
     }
 
     public String asEscapedString() {
-        String result = text
-                .replace("\r", "\\r")
-                .replace("\n", "\\n");
-
+        String result = text.replace("\r", "\\r").replace("\n", "\\n");
         return result;
     }
 
@@ -161,14 +150,13 @@ public enum LineSeparator {
 
     // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
     private Optional<JavaToken.Kind> asJavaTokenKind() {
-        if(this == CR) {
+        if (this == CR) {
             return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
-        } else if(this == LF) {
+        } else if (this == LF) {
             return Optional.of(JavaToken.Kind.UNIX_EOL);
-        } else if(this == CRLF) {
+        } else if (this == CRLF) {
             return Optional.of(JavaToken.Kind.WINDOWS_EOL);
         }
-
         return Optional.empty();
     }
 
@@ -176,5 +164,4 @@ public enum LineSeparator {
     public String toString() {
         return asRawString();
     }
-
 }

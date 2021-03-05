@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
@@ -31,10 +30,15 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class CsmList implements CsmElement {
+
     private final ObservableProperty property;
+
     private final CsmElement separatorPost;
+
     private final CsmElement separatorPre;
+
     private final CsmElement preceeding;
+
     private final CsmElement following;
 
     public ObservableProperty getProperty() {

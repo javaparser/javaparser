@@ -13,7 +13,7 @@ public interface PrinterConfiguration {
      * add or update an option
      */
     PrinterConfiguration addOption(ConfigurationOption option);
-    
+
     /*
      * Remove an option
      */
@@ -33,5 +33,4 @@ public interface PrinterConfiguration {
      * returns all activated options
      */
     Set<ConfigurationOption> get();
-
 }

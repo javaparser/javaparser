@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
@@ -31,6 +30,7 @@ import java.util.List;
  * A validator that will call a collection of validators.
  */
 public class Validators implements Validator {
+
     private final List<Validator> validators = new ArrayList<>();
 
     public Validators(Validator... validators) {

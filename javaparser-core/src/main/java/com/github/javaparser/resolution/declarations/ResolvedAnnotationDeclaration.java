@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -28,8 +27,7 @@ import java.util.List;
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDeclaration,
-        AssociableToAST<AnnotationDeclaration> {
+public interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDeclaration, AssociableToAST<AnnotationDeclaration> {
 
     List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers();
 }
