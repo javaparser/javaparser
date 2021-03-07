@@ -56,9 +56,7 @@ public class JarTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
-    // Returns the default class pool. The returned object is always identical since this method is a singleton
-    // factory. The default class pool searches the system search path. This is a difference from the previous class pool instantiation.
-    private ClassPool classPool = ClassPool.getDefault();
+    private ClassPool classPool = new ClassPool(false);
     
     /*
      * ResourceRegistry is useful for freeing up resources.
