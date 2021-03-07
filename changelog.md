@@ -42,7 +42,7 @@ Version 3.20.0
   (PR [#3129](https://github.com/javaparser/javaparser/pull/3129), by [@dependabot](https://github.com/dependabot))
 ### Fixed
 * Issue #3038 and Issue #3071 - Hanging when certain names are resolved
-  (PR [#3072](https://github.com/javaparser/javaparser/pull/3072), by [@mernst](https://github.com/mernst))
+  (PR [#3072](https://github.com/javaparser/javaparser/pull/3072), by [@col-e](https://github.com/Col-E))
 * Javadoc fixes
   (PR [#3082](https://github.com/javaparser/javaparser/pull/3082), by [@mernst](https://github.com/mernst))
 * Update readme with correct Java support versions
