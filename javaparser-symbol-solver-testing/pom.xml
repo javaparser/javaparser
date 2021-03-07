@@ -40,6 +40,8 @@
                             <parallel>methods</parallel>
                             <threadCount>4</threadCount>
                             <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
+                            <reportFormat>plain</reportFormat>
+                            <failIfNoTests>true</failIfNoTests>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -55,6 +57,8 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
+                            <reportFormat>plain</reportFormat>
+                            <failIfNoTests>true</failIfNoTests>
                         </configuration>
                     </plugin>
                 </plugins>
