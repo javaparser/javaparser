@@ -20,18 +20,20 @@
  */
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.javadoc.Javadoc;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JavadocCommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+import com.github.javaparser.metamodel.JavadocCommentMetaModel;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
 import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 
 /**
@@ -115,6 +117,7 @@ public class JavadocComment extends Comment {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJavadocComment(Consumer<JavadocComment> action) {
         action.accept(this);

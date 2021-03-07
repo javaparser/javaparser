@@ -21,17 +21,18 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @interface OuterAnnotation {
   @interface InnerAnnotation {}
@@ -39,6 +40,10 @@ import org.junit.jupiter.api.Test;
 
 @interface WithValue {
   String value();
+}
+
+@interface WithField {
+  int FIELD_DECLARATION = 0;
 }
 
 class ReflectionAnnotationDeclarationTest {
@@ -77,4 +82,14 @@ class ReflectionAnnotationDeclarationTest {
         annotation.solveMethod("value", Collections.emptyList(), false);
     assertEquals("value", symbolReference.getCorrespondingDeclaration().getName());
   }
+
+  @Test
+  void getAllFields_shouldReturnTheCorrectFields() {
+    ReflectionAnnotationDeclaration annotation =
+            (ReflectionAnnotationDeclaration) typeSolver.solveType(
+                    "com.github.javaparser.symbolsolver.reflectionmodel.WithField");
+    assertEquals(Collections.singleton("FIELD_DECLARATION"),
+            annotation.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
+  }
+
 }

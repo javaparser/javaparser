@@ -20,23 +20,25 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CastExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A typecast. The (long) in {@code (long)15}
@@ -95,7 +97,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     public CastExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
-            return (CastExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
@@ -109,7 +111,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     public CastExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (CastExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -167,6 +169,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCastExpr(Consumer<CastExpr> action) {
         action.accept(this);

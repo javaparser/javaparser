@@ -3,7 +3,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.18.1-SNAPSHOT</version>
+        <version>3.19.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +15,11 @@
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

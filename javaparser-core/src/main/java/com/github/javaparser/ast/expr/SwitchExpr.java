@@ -27,17 +27,17 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.SwitchStmtMetaModel;
+import com.github.javaparser.metamodel.SwitchExprMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.SwitchExprMetaModel;
 
 /**
  * <h1>The switch expression</h1>
@@ -115,7 +115,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
     public SwitchExpr setEntries(final NodeList<SwitchEntry> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
-            return (SwitchExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         if (this.entries != null)
@@ -129,7 +129,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
     public SwitchExpr setSelector(final Expression selector) {
         assertNotNull(selector);
         if (selector == this.selector) {
-            return (SwitchExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
         if (this.selector != null)
@@ -195,6 +195,7 @@ public class SwitchExpr extends Expression implements SwitchNode {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchExpr(Consumer<SwitchExpr> action) {
         action.accept(this);

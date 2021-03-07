@@ -57,13 +57,6 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest imp
         super.containerTypeCantBeNull();
     }
 
-    @Disabled(value = "This feature is not yet implemented. See https://github.com/javaparser/javaparser/issues/1837")
-    @Test
-    @Override
-    public void getAllFieldsCantBeNull() {
-        super.getAllFieldsCantBeNull();
-    }
-
     @Disabled(value = "This feature is not yet implemented. See https://github.com/javaparser/javaparser/issues/1838")
     @Test
     @Override

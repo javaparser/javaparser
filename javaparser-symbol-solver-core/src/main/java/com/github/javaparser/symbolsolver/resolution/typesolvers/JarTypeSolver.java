@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.jar.JarEntry;
@@ -39,6 +41,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.utils.Log;
 
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -53,7 +56,58 @@ public class JarTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
     private Map<String, ClasspathElement> classpathElements = new HashMap<>();
-    private ClassPool classPool = new ClassPool(false);
+    // Returns the default class pool. The returned object is always identical since this method is a singleton
+    // factory. The default class pool searches the system search path. This is a difference from the previous class pool instantiation.
+    private ClassPool classPool = ClassPool.getDefault();
+    
+    /*
+     * ResourceRegistry is useful for freeing up resources.
+     */
+    public static class ResourceRegistry {
+        
+        private static ResourceRegistry registry;
+        
+        private List<JarFile> jarfiles;
+        
+        private ResourceRegistry() {
+            jarfiles = new ArrayList<>();
+            // Add a ShutDownHook to free resources when the VM is shutting down
+            Thread cleanerHook = new Thread(() -> cleanUp());
+            Runtime.getRuntime().addShutdownHook(cleanerHook);
+        }
+        
+        public static ResourceRegistry getRegistry() {
+            if (registry == null) {
+                registry = new ResourceRegistry();
+            }
+            return registry;
+        }
+        
+        /*
+         * Add ressources (JarFile) in registry
+         */
+        public boolean add(JarFile jarFile) {
+            return jarfiles.add(jarFile);
+        }
+        
+        /*
+         * Clean up all resources
+         * Jar files can not be reused after this call so it's better to free all references to
+         * jar in the registry. Do we need to clean the classpool too?
+         */
+        public void cleanUp() {
+            jarfiles.stream()
+                    .forEach(file -> {
+                        try {
+                            file.close();
+                        } catch (IOException e) {
+                            // nothing to do except logging
+                            Log.error("Cannot close jar file %s", () -> file.getName());
+                        }
+                    });
+            jarfiles.clear();
+        }
+    }
 
     public JarTypeSolver(Path pathToJar) throws IOException {
         this(pathToJar.toFile());
@@ -110,6 +164,7 @@ public class JarTypeSolver implements TypeSolver {
             throw new RuntimeException(e);
         }
         JarFile jarFile = new JarFile(pathToJar);
+        ResourceRegistry.getRegistry().add(jarFile);
         JarEntry entry;
         Enumeration<JarEntry> e = jarFile.entries();
         while (e.hasMoreElements()) {
@@ -184,7 +239,7 @@ public class JarTypeSolver implements TypeSolver {
 
         CtClass toCtClass() throws IOException {
             try (InputStream is = jarFile.getInputStream(entry)) {
-                return classPool.makeClass(is);
+                return classPool.makeClassIfNew(is);
             }
         }
     }
