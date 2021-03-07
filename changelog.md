@@ -15,6 +15,8 @@ Version 3.20.0
 [issues resolved](https://github.com/javaparser/javaparser/milestone/181?closed=1)
 
 ### Added
+* Issue #2991 - Added support for Iterables in CombinedTypeSolver
+  (PR [#3033](https://github.com/javaparser/javaparser/pull/3033), by [@4everTheOne](https://github.com/4everTheOne))
 * Implemented logic for getAllFields in Annotations
   (PR [#3097](https://github.com/javaparser/javaparser/pull/3097), by [@4everTheOne](https://github.com/4everTheOne))
 ### Changed
