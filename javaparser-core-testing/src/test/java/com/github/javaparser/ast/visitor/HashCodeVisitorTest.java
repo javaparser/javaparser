@@ -183,7 +183,7 @@ class HashCodeVisitorTest {
 	void testVisitBreakStmt() {
 		BreakStmt node = spy(new BreakStmt());
 		HashCodeVisitor.hashCode(node);
-		verify(node, times(2)).getLabel();
+		verify(node, times(1)).getLabel();
 		verify(node, times(1)).getComment();
 	}
 
