@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtClass;
 import javassist.NotFoundException;
@@ -30,6 +31,7 @@ import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -110,7 +112,9 @@ public class JavassistTypeDeclarationAdapter {
      */
     public List<ResolvedReferenceType> getAncestors() {
         return Collections.singletonList(
-                JavassistFactory.typeUsageFor(ctClass, typeSolver).asReferenceType()
+                JavaParserFacade.get(typeSolver)
+                        .classToResolvedType(Annotation.class)
+                        .asReferenceType()
         );
     }
 }
