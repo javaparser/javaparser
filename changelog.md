@@ -1,4 +1,28 @@
-Next Release (Version 3.19.0)
+Next Release (Version 3.21.0)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/182?closed=1)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+Version 3.20.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/181?closed=1)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+Version 3.19.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/180?closed=1)
 
@@ -63,7 +87,6 @@ Next Release (Version 3.19.0)
 ### Deprecated
 * `PhantomNodeLogic` is now deprecated, with the logic now being handled by the node itself.
   (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
-### Removed
 ### Fixed
 * Fix issue on pretty configuration change
   (PR [#2979](https://github.com/javaparser/javaparser/pull/2979), by [@jlerbsc](https://github.com/jlerbsc))
@@ -97,7 +120,6 @@ Next Release (Version 3.19.0)
   (PR [#3075](https://github.com/javaparser/javaparser/pull/3075), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue #3083 Fix choosing the most specific method in case of java.lang.Object argument type
   (PR [#3084](https://github.com/javaparser/javaparser/pull/3084), by [@jlerbsc](https://github.com/jlerbsc))
-### Security
 
 
 Version 3.18.0
