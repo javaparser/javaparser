@@ -29,10 +29,12 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
+
 import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
 
 /**
@@ -196,6 +198,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
         action.accept(this);

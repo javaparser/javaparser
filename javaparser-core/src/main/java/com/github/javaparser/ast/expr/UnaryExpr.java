@@ -20,22 +20,24 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DerivedProperty;
-import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.printer.Stringable;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -132,7 +134,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     public UnaryExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
-            return (UnaryExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
@@ -146,7 +148,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     public UnaryExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
-            return (UnaryExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
@@ -207,6 +209,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnaryExpr(Consumer<UnaryExpr> action) {
         action.accept(this);

@@ -38,7 +38,7 @@ class DescriptorTest extends AbstractResolutionTest {
         // with single array type
         assertEquals("(IDLjava/lang/Thread;)[I", methods.get(2).toDescriptor());
         // with single array type
-        assertEquals("(IDLjava/lang/Thread;)[[L", methods.get(3).toDescriptor());
+        assertEquals("(IDLjava/lang/Thread;)[[J", methods.get(3).toDescriptor());
        // with void return type and no parameter
         assertEquals("()V", methods.get(4).toDescriptor());
     }

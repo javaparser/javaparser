@@ -22,6 +22,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -32,10 +33,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.TryStmtMetaModel;
+
 import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>The try statement</h1>
@@ -165,7 +167,7 @@ public class TryStmt extends Statement {
     public TryStmt setCatchClauses(final NodeList<CatchClause> catchClauses) {
         assertNotNull(catchClauses);
         if (catchClauses == this.catchClauses) {
-            return (TryStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.CATCH_CLAUSES, this.catchClauses, catchClauses);
         if (this.catchClauses != null)
@@ -178,7 +180,7 @@ public class TryStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
         if (finallyBlock == this.finallyBlock) {
-            return (TryStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.FINALLY_BLOCK, this.finallyBlock, finallyBlock);
         if (this.finallyBlock != null)
@@ -192,7 +194,7 @@ public class TryStmt extends Statement {
     public TryStmt setTryBlock(final BlockStmt tryBlock) {
         assertNotNull(tryBlock);
         if (tryBlock == this.tryBlock) {
-            return (TryStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TRY_BLOCK, this.tryBlock, tryBlock);
         if (this.tryBlock != null)
@@ -206,7 +208,7 @@ public class TryStmt extends Statement {
     public TryStmt setResources(final NodeList<Expression> resources) {
         assertNotNull(resources);
         if (resources == this.resources) {
-            return (TryStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.RESOURCES, this.resources, resources);
         if (this.resources != null)
@@ -301,6 +303,7 @@ public class TryStmt extends Statement {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTryStmt(Consumer<TryStmt> action) {
         action.accept(this);

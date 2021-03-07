@@ -20,12 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNonEmpty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -44,6 +38,12 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -108,7 +108,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     public MethodReferenceExpr setScope(final Expression scope) {
         assertNotNull(scope);
         if (scope == this.scope) {
-            return (MethodReferenceExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
@@ -132,7 +132,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (MethodReferenceExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
@@ -151,7 +151,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {
-            return (MethodReferenceExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
@@ -218,6 +218,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodReferenceExpr(Consumer<MethodReferenceExpr> action) {
         action.accept(this);
@@ -236,7 +237,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
-    
+
     /*
      * Method reference expressions are always poly expressions 
      * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html 15.13. Method Reference Expressions)

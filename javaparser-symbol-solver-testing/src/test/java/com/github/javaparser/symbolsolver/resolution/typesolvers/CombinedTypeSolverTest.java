@@ -39,7 +39,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-class CombinedTypeSolverTest {
+class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> {
+
+    public CombinedTypeSolverTest() {
+        super(CombinedTypeSolver::new);
+    }
 
     static List<Object[]> parameters() {
         // Why these classes? NFE is a subclass, IOOBE is a superclass and ISE is a class without children (by default)
