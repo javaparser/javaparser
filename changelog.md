@@ -38,8 +38,6 @@ Version 3.20.0
   (PR [#3110](https://github.com/javaparser/javaparser/pull/3110), by [@dependabot](https://github.com/dependabot))
 * Bump junit from 4.13.1 to 4.13.2
   (PR [#3129](https://github.com/javaparser/javaparser/pull/3129), by [@dependabot](https://github.com/dependabot))
-### Deprecated
-### Removed
 ### Fixed
 * Issue #3038 and Issue #3071 - Hanging when certain names are resolved
   (PR [#3072](https://github.com/javaparser/javaparser/pull/3072), by [@mernst](https://github.com/mernst))
@@ -49,7 +47,6 @@ Version 3.20.0
   (PR [#3096](https://github.com/javaparser/javaparser/pull/3096), by [@MaartenGDev](https://github.com/MaartenGDev))
 * Issue #3106 - Wrong descriptor for primitive type long
   (PR [#3107](https://github.com/javaparser/javaparser/pull/3107), by [@jlerbsc](https://github.com/jlerbsc))
-### Security
 
 
 Version 3.19.0
