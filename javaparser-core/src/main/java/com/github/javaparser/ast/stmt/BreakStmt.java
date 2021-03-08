@@ -62,7 +62,7 @@ public class BreakStmt extends Statement {
     private SimpleName label;
 
     public BreakStmt() {
-        this(null, new SimpleName());
+        this(null, null);
     }
 
     public BreakStmt(final String label) {
