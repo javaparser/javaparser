@@ -37,9 +37,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -157,11 +155,11 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         JavassistInterfaceDeclaration compilationUnit = (JavassistInterfaceDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.GenericChildInterface");
         List<ResolvedReferenceType> ancestors = compilationUnit.getAncestors();
         assertEquals(2, ancestors.size());
-        assertEquals("com.github.javaparser.test.GenericInterface<S>", ancestors.get(0).describe()); // Type should be 'S', from the GenericChildInterface
-        assertEquals("java.lang.Object", ancestors.get(1).describe());
+        assertEquals("java.lang.Object", ancestors.get(0).describe());
+        assertEquals("com.github.javaparser.test.GenericInterface<S>", ancestors.get(1).describe()); // Type should be 'S', from the GenericChildInterface
 
         // check the ancestor generic type is mapped to the type of the child
-        List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typePamatersMap = ancestors.get(0).getTypeParametersMap();
+        List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typePamatersMap = ancestors.get(1).getTypeParametersMap();
         assertEquals(1, typePamatersMap.size());
 
         ResolvedTypeParameterDeclaration genericTypeParameterDeclaration = typePamatersMap.get(0).a;

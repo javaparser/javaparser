@@ -78,8 +78,8 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest imp
 
         List<ResolvedReferenceType> ancestors = overrideAnnotation.getAncestors();
         assertEquals(2, ancestors.size());
-        assertEquals(Annotation.class.getCanonicalName(), ancestors.get(0).getQualifiedName());
-        assertEquals(Object.class.getCanonicalName(), ancestors.get(1).getQualifiedName());
+        assertEquals(Object.class.getCanonicalName(), ancestors.get(0).getQualifiedName());
+        assertEquals(Annotation.class.getCanonicalName(), ancestors.get(1).getQualifiedName());
     }
 
 }
