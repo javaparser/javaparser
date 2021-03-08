@@ -100,7 +100,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        return javassistTypeDeclarationAdapter.getAncestors();
+        return javassistTypeDeclarationAdapter.getAncestors(this, acceptIncompleteList);
     }
 
     @Override

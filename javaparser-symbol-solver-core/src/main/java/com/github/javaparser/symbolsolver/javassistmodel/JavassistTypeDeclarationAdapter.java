@@ -21,17 +21,17 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -108,13 +108,48 @@ public class JavassistTypeDeclarationAdapter {
     /**
      * Helper method to get the list of ancestors for the annotation.
      *
+     * @param referenceTypeDeclaration  The reference type where to look for ancestors.
+     * @param acceptIncompleteList      If should accept an incomplete list.
+     *
      * @return The list of ancestors.
      */
-    public List<ResolvedReferenceType> getAncestors() {
-        return Collections.singletonList(
-                JavaParserFacade.get(typeSolver)
-                        .classToResolvedType(Annotation.class)
-                        .asReferenceType()
-        );
+    public List<ResolvedReferenceType> getAncestors(ResolvedReferenceTypeDeclaration referenceTypeDeclaration,
+                                                    boolean acceptIncompleteList) {
+
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
+        if (ctClass.getGenericSignature() == null) {
+            for (String superInterface : ctClass.getClassFile().getInterfaces()) {
+                try {
+                    ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(superInterface)), typeSolver));
+                } catch (UnsolvedSymbolException e) {
+                    if (!acceptIncompleteList) {
+                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                        throw e;
+                    }
+                }
+            }
+        } else {
+            try {
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                for (SignatureAttribute.ClassType superInterface : classSignature.getInterfaces()) {
+                    try {
+                        ancestors.add(JavassistUtils.signatureTypeToType(superInterface, typeSolver, referenceTypeDeclaration).asReferenceType());
+                    } catch (UnsolvedSymbolException e) {
+                        if (!acceptIncompleteList) {
+                            // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                            throw e;
+                        }
+                    }
+                }
+            } catch (BadBytecode e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // Remove all {@code java.lang.Object}, then add precisely one.
+        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
+        ancestors.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver));
+
+        return ancestors;
     }
 }
