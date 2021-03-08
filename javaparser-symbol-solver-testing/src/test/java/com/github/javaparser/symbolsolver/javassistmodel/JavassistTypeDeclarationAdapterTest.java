@@ -49,7 +49,7 @@ class JavassistTypeDeclarationAdapterTest extends AbstractResolutionTest {
     @ParameterizedTest(name = "Given {0} is expected {1}")
     @ArgumentsSource(GetAncestorsProvider.class)
     void testGetAncestors(String ctClass, List<String> expectedAncestors) throws NotFoundException, IOException {
-        TypeSolver typeSolver = new ReflectionTypeSolver();
+        TypeSolver typeSolver = new ReflectionTypeSolver(false);
         CtClass clazz = ClassPool.getDefault().getCtClass(ctClass);
 
         ResolvedReferenceTypeDeclaration declaration = JavassistFactory.toTypeDeclaration(clazz, typeSolver);
@@ -67,34 +67,35 @@ class JavassistTypeDeclarationAdapterTest extends AbstractResolutionTest {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
             return Stream.of(
-                    // String.class
+                    // Node
                     Arguments.of(
-                            "java.lang.String",
+                            "com.github.javaparser.ast.Node",
                             asList(
                                     "java.lang.Object",
-                                    "java.io.Serializable",
-                                    "java.lang.Comparable",
-                                    "java.lang.CharSequence"
+                                    "java.lang.Cloneable",
+                                    "com.github.javaparser.HasParentNode",
+                                    "com.github.javaparser.ast.visitor.Visitable",
+                                    "com.github.javaparser.ast.nodeTypes.NodeWithRange",
+                                    "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange"
                             )
                     ),
-                    // Integer.class
+                    // Expression
                     Arguments.of(
-                            "java.lang.Integer",
-                            asList(
-                                    "java.lang.Number",
-                                    "java.lang.Comparable"
+                            "com.github.javaparser.ast.expr.Expression",
+                            singletonList(
+                                    "com.github.javaparser.ast.Node"
                             )
                     ),
                     // Annotation.class
                     Arguments.of(
-                            "java.lang.annotation.Annotation",
+                            "com.github.javaparser.ParseStart",
                             singletonList(
                                     "java.lang.Object"
                             )
                     ),
-                    // Override.class
+                    // SlowTest Annotation
                     Arguments.of(
-                            "java.lang.Override",
+                            "com.github.javaparser.SlowTest",
                             asList(
                                     "java.lang.Object",
                                     "java.lang.annotation.Annotation"
