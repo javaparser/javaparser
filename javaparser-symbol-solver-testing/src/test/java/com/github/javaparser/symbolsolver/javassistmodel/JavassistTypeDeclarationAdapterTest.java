@@ -25,8 +25,6 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -51,11 +49,8 @@ class JavassistTypeDeclarationAdapterTest extends AbstractResolutionTest {
     @ParameterizedTest(name = "Given {0} is expected {1}")
     @ArgumentsSource(GetAncestorsProvider.class)
     void testGetAncestors(String ctClass, List<String> expectedAncestors) throws NotFoundException, IOException {
-        TypeSolver typeSolver = new CombinedTypeSolver(
-                new ReflectionTypeSolver(),
-                new JavaParserTypeSolver(adaptPath("../javaparser-core/src/main/java"))
-        );
-        CtClass clazz = ClassPool.getDefault().getCtClass(ctClass);
+        TypeSolver typeSolver = new ReflectionTypeSolver(false);
+        CtClass clazz = new ClassPool(true).getCtClass(ctClass);
 
         ResolvedReferenceTypeDeclaration declaration = JavassistFactory.toTypeDeclaration(clazz, typeSolver);
         JavassistTypeDeclarationAdapter adapter = new JavassistTypeDeclarationAdapter(clazz, typeSolver);
