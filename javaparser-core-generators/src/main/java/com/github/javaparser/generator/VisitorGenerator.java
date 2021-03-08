@@ -28,9 +28,13 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
@@ -97,6 +101,19 @@ public abstract class VisitorGenerator extends Generator {
             }
             generateVisitMethodBody(node, newVisitMethod, compilationUnit);
         }
+    }
+
+    /**
+     * Get the list of properties in the order they should be visited.
+     *
+     * @param baseNodeMetaModel The metamodel to get the properties.
+     *
+     * @return The list of properties.
+     */
+    public List<PropertyMetaModel> getAllPropertyMetaModels(BaseNodeMetaModel baseNodeMetaModel) {
+        List<PropertyMetaModel> propertiesList = new ArrayList<>(baseNodeMetaModel.getAllPropertyMetaModels());
+        Collections.reverse(propertiesList);
+        return propertiesList;
     }
 
     protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);

@@ -21,8 +21,6 @@
 
 package com.github.javaparser.generator.core.visitor;
 
-import java.util.List;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -32,6 +30,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
+
+import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 
@@ -50,7 +50,7 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
         body.getStatements().clear();
 
         final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
-        final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
+        final List<PropertyMetaModel> propertyMetaModels = getAllPropertyMetaModels(node);
         if (node.equals(JavaParserMetaModel.lineCommentMetaModel)
                 || node.equals(JavaParserMetaModel.blockCommentMetaModel)
                 || node.equals(JavaParserMetaModel.javadocCommentMetaModel) || propertyMetaModels.isEmpty()) {

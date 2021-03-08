@@ -25,9 +25,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
@@ -46,7 +46,7 @@ public class VoidVisitorAdapterGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        for (PropertyMetaModel field : node.getAllPropertyMetaModels()) {
+        for (PropertyMetaModel field : getAllPropertyMetaModels(node)) {
             final String getter = field.getGetterMethodName() + "()";
             if (field.getNodeReference().isPresent()) {
                 if (field.isOptional() && field.isNodeList()) {

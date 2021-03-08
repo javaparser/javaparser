@@ -31,6 +31,8 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.util.List;
+
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class ModifierVisitorGenerator extends VisitorGenerator {
@@ -45,7 +47,8 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
+        List<PropertyMetaModel> allProperties = getAllPropertyMetaModels(node);
+        for (PropertyMetaModel property : allProperties) {
             if (property.isNode()) {
                 if (property.isNodeList()) {
                     body.addStatement(f("NodeList<%s> %s = modifyList(n.%s(), arg);",
@@ -73,7 +76,7 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
             body.addStatement("if (right == null) return left;");
         }else {
             final SeparatedItemStringBuilder collapseCheck = new SeparatedItemStringBuilder("if(", "||", ") return null;");
-            for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
+            for (PropertyMetaModel property : allProperties) {
                 if (property.isRequired() && property.isNode()) {
                     if (property.isNodeList()) {
                         if(property.isNonEmpty()){
@@ -89,7 +92,7 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
             }
         }
 
-        for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
+        for (PropertyMetaModel property : allProperties) {
             if (property.isNode()) {
                 body.addStatement(f("n.%s(%s);", property.getSetterMethodName(), property.getName()));
             }

@@ -25,10 +25,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.utils.SeparatedItemStringBuilder;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SeparatedItemStringBuilder;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class HashCodeVisitorGenerator extends VisitorGenerator {
         body.getStatements().clear();
 
         final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
-        final List<PropertyMetaModel> propertyMetaModels= node.getAllPropertyMetaModels();
+        final List<PropertyMetaModel> propertyMetaModels = getAllPropertyMetaModels(node);
         if (propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {
