@@ -25,12 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -52,11 +47,7 @@ import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -185,24 +176,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        try {
-            getSuperClass().ifPresent(superClass -> ancestors.add(superClass));
-        } catch (UnsolvedSymbolException e) {
-            if (!acceptIncompleteList) {
-                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                throw e;
-            }
-        }
-        try {
-            ancestors.addAll(getInterfaces());
-        } catch (UnsolvedSymbolException e) {
-            if (!acceptIncompleteList) {
-                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                throw e;
-            }
-        }
-        return ancestors;
+        return javassistTypeDeclarationAdapter.getAncestors(this, acceptIncompleteList);
     }
 
     @Override

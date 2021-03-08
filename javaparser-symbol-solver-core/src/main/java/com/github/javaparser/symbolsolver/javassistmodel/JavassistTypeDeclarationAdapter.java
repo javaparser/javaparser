@@ -30,6 +30,7 @@ import javassist.CtClass;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
+import javassist.bytecode.ClassFile;
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.*;
@@ -118,7 +119,23 @@ public class JavassistTypeDeclarationAdapter {
 
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         if (ctClass.getGenericSignature() == null) {
-            for (String superInterface : ctClass.getClassFile().getInterfaces()) {
+
+            ClassFile classFile = ctClass.getClassFile();
+
+            // Get the super
+            try {
+                ResolvedReferenceTypeDeclaration superType =
+                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(classFile.getSuperclass()));
+                ancestors.add(new ReferenceTypeImpl(superType, typeSolver));
+            } catch (UnsolvedSymbolException e) {
+                if (!acceptIncompleteList) {
+                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                    throw e;
+                }
+            }
+
+            // Get all the interface
+            for (String superInterface : classFile.getInterfaces()) {
                 try {
                     ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(superInterface)), typeSolver));
                 } catch (UnsolvedSymbolException e) {
@@ -131,6 +148,19 @@ public class JavassistTypeDeclarationAdapter {
         } else {
             try {
                 SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                try {
+                    ancestors.add(
+                            JavassistUtils.signatureTypeToType(
+                                    classSignature.getSuperClass(), typeSolver, referenceTypeDeclaration)
+                                    .asReferenceType()
+                    );
+                } catch (UnsolvedSymbolException e) {
+                    if (!acceptIncompleteList) {
+                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
+                        throw e;
+                    }
+                }
+
                 for (SignatureAttribute.ClassType superInterface : classSignature.getInterfaces()) {
                     try {
                         ancestors.add(JavassistUtils.signatureTypeToType(superInterface, typeSolver, referenceTypeDeclaration).asReferenceType());
@@ -145,10 +175,6 @@ public class JavassistTypeDeclarationAdapter {
                 throw new RuntimeException(e);
             }
         }
-
-        // Remove all {@code java.lang.Object}, then add precisely one.
-        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
-        ancestors.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver));
 
         return ancestors;
     }
