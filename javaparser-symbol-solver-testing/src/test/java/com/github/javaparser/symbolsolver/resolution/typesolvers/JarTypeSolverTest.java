@@ -21,19 +21,20 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import javassist.ClassPool;
+import javassist.NotFoundException;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
@@ -117,6 +118,22 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
         JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
         JarTypeSolver.ResourceRegistry.getRegistry().cleanUp();
         assertThrows(IllegalStateException.class, () -> jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
+    }
+
+    @Test
+    void shouldNotPolluteTheDefaultClassPool() throws IOException {
+
+        String testClassPath = "com.github.javaparser.test.TestClass";
+
+        assertThrows(NotFoundException.class, () -> ClassPool.getDefault().get(testClassPath),
+                String.format("The default ClassPool already has %s.", testClassPath));
+
+        Path pathToJar = adaptPath("src/test/resources/test-artifact-1.0.0.jar");
+        JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
+        jarTypeSolver.solveType(testClassPath);
+
+        assertThrows(NotFoundException.class, () -> ClassPool.getDefault().get(testClassPath),
+                "JarTypeSolver should not pollute the default ClassPool.");
     }
 
 }
