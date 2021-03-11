@@ -15,8 +15,9 @@ public class Example {
                 public class E {
                     //@ invariant true;
                 }
-                """);
+                                """);
         JmlPipeline jmlPipeline = new JmlPipeline();
+        System.out.println(result);
         result.getResult().ifPresent(it -> {
             jmlPipeline.processJml(it);
             final var c = new DefaultPrinterConfiguration();

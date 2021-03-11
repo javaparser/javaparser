@@ -79,13 +79,13 @@ package com.github.javaparser;
 import java.util.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.body.ClassInvariantClause;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.utils.*;
+
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.GeneratedJavaParser.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
@@ -142,6 +142,7 @@ PARSER_END(GeneratedJavaParser)
 
 /* WHITE SPACE */
 
+<DEFAULT,JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
 SPECIAL_TOKEN :
 {
   <SPACE: [ // TODO: Rename (or document) this as `WHITESPACE`?
@@ -174,7 +175,11 @@ SPECIAL_TOKEN :
      "\u3000", // 'IDEOGRAPHIC SPACE' (U+3000)
      "\ufeff"  // 'ZERO WIDTH NO-BREAK SPACE' (U+FEFF)
   ]>
-| <WINDOWS_EOL : "\r\n">
+}
+<DEFAULT,JML_MULTI_CONTRACT>
+SPECIAL_TOKEN :
+{
+  <WINDOWS_EOL : "\r\n">
 | <UNIX_EOL: "\n">
 | <OLD_MAC_EOL: "\r">
 }
@@ -252,12 +257,88 @@ TOKEN_MGR_DECLS :
     }
 }
 
-
-/* COMMENTS */
-SPECIAL_TOKEN :
+/** Jml comments */
+MORE :
 {
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
+  <JML_SINGLE_START0: "//" (~[" "])* "@"> : JML_SINGLE_CONTRACT_PRE
+  |
+  <SINGLE_LINE_COMMENT0: "//"> : SINGLE_LINE_COMMENT_STATE
 }
+
+<SINGLE_LINE_COMMENT_STATE> SPECIAL_TOKEN : { <SINGLE_LINE_COMMENT: (~["\n","\r"])*> : DEFAULT}
+<JML_SINGLE_CONTRACT_PRE> TOKEN: { <JML_SINGLE_START : " "> : JML_SINGLE_CONTRACT}
+
+
+TOKEN :{
+  <JML_MULTI_START: "/*" (~[" "])* "@">  : JML_MULTI_CONTRACT
+}
+
+<JML_MULTI_CONTRACT>
+TOKEN :
+{
+  <JML_MULTI_END: "*/" > : DEFAULT
+}
+
+<JML_SINGLE_CONTRACT>
+TOKEN :
+{
+  <JML_SINGLE_END: "\n"> : DEFAULT
+}
+
+<JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
+TOKEN : {
+  <INVARIANT : "invariant" >
+| <INITIALLY : "initially">
+| <ENSURES : "enssures">
+//| <REQUIRES0 : "requires">  {matchedToken.kind = REQUIRES;}
+| <ASSIGNABLE : "assignable">
+| <MODIFIABLE : "modifiable">
+| <MODIFIES : "modifies">
+| <ACCESSIBLE : "accessible">
+| <REPRESENTS : "represents">
+| <NESTED_CONTRACT_START : "{|">
+| <NESTED_CONTRACT_END : "|}">
+| <ALSO : "also">
+| <PURE : "pure">
+| <STRICTLY_PURE : "strictly_pure">
+| <MODEL: "model">
+| <HELPER : "helper">
+| <NULLABLE_BY_DEFAULT : "nullable_by_default">
+//| <PUBLIC0 : "public"> {matchedToken.kind = PUBLIC;}
+//| <PRIVATE0  : "private"> {matchedToken.kind = PRIVATE;}
+//| <PROTECTED0 : "protected"> {matchedToken.kind = PROTECTED;}
+//| <PACKAGE0 : "package">
+| <NON_NULL : "non_null">
+| <NULLABLE : "nullable">
+| <BEHAVIOR : "behavior">
+| <NORMAL_BEHAVIOR  : "normal_behavior">
+| <EXCEPTIONAL_BEHAVIOR : "exceptional_behavior">
+| <MEASURED_BY : "measured_by">
+| <DETERMINES : "determines">
+| <BY : "\by">
+| <DECLASSIFIES : "declassifies">
+| <ERASES :  "erases">
+| <NEW_OBJECT : "new_objects">
+| <SIGNALS : "signals">
+| <INSTANCE : "instance">
+}
+
+/*
+ * boolean
+     * byte
+     * char
+     * short
+     * int
+     * long
+     * \bigintv
+     * \seq
+     * \locset
+     * nullMod? id ('[]')
+"\\forall"
+  "\\exists"
+*/
+
+  /* COMMENTS */
 
 MORE :
 {
@@ -286,7 +367,7 @@ MORE :
 
 
 /* RESERVED WORDS AND LITERALS */
-
+<DEFAULT,JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
 TOKEN :
 {
   < ABSTRACT: "abstract" >
@@ -928,6 +1009,7 @@ TOKEN :
  *     (   )   {   }   [   ]   ;   ,   .   ...   @   ::
  * }</pre
  */
+<DEFAULT,JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
 TOKEN :
 {
   < LPAREN: "(" >
@@ -1680,6 +1762,8 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         LOOKAHEAD(2)
         ret = InitializerDeclaration()
      |
+        ret = JmlClassOrInterfaceBodyDeclaration()
+     |
         // Just get all the modifiers out of the way. If you want to do
         // more checks, pass the modifiers down to the member
         modifiers = Modifiers()
@@ -1703,6 +1787,47 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
     )
     { return ret; }
 }
+
+BodyDeclaration<?> JmlClassOrInterfaceBodyDeclaration():
+{
+    BodyDeclaration<?> ret;    ModifierHolder modifiers;
+
+
+}{
+    (
+      JmlStart()
+      modifiers = Modifiers()
+      (
+          ret = JmlClassInvariant(modifiers)
+        | ret = JmlClassInitially(modifiers)
+      )
+      JmlEnd()
+    )
+    { return ret; }
+}
+
+void JmlStart():
+{}
+{ <JML_MULTI_START> | <JML_SINGLE_START> }
+
+void JmlEnd():
+{}
+{ <JML_MULTI_END> | <JML_SINGLE_END> }
+
+BodyDeclaration<?> JmlClassInvariant(ModifierHolder modifiers):
+{ Expression expr; }
+{
+  <INVARIANT> expr=Expression() ";"
+  { return new ClassInvariantClause(); }
+}
+
+BodyDeclaration<?> JmlClassInitially(ModifierHolder modifiers):
+{ Expression expr; }
+{
+  <INITIALLY> expr=Expression() ";"
+  { return new ClassInvariantClause(); }
+}
+
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3

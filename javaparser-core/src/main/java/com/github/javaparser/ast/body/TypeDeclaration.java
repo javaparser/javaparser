@@ -55,7 +55,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     private NodeList<BodyDeclaration<?>> members;
 
-    private NodeList<JmlBodyDeclaration> jmlSpecification;
+    private NodeList<JmlBodyDeclaration> jmlMembers;
 
     public TypeDeclaration() {
         this(null, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>());
@@ -66,7 +66,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     }
 
     @AllFieldsConstructor
-    public TypeDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members, NodeList<JmlBodyDeclaration> jmlMembers) {
+    public TypeDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members,
+                           NodeList<JmlBodyDeclaration> jmlMembers) {
         this(null, modifiers, annotations, name, members);
     }
 

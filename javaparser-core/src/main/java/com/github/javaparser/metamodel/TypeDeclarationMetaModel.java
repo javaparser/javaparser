@@ -47,6 +47,8 @@ public class TypeDeclarationMetaModel extends BodyDeclarationMetaModel {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 
+    public PropertyMetaModel jmlMembersPropertyMetaModel;
+
     public PropertyMetaModel membersPropertyMetaModel;
 
     public PropertyMetaModel modifiersPropertyMetaModel;

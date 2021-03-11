@@ -719,7 +719,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlComment jmlComment, Void arg) {
-
     }
 
     @Override

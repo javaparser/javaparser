@@ -170,6 +170,13 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
+            case JML_SINGLE_START:
+            case JML_SINGLE_END:
+            case JML_MULTI_END:
+            case JML_MULTI_START:
+            case INVARIANT:
+            case ACCESSIBLE:
+            case ENSURES:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:
