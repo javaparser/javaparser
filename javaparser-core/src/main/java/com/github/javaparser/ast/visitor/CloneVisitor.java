@@ -1624,4 +1624,16 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         copyData(n, r);
         return r;
     }
+
+    @Override
+    public Visitable visit(final ClassInvariantClause n, final Object arg) {
+        Expression invariant = cloneNode(n.getInvariant(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ClassInvariantClause r = new ClassInvariantClause(n.getTokenRange().orElse(null), invariant);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
 }

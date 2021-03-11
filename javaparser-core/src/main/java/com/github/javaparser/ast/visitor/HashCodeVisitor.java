@@ -38,7 +38,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     private static final HashCodeVisitor SINGLETON = new HashCodeVisitor();
 
     private HashCodeVisitor() {
-        // hide constructor
+        //hide constructor
     }
 
     public static int hashCode(final Node node) {
@@ -632,5 +632,10 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlBoundVariable n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final ClassInvariantClause n, final Void arg) {
+        return (n.getInvariant().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }

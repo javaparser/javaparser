@@ -57,7 +57,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
 
     private NodeList<TypeParameter> typeParameters;
 
-    // Can contain more than one item if this is an interface
+    //Can contain more than one item if this is an interface
     private NodeList<ClassOrInterfaceType> extendedTypes;
 
     private NodeList<ClassOrInterfaceType> implementedTypes;
@@ -124,7 +124,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
         if (extendedTypes == this.extendedTypes) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
         if (this.extendedTypes != null)
@@ -138,7 +138,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
         if (this.implementedTypes != null)
@@ -151,7 +151,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setInterface(final boolean isInterface) {
         if (isInterface == this.isInterface) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.INTERFACE, this.isInterface, isInterface);
         this.isInterface = isInterface;
@@ -162,7 +162,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)

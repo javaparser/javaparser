@@ -83,7 +83,7 @@ public abstract class Comment extends Node {
     public Comment setContent(final String content) {
         assertNotNull(content);
         if (content == this.content) {
-            return (Comment) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
         this.content = content;
@@ -132,7 +132,7 @@ public abstract class Comment extends Node {
 
     @Override
     public Node setComment(final Comment comment) {
-        // comments on comments are not allowed, so we override setComment(Comment) here
+        //comments on comments are not allowed, so we override setComment(Comment) here
         if (comment != null) {
             throw new IllegalArgumentException("A comment cannot be commented.");
         }
@@ -141,7 +141,7 @@ public abstract class Comment extends Node {
 
     @Override
     public boolean remove() {
-        // the other are orphan comments and remove should work with them
+        //the other are orphan comments and remove should work with them
         if (this.commentedNode != null) {
             this.commentedNode.setComment(null);
             return true;
@@ -154,7 +154,7 @@ public abstract class Comment extends Node {
 
     @Override
     public Node findRootNode() {
-        // (Non-orphan) comments are not integrated into the normal AST; we need to get the commented node first.
+        //(Non-orphan) comments are not integrated into the normal AST; we need to get the commented node first.
         Node n = getCommentedNode().orElse(this);
         while (n.getParentNode().isPresent()) {
             n = n.getParentNode().get();

@@ -40,7 +40,7 @@ import com.github.javaparser.ast.clauses.*;
  */
 public interface GenericVisitor<R, A> {
 
-    // - Compilation Unit ----------------------------------
+    //- Compilation Unit ----------------------------------
     R visit(CompilationUnit n, A arg);
 
     R visit(PackageDeclaration n, A arg);
@@ -51,7 +51,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(BlockComment n, A arg);
 
-    // - Body ----------------------------------------------
+    //- Body ----------------------------------------------
     R visit(ClassOrInterfaceDeclaration n, A arg);
 
     R visit(EnumDeclaration n, A arg);
@@ -76,7 +76,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JavadocComment n, A arg);
 
-    // - Type ----------------------------------------------
+    //- Type ----------------------------------------------
     R visit(ClassOrInterfaceType n, A arg);
 
     R visit(PrimitiveType n, A arg);
@@ -95,7 +95,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(UnknownType n, A arg);
 
-    // - Expression ----------------------------------------
+    //- Expression ----------------------------------------
     R visit(ArrayAccessExpr n, A arg);
 
     R visit(ArrayCreationExpr n, A arg);
@@ -154,7 +154,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(MemberValuePair n, A arg);
 
-    // - Statements ----------------------------------------
+    //- Statements ----------------------------------------
     R visit(ExplicitConstructorInvocationStmt n, A arg);
 
     R visit(LocalClassDeclarationStmt n, A arg);
@@ -312,4 +312,6 @@ public interface GenericVisitor<R, A> {
     R visit(WorkingSpaceClause n, A arg);
 
     R visit(JmlBoundVariable n, A arg);
+
+    R visit(ClassInvariantClause n, A arg);
 }

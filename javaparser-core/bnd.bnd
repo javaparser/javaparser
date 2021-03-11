@@ -24,6 +24,8 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.ast.visitor, \
     com.github.javaparser.javadoc, \
     com.github.javaparser.javadoc.description, \
+    com.github.javaparser.jml, \
+    com.github.javaparser.jml.impl, \
     com.github.javaparser.metamodel, \
     com.github.javaparser.printer, \
     com.github.javaparser.printer.concretesyntaxmodel, \

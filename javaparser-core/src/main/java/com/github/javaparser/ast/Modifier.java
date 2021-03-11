@@ -138,7 +138,7 @@ public class Modifier extends Node {
         NATIVE("native"),
         STRICTFP("strictfp"),
         TRANSITIVE("transitive"),
-        // JML
+        //JML
         JML_HELPER("helper"),
         JML_NON_NULL("non_null"),
         JML_NULLABLE("nullable"),
@@ -205,7 +205,7 @@ public class Modifier extends Node {
     public Modifier setKeyword(final Keyword keyword) {
         assertNotNull(keyword);
         if (keyword == this.keyword) {
-            return (Modifier) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
         this.keyword = keyword;

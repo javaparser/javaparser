@@ -336,4 +336,34 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     public Optional<TypeDeclaration> toTypeDeclaration() {
         return Optional.empty();
     }
+
+    public boolean isClassInvariantClause() {
+        return false;
+    }
+
+    public ClassInvariantClause asClassInvariantClause() {
+        throw new IllegalStateException(f("%s is not ClassInvariantClause, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<ClassInvariantClause> toClassInvariantClause() {
+        return Optional.empty();
+    }
+
+    public void ifClassInvariantClause(Consumer<ClassInvariantClause> action) {
+    }
+
+    public boolean isJmlBodyDeclaration() {
+        return false;
+    }
+
+    public JmlBodyDeclaration asJmlBodyDeclaration() {
+        throw new IllegalStateException(f("%s is not JmlBodyDeclaration, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlBodyDeclaration> toJmlBodyDeclaration() {
+        return Optional.empty();
+    }
+
+    public void ifJmlBodyDeclaration(Consumer<JmlBodyDeclaration> action) {
+    }
 }

@@ -313,4 +313,6 @@ public interface VoidVisitor<A> {
     void visit(WorkingSpaceClause n, A arg);
 
     void visit(JmlBoundVariable n, A arg);
+
+    void visit(ClassInvariantClause n, A arg);
 }

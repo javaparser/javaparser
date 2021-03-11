@@ -152,7 +152,7 @@ public class CompilationUnit extends Node {
     @Override
     protected Printer getPrinter() {
         if (!containsData(PRINTER_KEY)) {
-            // create a default printer
+            //create a default printer
             Printer printer = createDefaultPrinter();
             printer(printer);
         }
@@ -259,7 +259,7 @@ public class CompilationUnit extends Node {
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         if (imports == this.imports) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
         if (this.imports != null)
@@ -299,17 +299,17 @@ public class CompilationUnit extends Node {
         Optional<Name> importPackageName = getImportPackageName(importDeclaration);
         if (importPackageName.isPresent()) {
             if (parseName(JAVA_LANG).equals(importPackageName.get())) {
-                // java.lang is implicitly imported
+                //java.lang is implicitly imported
                 return true;
             }
             if (packageDeclaration != null) {
-                // the import is within the same package
+                //the import is within the same package
                 Name currentPackageName = packageDeclaration.getName();
                 return currentPackageName.equals(importPackageName.get());
             }
             return false;
         } else {
-            // imports of unnamed package are not allowed
+            //imports of unnamed package are not allowed
             return true;
         }
     }
@@ -326,7 +326,7 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         if (packageDeclaration == this.packageDeclaration) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
         if (this.packageDeclaration != null)
@@ -343,7 +343,7 @@ public class CompilationUnit extends Node {
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         if (types == this.types) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         if (this.types != null)
@@ -637,7 +637,7 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setModule(final ModuleDeclaration module) {
         if (module == this.module) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
         if (this.module != null)

@@ -108,8 +108,8 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
 
     @Override
     protected void customInitialization() {
-        // We register an observer on the type property. When it is changed the MaximumCommonType is changes as well,
-        // because it is derived from the type of the variables it contains, for this reason we notify about the change
+        //We register an observer on the type property. When it is changed the MaximumCommonType is changes as well,
+        //because it is derived from the type of the variables it contains, for this reason we notify about the change
         register(new AstObserverAdapter() {
 
             @Override
@@ -118,7 +118,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
                     VariableDeclarator vd = VariableDeclarator.this;
                     if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
                         NodeWithVariables<?> nodeWithVariables = (NodeWithVariables<?>) vd.getParentNode().get();
-                        // We calculate the value the property will assume after the change will be completed
+                        //We calculate the value the property will assume after the change will be completed
                         Optional<Type> currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
                         List<Type> types = new LinkedList<>();
                         int index = nodeWithVariables.getVariables().indexOf(vd);
@@ -163,7 +163,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     public VariableDeclarator setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (VariableDeclarator) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -182,7 +182,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setInitializer(final Expression initializer) {
         if (initializer == this.initializer) {
-            return (VariableDeclarator) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         if (this.initializer != null)
@@ -211,7 +211,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (VariableDeclarator) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)

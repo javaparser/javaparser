@@ -1569,4 +1569,17 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final ClassInvariantClause n, final A arg) {
+        Expression invariant = (Expression) n.getInvariant().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (invariant == null)
+            return null;
+        n.setInvariant(invariant);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
+        return n;
+    }
 }

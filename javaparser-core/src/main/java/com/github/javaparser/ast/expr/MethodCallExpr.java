@@ -141,7 +141,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
@@ -155,7 +155,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     public MethodCallExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -168,7 +168,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setScope(final Expression scope) {
         if (scope == this.scope) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
@@ -192,7 +192,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
@@ -232,7 +232,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodCallExpr removeScope() {
-        return setScope((Expression) null);
+        return setScope(null);
     }
 
     @Override
@@ -331,26 +331,23 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
      */
     @Override
     public boolean isPolyExpression() {
-        // A method invocation expression is a poly expression if all of the following are true:
-        // 
-        // 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
+        //A method invocation expression is a poly expression if all of the following are true:
+        //
+        //1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
         if (!(appearsInAssignmentContext() || appearsInInvocationContext())) {
             return false;
         }
-        // 2. If the invocation is qualified (that is, any form of MethodInvocation except for the form [MethodName (
-        // [ArgumentList] )]), then the invocation elides TypeArguments to the left of the Identifier.
+        //2. If the invocation is qualified (that is, any form of MethodInvocation except for the form [MethodName (
+        //[ArgumentList] )]), then the invocation elides TypeArguments to the left of the Identifier.
         if (isQualified() && !elidesTypeArguments()) {
             return false;
         }
-        // 3. The method to be invoked, as determined by the following subsections, is generic (§8.4.4) and has a
-        // return type that mentions at least one of the method's type parameters.
-        // A method is generic if it declares one or more type variables (§4.4).
-        if (isGenericMethod() && hasParameterwithSameTypeThanResultType(resolve().getReturnType())) {
-            // it's a poly expression
-            return true;
-        }
-        // Otherwise, the method invocation expression is a standalone expression.
-        return false;
+        //3. The method to be invoked, as determined by the following subsections, is generic (§8.4.4) and has a
+        //return type that mentions at least one of the method's type parameters.
+        //A method is generic if it declares one or more type variables (§4.4).
+        //it's a poly expression
+        return isGenericMethod() && hasParameterwithSameTypeThanResultType(resolve().getReturnType());
+        //Otherwise, the method invocation expression is a standalone expression.
     }
 
     /*

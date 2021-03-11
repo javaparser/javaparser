@@ -72,6 +72,7 @@ public enum ObservableProperty {
     INITIALIZER(Type.SINGLE_REFERENCE),
     INNER(Type.SINGLE_REFERENCE),
     INTERFACE(Type.SINGLE_ATTRIBUTE),
+    INVARIANT(Type.SINGLE_REFERENCE),
     ITERABLE(Type.SINGLE_REFERENCE),
     KEYWORD(Type.SINGLE_ATTRIBUTE),
     LABEL(Type.SINGLE_REFERENCE),
@@ -139,9 +140,9 @@ public enum ObservableProperty {
 
         SINGLE_ATTRIBUTE(false, false), SINGLE_REFERENCE(false, true), MULTIPLE_ATTRIBUTE(true, false), MULTIPLE_REFERENCE(true, true);
 
-        private boolean multiple;
+        private final boolean multiple;
 
-        private boolean node;
+        private final boolean node;
 
         Type(boolean multiple, boolean node) {
             this.multiple = multiple;
@@ -149,9 +150,9 @@ public enum ObservableProperty {
         }
     }
 
-    private Type type;
+    private final Type type;
 
-    private boolean derived;
+    private final boolean derived;
 
     public static ObservableProperty fromCamelCaseName(String camelCaseName) {
         Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
