@@ -51,10 +51,12 @@ import com.github.javaparser.utils.Pair;
  * @author Federico Tomassetti
  */
 public class BoundSet {
+    
+    private static String JAVA_LANG_RUNTIME_EXCEPTION = RuntimeException.class.getCanonicalName();
+    
+    private static final BoundSet EMPTY = new BoundSet();
 
     private List<Bound> bounds = new LinkedList<>();
-
-    private static final BoundSet EMPTY = new BoundSet();
 
     @Override
     public boolean equals(Object o) {
@@ -713,7 +715,7 @@ public class BoundSet {
 
                     boolean throwsBound = bounds.stream().anyMatch(b -> b.isThrowsBoundOn(alphaI));
                     if (Ti == null && throwsBound && properUpperBoundsAreAtMostExceptionThrowableAndObject(alphaI)) {
-                        Ti = new ReferenceTypeImpl(typeSolver.solveType(RuntimeException.class.getCanonicalName()), typeSolver);
+                        Ti = new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_RUNTIME_EXCEPTION), typeSolver);
                     }
 
                     //   - Otherwise, where αi has proper upper bounds U1, ..., Uk, Ti = glb(U1, ..., Uk) (§5.1.10).
