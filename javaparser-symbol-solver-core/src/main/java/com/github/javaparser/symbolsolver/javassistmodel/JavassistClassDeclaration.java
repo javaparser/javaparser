@@ -277,19 +277,21 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         if (type.describe().equals(this.getQualifiedName())) {
             return true;
         }
-        try {
-            if (this.ctClass.getSuperclass() != null
-                    && new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(type)) {
+
+        Optional<ResolvedReferenceType> superClassOpt = getSuperClass();
+        if (superClassOpt.isPresent()) {
+            ResolvedReferenceType superClass = superClassOpt.get();
+            if (superClass.isAssignableBy(type)) {
                 return true;
             }
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistInterfaceDeclaration(interfaze, typeSolver).isAssignableBy(type)) {
-                    return true;
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
         }
+
+        for (ResolvedReferenceType interfaceType : getInterfaces()) {
+            if (interfaceType.isAssignableBy(type)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
