@@ -378,7 +378,7 @@
                 <groupId>org.junit-pioneer</groupId>
                 <artifactId>junit-pioneer</artifactId>
                 <!-- TODO: Not yet upgrading to v1.0.0 (causes some tests to not execute - see #2891 and #2893) -->
-                <version>0.5.6</version>
+                <version>0.9.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
