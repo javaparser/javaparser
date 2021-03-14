@@ -289,7 +289,8 @@ TOKEN :
 TOKEN : {
   <INVARIANT : "invariant" >
 | <INITIALLY : "initially">
-| <ENSURES : "enssures">
+| <ENSURES : "ensures">
+| <SUCH_THAT : "\\such_that">
 //| <REQUIRES0 : "requires">  {matchedToken.kind = REQUIRES;}
 | <ASSIGNABLE : "assignable">
 | <MODIFIABLE : "modifiable">
@@ -1800,6 +1801,10 @@ BodyDeclaration<?> JmlClassOrInterfaceBodyDeclaration():
       (
           ret = JmlClassInvariant(modifiers)
         | ret = JmlClassInitially(modifiers)
+        | ret = JmlClassAccessible(modifiers)
+        | ret = JmlClassRepresents(modifiers)
+        | ret = JmlFieldDeclaration(modifiers)
+        | ret = JmlMethodDeclaration(modifiers)
       )
       JmlEnd()
     )
@@ -1818,7 +1823,7 @@ BodyDeclaration<?> JmlClassInvariant(ModifierHolder modifiers):
 { Expression expr; }
 {
   <INVARIANT> expr=Expression() ";"
-  { return new ClassInvariantClause(); }
+  { return new ClassInvariantClause(range(begin, token()), expr); }
 }
 
 BodyDeclaration<?> JmlClassInitially(ModifierHolder modifiers):
@@ -1828,6 +1833,96 @@ BodyDeclaration<?> JmlClassInitially(ModifierHolder modifiers):
   { return new ClassInvariantClause(); }
 }
 
+BodyDeclaration<?>  JmlClassAccessible(ModifierHolder modifiers):
+{
+    SimpleName id;
+    Expression expr;
+    JmlClassAccessibleDeclaration ret = new JmlClassAccessibleDeclaration();
+}
+{
+  <ACCESSIBLE> id=SimpleName() <COLON>
+  expr=Expression()
+  (<COMMA> expr=Expression())*
+  (<MEASURED_BY> expr=Expression())?
+  {return ret;}
+}
+
+BodyDeclaration<?> JmlClassRepresents(ModifierHolder modifiers):
+{
+     SimpleName id;
+     Expression expr;
+     JmlRepresentsDeclaration ret = new JmlRepresentsDeclaration();
+}
+{
+  <REPRESENTS>
+  (
+    id=SimpleName() (<ASSIGN> | <SUCH_THAT>) expr=Expression()
+  | LOOKAHEAD(2) expr=Expression()
+  )
+  ";"
+  {return ret;}
+}
+
+BodyDeclaration<?> JmlFieldDeclaration(ModifierHolder modifier):
+{
+    Type partialType;
+    NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
+    VariableDeclarator val;
+}
+{
+    // Modifiers are already matched in the caller
+    partialType = Type(emptyNodeList())
+    val = VariableDeclarator(partialType) { variables.add(val); }
+    (
+        ","
+        val = VariableDeclarator(partialType) { variables.add(val); }
+    )*
+    ";"
+
+    {
+        JavaToken begin = orIfInvalid(modifier.begin, partialType);
+        return new FieldDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
+    }
+}
+
+BodyDeclaration<?>  JmlMethodDeclaration(ModifierHolder modifier):
+{
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
+    Type type;
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
+    ArrayBracketPair arrayBracketPair;
+    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
+    NodeList<ReferenceType> throws_ = emptyNodeList();
+    BlockStmt body = null;
+    NodeList<AnnotationExpr> annotations;
+    JavaToken begin = modifier.begin;
+    ReferenceType throwType;
+}
+{
+    // Modifiers already matched in the caller!
+    [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
+    annotations = Annotations() { modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations)); }
+    type = ResultType(emptyNodeList()) { begin = orIfInvalid(begin, type); }
+    name = SimpleName()
+    parameters = Parameters()
+    ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    [
+        "throws"
+        throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+        ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )*
+    ]
+    (
+        body = Block()
+     |
+        ";"
+    )
+
+    {
+        type = juggleArrayType(type, arrayBracketPairs);
+        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
+    }
+}
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3

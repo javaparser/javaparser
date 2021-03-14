@@ -1628,6 +1628,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final ClassInvariantClause n, final Object arg) {
         Expression invariant = cloneNode(n.getInvariant(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ClassInvariantClause r = new ClassInvariantClause(n.getTokenRange().orElse(null), invariant);

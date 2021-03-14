@@ -836,6 +836,8 @@ public final class JavaParserMetaModel {
         jmlBoundVariableMetaModel.getDeclaredPropertyMetaModels().add(jmlBoundVariableMetaModel.typePropertyMetaModel);
         classInvariantClauseMetaModel.invariantPropertyMetaModel = new PropertyMetaModel(classInvariantClauseMetaModel, "invariant", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         classInvariantClauseMetaModel.getDeclaredPropertyMetaModels().add(classInvariantClauseMetaModel.invariantPropertyMetaModel);
+        classInvariantClauseMetaModel.modifiersPropertyMetaModel = new PropertyMetaModel(classInvariantClauseMetaModel, "modifiers", com.github.javaparser.ast.Modifier.class, Optional.of(modifierMetaModel), false, false, true, false);
+        classInvariantClauseMetaModel.getDeclaredPropertyMetaModels().add(classInvariantClauseMetaModel.modifiersPropertyMetaModel);
         arrayTypeMetaModel.componentTypePropertyMetaModel = new PropertyMetaModel(arrayTypeMetaModel, "componentType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false);
         arrayTypeMetaModel.getDeclaredPropertyMetaModels().add(arrayTypeMetaModel.componentTypePropertyMetaModel);
         arrayTypeMetaModel.originPropertyMetaModel = new PropertyMetaModel(arrayTypeMetaModel, "origin", com.github.javaparser.ast.type.ArrayType.Origin.class, Optional.empty(), false, false, false, false);

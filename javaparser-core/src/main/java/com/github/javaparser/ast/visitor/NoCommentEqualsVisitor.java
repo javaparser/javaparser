@@ -1134,6 +1134,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final ClassInvariantClause n2 = (ClassInvariantClause) arg;
         if (!nodeEquals(n.getInvariant(), n2.getInvariant()))
             return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
         return nodesEquals(n.getAnnotations(), n2.getAnnotations());
     }
 }

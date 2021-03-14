@@ -337,33 +337,41 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isClassInvariantClause() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ClassInvariantClause asClassInvariantClause() {
         throw new IllegalStateException(f("%s is not ClassInvariantClause, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassInvariantClause> toClassInvariantClause() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassInvariantClause(Consumer<ClassInvariantClause> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlBodyDeclaration() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlBodyDeclaration asJmlBodyDeclaration() {
         throw new IllegalStateException(f("%s is not JmlBodyDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlBodyDeclaration> toJmlBodyDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBodyDeclaration(Consumer<JmlBodyDeclaration> action) {
     }
 }

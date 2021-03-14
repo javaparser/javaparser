@@ -902,6 +902,16 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(ClassInvariantClause n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printer.print("//@ ");
+        printModifiers(n.getModifiers());
+        printer.print("invariant ");
+        n.getInvariant().accept(this, arg);
+        printer.print(";");
+    }
+
+    @Override
     public void visit(final CharLiteralExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);

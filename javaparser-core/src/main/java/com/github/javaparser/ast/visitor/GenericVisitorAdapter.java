@@ -2428,6 +2428,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getAnnotations().accept(this, arg);
             if (result != null)
                 return result;
