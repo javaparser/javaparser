@@ -25,17 +25,12 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -53,12 +48,7 @@ import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -162,17 +152,52 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedType type) {
-        throw new UnsupportedOperationException();
+        if (type.isNull()) {
+            return true;
+        }
+
+        if (type instanceof LambdaArgumentTypePlaceholder) {
+            return isFunctionalInterface();
+        }
+
+        // Check if it's a reference type.
+        if (type.isReferenceType()) {
+
+            // Check if the qualified name matches
+            ResolvedReferenceType reference = type.asReferenceType();
+            if (reference.getQualifiedName().equals(getQualifiedName())) {
+
+                // Get the type declaration
+                Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = reference.getTypeDeclaration();
+                if (optionalTypeDeclaration.isPresent()) {
+
+                    // Check if the parameters match
+                    ResolvedReferenceTypeDeclaration typeDeclaration = optionalTypeDeclaration.get();
+                    if (typeDeclaration.getTypeParameters().equals(getTypeParameters())) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+
+        for (ResolvedReferenceType interfaze : getInterfacesExtended()) {
+            if (type.isAssignableBy(interfaze)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-      return javassistTypeDeclarationAdapter.getDeclaredFields();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        throw new UnsupportedOperationException();
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
