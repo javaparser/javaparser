@@ -21,25 +21,31 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Pair;
+import javassist.ClassPool;
+import javassist.CtClass;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -146,6 +152,53 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testHasAnnotation(){
         JavassistInterfaceDeclaration compilationUnit = (JavassistInterfaceDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestChildInterface");
         assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
+    }
+
+    @Nested
+    class TestIsAssignableBy {
+
+        private static final String CLASS_TO_SOLVE = "com.github.javaparser.ast.nodeTypes.NodeWithImplements";
+
+        @Test
+        void whenNullTypeIsProvided() {
+            JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) typeSolver.solveType(CLASS_TO_SOLVE);
+            assertTrue(nodeWithImplements.isAssignableBy(NullType.INSTANCE));
+        }
+
+        @Test
+        void whenLambdaArgumentTypePlaceholderIsProvided() {
+            JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) typeSolver.solveType(CLASS_TO_SOLVE);
+            assertFalse(nodeWithImplements.isAssignableBy(new LambdaArgumentTypePlaceholder(0)));
+        }
+
+        @Test
+        void whenEqualTypeIsProvided() {
+            JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) typeSolver.solveType(CLASS_TO_SOLVE);
+            assertTrue(nodeWithImplements.isAssignableBy(nodeWithImplements));
+        }
+
+        @Test
+        void whenOtherTypeIsProvided() {
+            ResolvedReferenceTypeDeclaration consumer = new ReflectionTypeSolver().solveType(Consumer.class.getCanonicalName());
+            JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) typeSolver.solveType(CLASS_TO_SOLVE);
+            assertFalse(nodeWithImplements.isAssignableBy(consumer));
+        }
+
+        @Test
+        void whenInterfaceIsProvided() {
+            MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
+
+            ClassPool classPool = new ClassPool();
+            CtClass interfaceA = classPool.makeInterface("A");
+            CtClass interfaceB = classPool.makeInterface("B", interfaceA);
+
+            JavassistInterfaceDeclaration declarationA = new JavassistInterfaceDeclaration(interfaceA, memoryTypeSolver);
+            JavassistInterfaceDeclaration declarationB = new JavassistInterfaceDeclaration(interfaceB, memoryTypeSolver);
+            memoryTypeSolver.addDeclaration("A", declarationA);
+            memoryTypeSolver.addDeclaration("B", declarationB);
+
+            assertTrue(declarationB.isAssignableBy(declarationA));
+        }
     }
 
     ///
