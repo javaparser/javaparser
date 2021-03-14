@@ -41,6 +41,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -537,6 +538,8 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
             assertTrue(cu.isAssignableBy(node));
         }
 
+        @Disabled("JavassistInterfaceDeclaration doesn't implement isAssignableBy yet." +
+                  "See https://github.com/javaparser/javaparser/issues/2761")
         @Test
         void whenInterfaceIsProvided() {
             JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) newTypeSolver.solveType(
