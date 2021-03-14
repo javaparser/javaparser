@@ -559,7 +559,7 @@ public class MethodResolutionLogic {
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
         }
-
+        
         // Examine the applicable methods found, and evaluate each to determine the "best" one
         ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
         ResolvedMethodDeclaration other = null;
@@ -572,21 +572,33 @@ public class MethodResolutionLogic {
                 possibleAmbiguity = false;
                 winningCandidate = other;
             } else {
-                if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                // 15.12.2.5. Choosing the Most Specific Method
+                // One applicable method m1 is more specific than another applicable method m2, for an invocation with argument
+                // expressions e1, ..., ek, if any of the following are true:
+                // m2 is generic, and m1 is inferred to be more specific than m2 for argument expressions e1, ..., ek by §18.5.4.
+                // 18.5.4. More Specific Method Inference should be verified 
+                // ...
+                if (winningCandidate.isGeneric() && !other.isGeneric()) {
+                    winningCandidate = other;
+                } else if (!winningCandidate.isGeneric() && other.isGeneric()) {
+                    // nothing to do at this stage winningCandidate is the winner
+                } else if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
                     possibleAmbiguity = true;
                 } else {
                     // we expect the methods to be ordered such that inherited methods are later in the list
                 }
             }
         }
-
+        
         if (possibleAmbiguity) {
             // pick the first exact match if it exists
             if (!isExactMatch(winningCandidate, argumentsTypes)) {
                 if (isExactMatch(other, argumentsTypes)) {
                     winningCandidate = other;
                 } else {
-                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
+                    throw new MethodAmbiguityException(
+                            "Ambiguous method call: cannot find a most applicable method: " + winningCandidate
+                                    + ", " + other);
                 }
             }
         }
