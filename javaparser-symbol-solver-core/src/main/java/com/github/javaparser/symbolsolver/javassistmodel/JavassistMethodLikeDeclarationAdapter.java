@@ -30,10 +30,7 @@ import javassist.CtBehavior;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class JavassistMethodLikeDeclarationAdapter {
@@ -77,7 +74,7 @@ public class JavassistMethodLikeDeclarationAdapter {
 
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (ctBehavior.getGenericSignature() == null) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
         return Arrays.stream(methodSignature.getTypeParameters())
                 .map(jasTp -> new JavassistTypeParameter(jasTp, declaration, typeSolver))
