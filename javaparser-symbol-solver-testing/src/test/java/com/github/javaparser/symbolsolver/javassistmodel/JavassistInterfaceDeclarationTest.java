@@ -25,10 +25,12 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.NullType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
@@ -42,6 +44,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -185,19 +188,42 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         }
 
         @Test
+        void whenSameClassButWithDifferentTypeParametersIsProvided() {
+            ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+
+            ReferenceTypeImpl javaLangObject = new ReferenceTypeImpl(reflectionTypeSolver.getSolvedJavaLangObject(), typeSolver);
+            ResolvedWildcard wildCard = ResolvedWildcard.extendsBound(javaLangObject);
+
+            JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) typeSolver.solveType(CLASS_TO_SOLVE);
+            ResolvedType typeA = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(wildCard), typeSolver);
+            ResolvedType typeB = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(javaLangObject), typeSolver);
+
+            assertFalse(typeB.isAssignableBy(typeA), "This should not be allowed:" +
+                    " NodeWithImplements<Object> node = new NodeWithImplements<? extends Object>()");
+            assertTrue(typeA.isAssignableBy(typeB), "This should be allowed:" +
+                    " NodeWithImplements<? extends Object> node = new NodeWithImplements<Object>()");
+        }
+
+        @Test
         void whenInterfaceIsProvided() {
             MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
+            CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(
+                    memoryTypeSolver,
+                    new ReflectionTypeSolver()
+            );
 
             ClassPool classPool = new ClassPool();
             CtClass interfaceA = classPool.makeInterface("A");
             CtClass interfaceB = classPool.makeInterface("B", interfaceA);
 
-            JavassistInterfaceDeclaration declarationA = new JavassistInterfaceDeclaration(interfaceA, memoryTypeSolver);
-            JavassistInterfaceDeclaration declarationB = new JavassistInterfaceDeclaration(interfaceB, memoryTypeSolver);
+            JavassistInterfaceDeclaration declarationA = new JavassistInterfaceDeclaration(interfaceA, combinedTypeSolver);
+            JavassistInterfaceDeclaration declarationB = new JavassistInterfaceDeclaration(interfaceB, combinedTypeSolver);
             memoryTypeSolver.addDeclaration("A", declarationA);
             memoryTypeSolver.addDeclaration("B", declarationB);
 
-            assertTrue(declarationB.isAssignableBy(declarationA));
+            // Knowing that B extends A we expect:
+            assertFalse(declarationA.isAssignableBy(declarationB), "This should not be allowed: B variable = new A()");
+            assertTrue(declarationB.isAssignableBy(declarationA), "This should be allowed: A variable = new B()");
         }
     }
 
