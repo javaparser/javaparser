@@ -18,18 +18,19 @@ import com.github.javaparser.TokenRange;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class ClassInvariantClause extends JmlBodyDeclaration implements NodeWithModifiers<ClassInvariantClause> {
+public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClause>
+        implements NodeWithModifiers<ClassInvariantClause> {
 
     private NodeList<Modifier> modifiers;
 
     private Expression invariant;
 
     public ClassInvariantClause() {
-        this(null);
     }
 
     @AllFieldsConstructor
-    public ClassInvariantClause(Expression invariant) {
+    public ClassInvariantClause(NodeList<Modifier> modifiers, Expression invariant) {
+        this.modifiers = modifiers;
         this.invariant = invariant;
     }
 
@@ -135,8 +136,9 @@ public class ClassInvariantClause extends JmlBodyDeclaration implements NodeWith
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ClassInvariantClause(TokenRange tokenRange, Expression invariant) {
+    public ClassInvariantClause(TokenRange tokenRange, NodeList<Modifier> modifiers, Expression invariant) {
         super(tokenRange);
+        setModifiers(modifiers);
         setInvariant(invariant);
         customInitialization();
     }

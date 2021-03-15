@@ -315,4 +315,8 @@ public interface VoidVisitor<A> {
     void visit(JmlBoundVariable n, A arg);
 
     void visit(ClassInvariantClause n, A arg);
+
+    void visit(JmlClassAccessibleDeclaration n, A arg);
+
+    void visit(JmlRepresentsDeclaration n, A arg);
 }

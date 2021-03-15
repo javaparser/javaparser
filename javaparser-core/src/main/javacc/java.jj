@@ -291,7 +291,14 @@ TOKEN : {
 | <INITIALLY : "initially">
 | <ENSURES : "ensures">
 | <SUCH_THAT : "\\such_that">
-//| <REQUIRES0 : "requires">  {matchedToken.kind = REQUIRES;}
+| <DIVERGES : "diverges">
+| <SIGNALS_ONLY : "SIGNALS_ONLY">
+| <RETURNS: "returns">
+| <BREAKS : "breaks">
+| <CONTINUES : "continues">
+| <BREAK_BEHAVIOR : "break_behaviou?r">
+| <CONTINUE_BEHAVIOR: "continue_behaviou?r">
+| <RETURN_BEHAVIOR : "return_behaviou?r">
 | <ASSIGNABLE : "assignable">
 | <MODIFIABLE : "modifiable">
 | <MODIFIES : "modifies">
@@ -305,10 +312,6 @@ TOKEN : {
 | <MODEL: "model">
 | <HELPER : "helper">
 | <NULLABLE_BY_DEFAULT : "nullable_by_default">
-//| <PUBLIC0 : "public"> {matchedToken.kind = PUBLIC;}
-//| <PRIVATE0  : "private"> {matchedToken.kind = PRIVATE;}
-//| <PROTECTED0 : "protected"> {matchedToken.kind = PROTECTED;}
-//| <PACKAGE0 : "package">
 | <NON_NULL : "non_null">
 | <NULLABLE : "nullable">
 | <BEHAVIOR : "behavior">
@@ -339,8 +342,7 @@ TOKEN : {
   "\\exists"
 */
 
-  /* COMMENTS */
-
+/* COMMENTS */
 MORE :
 {
   <ENTER_JAVADOC_COMMENT: "/**" ~["/"]> { input_stream.backup(1); } : IN_JAVADOC_COMMENT
@@ -1820,47 +1822,54 @@ void JmlEnd():
 { <JML_MULTI_END> | <JML_SINGLE_END> }
 
 BodyDeclaration<?> JmlClassInvariant(ModifierHolder modifiers):
-{ Expression expr; }
+{ Expression expr; Token inv; }
 {
-  <INVARIANT> expr=Expression() ";"
-  { return new ClassInvariantClause(range(begin, token()), expr); }
+  inv=<INVARIANT> expr=Expression() ";"
+  { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
+    return new ClassInvariantClause(range(begin, token()), modifiers.modifiers, expr); }
 }
 
 BodyDeclaration<?> JmlClassInitially(ModifierHolder modifiers):
-{ Expression expr; }
+{ Expression expr; Token inv; }
 {
-  <INITIALLY> expr=Expression() ";"
-  { return new ClassInvariantClause(); }
+  inv=<INITIALLY> expr=Expression() ";"
+  { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
+    //TODO add initally ast
+    return new ClassInvariantClause(range(begin, token()), modifiers.modifiers, expr); }
 }
 
 BodyDeclaration<?>  JmlClassAccessible(ModifierHolder modifiers):
 {
+    Token b;
     SimpleName id;
-    Expression expr;
-    JmlClassAccessibleDeclaration ret = new JmlClassAccessibleDeclaration();
+    Expression expr, measuredBy = null;
+    NodeList<Expression> expressions = new NodeList<>();
 }
 {
-  <ACCESSIBLE> id=SimpleName() <COLON>
-  expr=Expression()
-  (<COMMA> expr=Expression())*
-  (<MEASURED_BY> expr=Expression())?
-  {return ret;}
+  b=<ACCESSIBLE> id=SimpleName() <COLON>
+  expr=Expression() {expressions.add(expr);}
+  (<COMMA> expr=Expression() {expressions.add(expr);})*
+  (<MEASURED_BY> measuredBy=Expression())?
+  ";"
+  { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
+    return new JmlClassAccessibleDeclaration(/*range(begin, token()), modifiers.modifiers, id, expressions, measuredBy*/);}
 }
 
 BodyDeclaration<?> JmlClassRepresents(ModifierHolder modifiers):
 {
-     SimpleName id;
+     Token b;
+     SimpleName id=null;
      Expression expr;
-     JmlRepresentsDeclaration ret = new JmlRepresentsDeclaration();
 }
 {
-  <REPRESENTS>
+  b=<REPRESENTS>
   (
     id=SimpleName() (<ASSIGN> | <SUCH_THAT>) expr=Expression()
   | LOOKAHEAD(2) expr=Expression()
   )
   ";"
-  {return ret;}
+  { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
+    return new JmlRepresentsDeclaration(range(begin, token()), modifiers.modifiers, id, expr);}
 }
 
 BodyDeclaration<?> JmlFieldDeclaration(ModifierHolder modifier):
@@ -4255,6 +4264,7 @@ LabeledStmt LabeledStatement():
 BlockStmt Block():
 {
     NodeList<Statement> stmts = emptyNodeList();
+    NodeList<BlockContract> contracts = emptyNodeList();
     JavaToken begin;
 }
 {
@@ -4270,6 +4280,216 @@ BlockStmt Block():
         return block;
     }
 }
+
+BlockStmt BlockWithContract():
+{
+    BlockStmt b; NodeList<BlockContract> c=null;
+}
+{
+  (c=jmlBlockContracts())?
+  b=Block()
+  { //TODO add contracts c to block b.
+    return b;}
+}
+
+
+NodeList<BlockContract> jmlBlockContracts():
+{
+    BlockContract bc = null;
+    NodeList<BlockContract> contracts = emptyNodeList();
+}
+{
+  (<ALSO>)?
+  bc=blockContract() {contracts.add(bc);}
+  (<ALSO> bc=blockContract() {contracts.add(bc);})*
+  {return contracts;}
+}
+
+BlockContract blockContract():
+{
+    JavaToken begin;
+    NodeList<JmlClause> clauses = new NodeList<>();
+    Behavior b;
+    JmlClause clause;
+}
+{
+  {begin=token();}
+  (("public"|"private"|"package"|"protected"))?
+  (b=bbehavior())?
+  (clause=contractClause())+
+  {return new BlockContract(range(begin, token()));}
+}
+
+JmlClause contractClause():
+{
+ JmlClause ret;
+}
+{
+  ( ret=breaks()
+  | ret=returns_()
+  | ret=requires()
+  | ret=ensures()
+  | ret=signals()
+  | ret=signalsOnly()
+  | ret=diverges()
+  //| ret=determs()
+  | ret=assign()
+  | ret=acc()
+  | ret=mby() )
+  ";"
+  {return ret;}
+}
+
+Behavior bbehavior():
+{}
+{
+    <BEHAVIOR> {return Behavior.BEHAVIOR;}
+  | <NORMAL_BEHAVIOR> {return Behavior.BEHAVIOR;}
+  | <EXCEPTIONAL_BEHAVIOR> {return Behavior.BEHAVIOR;}
+  | <BREAK_BEHAVIOR> {return Behavior.BEHAVIOR;}
+  | <CONTINUE_BEHAVIOR> {return Behavior.BEHAVIOR;}
+  | <RETURN_BEHAVIOR> {return Behavior.BEHAVIOR;}
+}
+
+
+JmlClause breaks():
+{
+    SimpleName id; Expression expr;
+}
+{
+  (<BREAKS> | <CONTINUES>)
+  <LPAREN> (id=SimpleName())? <RPAREN>
+  expr=Expression()
+  { return new JmlClause(); /* TODO */ }
+}
+
+JmlClause returns_():
+{SimpleName id; Expression expr;}
+{
+  <RETURNS> expr=Expression()
+  { return new JmlClause(); /* TODO */ }
+}
+
+SimpleName heap():
+{ SimpleName name;}
+{
+  <LT> name=SimpleName() <GT>
+  {return name;}
+}
+
+/**
+*/
+JmlClause assign():
+{
+    SimpleName id, h, name;
+    Expression expr,e;
+}
+{
+  (<ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES> )
+  (h=heap())*
+  e=Expression() (<COMMA> e=Expression())*
+  { return new JmlClause(); /* TODO */ }
+}
+
+JmlClause acc():
+{
+    SimpleName id, h, name;
+    Expression expr,e;
+}
+{
+  (<ACCESSIBLE> )
+  (h=heap())*
+  e=Expression() (<COMMA> e=Expression())*
+  (mby())?
+  { return new JmlClause(); /* TODO */ }
+}
+
+/**
+Measures_by
+*/
+JmlClause mby():
+{
+    SimpleName id, h, name;
+    Expression expr,e;
+}
+{
+  <MEASURED_BY> e=Expression()
+  { return new JmlClause(); /* TODO */ }
+}
+
+JmlClause requires():
+{
+    SimpleName id, h, name;
+    Expression expr,e;
+}
+{
+  <REQUIRES>  (h=heap())* e=Expression()
+  { return new JmlClause(); /* TODO */ }
+}
+
+
+
+/**
+*/
+JmlClause ensures():
+{
+    SimpleName id, h, name;
+    Expression expr,e;
+}
+{
+  <ENSURES> (h=heap())* e=Expression()
+  { return new JmlClause(); /* TODO */ }
+}
+
+/**
+*/
+JmlClause signals():
+{
+    SimpleName id, h, name;
+    Expression expr,e;
+    Type type;
+}
+{
+  <SIGNALS> <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
+{ return new JmlClause(); /* TODO */ }
+}
+
+
+/**
+signals_only  \nothing;
+singals_only  \everything;
+singals_only  \everything;
+*/
+JmlClause signalsOnly():
+{
+    Type type;
+}
+{
+  <SIGNALS_ONLY> type=Type(emptyNodeList())
+  (<COMMA> type=Type(emptyNodeList()) )*
+  { return new JmlClause(); /* TODO */ }
+}
+
+
+JmlClause diverges():
+{
+    SimpleName id, h, name;
+    Expression expr,e;
+}
+{
+  <DIVERGES> e=Expression()
+  { return new JmlClause(); /* TODO */ }
+}
+
+
+/*JmlClause determs():
+{}
+{
+  DETERMINES exprs
+    BY exprs
+    ( DECLASSIFIES exprs  | ERASES exprs )?
+    ( NEW_OBJECTS exprs )?
+}*/
 
 /**
  * Classes inside body statements can only be abstract or final. The semantic checks must check it.

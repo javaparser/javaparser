@@ -35,10 +35,7 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassInvariantClause;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.JmlBodyDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.clauses.DivergesClause;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
@@ -216,6 +213,10 @@ public class MetaModelGenerator extends AbstractGenerator {
 
         add(JmlBodyDeclaration.class);
         add(ClassInvariantClause.class);
+        add(JmlRepresentsDeclaration.class);
+        add(JmlClassAccessibleDeclaration.class);
+        add(JmlClassAccessibleDeclaration.class);
+        add(JmlClassAccessibleDeclaration.class);
 
         add(com.github.javaparser.ast.type.ArrayType.class);
         add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);

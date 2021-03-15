@@ -314,4 +314,8 @@ public interface GenericVisitor<R, A> {
     R visit(JmlBoundVariable n, A arg);
 
     R visit(ClassInvariantClause n, A arg);
+
+    R visit(JmlClassAccessibleDeclaration n, A arg);
+
+    R visit(JmlRepresentsDeclaration n, A arg);
 }

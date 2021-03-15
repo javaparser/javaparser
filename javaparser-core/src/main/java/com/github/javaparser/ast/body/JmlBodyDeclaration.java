@@ -16,7 +16,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (2/24/21)
  */
-public abstract class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> implements Jmlish {
+public abstract class JmlBodyDeclaration<T extends BodyDeclaration<?>> extends BodyDeclaration<T> implements Jmlish {
 
     @AllFieldsConstructor
     public JmlBodyDeclaration() {

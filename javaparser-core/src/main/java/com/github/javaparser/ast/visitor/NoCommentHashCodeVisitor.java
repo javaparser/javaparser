@@ -631,4 +631,14 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final ClassInvariantClause n, final Void arg) {
         return (n.getInvariant().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
+
+    @Override
+    public Integer visit(final JmlClassAccessibleDeclaration n, final Void arg) {
+        return 0;//(n.getExpressions().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getExpressions().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getExpressions().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final JmlRepresentsDeclaration n, final Void arg) {
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+    }
 }

@@ -1584,4 +1584,26 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final JmlClassAccessibleDeclaration n, final A arg) {
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlRepresentsDeclaration n, final A arg) {
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
+        SimpleName id = (SimpleName) n.getId().accept(this, arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null || id == null)
+            return null;
+        n.setExpr(expr);
+        n.setId(id);
+        n.setModifiers(modifiers);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
+        return n;
+    }
 }

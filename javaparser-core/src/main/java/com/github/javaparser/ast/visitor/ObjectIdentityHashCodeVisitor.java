@@ -631,4 +631,14 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final ClassInvariantClause n, final Void arg) {
         return n.hashCode();
     }
+
+    @Override
+    public Integer visit(final JmlClassAccessibleDeclaration n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlRepresentsDeclaration n, final Void arg) {
+        return n.hashCode();
+    }
 }

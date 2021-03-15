@@ -1631,7 +1631,26 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ClassInvariantClause r = new ClassInvariantClause(n.getTokenRange().orElse(null), invariant);
+        ClassInvariantClause r = new ClassInvariantClause(n.getTokenRange().orElse(null), modifiers, invariant);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlClassAccessibleDeclaration n, final Object arg) {
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlRepresentsDeclaration n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
+        SimpleName id = cloneNode(n.getId(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlRepresentsDeclaration r = new JmlRepresentsDeclaration(n.getTokenRange().orElse(null), modifiers, id, expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
