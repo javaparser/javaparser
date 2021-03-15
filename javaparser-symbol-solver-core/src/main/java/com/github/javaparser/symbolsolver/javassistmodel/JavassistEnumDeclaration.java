@@ -96,34 +96,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        // Direct ancestors of an enum are java.lang.Enum and interfaces
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-
-        String superClassName = ctClass.getClassFile().getSuperclass();
-
-        if (superClassName != null) {
-            try {
-                ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(superClassName), typeSolver));
-            } catch (UnsolvedSymbolException e) {
-                if (!acceptIncompleteList) {
-                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                    throw e;
-                }
-            }
-        }
-
-        for (String interfazeName : ctClass.getClassFile().getInterfaces()) {
-            try {
-                ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(interfazeName), typeSolver));
-            } catch (UnsolvedSymbolException e) {
-                if (!acceptIncompleteList) {
-                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                    throw e;
-                }
-            }
-        }
-
-        return ancestors;
+        return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
     }
 
     @Override

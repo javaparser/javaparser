@@ -47,8 +47,6 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
@@ -185,24 +183,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        try {
-            getSuperClass().ifPresent(superClass -> ancestors.add(superClass));
-        } catch (UnsolvedSymbolException e) {
-            if (!acceptIncompleteList) {
-                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                throw e;
-            }
-        }
-        try {
-            ancestors.addAll(getInterfaces());
-        } catch (UnsolvedSymbolException e) {
-            if (!acceptIncompleteList) {
-                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                throw e;
-            }
-        }
-        return ancestors;
+        return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
     }
 
     @Override
@@ -333,51 +314,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        try {
-            if ("java.lang.Object".equals(ctClass.getClassFile().getName())) {
-                // If this is java.lang.Object, ignore the presence of any superclass (preventing any infinite loops).
-                return Optional.empty();
-            }
-            if (ctClass.getGenericSignature() == null) {
-                // Compiled classes have generic types erased, but can be made available for reflection via getGenericSignature().
-                // If it is absent, then no further work is needed and we can return a reference type without generics.
-                return Optional.of(new ReferenceTypeImpl(
-                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())),
-                        typeSolver
-                ));
-            } else {
-                // If there is a generic signature present, solve the types and return it.
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Optional.ofNullable(
-                        JavassistUtils.signatureTypeToType(
-                                classSignature.getSuperClass(),
-                                typeSolver,
-                                this
-                        ).asReferenceType()
-                );
-            }
-        } catch (BadBytecode e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.getSuperClass();
     }
 
     @Override
     public List<ResolvedReferenceType> getInterfaces() {
-        try {
-            if (ctClass.getGenericSignature() == null) {
-                return Arrays.stream(ctClass.getClassFile().getInterfaces())
-                        .map(i -> typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(i)))
-                        .map(i -> new ReferenceTypeImpl(i, typeSolver))
-                        .collect(Collectors.toList());
-            } else {
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.stream(classSignature.getInterfaces())
-                        .map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType())
-                        .collect(Collectors.toList());
-            }
-        } catch (BadBytecode e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.getInterfaces();
     }
 
     @Override

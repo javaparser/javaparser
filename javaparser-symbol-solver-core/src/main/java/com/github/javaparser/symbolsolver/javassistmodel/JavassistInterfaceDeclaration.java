@@ -91,8 +91,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedReferenceType> getInterfacesExtended() {
-        return Arrays.stream(ctClass.getClassFile().getInterfaces()).map(i -> typeSolver.solveType(i))
-                .map(i -> new ReferenceTypeImpl(i, typeSolver)).collect(Collectors.toList());
+        return javassistTypeDeclarationAdapter.getInterfaces();
     }
 
     @Override
@@ -177,41 +176,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        if (ctClass.getGenericSignature() == null) {
-            for (String superInterface : ctClass.getClassFile().getInterfaces()) {
-                try {
-                    ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(superInterface)), typeSolver));
-                } catch (UnsolvedSymbolException e) {
-                    if (!acceptIncompleteList) {
-                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                        throw e;
-                    }
-                }
-            }
-        } else {
-            try {
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                for (SignatureAttribute.ClassType superInterface : classSignature.getInterfaces()) {
-                    try {
-                        ancestors.add(JavassistUtils.signatureTypeToType(superInterface, typeSolver, this).asReferenceType());
-                    } catch (UnsolvedSymbolException e) {
-                        if (!acceptIncompleteList) {
-                            // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                            throw e;
-                        }
-                    }
-                }
-            } catch (BadBytecode e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        // Remove all {@code java.lang.Object}, then add precisely one.
-        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
-        ancestors.add(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver));
-
-        return ancestors;
+        return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
     }
 
     @Override
