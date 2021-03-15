@@ -23,12 +23,14 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
@@ -36,6 +38,7 @@ import javassist.*;
 import javassist.bytecode.*;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +79,45 @@ class JavassistUtils {
         }
 
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
+    }
+
+    static SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+                                                                  TypeSolver typeSolver, ResolvedReferenceTypeDeclaration scopeType, CtClass ctClass) {
+        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
+        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || java.lang.reflect.Modifier.isStatic(m.getModifiers());
+        for (CtMethod method : ctClass.getDeclaredMethods()) {
+            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
+            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
+            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
+                ResolvedMethodDeclaration candidate = new JavassistMethodDeclaration(method, typeSolver);
+                candidates.add(candidate);
+
+                // no need to search for overloaded/inherited methods if the method has no parameters
+                if (argumentsTypes.isEmpty() && candidate.getNumberOfParams() == 0) {
+                    return SymbolReference.solved(candidate);
+                }
+            }
+        }
+
+        // add the method declaration of the interfaces to the candidates, if present
+        for (ResolvedReferenceType ancestorRefType : scopeType.getAncestors()) {
+            Optional<ResolvedReferenceTypeDeclaration> ancestorTypeDeclOpt = ancestorRefType.getTypeDeclaration();
+            if (ancestorTypeDeclOpt.isPresent()) {
+                SymbolReference<ResolvedMethodDeclaration> ancestorMethodRef = MethodResolutionLogic.solveMethodInType(
+                        ancestorTypeDeclOpt.get(),
+                        name,
+                        argumentsTypes,
+                        staticOnly
+                );
+                if (ancestorMethodRef.isSolved()) {
+                    candidates.add(ancestorMethodRef.getCorrespondingDeclaration());
+                }
+            } else {
+                // Consider IllegalStateException or similar?
+            }
+        }
+
+        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
     }
 
     static ResolvedType signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {

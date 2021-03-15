@@ -40,22 +40,15 @@ import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.AccessFlag;
-import javassist.bytecode.SyntheticAttribute;
 
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -189,55 +182,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
-        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
-        for (CtMethod method : ctClass.getDeclaredMethods()) {
-            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
-            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
-            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
-                ResolvedMethodDeclaration candidate = new JavassistMethodDeclaration(method, typeSolver);
-                candidates.add(candidate);
-
-                // no need to search for overloaded/inherited methods if the method has no parameters
-                if (argumentsTypes.isEmpty() && candidate.getNumberOfParams() == 0) {
-                    return SymbolReference.solved(candidate);
-                }
-            }
-        }
-
-        // add the method declaration of the superclass to the candidates, if present
-        getSuperClass()
-                .flatMap(ResolvedReferenceType::getTypeDeclaration)
-                .ifPresent(superclassTypeDeclaration -> {
-                    SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInType(
-                            superclassTypeDeclaration,
-                            name,
-                            argumentsTypes,
-                            staticOnly
-                    );
-                    if (superClassMethodRef.isSolved()) {
-                        candidates.add(superClassMethodRef.getCorrespondingDeclaration());
-                    }
-                });
-
-        // add the method declaration of the interfaces to the candidates, if present
-        for (ResolvedReferenceType interfaceRef : getInterfaces()) {
-            if (interfaceRef.getTypeDeclaration().isPresent()) {
-                SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
-                        interfaceRef.getTypeDeclaration().get(),
-                        name,
-                        argumentsTypes,
-                        staticOnly
-                );
-                if (interfaceMethodRef.isSolved()) {
-                    candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
-                }
-            } else {
-                // Consider IllegalStateException or similar?
-            }
-        }
-
-        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
     public ResolvedType getUsage(Node node) {

@@ -40,23 +40,16 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.AccessFlag;
-import javassist.bytecode.SyntheticAttribute;
 
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -119,29 +112,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
-        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
-        for (CtMethod method : ctClass.getDeclaredMethods()) {
-            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
-            boolean isNotBridge =  (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
-            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
-                candidates.add(new JavassistMethodDeclaration(method, typeSolver));
-            }
-        }
-
-        for (ResolvedReferenceType interfaceType : getInterfacesExtended()) {
-            SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
-                    interfaceType.getTypeDeclaration().get(),
-                    name,
-                    argumentsTypes,
-                    staticOnly
-            );
-            if (interfaceMethodRef.isSolved()) {
-                candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
-            }
-        }
-
-        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
     @Override
