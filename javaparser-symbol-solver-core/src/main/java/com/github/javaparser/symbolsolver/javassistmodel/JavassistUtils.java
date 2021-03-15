@@ -27,6 +27,8 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
@@ -41,8 +43,11 @@ import java.util.stream.Collectors;
  */
 class JavassistUtils {
 
-    static Optional<MethodUsage> getMethodUsage(CtClass ctClass, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
-                                                List<ResolvedTypeParameterDeclaration> typeParameters, List<ResolvedType> typeParameterValues) {
+    static Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+                                                    Context invokationContext, List<ResolvedType> typeParameterValues,
+                                                    ResolvedReferenceTypeDeclaration scopeType, CtClass ctClass) {
+        List<ResolvedTypeParameterDeclaration> typeParameters = scopeType.getTypeParameters();
+
         List<MethodUsage> methods = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)
@@ -63,27 +68,11 @@ class JavassistUtils {
             }
         }
 
-        try {
-            CtClass superClass = ctClass.getSuperclass();
-            if (superClass != null) {
-                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(superClass, name, argumentsTypes, typeSolver, typeParameters, typeParameterValues);
-                if (ref.isPresent()) {
-                    methods.add(ref.get());
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(interfaze, name, argumentsTypes, typeSolver, typeParameters, typeParameterValues);
-                if (ref.isPresent()) {
-                    methods.add(ref.get());
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+        for (ResolvedReferenceType ancestor : scopeType.getAncestors()) {
+            ancestor.getTypeDeclaration()
+                .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
+                .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
+                .ifPresent(methods::add);
         }
 
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
