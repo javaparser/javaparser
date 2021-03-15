@@ -52,7 +52,7 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
             if (signature == null) {
                 signature = ctField.getSignature();
             }
-            SignatureAttribute.Type genericSignatureType = SignatureAttribute.toFieldSignature(signature);
+            SignatureAttribute.Type genericSignatureType = SignatureAttribute.toTypeSignature(signature);
             return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
