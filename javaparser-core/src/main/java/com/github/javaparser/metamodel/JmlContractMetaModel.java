@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.MeasuredByClause;
+
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -34,12 +35,18 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class MeasuredByClauseMetaModel extends JmlClauseMetaModel {
+public class JmlContractMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    MeasuredByClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, MeasuredByClause.class, "MeasuredByClause", "com.github.javaparser.ast.clauses", false, false);
+    JmlContractMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, JmlContract.class, "JmlContract", "com.github.javaparser.ast.clauses", false, false);
     }
 
-    public PropertyMetaModel ePropertyMetaModel;
+    public PropertyMetaModel behaviorPropertyMetaModel;
+
+    public PropertyMetaModel clausesPropertyMetaModel;
+
+    public PropertyMetaModel modifierPropertyMetaModel;
+
+    public PropertyMetaModel subContractsPropertyMetaModel;
 }

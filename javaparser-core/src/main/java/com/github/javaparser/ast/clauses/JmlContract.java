@@ -1,10 +1,7 @@
 package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Jmlish;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.stmt.Behavior;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -22,6 +19,15 @@ public class JmlContract extends Node implements Jmlish {
     public JmlContract() {
         super(null);
     }
+
+    @AllFieldsConstructor
+    public JmlContract(
+            Behavior behavior, Modifier modifier, NodeList<JmlClause> clauses,
+            NodeList<JmlContract> subContracts) {
+        super(null);
+
+    }
+
 
     public JmlContract(TokenRange tokenRange) {
         super(tokenRange);

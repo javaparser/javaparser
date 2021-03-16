@@ -30,14 +30,18 @@ import com.github.javaparser.ast.Generated;
  *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
  *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
  * </ul>
- *
+ * <p>
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class EnsuresClauseMetaModel extends ClauseMetaModel {
+public class EnsuresClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     EnsuresClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, EnsuresClause.class, "EnsuresClause", "com.github.javaparser.ast.clauses", false, false);
     }
+
+    public PropertyMetaModel exprPropertyMetaModel;
+
+    public PropertyMetaModel heapsPropertyMetaModel;
 }
