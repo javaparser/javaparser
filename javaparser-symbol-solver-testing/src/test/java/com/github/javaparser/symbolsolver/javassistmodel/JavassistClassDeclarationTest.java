@@ -538,8 +538,6 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
             assertTrue(cu.isAssignableBy(node));
         }
 
-        @Disabled("JavassistInterfaceDeclaration doesn't implement isAssignableBy yet." +
-                  "See https://github.com/javaparser/javaparser/issues/2761")
         @Test
         void whenInterfaceIsProvided() {
             JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) newTypeSolver.solveType(
