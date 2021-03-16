@@ -934,22 +934,32 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final AccessibleClause n, final Visitable arg) {
-        return true;
+        final AccessibleClause n2 = (AccessibleClause) arg;
+        if (!nodesEquals(n.getExprs(), n2.getExprs()))
+            return false;
+        if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
+            return false;
+        return nodeEquals(n.getMeasuredBy(), n2.getMeasuredBy());
     }
 
     @Override
     public Boolean visit(final AssignableClause n, final Visitable arg) {
-        return true;
+        final AssignableClause n2 = (AssignableClause) arg;
+        if (!nodesEquals(n.getExprs(), n2.getExprs()))
+            return false;
+        return nodesEquals(n.getHeaps(), n2.getHeaps());
     }
 
     @Override
     public Boolean visit(final BreaksClause n, final Visitable arg) {
-        return true;
+        final BreaksClause n2 = (BreaksClause) arg;
+        return nodeEquals(n.getExpr(), n2.getExpr());
     }
 
     @Override
     public Boolean visit(final ContinuesClause n, final Visitable arg) {
-        return true;
+        final ContinuesClause n2 = (ContinuesClause) arg;
+        return nodeEquals(n.getExpr(), n2.getExpr());
     }
 
     @Override
@@ -959,7 +969,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final EnsuresClause n, final Visitable arg) {
-        return true;
+        final EnsuresClause n2 = (EnsuresClause) arg;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        return nodesEquals(n.getHeaps(), n2.getHeaps());
     }
 
     @Override
@@ -1020,7 +1033,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final MeasuredByClause n, final Visitable arg) {
-        return true;
+        final MeasuredByClause n2 = (MeasuredByClause) arg;
+        return nodeEquals(n.getE(), n2.getE());
     }
 
     @Override
@@ -1030,22 +1044,32 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final RequiresClause n, final Visitable arg) {
-        return true;
+        final RequiresClause n2 = (RequiresClause) arg;
+        if (!nodeEquals(n.getE(), n2.getE()))
+            return false;
+        return nodesEquals(n.getHeaps(), n2.getHeaps());
     }
 
     @Override
     public Boolean visit(final ReturnsClause n, final Visitable arg) {
-        return true;
+        final ReturnsClause n2 = (ReturnsClause) arg;
+        return nodeEquals(n.getExpr(), n2.getExpr());
     }
 
     @Override
     public Boolean visit(final SignalsClause n, final Visitable arg) {
-        return true;
+        final SignalsClause n2 = (SignalsClause) arg;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        return nodeEquals(n.getType(), n2.getType());
     }
 
     @Override
     public Boolean visit(final SignalsOnlyClause n, final Visitable arg) {
-        return true;
+        final SignalsOnlyClause n2 = (SignalsOnlyClause) arg;
+        return nodesEquals(n.getTypes(), n2.getTypes());
     }
 
     @Override
@@ -1155,5 +1179,17 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
         return nodesEquals(n.getAnnotations(), n2.getAnnotations());
+    }
+
+    @Override
+    public Boolean visit(final JmlContract n, final Visitable arg) {
+        final JmlContract n2 = (JmlContract) arg;
+        if (!objEquals(n.getBehavior(), n2.getBehavior()))
+            return false;
+        if (!nodesEquals(n.getClauses(), n2.getClauses()))
+            return false;
+        if (!nodeEquals(n.getModifier(), n2.getModifier()))
+            return false;
+        return nodesEquals(n.getSubContracts(), n2.getSubContracts());
     }
 }

@@ -12,6 +12,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.EnsuresClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -36,6 +39,8 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnsuresClause(TokenRange tokenRange, NodeList<SimpleName> heaps, Expression expr) {
         super(tokenRange);
+        setHeaps(heaps);
+        setExpr(expr);
         customInitialization();
     }
 
@@ -47,6 +52,12 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < heaps.size(); i++) {
+            if (heaps.get(i) == node) {
+                heaps.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -55,6 +66,16 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expr) {
+            setExpr((Expression) replacementNode);
+            return true;
+        }
+        for (int i = 0; i < heaps.size(); i++) {
+            if (heaps.get(i) == node) {
+                heaps.set(i, (SimpleName) replacementNode);
+                return true;
+            }
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -89,5 +110,43 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
     public EnsuresClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getExpr() {
+        return expr;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public EnsuresClause setExpr(final Expression expr) {
+        assertNotNull(expr);
+        if (expr == this.expr) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
+        this.expr = expr;
+        setAsParentNodeOf(expr);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getHeaps() {
+        return heaps;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public EnsuresClause setHeaps(final NodeList<SimpleName> heaps) {
+        assertNotNull(heaps);
+        if (heaps == this.heaps) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.HEAPS, this.heaps, heaps);
+        if (this.heaps != null)
+            this.heaps.setParentNode(null);
+        this.heaps = heaps;
+        setAsParentNodeOf(heaps);
+        return this;
     }
 }

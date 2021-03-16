@@ -12,6 +12,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SignalsMetaModel;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.metamodel.SignalsClauseMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -39,6 +44,9 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SignalsClause(TokenRange tokenRange, Type type, SimpleName name, Expression expr) {
         super(tokenRange);
+        setType(type);
+        setName(name);
+        setExpr(expr);
         customInitialization();
     }
 
@@ -55,6 +63,18 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expr) {
+            setExpr((Expression) replacementNode);
+            return true;
+        }
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -83,5 +103,68 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     public SignalsClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getExpr() {
+        return expr;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SignalsClause setExpr(final Expression expr) {
+        assertNotNull(expr);
+        if (expr == this.expr) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
+        this.expr = expr;
+        setAsParentNodeOf(expr);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getName() {
+        return name;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SignalsClause setName(final SimpleName name) {
+        assertNotNull(name);
+        if (name == this.name) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type getType() {
+        return type;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SignalsClause setType(final Type type) {
+        assertNotNull(type);
+        if (type == this.type) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
+        this.type = type;
+        setAsParentNodeOf(type);
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public SignalsClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.signalsClauseMetaModel;
     }
 }

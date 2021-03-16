@@ -8,6 +8,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JmlClauseMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -58,5 +60,11 @@ public abstract class JmlClause extends Node implements Jmlish {
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlClause clone() {
         return (JmlClause) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClauseMetaModel;
     }
 }

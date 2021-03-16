@@ -10,6 +10,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ContinuesClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -33,6 +36,7 @@ public class ContinuesClause extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ContinuesClause(TokenRange tokenRange, Expression expr) {
         super(tokenRange);
+        setExpr(expr);
         customInitialization();
     }
 
@@ -61,6 +65,10 @@ public class ContinuesClause extends JmlClause {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expr) {
+            setExpr((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -83,5 +91,24 @@ public class ContinuesClause extends JmlClause {
     public ContinuesClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getExpr() {
+        return expr;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ContinuesClause setExpr(final Expression expr) {
+        assertNotNull(expr);
+        if (expr == this.expr) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
+        this.expr = expr;
+        setAsParentNodeOf(expr);
+        return this;
     }
 }

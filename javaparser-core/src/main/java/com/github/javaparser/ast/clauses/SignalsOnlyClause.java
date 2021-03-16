@@ -11,6 +11,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SignalsOnlyMetaModel;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.metamodel.SignalsOnlyClauseMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -31,6 +36,7 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SignalsOnlyClause(TokenRange tokenRange, NodeList<Type> types) {
         super(tokenRange);
+        setTypes(types);
         customInitialization();
     }
 
@@ -59,6 +65,12 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i) == node) {
+                types.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -67,6 +79,12 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i) == node) {
+                types.set(i, (Type) replacementNode);
+                return true;
+            }
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -85,4 +103,28 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
         customInitialization();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Type> getTypes() {
+        return types;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SignalsOnlyClause setTypes(final NodeList<Type> types) {
+        assertNotNull(types);
+        if (types == this.types) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
+        if (this.types != null)
+            this.types.setParentNode(null);
+        this.types = types;
+        setAsParentNodeOf(types);
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public SignalsOnlyClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.signalsOnlyClauseMetaModel;
+    }
 }

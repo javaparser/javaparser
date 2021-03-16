@@ -1268,8 +1268,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final AccessibleClause n, final Object arg) {
+        NodeList<Expression> exprs = cloneList(n.getExprs(), arg);
+        NodeList<SimpleName> heaps = cloneList(n.getHeaps(), arg);
+        Expression measuredBy = cloneNode(n.getMeasuredBy(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        AccessibleClause r = new AccessibleClause(n.getTokenRange().orElse(null));
+        AccessibleClause r = new AccessibleClause(n.getTokenRange().orElse(null), heaps, exprs, measuredBy);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1278,8 +1281,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final AssignableClause n, final Object arg) {
+        NodeList<Expression> exprs = cloneList(n.getExprs(), arg);
+        NodeList<SimpleName> heaps = cloneList(n.getHeaps(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        AssignableClause r = new AssignableClause(n.getTokenRange().orElse(null));
+        AssignableClause r = new AssignableClause(n.getTokenRange().orElse(null), heaps, exprs);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1288,8 +1293,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final BreaksClause n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        BreaksClause r = new BreaksClause(n.getTokenRange().orElse(null));
+        BreaksClause r = new BreaksClause(n.getTokenRange().orElse(null), expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1298,8 +1304,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final ContinuesClause n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ContinuesClause r = new ContinuesClause(n.getTokenRange().orElse(null));
+        ContinuesClause r = new ContinuesClause(n.getTokenRange().orElse(null), expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1318,8 +1325,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final EnsuresClause n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
+        NodeList<SimpleName> heaps = cloneList(n.getHeaps(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        EnsuresClause r = new EnsuresClause(n.getTokenRange().orElse(null));
+        EnsuresClause r = new EnsuresClause(n.getTokenRange().orElse(null), heaps, expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1420,8 +1429,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final MeasuredByClause n, final Object arg) {
+        Expression e = cloneNode(n.getE(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        MeasuredByClause r = new MeasuredByClause(n.getTokenRange().orElse(null));
+        MeasuredByClause r = new MeasuredByClause(n.getTokenRange().orElse(null), e);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1440,8 +1450,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final RequiresClause n, final Object arg) {
+        Expression e = cloneNode(n.getE(), arg);
+        NodeList<SimpleName> heaps = cloneList(n.getHeaps(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        RequiresClause r = new RequiresClause(n.getTokenRange().orElse(null));
+        RequiresClause r = new RequiresClause(n.getTokenRange().orElse(null), heaps, e);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1450,8 +1462,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final ReturnsClause n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ReturnsClause r = new ReturnsClause(n.getTokenRange().orElse(null));
+        ReturnsClause r = new ReturnsClause(n.getTokenRange().orElse(null), expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1460,8 +1473,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final SignalsClause n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SignalsClause r = new SignalsClause(n.getTokenRange().orElse(null));
+        SignalsClause r = new SignalsClause(n.getTokenRange().orElse(null), type, name, expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1470,8 +1486,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final SignalsOnlyClause n, final Object arg) {
+        NodeList<Type> types = cloneList(n.getTypes(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SignalsOnlyClause r = new SignalsOnlyClause(n.getTokenRange().orElse(null));
+        SignalsOnlyClause r = new SignalsOnlyClause(n.getTokenRange().orElse(null), types);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1657,6 +1674,19 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlRepresentsDeclaration r = new JmlRepresentsDeclaration(n.getTokenRange().orElse(null), modifiers, id, expr);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlContract n, final Object arg) {
+        NodeList<JmlClause> clauses = cloneList(n.getClauses(), arg);
+        Modifier modifier = cloneNode(n.getModifier(), arg);
+        NodeList<JmlContract> subContracts = cloneList(n.getSubContracts(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlContract r = new JmlContract(n.getTokenRange().orElse(null), n.getBehavior(), modifier, clauses, subContracts);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

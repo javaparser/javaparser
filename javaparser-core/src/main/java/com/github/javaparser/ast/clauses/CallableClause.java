@@ -7,6 +7,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.CallableClauseMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -62,4 +64,9 @@ public class CallableClause extends JmlClause {
         v.visit(this, arg);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public CallableClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.callableClauseMetaModel;
+    }
 }

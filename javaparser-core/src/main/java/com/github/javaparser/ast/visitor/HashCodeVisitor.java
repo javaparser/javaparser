@@ -456,22 +456,22 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final AccessibleClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExprs().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final AssignableClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExprs().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final BreaksClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final ContinuesClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -481,7 +481,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final EnsuresClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -536,7 +536,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final MeasuredByClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getE().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -546,22 +546,22 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final RequiresClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getE().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final ReturnsClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final SignalsClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final SignalsOnlyClause n, final Void arg) {
-        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getTypes().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -647,5 +647,10 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlRepresentsDeclaration n, final Void arg) {
         return (n.getExpr().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlContract n, final Void arg) {
+        return (n.getBehavior().hashCode()) * 31 + (n.getClauses().accept(this, arg)) * 31 + (n.getModifier().accept(this, arg)) * 31 + (n.getSubContracts().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }

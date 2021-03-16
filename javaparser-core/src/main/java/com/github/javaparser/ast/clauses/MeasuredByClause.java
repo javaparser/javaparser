@@ -12,6 +12,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.MeasuredByClauseMetaModel;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -32,6 +35,7 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MeasuredByClause(TokenRange tokenRange, Expression e) {
         super(tokenRange);
+        setE(e);
         customInitialization();
     }
 
@@ -63,6 +67,10 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == e) {
+            setE((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -85,5 +93,24 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     public MeasuredByClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getE() {
+        return e;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public MeasuredByClause setE(final Expression e) {
+        assertNotNull(e);
+        if (e == this.e) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.E, this.e, e);
+        if (this.e != null)
+            this.e.setParentNode(null);
+        this.e = e;
+        setAsParentNodeOf(e);
+        return this;
     }
 }
