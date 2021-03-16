@@ -135,8 +135,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-        // TODO #1837
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getAllFields();
     }
 
     @Override

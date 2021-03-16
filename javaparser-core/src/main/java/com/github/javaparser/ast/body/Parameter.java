@@ -20,10 +20,8 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -38,11 +36,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ParameterMetaModel;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.ast.Generated;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
@@ -137,7 +134,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     public Parameter setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (Parameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -150,7 +147,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setVarArgs(final boolean isVarArgs) {
         if (isVarArgs == this.isVarArgs) {
-            return (Parameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
@@ -189,7 +186,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (Parameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -203,7 +200,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     public Parameter setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (Parameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -217,7 +214,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     public Parameter setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (Parameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         if (this.modifiers != null)
@@ -262,7 +259,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     public Parameter setVarArgsAnnotations(final NodeList<AnnotationExpr> varArgsAnnotations) {
         assertNotNull(varArgsAnnotations);
         if (varArgsAnnotations == this.varArgsAnnotations) {
-            return (Parameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VAR_ARGS_ANNOTATIONS, this.varArgsAnnotations, varArgsAnnotations);
         if (this.varArgsAnnotations != null)

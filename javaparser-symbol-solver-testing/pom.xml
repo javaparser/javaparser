@@ -3,7 +3,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.18.1-SNAPSHOT</version>
+        <version>3.20.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -40,6 +40,8 @@
                             <parallel>methods</parallel>
                             <threadCount>4</threadCount>
                             <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
+                            <reportFormat>plain</reportFormat>
+                            <failIfNoTests>true</failIfNoTests>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -55,6 +57,8 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
+                            <reportFormat>plain</reportFormat>
+                            <failIfNoTests>true</failIfNoTests>
                         </configuration>
                     </plugin>
                 </plugins>
