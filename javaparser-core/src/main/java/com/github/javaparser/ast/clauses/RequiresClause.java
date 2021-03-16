@@ -83,6 +83,7 @@ public class RequiresClause extends JmlClause implements MethodContractable, Blo
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public RequiresClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();

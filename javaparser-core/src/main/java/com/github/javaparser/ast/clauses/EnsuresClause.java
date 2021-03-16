@@ -26,6 +26,8 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
     @AllFieldsConstructor
     public EnsuresClause(NodeList<SimpleName> heaps, Expression expr) {
         super();
+        this.heaps = heaps;
+        this.expr = expr;
     }
 
     /**
@@ -83,6 +85,7 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnsuresClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();

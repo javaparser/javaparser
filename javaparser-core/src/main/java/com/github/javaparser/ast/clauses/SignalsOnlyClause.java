@@ -85,6 +85,7 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SignalsOnlyClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();

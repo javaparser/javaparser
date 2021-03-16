@@ -79,6 +79,7 @@ public class ReturnsClause extends JmlClause implements BlockContractable {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReturnsClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();

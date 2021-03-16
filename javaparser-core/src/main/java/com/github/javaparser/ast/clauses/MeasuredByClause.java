@@ -81,6 +81,7 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MeasuredByClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();

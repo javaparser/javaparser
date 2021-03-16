@@ -74,6 +74,7 @@ public class DivergesClause extends JmlClause implements MethodContractable {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public DivergesClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();

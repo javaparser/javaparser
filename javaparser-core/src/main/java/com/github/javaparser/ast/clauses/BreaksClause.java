@@ -80,6 +80,7 @@ public class BreaksClause extends JmlClause {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BreaksClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
