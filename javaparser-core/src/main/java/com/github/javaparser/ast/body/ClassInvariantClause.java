@@ -63,6 +63,7 @@ public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClaus
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassInvariantClause(Consumer<ClassInvariantClause> action) {
         action.accept(this);

@@ -74,7 +74,7 @@ public class JmlFunction extends Expression implements Jmlish {
     public JmlFunction setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
-            return (JmlFunction) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
@@ -93,7 +93,7 @@ public class JmlFunction extends Expression implements Jmlish {
     public JmlFunction setFunctionName(final JmlName functionName) {
         assertNotNull(functionName);
         if (functionName == this.functionName) {
-            return (JmlFunction) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.FUNCTION_NAME, this.functionName, functionName);
         if (this.functionName != null)

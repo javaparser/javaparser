@@ -30,10 +30,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -873,5 +871,80 @@ public abstract class Expression extends Node {
         Expression scope = (Expression) ((NodeWithOptionalScope) this).getScope().get();
         NodeWithTypeArguments nwta = (NodeWithTypeArguments) this;
         return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
+    }
+
+    public boolean isJmlBindingExpr() {
+        return false;
+    }
+
+    public JmlBindingExpr asJmlBindingExpr() {
+        throw new IllegalStateException(f("%s is not JmlBindingExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlBindingExpr> toJmlBindingExpr() {
+        return Optional.empty();
+    }
+
+    public void ifJmlBindingExpr(Consumer<JmlBindingExpr> action) {
+    }
+
+    public boolean isJmlFunction() {
+        return false;
+    }
+
+    public JmlFunction asJmlFunction() {
+        throw new IllegalStateException(f("%s is not JmlFunction, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlFunction> toJmlFunction() {
+        return Optional.empty();
+    }
+
+    public void ifJmlFunction(Consumer<JmlFunction> action) {
+    }
+
+    public boolean isJmlLabel() {
+        return false;
+    }
+
+    public JmlLabel asJmlLabel() {
+        throw new IllegalStateException(f("%s is not JmlLabel, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlLabel> toJmlLabel() {
+        return Optional.empty();
+    }
+
+    public void ifJmlLabel(Consumer<JmlLabel> action) {
+    }
+
+    public boolean isJmlLetExpr() {
+        return false;
+    }
+
+    public JmlLetExpr asJmlLetExpr() {
+        throw new IllegalStateException(f("%s is not JmlLetExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlLetExpr> toJmlLetExpr() {
+        return Optional.empty();
+    }
+
+    public void ifJmlLetExpr(Consumer<JmlLetExpr> action) {
+    }
+
+    public boolean isJmlMultiCompareExpr() {
+        return false;
+    }
+
+    public JmlMultiCompareExpr asJmlMultiCompareExpr() {
+        throw new IllegalStateException(f("%s is not JmlMultiCompareExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlMultiCompareExpr> toJmlMultiCompareExpr() {
+        return Optional.empty();
+    }
+
+    public void ifJmlMultiCompareExpr(Consumer<JmlMultiCompareExpr> action) {
     }
 }

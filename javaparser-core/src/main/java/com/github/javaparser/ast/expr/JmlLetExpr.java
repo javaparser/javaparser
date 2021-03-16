@@ -83,7 +83,7 @@ public class JmlLetExpr extends Expression {
     public JmlLetExpr setBody(final Expression body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (JmlLetExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
@@ -102,7 +102,7 @@ public class JmlLetExpr extends Expression {
     public JmlLetExpr setVariables(final NodeList<Parameter> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (JmlLetExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         if (this.variables != null)

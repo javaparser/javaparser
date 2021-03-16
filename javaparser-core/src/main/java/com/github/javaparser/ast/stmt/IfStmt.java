@@ -35,10 +35,8 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -168,7 +166,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public IfStmt removeElseStmt() {
-        return setElseStmt((Statement) null);
+        return setElseStmt(null);
     }
 
     /**

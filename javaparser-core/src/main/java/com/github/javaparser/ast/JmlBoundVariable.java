@@ -89,7 +89,7 @@ public class JmlBoundVariable extends Node implements NodeWithType<JmlBoundVaria
     public JmlBoundVariable setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (JmlBoundVariable) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -113,7 +113,7 @@ public class JmlBoundVariable extends Node implements NodeWithType<JmlBoundVaria
     public JmlBoundVariable setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (JmlBoundVariable) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)

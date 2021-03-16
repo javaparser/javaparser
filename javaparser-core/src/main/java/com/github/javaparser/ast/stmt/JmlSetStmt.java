@@ -52,6 +52,7 @@ public class JmlSetStmt extends Statement {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSetStmt(Consumer<JmlSetStmt> action) {
         action.accept(this);

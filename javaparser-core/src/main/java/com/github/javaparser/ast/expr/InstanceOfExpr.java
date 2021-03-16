@@ -35,10 +35,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.InstanceOfExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -219,7 +217,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public InstanceOfExpr removePattern() {
-        return setPattern((PatternExpr) null);
+        return setPattern(null);
     }
 
     @Override

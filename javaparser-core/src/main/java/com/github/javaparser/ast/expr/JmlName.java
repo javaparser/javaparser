@@ -98,7 +98,7 @@ public class JmlName extends Node implements NodeWithIdentifier<JmlName>, Jmlish
     public JmlName setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {
-            return (JmlName) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
@@ -123,7 +123,7 @@ public class JmlName extends Node implements NodeWithIdentifier<JmlName>, Jmlish
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlName setQualifier(final JmlName qualifier) {
         if (qualifier == this.qualifier) {
-            return (JmlName) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
         if (this.qualifier != null)
@@ -149,7 +149,7 @@ public class JmlName extends Node implements NodeWithIdentifier<JmlName>, Jmlish
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlName removeQualifier() {
-        return setQualifier((JmlName) null);
+        return setQualifier(null);
     }
 
     @Override

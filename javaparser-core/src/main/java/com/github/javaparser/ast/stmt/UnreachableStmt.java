@@ -53,6 +53,7 @@ public class UnreachableStmt extends Statement {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnreachableStmt(Consumer<UnreachableStmt> action) {
         action.accept(this);

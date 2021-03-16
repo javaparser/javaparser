@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.VoidTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 

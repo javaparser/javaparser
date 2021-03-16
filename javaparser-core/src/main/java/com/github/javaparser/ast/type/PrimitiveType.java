@@ -34,11 +34,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
-
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -99,7 +97,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
 
         final String descriptor;
 
-        private String codeRepresentation;
+        private final String codeRepresentation;
 
         public ClassOrInterfaceType toBoxedType() {
             return parseClassOrInterfaceType(nameOfBoxedType);

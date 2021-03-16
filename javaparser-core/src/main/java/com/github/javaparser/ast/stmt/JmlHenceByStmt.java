@@ -53,6 +53,7 @@ public class JmlHenceByStmt extends Statement implements Jmlish {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlHenceByStmt(Consumer<JmlHenceByStmt> action) {
         action.accept(this);

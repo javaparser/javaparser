@@ -35,7 +35,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.WildcardTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -174,12 +173,12 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeExtendedType() {
-        return setExtendedType((ReferenceType) null);
+        return setExtendedType(null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeSuperType() {
-        return setSuperType((ReferenceType) null);
+        return setSuperType(null);
     }
 
     @Override

@@ -33,7 +33,6 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -118,7 +117,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeClassName() {
-        return setTypeName((Name) null);
+        return setTypeName(null);
     }
 
     @Override
@@ -178,6 +177,6 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeTypeName() {
-        return setTypeName((Name) null);
+        return setTypeName(null);
     }
 }

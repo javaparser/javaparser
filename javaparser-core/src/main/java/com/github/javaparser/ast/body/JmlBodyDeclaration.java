@@ -50,6 +50,7 @@ public abstract class JmlBodyDeclaration<T extends BodyDeclaration<?>> extends B
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBodyDeclaration(Consumer<JmlBodyDeclaration> action) {
         action.accept(this);

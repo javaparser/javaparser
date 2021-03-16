@@ -135,7 +135,7 @@ public class JmlBindingExpr extends Expression {
     public JmlBindingExpr setExpressions(final NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
-            return (JmlBindingExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
         if (this.expressions != null)
@@ -154,7 +154,7 @@ public class JmlBindingExpr extends Expression {
     public JmlBindingExpr setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (JmlBindingExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         if (this.variables != null)

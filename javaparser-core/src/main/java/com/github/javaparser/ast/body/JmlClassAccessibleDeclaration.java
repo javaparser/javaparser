@@ -77,6 +77,7 @@ public class JmlClassAccessibleDeclaration extends JmlBodyDeclaration<JmlClassAc
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassAccessibleDeclaration(Consumer<JmlClassAccessibleDeclaration> action) {
         action.accept(this);

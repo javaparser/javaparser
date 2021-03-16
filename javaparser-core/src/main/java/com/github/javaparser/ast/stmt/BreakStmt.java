@@ -32,7 +32,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.BreakStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -136,7 +135,7 @@ public class BreakStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public BreakStmt removeLabel() {
-        return setLabel((SimpleName) null);
+        return setLabel(null);
     }
 
     @Override

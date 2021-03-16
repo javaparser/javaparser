@@ -52,6 +52,7 @@ public class JmlAssumeStmt extends Statement {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlAssumeStmt(Consumer<JmlAssumeStmt> action) {
         action.accept(this);

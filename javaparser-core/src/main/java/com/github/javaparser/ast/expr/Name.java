@@ -33,9 +33,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
@@ -154,7 +152,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Name removeQualifier() {
-        return setQualifier((Name) null);
+        return setQualifier(null);
     }
 
     @Override

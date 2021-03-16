@@ -52,6 +52,7 @@ public class JmlAssertStmt extends Statement {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlAssertStmt(Consumer<JmlAssertStmt> action) {
         action.accept(this);

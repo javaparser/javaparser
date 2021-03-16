@@ -35,11 +35,9 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -276,9 +274,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             Signature signature = (Signature) o;
             if (!name.equals(signature.name))
                 return false;
-            if (!parameterTypes.equals(signature.parameterTypes))
-                return false;
-            return true;
+            return parameterTypes.equals(signature.parameterTypes);
         }
 
         @Override
@@ -420,7 +416,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CallableDeclaration removeReceiverParameter() {
-        return setReceiverParameter((ReceiverParameter) null);
+        return setReceiverParameter(null);
     }
 
     @Override

@@ -44,10 +44,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -179,7 +177,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
-        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
+        String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
         final MethodDeclaration getter;
         getter = parentClass.map(clazz -> clazz.addMethod("get" + fieldNameUpper, Modifier.Keyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, Modifier.Keyword.PUBLIC));
         getter.setType(variable.getType());
@@ -206,7 +204,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
-        String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
+        String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
         final MethodDeclaration setter;
         setter = parentClass.map(clazz -> clazz.addMethod("set" + fieldNameUpper, Modifier.Keyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, Modifier.Keyword.PUBLIC));
         setter.setType(new VoidType());

@@ -41,10 +41,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -132,7 +130,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AnnotationMemberDeclaration removeDefaultValue() {
-        return setDefaultValue((Expression) null);
+        return setDefaultValue(null);
     }
 
     /**

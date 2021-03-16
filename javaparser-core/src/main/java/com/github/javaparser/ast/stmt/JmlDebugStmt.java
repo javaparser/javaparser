@@ -53,6 +53,7 @@ public class JmlDebugStmt extends Statement {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlDebugStmt(Consumer<JmlDebugStmt> action) {
         action.accept(this);

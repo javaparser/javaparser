@@ -66,6 +66,7 @@ public class JmlComment extends Comment {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlComment(Consumer<JmlComment> action) {
         action.accept(this);
