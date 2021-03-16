@@ -53,9 +53,9 @@ class JavassistTypeDeclarationAdapterTest extends AbstractResolutionTest {
         CtClass clazz = new ClassPool(true).getCtClass(ctClass);
 
         ResolvedReferenceTypeDeclaration declaration = JavassistFactory.toTypeDeclaration(clazz, typeSolver);
-        JavassistTypeDeclarationAdapter adapter = new JavassistTypeDeclarationAdapter(clazz, typeSolver);
+        JavassistTypeDeclarationAdapter adapter = new JavassistTypeDeclarationAdapter(clazz, typeSolver, declaration);
 
-        List<ResolvedReferenceType> resultAncestors = adapter.getAncestors(declaration, false);
+        List<ResolvedReferenceType> resultAncestors = adapter.getAncestors(false);
         assertEquals(expectedAncestors,
                 resultAncestors.stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toList()));
     }
