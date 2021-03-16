@@ -829,12 +829,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final Signals n, final A arg) {
+    public void visit(final SignalsClause n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
-    public void visit(final SignalsOnly n, final A arg) {
+    public void visit(final SignalsOnlyClause n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -844,7 +844,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final Callable n, final A arg) {
+    public void visit(final CallableClause n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -854,7 +854,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final Duration n, final A arg) {
+    public void visit(final DurationClause n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

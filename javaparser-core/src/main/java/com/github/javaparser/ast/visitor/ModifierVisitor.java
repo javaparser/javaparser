@@ -36,13 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.comments.*;
+
 import com.github.javaparser.ast.clauses.*;
 
 /**
@@ -1441,14 +1435,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final Signals n, final A arg) {
+    public Visitable visit(final SignalsClause n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }
 
     @Override
-    public Visitable visit(final SignalsOnly n, final A arg) {
+    public Visitable visit(final SignalsOnlyClause n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
@@ -1462,7 +1456,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final Callable n, final A arg) {
+    public Visitable visit(final CallableClause n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
@@ -1476,7 +1470,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final Duration n, final A arg) {
+    public Visitable visit(final DurationClause n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;

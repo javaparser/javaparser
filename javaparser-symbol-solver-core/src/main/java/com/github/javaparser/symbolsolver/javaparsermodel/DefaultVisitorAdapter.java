@@ -332,12 +332,12 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(Signals n, Boolean arg) {
+    public ResolvedType visit(SignalsClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(SignalsOnly n, Boolean arg) {
+    public ResolvedType visit(SignalsOnlyClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -347,7 +347,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(Callable n, Boolean arg) {
+    public ResolvedType visit(CallableClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -357,7 +357,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(Duration n, Boolean arg) {
+    public ResolvedType visit(DurationClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 

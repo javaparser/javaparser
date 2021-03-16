@@ -30,7 +30,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.clauses.*;
 
 /**
@@ -281,17 +280,17 @@ public interface GenericVisitor<R, A> {
 
     R visit(ReturnsClause n, A arg);
 
-    R visit(Signals n, A arg);
+    R visit(SignalsClause n, A arg);
 
-    R visit(SignalsOnly n, A arg);
+    R visit(SignalsOnlyClause n, A arg);
 
     R visit(UnreachableStmt n, A arg);
 
-    R visit(Callable n, A arg);
+    R visit(CallableClause n, A arg);
 
     R visit(CapturesClause n, A arg);
 
-    R visit(Duration n, A arg);
+    R visit(DurationClause n, A arg);
 
     R visit(ForallClause n, A arg);
 

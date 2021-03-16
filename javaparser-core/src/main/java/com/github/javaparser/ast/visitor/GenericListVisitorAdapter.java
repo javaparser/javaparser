@@ -2378,7 +2378,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final Signals n, final A arg) {
+    public List<R> visit(final SignalsClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2390,7 +2390,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final SignalsOnly n, final A arg) {
+    public List<R> visit(final SignalsOnlyClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2414,7 +2414,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final Callable n, final A arg) {
+    public List<R> visit(final CallableClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2438,7 +2438,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final Duration n, final A arg) {
+    public List<R> visit(final DurationClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {

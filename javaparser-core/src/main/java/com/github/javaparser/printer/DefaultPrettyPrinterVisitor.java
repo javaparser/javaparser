@@ -822,12 +822,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(Signals n, Void arg) {
+    public void visit(SignalsClause n, Void arg) {
 
     }
 
     @Override
-    public void visit(SignalsOnly n, Void arg) {
+    public void visit(SignalsOnlyClause n, Void arg) {
 
     }
 
@@ -837,7 +837,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(Callable n, Void arg) {
+    public void visit(CallableClause n, Void arg) {
 
     }
 
@@ -847,7 +847,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(Duration n, Void arg) {
+    public void visit(DurationClause n, Void arg) {
 
     }
 

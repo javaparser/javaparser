@@ -36,7 +36,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.clauses.DivergesClause;
+import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -185,7 +185,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.JmlRefiningStmt.class);
         add(com.github.javaparser.ast.stmt.UnreachableStmt.class);
 
-        add(com.github.javaparser.ast.clauses.Clause.class);
+        add(JmlClause.class);
         add(com.github.javaparser.ast.clauses.EnsuresClause.class);
         add(com.github.javaparser.ast.clauses.RequiresClause.class);
         add(com.github.javaparser.ast.clauses.AssignableClause.class);
@@ -193,8 +193,8 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.clauses.ModifiesClause.class);
         add(com.github.javaparser.ast.clauses.MeasuredByClause.class);
         add(com.github.javaparser.ast.clauses.DivergesClause.class);
-        add(com.github.javaparser.ast.clauses.Signals.class);
-        add(com.github.javaparser.ast.clauses.SignalsOnly.class);
+        add(SignalsClause.class);
+        add(SignalsOnlyClause.class);
         add(com.github.javaparser.ast.clauses.ReturnsClause.class);
         add(com.github.javaparser.ast.clauses.BreaksClause.class);
         add(com.github.javaparser.ast.clauses.ContinuesClause.class);
@@ -205,9 +205,10 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.clauses.ForallClause.class);
         add(com.github.javaparser.ast.clauses.WhenClause.class);
         add(com.github.javaparser.ast.clauses.CapturesClause.class);
-        add(com.github.javaparser.ast.clauses.Duration.class);
+        add(DurationClause.class);
         add(com.github.javaparser.ast.clauses.WorkingSpaceClause.class);
-        add(com.github.javaparser.ast.clauses.Callable.class);
+        add(CallableClause.class);
+        add(com.github.javaparser.ast.clauses.JmlContract.class);
 
         add(com.github.javaparser.ast.JmlBoundVariable.class);
 

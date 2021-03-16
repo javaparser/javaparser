@@ -1,9 +1,11 @@
-package com.github.javaparser.ast.stmt;
+package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Jmlish;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.stmt.Behavior;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -11,16 +13,17 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
-public class BlockContract extends Node implements Jmlish {
+public class JmlContract extends Node implements Jmlish {
     private Behavior behavior;
+    private Modifier modifier;
     private final NodeList<JmlClause> clauses = new NodeList<>();
-    private final NodeList<BlockContract> subContracts = new NodeList<>();
+    private final NodeList<JmlContract> subContracts = new NodeList<>();
 
-    public BlockContract() {
+    public JmlContract() {
         super(null);
     }
 
-    public BlockContract(TokenRange tokenRange) {
+    public JmlContract(TokenRange tokenRange) {
         super(tokenRange);
     }
 

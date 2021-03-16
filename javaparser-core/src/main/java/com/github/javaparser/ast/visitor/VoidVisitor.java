@@ -30,13 +30,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.clauses.*;
 
 /**
@@ -282,17 +275,17 @@ public interface VoidVisitor<A> {
 
     void visit(ReturnsClause n, A arg);
 
-    void visit(Signals n, A arg);
+    void visit(SignalsClause n, A arg);
 
-    void visit(SignalsOnly n, A arg);
+    void visit(SignalsOnlyClause n, A arg);
 
     void visit(UnreachableStmt n, A arg);
 
-    void visit(Callable n, A arg);
+    void visit(CallableClause n, A arg);
 
     void visit(CapturesClause n, A arg);
 
-    void visit(Duration n, A arg);
+    void visit(DurationClause n, A arg);
 
     void visit(ForallClause n, A arg);
 

@@ -2,24 +2,43 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.AccessibleClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.AccessibleClauseMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class AccessibleClause extends Clause {
+public class AccessibleClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
+    private NodeList<SimpleName> heaps;
+    private NodeList<Expression> exprs;
+    private Expression measuredBy;
+
+    public AccessibleClause() {
+    }
 
     @AllFieldsConstructor
-    public AccessibleClause() {
+    public AccessibleClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
         super();
     }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public AccessibleClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
+        super(tokenRange);
+        customInitialization();
+    }
+
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -47,15 +66,6 @@ public class AccessibleClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AccessibleClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.accessibleClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AccessibleClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 
     @Override

@@ -555,12 +555,12 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final Signals n, final Void arg) {
+    public Integer visit(final SignalsClause n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
-    public Integer visit(final SignalsOnly n, final Void arg) {
+    public Integer visit(final SignalsOnlyClause n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
@@ -570,7 +570,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final Callable n, final Void arg) {
+    public Integer visit(final CallableClause n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
@@ -580,7 +580,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final Duration n, final Void arg) {
+    public Integer visit(final DurationClause n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 

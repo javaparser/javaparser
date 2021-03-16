@@ -3,41 +3,55 @@ package com.github.javaparser.ast.clauses;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.SignalsOnlyMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public abstract class Clause extends Node implements Jmlish {
+public class SignalsOnlyClause extends JmlClause implements MethodContractable, BlockContractable {
+    private NodeList<Type> types;
 
     @AllFieldsConstructor
-    public Clause() {
-        this(null);
+    public SignalsOnlyClause(NodeList<Type> types) {
+        super();
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Clause(TokenRange tokenRange) {
+    public SignalsOnlyClause(TokenRange tokenRange, NodeList<Type> types) {
         super(tokenRange);
         customInitialization();
     }
 
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return null;
+    public SignalsOnlyClause() {
+
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Override
+    public boolean hasParentNode() {
+        return false;
     }
 
     @Override
@@ -58,13 +72,13 @@ public abstract class Clause extends Node implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public Clause clone() {
-        return (Clause) accept(new CloneVisitor(), null);
+    public SignalsOnlyClause clone() {
+        return (SignalsOnlyClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.clauseMetaModel;
+    public SignalsOnlyMetaModel getMetaModel() {
+        return JavaParserMetaModel.signalsOnlyMetaModel;
     }
 }

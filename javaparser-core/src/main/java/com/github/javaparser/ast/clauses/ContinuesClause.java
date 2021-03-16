@@ -2,24 +2,42 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ContinuesClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class ContinuesClause extends Clause {
+public class ContinuesClause extends JmlClause {
+    private Expression expr;
+
+
+    public ContinuesClause() {
+
+    }
+
 
     @AllFieldsConstructor
-    public ContinuesClause() {
+    public ContinuesClause(Expression expr) {
         super();
     }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ContinuesClause(TokenRange tokenRange, Expression expr) {
+        super(tokenRange);
+        customInitialization();
+    }
+
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
@@ -59,14 +77,5 @@ public class ContinuesClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ContinuesClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.continuesClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ContinuesClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 }

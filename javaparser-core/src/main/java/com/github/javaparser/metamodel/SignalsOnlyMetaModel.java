@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.SignalsOnly;
+
+import com.github.javaparser.ast.clauses.SignalsOnlyClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class SignalsOnlyMetaModel extends ClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     SignalsOnlyMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, SignalsOnly.class, "SignalsOnly", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, SignalsOnlyClause.class, "SignalsOnly", "com.github.javaparser.ast.clauses", false, false);
     }
 }

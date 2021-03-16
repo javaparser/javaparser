@@ -1,28 +1,37 @@
 package com.github.javaparser.ast.clauses;
 
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ForallClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.ForallClauseMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class ForallClause extends Clause {
+public class ForallClause extends JmlClause implements MethodContractable {
 
     private NodeList<JmlBoundVariable> variables;
 
     @AllFieldsConstructor
     public ForallClause(NodeList<JmlBoundVariable> variables) {
         this(null, variables);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ForallClause(TokenRange tokenRange, NodeList<JmlBoundVariable> variables) {
+        super(tokenRange);
+        setVariables(variables);
+        customInitialization();
     }
 
     @Override
@@ -46,7 +55,7 @@ public class ForallClause extends Clause {
     public ForallClause setVariables(final NodeList<JmlBoundVariable> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (ForallClause) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         if (this.variables != null)
@@ -94,15 +103,5 @@ public class ForallClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ForallClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.forallClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForallClause(TokenRange tokenRange, NodeList<JmlBoundVariable> variables) {
-        super(tokenRange);
-        setVariables(variables);
-        customInitialization();
     }
 }

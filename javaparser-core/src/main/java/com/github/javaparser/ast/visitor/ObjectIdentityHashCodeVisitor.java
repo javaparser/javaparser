@@ -28,7 +28,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import java.util.Optional;
 
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
@@ -548,12 +547,12 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final Signals n, final Void arg) {
+    public Integer visit(final SignalsClause n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final SignalsOnly n, final Void arg) {
+    public Integer visit(final SignalsOnlyClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -563,7 +562,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final Callable n, final Void arg) {
+    public Integer visit(final CallableClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -573,7 +572,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final Duration n, final Void arg) {
+    public Integer visit(final DurationClause n, final Void arg) {
         return n.hashCode();
     }
 

@@ -2,23 +2,32 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.LoopVariantClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.LoopVariantClauseMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class LoopVariantClause extends Clause {
+public class LoopVariantClause extends JmlClause implements LoopContractable {
 
     @AllFieldsConstructor
     public LoopVariantClause() {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public LoopVariantClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -59,14 +68,5 @@ public class LoopVariantClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LoopVariantClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.loopVariantClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LoopVariantClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 }

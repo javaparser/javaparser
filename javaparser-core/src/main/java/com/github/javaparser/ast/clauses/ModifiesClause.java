@@ -2,23 +2,31 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ModifiesClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.ModifiesClauseMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class ModifiesClause extends Clause {
-
+public class ModifiesClause extends JmlClause implements LoopContractable, MethodContractable, BlockContractable {
     @AllFieldsConstructor
     public ModifiesClause() {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ModifiesClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -59,14 +67,5 @@ public class ModifiesClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModifiesClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.modifiesClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModifiesClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 }

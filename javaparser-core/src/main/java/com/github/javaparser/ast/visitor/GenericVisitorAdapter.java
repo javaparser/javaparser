@@ -2225,7 +2225,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final Signals n, final A arg) {
+    public R visit(final SignalsClause n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
@@ -2235,7 +2235,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final SignalsOnly n, final A arg) {
+    public R visit(final SignalsOnlyClause n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
@@ -2255,7 +2255,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final Callable n, final A arg) {
+    public R visit(final CallableClause n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
@@ -2275,7 +2275,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final Duration n, final A arg) {
+    public R visit(final DurationClause n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);

@@ -1,24 +1,33 @@
 package com.github.javaparser.ast.clauses;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.DurationMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.CallableMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class Duration extends Clause {
+public class CallableClause extends JmlClause {
 
     @AllFieldsConstructor
-    public Duration() {
+    public CallableClause() {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public CallableClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -39,23 +48,14 @@ public class Duration extends Clause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public Duration clone() {
-        return (Duration) accept(new CloneVisitor(), null);
+    public CallableClause clone() {
+        return (CallableClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public DurationMetaModel getMetaModel() {
-        return JavaParserMetaModel.durationMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Duration(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
+    public CallableMetaModel getMetaModel() {
+        return JavaParserMetaModel.callableMetaModel;
     }
 
     @Override

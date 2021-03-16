@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.Callable;
+
+import com.github.javaparser.ast.clauses.CallableClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class CallableMetaModel extends ClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CallableMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, Callable.class, "Callable", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, CallableClause.class, "Callable", "com.github.javaparser.ast.clauses", false, false);
     }
 }

@@ -633,12 +633,12 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final Signals n, final Visitable arg) {
+    public Boolean visit(final SignalsClause n, final Visitable arg) {
         return n == arg;
     }
 
     @Override
-    public Boolean visit(final SignalsOnly n, final Visitable arg) {
+    public Boolean visit(final SignalsOnlyClause n, final Visitable arg) {
         return n == arg;
     }
 
@@ -648,7 +648,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final Callable n, final Visitable arg) {
+    public Boolean visit(final CallableClause n, final Visitable arg) {
         return n == arg;
     }
 
@@ -658,7 +658,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final Duration n, final Visitable arg) {
+    public Boolean visit(final DurationClause n, final Visitable arg) {
         return n == arg;
     }
 

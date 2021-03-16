@@ -640,12 +640,12 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final Signals n, final A arg) {
+    public R visit(final SignalsClause n, final A arg) {
         return defaultAction(n, arg);
     }
 
     @Override
-    public R visit(final SignalsOnly n, final A arg) {
+    public R visit(final SignalsOnlyClause n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -655,7 +655,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final Callable n, final A arg) {
+    public R visit(final CallableClause n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -665,7 +665,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final Duration n, final A arg) {
+    public R visit(final DurationClause n, final A arg) {
         return defaultAction(n, arg);
     }
 

@@ -1,30 +1,49 @@
 package com.github.javaparser.ast.clauses;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.OldClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OldClauseMetaModel;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class OldClause extends Clause {
+public class OldClause extends JmlClause implements MethodContractable {
 
     private NodeList<VariableDeclarator> variables;
 
     @AllFieldsConstructor
     public OldClause(NodeList<VariableDeclarator> variables) {
         this(null, variables);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public OldClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public OldClause(TokenRange tokenRange, NodeList<VariableDeclarator> variables) {
+        super(tokenRange);
+        setVariables(variables);
+        customInitialization();
     }
 
     @Override
@@ -67,14 +86,6 @@ public class OldClause extends Clause {
         return JavaParserMetaModel.oldClauseMetaModel;
     }
 
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    public OldClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -96,7 +107,7 @@ public class OldClause extends Clause {
     public OldClause setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (OldClause) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         if (this.variables != null)
@@ -104,15 +115,5 @@ public class OldClause extends Clause {
         this.variables = variables;
         setAsParentNodeOf(variables);
         return this;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public OldClause(TokenRange tokenRange, NodeList<VariableDeclarator> variables) {
-        super(tokenRange);
-        setVariables(variables);
-        customInitialization();
     }
 }

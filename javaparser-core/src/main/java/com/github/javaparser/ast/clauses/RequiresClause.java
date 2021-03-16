@@ -2,23 +2,41 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.RequiresClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.RequiresClauseMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class RequiresClause extends Clause {
+public class RequiresClause extends JmlClause implements MethodContractable, BlockContractable {
+    private NodeList<SimpleName> heaps;
+    private Expression e;
 
     @AllFieldsConstructor
-    public RequiresClause() {
+    public RequiresClause(NodeList<SimpleName> heaps, Expression e) {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public RequiresClause(TokenRange tokenRange, NodeList<SimpleName> heaps, Expression e) {
+        super(tokenRange);
+        customInitialization();
+    }
+
+    public RequiresClause() {
+
     }
 
     @Override
@@ -47,15 +65,6 @@ public class RequiresClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public RequiresClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.requiresClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public RequiresClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 
     @Override

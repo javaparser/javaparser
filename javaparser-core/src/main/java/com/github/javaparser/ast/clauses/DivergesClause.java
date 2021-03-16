@@ -2,23 +2,33 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DivergesClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class DivergesClause extends Clause {
+public class DivergesClause extends JmlClause implements MethodContractable {
 
     @AllFieldsConstructor
     public DivergesClause() {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public DivergesClause(TokenRange tokenRange, Expression e) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -59,14 +69,5 @@ public class DivergesClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public DivergesClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.divergesClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public DivergesClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 }

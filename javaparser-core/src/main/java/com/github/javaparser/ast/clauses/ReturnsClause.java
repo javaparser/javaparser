@@ -2,23 +2,38 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ReturnsClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.ReturnsClauseMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class ReturnsClause extends Clause {
+public class ReturnsClause extends JmlClause implements BlockContractable {
+    private Expression expr;
 
     @AllFieldsConstructor
-    public ReturnsClause() {
+    public ReturnsClause(Expression expr) {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ReturnsClause(TokenRange tokenRange, Expression expr) {
+        super(tokenRange);
+        customInitialization();
+    }
+
+    public ReturnsClause() {
+
     }
 
     @Override
@@ -59,14 +74,5 @@ public class ReturnsClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ReturnsClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.returnsClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ReturnsClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 }

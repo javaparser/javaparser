@@ -639,12 +639,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final Signals n, final A arg) {
+    public void visit(final SignalsClause n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
-    public void visit(final SignalsOnly n, final A arg) {
+    public void visit(final SignalsOnlyClause n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -654,7 +654,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final Callable n, final A arg) {
+    public void visit(final CallableClause n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -664,7 +664,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final Duration n, final A arg) {
+    public void visit(final DurationClause n, final A arg) {
         defaultAction(n, arg);
     }
 

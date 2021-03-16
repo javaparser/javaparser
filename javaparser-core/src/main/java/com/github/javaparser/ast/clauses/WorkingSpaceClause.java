@@ -1,24 +1,33 @@
 package com.github.javaparser.ast.clauses;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.WorkingSpaceClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.WorkingSpaceClauseMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class WorkingSpaceClause extends Clause {
+public class WorkingSpaceClause extends JmlClause implements MethodContractable {
 
     @AllFieldsConstructor
     public WorkingSpaceClause() {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public WorkingSpaceClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -47,15 +56,6 @@ public class WorkingSpaceClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public WorkingSpaceClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.workingSpaceClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WorkingSpaceClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 
     @Override

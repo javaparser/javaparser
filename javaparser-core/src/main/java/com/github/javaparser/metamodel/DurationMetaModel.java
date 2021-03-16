@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.Duration;
+
+import com.github.javaparser.ast.clauses.DurationClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class DurationMetaModel extends ClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     DurationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, Duration.class, "Duration", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, DurationClause.class, "Duration", "com.github.javaparser.ast.clauses", false, false);
     }
 }

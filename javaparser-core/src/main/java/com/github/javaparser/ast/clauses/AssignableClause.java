@@ -2,24 +2,43 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.AssignableClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.AssignableClauseMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class AssignableClause extends Clause {
+public class AssignableClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
+    private NodeList<SimpleName> heaps;
+    private NodeList<Expression> exprs;
+
+    public AssignableClause() {
+
+    }
 
     @AllFieldsConstructor
-    public AssignableClause() {
+    public AssignableClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
         super();
     }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public AssignableClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+        super(tokenRange);
+        customInitialization();
+    }
+
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -47,15 +66,6 @@ public class AssignableClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AssignableClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.assignableClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AssignableClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 
     @Override

@@ -28,7 +28,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import java.util.Optional;
 
 public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
@@ -548,12 +547,12 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final Signals n, final Void arg) {
+    public Integer visit(final SignalsClause n, final Void arg) {
         return 0;
     }
 
     @Override
-    public Integer visit(final SignalsOnly n, final Void arg) {
+    public Integer visit(final SignalsOnlyClause n, final Void arg) {
         return 0;
     }
 
@@ -563,7 +562,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final Callable n, final Void arg) {
+    public Integer visit(final CallableClause n, final Void arg) {
         return 0;
     }
 
@@ -573,7 +572,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final Duration n, final Void arg) {
+    public Integer visit(final DurationClause n, final Void arg) {
         return 0;
     }
 

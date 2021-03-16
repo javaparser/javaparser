@@ -2,40 +2,42 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.SignalsOnlyMetaModel;
+import com.github.javaparser.metamodel.ClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class SignalsOnly extends Clause {
+public abstract class JmlClause extends Node implements Jmlish {
 
     @AllFieldsConstructor
-    public SignalsOnly() {
-        super();
+    public JmlClause() {
+        this(null);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+        return null;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
-    }
-
-    @Override
-    public boolean hasParentNode() {
-        return false;
+    public <A> void accept(VoidVisitor<A> v, A arg) {
     }
 
     @Override
@@ -56,22 +58,13 @@ public class SignalsOnly extends Clause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public SignalsOnly clone() {
-        return (SignalsOnly) accept(new CloneVisitor(), null);
+    public JmlClause clone() {
+        return (JmlClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SignalsOnlyMetaModel getMetaModel() {
-        return JavaParserMetaModel.signalsOnlyMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SignalsOnly(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
+    public ClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.clauseMetaModel;
     }
 }

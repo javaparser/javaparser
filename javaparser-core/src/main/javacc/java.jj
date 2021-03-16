@@ -80,10 +80,12 @@ import java.util.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.clauses.JmlClause;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.utils.*;
 
 import static com.github.javaparser.JavaToken.INVALID;
@@ -4264,7 +4266,7 @@ LabeledStmt LabeledStatement():
 BlockStmt Block():
 {
     NodeList<Statement> stmts = emptyNodeList();
-    NodeList<BlockContract> contracts = emptyNodeList();
+    NodeList<JmlContract> contracts = emptyNodeList();
     JavaToken begin;
 }
 {
@@ -4283,29 +4285,30 @@ BlockStmt Block():
 
 BlockStmt BlockWithContract():
 {
-    BlockStmt b; NodeList<BlockContract> c=null;
+    BlockStmt b;
+    NodeList<JmlContract> c=null;
 }
 {
-  (c=jmlBlockContracts())?
+  (c=jmlContracts())?
   b=Block()
   { //TODO add contracts c to block b.
     return b;}
 }
 
 
-NodeList<BlockContract> jmlBlockContracts():
+NodeList<JmlContract> jmlContracts():
 {
-    BlockContract bc = null;
-    NodeList<BlockContract> contracts = emptyNodeList();
+    JmlContract bc = null;
+    NodeList<JmlContract> contracts = emptyNodeList();
 }
 {
   (<ALSO>)?
-  bc=blockContract() {contracts.add(bc);}
-  (<ALSO> bc=blockContract() {contracts.add(bc);})*
+  bc=jmlContract() {contracts.add(bc);}
+  (<ALSO> bc=jmlContract() {contracts.add(bc);})*
   {return contracts;}
 }
 
-BlockContract blockContract():
+JmlContract jmlContract():
 {
     JavaToken begin;
     NodeList<JmlClause> clauses = new NodeList<>();
@@ -4317,7 +4320,7 @@ BlockContract blockContract():
   (("public"|"private"|"package"|"protected"))?
   (b=bbehavior())?
   (clause=contractClause())+
-  {return new BlockContract(range(begin, token()));}
+  {return new JmlContract(range(begin, token()));}
 }
 
 JmlClause contractClause():
@@ -4326,6 +4329,7 @@ JmlClause contractClause():
 }
 {
   ( ret=breaks()
+  | ret=continues()
   | ret=returns_()
   | ret=requires()
   | ret=ensures()
@@ -4354,54 +4358,95 @@ Behavior bbehavior():
 
 JmlClause breaks():
 {
-    SimpleName id; Expression expr;
+    SimpleName id;
+    Expression expr;
+    JavaToken begin;
 }
 {
+  { begin = token();}
+  <BREAKS>
+  <LPAREN> (id=SimpleName())? <RPAREN>
+  expr=Expression()
+  { return new BreaksClause(range(begin, token()), expr); }
+}
+
+JmlClause continues():
+{
+    SimpleName id;
+    Expression expr;
+    JavaToken begin;
+}
+{
+  { begin = token();}
   (<BREAKS> | <CONTINUES>)
   <LPAREN> (id=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new JmlClause(); /* TODO */ }
+  { return new ContinuesClause(range(begin, token()), expr); }
 }
 
+
 JmlClause returns_():
-{SimpleName id; Expression expr;}
 {
+    SimpleName id;
+    Expression expr;
+    JavaToken begin;
+}
+{
+  { begin = token();}
   <RETURNS> expr=Expression()
-  { return new JmlClause(); /* TODO */ }
+  { return new ReturnsClause(range(begin, token()), expr); }
 }
 
 SimpleName heap():
-{ SimpleName name;}
+{
+    SimpleName name;
+}
 {
   <LT> name=SimpleName() <GT>
-  {return name;}
+  { return name; }
+}
+
+NodeList<SimpleName> heaps():
+{
+    NodeList<SimpleName> names = new NodeList<SimpleName>();
+    SimpleName name;
+}
+{
+  name=heap() { names.add(name); }
+  { return names; }
 }
 
 /**
 */
 JmlClause assign():
 {
-    SimpleName id, h, name;
-    Expression expr,e;
+    Expression e;
+    NodeList<SimpleName> heaps=null;
+    NodeList<Expression> exprs = new NodeList<>();
+    JavaToken begin;
 }
 {
+  { begin = token();}
   (<ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES> )
-  (h=heap())*
-  e=Expression() (<COMMA> e=Expression())*
-  { return new JmlClause(); /* TODO */ }
+  (heaps=heaps())*
+  e=Expression() {exprs.add(e);} (<COMMA> e=Expression() {exprs.add(e);})*
+  { return new AssignableClause(range(begin, token()), heaps, exprs); }
 }
 
 JmlClause acc():
 {
-    SimpleName id, h, name;
-    Expression expr,e;
+    NodeList<SimpleName> heaps=null;
+    Expression e;
+    NodeList<Expression> exprs = new NodeList<>();
+    JavaToken begin;
 }
 {
-  (<ACCESSIBLE> )
-  (h=heap())*
-  e=Expression() (<COMMA> e=Expression())*
-  (mby())?
-  { return new JmlClause(); /* TODO */ }
+  { begin = token();}
+  (<ACCESSIBLE>)
+  (heaps=heaps())*
+  e=Expression() {exprs.add(e);} (<COMMA> e=Expression() {exprs.add(e);})*
+  (<MEASURED_BY> e=Expression())?
+  { return new AccessibleClause(range(begin,token()), heaps, exprs, e); }
 }
 
 /**
@@ -4409,49 +4454,54 @@ Measures_by
 */
 JmlClause mby():
 {
-    SimpleName id, h, name;
-    Expression expr,e;
+    Expression e;
+    JavaToken begin;
 }
 {
+  { begin = token();}
   <MEASURED_BY> e=Expression()
-  { return new JmlClause(); /* TODO */ }
+  { return new MeasuredByClause(range(begin,token()), e); }
 }
 
 JmlClause requires():
 {
-    SimpleName id, h, name;
-    Expression expr,e;
+    NodeList<SimpleName> heaps=null;
+    Expression e;
+    JavaToken begin;
 }
 {
-  <REQUIRES>  (h=heap())* e=Expression()
-  { return new JmlClause(); /* TODO */ }
+  { begin = token();}
+    <REQUIRES>  (heaps=heaps())? e=Expression()
+  { return new RequiresClause(range(begin, token()), heaps, e); }
 }
-
-
 
 /**
 */
 JmlClause ensures():
 {
-    SimpleName id, h, name;
-    Expression expr,e;
+    NodeList<SimpleName> heaps=null;
+    Expression e;
+    JavaToken begin;
 }
 {
-  <ENSURES> (h=heap())* e=Expression()
-  { return new JmlClause(); /* TODO */ }
+  { begin = token();}
+  <ENSURES> (heaps=heaps())? e=Expression()
+  { return new EnsuresClause(range(begin, token()), heaps, e); }
 }
 
 /**
 */
 JmlClause signals():
 {
-    SimpleName id, h, name;
-    Expression expr,e;
+    SimpleName id=null;
+    Expression e;
     Type type;
+    JavaToken begin;
 }
 {
+  { begin = token(); }
   <SIGNALS> <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
-{ return new JmlClause(); /* TODO */ }
+  { return new SignalsClause(range(begin, token()), type, id, e); }
 }
 
 
@@ -4462,23 +4512,27 @@ singals_only  \everything;
 */
 JmlClause signalsOnly():
 {
-    Type type;
+  JavaToken begin;
+  Type type;
+  NodeList<Type> types = new NodeList<>();
 }
 {
-  <SIGNALS_ONLY> type=Type(emptyNodeList())
-  (<COMMA> type=Type(emptyNodeList()) )*
-  { return new JmlClause(); /* TODO */ }
+  {begin=token();}
+  <SIGNALS_ONLY> type=Type(emptyNodeList()) {types.add(type);}
+  (<COMMA> type=Type(emptyNodeList()) {types.add(type);})*
+  { return new SignalsOnlyClause(range(begin, token()), types); }
 }
 
 
 JmlClause diverges():
 {
-    SimpleName id, h, name;
-    Expression expr,e;
+  JavaToken begin;
+  Expression e;
 }
 {
+  {begin=token();}
   <DIVERGES> e=Expression()
-  { return new JmlClause(); /* TODO */ }
+  { return new DivergesClause(range(begin, token()), e); }
 }
 
 

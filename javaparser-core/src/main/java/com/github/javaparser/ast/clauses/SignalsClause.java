@@ -1,25 +1,45 @@
 package com.github.javaparser.ast.clauses;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.CallableMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.SignalsMetaModel;
 
 /**
  * @author Alexander Weigl
- * @version 1 (2/22/21)
+ * @version 1 (2/21/21)
  */
-public class Callable extends Clause {
+public class SignalsClause extends JmlClause implements MethodContractable, BlockContractable {
+    private Type type;
+    private SimpleName name;
+    private Expression expr;
+
+    public SignalsClause() {
+
+    }
 
     @AllFieldsConstructor
-    public Callable() {
+    public SignalsClause(Type type, SimpleName name, Expression expr) {
         super();
     }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public SignalsClause(TokenRange tokenRange, Type type, SimpleName name, Expression expr) {
+        super(tokenRange);
+        customInitialization();
+    }
+
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -39,23 +59,14 @@ public class Callable extends Clause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public Callable clone() {
-        return (Callable) accept(new CloneVisitor(), null);
+    public SignalsClause clone() {
+        return (SignalsClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public CallableMetaModel getMetaModel() {
-        return JavaParserMetaModel.callableMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Callable(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
+    public SignalsMetaModel getMetaModel() {
+        return JavaParserMetaModel.signalsMetaModel;
     }
 
     @Override

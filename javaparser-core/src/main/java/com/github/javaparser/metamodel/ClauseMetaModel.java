@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.Clause;
+
+import com.github.javaparser.ast.clauses.JmlClause;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 
@@ -39,7 +40,7 @@ public class ClauseMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, Clause.class, "Clause", "com.github.javaparser.ast.clauses", true, false);
+        super(superBaseNodeMetaModel, JmlClause.class, "Clause", "com.github.javaparser.ast.clauses", true, false);
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")

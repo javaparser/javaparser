@@ -2,23 +2,32 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.SignalsMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.DurationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
- * @version 1 (2/21/21)
+ * @version 1 (2/22/21)
  */
-public class Signals extends Clause {
+public class DurationClause extends JmlClause implements MethodContractable {
 
     @AllFieldsConstructor
-    public Signals() {
+    public DurationClause() {
         super();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public DurationClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -39,23 +48,14 @@ public class Signals extends Clause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public Signals clone() {
-        return (Signals) accept(new CloneVisitor(), null);
+    public DurationClause clone() {
+        return (DurationClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SignalsMetaModel getMetaModel() {
-        return JavaParserMetaModel.signalsMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Signals(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
+    public DurationMetaModel getMetaModel() {
+        return JavaParserMetaModel.durationMetaModel;
     }
 
     @Override

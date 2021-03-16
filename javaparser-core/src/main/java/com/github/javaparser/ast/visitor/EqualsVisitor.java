@@ -1299,14 +1299,14 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final Signals n, final Visitable arg) {
-        final Signals n2 = (Signals) arg;
+    public Boolean visit(final SignalsClause n, final Visitable arg) {
+        final SignalsClause n2 = (SignalsClause) arg;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
     @Override
-    public Boolean visit(final SignalsOnly n, final Visitable arg) {
-        final SignalsOnly n2 = (SignalsOnly) arg;
+    public Boolean visit(final SignalsOnlyClause n, final Visitable arg) {
+        final SignalsOnlyClause n2 = (SignalsOnlyClause) arg;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1317,8 +1317,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final Callable n, final Visitable arg) {
-        final Callable n2 = (Callable) arg;
+    public Boolean visit(final CallableClause n, final Visitable arg) {
+        final CallableClause n2 = (CallableClause) arg;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1329,8 +1329,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final Duration n, final Visitable arg) {
-        final Duration n2 = (Duration) arg;
+    public Boolean visit(final DurationClause n, final Visitable arg) {
+        final DurationClause n2 = (DurationClause) arg;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 

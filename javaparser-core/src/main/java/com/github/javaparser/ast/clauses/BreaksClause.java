@@ -1,24 +1,40 @@
 package com.github.javaparser.ast.clauses;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BreaksClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class BreaksClause extends Clause {
+public class BreaksClause extends JmlClause {
+    private Expression expr;
 
     @AllFieldsConstructor
-    public BreaksClause() {
+    public BreaksClause(Expression expr) {
         super();
+        this.expr = expr;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public BreaksClause(TokenRange tokenRange, Expression expr) {
+        super(tokenRange);
+        customInitialization();
+    }
+
+    public BreaksClause() {
+
     }
 
     @Override
@@ -59,14 +75,5 @@ public class BreaksClause extends Clause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BreaksClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.breaksClauseMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BreaksClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 }
