@@ -32,8 +32,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -45,7 +47,6 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     private NodeList<Statement> statements;
 
-    //private NodeList<BlockContract> blockContracts;
     public BlockStmt() {
         this(null, new NodeList<>());
     }
@@ -148,6 +149,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBlockStmt(Consumer<BlockStmt> action) {
         action.accept(this);

@@ -20,29 +20,6 @@
  */
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.ast.Node.Parsedness.PARSED;
-import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Spliterators;
-import java.util.Stack;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -60,11 +37,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.metamodel.InternalProperty;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -73,6 +46,20 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -162,7 +149,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    //usefull to find if the node is a phantom node
+    // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
     protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
@@ -177,10 +164,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Node parentNode;
 
     @InternalProperty
-    private final List<Node> childNodes = new LinkedList<>();
+    private List<Node> childNodes = new LinkedList<>();
 
     @InternalProperty
-    private final List<Comment> orphanComments = new LinkedList<>();
+    private List<Comment> orphanComments = new LinkedList<>();
 
     @InternalProperty
     private IdentityHashMap<DataKey<?>, Object> data = null;
@@ -189,7 +176,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Comment comment;
 
     @InternalProperty
-    private final Set<AstObserver> observers = new HashSet<>();
+    private Set<AstObserver> observers = new HashSet<>();
 
     @InternalProperty
     private Parsedness parsed = PARSED;
@@ -434,7 +421,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             return this;
         }
         observers.forEach(o -> o.parentChange(this, parentNode, newParentNode));
-        //remove from old parent, if any
+        // remove from old parent, if any
         if (parentNode != null) {
             final List<Node> parentChildNodes = parentNode.childNodes;
             for (int i = 0; i < parentChildNodes.size(); i++) {
@@ -444,7 +431,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             }
         }
         parentNode = newParentNode;
-        //add to new parent, if any
+        // add to new parent, if any
         if (parentNode != null) {
             parentNode.childNodes.add(this);
         }
@@ -696,7 +683,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Node removeComment() {
-        return setComment(null);
+        return setComment((Comment) null);
     }
 
     @Override
@@ -773,19 +760,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public LineSeparator getLineEndingStyle() {
         Node current = this;
-        //First check this node
+        // First check this node
         if (current.containsData(Node.LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = current.getData(Node.LINE_SEPARATOR_KEY);
             return lineSeparator;
         }
-        //Then check parent/ancestor nodes
+        // Then check parent/ancestor nodes
         while (current.getParentNode().isPresent()) {
             current = current.getParentNode().get();
             if (current.containsData(Node.LINE_SEPARATOR_KEY)) {
                 return current.getData(Node.LINE_SEPARATOR_KEY);
             }
         }
-        //Default to the system line separator if it's not already set within the parsed node/code.
+        // Default to the system line separator if it's not already set within the parsed node/code.
         return LineSeparator.SYSTEM;
     }
 
@@ -799,7 +786,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
     }
 
-    //We need to expose it because we will need to use it to inject the SymbolSolver
+    // We need to expose it because we will need to use it to inject the SymbolSolver
     public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
     };
 
@@ -857,7 +844,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * <br>This is the most general walk method. All other walk and findAll methods are based on this.
      */
     public void walk(TreeTraversal traversal, Consumer<Node> consumer) {
-        //Could be implemented as a call to the above walk method, but this is a little more efficient.
+        // Could be implemented as a call to the above walk method, but this is a little more efficient.
         for (Node node : treeIterable(traversal)) {
             consumer.accept(node);
         }

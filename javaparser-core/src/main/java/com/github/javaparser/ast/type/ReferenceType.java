@@ -20,8 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -31,6 +29,9 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
+
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Base class for reference types.
@@ -97,6 +98,7 @@ public abstract class ReferenceType extends Type {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReferenceType(Consumer<ReferenceType> action) {
         action.accept(this);

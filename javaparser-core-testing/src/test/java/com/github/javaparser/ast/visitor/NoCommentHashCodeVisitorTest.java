@@ -218,7 +218,7 @@ class NoCommentHashCodeVisitorTest {
 		BreakStmt node = spy(new BreakStmt());
 		NoCommentHashCodeVisitor.hashCode(node);
 
-		verify(node, times(2)).getLabel();
+		verify(node, times(1)).getLabel();
 		verify(node, never()).getComment();
 	}
 

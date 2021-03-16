@@ -20,12 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -41,6 +35,14 @@ import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -113,7 +115,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setComponentType(final Type componentType) {
         assertNotNull(componentType);
         if (componentType == this.componentType) {
-            return (ArrayType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
         if (this.componentType != null)
@@ -224,7 +226,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setOrigin(final Origin origin) {
         assertNotNull(origin);
         if (origin == this.origin) {
-            return (ArrayType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ORIGIN, this.origin, origin);
         this.origin = origin;
@@ -288,6 +290,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayType(Consumer<ArrayType> action) {
         action.accept(this);

@@ -20,18 +20,19 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.MemberValuePairMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.MemberValuePairMetaModel;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A value for a member of an annotation.
@@ -95,7 +96,7 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
     public MemberValuePair setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (MemberValuePair) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -109,7 +110,7 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
     public MemberValuePair setValue(final Expression value) {
         assertNotNull(value);
         if (value == this.value) {
-            return (MemberValuePair) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         if (this.value != null)

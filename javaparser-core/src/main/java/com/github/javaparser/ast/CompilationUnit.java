@@ -20,31 +20,7 @@
  */
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.JavaToken.Kind.EOF;
-import static com.github.javaparser.Providers.UTF8;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.Range.range;
-import static com.github.javaparser.StaticJavaParser.parseImport;
-import static com.github.javaparser.StaticJavaParser.parseName;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.Position;
-import com.github.javaparser.TokenRange;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -67,6 +43,27 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.JavaToken.Kind.EOF;
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Range.range;
+import static com.github.javaparser.StaticJavaParser.parseImport;
+import static com.github.javaparser.StaticJavaParser.parseName;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -152,7 +149,7 @@ public class CompilationUnit extends Node {
     @Override
     protected Printer getPrinter() {
         if (!containsData(PRINTER_KEY)) {
-            //create a default printer
+            // create a default printer
             Printer printer = createDefaultPrinter();
             printer(printer);
         }
@@ -299,17 +296,17 @@ public class CompilationUnit extends Node {
         Optional<Name> importPackageName = getImportPackageName(importDeclaration);
         if (importPackageName.isPresent()) {
             if (parseName(JAVA_LANG).equals(importPackageName.get())) {
-                //java.lang is implicitly imported
+                // java.lang is implicitly imported
                 return true;
             }
             if (packageDeclaration != null) {
-                //the import is within the same package
+                // the import is within the same package
                 Name currentPackageName = packageDeclaration.getName();
                 return currentPackageName.equals(importPackageName.get());
             }
             return false;
         } else {
-            //imports of unnamed package are not allowed
+            // imports of unnamed package are not allowed
             return true;
         }
     }

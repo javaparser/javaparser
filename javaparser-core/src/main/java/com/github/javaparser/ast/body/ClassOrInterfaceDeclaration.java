@@ -40,11 +40,11 @@ import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * A definition of a class or interface.<br>{@code class X { ... }}
@@ -271,6 +271,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceDeclaration(Consumer<ClassOrInterfaceDeclaration> action) {
         action.accept(this);

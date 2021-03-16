@@ -20,28 +20,30 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExplicitConstructorInvocationStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+
+import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A call to super or this in a constructor or initializer.
@@ -121,7 +123,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
@@ -140,7 +142,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
         if (expression == this.expression) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
@@ -153,7 +155,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
         if (isThis == this.isThis) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.THIS, this.isThis, isThis);
         this.isThis = isThis;
@@ -174,7 +176,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (ExplicitConstructorInvocationStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
@@ -269,6 +271,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExplicitConstructorInvocationStmt(Consumer<ExplicitConstructorInvocationStmt> action) {
         action.accept(this);
