@@ -37,8 +37,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtMethod;
 
 import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Federico Tomassetti

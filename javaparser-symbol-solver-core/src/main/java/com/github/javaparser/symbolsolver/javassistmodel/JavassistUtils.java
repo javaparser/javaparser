@@ -34,10 +34,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javassist.CtBehavior;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.Modifier;
+import javassist.*;
 import javassist.bytecode.*;
 
 import java.util.*;

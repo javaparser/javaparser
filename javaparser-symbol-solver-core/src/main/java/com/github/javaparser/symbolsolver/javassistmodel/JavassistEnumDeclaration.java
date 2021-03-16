@@ -39,10 +39,7 @@ import javassist.CtField;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
