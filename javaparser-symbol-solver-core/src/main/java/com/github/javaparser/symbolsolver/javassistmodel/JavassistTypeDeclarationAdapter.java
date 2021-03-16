@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
@@ -41,12 +42,94 @@ import java.util.stream.Collectors;
  */
 public class JavassistTypeDeclarationAdapter {
 
-    private final CtClass ctClass;
-    private final TypeSolver typeSolver;
+    private CtClass ctClass;
+    private TypeSolver typeSolver;
+    private ResolvedReferenceTypeDeclaration typeDeclaration;
 
-    public JavassistTypeDeclarationAdapter(CtClass ctClass, TypeSolver typeSolver) {
+    public JavassistTypeDeclarationAdapter(CtClass ctClass, TypeSolver typeSolver, ResolvedReferenceTypeDeclaration typeDeclaration) {
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
+        this.typeDeclaration = typeDeclaration;
+    }
+
+    public Optional<ResolvedReferenceType> getSuperClass() {
+        try {
+            if ("java.lang.Object".equals(ctClass.getClassFile().getName())) {
+                // If this is java.lang.Object, ignore the presence of any superclass (preventing any infinite loops).
+                return Optional.empty();
+            }
+            if (ctClass.getGenericSignature() == null) {
+                // Compiled classes have generic types erased, but can be made available for reflection via getGenericSignature().
+                // If it is absent, then no further work is needed and we can return a reference type without generics.
+                return Optional.of(new ReferenceTypeImpl(
+                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())),
+                        typeSolver
+                ));
+            } else {
+                // If there is a generic signature present, solve the types and return it.
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                return Optional.ofNullable(
+                        JavassistUtils.signatureTypeToType(
+                                classSignature.getSuperClass(),
+                                typeSolver,
+                                typeDeclaration
+                        ).asReferenceType()
+                );
+            }
+        } catch (BadBytecode e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<ResolvedReferenceType> getInterfaces() {
+        return getInterfaces(false);
+    }
+
+    private List<ResolvedReferenceType> getInterfaces(boolean acceptIncompleteList) {
+        List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        try {
+            if (ctClass.getGenericSignature() == null) {
+                for (String interfaceType : ctClass.getClassFile().getInterfaces()) {
+                    try {
+                        ResolvedReferenceTypeDeclaration declaration = typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(interfaceType));
+                        interfaces.add(new ReferenceTypeImpl(declaration, typeSolver));
+                    } catch (UnsolvedSymbolException e) {
+                        if (!acceptIncompleteList) {
+                            throw e;
+                        }
+                    }
+                }
+            } else {
+                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                for (SignatureAttribute.ClassType interfaceType : classSignature.getInterfaces()) {
+                    try {
+                        interfaces.add(JavassistUtils.signatureTypeToType(interfaceType, typeSolver, typeDeclaration).asReferenceType());
+                    } catch (UnsolvedSymbolException e) {
+                        if (!acceptIncompleteList) {
+                            throw e;
+                        }
+                    }
+                }
+            }
+        } catch (BadBytecode e) {
+            throw new RuntimeException(e);
+        }
+
+        return interfaces;
+    }
+
+    public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
+
+        try {
+            getSuperClass().ifPresent(superClass -> ancestors.add(superClass));
+        } catch (UnsolvedSymbolException e) {
+            if (!acceptIncompleteList) {
+                throw e;
+            }
+        }
+        ancestors.addAll(getInterfaces(acceptIncompleteList));
+        return ancestors;
     }
 
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
@@ -63,21 +146,21 @@ public class JavassistTypeDeclarationAdapter {
     }
 
     public List<ResolvedFieldDeclaration> getDeclaredFields() {
-        List<ResolvedFieldDeclaration> fieldDecls = new ArrayList<>();
-        collectDeclaredFields(ctClass, fieldDecls);
-        return fieldDecls;
-    }
+        List<ResolvedFieldDeclaration> fields = new ArrayList<>();
 
-    private void collectDeclaredFields(CtClass ctClass, List<ResolvedFieldDeclaration> fieldDecls) {
-        if (ctClass != null) {
-            Arrays.stream(ctClass.getDeclaredFields())
-                    .forEach(f -> fieldDecls.add(new JavassistFieldDeclaration(f, typeSolver)));
-            try {
-                collectDeclaredFields(ctClass.getSuperclass(), fieldDecls);
-            } catch (NotFoundException e) {
-                // We'll stop here
-            }
+        // First consider fields declared on this class
+        for (CtField field : ctClass.getDeclaredFields()) {
+            fields.add(new JavassistFieldDeclaration(field, typeSolver));
         }
+
+        // Then consider fields inherited from ancestors
+        for (ResolvedReferenceType ancestor : typeDeclaration.getAllAncestors()) {
+            ancestor.getTypeDeclaration().ifPresent(ancestorTypeDeclaration -> {
+                fields.addAll(ancestorTypeDeclaration.getAllFields());
+            });
+        }
+
+        return fields;
     }
 
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
@@ -87,7 +170,7 @@ public class JavassistTypeDeclarationAdapter {
             try {
                 SignatureAttribute.ClassSignature classSignature =
                         SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.stream(classSignature.getParameters())
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters())
                         .map((tp) -> new JavassistTypeParameter(tp, JavassistFactory.toTypeDeclaration(ctClass, typeSolver), typeSolver))
                         .collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {
@@ -104,78 +187,5 @@ public class JavassistTypeDeclarationAdapter {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Helper method to get the list of ancestors for the annotation.
-     *
-     * @param referenceTypeDeclaration  The reference type where to look for ancestors.
-     * @param acceptIncompleteList      If should accept an incomplete list.
-     *
-     * @return The list of ancestors.
-     */
-    public List<ResolvedReferenceType> getAncestors(ResolvedReferenceTypeDeclaration referenceTypeDeclaration,
-                                                    boolean acceptIncompleteList) {
-
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        if (ctClass.getGenericSignature() == null) {
-
-            ClassFile classFile = ctClass.getClassFile();
-
-            // Get the super
-            try {
-                ResolvedReferenceTypeDeclaration superType =
-                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(classFile.getSuperclass()));
-                ancestors.add(new ReferenceTypeImpl(superType, typeSolver));
-            } catch (UnsolvedSymbolException e) {
-                if (!acceptIncompleteList) {
-                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                    throw e;
-                }
-            }
-
-            // Get all the interface
-            for (String superInterface : classFile.getInterfaces()) {
-                try {
-                    ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(superInterface)), typeSolver));
-                } catch (UnsolvedSymbolException e) {
-                    if (!acceptIncompleteList) {
-                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                        throw e;
-                    }
-                }
-            }
-        } else {
-            try {
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                try {
-                    ancestors.add(
-                            JavassistUtils.signatureTypeToType(
-                                    classSignature.getSuperClass(), typeSolver, referenceTypeDeclaration)
-                                    .asReferenceType()
-                    );
-                } catch (UnsolvedSymbolException e) {
-                    if (!acceptIncompleteList) {
-                        // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                        throw e;
-                    }
-                }
-
-                for (SignatureAttribute.ClassType superInterface : classSignature.getInterfaces()) {
-                    try {
-                        ancestors.add(JavassistUtils.signatureTypeToType(superInterface, typeSolver, referenceTypeDeclaration).asReferenceType());
-                    } catch (UnsolvedSymbolException e) {
-                        if (!acceptIncompleteList) {
-                            // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                            throw e;
-                        }
-                    }
-                }
-            } catch (BadBytecode e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return ancestors;
     }
 }

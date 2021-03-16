@@ -74,6 +74,9 @@ public class JavaParserFacade {
     };
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
+    
+    private static String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final SymbolSolver symbolSolver;
@@ -474,9 +477,9 @@ public class JavaParserFacade {
 
         if (operator == BinaryExpr.Operator.PLUS) {
             boolean isLeftString = leftType.isReferenceType() && leftType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             boolean isRightString = rightType.isReferenceType() && rightType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             if (isLeftString || isRightString) {
                 return isLeftString ? leftType : rightType;
             }
