@@ -205,10 +205,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public DoStmt setContracts(final NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {

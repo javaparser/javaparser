@@ -89,7 +89,7 @@ public class Modifier extends Node {
     }
 
     public static Modifier jmlGhostModifier() {
-        return new Modifier(Keyword.JML_GOST);
+        return new Modifier(Keyword.JML_GHOST);
     }
 
     public static Modifier jmlSpecPublicModifier() {
@@ -139,10 +139,14 @@ public class Modifier extends Node {
         STRICTFP("strictfp"),
         TRANSITIVE("transitive"),
         //JML
+        JML_PURE("pure"),
+        JML_STRICTLY_PURE("strictly_pure"),
         JML_HELPER("helper"),
+        JML_INSTANCE("instance"),
+        JML_NULLABLE_BY_DEFAULT("nullable_by_default"),
         JML_NON_NULL("non_null"),
         JML_NULLABLE("nullable"),
-        JML_GOST("ghost"),
+        JML_GHOST("ghost"),
         JML_MODEL("model"),
         JML_SPEC_PUBLIC("spec_public"),
         JML_SPEC_PACKAGE("spec_package"),

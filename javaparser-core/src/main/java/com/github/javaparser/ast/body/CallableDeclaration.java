@@ -441,10 +441,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setContracts(final NodeList<JmlContract> contracts) {
         assertNotNull(contracts);

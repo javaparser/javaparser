@@ -179,10 +179,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt setContracts(final NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {

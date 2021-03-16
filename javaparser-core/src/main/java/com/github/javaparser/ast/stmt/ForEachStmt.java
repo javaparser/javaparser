@@ -21,11 +21,9 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -49,6 +47,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> {
 
+    private NodeList<JmlContract> contracts;
+
     private VariableDeclarationExpr variable;
 
     private Expression iterable;
@@ -56,19 +56,23 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     private Statement body;
 
     public ForEachStmt() {
-        this(null, new VariableDeclarationExpr(), new NameExpr(), new ReturnStmt());
+        this(new VariableDeclarationExpr(), new NameExpr(), new ReturnStmt());
+    }
+
+    public ForEachStmt(final VariableDeclarationExpr variable, final Expression iterable, final Statement body) {
+        this(variable, iterable, body, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ForEachStmt(final VariableDeclarationExpr variable, final Expression iterable, final Statement body) {
-        this(null, variable, iterable, body);
+    public ForEachStmt(final VariableDeclarationExpr variable, final Expression iterable, final Statement body, final NodeList<JmlContract> contracts) {
+        this(null, variable, iterable, body, contracts);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body) {
+    public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body, final NodeList<JmlContract> contracts) {
         super(tokenRange);
         setVariable(variable);
         setIterable(iterable);
@@ -77,7 +81,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     public ForEachStmt(VariableDeclarationExpr variable, String iterable, BlockStmt body) {
-        this(null, variable, new NameExpr(iterable), body);
+        this(variable, new NameExpr(iterable), body);
     }
 
     @Override
@@ -240,5 +244,16 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ForEachStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.forEachStmtMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body) {
+        super(tokenRange);
+        setVariable(variable);
+        setIterable(iterable);
+        setBody(body);
+        customInitialization();
     }
 }

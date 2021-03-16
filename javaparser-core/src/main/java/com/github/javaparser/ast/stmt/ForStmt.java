@@ -69,7 +69,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
-    private final NodeList<JmlContract> contracts;
+    private NodeList<JmlContract> contracts;
 
     private NodeList<Expression> initialization;
 
@@ -313,10 +313,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return Optional.of(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setContracts(final NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {

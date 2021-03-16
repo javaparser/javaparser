@@ -316,6 +316,11 @@ TOKEN : {
 | <NULLABLE_BY_DEFAULT : "nullable_by_default">
 | <NON_NULL : "non_null">
 | <NULLABLE : "nullable">
+| <GHOST : "ghost">
+| <SPEC_PUBLIC : "spec_public">
+| <SPEC_PRIVATE : "spec_private">
+| <SPEC_PACKAGE : "spec_package">
+| <SPEC_PROTECTED : "spec_protected">
 | <BEHAVIOR : "behavior">
 | <NORMAL_BEHAVIOR  : "normal_behavior">
 | <EXCEPTIONAL_BEHAVIOR : "exceptional_behavior">
@@ -1342,6 +1347,8 @@ ModifierHolder Modifiers():
          |
             "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, token()); }
          |
+            jmlModifiers(modifiers)
+         |
              ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
         )
     )*
@@ -1349,6 +1356,34 @@ ModifierHolder Modifiers():
         return new ModifierHolder(begin, modifiers, annotations);
     }
 }
+
+void jmlModifiers(NodeList<Modifier> modifiers):
+{}
+{
+    JmlStart() jmlModifiersInner(modifiers) JmlEnd()
+  | jmlModifiersInner(modifiers)
+  //This seems odd, but is required for model methods/fields which are already wrapped in JML comment.
+  // but this is not a danger overall, as the modifiers are only lexec properly inside JML comments.
+}
+
+void jmlModifiersInner(NodeList<Modifier> modifiers):
+{ JavaToken begin = INVALID; }
+{
+    <PURE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_PURE));  begin = orIfInvalid(begin, token()); }
+  | <STRICTLY_PURE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_STRICTLY_PURE));  begin = orIfInvalid(begin, token()); }
+  | <MODEL> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_MODEL));  begin = orIfInvalid(begin, token()); }
+  | <HELPER> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_HELPER));  begin = orIfInvalid(begin, token()); }
+  | <NULLABLE_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NULLABLE_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
+  | <NON_NULL> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL));  begin = orIfInvalid(begin, token()); }
+  | <NULLABLE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NULLABLE));  begin = orIfInvalid(begin, token()); }
+  | <GHOST> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_GHOST));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PUBLIC> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PUBLIC));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PRIVATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PRIVATE));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PACKAGE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PACKAGE));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PROTECTED> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PROTECTED));  begin = orIfInvalid(begin, token()); }
+  | <INSTANCE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_INSTANCE));  begin = orIfInvalid(begin, token()); }
+}
+
 
 /*
  * Declaration syntax follows.
@@ -1761,14 +1796,17 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 {
     ModifierHolder modifiers;
     BodyDeclaration<?> ret;
+    NodeList<JmlContract> contracts = new NodeList<>();
 }
 {
     (
         LOOKAHEAD(2)
         ret = InitializerDeclaration()
      |
+        LOOKAHEAD(JmlStart())
         ret = JmlClassOrInterfaceBodyDeclaration()
      |
+        (contracts=jmlContracts())?
         // Just get all the modifiers out of the way. If you want to do
         // more checks, pass the modifiers down to the member
         modifiers = Modifiers()
@@ -1787,7 +1825,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
             LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
             ret = FieldDeclaration(modifiers)
          |
-            ret = MethodDeclaration(modifiers)
+            ret = MethodDeclaration(modifiers, contracts)
         )
     )
     { return ret; }
@@ -2113,7 +2151,7 @@ ArrayInitializerExpr ArrayInitializer():
  *         {Annotation} UnannType [Identifier .] this
  * }</pre>
  */
-MethodDeclaration MethodDeclaration(ModifierHolder modifier):
+MethodDeclaration MethodDeclaration(ModifierHolder modifier, NodeList<JmlContract> contracts):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
     Type type;
@@ -2148,7 +2186,8 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 
     {
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
+        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations,
+        typeParameters.list, type, name, parameters.a, throws_, body, parameters.b, contracts);
     }
 }
 
@@ -4183,7 +4222,7 @@ Statement Statement():
             LOOKAHEAD(2) ret = LabeledStatement()
             | ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
-            | ret = Block()
+            | ret = BlockWithContract()
             | ret = EmptyStatement()
             | ret = StatementExpression()
             | ret = SwitchStatement()
@@ -4302,10 +4341,12 @@ NodeList<JmlContract> jmlContracts():
     NodeList<JmlContract> contracts = emptyNodeList();
 }
 {
+  JmlStart()
   (<ALSO>)?
   bc=jmlContract() {contracts.add(bc);}
   (<ALSO> bc=jmlContract() {contracts.add(bc);})*
   {return contracts;}
+  JmlEnd()
 }
 
 JmlContract jmlContract():
@@ -4920,14 +4961,16 @@ WhileStmt WhileStatement():
     Expression condition;
     Statement body;
     JavaToken begin;
+    NodeList<JmlContract> contracts = new NodeList<>();
 }
 {
+    (contracts=jmlContracts())?
     "while" { begin=token(); }
     "("
     condition = Expression()
     ")"
     body = Statement()
-    { return new WhileStmt(range(begin, token()),condition, body); }
+    { return new WhileStmt(range(begin, token()),condition, body, contracts); }
 }
 
 /**
@@ -4942,8 +4985,10 @@ DoStmt DoStatement():
     Expression condition;
     Statement body;
     JavaToken begin;
+    NodeList<JmlContract> contracts = new NodeList<>();
 }
 {
+    (contracts=jmlContracts())?
     "do" { begin=token(); }
     body = Statement()
     "while"
@@ -4951,7 +4996,7 @@ DoStmt DoStatement():
     condition = Expression()
     ")"
     ";"
-    { return new DoStmt(range(begin, token()),body, condition); }
+    { return new DoStmt(range(begin, token()),body, condition, contracts); }
 }
 
 /**
@@ -4973,8 +5018,10 @@ Statement ForStatement():
     NodeList<Expression> update = emptyNodeList();
     Statement body;
     JavaToken begin;
+    NodeList<JmlContract> contracts = new NodeList<>();
 }
 {
+    (contracts=jmlContracts())?
     "for" { begin=token(); }
     "("
 
@@ -4998,9 +5045,9 @@ Statement ForStatement():
 
     {
         if (varExpr != null) {
-            return new ForEachStmt(range(begin, token()),varExpr, expr, body);
+            return new ForEachStmt(range(begin, token()),varExpr, expr, body, contracts);
         }
-        return new ForStmt(range(begin, token()),init, expr, update, body);
+        return new ForStmt(range(begin, token()),init, expr, update, body, contracts);
     }
 }
 
@@ -6054,10 +6101,12 @@ MethodDeclaration MethodDeclarationParseStart():
 {
     MethodDeclaration ret;
     ModifierHolder modifier;
+    NodeList<JmlContract> contracts = new NodeList<>();
 }
 {
+    (contracts = jmlContracts())?
     modifier = Modifiers()
-    ret = MethodDeclaration(modifier)
+    ret = MethodDeclaration(modifier, contracts)
     <EOF>
     { return ret; }
 }
