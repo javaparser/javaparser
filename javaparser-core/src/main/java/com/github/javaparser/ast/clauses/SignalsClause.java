@@ -65,12 +65,6 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SignalsMetaModel getMetaModel() {
-        return JavaParserMetaModel.signalsMetaModel;
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);

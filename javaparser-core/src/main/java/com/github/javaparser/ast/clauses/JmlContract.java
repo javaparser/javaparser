@@ -13,8 +13,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public class JmlContract extends Node implements Jmlish {
     private Behavior behavior;
     private Modifier modifier;
-    private final NodeList<JmlClause> clauses = new NodeList<>();
-    private final NodeList<JmlContract> subContracts = new NodeList<>();
+    private NodeList<JmlClause> clauses = new NodeList<>();
+    private NodeList<JmlContract> subContracts = new NodeList<>();
 
     public JmlContract() {
         super(null);
@@ -25,9 +25,11 @@ public class JmlContract extends Node implements Jmlish {
             Behavior behavior, Modifier modifier, NodeList<JmlClause> clauses,
             NodeList<JmlContract> subContracts) {
         super(null);
-
+        this.behavior = behavior;
+        this.modifier = modifier;
+        this.clauses = clauses;
+        this.subContracts = subContracts;
     }
-
 
     public JmlContract(TokenRange tokenRange) {
         super(tokenRange);

@@ -76,12 +76,6 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
         return (SignalsOnlyClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SignalsOnlyMetaModel getMetaModel() {
-        return JavaParserMetaModel.signalsOnlyMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */
@@ -90,4 +84,5 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
         super(tokenRange);
         customInitialization();
     }
+
 }
