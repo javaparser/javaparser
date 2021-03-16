@@ -18,7 +18,9 @@ import com.github.javaparser.metamodel.RequiresClauseMetaModel;
  * @version 1 (2/21/21)
  */
 public class RequiresClause extends JmlClause implements MethodContractable, BlockContractable {
+
     private NodeList<SimpleName> heaps;
+
     private Expression e;
 
     @AllFieldsConstructor
@@ -36,7 +38,6 @@ public class RequiresClause extends JmlClause implements MethodContractable, Blo
     }
 
     public RequiresClause() {
-
     }
 
     @Override
@@ -77,5 +78,13 @@ public class RequiresClause extends JmlClause implements MethodContractable, Blo
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public RequiresClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

@@ -18,6 +18,7 @@ import com.github.javaparser.metamodel.MeasuredByClauseMetaModel;
  * @version 1 (2/21/21)
  */
 public class MeasuredByClause extends JmlClause implements MethodContractable, LoopContractable {
+
     Expression e;
 
     @AllFieldsConstructor
@@ -35,7 +36,6 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     }
 
     public MeasuredByClause() {
-
     }
 
     @Override
@@ -76,5 +76,13 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MeasuredByClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.measuredByClauseMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public MeasuredByClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

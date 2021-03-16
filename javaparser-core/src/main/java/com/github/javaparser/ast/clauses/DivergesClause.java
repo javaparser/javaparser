@@ -70,4 +70,12 @@ public class DivergesClause extends JmlClause implements MethodContractable {
     public DivergesClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.divergesClauseMetaModel;
     }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public DivergesClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
+    }
 }

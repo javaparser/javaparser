@@ -18,12 +18,14 @@ import com.github.javaparser.metamodel.SignalsMetaModel;
  * @version 1 (2/21/21)
  */
 public class SignalsClause extends JmlClause implements MethodContractable, BlockContractable {
+
     private Type type;
+
     private SimpleName name;
+
     private Expression expr;
 
     public SignalsClause() {
-
     }
 
     @AllFieldsConstructor
@@ -39,7 +41,6 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
         super(tokenRange);
         customInitialization();
     }
-
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -79,5 +80,13 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public SignalsClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

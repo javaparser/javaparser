@@ -17,6 +17,7 @@ import com.github.javaparser.metamodel.SignalsOnlyMetaModel;
  * @version 1 (2/21/21)
  */
 public class SignalsOnlyClause extends JmlClause implements MethodContractable, BlockContractable {
+
     private NodeList<Type> types;
 
     @AllFieldsConstructor
@@ -34,7 +35,6 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     }
 
     public SignalsOnlyClause() {
-
     }
 
     @Override
@@ -80,5 +80,13 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SignalsOnlyMetaModel getMetaModel() {
         return JavaParserMetaModel.signalsOnlyMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public SignalsOnlyClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

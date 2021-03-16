@@ -15,6 +15,7 @@ import com.github.javaparser.metamodel.ModifiesClauseMetaModel;
  * @version 1 (2/21/21)
  */
 public class ModifiesClause extends JmlClause implements LoopContractable, MethodContractable, BlockContractable {
+
     @AllFieldsConstructor
     public ModifiesClause() {
         super();

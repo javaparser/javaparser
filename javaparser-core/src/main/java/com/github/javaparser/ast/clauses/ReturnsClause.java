@@ -16,6 +16,7 @@ import com.github.javaparser.metamodel.ReturnsClauseMetaModel;
  * @version 1 (2/21/21)
  */
 public class ReturnsClause extends JmlClause implements BlockContractable {
+
     private Expression expr;
 
     @AllFieldsConstructor
@@ -33,7 +34,6 @@ public class ReturnsClause extends JmlClause implements BlockContractable {
     }
 
     public ReturnsClause() {
-
     }
 
     @Override
@@ -74,5 +74,13 @@ public class ReturnsClause extends JmlClause implements BlockContractable {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ReturnsClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.returnsClauseMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public ReturnsClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

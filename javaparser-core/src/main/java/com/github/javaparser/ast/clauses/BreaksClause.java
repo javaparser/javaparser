@@ -16,6 +16,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @version 1 (2/21/21)
  */
 public class BreaksClause extends JmlClause {
+
     private Expression expr;
 
     @AllFieldsConstructor
@@ -34,7 +35,6 @@ public class BreaksClause extends JmlClause {
     }
 
     public BreaksClause() {
-
     }
 
     @Override
@@ -75,5 +75,13 @@ public class BreaksClause extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BreaksClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.breaksClauseMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public BreaksClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

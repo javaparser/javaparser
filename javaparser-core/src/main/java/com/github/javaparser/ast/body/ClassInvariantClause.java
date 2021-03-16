@@ -18,8 +18,7 @@ import com.github.javaparser.TokenRange;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClause>
-        implements NodeWithModifiers<ClassInvariantClause> {
+public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClause> implements NodeWithModifiers<ClassInvariantClause> {
 
     private NodeList<Modifier> modifiers;
 

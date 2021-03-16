@@ -9,14 +9,10 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlRepresentsDeclarationMetaModel;
@@ -32,8 +28,7 @@ import com.github.javaparser.ast.Generated;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlRepresentsDeclaration extends JmlBodyDeclaration<JmlRepresentsDeclaration>
-        implements NodeWithModifiers<JmlRepresentsDeclaration> {
+public class JmlRepresentsDeclaration extends JmlBodyDeclaration<JmlRepresentsDeclaration> implements NodeWithModifiers<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 

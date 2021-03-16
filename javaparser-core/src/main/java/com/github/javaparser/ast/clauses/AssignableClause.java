@@ -18,11 +18,12 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @version 1 (2/21/21)
  */
 public class AssignableClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
+
     private NodeList<SimpleName> heaps;
+
     private NodeList<Expression> exprs;
 
     public AssignableClause() {
-
     }
 
     @AllFieldsConstructor
@@ -38,7 +39,6 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
         super(tokenRange);
         customInitialization();
     }
-
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -78,5 +78,13 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public AssignableClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

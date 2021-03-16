@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
-
 import com.github.javaparser.ast.clauses.*;
 
 /**
@@ -1581,6 +1580,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlClassAccessibleDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 

@@ -73,8 +73,8 @@ public abstract class JmlBodyDeclaration<T extends BodyDeclaration<?>> extends B
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlBodyDeclaration clone() {
-        return (JmlBodyDeclaration) accept(new CloneVisitor(), null);
+    public JmlBodyDeclaration<?> clone() {
+        return (JmlBodyDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
     @Override

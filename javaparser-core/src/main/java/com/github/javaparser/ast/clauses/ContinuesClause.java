@@ -16,13 +16,11 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @version 1 (2/21/21)
  */
 public class ContinuesClause extends JmlClause {
+
     private Expression expr;
 
-
     public ContinuesClause() {
-
     }
-
 
     @AllFieldsConstructor
     public ContinuesClause(Expression expr) {
@@ -37,7 +35,6 @@ public class ContinuesClause extends JmlClause {
         super(tokenRange);
         customInitialization();
     }
-
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
@@ -77,5 +74,13 @@ public class ContinuesClause extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ContinuesClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.continuesClauseMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public ContinuesClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

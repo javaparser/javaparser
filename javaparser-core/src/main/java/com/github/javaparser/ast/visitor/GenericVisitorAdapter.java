@@ -2446,58 +2446,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     public R visit(final JmlClassAccessibleDeclaration n, final A arg) {
-        R result = null;
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getModifiers().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getModifiers().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getModifiers().accept(this, arg);
-            if (result != null)
-                return result;
-        }
+        R result;
         {
             result = n.getAnnotations().accept(this, arg);
             if (result != null)

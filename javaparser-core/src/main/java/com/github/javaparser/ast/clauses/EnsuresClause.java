@@ -18,7 +18,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @version 1 (2/21/21)
  */
 public class EnsuresClause extends JmlClause implements MethodContractable {
+
     private NodeList<SimpleName> heaps;
+
     private Expression expr;
 
     @AllFieldsConstructor
@@ -76,5 +78,13 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public EnsuresClause(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 }

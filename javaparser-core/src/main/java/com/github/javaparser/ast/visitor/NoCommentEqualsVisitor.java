@@ -1142,7 +1142,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final JmlClassAccessibleDeclaration n, final Visitable arg) {
         final JmlClassAccessibleDeclaration n2 = (JmlClassAccessibleDeclaration) arg;
-        return true;
+        return nodesEquals(n.getAnnotations(), n2.getAnnotations());
     }
 
     @Override

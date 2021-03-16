@@ -641,7 +641,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlClassAccessibleDeclaration n, final Void arg) {
-        return 0;//(n.getExpressions().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getExpressions().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getExpressions().accept(this, arg)) * 31 + (n.getId().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override

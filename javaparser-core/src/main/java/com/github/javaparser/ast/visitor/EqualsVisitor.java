@@ -1425,7 +1425,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlClassAccessibleDeclaration n, final Visitable arg) {
         final JmlClassAccessibleDeclaration n2 = (JmlClassAccessibleDeclaration) arg;
-        return true;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
     }
 
     @Override
