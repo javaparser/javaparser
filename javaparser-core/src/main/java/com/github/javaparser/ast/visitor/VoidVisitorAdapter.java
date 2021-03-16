@@ -105,6 +105,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final BlockStmt n, final A arg) {
+        n.getContracts().forEach(p -> p.accept(this, arg));
         n.getStatements().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -186,6 +187,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final ConstructorDeclaration n, final A arg) {
         n.getBody().accept(this, arg);
+        n.getContracts().forEach(p -> p.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));
@@ -206,6 +208,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final DoStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getCondition().accept(this, arg);
+        n.getContracts().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -287,6 +290,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final ForStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getCompare().ifPresent(l -> l.accept(this, arg));
+        n.getContracts().forEach(p -> p.accept(this, arg));
         n.getInitialization().forEach(p -> p.accept(this, arg));
         n.getUpdate().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -368,6 +372,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final MethodDeclaration n, final A arg) {
         n.getBody().ifPresent(l -> l.accept(this, arg));
         n.getType().accept(this, arg);
+        n.getContracts().forEach(p -> p.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));
@@ -586,6 +591,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final WhileStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getCondition().accept(this, arg);
+        n.getContracts().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

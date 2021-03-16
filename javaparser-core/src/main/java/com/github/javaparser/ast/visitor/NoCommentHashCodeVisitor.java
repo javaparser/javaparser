@@ -85,7 +85,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final BlockStmt n, final Void arg) {
-        return (n.getStatements().accept(this, arg));
+        return (n.getContracts().accept(this, arg)) * 31 + (n.getStatements().accept(this, arg));
     }
 
     public Integer visit(final BooleanLiteralExpr n, final Void arg) {
@@ -129,7 +129,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final ConstructorDeclaration n, final Void arg) {
-        return (n.getBody().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getReceiverParameter().isPresent() ? n.getReceiverParameter().get().accept(this, arg) : 0) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getBody().accept(this, arg)) * 31 + (n.getContracts().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getReceiverParameter().isPresent() ? n.getReceiverParameter().get().accept(this, arg) : 0) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     public Integer visit(final ContinueStmt n, final Void arg) {
@@ -137,7 +137,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final DoStmt n, final Void arg) {
-        return (n.getBody().accept(this, arg)) * 31 + (n.getCondition().accept(this, arg));
+        return (n.getBody().accept(this, arg)) * 31 + (n.getCondition().accept(this, arg)) * 31 + (n.getContracts().accept(this, arg));
     }
 
     public Integer visit(final DoubleLiteralExpr n, final Void arg) {
@@ -177,7 +177,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final ForStmt n, final Void arg) {
-        return (n.getBody().accept(this, arg)) * 31 + (n.getCompare().isPresent() ? n.getCompare().get().accept(this, arg) : 0) * 31 + (n.getInitialization().accept(this, arg)) * 31 + (n.getUpdate().accept(this, arg));
+        return (n.getBody().accept(this, arg)) * 31 + (n.getCompare().isPresent() ? n.getCompare().get().accept(this, arg) : 0) * 31 + (n.getContracts().accept(this, arg)) * 31 + (n.getInitialization().accept(this, arg)) * 31 + (n.getUpdate().accept(this, arg));
     }
 
     public Integer visit(final ForEachStmt n, final Void arg) {
@@ -245,7 +245,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final MethodDeclaration n, final Void arg) {
-        return (n.getBody().isPresent() ? n.getBody().get().accept(this, arg) : 0) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getReceiverParameter().isPresent() ? n.getReceiverParameter().get().accept(this, arg) : 0) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getBody().isPresent() ? n.getBody().get().accept(this, arg) : 0) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getContracts().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getReceiverParameter().isPresent() ? n.getReceiverParameter().get().accept(this, arg) : 0) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     public Integer visit(final MethodReferenceExpr n, final Void arg) {
@@ -369,7 +369,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final WhileStmt n, final Void arg) {
-        return (n.getBody().accept(this, arg)) * 31 + (n.getCondition().accept(this, arg));
+        return (n.getBody().accept(this, arg)) * 31 + (n.getCondition().accept(this, arg)) * 31 + (n.getContracts().accept(this, arg));
     }
 
     public Integer visit(final WildcardType n, final Void arg) {

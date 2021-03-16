@@ -62,9 +62,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     private BlockStmt body;
 
     public MethodDeclaration() {
-        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(),
-                new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null,
-                new NodeList<>());
+        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null, new NodeList<>());
     }
 
     public MethodDeclaration(final NodeList<Modifier> modifiers, final Type type, final String name) {
@@ -80,23 +78,19 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     @AllFieldsConstructor
-    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations,
-                             final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters,
-                             final NodeList<ReferenceType> thrownExceptions, final BlockStmt body, ReceiverParameter receiverParameter,
-                             final NodeList<JmlContract> contracts) {
+    public MethodDeclaration(final NodeList<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body, ReceiverParameter receiverParameter, final NodeList<JmlContract> contracts) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter, contracts);
     }
 
     public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
-        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter, new NodeList<>());
+        this(tokenRange, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter, new NodeList<>());
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter,
-                             NodeList<JmlContract> contracts) {
+    public MethodDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter, contracts);
         setType(type);
         setBody(body);

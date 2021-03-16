@@ -296,6 +296,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final ConstructorDeclaration n2 = (ConstructorDeclaration) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
+            return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -319,6 +321,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
         if (!nodeEquals(n.getType(), n2.getType()))
+            return false;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
@@ -806,6 +810,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final BlockStmt n, final Visitable arg) {
         final BlockStmt n2 = (BlockStmt) arg;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
+            return false;
         if (!nodesEquals(n.getStatements(), n2.getStatements()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
@@ -892,6 +898,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodeEquals(n.getCondition(), n2.getCondition()))
             return false;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -909,6 +917,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
         if (!nodeEquals(n.getCondition(), n2.getCondition()))
+            return false;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
@@ -931,6 +941,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
         if (!nodeEquals(n.getCompare(), n2.getCompare()))
+            return false;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
             return false;
         if (!nodesEquals(n.getInitialization(), n2.getInitialization()))
             return false;

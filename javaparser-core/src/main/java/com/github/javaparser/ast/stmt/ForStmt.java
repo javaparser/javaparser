@@ -68,6 +68,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see com.github.javaparser.ast.expr.VariableDeclarationExpr
  */
 public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
+
     private final NodeList<JmlContract> contracts;
 
     private NodeList<Expression> initialization;
@@ -88,14 +89,11 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     }
 
     @AllFieldsConstructor
-    public ForStmt(final NodeList<Expression> initialization, final Expression compare,
-                   final NodeList<Expression> update, final Statement body,
-                   final NodeList<JmlContract> contracts) {
+    public ForStmt(final NodeList<Expression> initialization, final Expression compare, final NodeList<Expression> update, final Statement body, final NodeList<JmlContract> contracts) {
         this(null, initialization, compare, update, body, contracts);
     }
 
-    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare,
-                   NodeList<Expression> update, Statement body) {
+    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
         this(tokenRange, initialization, compare, update, body, new NodeList<>());
     }
 
@@ -103,15 +101,13 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare,
-                   NodeList<Expression> update, Statement body,
-                   final NodeList<JmlContract> contracts) {
+    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setInitialization(initialization);
         setCompare(compare);
         setUpdate(update);
         setBody(body);
-        this.contracts = contracts;
+        setContracts(contracts);
         customInitialization();
     }
 
@@ -219,6 +215,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
                 return true;
             }
         }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < initialization.size(); i++) {
             if (initialization.get(i) == node) {
                 initialization.remove(i);
@@ -266,6 +268,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
                 return true;
             }
         }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
+            }
+        }
         for (int i = 0; i < initialization.size(); i++) {
             if (initialization.get(i) == node) {
                 initialization.set(i, (Expression) replacementNode);
@@ -303,5 +311,22 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ForStmt> toForStmt() {
         return Optional.of(this);
+    }
+
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
+    }
+
+    public ForStmt setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
+        if (contracts == this.contracts) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.CONTRACTS, this.contracts, contracts);
+        if (this.contracts != null)
+            this.contracts.setParentNode(null);
+        this.contracts = contracts;
+        setAsParentNodeOf(contracts);
+        return this;
     }
 }

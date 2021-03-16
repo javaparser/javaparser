@@ -3,7 +3,8 @@
                    nameIsGenerated="true">
         <option name="MAIN_CLASS_NAME" value="com.github.javaparser.generator.metamodel.MetaModelGenerator"/>
         <module name="javaparser-core-metamodel-generator"/>
-        <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$"/>
+        <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/javaparser-core-metamodel-generator"/>
+        <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/javaparser-core-metamodel-generator"/>
         <extension name="coverage">
             <pattern>
                 <option name="PATTERN" value="com.github.javaparser.generator.metamodel.*"/>

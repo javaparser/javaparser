@@ -57,6 +57,7 @@ public class JmlLabel extends Expression {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlLabel(Consumer<JmlLabel> action) {
         action.accept(this);

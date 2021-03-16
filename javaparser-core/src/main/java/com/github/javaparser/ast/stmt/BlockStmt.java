@@ -43,7 +43,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
+
     private NodeList<Statement> statements;
+
     private NodeList<JmlContract> contracts = new NodeList<>();
 
     public BlockStmt() {
@@ -66,7 +68,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setStatements(statements);
-        this.contracts = contracts;
+        setContracts(contracts);
         customInitialization();
     }
 
@@ -106,6 +108,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < statements.size(); i++) {
             if (statements.get(i) == node) {
                 statements.remove(i);
@@ -132,6 +140,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
+            }
+        }
         for (int i = 0; i < statements.size(); i++) {
             if (statements.get(i) == node) {
                 statements.set(i, (Statement) replacementNode);
@@ -163,5 +177,22 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BlockStmt> toBlockStmt() {
         return Optional.of(this);
+    }
+
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
+    }
+
+    public BlockStmt setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
+        if (contracts == this.contracts) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.CONTRACTS, this.contracts, contracts);
+        if (this.contracts != null)
+            this.contracts.setParentNode(null);
+        this.contracts = contracts;
+        setAsParentNodeOf(contracts);
+        return this;
     }
 }

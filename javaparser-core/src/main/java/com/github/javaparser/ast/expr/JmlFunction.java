@@ -60,6 +60,7 @@ public class JmlFunction extends Expression implements Jmlish {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlFunction(Consumer<JmlFunction> action) {
         action.accept(this);

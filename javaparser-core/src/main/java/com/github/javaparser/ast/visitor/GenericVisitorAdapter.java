@@ -230,6 +230,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final BlockStmt n, final A arg) {
         R result;
         {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getStatements().accept(this, arg);
             if (result != null)
                 return result;
@@ -470,6 +475,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getModifiers().accept(this, arg);
             if (result != null)
                 return result;
@@ -536,6 +546,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getCondition().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -780,6 +795,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getInitialization().accept(this, arg);
             if (result != null)
                 return result;
@@ -991,6 +1011,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1616,6 +1641,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getCondition().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
         }

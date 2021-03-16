@@ -36,10 +36,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -49,6 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithCondition<DoStmt> {
+
     private NodeList<JmlContract> contracts;
 
     private Statement body;
@@ -80,6 +79,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         super(tokenRange);
         setBody(body);
         setCondition(condition);
+        setContracts(contracts);
         customInitialization();
     }
 
@@ -138,6 +138,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -166,6 +172,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
             setCondition((Expression) replacementNode);
             return true;
         }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
+            }
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -191,5 +203,22 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<DoStmt> toDoStmt() {
         return Optional.of(this);
+    }
+
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
+    }
+
+    public DoStmt setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
+        if (contracts == this.contracts) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.CONTRACTS, this.contracts, contracts);
+        if (this.contracts != null)
+            this.contracts.setParentNode(null);
+        this.contracts = contracts;
+        setAsParentNodeOf(contracts);
+        return this;
     }
 }

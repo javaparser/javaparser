@@ -69,6 +69,7 @@ public class JmlLetExpr extends Expression {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlLetExpr(Consumer<JmlLetExpr> action) {
         action.accept(this);

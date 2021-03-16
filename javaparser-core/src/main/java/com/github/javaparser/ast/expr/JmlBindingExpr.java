@@ -121,6 +121,7 @@ public class JmlBindingExpr extends Expression {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBindingExpr(Consumer<JmlBindingExpr> action) {
         action.accept(this);

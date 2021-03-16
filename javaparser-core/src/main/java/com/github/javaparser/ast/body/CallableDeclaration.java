@@ -64,9 +64,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     private NodeList<JmlContract> contracts = new NodeList<>();
 
     @AllFieldsConstructor
-    CallableDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters,
-                        NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter,
-                        NodeList<JmlContract> contracts) {
+    CallableDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter, contracts);
     }
 
@@ -82,7 +80,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
         setReceiverParameter(receiverParameter);
-        this.contracts = contracts;
+        setContracts(contracts);
         customInitialization();
     }
 
@@ -214,6 +212,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
@@ -346,6 +350,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
+            }
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.set(i, (Modifier) replacementNode);
@@ -429,5 +439,23 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<CallableDeclaration> toCallableDeclaration() {
         return Optional.of(this);
+    }
+
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
+        if (contracts == this.contracts) {
+            return (T) this;
+        }
+        notifyPropertyChange(ObservableProperty.CONTRACTS, this.contracts, contracts);
+        if (this.contracts != null)
+            this.contracts.setParentNode(null);
+        this.contracts = contracts;
+        setAsParentNodeOf(contracts);
+        return (T) this;
     }
 }
