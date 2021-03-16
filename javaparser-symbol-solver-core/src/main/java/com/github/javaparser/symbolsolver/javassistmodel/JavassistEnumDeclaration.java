@@ -33,19 +33,16 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
-import javassist.bytecode.SyntheticAttribute;
 
-import java.lang.reflect.Modifier;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -67,7 +64,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
-        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver);
+        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver, this);
     }
 
     @Override
@@ -96,34 +93,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        // Direct ancestors of an enum are java.lang.Enum and interfaces
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-
-        String superClassName = ctClass.getClassFile().getSuperclass();
-
-        if (superClassName != null) {
-            try {
-                ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(superClassName), typeSolver));
-            } catch (UnsolvedSymbolException e) {
-                if (!acceptIncompleteList) {
-                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                    throw e;
-                }
-            }
-        }
-
-        for (String interfazeName : ctClass.getClassFile().getInterfaces()) {
-            try {
-                ancestors.add(new ReferenceTypeImpl(typeSolver.solveType(interfazeName), typeSolver));
-            } catch (UnsolvedSymbolException e) {
-                if (!acceptIncompleteList) {
-                    // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                    throw e;
-                }
-            }
-        }
-
-        return ancestors;
+        return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
     }
 
     @Override
@@ -181,46 +151,12 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
-        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
-        for (CtMethod method : ctClass.getDeclaredMethods()) {
-            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
-            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
-            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
-                candidates.add(new JavassistMethodDeclaration(method, typeSolver));
-            }
-        }
-
-        try {
-            for (CtClass iface : ctClass.getInterfaces()) {
-                SymbolReference<ResolvedMethodDeclaration> ref = new JavassistInterfaceDeclaration(iface, typeSolver)
-                        .solveMethod(name, argumentsTypes, staticOnly);
-                if (ref.isSolved()) {
-                    candidates.add(ref.getCorrespondingDeclaration());
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            CtClass superClass = ctClass.getSuperclass();
-            if (superClass != null) {
-                SymbolReference<ResolvedMethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
-                if (ref.isSolved()) {
-                    candidates.add(ref.getCorrespondingDeclaration());
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
-        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, getTypeParameters(), typeParameterValues);
+        return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }
 
     @Override
