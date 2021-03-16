@@ -41,5 +41,7 @@ public class BlockStmtMetaModel extends StatementMetaModel {
         super(superBaseNodeMetaModel, BlockStmt.class, "BlockStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
+    public PropertyMetaModel contractsPropertyMetaModel;
+
     public PropertyMetaModel statementsPropertyMetaModel;
 }

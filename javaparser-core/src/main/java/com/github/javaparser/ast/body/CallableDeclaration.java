@@ -22,6 +22,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -60,16 +61,20 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @OptionalProperty
     private ReceiverParameter receiverParameter;
 
+    private NodeList<JmlContract> contracts = new NodeList<>();
+
     @AllFieldsConstructor
-    CallableDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter) {
-        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
+    CallableDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters,
+                        NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter,
+                        NodeList<JmlContract> contracts) {
+        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter, contracts);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CallableDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter) {
+    public CallableDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -77,6 +82,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
         setReceiverParameter(receiverParameter);
+        this.contracts = contracts;
         customInitialization();
     }
 

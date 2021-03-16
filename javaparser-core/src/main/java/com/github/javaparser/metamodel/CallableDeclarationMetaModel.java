@@ -47,6 +47,8 @@ public class CallableDeclarationMetaModel extends BodyDeclarationMetaModel {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 
+    public PropertyMetaModel contractsPropertyMetaModel;
+
     public PropertyMetaModel modifiersPropertyMetaModel;
 
     public PropertyMetaModel namePropertyMetaModel;

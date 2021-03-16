@@ -45,6 +45,8 @@ public class ForStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel comparePropertyMetaModel;
 
+    public PropertyMetaModel contractsPropertyMetaModel;
+
     public PropertyMetaModel initializationPropertyMetaModel;
 
     public PropertyMetaModel updatePropertyMetaModel;

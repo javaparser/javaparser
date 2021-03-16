@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -42,25 +43,30 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
-
     private NodeList<Statement> statements;
+    private NodeList<JmlContract> contracts = new NodeList<>();
 
     public BlockStmt() {
-        this(null, new NodeList<>());
+        this(null, new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public BlockStmt(final NodeList<Statement> statements) {
-        this(null, statements);
+    public BlockStmt(final NodeList<Statement> statements, final NodeList<JmlContract> contracts) {
+        this(null, statements, contracts);
+    }
+
+    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
+        this(tokenRange, statements, new NodeList<>());
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
+    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setStatements(statements);
+        this.contracts = contracts;
         customInitialization();
     }
 

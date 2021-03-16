@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
@@ -67,6 +68,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see com.github.javaparser.ast.expr.VariableDeclarationExpr
  */
 public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
+    private final NodeList<JmlContract> contracts;
 
     private NodeList<Expression> initialization;
 
@@ -78,24 +80,38 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     private Statement body;
 
     public ForStmt() {
-        this(null, new NodeList<>(), new BooleanLiteralExpr(), new NodeList<>(), new ReturnStmt());
+        this(new NodeList<>(), new BooleanLiteralExpr(), new NodeList<>(), new ReturnStmt());
+    }
+
+    public ForStmt(final NodeList<Expression> initialization, final Expression compare, final NodeList<Expression> update, final Statement body) {
+        this(initialization, compare, update, body, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ForStmt(final NodeList<Expression> initialization, final Expression compare, final NodeList<Expression> update, final Statement body) {
-        this(null, initialization, compare, update, body);
+    public ForStmt(final NodeList<Expression> initialization, final Expression compare,
+                   final NodeList<Expression> update, final Statement body,
+                   final NodeList<JmlContract> contracts) {
+        this(null, initialization, compare, update, body, contracts);
+    }
+
+    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare,
+                   NodeList<Expression> update, Statement body) {
+        this(tokenRange, initialization, compare, update, body, new NodeList<>());
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
+    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare,
+                   NodeList<Expression> update, Statement body,
+                   final NodeList<JmlContract> contracts) {
         super(tokenRange);
         setInitialization(initialization);
         setCompare(compare);
         setUpdate(update);
         setBody(body);
+        this.contracts = contracts;
         customInitialization();
     }
 

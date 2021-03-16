@@ -24,6 +24,8 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
@@ -45,25 +47,36 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt> {
+    private NodeList<JmlContract> contracts;
 
     private Expression condition;
 
     private Statement body;
 
     public WhileStmt() {
-        this(null, new BooleanLiteralExpr(), new ReturnStmt());
+        this(new BooleanLiteralExpr(), new ReturnStmt());
+    }
+
+    public WhileStmt(final Expression condition, final Statement body) {
+        this(condition, body, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public WhileStmt(final Expression condition, final Statement body) {
-        this(null, condition, body);
+    public WhileStmt(final Expression condition, final Statement body,
+                     final NodeList<JmlContract> contracts) {
+        this(null, condition, body, contracts);
+    }
+
+    public WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
+        this(tokenRange, condition, body, new NodeList<>());
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
+    public WhileStmt(TokenRange tokenRange, Expression condition, Statement body,
+                     final NodeList<JmlContract> contracts) {
         super(tokenRange);
         setCondition(condition);
         setBody(body);

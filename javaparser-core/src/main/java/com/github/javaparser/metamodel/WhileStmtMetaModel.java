@@ -44,4 +44,6 @@ public class WhileStmtMetaModel extends StatementMetaModel {
     public PropertyMetaModel bodyPropertyMetaModel;
 
     public PropertyMetaModel conditionPropertyMetaModel;
+
+    public PropertyMetaModel contractsPropertyMetaModel;
 }

@@ -24,6 +24,8 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
@@ -34,8 +36,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -45,25 +49,34 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithCondition<DoStmt> {
+    private NodeList<JmlContract> contracts;
 
     private Statement body;
 
     private Expression condition;
 
     public DoStmt() {
-        this(null, new ReturnStmt(), new BooleanLiteralExpr());
+        this(new ReturnStmt(), new BooleanLiteralExpr());
     }
 
     @AllFieldsConstructor
+    public DoStmt(final Statement body, final Expression condition, final NodeList<JmlContract> contracts) {
+        this(null, body, condition, contracts);
+    }
+
     public DoStmt(final Statement body, final Expression condition) {
-        this(null, body, condition);
+        this(body, condition, new NodeList<>());
+    }
+
+    public DoStmt(TokenRange tokenRange, Statement body, Expression condition) {
+        this(tokenRange, body, condition, new NodeList<>());
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public DoStmt(TokenRange tokenRange, Statement body, Expression condition) {
+    public DoStmt(TokenRange tokenRange, Statement body, Expression condition, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setBody(body);
         setCondition(condition);
