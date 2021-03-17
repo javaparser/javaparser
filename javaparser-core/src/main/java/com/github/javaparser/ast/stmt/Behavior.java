@@ -8,5 +8,5 @@ import com.github.javaparser.ast.Jmlish;
  */
 public enum Behavior implements Jmlish {
     NONE, BEHAVIOR, NORMAL, EXCEPTIONAL,
-    BREAK_BEHAVIOR, CONTINUE_BEHAVIOR, RETURN_BEHAVIOR
+    BREAK, CONTINUE, RETURN
 }

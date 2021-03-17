@@ -1,16 +1,22 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlAssertStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -18,8 +24,10 @@ import com.github.javaparser.ast.Generated;
  */
 public class JmlAssertStmt extends Statement {
 
+    private Expression expression;
+
     @AllFieldsConstructor
-    public JmlAssertStmt() {
+    public JmlAssertStmt(final Expression expression) {
     }
 
     @Override
@@ -71,6 +79,10 @@ public class JmlAssertStmt extends Statement {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -92,6 +104,32 @@ public class JmlAssertStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlAssertStmt(TokenRange tokenRange) {
         super(tokenRange);
+        customInitialization();
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public JmlAssertStmt setExpression(final Expression expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
+        return this;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public JmlAssertStmt(TokenRange tokenRange, Expression expression) {
+        super(tokenRange);
+        setExpression(expression);
         customInitialization();
     }
 }

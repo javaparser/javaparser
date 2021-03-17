@@ -1803,7 +1803,9 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         LOOKAHEAD(2)
         ret = InitializerDeclaration()
      |
-        LOOKAHEAD(JmlStart())
+        //FIXME expensive lookahead, required to distinguish, fields from contracts
+        // maybe large k is sufficient
+        LOOKAHEAD(JmlClassOrInterfaceBodyDeclaration())
         ret = JmlClassOrInterfaceBodyDeclaration()
      |
         (contracts=jmlContracts())?
@@ -4345,15 +4347,17 @@ NodeList<JmlContract> jmlContracts():
   (<ALSO>)?
   bc=jmlContract() {contracts.add(bc);}
   (<ALSO> bc=jmlContract() {contracts.add(bc);})*
-  {return contracts;}
   JmlEnd()
+  {return contracts;}
 }
 
 JmlContract jmlContract():
 {
     JavaToken begin;
     NodeList<JmlClause> clauses = new NodeList<>();
-    Behavior b;
+    NodeList<JmlContract> subContracts = new NodeList<>();
+
+    Behavior b = Behavior.NONE;
     JmlClause clause;
 }
 {
@@ -4361,7 +4365,8 @@ JmlContract jmlContract():
   (("public"|"private"|"package"|"protected"))?
   (b=bbehavior())?
   (clause=contractClause())+
-  {return new JmlContract(range(begin, token()));}
+  (<NESTED_CONTRACT_START> subContracts=jmlContracts() <NESTED_CONTRACT_END>)?
+  {return new JmlContract(range(begin, token()), b, new Modifier(), clauses, subContracts);}
 }
 
 JmlClause contractClause():
@@ -4389,52 +4394,49 @@ Behavior bbehavior():
 {}
 {
     <BEHAVIOR> {return Behavior.BEHAVIOR;}
-  | <NORMAL_BEHAVIOR> {return Behavior.BEHAVIOR;}
-  | <EXCEPTIONAL_BEHAVIOR> {return Behavior.BEHAVIOR;}
-  | <BREAK_BEHAVIOR> {return Behavior.BEHAVIOR;}
-  | <CONTINUE_BEHAVIOR> {return Behavior.BEHAVIOR;}
-  | <RETURN_BEHAVIOR> {return Behavior.BEHAVIOR;}
+  | <NORMAL_BEHAVIOR> {return Behavior.NORMAL;}
+  | <EXCEPTIONAL_BEHAVIOR> {return Behavior.EXCEPTIONAL;}
+  | <BREAK_BEHAVIOR> {return Behavior.BREAK;}
+  | <CONTINUE_BEHAVIOR> {return Behavior.CONTINUE;}
+  | <RETURN_BEHAVIOR> {return Behavior.RETURN;}
 }
 
 
 JmlClause breaks():
 {
-    SimpleName id;
+    SimpleName label=null;
     Expression expr;
     JavaToken begin;
 }
 {
-  { begin = token();}
-  <BREAKS>
-  <LPAREN> (id=SimpleName())? <RPAREN>
+  <BREAKS>   { begin = token();}
+  <LPAREN> (label=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new BreaksClause(range(begin, token()), expr); }
+  { return new BreaksClause(range(begin, token()), label, expr); }
 }
 
 JmlClause continues():
 {
-    SimpleName id;
+    SimpleName label=null;
     Expression expr;
     JavaToken begin;
 }
 {
-  { begin = token();}
-  (<BREAKS> | <CONTINUES>)
-  <LPAREN> (id=SimpleName())? <RPAREN>
+  <CONTINUES> { begin = token();}
+  <LPAREN> (label=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new ContinuesClause(range(begin, token()), expr); }
+  { return new ContinuesClause(range(begin, token()), label, expr); }
 }
 
 
 JmlClause returns_():
 {
-    SimpleName id;
     Expression expr;
     JavaToken begin;
 }
 {
-  { begin = token();}
-  <RETURNS> expr=Expression()
+  <RETURNS> {begin = token();}
+  expr=Expression()
   { return new ReturnsClause(range(begin, token()), expr); }
 }
 
@@ -4476,7 +4478,7 @@ JmlClause assign():
 
 JmlClause acc():
 {
-    NodeList<SimpleName> heaps=null;
+    NodeList<SimpleName> heaps=new NodeList<>();
     Expression e;
     NodeList<Expression> exprs = new NodeList<>();
     JavaToken begin;
@@ -4506,7 +4508,7 @@ JmlClause mby():
 
 JmlClause requires():
 {
-    NodeList<SimpleName> heaps=null;
+    NodeList<SimpleName> heaps=new NodeList<>();
     Expression e;
     JavaToken begin;
 }
@@ -4520,7 +4522,7 @@ JmlClause requires():
 */
 JmlClause ensures():
 {
-    NodeList<SimpleName> heaps=null;
+    NodeList<SimpleName> heaps=new NodeList<>();
     Expression e;
     JavaToken begin;
 }

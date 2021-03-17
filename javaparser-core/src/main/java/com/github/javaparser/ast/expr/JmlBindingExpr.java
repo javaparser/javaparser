@@ -23,37 +23,39 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlBindingExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlBindingExprMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
- * <h1>A lambda expression</h1>
- * <h2>Java 1-7</h2>
- * Does not exist.
- * <h2>Java 8+</h2>
- * {@code (a, b) -> a + b}
- * <br>{@code a -> ...}
- * <br>{@code (Long a) -> { println(a); }}
- * <p>The parameters are on the left side of the -&gt;.
- * If a parameter uses type inference (it has no type specified) then its type is set to {@code UnknownType}.
- * If they are in ( ), "isEnclosingParameters" is true.
- * <br>The body is to the right of the -&gt;.
- * The body is either a BlockStmt when it is in { } braces, or an ExpressionStmt when it is not in braces.
- *
- * @author Raquel Pau
+ * @author Alexander Weigl
  */
 public class JmlBindingExpr extends Expression {
+
+    public enum JmlBinder {
+
+        FORALL("\\forall"), EXISTS("\\exists");
+
+        public final String symbol;
+
+        JmlBinder(String symbol) {
+            this.symbol = symbol;
+        }
+    }
+
+    private JmlBinder binder;
 
     @NonEmptyProperty
     private NodeList<VariableDeclarator> variables;
@@ -62,30 +64,25 @@ public class JmlBindingExpr extends Expression {
     private NodeList<Expression> expressions;
 
     public JmlBindingExpr() {
-        this(null, new NodeList<>(), new NodeList<>());
+        this(null, JmlBinder.EXISTS, new NodeList<>(), new NodeList<>());
     }
 
-    /**
-     * Creates a single parameter lambda expression.
-     */
-    public JmlBindingExpr(VariableDeclarator var, Expression expressions) {
-        this(null, new NodeList<>(var), new NodeList<>(expressions));
+    public JmlBindingExpr(final NodeList<VariableDeclarator> variables, final Expression expressions) {
+        this(null, JmlBinder.EXISTS, variables, new NodeList<>(expressions));
     }
 
-    /**
-     * Creates a zero or multi-parameter lambda expression with its variables wrapped in ( ).
-     */
     @AllFieldsConstructor
-    public JmlBindingExpr(NodeList<VariableDeclarator> variables, Expression expressions) {
-        this(null, variables, new NodeList<>(expressions));
+    public JmlBindingExpr(final JmlBinder binder, final NodeList<VariableDeclarator> variables, final Expression expressions) {
+        this(null, binder, variables, new NodeList<>(expressions));
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlBindingExpr(TokenRange tokenRange, NodeList<VariableDeclarator> variables, NodeList<Expression> expressions) {
+    public JmlBindingExpr(TokenRange tokenRange, JmlBinder binder, NodeList<VariableDeclarator> variables, NodeList<Expression> expressions) {
         super(tokenRange);
+        setBinder(binder);
         setVariables(variables);
         setExpressions(expressions);
         customInitialization();
@@ -215,5 +212,20 @@ public class JmlBindingExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlBindingExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlBindingExprMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlBinder getBinder() {
+        return binder;
+    }
+
+    public JmlBindingExpr setBinder(final JmlBinder binder) {
+        assertNotNull(binder);
+        if (binder == this.binder) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.BINDER, this.binder, binder);
+        this.binder = binder;
+        return this;
     }
 }

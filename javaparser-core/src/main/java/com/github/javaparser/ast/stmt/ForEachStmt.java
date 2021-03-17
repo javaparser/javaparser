@@ -72,11 +72,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body, final NodeList<JmlContract> contracts) {
+    public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setVariable(variable);
         setIterable(iterable);
         setBody(body);
+        setContracts(contracts);
         customInitialization();
     }
 
@@ -187,6 +188,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -204,6 +211,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         if (node == body) {
             setBody((Statement) replacementNode);
             return true;
+        }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
+            }
         }
         if (node == iterable) {
             setIterable((Expression) replacementNode);
@@ -249,11 +262,29 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body) {
         super(tokenRange);
         setVariable(variable);
         setIterable(iterable);
         setBody(body);
         customInitialization();
+    }
+
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
+    }
+
+    public ForEachStmt setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
+        if (contracts == this.contracts) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.CONTRACTS, this.contracts, contracts);
+        if (this.contracts != null)
+            this.contracts.setParentNode(null);
+        this.contracts = contracts;
+        setAsParentNodeOf(contracts);
+        return this;
     }
 }

@@ -928,6 +928,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final ForEachStmt n2 = (ForEachStmt) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
+            return false;
         if (!nodeEquals(n.getIterable(), n2.getIterable()))
             return false;
         if (!nodeEquals(n.getVariable(), n2.getVariable()))
@@ -1175,14 +1177,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JmlComment n, final Visitable arg) {
-        final JmlComment n2 = (JmlComment) arg;
-        if (!objEquals(n.getContent(), n2.getContent()))
-            return false;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
     public Boolean visit(final AccessibleClause n, final Visitable arg) {
         final AccessibleClause n2 = (AccessibleClause) arg;
         if (!nodesEquals(n.getExprs(), n2.getExprs()))
@@ -1209,6 +1203,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final BreaksClause n2 = (BreaksClause) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
             return false;
+        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1216,6 +1212,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final ContinuesClause n, final Visitable arg) {
         final ContinuesClause n2 = (ContinuesClause) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        if (!nodeEquals(n.getLabel(), n2.getLabel()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
@@ -1239,18 +1237,24 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlAssertStmt n, final Visitable arg) {
         final JmlAssertStmt n2 = (JmlAssertStmt) arg;
+        if (!nodeEquals(n.getExpression(), n2.getExpression()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
     @Override
     public Boolean visit(final JmlAssumeStmt n, final Visitable arg) {
         final JmlAssumeStmt n2 = (JmlAssumeStmt) arg;
+        if (!nodeEquals(n.getExpression(), n2.getExpression()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
     @Override
     public Boolean visit(final JmlBindingExpr n, final Visitable arg) {
         final JmlBindingExpr n2 = (JmlBindingExpr) arg;
+        if (!objEquals(n.getBinder(), n2.getBinder()))
+            return false;
         if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
             return false;
         if (!nodesEquals(n.getVariables(), n2.getVariables()))

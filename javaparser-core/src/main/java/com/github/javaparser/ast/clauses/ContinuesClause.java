@@ -5,6 +5,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -19,22 +20,25 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ContinuesClause extends JmlClause {
 
+    private SimpleName label;
+
     private Expression expr;
 
     public ContinuesClause() {
     }
 
     @AllFieldsConstructor
-    public ContinuesClause(Expression expr) {
-        super();
+    public ContinuesClause(SimpleName label, Expression expr) {
+        this(null, label, expr);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ContinuesClause(TokenRange tokenRange, Expression expr) {
+    public ContinuesClause(TokenRange tokenRange, SimpleName label, Expression expr) {
         super(tokenRange);
+        setLabel(label);
         setExpr(expr);
         customInitialization();
     }
@@ -66,6 +70,10 @@ public class ContinuesClause extends JmlClause {
             return false;
         if (node == expr) {
             setExpr((Expression) replacementNode);
+            return true;
+        }
+        if (node == label) {
+            setLabel((SimpleName) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -108,6 +116,23 @@ public class ContinuesClause extends JmlClause {
             this.expr.setParentNode(null);
         this.expr = expr;
         setAsParentNodeOf(expr);
+        return this;
+    }
+
+    public SimpleName getLabel() {
+        return label;
+    }
+
+    public ContinuesClause setLabel(final SimpleName label) {
+        assertNotNull(label);
+        if (label == this.label) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        if (this.label != null)
+            this.label.setParentNode(null);
+        this.label = label;
+        setAsParentNodeOf(label);
         return this;
     }
 }

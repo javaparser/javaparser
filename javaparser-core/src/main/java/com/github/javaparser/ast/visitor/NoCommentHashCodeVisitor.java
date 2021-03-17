@@ -25,7 +25,6 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.JmlComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -181,7 +180,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final ForEachStmt n, final Void arg) {
-        return (n.getBody().accept(this, arg)) * 31 + (n.getIterable().accept(this, arg)) * 31 + (n.getVariable().accept(this, arg));
+        return (n.getBody().accept(this, arg)) * 31 + (n.getContracts().accept(this, arg)) * 31 + (n.getIterable().accept(this, arg)) * 31 + (n.getVariable().accept(this, arg));
     }
 
     public Integer visit(final IfStmt n, final Void arg) {
@@ -445,13 +444,8 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlComment n, final Void arg) {
-        return (n.getContent().hashCode());
-    }
-
-    @Override
     public Integer visit(final JmlBindingExpr n, final Void arg) {
-        return (n.getExpressions().accept(this, arg)) * 31 + (n.getVariables().accept(this, arg));
+        return (n.getBinder().hashCode()) * 31 + (n.getExpressions().accept(this, arg)) * 31 + (n.getVariables().accept(this, arg));
     }
 
     @Override
@@ -466,12 +460,12 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final BreaksClause n, final Void arg) {
-        return (n.getExpr().accept(this, arg));
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getLabel().accept(this, arg));
     }
 
     @Override
     public Integer visit(final ContinuesClause n, final Void arg) {
-        return (n.getExpr().accept(this, arg));
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getLabel().accept(this, arg));
     }
 
     @Override
@@ -486,12 +480,12 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlAssertStmt n, final Void arg) {
-        return 0;
+        return (n.getExpression().accept(this, arg));
     }
 
     @Override
     public Integer visit(final JmlAssumeStmt n, final Void arg) {
-        return 0;
+        return (n.getExpression().accept(this, arg));
     }
 
     @Override

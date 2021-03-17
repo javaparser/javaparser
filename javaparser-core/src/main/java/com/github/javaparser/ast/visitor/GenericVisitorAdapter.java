@@ -25,7 +25,6 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.JmlComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
@@ -761,6 +760,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getBody().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2028,16 +2032,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlComment n, final A arg) {
-        R result;
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            return result;
-        }
-        return null;
-    }
-
-    @Override
     public R visit(final JmlBindingExpr n, final A arg) {
         R result;
         {
@@ -2110,6 +2104,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        {
+            result = n.getLabel().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2122,6 +2121,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getExpr().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getLabel().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2165,6 +2169,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final JmlAssertStmt n, final A arg) {
         R result;
+        {
+            result = n.getExpression().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2175,6 +2184,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final JmlAssumeStmt n, final A arg) {
         R result;
+        {
+            result = n.getExpression().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;

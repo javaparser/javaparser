@@ -540,11 +540,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlComment n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
     public R visit(final AccessibleClause n, final A arg) {
         return defaultAction(n, arg);
     }

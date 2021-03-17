@@ -40,4 +40,6 @@ public class JmlAssumeStmtMetaModel extends StatementMetaModel {
     JmlAssumeStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlAssumeStmt.class, "JmlAssumeStmt", "com.github.javaparser.ast.stmt", false, false);
     }
+
+    public PropertyMetaModel expressionPropertyMetaModel;
 }

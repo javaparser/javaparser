@@ -20,33 +20,18 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.joining;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.jml.JmlPipeline;
@@ -55,9 +40,18 @@ import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.*;
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.joining;
+
 /**
  * Outputs the AST as formatted Java source code.
- *
  */
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     protected final PrinterConfiguration configuration;
@@ -66,7 +60,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public DefaultPrettyPrinterVisitor(PrinterConfiguration configuration) {
         this(configuration, new SourcePrinter(configuration));
     }
-    
+
     public DefaultPrettyPrinterVisitor(PrinterConfiguration configuration, SourcePrinter printer) {
         this.configuration = configuration;
         this.printer = printer;
@@ -102,7 +96,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     protected void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace,
-                                  final Void arg) {
+                                    final Void arg) {
         if (annotations.isEmpty()) {
             return;
         }
@@ -630,7 +624,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
 
-
     /**
      * work in progress for issue-545
      */
@@ -704,7 +697,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getExpression().accept(this, arg);
         printer.print(" instanceof ");
         n.getType().accept(this, arg);
-        if(n.getName().isPresent()) {
+        if (n.getName().isPresent()) {
             printer.print(" ");
             n.getName().get().accept(this, arg);
         }
@@ -717,23 +710,46 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
     }
 
-    @Override
-    public void visit(JmlComment jmlComment, Void arg) {
+    private <T extends Node> void printList(NodeList<T> args, String sep) {
+        printList(args, sep, "", "", "", "");
+    }
+
+    private <T extends Node> void printList(NodeList<T> args, String sep,
+                                            String delimStart, String delimEnd,
+                                            String eachStart, String eachEnd) {
+        if (!isNullOrEmpty(args)) {
+            printer.print(delimStart);
+            for (final Iterator<T> i = args.iterator(); i.hasNext(); ) {
+                final T t = i.next();
+                printer.print(eachStart);
+                t.accept(this, null);
+                printer.print(eachEnd);
+                if (i.hasNext()) {
+                    printer.print(sep);
+                }
+            }
+            printer.print(delimEnd);
+        }
     }
 
     @Override
     public void visit(JmlBindingExpr jmlBindingExpr, Void arg) {
-
+        printer.print("(");
+        printer.print(jmlBindingExpr.getBinder().symbol);
+        printer.print(" ");
+        printList(jmlBindingExpr.getVariables(), ", ");
+        printList(jmlBindingExpr.getExpressions(), "; ");
+        printer.print(")");
     }
 
     @Override
     public void visit(AccessibleClause n, Void arg) {
-
+        printClause("accessible", n.getHeaps(), n.getExprs());
     }
 
     @Override
     public void visit(AssignableClause n, Void arg) {
-
+        printClause("assignable", n.getHeaps(), n.getExprs());
     }
 
     @Override
@@ -743,27 +759,35 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ContinuesClause n, Void arg) {
+        printClause("continues", n.getExpr());
+    }
 
+    private void printClause(String name, Expression expr) {
+        printClause(name, new NodeList<>(), expr);
     }
 
     @Override
     public void visit(DivergesClause n, Void arg) {
-
+        //TODO
     }
 
     @Override
     public void visit(EnsuresClause n, Void arg) {
-
+        printClause("ensures", n.getHeaps(), n.getExpr());
     }
 
     @Override
     public void visit(JmlAssertStmt n, Void arg) {
-
+        printer.print("//@ assert ");
+        //TODO n.getExpression().accept(this, arg);
+        printer.println(";");
     }
 
     @Override
     public void visit(JmlAssumeStmt n, Void arg) {
-
+        printer.print("//@ assert ");
+        //TODO n.getExpression().accept(this, arg);
+        printer.println(";");
     }
 
     @Override
@@ -783,7 +807,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlSetStmt n, Void arg) {
-
+        printer.print("//@ set ");
+        //TODO n.getExpression().accept(this, arg);
+        printer.println(";");
     }
 
     @Override
@@ -2028,6 +2054,17 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print("???;");
     }
 
+    private void printClause(String name, NodeList<SimpleName> heaps, Expression expr) {
+        printClause(name, heaps, new NodeList<>(expr));
+    }
+
+    private void printClause(String name, NodeList<SimpleName> heaps, NodeList<Expression> expr) {
+        printer.print(name);
+        printList(heaps, "", "", "", "<", ">");
+        printList(expr, ", ");
+        printer.println(";");
+    }
+
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {
         if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
         if (node instanceof Comment) return;
@@ -2064,7 +2101,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) return;
 
         // extract all nodes for which the position/range is indicated to avoid to skip orphan comments
-        List<Node> everything = node.getChildNodes().stream().filter(n->n.getRange().isPresent()).collect(Collectors.toList());
+        List<Node> everything = node.getChildNodes().stream().filter(n -> n.getRange().isPresent()).collect(Collectors.toList());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {
             return;
@@ -2083,16 +2120,18 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             everything.get(everything.size() - commentsAtEnd + i).accept(this, null);
         }
     }
-     private void indentIf(boolean expr){
-        if(expr)
+
+    private void indentIf(boolean expr) {
+        if (expr)
             printer.indent();
-     }
-    private void unindentIf(boolean expr){
-        if(expr)
+    }
+
+    private void unindentIf(boolean expr) {
+        if (expr)
             printer.unindent();
     }
-    
-    
+
+
     private Optional<ConfigurationOption> getOption(ConfigOption cOption) {
         return configuration.get(new DefaultConfigurationOption(cOption));
     }

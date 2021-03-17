@@ -42,4 +42,6 @@ public class BreaksClauseMetaModel extends JmlClauseMetaModel {
     }
 
     public PropertyMetaModel exprPropertyMetaModel;
+
+    public PropertyMetaModel labelPropertyMetaModel;
 }

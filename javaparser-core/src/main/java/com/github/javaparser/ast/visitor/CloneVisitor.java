@@ -920,10 +920,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final ForEachStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
+        NodeList<JmlContract> contracts = cloneList(n.getContracts(), arg);
         Expression iterable = cloneNode(n.getIterable(), arg);
         VariableDeclarationExpr variable = cloneNode(n.getVariable(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ForEachStmt r = new ForEachStmt(n.getTokenRange().orElse(null), variable, iterable, body);
+        ForEachStmt r = new ForEachStmt(n.getTokenRange().orElse(null), variable, iterable, body, contracts);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1255,17 +1256,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Expression> expressions = cloneList(n.getExpressions(), arg);
         NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlBindingExpr r = new JmlBindingExpr(n.getTokenRange().orElse(null), variables, expressions);
-        r.setComment(comment);
-        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
-        copyData(n, r);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(final JmlComment n, final Object arg) {
-        Comment comment = cloneNode(n.getComment(), arg);
-        JmlComment r = new JmlComment(n.getTokenRange().orElse(null), n.getContent());
+        JmlBindingExpr r = new JmlBindingExpr(n.getTokenRange().orElse(null), n.getBinder(), variables, expressions);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1300,8 +1291,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final BreaksClause n, final Object arg) {
         Expression expr = cloneNode(n.getExpr(), arg);
+        SimpleName label = cloneNode(n.getLabel(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        BreaksClause r = new BreaksClause(n.getTokenRange().orElse(null), expr);
+        BreaksClause r = new BreaksClause(n.getTokenRange().orElse(null), label, expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1311,8 +1303,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final ContinuesClause n, final Object arg) {
         Expression expr = cloneNode(n.getExpr(), arg);
+        SimpleName label = cloneNode(n.getLabel(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ContinuesClause r = new ContinuesClause(n.getTokenRange().orElse(null), expr);
+        ContinuesClause r = new ContinuesClause(n.getTokenRange().orElse(null), label, expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1343,8 +1336,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlAssertStmt n, final Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlAssertStmt r = new JmlAssertStmt(n.getTokenRange().orElse(null));
+        JmlAssertStmt r = new JmlAssertStmt(n.getTokenRange().orElse(null), expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1353,8 +1347,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlAssumeStmt n, final Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlAssumeStmt r = new JmlAssumeStmt(n.getTokenRange().orElse(null));
+        JmlAssumeStmt r = new JmlAssumeStmt(n.getTokenRange().orElse(null), expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

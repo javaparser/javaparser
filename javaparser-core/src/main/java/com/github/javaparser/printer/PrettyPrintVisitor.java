@@ -745,10 +745,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
     }
 
-    @Override
-    public void visit(JmlComment jmlComment, Void arg) {
-
-    }
 
     @Override
     public void visit(JmlBindingExpr jmlBindingExpr, Void arg) {

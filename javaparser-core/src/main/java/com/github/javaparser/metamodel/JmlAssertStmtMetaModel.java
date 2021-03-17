@@ -40,4 +40,6 @@ public class JmlAssertStmtMetaModel extends StatementMetaModel {
     JmlAssertStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlAssertStmt.class, "JmlAssertStmt", "com.github.javaparser.ast.stmt", false, false);
     }
+
+    public PropertyMetaModel expressionPropertyMetaModel;
 }

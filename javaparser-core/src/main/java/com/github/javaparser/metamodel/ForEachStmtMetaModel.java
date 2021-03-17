@@ -43,6 +43,8 @@ public class ForEachStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel bodyPropertyMetaModel;
 
+    public PropertyMetaModel contractsPropertyMetaModel;
+
     public PropertyMetaModel iterablePropertyMetaModel;
 
     public PropertyMetaModel variablePropertyMetaModel;

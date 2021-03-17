@@ -177,6 +177,13 @@ public class TokenTypes {
             case INVARIANT:
             case ACCESSIBLE:
             case ENSURES:
+            case NORMAL_BEHAVIOR:
+            case EXCEPTIONAL_BEHAVIOR:
+            case BEHAVIOR:
+            case BREAK_BEHAVIOR:
+            case CONTINUE_BEHAVIOR:
+            case BREAKS:
+            case CONTINUES:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

@@ -281,6 +281,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final ForEachStmt n, final A arg) {
         n.getBody().accept(this, arg);
+        n.getContracts().forEach(p -> p.accept(this, arg));
         n.getIterable().accept(this, arg);
         n.getVariable().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -726,11 +727,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlComment n, final A arg) {
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
     public void visit(final AccessibleClause n, final A arg) {
         n.getExprs().forEach(p -> p.accept(this, arg));
         n.getHeaps().forEach(p -> p.accept(this, arg));
@@ -748,12 +744,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final BreaksClause n, final A arg) {
         n.getExpr().accept(this, arg);
+        n.getLabel().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     public void visit(final ContinuesClause n, final A arg) {
         n.getExpr().accept(this, arg);
+        n.getLabel().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -771,11 +769,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlAssertStmt n, final A arg) {
+        n.getExpression().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     public void visit(final JmlAssumeStmt n, final A arg) {
+        n.getExpression().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

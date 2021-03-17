@@ -477,12 +477,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ForEachStmt n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
+        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
         Expression iterable = (Expression) n.getIterable().accept(this, arg);
         VariableDeclarationExpr variable = (VariableDeclarationExpr) n.getVariable().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (body == null || iterable == null || variable == null)
             return null;
         n.setBody(body);
+        n.setContracts(contracts);
         n.setIterable(iterable);
         n.setVariable(variable);
         n.setComment(comment);
@@ -1287,13 +1289,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlComment n, final A arg) {
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final AccessibleClause n, final A arg) {
         NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
@@ -1322,10 +1317,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final BreaksClause n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
+        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null)
+        if (expr == null || label == null)
             return null;
         n.setExpr(expr);
+        n.setLabel(label);
         n.setComment(comment);
         return n;
     }
@@ -1333,10 +1330,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ContinuesClause n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
+        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null)
+        if (expr == null || label == null)
             return null;
         n.setExpr(expr);
+        n.setLabel(label);
         n.setComment(comment);
         return n;
     }
@@ -1363,14 +1362,22 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlAssertStmt n, final A arg) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
+            return null;
+        n.setExpression(expression);
         n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final JmlAssumeStmt n, final A arg) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
+            return null;
+        n.setExpression(expression);
         n.setComment(comment);
         return n;
     }
