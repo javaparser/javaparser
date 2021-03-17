@@ -31,7 +31,6 @@ import javassist.CtField;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
-import javassist.bytecode.ClassFile;
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.*;
