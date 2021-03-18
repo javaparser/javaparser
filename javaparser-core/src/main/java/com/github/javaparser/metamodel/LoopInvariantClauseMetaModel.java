@@ -40,4 +40,6 @@ public class LoopInvariantClauseMetaModel extends JmlClauseMetaModel {
     LoopInvariantClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, LoopInvariantClause.class, "LoopInvariantClause", "com.github.javaparser.ast.clauses", false, false);
     }
+
+    public PropertyMetaModel exprPropertyMetaModel;
 }

@@ -27,6 +27,7 @@ public class BreaksClause extends JmlClause {
     @AllFieldsConstructor
     public BreaksClause(SimpleName label, Expression expr) {
         this(null, label, expr);
+        setKind(Kind.BREAKS);
     }
 
     /**
@@ -41,6 +42,7 @@ public class BreaksClause extends JmlClause {
     }
 
     public BreaksClause() {
+        setKind(Kind.BREAKS);
     }
 
     @Override
@@ -119,10 +121,12 @@ public class BreaksClause extends JmlClause {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getLabel() {
         return label;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BreaksClause setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {

@@ -23,7 +23,8 @@ public class ReturnsClause extends JmlClause implements BlockContractable {
 
     @AllFieldsConstructor
     public ReturnsClause(Expression expr) {
-        super();
+        this(null, expr);
+        setKind(Kind.RETURNS);
     }
 
     /**

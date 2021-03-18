@@ -4,9 +4,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -21,20 +19,21 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class MeasuredByClause extends JmlClause implements MethodContractable, LoopContractable {
 
-    Expression e;
+    private Expression expr;
 
     @AllFieldsConstructor
-    public MeasuredByClause(Expression e) {
-        super();
+    public MeasuredByClause(Expression expr) {
+        this(null, expr);
+        setKind(Kind.MEASURED_BY);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MeasuredByClause(TokenRange tokenRange, Expression e) {
+    public MeasuredByClause(TokenRange tokenRange, Expression expr) {
         super(tokenRange);
-        setE(e);
+        setExpr(expr);
         customInitialization();
     }
 
@@ -66,8 +65,8 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (node == e) {
-            setE((Expression) replacementNode);
+        if (node == expr) {
+            setExpr((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -95,21 +94,21 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getE() {
-        return e;
+    public Expression getExpr() {
+        return expr;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MeasuredByClause setE(final Expression e) {
-        assertNotNull(e);
-        if (e == this.e) {
+    public MeasuredByClause setExpr(final Expression expr) {
+        assertNotNull(expr);
+        if (expr == this.expr) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.E, this.e, e);
-        if (this.e != null)
-            this.e.setParentNode(null);
-        this.e = e;
-        setAsParentNodeOf(e);
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
+        this.expr = expr;
+        setAsParentNodeOf(expr);
         return this;
     }
 }

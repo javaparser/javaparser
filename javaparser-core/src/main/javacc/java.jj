@@ -77,6 +77,7 @@ PARSER_BEGIN(GeneratedJavaParser)
 package com.github.javaparser;
 
 import java.util.*;
+import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.modules.*;
@@ -87,14 +88,11 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
-
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.GeneratedJavaParser.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 import static com.github.javaparser.ast.Node.Parsedness.*;
-import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
-
 
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
@@ -1833,26 +1831,30 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
     { return ret; }
 }
 
-BodyDeclaration<?> JmlClassOrInterfaceBodyDeclaration():
+JmlBodyDeclaration JmlClassOrInterfaceBodyDeclaration():
 {
-    BodyDeclaration<?> ret;    ModifierHolder modifiers;
-
-
+    JmlBodyDeclaration ret = new JmlBodyDeclaration();
+    JmlClassLevel element;
+    ModifierHolder modifiers;
+    JavaToken begin;
 }{
     (
-      JmlStart()
+      JmlStart() {begin=token();}
       modifiers = Modifiers()
       (
-          ret = JmlClassInvariant(modifiers)
-        | ret = JmlClassInitially(modifiers)
-        | ret = JmlClassAccessible(modifiers)
-        | ret = JmlClassRepresents(modifiers)
-        | ret = JmlFieldDeclaration(modifiers)
-        | ret = JmlMethodDeclaration(modifiers)
-      )
+        ( element = JmlClassInvariant(modifiers)
+        | element = JmlClassInitially(modifiers)
+        | element = JmlClassAccessible(modifiers)
+        | element = JmlClassRepresents(modifiers)
+        //| element = JmlFieldDeclaration(modifiers)
+        //| element = JmlMethodDeclaration(modifiers)
+        )
+        {/*ret.getWrapped().add(element);*/}
+      )+
       JmlEnd()
     )
-    { return ret; }
+    { ret.setTokenRange(range(begin, token()));
+      return ret;}
 }
 
 void JmlStart():
@@ -1863,7 +1865,7 @@ void JmlEnd():
 {}
 { <JML_MULTI_END> | <JML_SINGLE_END> }
 
-BodyDeclaration<?> JmlClassInvariant(ModifierHolder modifiers):
+JmlClassLevel JmlClassInvariant(ModifierHolder modifiers):
 { Expression expr; Token inv; }
 {
   inv=<INVARIANT> expr=Expression() ";"
@@ -1871,16 +1873,16 @@ BodyDeclaration<?> JmlClassInvariant(ModifierHolder modifiers):
     return new ClassInvariantClause(range(begin, token()), modifiers.modifiers, expr); }
 }
 
-BodyDeclaration<?> JmlClassInitially(ModifierHolder modifiers):
+JmlClassLevel JmlClassInitially(ModifierHolder modifiers):
 { Expression expr; Token inv; }
 {
   inv=<INITIALLY> expr=Expression() ";"
   { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
-    //TODO add initally ast
+    //TODO weigl add initally ast
     return new ClassInvariantClause(range(begin, token()), modifiers.modifiers, expr); }
 }
 
-BodyDeclaration<?>  JmlClassAccessible(ModifierHolder modifiers):
+JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
 {
     Token b;
     SimpleName id;
@@ -1897,7 +1899,7 @@ BodyDeclaration<?>  JmlClassAccessible(ModifierHolder modifiers):
     return new JmlClassAccessibleDeclaration(/*range(begin, token()), modifiers.modifiers, id, expressions, measuredBy*/);}
 }
 
-BodyDeclaration<?> JmlClassRepresents(ModifierHolder modifiers):
+JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
 {
      Token b;
      SimpleName id=null;
@@ -1913,8 +1915,8 @@ BodyDeclaration<?> JmlClassRepresents(ModifierHolder modifiers):
   { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
     return new JmlRepresentsDeclaration(range(begin, token()), modifiers.modifiers, id, expr);}
 }
-
-BodyDeclaration<?> JmlFieldDeclaration(ModifierHolder modifier):
+/*
+JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
 {
     Type partialType;
     NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
@@ -1936,7 +1938,7 @@ BodyDeclaration<?> JmlFieldDeclaration(ModifierHolder modifier):
     }
 }
 
-BodyDeclaration<?>  JmlMethodDeclaration(ModifierHolder modifier):
+JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
     Type type;
@@ -1974,6 +1976,7 @@ BodyDeclaration<?>  JmlMethodDeclaration(ModifierHolder modifier):
         return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
     }
 }
+*/
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3

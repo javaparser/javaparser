@@ -25,11 +25,13 @@ public class ContinuesClause extends JmlClause {
     private Expression expr;
 
     public ContinuesClause() {
+        setKind(Kind.CONTINUES);
     }
 
     @AllFieldsConstructor
     public ContinuesClause(SimpleName label, Expression expr) {
         this(null, label, expr);
+        setKind(Kind.CONTINUES);
     }
 
     /**
@@ -119,10 +121,12 @@ public class ContinuesClause extends JmlClause {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getLabel() {
         return label;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ContinuesClause setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {

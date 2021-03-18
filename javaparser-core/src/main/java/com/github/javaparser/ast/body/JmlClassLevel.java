@@ -1,32 +1,30 @@
-package com.github.javaparser.ast.clauses;
+package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.CallableClauseMetaModel;
+import com.github.javaparser.metamodel.JmlClassLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
- * @version 1 (2/22/21)
+ * @version 1 (3/17/21)
  */
-public class CallableClause extends JmlClause {
+public abstract class JmlClassLevel extends Node implements Jmlish {
 
     @AllFieldsConstructor
-    public CallableClause() {
-        this(null);
-        setKind(Kind.CALLABLE);
+    public JmlClassLevel() {
+        super(null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CallableClause(TokenRange tokenRange) {
+    public JmlClassLevel(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -49,25 +47,13 @@ public class CallableClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public CallableClause clone() {
-        return (CallableClause) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
+    public JmlClassLevel clone() {
+        return (JmlClassLevel) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public CallableClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.callableClauseMetaModel;
+    public JmlClassLevelMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClassLevelMetaModel;
     }
 }

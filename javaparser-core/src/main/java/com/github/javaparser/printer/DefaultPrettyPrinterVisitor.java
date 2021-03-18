@@ -744,60 +744,74 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(AccessibleClause n, Void arg) {
-        printClause("accessible", n.getHeaps(), n.getExprs());
+        printClause(n.getKind(), n.getHeaps(), n.getExprs());
     }
 
     @Override
     public void visit(AssignableClause n, Void arg) {
-        printClause("assignable", n.getHeaps(), n.getExprs());
+        printClause(n.getKind(), n.getHeaps(), n.getExprs());
     }
 
     @Override
     public void visit(BreaksClause n, Void arg) {
-
+        //TODO n.getLabel()
+        printClause(n.getKind(), n.getExpr());
     }
 
     @Override
     public void visit(ContinuesClause n, Void arg) {
-        printClause("continues", n.getExpr());
+        printClause(n.getKind(), n.getExpr());
     }
 
-    private void printClause(String name, Expression expr) {
+    private void printClause(JmlClause.Kind name, Expression expr) {
         printClause(name, new NodeList<>(), expr);
     }
 
     @Override
     public void visit(DivergesClause n, Void arg) {
-        //TODO
+        //printClause(n.getKind(), );
     }
 
     @Override
     public void visit(EnsuresClause n, Void arg) {
-        printClause("ensures", n.getHeaps(), n.getExpr());
+        printClause(n.getKind(), n.getHeaps(), n.getExpr());
     }
 
     @Override
     public void visit(JmlAssertStmt n, Void arg) {
         printer.print("//@ assert ");
-        //TODO n.getExpression().accept(this, arg);
+        n.getExpression().accept(this, arg);
         printer.println(";");
     }
 
     @Override
     public void visit(JmlAssumeStmt n, Void arg) {
         printer.print("//@ assert ");
-        //TODO n.getExpression().accept(this, arg);
+        n.getExpression().accept(this, arg);
         printer.println(";");
     }
 
     @Override
     public void visit(JmlLabel n, Void arg) {
-
+        printer.print("(");
+        switch (n.getKind()) {
+            case NONE -> printer.print("\\lbl");
+            case POSITIVE -> printer.print("\\lblpos");
+            case NEGATIVE -> printer.print("\\lblneg");
+        }
+        n.getLabel().accept(this, arg);
+        printer.print(" : ");
+        n.getExpression().accept(this, arg);
+        printer.print(")");
     }
 
     @Override
     public void visit(JmlLetExpr n, Void arg) {
-
+        printer.print("(\\let ");
+        printList(n.getVariables(), ", ");
+        printer.print("; ");
+        n.getBody().accept(this, arg);
+        printer.print(")");
     }
 
     @Override
@@ -808,7 +822,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlSetStmt n, Void arg) {
         printer.print("//@ set ");
-        //TODO n.getExpression().accept(this, arg);
+        n.getAssignment().accept(this, arg);
         printer.println(";");
     }
 
@@ -819,7 +833,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(LoopInvariantClause n, Void arg) {
-
+        printClause(n.getKind(), null);
     }
 
     @Override
@@ -829,42 +843,45 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(MeasuredByClause n, Void arg) {
-
+        printClause(n.getKind(), n.getExpr());
     }
 
     @Override
     public void visit(ModifiesClause n, Void arg) {
-
+        //printClause(n.getKind(), n.getExpr());
     }
 
     @Override
     public void visit(RequiresClause n, Void arg) {
-
+        printClause(n.getKind(), n.getHeaps(), n.getE());
     }
 
     @Override
     public void visit(ReturnsClause n, Void arg) {
-
+        printClause(n.getKind(), n.getExpr());
     }
 
     @Override
     public void visit(SignalsClause n, Void arg) {
-
+        printClause(n.getKind(), n.getExpr());
     }
 
     @Override
     public void visit(SignalsOnlyClause n, Void arg) {
-
+        printer.print(n.getKind().jmlSymbol);
+        printer.print(" ");
+        printList(n.getTypes(), ", ");
+        printer.print(";");
     }
 
     @Override
     public void visit(UnreachableStmt n, Void arg) {
-
+        printer.println("//@ unreachable;");
     }
 
     @Override
     public void visit(CallableClause n, Void arg) {
-
+        //TODO printClause(n.getKind(), n.getExpr());
     }
 
     @Override
@@ -879,22 +896,33 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(ForallClause n, Void arg) {
-
+        printer.print(n.getKind().jmlSymbol);
+        printer.print(" ");
+        printList(n.getVariables(), ", ");
+        printer.print(";");
     }
 
     @Override
     public void visit(JmlDebugStmt n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
 
+        printer.print("//@ debug");
+        //TODO n.get
+        printer.println();
     }
 
     @Override
     public void visit(JmlFunction n, Void arg) {
-
+        printOrphanCommentsBeforeThisChildNode(n);
+        n.getFunctionName().accept(this, arg);
+        printList(n.getArguments(), ", ", "(", ")", "", "");
     }
 
     @Override
     public void visit(JmlHenceByStmt n, Void arg) {
-
+        printOrphanCommentsBeforeThisChildNode(n);
+        printer.print("//@ hence_by");
+        printer.println();
     }
 
     @Override
@@ -909,22 +937,27 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(OldClause n, Void arg) {
-
+        printer.print(n.getKind().jmlSymbol);
+        printer.print(" ");
+        printList(n.getVariables(), ", ");
+        printer.print(";");
     }
 
     @Override
     public void visit(WhenClause n, Void arg) {
-
+        printClause(n.getKind(), n.getExpr());
     }
 
     @Override
     public void visit(WorkingSpaceClause n, Void arg) {
-
+        //TODO printClause(n.getKind(),);
     }
 
     @Override
     public void visit(JmlBoundVariable n, Void arg) {
-
+        n.getType().accept(this, arg);
+        printer.print(" ");
+        n.getName().accept(this, arg);
     }
 
     @Override
@@ -949,6 +982,16 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlContract n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlBodyDeclaration n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlContracts n, Void arg) {
 
     }
 
@@ -2054,12 +2097,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print("???;");
     }
 
-    private void printClause(String name, NodeList<SimpleName> heaps, Expression expr) {
+    private void printClause(JmlClause.Kind name, NodeList<SimpleName> heaps, Expression expr) {
         printClause(name, heaps, new NodeList<>(expr));
     }
 
-    private void printClause(String name, NodeList<SimpleName> heaps, NodeList<Expression> expr) {
-        printer.print(name);
+    private void printClause(JmlClause.Kind name, NodeList<SimpleName> heaps, NodeList<Expression> expr) {
+        printer.print(name.jmlSymbol);
         printList(heaps, "", "", "", "<", ">");
         printList(expr, ", ");
         printer.println(";");

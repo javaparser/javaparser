@@ -19,7 +19,7 @@ import com.github.javaparser.ast.Generated;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlClassAccessibleDeclaration extends JmlBodyDeclaration<JmlClassAccessibleDeclaration> implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
+public class JmlClassAccessibleDeclaration extends JmlClassLevel implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
 
     /*    private NodeList<Modifier> modifiers;
     private SimpleName id;
@@ -59,28 +59,13 @@ public class JmlClassAccessibleDeclaration extends JmlBodyDeclaration<JmlClassAc
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClassAccessibleDeclaration() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassAccessibleDeclaration asJmlClassAccessibleDeclaration() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassAccessibleDeclaration> toJmlClassAccessibleDeclaration() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassAccessibleDeclaration(Consumer<JmlClassAccessibleDeclaration> action) {
-        action.accept(this);
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlClassAccessibleDeclaration(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -109,14 +94,5 @@ public class JmlClassAccessibleDeclaration extends JmlBodyDeclaration<JmlClassAc
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClassAccessibleDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClassAccessibleDeclarationMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClassAccessibleDeclaration(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
     }
 }

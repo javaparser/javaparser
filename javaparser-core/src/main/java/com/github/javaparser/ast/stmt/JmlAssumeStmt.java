@@ -5,17 +5,14 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlAssumeStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -107,10 +104,12 @@ public class JmlAssumeStmt extends Statement {
         customInitialization();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlAssumeStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
@@ -127,6 +126,7 @@ public class JmlAssumeStmt extends Statement {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlAssumeStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);
         setExpression(expression);

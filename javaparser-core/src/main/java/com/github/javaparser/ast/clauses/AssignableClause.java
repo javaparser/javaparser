@@ -26,11 +26,13 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
     private NodeList<Expression> exprs;
 
     public AssignableClause() {
+        this(null, null);
     }
 
     @AllFieldsConstructor
     public AssignableClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
-        super();
+        this(null, heaps, exprs);
+        setKind(Kind.ASSIGNABLE);
     }
 
     /**

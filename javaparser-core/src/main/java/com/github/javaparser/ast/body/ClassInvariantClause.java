@@ -18,7 +18,7 @@ import com.github.javaparser.TokenRange;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClause> implements NodeWithModifiers<ClassInvariantClause> {
+public class ClassInvariantClause extends JmlClassLevel implements NodeWithModifiers<ClassInvariantClause> {
 
     private NodeList<Modifier> modifiers;
 
@@ -43,30 +43,6 @@ public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClaus
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isClassInvariantClause() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ClassInvariantClause asClassInvariantClause() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ClassInvariantClause> toClassInvariantClause() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifClassInvariantClause(Consumer<ClassInvariantClause> action) {
-        action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -126,12 +102,6 @@ public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClaus
         return (ClassInvariantClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ClassInvariantClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.classInvariantClauseMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */
@@ -160,5 +130,11 @@ public class ClassInvariantClause extends JmlBodyDeclaration<ClassInvariantClaus
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public ClassInvariantClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.classInvariantClauseMetaModel;
     }
 }

@@ -27,9 +27,8 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
 
     @AllFieldsConstructor
     public EnsuresClause(NodeList<SimpleName> heaps, Expression expr) {
-        super();
-        this.heaps = heaps;
-        this.expr = expr;
+        this(null, heaps, expr);
+        setKind(Kind.ENSURES);
     }
 
     /**

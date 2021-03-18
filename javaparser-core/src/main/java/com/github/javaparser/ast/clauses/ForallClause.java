@@ -21,6 +21,7 @@ public class ForallClause extends JmlClause implements MethodContractable {
     @AllFieldsConstructor
     public ForallClause(NodeList<JmlBoundVariable> variables) {
         this(null, variables);
+        setKind(Kind.FORALL);
     }
 
     /**

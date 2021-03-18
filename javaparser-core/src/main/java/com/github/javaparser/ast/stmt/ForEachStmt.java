@@ -271,10 +271,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         customInitialization();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForEachStmt setContracts(final NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {

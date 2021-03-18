@@ -2,12 +2,17 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
+
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlBodyDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -16,48 +21,86 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (2/24/21)
  */
-public abstract class JmlBodyDeclaration<T extends BodyDeclaration<?>> extends BodyDeclaration<T> implements Jmlish {
+public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
+
+    private boolean singleLine;
+
+    private Set<String> jmlTags;
+
+    private NodeList<JmlClassLevel> elements;
 
     @AllFieldsConstructor
+    public JmlBodyDeclaration(boolean singleLine, Set<String> jmlTags, NodeList<JmlClassLevel> elements) {
+        this.singleLine = singleLine;
+        this.jmlTags = jmlTags;
+        this.elements = elements;
+    }
+
+    public JmlBodyDeclaration(TokenRange range, boolean singleLine, Set<String> jmlTags, NodeList<JmlClassLevel> elements) {
+        super(range);
+        this.singleLine = singleLine;
+        this.jmlTags = jmlTags;
+        this.elements = elements;
+    }
+
     public JmlBodyDeclaration() {
         this(null);
     }
 
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlBodyDeclaration(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
+    public JmlBodyDeclaration(TokenRange range) {
+        super(range);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Override
     public boolean isJmlBodyDeclaration() {
         return true;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlBodyDeclaration asJmlBodyDeclaration() {
         return this;
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlBodyDeclaration> toJmlBodyDeclaration() {
         return Optional.of(this);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBodyDeclaration(Consumer<JmlBodyDeclaration> action) {
         action.accept(this);
     }
 
+    public JmlClassLevel getWrapped() {
+        return wrapped;
+    }
+
+    public JmlBodyDeclaration setWrapped(final JmlClassLevel wrapped) {
+        assertNotNull(wrapped);
+        if (wrapped == this.wrapped) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.WRAPPED, this.wrapped, wrapped);
+        if (this.wrapped != null)
+            this.wrapped.setParentNode(null);
+        this.wrapped = wrapped;
+        setAsParentNodeOf(wrapped);
+        return this;
+    }
+
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -65,22 +108,32 @@ public abstract class JmlBodyDeclaration<T extends BodyDeclaration<?>> extends B
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == wrapped) {
+            setWrapped((JmlClassLevel) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlBodyDeclaration<?> clone() {
-        return (JmlBodyDeclaration<?>) accept(new CloneVisitor(), null);
+    public JmlBodyDeclaration clone() {
+        return (JmlBodyDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlBodyDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlBodyDeclarationMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public JmlBodyDeclaration(TokenRange tokenRange, JmlClassLevel wrapped) {
+        super(tokenRange);
+        setWrapped(wrapped);
+        customInitialization();
     }
 }

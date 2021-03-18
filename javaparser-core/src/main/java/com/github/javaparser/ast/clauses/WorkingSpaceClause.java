@@ -18,7 +18,8 @@ public class WorkingSpaceClause extends JmlClause implements MethodContractable 
 
     @AllFieldsConstructor
     public WorkingSpaceClause() {
-        super();
+        this(null);
+        setKind(Kind.WORKING_SPACE);
     }
 
     /**

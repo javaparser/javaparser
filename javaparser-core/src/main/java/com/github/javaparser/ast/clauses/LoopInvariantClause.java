@@ -4,11 +4,15 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LoopInvariantClauseMetaModel;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -16,17 +20,21 @@ import com.github.javaparser.metamodel.LoopInvariantClauseMetaModel;
  */
 public class LoopInvariantClause extends JmlClause implements LoopContractable {
 
+    private Expression expr;
+
     @AllFieldsConstructor
-    public LoopInvariantClause() {
-        super();
+    public LoopInvariantClause(Expression expr) {
+        this(null, expr);
+        setKind(Kind.LOOP_INVARIANT);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LoopInvariantClause(TokenRange tokenRange) {
+    public LoopInvariantClause(TokenRange tokenRange, Expression expr) {
         super(tokenRange);
+        setExpr(expr);
         customInitialization();
     }
 
@@ -55,6 +63,10 @@ public class LoopInvariantClause extends JmlClause implements LoopContractable {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expr) {
+            setExpr((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -68,5 +80,24 @@ public class LoopInvariantClause extends JmlClause implements LoopContractable {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LoopInvariantClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.loopInvariantClauseMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getExpr() {
+        return expr;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public LoopInvariantClause setExpr(final Expression expr) {
+        assertNotNull(expr);
+        if (expr == this.expr) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
+        this.expr = expr;
+        setAsParentNodeOf(expr);
+        return this;
     }
 }

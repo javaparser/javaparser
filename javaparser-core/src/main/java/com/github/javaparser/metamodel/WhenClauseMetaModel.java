@@ -40,4 +40,6 @@ public class WhenClauseMetaModel extends JmlClauseMetaModel {
     WhenClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, WhenClause.class, "WhenClause", "com.github.javaparser.ast.clauses", false, false);
     }
+
+    public PropertyMetaModel exprPropertyMetaModel;
 }

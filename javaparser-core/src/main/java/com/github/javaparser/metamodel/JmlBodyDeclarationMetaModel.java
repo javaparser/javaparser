@@ -23,7 +23,6 @@ package com.github.javaparser.metamodel;
 import java.util.Optional;
 import com.github.javaparser.ast.body.JmlBodyDeclaration;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -39,11 +38,8 @@ public class JmlBodyDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlBodyDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlBodyDeclaration.class, "JmlBodyDeclaration", "com.github.javaparser.ast.body", true, true);
+        super(superBaseNodeMetaModel, JmlBodyDeclaration.class, "JmlBodyDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
-    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected JmlBodyDeclarationMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
-        super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
-    }
+    public PropertyMetaModel wrappedPropertyMetaModel;
 }

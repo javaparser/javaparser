@@ -316,4 +316,8 @@ public interface GenericVisitor<R, A> {
     R visit(JmlRepresentsDeclaration n, A arg);
 
     R visit(JmlContract n, A arg);
+
+    R visit(JmlBodyDeclaration n, A arg);
+
+    R visit(JmlContracts n, A arg);
 }

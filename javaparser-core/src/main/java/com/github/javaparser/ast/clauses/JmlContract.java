@@ -2,6 +2,7 @@ package com.github.javaparser.ast.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.JmlSpecification;
 import com.github.javaparser.ast.stmt.Behavior;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -177,12 +178,6 @@ public class JmlContract extends Node implements Jmlish {
         return (JmlContract) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlContractMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlContractMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */
@@ -194,5 +189,11 @@ public class JmlContract extends Node implements Jmlish {
         setClauses(clauses);
         setSubContracts(subContracts);
         customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlContractMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlContractMetaModel;
     }
 }

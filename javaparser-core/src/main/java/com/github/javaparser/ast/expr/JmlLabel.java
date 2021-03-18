@@ -3,14 +3,19 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlLabelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -18,8 +23,21 @@ import com.github.javaparser.ast.Generated;
  */
 public class JmlLabel extends Expression {
 
+    private Kind kind;
+
+    private SimpleName label;
+
+    private Expression expression;
+
     @AllFieldsConstructor
-    public JmlLabel() {
+    public JmlLabel(final Kind kind, SimpleName label, final Expression expression) {
+        //TODO
+        this(null);
+    }
+
+    public enum Kind {
+
+        NONE, POSITIVE, NEGATIVE
     }
 
     @Override
@@ -76,6 +94,14 @@ public class JmlLabel extends Expression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
+        if (node == label) {
+            setLabel((SimpleName) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -97,6 +123,82 @@ public class JmlLabel extends Expression {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlLabel(TokenRange tokenRange) {
         super(tokenRange);
+        customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getExpression() {
+        return expression;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlLabel setExpression(final Expression expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Kind getKind() {
+        return kind;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlLabel setKind(final Kind kind) {
+        assertNotNull(kind);
+        if (kind == this.kind) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);
+        this.kind = kind;
+        return this;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public JmlLabel(TokenRange tokenRange, Kind kind, Expression expression) {
+        super(tokenRange);
+        setKind(kind);
+        setExpression(expression);
+        customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getLabel() {
+        return label;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlLabel setLabel(final SimpleName label) {
+        assertNotNull(label);
+        if (label == this.label) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        if (this.label != null)
+            this.label.setParentNode(null);
+        this.label = label;
+        setAsParentNodeOf(label);
+        return this;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlLabel(TokenRange tokenRange, Kind kind, SimpleName label, Expression expression) {
+        super(tokenRange);
+        setKind(kind);
+        setLabel(label);
+        setExpression(expression);
         customInitialization();
     }
 }

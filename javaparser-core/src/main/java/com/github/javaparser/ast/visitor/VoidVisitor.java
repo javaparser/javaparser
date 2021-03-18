@@ -311,4 +311,8 @@ public interface VoidVisitor<A> {
     void visit(JmlRepresentsDeclaration n, A arg);
 
     void visit(JmlContract n, A arg);
+
+    void visit(JmlBodyDeclaration n, A arg);
+
+    void visit(JmlContracts n, A arg);
 }

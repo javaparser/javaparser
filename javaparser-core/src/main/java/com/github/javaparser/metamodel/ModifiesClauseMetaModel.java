@@ -40,4 +40,8 @@ public class ModifiesClauseMetaModel extends JmlClauseMetaModel {
     ModifiesClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, ModifiesClause.class, "ModifiesClause", "com.github.javaparser.ast.clauses", false, false);
     }
+
+    public PropertyMetaModel exprsPropertyMetaModel;
+
+    public PropertyMetaModel heapsPropertyMetaModel;
 }

@@ -46,4 +46,6 @@ public class JmlClauseMetaModel extends NodeMetaModel {
     protected JmlClauseMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
+
+    public PropertyMetaModel kindPropertyMetaModel;
 }

@@ -41,5 +41,5 @@ public class MeasuredByClauseMetaModel extends JmlClauseMetaModel {
         super(superBaseNodeMetaModel, MeasuredByClause.class, "MeasuredByClause", "com.github.javaparser.ast.clauses", false, false);
     }
 
-    public PropertyMetaModel ePropertyMetaModel;
+    public PropertyMetaModel exprPropertyMetaModel;
 }

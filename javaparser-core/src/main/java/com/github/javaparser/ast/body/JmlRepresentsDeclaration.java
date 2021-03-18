@@ -28,7 +28,7 @@ import com.github.javaparser.ast.Generated;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlRepresentsDeclaration extends JmlBodyDeclaration<JmlRepresentsDeclaration> implements NodeWithModifiers<JmlRepresentsDeclaration> {
+public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithModifiers<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -84,30 +84,6 @@ public class JmlRepresentsDeclaration extends JmlBodyDeclaration<JmlRepresentsDe
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlRepresentsDeclaration() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlRepresentsDeclaration asJmlRepresentsDeclaration() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlRepresentsDeclaration> toJmlRepresentsDeclaration() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlRepresentsDeclaration(Consumer<JmlRepresentsDeclaration> action) {
-        action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")

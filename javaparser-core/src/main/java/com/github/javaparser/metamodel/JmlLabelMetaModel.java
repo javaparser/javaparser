@@ -40,4 +40,10 @@ public class JmlLabelMetaModel extends ExpressionMetaModel {
     JmlLabelMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlLabel.class, "JmlLabel", "com.github.javaparser.ast.expr", false, false);
     }
+
+    public PropertyMetaModel expressionPropertyMetaModel;
+
+    public PropertyMetaModel kindPropertyMetaModel;
+
+    public PropertyMetaModel labelPropertyMetaModel;
 }

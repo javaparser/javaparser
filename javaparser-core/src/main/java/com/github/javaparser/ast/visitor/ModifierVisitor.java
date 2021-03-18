@@ -1397,7 +1397,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlLabel n, final A arg) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null || label == null)
+            return null;
+        n.setExpression(expression);
+        n.setLabel(label);
         n.setComment(comment);
         return n;
     }
@@ -1424,7 +1430,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlSetStmt n, final A arg) {
+        AssignExpr assignment = (AssignExpr) n.getAssignment().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (assignment == null)
+            return null;
+        n.setAssignment(assignment);
         n.setComment(comment);
         return n;
     }
@@ -1438,7 +1448,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final LoopInvariantClause n, final A arg) {
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null)
+            return null;
+        n.setExpr(expr);
         n.setComment(comment);
         return n;
     }
@@ -1452,18 +1466,22 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final MeasuredByClause n, final A arg) {
-        Expression e = (Expression) n.getE().accept(this, arg);
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (e == null)
+        if (expr == null)
             return null;
-        n.setE(e);
+        n.setExpr(expr);
         n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ModifiesClause n, final A arg) {
+        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
+        NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setExprs(exprs);
+        n.setHeaps(heaps);
         n.setComment(comment);
         return n;
     }
@@ -1607,7 +1625,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final WhenClause n, final A arg) {
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null)
+            return null;
+        n.setExpr(expr);
         n.setComment(comment);
         return n;
     }
@@ -1636,22 +1658,18 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final ClassInvariantClause n, final A arg) {
         Expression invariant = (Expression) n.getInvariant().accept(this, arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
-        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (invariant == null)
             return null;
         n.setInvariant(invariant);
         n.setModifiers(modifiers);
-        n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final JmlClassAccessibleDeclaration n, final A arg) {
-        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
     }
@@ -1661,14 +1679,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
         SimpleName id = (SimpleName) n.getId().accept(this, arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
-        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expr == null || id == null)
             return null;
         n.setExpr(expr);
         n.setId(id);
         n.setModifiers(modifiers);
-        n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
     }
@@ -1684,6 +1700,30 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setClauses(clauses);
         n.setModifier(modifier);
         n.setSubContracts(subContracts);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlBodyDeclaration n, final A arg) {
+        JmlClassLevel wrapped = (JmlClassLevel) n.getWrapped().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (wrapped == null)
+            return null;
+        n.setWrapped(wrapped);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlContracts n, final A arg) {
+        JmlContract elements = (JmlContract) n.getElements().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (elements == null)
+            return null;
+        n.setElements(elements);
         n.setComment(comment);
         return n;
     }
