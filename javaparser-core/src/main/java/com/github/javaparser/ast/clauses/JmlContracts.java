@@ -7,13 +7,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Set;
-
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlContractsMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -40,6 +36,7 @@ public class JmlContracts extends Node implements Jmlish {
         this(null, singleLine, jmlTags, elements);
     }
 
+    @Generated("")
     public JmlContracts(TokenRange tokenRange, boolean singleLine, Set<String> jmlTags, NodeList<JmlContract> elements) {
         super(tokenRange);
         this.singleLine = singleLine;
@@ -59,11 +56,16 @@ public class JmlContracts extends Node implements Jmlish {
         v.visit(this, arg);
     }
 
-    public JmlContract getElements() {
+    public JmlContracts(TokenRange tokenRange, JmlContract elements) {
+        super(tokenRange);
+        customInitialization();
+    }
+
+    public NodeList<JmlContract> getElements() {
         return elements;
     }
 
-    public JmlContracts setElements(final JmlContract elements) {
+    public JmlContracts setElements(final NodeList<JmlContract> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return this;
@@ -76,10 +78,43 @@ public class JmlContracts extends Node implements Jmlish {
         return this;
     }
 
+    public String getJmlTags() {
+        return jmlTags;
+    }
+
+    public JmlContracts setJmlTags(final String jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        this.jmlTags = jmlTags;
+        return this;
+    }
+
+    public boolean isSingleLine() {
+        return singleLine;
+    }
+
+    public JmlContracts setSingleLine(final boolean singleLine) {
+        if (singleLine == this.singleLine) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.SINGLE_LINE, this.singleLine, singleLine);
+        this.singleLine = singleLine;
+        return this;
+    }
+
     @Override
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i) == node) {
+                elements.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -87,9 +122,11 @@ public class JmlContracts extends Node implements Jmlish {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (node == elements) {
-            setElements((JmlContract) replacementNode);
-            return true;
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i) == node) {
+                elements.set(i, (JmlContract) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -107,8 +144,10 @@ public class JmlContracts extends Node implements Jmlish {
     /**
      * This constructor is used by the parser and is considered private.
      */
-    public JmlContracts(TokenRange tokenRange, JmlContract elements) {
+    public JmlContracts(TokenRange tokenRange, boolean singleLine, String jmlTags, NodeList<JmlContract> elements) {
         super(tokenRange);
+        setSingleLine(singleLine);
+        setJmlTags(jmlTags);
         setElements(elements);
         customInitialization();
     }

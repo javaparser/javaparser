@@ -1564,7 +1564,17 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlBodyDeclaration n, final Visitable arg) {
         final JmlBodyDeclaration n2 = (JmlBodyDeclaration) arg;
-        if (!nodeEquals(n.getWrapped(), n2.getWrapped()))
+        if (!nodesEquals(n.getElements(), n2.getElements()))
+            return false;
+        if (!objEquals(n.getJmlTags(), n2.getJmlTags()))
+            return false;
+        if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
+            return false;
+        if (!nodesEquals(n.getElements(), n2.getElements()))
+            return false;
+        if (!objEquals(n.getJmlTags(), n2.getJmlTags()))
+            return false;
+        if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
@@ -1574,7 +1584,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlContracts n, final Visitable arg) {
         final JmlContracts n2 = (JmlContracts) arg;
-        if (!nodeEquals(n.getElements(), n2.getElements()))
+        if (!nodesEquals(n.getElements(), n2.getElements()))
+            return false;
+        if (!objEquals(n.getJmlTags(), n2.getJmlTags()))
+            return false;
+        if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }

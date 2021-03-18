@@ -2670,7 +2670,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlBodyDeclaration n, final A arg) {
         R result;
         {
-            result = n.getWrapped().accept(this, arg);
+            result = n.getElements().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getElements().accept(this, arg);
             if (result != null)
                 return result;
         }

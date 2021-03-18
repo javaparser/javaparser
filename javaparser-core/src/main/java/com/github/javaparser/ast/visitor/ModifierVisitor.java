@@ -1706,12 +1706,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlBodyDeclaration n, final A arg) {
-        JmlClassLevel wrapped = (JmlClassLevel) n.getWrapped().accept(this, arg);
+        NodeList<JmlClassLevel> elements = modifyList(n.getElements(), arg);
+        NodeList<JmlClassLevel> elements = modifyList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (wrapped == null)
-            return null;
-        n.setWrapped(wrapped);
+        n.setElements(elements);
+        n.setElements(elements);
         n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
@@ -1719,10 +1719,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlContracts n, final A arg) {
-        JmlContract elements = (JmlContract) n.getElements().accept(this, arg);
+        NodeList<JmlContract> elements = modifyList(n.getElements(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (elements == null)
-            return null;
         n.setElements(elements);
         n.setComment(comment);
         return n;

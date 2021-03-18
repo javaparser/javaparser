@@ -41,5 +41,9 @@ public class JmlBodyDeclarationMetaModel extends BodyDeclarationMetaModel {
         super(superBaseNodeMetaModel, JmlBodyDeclaration.class, "JmlBodyDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
-    public PropertyMetaModel wrappedPropertyMetaModel;
+    public PropertyMetaModel elementsPropertyMetaModel;
+
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
+
+    public PropertyMetaModel singleLinePropertyMetaModel;
 }
