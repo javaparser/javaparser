@@ -35,9 +35,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -154,13 +157,18 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAncestorsWithGenericAncestors() {
         JavassistInterfaceDeclaration compilationUnit = (JavassistInterfaceDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.GenericChildInterface");
         List<ResolvedReferenceType> ancestors = compilationUnit.getAncestors();
-
+        ancestors.sort(new Comparator<ResolvedReferenceType>() {
+            @Override
+            public int compare(ResolvedReferenceType o1, ResolvedReferenceType o2) {
+                return o1.describe().compareTo(o2.describe());
+            }
+        });
         assertEquals(2, ancestors.size());
-        assertEquals("java.lang.Object", ancestors.get(0).describe());
-        assertEquals("com.github.javaparser.test.GenericInterface<S>", ancestors.get(1).describe()); // Type should be 'S', from the GenericChildInterface
+        assertEquals("com.github.javaparser.test.GenericInterface<S>", ancestors.get(0).describe()); // Type should be 'S', from the GenericChildInterface
+        assertEquals("java.lang.Object", ancestors.get(1).describe());
 
         // check the ancestor generic type is mapped to the type of the child
-        List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typePamatersMap = ancestors.get(1).getTypeParametersMap();
+        List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> typePamatersMap = ancestors.get(0).getTypeParametersMap();
         assertEquals(1, typePamatersMap.size());
 
         ResolvedTypeParameterDeclaration genericTypeParameterDeclaration = typePamatersMap.get(0).a;
