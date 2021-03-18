@@ -24,6 +24,8 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtClass;
@@ -187,4 +189,22 @@ public class JavassistTypeDeclarationAdapter {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean isAssignableBy(ResolvedType other) {
+
+        if (other.isNull()) {
+            return true;
+        }
+
+        if (other instanceof LambdaArgumentTypePlaceholder) {
+            return typeDeclaration.isFunctionalInterface();
+        }
+
+        return other.isAssignableBy(new ReferenceTypeImpl(typeDeclaration, typeSolver));
+    }
+
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+    }
+
 }

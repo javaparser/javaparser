@@ -117,7 +117,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedType type) {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.isAssignableBy(type);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.isAssignableBy(other);
     }
 
     @Override
