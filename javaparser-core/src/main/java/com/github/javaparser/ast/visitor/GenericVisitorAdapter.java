@@ -2675,7 +2675,17 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getJmlTags().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getElements().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getJmlTags().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2696,6 +2706,31 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getElements().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getJmlTags().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlStatements n, final A arg) {
+        R result;
+        {
+            result = n.getElements().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getJmlTags().accept(this, arg);
             if (result != null)
                 return result;
         }

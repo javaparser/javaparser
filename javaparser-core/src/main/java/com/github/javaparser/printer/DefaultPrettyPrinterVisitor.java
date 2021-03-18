@@ -779,14 +779,14 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlAssertStmt n, Void arg) {
-        printer.print("//@ assert ");
+        printer.print("assert ");
         n.getExpression().accept(this, arg);
         printer.println(";");
     }
 
     @Override
     public void visit(JmlAssumeStmt n, Void arg) {
-        printer.print("//@ assert ");
+        printer.print("assert ");
         n.getExpression().accept(this, arg);
         printer.println(";");
     }
@@ -821,7 +821,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlSetStmt n, Void arg) {
-        printer.print("//@ set ");
+        printer.print("set ");
         n.getAssignment().accept(this, arg);
         printer.println(";");
     }
@@ -876,7 +876,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(UnreachableStmt n, Void arg) {
-        printer.println("//@ unreachable;");
+        printer.println("unreachable;");
     }
 
     @Override
@@ -906,7 +906,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(JmlDebugStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
 
-        printer.print("//@ debug");
+        printer.print("debug");
         //TODO n.get
         printer.println();
     }
@@ -921,7 +921,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlHenceByStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printer.print("//@ hence_by");
+        printer.print("hence_by");
         printer.println();
     }
 
@@ -963,7 +963,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(ClassInvariantClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printer.print("//@ ");
         printModifiers(n.getModifiers());
         printer.print("invariant ");
         n.getInvariant().accept(this, arg);
@@ -987,12 +986,33 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlBodyDeclaration n, Void arg) {
+        startJmlComment(n.isSingleLine(), n.getJmlTags());
+        printList(n.getElements(), "\n");
+        endJmlComment(n.isSingleLine());
+    }
 
+    private void endJmlComment(boolean singleLine) {
+        if (singleLine)
+            printer.println();
+        else
+            printer.println("*/");
+    }
+
+    private void startJmlComment(boolean singleLine, NodeList<SimpleName> jmlTags) {
+        if (singleLine) {
+            printer.print("//");
+        } else {
+            printer.print("/*");
+        }
+        printList(jmlTags, "");
+        printer.print("@ ");
     }
 
     @Override
     public void visit(JmlContracts n, Void arg) {
-
+        startJmlComment(n.isSingleLine(), n.getJmlTags());
+        printList(n.getElements(), "\nalso\n");
+        endJmlComment(n.isSingleLine());
     }
 
     @Override

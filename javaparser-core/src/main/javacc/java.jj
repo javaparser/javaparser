@@ -1849,7 +1849,7 @@ JmlBodyDeclaration JmlClassOrInterfaceBodyDeclaration():
         //| element = JmlFieldDeclaration(modifiers)
         //| element = JmlMethodDeclaration(modifiers)
         )
-        {/*ret.getWrapped().add(element);*/}
+        {ret.getElements().add(element);}
       )+
       JmlEnd()
     )

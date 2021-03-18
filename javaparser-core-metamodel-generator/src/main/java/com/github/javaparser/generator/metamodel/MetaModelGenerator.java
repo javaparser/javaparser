@@ -37,6 +37,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.stmt.JmlStatement;
+import com.github.javaparser.ast.stmt.JmlStatements;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -176,6 +178,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.WhileStmt.class);
         add(com.github.javaparser.ast.stmt.YieldStmt.class);
 
+        add(JmlStatement.class);
         add(com.github.javaparser.ast.stmt.JmlSetStmt.class);
         add(com.github.javaparser.ast.stmt.JmlAssertStmt.class);
         add(com.github.javaparser.ast.stmt.JmlAssumeStmt.class);
@@ -189,6 +192,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlClassLevel.class);
         add(JmlClause.class);
         add(JmlBodyDeclaration.class);
+        add(JmlStatements.class);
         add(com.github.javaparser.ast.clauses.EnsuresClause.class);
         add(com.github.javaparser.ast.clauses.RequiresClause.class);
         add(com.github.javaparser.ast.clauses.AssignableClause.class);

@@ -2,6 +2,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
@@ -21,22 +22,13 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
 
     private boolean singleLine;
 
-    private Set<String> jmlTags;
+    private NodeList<SimpleName> jmlTags;
 
     private NodeList<JmlClassLevel> elements;
 
     @AllFieldsConstructor
-    public JmlBodyDeclaration(boolean singleLine, Set<String> jmlTags, NodeList<JmlClassLevel> elements) {
-        this.singleLine = singleLine;
-        this.jmlTags = jmlTags;
-        this.elements = elements;
-    }
-
-    public JmlBodyDeclaration(TokenRange range, boolean singleLine, Set<String> jmlTags, NodeList<JmlClassLevel> elements) {
-        super(range);
-        this.singleLine = singleLine;
-        this.jmlTags = jmlTags;
-        this.elements = elements;
+    public JmlBodyDeclaration(boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements) {
+        this(null, singleLine, jmlTags, elements);
     }
 
     public JmlBodyDeclaration() {
@@ -44,7 +36,7 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
     }
 
     public JmlBodyDeclaration(TokenRange range) {
-        super(range);
+        this(range, false, new NodeList<>(), new NodeList<>());
     }
 
     @Override
@@ -94,9 +86,21 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
                 return true;
             }
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < elements.size(); i++) {
             if (elements.get(i) == node) {
                 elements.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
                 return true;
             }
         }
@@ -143,18 +147,21 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String getJmlTags() {
+    public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBodyDeclaration setJmlTags(final String jmlTags) {
+    public JmlBodyDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
         this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
         return this;
     }
 
@@ -184,9 +191,21 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
                 return true;
             }
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
+                return true;
+            }
+        }
         for (int i = 0; i < elements.size(); i++) {
             if (elements.get(i) == node) {
                 elements.set(i, (JmlClassLevel) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
                 return true;
             }
         }
@@ -197,7 +216,18 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlBodyDeclaration(TokenRange tokenRange, boolean singleLine, String jmlTags, NodeList<JmlClassLevel> elements, boolean singleLine, String jmlTags, NodeList<JmlClassLevel> elements) {
+    public JmlBodyDeclaration(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements) {
+        super(tokenRange);
+        setSingleLine(singleLine);
+        setJmlTags(jmlTags);
+        setElements(elements);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlBodyDeclaration(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements) {
         super(tokenRange);
         setSingleLine(singleLine);
         setJmlTags(jmlTags);

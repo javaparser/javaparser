@@ -17,7 +17,7 @@ import com.github.javaparser.TokenRange;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlHenceByStmt extends Statement implements Jmlish {
+public class JmlHenceByStmt extends JmlStatement implements Jmlish {
 
     @AllFieldsConstructor
     public JmlHenceByStmt() {

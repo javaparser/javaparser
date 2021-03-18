@@ -2864,7 +2864,17 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
                 result.addAll(tmp);
         }
         {
+            tmp = n.getJmlTags().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
             tmp = n.getElements().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getJmlTags().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2887,6 +2897,33 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> tmp;
         {
             tmp = n.getElements().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getJmlTags().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final JmlStatements n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getElements().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getJmlTags().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

@@ -1707,11 +1707,15 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlBodyDeclaration n, final A arg) {
         NodeList<JmlClassLevel> elements = modifyList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         NodeList<JmlClassLevel> elements = modifyList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setElements(elements);
+        n.setJmlTags(jmlTags);
         n.setElements(elements);
+        n.setJmlTags(jmlTags);
         n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
@@ -1720,8 +1724,21 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlContracts n, final A arg) {
         NodeList<JmlContract> elements = modifyList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setElements(elements);
+        n.setJmlTags(jmlTags);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlStatements n, final A arg) {
+        NodeList<JmlStatement> elements = modifyList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setElements(elements);
+        n.setJmlTags(jmlTags);
         n.setComment(comment);
         return n;
     }

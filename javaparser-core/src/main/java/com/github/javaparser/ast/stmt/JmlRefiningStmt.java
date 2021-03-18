@@ -17,7 +17,7 @@ import com.github.javaparser.metamodel.JmlRefiningStmtMetaModel;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlRefiningStmt extends Statement {
+public class JmlRefiningStmt extends JmlStatement {
 
     @AllFieldsConstructor
     public JmlRefiningStmt() {

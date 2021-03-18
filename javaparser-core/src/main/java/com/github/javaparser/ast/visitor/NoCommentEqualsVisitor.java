@@ -1257,13 +1257,13 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlBodyDeclaration n2 = (JmlBodyDeclaration) arg;
         if (!nodesEquals(n.getElements(), n2.getElements()))
             return false;
-        if (!objEquals(n.getJmlTags(), n2.getJmlTags()))
+        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
             return false;
         if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
             return false;
         if (!nodesEquals(n.getElements(), n2.getElements()))
             return false;
-        if (!objEquals(n.getJmlTags(), n2.getJmlTags()))
+        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
             return false;
         if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
             return false;
@@ -1275,7 +1275,17 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlContracts n2 = (JmlContracts) arg;
         if (!nodesEquals(n.getElements(), n2.getElements()))
             return false;
-        if (!objEquals(n.getJmlTags(), n2.getJmlTags()))
+        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
+            return false;
+        return objEquals(n.isSingleLine(), n2.isSingleLine());
+    }
+
+    @Override
+    public Boolean visit(final JmlStatements n, final Visitable arg) {
+        final JmlStatements n2 = (JmlStatements) arg;
+        if (!nodesEquals(n.getElements(), n2.getElements()))
+            return false;
+        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
             return false;
         return objEquals(n.isSingleLine(), n2.isSingleLine());
     }

@@ -1694,10 +1694,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlBodyDeclaration n, final Object arg) {
         NodeList<JmlClassLevel> elements = cloneList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
         NodeList<JmlClassLevel> elements = cloneList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlBodyDeclaration r = new JmlBodyDeclaration(n.getTokenRange().orElse(null), n.isSingleLine(), n.getJmlTags(), elements, n.isSingleLine(), n.getJmlTags(), elements);
+        JmlBodyDeclaration r = new JmlBodyDeclaration(n.getTokenRange().orElse(null), n.isSingleLine(), jmlTags, elements, n.isSingleLine(), jmlTags, elements);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1707,8 +1709,21 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlContracts n, final Object arg) {
         NodeList<JmlContract> elements = cloneList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlContracts r = new JmlContracts(n.getTokenRange().orElse(null), n.isSingleLine(), n.getJmlTags(), elements);
+        JmlContracts r = new JmlContracts(n.getTokenRange().orElse(null), n.isSingleLine(), jmlTags, elements);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlStatements n, final Object arg) {
+        NodeList<JmlStatement> elements = cloneList(n.getElements(), arg);
+        NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlStatements r = new JmlStatements(n.getTokenRange().orElse(null), n.isSingleLine(), jmlTags, elements);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

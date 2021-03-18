@@ -611,4 +611,34 @@ public abstract class Statement extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlRefiningStmt(Consumer<JmlRefiningStmt> action) {
     }
+
+    public boolean isJmlStatement() {
+        return false;
+    }
+
+    public JmlStatement asJmlStatement() {
+        throw new IllegalStateException(f("%s is not JmlStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlStatement> toJmlStatement() {
+        return Optional.empty();
+    }
+
+    public void ifJmlStatement(Consumer<JmlStatement> action) {
+    }
+
+    public boolean isJmlStatements() {
+        return false;
+    }
+
+    public JmlStatements asJmlStatements() {
+        throw new IllegalStateException(f("%s is not JmlStatements, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlStatements> toJmlStatements() {
+        return Optional.empty();
+    }
+
+    public void ifJmlStatements(Consumer<JmlStatements> action) {
+    }
 }

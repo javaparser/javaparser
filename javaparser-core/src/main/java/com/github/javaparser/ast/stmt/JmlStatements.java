@@ -1,40 +1,57 @@
-package com.github.javaparser.ast.clauses;
+package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Jmlish;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.clauses.JmlContract;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Set;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlContractsMetaModel;
+import com.github.javaparser.metamodel.JmlStatementsMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 
 /**
  * @author Alexander Weigl
- * @version 1 (3/17/21)
+ * @version 1 (3/18/21)
  */
-public class JmlContracts extends Node implements Jmlish {
+public class JmlStatements extends Statement {
 
     private boolean singleLine;
 
     private NodeList<SimpleName> jmlTags;
 
-    private NodeList<JmlContract> elements;
+    private NodeList<JmlStatement> elements;
 
-    public JmlContracts(TokenRange tokenRange) {
+    public JmlStatements(TokenRange tokenRange) {
         super(tokenRange);
     }
 
     @AllFieldsConstructor
-    public JmlContracts(boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlContract> elements) {
+    public JmlStatements(boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlStatement> elements) {
         this(null, singleLine, jmlTags, elements);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlStatements(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlStatement> elements) {
+        super(tokenRange);
+        setSingleLine(singleLine);
+        setJmlTags(jmlTags);
+        setElements(elements);
+        customInitialization();
     }
 
     @Override
@@ -49,18 +66,30 @@ public class JmlContracts extends Node implements Jmlish {
         v.visit(this, arg);
     }
 
-    public JmlContracts(TokenRange tokenRange, JmlContract elements) {
-        super(tokenRange);
-        customInitialization();
+    @Override
+    public boolean isJmlStatements() {
+        return true;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> getElements() {
+    @Override
+    public JmlStatements asJmlStatements() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlStatements> toJmlStatements() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlStatements(Consumer<JmlStatements> action) {
+        action.accept(this);
+    }
+
+    public NodeList<JmlStatement> getElements() {
         return elements;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContracts setElements(final NodeList<JmlContract> elements) {
+    public JmlStatements setElements(final NodeList<JmlStatement> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return this;
@@ -73,13 +102,11 @@ public class JmlContracts extends Node implements Jmlish {
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContracts setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlStatements setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -92,13 +119,11 @@ public class JmlContracts extends Node implements Jmlish {
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isSingleLine() {
         return singleLine;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContracts setSingleLine(final boolean singleLine) {
+    public JmlStatements setSingleLine(final boolean singleLine) {
         if (singleLine == this.singleLine) {
             return this;
         }
@@ -108,7 +133,6 @@ public class JmlContracts extends Node implements Jmlish {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -128,13 +152,12 @@ public class JmlContracts extends Node implements Jmlish {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
         for (int i = 0; i < elements.size(); i++) {
             if (elements.get(i) == node) {
-                elements.set(i, (JmlContract) replacementNode);
+                elements.set(i, (JmlStatement) replacementNode);
                 return true;
             }
         }
@@ -148,26 +171,12 @@ public class JmlContracts extends Node implements Jmlish {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlContracts clone() {
-        return (JmlContracts) accept(new CloneVisitor(), null);
+    public JmlStatements clone() {
+        return (JmlStatements) accept(new CloneVisitor(), null);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlContractsMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlContractsMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContracts(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlContract> elements) {
-        super(tokenRange);
-        setSingleLine(singleLine);
-        setJmlTags(jmlTags);
-        setElements(elements);
-        customInitialization();
+    public JmlStatementsMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlStatementsMetaModel;
     }
 }

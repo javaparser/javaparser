@@ -19,7 +19,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlSetStmt extends Statement {
+public class JmlSetStmt extends JmlStatement {
 
     private AssignExpr assignment;
 
