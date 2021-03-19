@@ -1,4 +1,57 @@
-Next Release (Version 3.19.0)
+Next Release (Version 3.21.0)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/182?closed=1)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+Version 3.20.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/181?closed=1)
+
+### Added
+* Issue #2991 - Added support for Iterables in CombinedTypeSolver
+  (PR [#3033](https://github.com/javaparser/javaparser/pull/3033), by [@4everTheOne](https://github.com/4everTheOne))
+* Implemented logic for getAllFields in Annotations
+  (PR [#3097](https://github.com/javaparser/javaparser/pull/3097), by [@4everTheOne](https://github.com/4everTheOne))
+### Changed
+* Issue #2717 - Removed "empty" label from break statement and added additional test for BreakStmt
+  (PR [#3109](https://github.com/javaparser/javaparser/pull/3109), by [@4everTheOne](https://github.com/4everTheOne))
+* Issue #2708 - Improvement to the generated code (removal of redundant casts, and additions of `@Override`)
+  (PR [#3124](https://github.com/javaparser/javaparser/pull/3124), by [@4everTheOne](https://github.com/4everTheOne))
+* Performance improvement on ResolvedReferenceTypeDeclaration.isJavaLangObject()
+  (PR [#3125](https://github.com/javaparser/javaparser/pull/3125), by [@jlerbsc](https://github.com/jlerbsc))
+* Optimization to avoid systematically creating a class from javassist when the class has already been created
+  (PR [#3126](https://github.com/javaparser/javaparser/pull/3126), by [@jlerbsc](https://github.com/jlerbsc))
+* Bump jbehave-core from 4.8.1 to 4.8.2
+  (PR [#3043](https://github.com/javaparser/javaparser/pull/3043), by [@dependabot](https://github.com/dependabot))
+* Bump assertj-core from 3.18.1 to 3.19.0
+  (PR [#3047](https://github.com/javaparser/javaparser/pull/3047), by [@dependabot](https://github.com/dependabot))
+* Bump okhttp from 4.9.0 to 4.9.1
+  (PR [#3054](https://github.com/javaparser/javaparser/pull/3054), by [@dependabot](https://github.com/dependabot))
+* Bump actions/cache from v2 to v2.1.4
+  (PR [#3070](https://github.com/javaparser/javaparser/pull/3070), by [@dependabot](https://github.com/dependabot))
+* Bump mockito-core from 3.6.28 to 3.8.0
+  (PR [#3110](https://github.com/javaparser/javaparser/pull/3110), by [@dependabot](https://github.com/dependabot))
+* Bump junit from 4.13.1 to 4.13.2
+  (PR [#3129](https://github.com/javaparser/javaparser/pull/3129), by [@dependabot](https://github.com/dependabot))
+### Fixed
+* Issue #3038 and Issue #3071 - Hanging when certain names are resolved
+  (PR [#3072](https://github.com/javaparser/javaparser/pull/3072), by [@col-e](https://github.com/Col-E))
+* Javadoc fixes
+  (PR [#3082](https://github.com/javaparser/javaparser/pull/3082), by [@mernst](https://github.com/mernst))
+* Update readme with correct Java support versions
+  (PR [#3096](https://github.com/javaparser/javaparser/pull/3096), by [@MaartenGDev](https://github.com/MaartenGDev))
+* Issue #3106 - Wrong descriptor for primitive type long
+  (PR [#3107](https://github.com/javaparser/javaparser/pull/3107), by [@jlerbsc](https://github.com/jlerbsc))
+
+
+Version 3.19.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/180?closed=1)
 
@@ -63,7 +116,6 @@ Next Release (Version 3.19.0)
 ### Deprecated
 * `PhantomNodeLogic` is now deprecated, with the logic now being handled by the node itself.
   (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
-### Removed
 ### Fixed
 * Fix issue on pretty configuration change
   (PR [#2979](https://github.com/javaparser/javaparser/pull/2979), by [@jlerbsc](https://github.com/jlerbsc))
@@ -97,7 +149,6 @@ Next Release (Version 3.19.0)
   (PR [#3075](https://github.com/javaparser/javaparser/pull/3075), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue #3083 Fix choosing the most specific method in case of java.lang.Object argument type
   (PR [#3084](https://github.com/javaparser/javaparser/pull/3084), by [@jlerbsc](https://github.com/jlerbsc))
-### Security
 
 
 Version 3.18.0

@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -38,8 +40,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * This should not be used to represent fields of parameters.
@@ -126,6 +126,14 @@ public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
     public boolean isPattern() {
 //        return getWrappedNode() instanceof PatternExpr;
         return false;
+    }
+    
+    /**
+     * Does this declaration represents a variable?
+     */
+    @Override
+    public boolean isVariable() {
+        return getWrappedNode() instanceof VariableDeclarator;
     }
 
     @Override
