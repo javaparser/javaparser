@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.JmlContracts;
+
+import com.github.javaparser.ast.jml.clauses.JmlContracts;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class JmlContractsMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlContractsMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlContracts.class, "JmlContracts", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, JmlContracts.class, "JmlContracts", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel elementsPropertyMetaModel;

@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.stmt.JmlAssumeStmt;
+
+import com.github.javaparser.ast.jml.stmt.JmlAssumeStmt;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -30,15 +31,15 @@ import com.github.javaparser.ast.Generated;
  *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
  *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
  * </ul>
- *
+ * <p>
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlAssumeStmtMetaModel extends StatementMetaModel {
+public class JmlAssumeStmtMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlAssumeStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlAssumeStmt.class, "JmlAssumeStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(superBaseNodeMetaModel, JmlAssumeStmt.class, "JmlAssumeStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 
     public PropertyMetaModel expressionPropertyMetaModel;

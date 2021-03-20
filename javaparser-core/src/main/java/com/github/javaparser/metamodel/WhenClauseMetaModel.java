@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.WhenClause;
+
+import com.github.javaparser.ast.jml.clauses.WhenClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class WhenClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     WhenClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, WhenClause.class, "WhenClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, WhenClause.class, "WhenClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel exprPropertyMetaModel;

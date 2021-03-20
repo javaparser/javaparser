@@ -22,16 +22,20 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
+import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.jml.locref.*;
-import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
@@ -564,7 +568,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final UnreachableStmt n, final Void arg) {
+    public Integer visit(final JmlUnreachableStmt n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 

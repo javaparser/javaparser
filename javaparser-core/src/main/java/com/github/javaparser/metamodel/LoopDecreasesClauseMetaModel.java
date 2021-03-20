@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.LoopDecreasesClause;
+
+import com.github.javaparser.ast.jml.clauses.LoopDecreasesClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class LoopDecreasesClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LoopDecreasesClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LoopDecreasesClause.class, "LoopDecreasesClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, LoopDecreasesClause.class, "LoopDecreasesClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 }

@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.expr.JmlName;
+
+import com.github.javaparser.ast.jml.expr.JmlName;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class JmlNameMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlNameMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlName.class, "JmlName", "com.github.javaparser.ast.expr", false, false);
+        super(superBaseNodeMetaModel, JmlName.class, "JmlName", "com.github.javaparser.ast.jml.expr", false, false);
     }
 
     public PropertyMetaModel identifierPropertyMetaModel;

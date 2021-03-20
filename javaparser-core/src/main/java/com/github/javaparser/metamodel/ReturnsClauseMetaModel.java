@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.ReturnsClause;
+
+import com.github.javaparser.ast.jml.clauses.ReturnsClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class ReturnsClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ReturnsClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ReturnsClause.class, "ReturnsClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, ReturnsClause.class, "ReturnsClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel exprPropertyMetaModel;

@@ -22,7 +22,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-import com.github.javaparser.ast.clauses.SignalsOnlyClause;
+import com.github.javaparser.ast.jml.clauses.SignalsOnlyClause;
 import com.github.javaparser.ast.Generated;
 
 /**

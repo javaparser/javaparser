@@ -26,12 +26,16 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
+import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.locref.*;
-import com.github.javaparser.ast.jml.*;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.clauses.*;
 
 /**
  * A visitor that has a return value.
@@ -283,7 +287,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(SignalsOnlyClause n, A arg);
 
-    R visit(UnreachableStmt n, A arg);
+    R visit(JmlUnreachableStmt n, A arg);
 
     R visit(CallableClause n, A arg);
 

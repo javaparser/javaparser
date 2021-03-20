@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.expr.JmlLetExpr;
+
+import com.github.javaparser.ast.jml.expr.JmlLetExpr;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class JmlLetExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlLetExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlLetExpr.class, "JmlLetExpr", "com.github.javaparser.ast.expr", false, false);
+        super(superBaseNodeMetaModel, JmlLetExpr.class, "JmlLetExpr", "com.github.javaparser.ast.jml.expr", false, false);
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;

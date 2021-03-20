@@ -23,13 +23,17 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
+import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.jml.locref.*;
-import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that returns nothing, and has a default implementation for all its visit
@@ -870,7 +874,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final UnreachableStmt n, final A arg) {
+    public void visit(final JmlUnreachableStmt n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

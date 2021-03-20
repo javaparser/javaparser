@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.LoopInvariantClause;
+
+import com.github.javaparser.ast.jml.clauses.LoopInvariantClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class LoopInvariantClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LoopInvariantClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LoopInvariantClause.class, "LoopInvariantClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, LoopInvariantClause.class, "LoopInvariantClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel exprPropertyMetaModel;

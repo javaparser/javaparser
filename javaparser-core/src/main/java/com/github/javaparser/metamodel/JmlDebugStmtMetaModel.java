@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.stmt.JmlDebugStmt;
+
+import com.github.javaparser.ast.jml.stmt.JmlDebugStmt;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class JmlDebugStmtMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlDebugStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlDebugStmt.class, "JmlDebugStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(superBaseNodeMetaModel, JmlDebugStmt.class, "JmlDebugStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 }

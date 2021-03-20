@@ -2,11 +2,10 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.jml.body.JmlClassLevel;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;

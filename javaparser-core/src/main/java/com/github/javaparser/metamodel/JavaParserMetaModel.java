@@ -23,7 +23,13 @@ package com.github.javaparser.metamodel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.jml.body.JmlClassLevel;
+import com.github.javaparser.ast.jml.expr.JmlBindingExpr;
+import com.github.javaparser.ast.jml.expr.JmlLabel;
+import com.github.javaparser.ast.jml.expr.JmlName;
+import com.github.javaparser.ast.jml.stmt.JmlStatement;
 
 /**
  * Warning: The content of this class is partially or completely generated - manual edits risk being overwritten.
@@ -446,6 +452,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(jmlSetStmtMetaModel);
         nodeMetaModels.add(jmlStatementMetaModel);
         nodeMetaModels.add(jmlStatementsMetaModel);
+        nodeMetaModels.add(jmlUnreachableStmtMetaModel);
         nodeMetaModels.add(labeledStmtMetaModel);
         nodeMetaModels.add(lambdaExprMetaModel);
         nodeMetaModels.add(lineCommentMetaModel);
@@ -517,7 +524,6 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(unionTypeMetaModel);
         nodeMetaModels.add(unknownTypeMetaModel);
         nodeMetaModels.add(unparsableStmtMetaModel);
-        nodeMetaModels.add(unreachableStmtMetaModel);
         nodeMetaModels.add(varTypeMetaModel);
         nodeMetaModels.add(variableDeclarationExprMetaModel);
         nodeMetaModels.add(variableDeclaratorMetaModel);
@@ -535,7 +541,7 @@ public final class JavaParserMetaModel {
         nodeMetaModel.getDeclaredPropertyMetaModels().add(nodeMetaModel.commentPropertyMetaModel);
         bodyDeclarationMetaModel.annotationsPropertyMetaModel = new PropertyMetaModel(bodyDeclarationMetaModel, "annotations", com.github.javaparser.ast.expr.AnnotationExpr.class, Optional.of(annotationExprMetaModel), false, false, true, false);
         bodyDeclarationMetaModel.getDeclaredPropertyMetaModels().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
-        callableDeclarationMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(callableDeclarationMetaModel, "contracts", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        callableDeclarationMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(callableDeclarationMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         callableDeclarationMetaModel.getDeclaredPropertyMetaModels().add(callableDeclarationMetaModel.contractsPropertyMetaModel);
         callableDeclarationMetaModel.modifiersPropertyMetaModel = new PropertyMetaModel(callableDeclarationMetaModel, "modifiers", com.github.javaparser.ast.Modifier.class, Optional.of(modifierMetaModel), false, false, true, false);
         callableDeclarationMetaModel.getDeclaredPropertyMetaModels().add(callableDeclarationMetaModel.modifiersPropertyMetaModel);
@@ -799,7 +805,7 @@ public final class JavaParserMetaModel {
         variableDeclarationExprMetaModel.getDeclaredPropertyMetaModels().add(variableDeclarationExprMetaModel.variablesPropertyMetaModel);
         variableDeclarationExprMetaModel.maximumCommonTypePropertyMetaModel = new PropertyMetaModel(variableDeclarationExprMetaModel, "maximumCommonType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), true, false, false, false);
         variableDeclarationExprMetaModel.getDerivedPropertyMetaModels().add(variableDeclarationExprMetaModel.maximumCommonTypePropertyMetaModel);
-        jmlBindingExprMetaModel.binderPropertyMetaModel = new PropertyMetaModel(jmlBindingExprMetaModel, "binder", com.github.javaparser.ast.expr.JmlBindingExpr.JmlBinder.class, Optional.empty(), false, false, false, false);
+        jmlBindingExprMetaModel.binderPropertyMetaModel = new PropertyMetaModel(jmlBindingExprMetaModel, "binder", com.github.javaparser.ast.jml.expr.JmlBindingExpr.JmlBinder.class, Optional.empty(), false, false, false, false);
         jmlBindingExprMetaModel.getDeclaredPropertyMetaModels().add(jmlBindingExprMetaModel.binderPropertyMetaModel);
         jmlBindingExprMetaModel.expressionsPropertyMetaModel = new PropertyMetaModel(jmlBindingExprMetaModel, "expressions", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, true, true, false);
         jmlBindingExprMetaModel.getDeclaredPropertyMetaModels().add(jmlBindingExprMetaModel.expressionsPropertyMetaModel);
@@ -811,23 +817,23 @@ public final class JavaParserMetaModel {
         jmlLetExprMetaModel.getDeclaredPropertyMetaModels().add(jmlLetExprMetaModel.variablesPropertyMetaModel);
         jmlLabelMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(jmlLabelMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         jmlLabelMetaModel.getDeclaredPropertyMetaModels().add(jmlLabelMetaModel.expressionPropertyMetaModel);
-        jmlLabelMetaModel.kindPropertyMetaModel = new PropertyMetaModel(jmlLabelMetaModel, "kind", com.github.javaparser.ast.expr.JmlLabel.Kind.class, Optional.empty(), false, false, false, false);
+        jmlLabelMetaModel.kindPropertyMetaModel = new PropertyMetaModel(jmlLabelMetaModel, "kind", com.github.javaparser.ast.jml.expr.JmlLabel.Kind.class, Optional.empty(), false, false, false, false);
         jmlLabelMetaModel.getDeclaredPropertyMetaModels().add(jmlLabelMetaModel.kindPropertyMetaModel);
         jmlLabelMetaModel.labelPropertyMetaModel = new PropertyMetaModel(jmlLabelMetaModel, "label", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false);
         jmlLabelMetaModel.getDeclaredPropertyMetaModels().add(jmlLabelMetaModel.labelPropertyMetaModel);
         jmlNameMetaModel.identifierPropertyMetaModel = new PropertyMetaModel(jmlNameMetaModel, "identifier", java.lang.String.class, Optional.empty(), false, true, false, false);
         jmlNameMetaModel.getDeclaredPropertyMetaModels().add(jmlNameMetaModel.identifierPropertyMetaModel);
-        jmlNameMetaModel.qualifierPropertyMetaModel = new PropertyMetaModel(jmlNameMetaModel, "qualifier", com.github.javaparser.ast.expr.JmlName.class, Optional.of(jmlNameMetaModel), true, false, false, false);
+        jmlNameMetaModel.qualifierPropertyMetaModel = new PropertyMetaModel(jmlNameMetaModel, "qualifier", com.github.javaparser.ast.jml.expr.JmlName.class, Optional.of(jmlNameMetaModel), true, false, false, false);
         jmlNameMetaModel.getDeclaredPropertyMetaModels().add(jmlNameMetaModel.qualifierPropertyMetaModel);
         jmlFunctionMetaModel.argumentsPropertyMetaModel = new PropertyMetaModel(jmlFunctionMetaModel, "arguments", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
         jmlFunctionMetaModel.getDeclaredPropertyMetaModels().add(jmlFunctionMetaModel.argumentsPropertyMetaModel);
-        jmlFunctionMetaModel.functionNamePropertyMetaModel = new PropertyMetaModel(jmlFunctionMetaModel, "functionName", com.github.javaparser.ast.expr.JmlName.class, Optional.of(jmlNameMetaModel), false, false, false, false);
+        jmlFunctionMetaModel.functionNamePropertyMetaModel = new PropertyMetaModel(jmlFunctionMetaModel, "functionName", com.github.javaparser.ast.jml.expr.JmlName.class, Optional.of(jmlNameMetaModel), false, false, false, false);
         jmlFunctionMetaModel.getDeclaredPropertyMetaModels().add(jmlFunctionMetaModel.functionNamePropertyMetaModel);
         assertStmtMetaModel.checkPropertyMetaModel = new PropertyMetaModel(assertStmtMetaModel, "check", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         assertStmtMetaModel.getDeclaredPropertyMetaModels().add(assertStmtMetaModel.checkPropertyMetaModel);
         assertStmtMetaModel.messagePropertyMetaModel = new PropertyMetaModel(assertStmtMetaModel, "message", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
         assertStmtMetaModel.getDeclaredPropertyMetaModels().add(assertStmtMetaModel.messagePropertyMetaModel);
-        blockStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(blockStmtMetaModel, "contracts", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        blockStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(blockStmtMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         blockStmtMetaModel.getDeclaredPropertyMetaModels().add(blockStmtMetaModel.contractsPropertyMetaModel);
         blockStmtMetaModel.statementsPropertyMetaModel = new PropertyMetaModel(blockStmtMetaModel, "statements", com.github.javaparser.ast.stmt.Statement.class, Optional.of(statementMetaModel), false, false, true, false);
         blockStmtMetaModel.getDeclaredPropertyMetaModels().add(blockStmtMetaModel.statementsPropertyMetaModel);
@@ -843,7 +849,7 @@ public final class JavaParserMetaModel {
         doStmtMetaModel.getDeclaredPropertyMetaModels().add(doStmtMetaModel.bodyPropertyMetaModel);
         doStmtMetaModel.conditionPropertyMetaModel = new PropertyMetaModel(doStmtMetaModel, "condition", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         doStmtMetaModel.getDeclaredPropertyMetaModels().add(doStmtMetaModel.conditionPropertyMetaModel);
-        doStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(doStmtMetaModel, "contracts", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        doStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(doStmtMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         doStmtMetaModel.getDeclaredPropertyMetaModels().add(doStmtMetaModel.contractsPropertyMetaModel);
         explicitConstructorInvocationStmtMetaModel.argumentsPropertyMetaModel = new PropertyMetaModel(explicitConstructorInvocationStmtMetaModel, "arguments", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
         explicitConstructorInvocationStmtMetaModel.getDeclaredPropertyMetaModels().add(explicitConstructorInvocationStmtMetaModel.argumentsPropertyMetaModel);
@@ -859,7 +865,7 @@ public final class JavaParserMetaModel {
         expressionStmtMetaModel.getDeclaredPropertyMetaModels().add(expressionStmtMetaModel.expressionPropertyMetaModel);
         forEachStmtMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(forEachStmtMetaModel, "body", com.github.javaparser.ast.stmt.Statement.class, Optional.of(statementMetaModel), false, false, false, false);
         forEachStmtMetaModel.getDeclaredPropertyMetaModels().add(forEachStmtMetaModel.bodyPropertyMetaModel);
-        forEachStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(forEachStmtMetaModel, "contracts", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        forEachStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(forEachStmtMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         forEachStmtMetaModel.getDeclaredPropertyMetaModels().add(forEachStmtMetaModel.contractsPropertyMetaModel);
         forEachStmtMetaModel.iterablePropertyMetaModel = new PropertyMetaModel(forEachStmtMetaModel, "iterable", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         forEachStmtMetaModel.getDeclaredPropertyMetaModels().add(forEachStmtMetaModel.iterablePropertyMetaModel);
@@ -869,7 +875,7 @@ public final class JavaParserMetaModel {
         forStmtMetaModel.getDeclaredPropertyMetaModels().add(forStmtMetaModel.bodyPropertyMetaModel);
         forStmtMetaModel.comparePropertyMetaModel = new PropertyMetaModel(forStmtMetaModel, "compare", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
         forStmtMetaModel.getDeclaredPropertyMetaModels().add(forStmtMetaModel.comparePropertyMetaModel);
-        forStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(forStmtMetaModel, "contracts", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        forStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(forStmtMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         forStmtMetaModel.getDeclaredPropertyMetaModels().add(forStmtMetaModel.contractsPropertyMetaModel);
         forStmtMetaModel.initializationPropertyMetaModel = new PropertyMetaModel(forStmtMetaModel, "initialization", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
         forStmtMetaModel.getDeclaredPropertyMetaModels().add(forStmtMetaModel.initializationPropertyMetaModel);
@@ -925,7 +931,7 @@ public final class JavaParserMetaModel {
         whileStmtMetaModel.getDeclaredPropertyMetaModels().add(whileStmtMetaModel.bodyPropertyMetaModel);
         whileStmtMetaModel.conditionPropertyMetaModel = new PropertyMetaModel(whileStmtMetaModel, "condition", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         whileStmtMetaModel.getDeclaredPropertyMetaModels().add(whileStmtMetaModel.conditionPropertyMetaModel);
-        whileStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(whileStmtMetaModel, "contracts", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        whileStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(whileStmtMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         whileStmtMetaModel.getDeclaredPropertyMetaModels().add(whileStmtMetaModel.contractsPropertyMetaModel);
         yieldStmtMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(yieldStmtMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         yieldStmtMetaModel.getDeclaredPropertyMetaModels().add(yieldStmtMetaModel.expressionPropertyMetaModel);
@@ -935,21 +941,21 @@ public final class JavaParserMetaModel {
         jmlAssertStmtMetaModel.getDeclaredPropertyMetaModels().add(jmlAssertStmtMetaModel.expressionPropertyMetaModel);
         jmlAssumeStmtMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(jmlAssumeStmtMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         jmlAssumeStmtMetaModel.getDeclaredPropertyMetaModels().add(jmlAssumeStmtMetaModel.expressionPropertyMetaModel);
-        jmlContractsMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(jmlContractsMetaModel, "elements", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        jmlContractsMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(jmlContractsMetaModel, "elements", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         jmlContractsMetaModel.getDeclaredPropertyMetaModels().add(jmlContractsMetaModel.elementsPropertyMetaModel);
         jmlContractsMetaModel.jmlTagsPropertyMetaModel = new PropertyMetaModel(jmlContractsMetaModel, "jmlTags", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, true, false);
         jmlContractsMetaModel.getDeclaredPropertyMetaModels().add(jmlContractsMetaModel.jmlTagsPropertyMetaModel);
         jmlContractsMetaModel.singleLinePropertyMetaModel = new PropertyMetaModel(jmlContractsMetaModel, "singleLine", boolean.class, Optional.empty(), false, false, false, false);
         jmlContractsMetaModel.getDeclaredPropertyMetaModels().add(jmlContractsMetaModel.singleLinePropertyMetaModel);
-        jmlClauseMetaModel.kindPropertyMetaModel = new PropertyMetaModel(jmlClauseMetaModel, "kind", com.github.javaparser.ast.clauses.JmlClause.Kind.class, Optional.empty(), false, false, false, false);
+        jmlClauseMetaModel.kindPropertyMetaModel = new PropertyMetaModel(jmlClauseMetaModel, "kind", com.github.javaparser.ast.jml.clauses.JmlClause.Kind.class, Optional.empty(), false, false, false, false);
         jmlClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlClauseMetaModel.kindPropertyMetaModel);
-        jmlBodyDeclarationMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(jmlBodyDeclarationMetaModel, "elements", com.github.javaparser.ast.body.JmlClassLevel.class, Optional.of(jmlClassLevelMetaModel), false, false, true, false);
+        jmlBodyDeclarationMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(jmlBodyDeclarationMetaModel, "elements", com.github.javaparser.ast.jml.body.JmlClassLevel.class, Optional.of(jmlClassLevelMetaModel), false, false, true, false);
         jmlBodyDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlBodyDeclarationMetaModel.elementsPropertyMetaModel);
         jmlBodyDeclarationMetaModel.jmlTagsPropertyMetaModel = new PropertyMetaModel(jmlBodyDeclarationMetaModel, "jmlTags", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, true, false);
         jmlBodyDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlBodyDeclarationMetaModel.jmlTagsPropertyMetaModel);
         jmlBodyDeclarationMetaModel.singleLinePropertyMetaModel = new PropertyMetaModel(jmlBodyDeclarationMetaModel, "singleLine", boolean.class, Optional.empty(), false, false, false, false);
         jmlBodyDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlBodyDeclarationMetaModel.singleLinePropertyMetaModel);
-        jmlStatementsMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(jmlStatementsMetaModel, "elements", com.github.javaparser.ast.stmt.JmlStatement.class, Optional.of(jmlStatementMetaModel), false, false, true, false);
+        jmlStatementsMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(jmlStatementsMetaModel, "elements", com.github.javaparser.ast.jml.stmt.JmlStatement.class, Optional.of(jmlStatementMetaModel), false, false, true, false);
         jmlStatementsMetaModel.getDeclaredPropertyMetaModels().add(jmlStatementsMetaModel.elementsPropertyMetaModel);
         jmlStatementsMetaModel.jmlTagsPropertyMetaModel = new PropertyMetaModel(jmlStatementsMetaModel, "jmlTags", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, true, false);
         jmlStatementsMetaModel.getDeclaredPropertyMetaModels().add(jmlStatementsMetaModel.jmlTagsPropertyMetaModel);
@@ -1007,11 +1013,11 @@ public final class JavaParserMetaModel {
         whenClauseMetaModel.getDeclaredPropertyMetaModels().add(whenClauseMetaModel.exprPropertyMetaModel);
         jmlContractMetaModel.behaviorPropertyMetaModel = new PropertyMetaModel(jmlContractMetaModel, "behavior", com.github.javaparser.ast.stmt.Behavior.class, Optional.empty(), false, false, false, false);
         jmlContractMetaModel.getDeclaredPropertyMetaModels().add(jmlContractMetaModel.behaviorPropertyMetaModel);
-        jmlContractMetaModel.clausesPropertyMetaModel = new PropertyMetaModel(jmlContractMetaModel, "clauses", com.github.javaparser.ast.clauses.JmlClause.class, Optional.of(jmlClauseMetaModel), false, false, true, false);
+        jmlContractMetaModel.clausesPropertyMetaModel = new PropertyMetaModel(jmlContractMetaModel, "clauses", com.github.javaparser.ast.jml.clauses.JmlClause.class, Optional.of(jmlClauseMetaModel), false, false, true, false);
         jmlContractMetaModel.getDeclaredPropertyMetaModels().add(jmlContractMetaModel.clausesPropertyMetaModel);
         jmlContractMetaModel.modifierPropertyMetaModel = new PropertyMetaModel(jmlContractMetaModel, "modifier", com.github.javaparser.ast.Modifier.class, Optional.of(modifierMetaModel), false, false, false, false);
         jmlContractMetaModel.getDeclaredPropertyMetaModels().add(jmlContractMetaModel.modifierPropertyMetaModel);
-        jmlContractMetaModel.subContractsPropertyMetaModel = new PropertyMetaModel(jmlContractMetaModel, "subContracts", com.github.javaparser.ast.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
+        jmlContractMetaModel.subContractsPropertyMetaModel = new PropertyMetaModel(jmlContractMetaModel, "subContracts", com.github.javaparser.ast.jml.clauses.JmlContract.class, Optional.of(jmlContractMetaModel), false, false, true, false);
         jmlContractMetaModel.getDeclaredPropertyMetaModels().add(jmlContractMetaModel.subContractsPropertyMetaModel);
         jmlBoundVariableMetaModel.namePropertyMetaModel = new PropertyMetaModel(jmlBoundVariableMetaModel, "name", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false);
         jmlBoundVariableMetaModel.getDeclaredPropertyMetaModels().add(jmlBoundVariableMetaModel.namePropertyMetaModel);
@@ -1424,7 +1430,7 @@ public final class JavaParserMetaModel {
     public static final JmlAssertStmtMetaModel jmlAssertStmtMetaModel = new JmlAssertStmtMetaModel(Optional.of(jmlStatementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final JmlAssumeStmtMetaModel jmlAssumeStmtMetaModel = new JmlAssumeStmtMetaModel(Optional.of(statementMetaModel));
+    public static final JmlAssumeStmtMetaModel jmlAssumeStmtMetaModel = new JmlAssumeStmtMetaModel(Optional.of(jmlStatementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlHenceByStmtMetaModel jmlHenceByStmtMetaModel = new JmlHenceByStmtMetaModel(Optional.of(jmlStatementMetaModel));
@@ -1436,7 +1442,7 @@ public final class JavaParserMetaModel {
     public static final JmlRefiningStmtMetaModel jmlRefiningStmtMetaModel = new JmlRefiningStmtMetaModel(Optional.of(jmlStatementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final UnreachableStmtMetaModel unreachableStmtMetaModel = new UnreachableStmtMetaModel(Optional.of(statementMetaModel));
+    public static final JmlUnreachableStmtMetaModel jmlUnreachableStmtMetaModel = new JmlUnreachableStmtMetaModel(Optional.of(jmlStatementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlContractsMetaModel jmlContractsMetaModel = new JmlContractsMetaModel(Optional.of(nodeMetaModel));

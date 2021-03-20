@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.stmt.JmlRefiningStmt;
+
+import com.github.javaparser.ast.jml.stmt.JmlRefiningStmt;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class JmlRefiningStmtMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlRefiningStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlRefiningStmt.class, "JmlRefiningStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(superBaseNodeMetaModel, JmlRefiningStmt.class, "JmlRefiningStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 }

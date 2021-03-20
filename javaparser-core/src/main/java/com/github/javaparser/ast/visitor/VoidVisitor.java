@@ -26,12 +26,14 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.locref.*;
-import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that does not return anything.
@@ -278,7 +280,7 @@ public interface VoidVisitor<A> {
 
     void visit(SignalsOnlyClause n, A arg);
 
-    void visit(UnreachableStmt n, A arg);
+    void visit(JmlUnreachableStmt n, A arg);
 
     void visit(CallableClause n, A arg);
 

@@ -22,7 +22,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.clauses.JmlContract;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;

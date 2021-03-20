@@ -23,7 +23,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.clauses.JmlContract;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;

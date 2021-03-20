@@ -22,6 +22,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.StatementMetaModel;
@@ -542,17 +543,17 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public UnreachableStmt asUnreachableStmt() {
+    public JmlUnreachableStmt asUnreachableStmt() {
         throw new IllegalStateException(f("%s is not UnreachableStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<UnreachableStmt> toUnreachableStmt() {
+    public Optional<JmlUnreachableStmt> toUnreachableStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifUnreachableStmt(Consumer<UnreachableStmt> action) {
+    public void ifUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -648,5 +649,20 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlStatements(Consumer<JmlStatements> action) {
+    }
+
+    public boolean isJmlUnreachableStmt() {
+        return false;
+    }
+
+    public JmlUnreachableStmt asJmlUnreachableStmt() {
+        throw new IllegalStateException(f("%s is not JmlUnreachableStmt, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlUnreachableStmt> toJmlUnreachableStmt() {
+        return Optional.empty();
+    }
+
+    public void ifJmlUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
     }
 }

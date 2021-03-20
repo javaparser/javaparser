@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.stmt.JmlHenceByStmt;
+
+import com.github.javaparser.ast.jml.stmt.JmlHenceByStmt;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class JmlHenceByStmtMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlHenceByStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlHenceByStmt.class, "JmlHenceByStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(superBaseNodeMetaModel, JmlHenceByStmt.class, "JmlHenceByStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 }

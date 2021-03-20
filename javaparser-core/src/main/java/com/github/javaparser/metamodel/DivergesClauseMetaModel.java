@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.DivergesClause;
+
+import com.github.javaparser.ast.jml.clauses.DivergesClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class DivergesClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     DivergesClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, DivergesClause.class, "DivergesClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, DivergesClause.class, "DivergesClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 }

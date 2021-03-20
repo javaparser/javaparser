@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.LoopVariantClause;
+
+import com.github.javaparser.ast.jml.clauses.LoopVariantClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +39,6 @@ public class LoopVariantClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LoopVariantClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LoopVariantClause.class, "LoopVariantClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, LoopVariantClause.class, "LoopVariantClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 }

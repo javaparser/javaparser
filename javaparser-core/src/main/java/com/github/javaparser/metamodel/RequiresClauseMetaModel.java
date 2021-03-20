@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.RequiresClause;
+
+import com.github.javaparser.ast.jml.clauses.RequiresClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class RequiresClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     RequiresClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, RequiresClause.class, "RequiresClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, RequiresClause.class, "RequiresClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel ePropertyMetaModel;

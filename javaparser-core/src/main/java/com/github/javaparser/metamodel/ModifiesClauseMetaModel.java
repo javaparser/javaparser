@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.clauses.ModifiesClause;
+
+import com.github.javaparser.ast.jml.clauses.ModifiesClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class ModifiesClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ModifiesClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ModifiesClause.class, "ModifiesClause", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, ModifiesClause.class, "ModifiesClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel exprsPropertyMetaModel;
