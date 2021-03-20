@@ -88,7 +88,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
@@ -107,6 +110,9 @@ public class JavaParserFacade {
     };
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
+    
+    private static String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final SymbolSolver symbolSolver;
@@ -507,9 +513,9 @@ public class JavaParserFacade {
 
         if (operator == BinaryExpr.Operator.PLUS) {
             boolean isLeftString = leftType.isReferenceType() && leftType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             boolean isRightString = rightType.isReferenceType() && rightType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             if (isLeftString || isRightString) {
                 return isLeftString ? leftType : rightType;
             }
@@ -795,6 +801,18 @@ public class JavaParserFacade {
         if (clazz.isPrimitive()) {
             return ResolvedPrimitiveType.byName(clazz.getName());
         }
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
+
+        ResolvedReferenceTypeDeclaration declaration;
+        if (clazz.isAnnotation()) {
+            declaration = new ReflectionAnnotationDeclaration(clazz, typeSolver);
+        } else if (clazz.isEnum()) {
+            declaration = new ReflectionEnumDeclaration(clazz, typeSolver);
+        } else if (clazz.isInterface()) {
+            declaration = new ReflectionInterfaceDeclaration(clazz, typeSolver);
+        } else {
+            declaration = new ReflectionClassDeclaration(clazz, typeSolver);
+        }
+        return new ReferenceTypeImpl(declaration, typeSolver);
     }
+
 }
