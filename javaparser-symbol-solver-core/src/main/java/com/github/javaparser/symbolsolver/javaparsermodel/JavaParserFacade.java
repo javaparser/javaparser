@@ -39,10 +39,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -571,14 +568,13 @@ public class JavaParserFacade {
      * @return The first class/interface/enum declaration in the Node's ancestry.
      */
     protected TypeDeclaration<?> findContainingTypeDecl(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            return (ClassOrInterfaceDeclaration) node;
+        Node parent = node;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof TypeDeclaration) {
+                return (TypeDeclaration<?>) parent;
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return (EnumDeclaration) node;
-        }
-        return findContainingTypeDecl(demandParentNode(node));
-
     }
 
     /**
@@ -608,17 +604,22 @@ public class JavaParserFacade {
      * the Node's ancestry.
      */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            return node;
+        Node parent = node;
+        boolean detachFlag = false;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof BodyDeclaration) {
+                if (parent instanceof TypeDeclaration) {
+                    return parent;
+                } else {
+                    detachFlag = true;
+                }
+            } else if (parent instanceof ObjectCreationExpr) {
+                if (detachFlag) {
+                    return parent;
+                }
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return node;
-        }
-        Node parent = demandParentNode(node);
-        if (parent instanceof ObjectCreationExpr && !((ObjectCreationExpr) parent).getArguments().contains(node)) {
-            return parent;
-        }
-        return findContainingTypeDeclOrObjectCreationExpr(parent);
     }
 
     /**
@@ -626,17 +627,22 @@ public class JavaParserFacade {
      * references an outer class -- as its ancestor, return the declaration corresponding to the class name specified.
      */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node, String className) {
-        if (node instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) node).getFullyQualifiedName().get().endsWith(className)) {
-            return node;
+        Node parent = node;
+        boolean detachFlag = false;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof BodyDeclaration) {
+                if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
+                    return parent;
+                } else {
+                    detachFlag = true;
+                }
+            } else if (parent instanceof ObjectCreationExpr) {
+                if (detachFlag) {
+                    return parent;
+                }
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return node;
-        }
-        Node parent = demandParentNode(node);
-        if (parent instanceof ObjectCreationExpr && !((ObjectCreationExpr) parent).getArguments().contains(node)) {
-            return parent;
-        }
-        return findContainingTypeDeclOrObjectCreationExpr(parent, className);
     }
 
 
