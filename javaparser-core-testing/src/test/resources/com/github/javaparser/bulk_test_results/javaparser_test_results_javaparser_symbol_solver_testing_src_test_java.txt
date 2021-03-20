@@ -1,1 +1,10 @@
-0 problems in 0 files
+com/github/javaparser/symbolsolver/Issue1574Test.java
+Lexical error at line 63, column 97.  Encountered: "\r" (13), after : "//The 2 first should be orphan comment while the third will be associated to the package"
+
+com/github/javaparser/symbolsolver/model/typesystem/WildcardUsageTest.java
+Lexical error at line 215, column 8.  Encountered: "T" (84), after : ""
+
+com/github/javaparser/symbolsolver/resolution/GenericsResolutionTest.java
+Lexical error at line 398, column 8.  Encountered: "T" (84), after : ""
+
+3 problems in 3 files

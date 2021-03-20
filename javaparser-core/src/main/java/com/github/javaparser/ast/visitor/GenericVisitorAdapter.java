@@ -30,6 +30,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that has a return value (R), and has a default implementation for all its visit
@@ -2609,6 +2611,26 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final JmlClassAccessibleDeclaration n, final A arg) {
         R result;
+        {
+            result = n.getExpressions().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getLabel().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getMeasuredBy().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2680,16 +2702,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
-            result = n.getElements().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getJmlTags().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
             result = n.getAnnotations().accept(this, arg);
             if (result != null)
                 return result;
@@ -2734,6 +2746,111 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final LocationSetArrayAccess n, final A arg) {
+        R result;
+        {
+            result = n.getIndex().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final LocationSetBindingExpr n, final A arg) {
+        R result;
+        {
+            result = n.getBoundedVars().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getExpr().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getPredicate().isPresent()) {
+            result = n.getPredicate().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final LocationSetFieldAccess n, final A arg) {
+        R result;
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getScope().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final LocationSetFunction n, final A arg) {
+        R result;
+        {
+            result = n.getArguments().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final LocationSetLiftExpression n, final A arg) {
+        R result;
+        {
+            result = n.getArguments().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final LocationSetPrimary n, final A arg) {
+        R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;

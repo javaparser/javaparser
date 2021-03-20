@@ -28,7 +28,11 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import java.util.Optional;
+
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that clones (copies) a node and all its children.
@@ -1657,8 +1661,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlClassAccessibleDeclaration n, final Object arg) {
+        NodeList<Expression> expressions = cloneList(n.getExpressions(), arg);
+        SimpleName label = cloneNode(n.getLabel(), arg);
+        Expression measuredBy = cloneNode(n.getMeasuredBy(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlClassAccessibleDeclaration r = new JmlClassAccessibleDeclaration(n.getTokenRange().orElse(null));
+        JmlClassAccessibleDeclaration r = new JmlClassAccessibleDeclaration(n.getTokenRange().orElse(null), modifiers, label, expressions, measuredBy);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1695,11 +1703,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final JmlBodyDeclaration n, final Object arg) {
         NodeList<JmlClassLevel> elements = cloneList(n.getElements(), arg);
         NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
-        NodeList<JmlClassLevel> elements = cloneList(n.getElements(), arg);
-        NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlBodyDeclaration r = new JmlBodyDeclaration(n.getTokenRange().orElse(null), n.isSingleLine(), jmlTags, elements, n.isSingleLine(), jmlTags, elements);
+        JmlBodyDeclaration r = new JmlBodyDeclaration(n.getTokenRange().orElse(null), n.isSingleLine(), jmlTags, elements);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1724,6 +1730,75 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlStatements r = new JmlStatements(n.getTokenRange().orElse(null), n.isSingleLine(), jmlTags, elements);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetArrayAccess n, final Object arg) {
+        Expression index = cloneNode(n.getIndex(), arg);
+        LocationSetExpression name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetArrayAccess r = new LocationSetArrayAccess(n.getTokenRange().orElse(null), name, index);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetBindingExpr n, final Object arg) {
+        VariableDeclarationExpr boundedVars = cloneNode(n.getBoundedVars(), arg);
+        LocationSetExpression expr = cloneNode(n.getExpr(), arg);
+        Expression predicate = cloneNode(n.getPredicate(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetBindingExpr r = new LocationSetBindingExpr(n.getTokenRange().orElse(null), n.getQuantifier(), boundedVars, predicate, expr);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetFieldAccess n, final Object arg) {
+        SimpleName name = cloneNode(n.getName(), arg);
+        LocationSetExpression scope = cloneNode(n.getScope(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetFieldAccess r = new LocationSetFieldAccess(n.getTokenRange().orElse(null), scope, name);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetFunction n, final Object arg) {
+        NodeList<LocationSetExpression> arguments = cloneList(n.getArguments(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetFunction r = new LocationSetFunction(n.getTokenRange().orElse(null), n.getFunction(), arguments);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetLiftExpression n, final Object arg) {
+        NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetLiftExpression r = new LocationSetLiftExpression(n.getTokenRange().orElse(null), arguments);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetPrimary n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetPrimary r = new LocationSetPrimary(n.getTokenRange().orElse(null), n.getKind());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

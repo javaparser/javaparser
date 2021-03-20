@@ -1,1 +1,4 @@
-0 problems in 0 files
+com/github/javaparser/generator/core/visitor/NoCommentEqualsVisitorGenerator.java
+Lexical error at line 70, column 94.  Encountered: "\r" (13), after : "// Only the cast line was added, but nothing is using it, so remove it again."
+
+1 problems in 1 files

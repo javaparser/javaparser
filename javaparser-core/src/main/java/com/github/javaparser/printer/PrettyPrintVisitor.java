@@ -42,6 +42,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleExportsDirective;
 import com.github.javaparser.ast.modules.ModuleOpensDirective;
@@ -953,6 +954,41 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlContracts n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlStatements n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetArrayAccess n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetBindingExpr n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetFieldAccess n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetFunction n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetLiftExpression n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetPrimary n, Void arg) {
 
     }
 

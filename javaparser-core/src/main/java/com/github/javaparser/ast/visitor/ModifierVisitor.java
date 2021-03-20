@@ -31,12 +31,17 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
+
 import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * This visitor can be used to save time when some specific nodes needs
@@ -1669,7 +1674,17 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlClassAccessibleDeclaration n, final A arg) {
+        NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
+        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
+        Expression measuredBy = (Expression) n.getMeasuredBy().accept(this, arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (label == null || measuredBy == null)
+            return null;
+        n.setExpressions(expressions);
+        n.setLabel(label);
+        n.setMeasuredBy(measuredBy);
+        n.setModifiers(modifiers);
         n.setComment(comment);
         return n;
     }
@@ -1708,12 +1723,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final JmlBodyDeclaration n, final A arg) {
         NodeList<JmlClassLevel> elements = modifyList(n.getElements(), arg);
         NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
-        NodeList<JmlClassLevel> elements = modifyList(n.getElements(), arg);
-        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setElements(elements);
-        n.setJmlTags(jmlTags);
         n.setElements(elements);
         n.setJmlTags(jmlTags);
         n.setAnnotations(annotations);
@@ -1739,6 +1750,72 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setElements(elements);
         n.setJmlTags(jmlTags);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetArrayAccess n, final A arg) {
+        Expression index = (Expression) n.getIndex().accept(this, arg);
+        LocationSetExpression name = (LocationSetExpression) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (index == null || name == null)
+            return null;
+        n.setIndex(index);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetBindingExpr n, final A arg) {
+        VariableDeclarationExpr boundedVars = (VariableDeclarationExpr) n.getBoundedVars().accept(this, arg);
+        LocationSetExpression expr = (LocationSetExpression) n.getExpr().accept(this, arg);
+        Expression predicate = n.getPredicate().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (boundedVars == null || expr == null)
+            return null;
+        n.setBoundedVars(boundedVars);
+        n.setExpr(expr);
+        n.setPredicate(predicate);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetFieldAccess n, final A arg) {
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        LocationSetExpression scope = (LocationSetExpression) n.getScope().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || scope == null)
+            return null;
+        n.setName(name);
+        n.setScope(scope);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetFunction n, final A arg) {
+        NodeList<LocationSetExpression> arguments = modifyList(n.getArguments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setArguments(arguments);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetLiftExpression n, final A arg) {
+        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setArguments(arguments);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetPrimary n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }

@@ -28,7 +28,11 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import java.util.Optional;
+
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 
@@ -1227,7 +1231,14 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final JmlClassAccessibleDeclaration n, final Visitable arg) {
-        return true;
+        final JmlClassAccessibleDeclaration n2 = (JmlClassAccessibleDeclaration) arg;
+        if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
+            return false;
+        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+            return false;
+        if (!nodeEquals(n.getMeasuredBy(), n2.getMeasuredBy()))
+            return false;
+        return nodesEquals(n.getModifiers(), n2.getModifiers());
     }
 
     @Override
@@ -1261,12 +1272,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
             return false;
-        if (!nodesEquals(n.getElements(), n2.getElements()))
-            return false;
-        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
-            return false;
-        if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
-            return false;
         return nodesEquals(n.getAnnotations(), n2.getAnnotations());
     }
 
@@ -1288,5 +1293,53 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
             return false;
         return objEquals(n.isSingleLine(), n2.isSingleLine());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetArrayAccess n, final Visitable arg) {
+        final LocationSetArrayAccess n2 = (LocationSetArrayAccess) arg;
+        if (!nodeEquals(n.getIndex(), n2.getIndex()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetBindingExpr n, final Visitable arg) {
+        final LocationSetBindingExpr n2 = (LocationSetBindingExpr) arg;
+        if (!nodeEquals(n.getBoundedVars(), n2.getBoundedVars()))
+            return false;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        if (!nodeEquals(n.getPredicate(), n2.getPredicate()))
+            return false;
+        return objEquals(n.getQuantifier(), n2.getQuantifier());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetFieldAccess n, final Visitable arg) {
+        final LocationSetFieldAccess n2 = (LocationSetFieldAccess) arg;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        return nodeEquals(n.getScope(), n2.getScope());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetFunction n, final Visitable arg) {
+        final LocationSetFunction n2 = (LocationSetFunction) arg;
+        if (!nodesEquals(n.getArguments(), n2.getArguments()))
+            return false;
+        return objEquals(n.getFunction(), n2.getFunction());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetLiftExpression n, final Visitable arg) {
+        final LocationSetLiftExpression n2 = (LocationSetLiftExpression) arg;
+        return nodesEquals(n.getArguments(), n2.getArguments());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetPrimary n, final Visitable arg) {
+        final LocationSetPrimary n2 = (LocationSetPrimary) arg;
+        return objEquals(n.getKind(), n2.getKind());
     }
 }

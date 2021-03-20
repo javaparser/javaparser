@@ -1,1 +1,25 @@
-0 problems in 0 files
+com/github/javaparser/PositionMappingTest.java
+Lexical error at line 75, column 27.  Encountered: "\r" (13), after : "// Character positions:"
+
+com/github/javaparser/printer/lexicalpreservation/Issue1467Test.java
+Lexical error at line 56, column 41.  Encountered: "\r" (13), after : "// add method method declaration"
+
+com/github/javaparser/printer/lexicalpreservation/Issue2290Test.java
+Lexical error at line 59, column 48.  Encountered: "\r" (13), after : "// verify that one statement is removed"
+
+com/github/javaparser/printer/lexicalpreservation/Issue2374Test.java
+Lexical error at line 48, column 47.  Encountered: "\r" (13), after : "// contruct a statement with a comment"
+
+com/github/javaparser/printer/lexicalpreservation/Issue2610Test.java
+Lexical error at line 50, column 47.  Encountered: "\r" (13), after : "// contruct a statement with a comment"
+
+com/github/javaparser/printer/lexicalpreservation/Issue2620Test.java
+Lexical error at line 72, column 67.  Encountered: "\r" (13), after : "// Note: Expect the platform\'s EOL character when printing"
+
+com/github/javaparser/printer/lexicalpreservation/PrettyPrinterIssue2351Test.java
+Lexical error at line 32, column 131.  Encountered: "\r" (13), after : "// manage java.lang.UnsupportedOperationException: Csm token token(}) NodeText TOKEN \";\"   <102>   (line 1,col 39)-(line 1,col 39)"
+
+com/github/javaparser/RangeTest.java
+Lexical error at line 50, column 8.  Encountered: "f" (102), after : ""
+
+8 problems in 8 files

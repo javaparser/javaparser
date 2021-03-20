@@ -30,6 +30,8 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that does not return anything.
@@ -317,4 +319,16 @@ public interface VoidVisitor<A> {
     void visit(JmlContracts n, A arg);
 
     void visit(JmlStatements n, A arg);
+
+    void visit(LocationSetArrayAccess n, A arg);
+
+    void visit(LocationSetBindingExpr n, A arg);
+
+    void visit(LocationSetFieldAccess n, A arg);
+
+    void visit(LocationSetFunction n, A arg);
+
+    void visit(LocationSetLiftExpression n, A arg);
+
+    void visit(LocationSetPrimary n, A arg);
 }

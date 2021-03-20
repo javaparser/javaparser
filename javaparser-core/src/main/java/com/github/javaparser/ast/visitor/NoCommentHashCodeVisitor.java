@@ -30,6 +30,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
@@ -630,7 +632,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlClassAccessibleDeclaration n, final Void arg) {
-        return 0;
+        return (n.getExpressions().accept(this, arg)) * 31 + (n.getLabel().accept(this, arg)) * 31 + (n.getMeasuredBy().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg));
     }
 
     @Override
@@ -645,7 +647,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlBodyDeclaration n, final Void arg) {
-        return (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0) * 31 + (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Override
@@ -656,5 +658,35 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlStatements n, final Void arg) {
         return (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0);
+    }
+
+    @Override
+    public Integer visit(final LocationSetArrayAccess n, final Void arg) {
+        return (n.getIndex().accept(this, arg)) * 31 + (n.getName().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final LocationSetBindingExpr n, final Void arg) {
+        return (n.getBoundedVars().accept(this, arg)) * 31 + (n.getExpr().accept(this, arg)) * 31 + (n.getPredicate().isPresent() ? n.getPredicate().get().accept(this, arg) : 0) * 31 + (n.getQuantifier().hashCode());
+    }
+
+    @Override
+    public Integer visit(final LocationSetFieldAccess n, final Void arg) {
+        return (n.getName().accept(this, arg)) * 31 + (n.getScope().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final LocationSetFunction n, final Void arg) {
+        return (n.getArguments().accept(this, arg)) * 31 + (n.getFunction().hashCode());
+    }
+
+    @Override
+    public Integer visit(final LocationSetLiftExpression n, final Void arg) {
+        return (n.getArguments().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final LocationSetPrimary n, final Void arg) {
+        return (n.getKind().hashCode());
     }
 }

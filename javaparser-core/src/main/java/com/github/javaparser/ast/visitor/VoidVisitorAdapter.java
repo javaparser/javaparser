@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that returns nothing, and has a default implementation for all its visit
@@ -954,6 +956,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlClassAccessibleDeclaration n, final A arg) {
+        n.getExpressions().forEach(p -> p.accept(this, arg));
+        n.getLabel().accept(this, arg);
+        n.getMeasuredBy().accept(this, arg);
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -977,8 +983,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final JmlBodyDeclaration n, final A arg) {
         n.getElements().forEach(p -> p.accept(this, arg));
         n.getJmlTags().forEach(p -> p.accept(this, arg));
-        n.getElements().forEach(p -> p.accept(this, arg));
-        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -994,6 +998,45 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final JmlStatements n, final A arg) {
         n.getElements().forEach(p -> p.accept(this, arg));
         n.getJmlTags().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetArrayAccess n, final A arg) {
+        n.getIndex().accept(this, arg);
+        n.getName().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetBindingExpr n, final A arg) {
+        n.getBoundedVars().accept(this, arg);
+        n.getExpr().accept(this, arg);
+        n.getPredicate().ifPresent(l -> l.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetFieldAccess n, final A arg) {
+        n.getName().accept(this, arg);
+        n.getScope().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetFunction n, final A arg) {
+        n.getArguments().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetLiftExpression n, final A arg) {
+        n.getArguments().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetPrimary n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

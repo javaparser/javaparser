@@ -31,6 +31,8 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that returns nothing, and has default methods that are used when a specific visit method is not
@@ -745,6 +747,36 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlStatements n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetArrayAccess n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetBindingExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetFieldAccess n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetFunction n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetLiftExpression n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetPrimary n, final A arg) {
         defaultAction(n, arg);
     }
 }

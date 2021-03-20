@@ -40,4 +40,12 @@ public class JmlClassAccessibleDeclarationMetaModel extends JmlClassLevelMetaMod
     JmlClassAccessibleDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlClassAccessibleDeclaration.class, "JmlClassAccessibleDeclaration", "com.github.javaparser.ast.body", false, false);
     }
+
+    public PropertyMetaModel expressionsPropertyMetaModel;
+
+    public PropertyMetaModel labelPropertyMetaModel;
+
+    public PropertyMetaModel measuredByPropertyMetaModel;
+
+    public PropertyMetaModel modifiersPropertyMetaModel;
 }

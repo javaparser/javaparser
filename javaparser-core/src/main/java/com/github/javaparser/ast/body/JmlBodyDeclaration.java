@@ -92,18 +92,6 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
                 return true;
             }
         }
-        for (int i = 0; i < elements.size(); i++) {
-            if (elements.get(i) == node) {
-                elements.remove(i);
-                return true;
-            }
-        }
-        for (int i = 0; i < jmlTags.size(); i++) {
-            if (jmlTags.get(i) == node) {
-                jmlTags.remove(i);
-                return true;
-            }
-        }
         return super.remove(node);
     }
 
@@ -197,18 +185,6 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
                 return true;
             }
         }
-        for (int i = 0; i < elements.size(); i++) {
-            if (elements.get(i) == node) {
-                elements.set(i, (JmlClassLevel) replacementNode);
-                return true;
-            }
-        }
-        for (int i = 0; i < jmlTags.size(); i++) {
-            if (jmlTags.get(i) == node) {
-                jmlTags.set(i, (SimpleName) replacementNode);
-                return true;
-            }
-        }
         return super.replace(node, replacementNode);
     }
 
@@ -218,20 +194,6 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlBodyDeclaration(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements) {
         super(tokenRange);
-        setSingleLine(singleLine);
-        setJmlTags(jmlTags);
-        setElements(elements);
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlBodyDeclaration(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements) {
-        super(tokenRange);
-        setSingleLine(singleLine);
-        setJmlTags(jmlTags);
-        setElements(elements);
         setSingleLine(singleLine);
         setJmlTags(jmlTags);
         setElements(elements);

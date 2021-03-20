@@ -28,6 +28,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.*;
@@ -1013,6 +1014,43 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         startJmlComment(n.isSingleLine(), n.getJmlTags());
         printList(n.getElements(), "\nalso\n");
         endJmlComment(n.isSingleLine());
+    }
+
+    @Override
+    public void visit(JmlStatements n, Void arg) {
+        startJmlComment(n.isSingleLine(), n.getJmlTags());
+        printList(n.getElements(), "\n");
+        endJmlComment(n.isSingleLine());
+    }
+
+    @Override
+    public void visit(LocationSetArrayAccess n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetBindingExpr n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetFieldAccess n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetFunction n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetLiftExpression n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(LocationSetPrimary n, Void arg) {
+
     }
 
     @Override

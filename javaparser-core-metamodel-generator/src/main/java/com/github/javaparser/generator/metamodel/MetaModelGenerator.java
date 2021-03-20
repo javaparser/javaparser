@@ -37,6 +37,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.clauses.*;
+import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.stmt.JmlStatement;
 import com.github.javaparser.ast.stmt.JmlStatements;
 import com.github.javaparser.ast.stmt.Statement;
@@ -219,12 +220,17 @@ public class MetaModelGenerator extends AbstractGenerator {
 
         add(com.github.javaparser.ast.JmlBoundVariable.class);
 
-        add(JmlBodyDeclaration.class);
         add(ClassInvariantClause.class);
         add(JmlRepresentsDeclaration.class);
         add(JmlClassAccessibleDeclaration.class);
-        add(JmlClassAccessibleDeclaration.class);
-        add(JmlClassAccessibleDeclaration.class);
+
+        add(LocationSetExpression.class);
+        add(LocationSetPrimary.class);
+        add(LocationSetFunction.class);
+        add(LocationSetLiftExpression.class);
+        add(LocationSetFieldAccess.class);
+        add(LocationSetArrayAccess.class);
+        add(LocationSetBindingExpr.class);
 
         add(com.github.javaparser.ast.type.ArrayType.class);
         add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);

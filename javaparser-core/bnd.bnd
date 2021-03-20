@@ -11,6 +11,8 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.ast.clauses, \
     com.github.javaparser.ast.comments, \
     com.github.javaparser.ast.expr, \
+    com.github.javaparser.ast.jml, \
+    com.github.javaparser.ast.jml.locref, \
     com.github.javaparser.ast.modules, \
     com.github.javaparser.ast.nodeTypes, \
     com.github.javaparser.ast.nodeTypes.modifiers, \

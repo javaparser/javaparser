@@ -28,6 +28,8 @@ import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
@@ -739,6 +741,36 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final JmlStatements n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetArrayAccess n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetBindingExpr n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetFieldAccess n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetFunction n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetLiftExpression n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetPrimary n, final Visitable arg) {
         return n == arg;
     }
 }

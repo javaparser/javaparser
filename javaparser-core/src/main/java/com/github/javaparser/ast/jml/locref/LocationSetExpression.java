@@ -1,57 +1,32 @@
-package com.github.javaparser.ast.stmt;
+package com.github.javaparser.ast.jml.locref;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlStatementMetaModel;
+import com.github.javaparser.metamodel.LocationSetExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
- * @version 1 (3/18/21)
+ * @version 1 (3/19/21)
  */
-public abstract class JmlStatement extends Statement {
+public abstract class LocationSetExpression extends Node implements Jmlish {
 
     @AllFieldsConstructor
-    public JmlStatement() {
+    protected LocationSetExpression() {
+        super(null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlStatement(TokenRange tokenRange) {
+    public LocationSetExpression(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlStatement() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlStatement asJmlStatement() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlStatement> toJmlStatement() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlStatement(Consumer<JmlStatement> action) {
-        action.accept(this);
     }
 
     @Override
@@ -72,13 +47,13 @@ public abstract class JmlStatement extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlStatement clone() {
-        return (JmlStatement) accept(new CloneVisitor(), null);
+    public LocationSetExpression clone() {
+        return (LocationSetExpression) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlStatementMetaModel;
+    public LocationSetExpressionMetaModel getMetaModel() {
+        return JavaParserMetaModel.locationSetExpressionMetaModel;
     }
 }

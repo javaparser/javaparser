@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
@@ -653,6 +655,36 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlStatements n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetArrayAccess n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetBindingExpr n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetFieldAccess n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetFunction n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetLiftExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetPrimary n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -30,8 +30,12 @@ import com.github.javaparser.ast.clauses.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import java.util.List;
 import java.util.Optional;
+
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
@@ -1532,6 +1536,14 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlClassAccessibleDeclaration n, final Visitable arg) {
         final JmlClassAccessibleDeclaration n2 = (JmlClassAccessibleDeclaration) arg;
+        if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
+            return false;
+        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+            return false;
+        if (!nodeEquals(n.getMeasuredBy(), n2.getMeasuredBy()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1570,12 +1582,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
             return false;
-        if (!nodesEquals(n.getElements(), n2.getElements()))
-            return false;
-        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
-            return false;
-        if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
-            return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
@@ -1601,6 +1607,66 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
             return false;
         if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetArrayAccess n, final Visitable arg) {
+        final LocationSetArrayAccess n2 = (LocationSetArrayAccess) arg;
+        if (!nodeEquals(n.getIndex(), n2.getIndex()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetBindingExpr n, final Visitable arg) {
+        final LocationSetBindingExpr n2 = (LocationSetBindingExpr) arg;
+        if (!nodeEquals(n.getBoundedVars(), n2.getBoundedVars()))
+            return false;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        if (!nodeEquals(n.getPredicate(), n2.getPredicate()))
+            return false;
+        if (!objEquals(n.getQuantifier(), n2.getQuantifier()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetFieldAccess n, final Visitable arg) {
+        final LocationSetFieldAccess n2 = (LocationSetFieldAccess) arg;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getScope(), n2.getScope()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetFunction n, final Visitable arg) {
+        final LocationSetFunction n2 = (LocationSetFunction) arg;
+        if (!nodesEquals(n.getArguments(), n2.getArguments()))
+            return false;
+        if (!objEquals(n.getFunction(), n2.getFunction()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetLiftExpression n, final Visitable arg) {
+        final LocationSetLiftExpression n2 = (LocationSetLiftExpression) arg;
+        if (!nodesEquals(n.getArguments(), n2.getArguments()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final LocationSetPrimary n, final Visitable arg) {
+        final LocationSetPrimary n2 = (LocationSetPrimary) arg;
+        if (!objEquals(n.getKind(), n2.getKind()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }

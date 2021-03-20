@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
@@ -746,6 +748,36 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlStatements n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetArrayAccess n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetBindingExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetFieldAccess n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetFunction n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetLiftExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetPrimary n, final A arg) {
         return defaultAction(n, arg);
     }
 }

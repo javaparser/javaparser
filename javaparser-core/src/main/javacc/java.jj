@@ -87,6 +87,8 @@ import com.github.javaparser.ast.clauses.JmlClause;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.GeneratedJavaParser.*;
@@ -287,65 +289,201 @@ TOKEN :
 
 <JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
 TOKEN : {
-  <INVARIANT : "invariant" >
-| <INITIALLY : "initially">
-| <ENSURES : "ensures">
-| <SUCH_THAT : "\\such_that">
-| <DIVERGES : "diverges">
-| <SIGNALS_ONLY : "SIGNALS_ONLY">
-| <RETURNS: "returns">
-| <BREAKS : "breaks">
-| <CONTINUES : "continues">
+  <INVARIANT: "invariant" >
+| <ABRUPT_BEHAVIOR: "abrupt_behavior">
+| <ABRUPT_BEHAVIOUR: "abrupt_behaviour">
+| <ACCESSIBLE: "accessible">
+| <ACCESSIBLE_REDUNDANTLY: "accessible_redundantly">
+| <ALSO: "also">
+| <ANTIVALENCE: "<=!=>">
+| <ASSERT_REDUNDANTLY: "assert_redundantly">
+| <ASSIGNABLE: "assignable">
+| <ASSIGNABLE_REDUNDANTLY: "assignable_redundantly">
+| <ASSUME: "assume">
+| <ASSUME_REDUNDANTLY: "assume_redundantly">
+| <AXIOM: "axiom">
+| <BEHAVIOR: "behavior">
+| <BEHAVIOUR: "behaviour">
+| <BIGINT: "\\BIGINT">
+| <BIGINT_MATH: "\\bigint_math">
+| <BREAKS: "breaks">
+| <BREAKS_REDUNDANTLY: "breaks_redundantly">
 | <BREAK_BEHAVIOR : "break_behaviou?r">
+| <BY : "\\by">
+| <CALLABLE: "callable">
+| <CALLABLE_REDUNDANTLY: "callable_redundantly">
+| <CAPTURES: "captures">
+| <CAPTURES_REDUNDANTLY: "captures_redundantly">
+| <CHOOSE: "choose">
+| <CHOOSE_IF: "choose_if">
+| <CODE: "code">
+| <CODE_BIGINT_MATH: "code_bigint_math">
+| <CODE_JAVA_MATH: "code_java_math">
+| <CODE_SAFE_MATH: "code_safe_math">
+| <CONSTRAINT: "constraint">
+| <CONSTRAINT_REDUNDANTLY: "constraint_redundantly">
+| <CONSTRUCTOR: "constructor">
+| <CONTINUES: "continues">
+| <CONTINUES_REDUNDANTLY: "continues_redundantly">
 | <CONTINUE_BEHAVIOR: "continue_behaviou?r">
-| <RETURN_BEHAVIOR : "return_behaviou?r">
-| <ASSIGNABLE : "assignable">
-| <MODIFIABLE : "modifiable">
-| <MODIFIES : "modifies">
-| <ACCESSIBLE : "accessible">
-| <REPRESENTS : "represents">
-| <NESTED_CONTRACT_START : "{|">
-| <NESTED_CONTRACT_END : "|}">
-| <ALSO : "also">
-| <PURE : "pure">
-| <STRICTLY_PURE : "strictly_pure">
-| <MODEL: "model">
-| <HELPER : "helper">
-| <NULLABLE_BY_DEFAULT : "nullable_by_default">
-| <NON_NULL : "non_null">
-| <NULLABLE : "nullable">
-| <GHOST : "ghost">
-| <SPEC_PUBLIC : "spec_public">
-| <SPEC_PRIVATE : "spec_private">
-| <SPEC_PACKAGE : "spec_package">
-| <SPEC_PROTECTED : "spec_protected">
-| <BEHAVIOR : "behavior">
-| <NORMAL_BEHAVIOR  : "normal_behavior">
-| <EXCEPTIONAL_BEHAVIOR : "exceptional_behavior">
-| <MEASURED_BY : "measured_by">
-| <DETERMINES : "determines">
-| <BY : "\by">
 | <DECLASSIFIES : "declassifies">
+| <DECREASES: "decreases">
+| <DECREASES_REDUNDANTLY: "decreases_redundantly">
+| <DECREASING: "decreasing">
+| <DECREASING_REDUNDANTLY: "decreasing_redundantly">
+| <DETERMINES : "determines">
+| <DIVERGES: "diverges">
+| <DIVERGES_REDUNDANTLY: "diverges_redundantly">
+| <DURATION: "\\duration">
+| <DURATION_REDUNDANTLY: "duration_redundantly">
+| <ELEMTYPE: "\\elemtype">
+| <ENSURES: "ensures">
+| <ENSURES_REDUNDANTLY: "ensures_redundantly">
+| <EQUIVALENCE: "<==>">
 | <ERASES :  "erases">
+| <EVERYTHING: "\\everything">
+| <EXAMPLE: "example">
+| <EXCEPTIONAL_BEHAVIOR: "exceptional_behavior">
+| <EXCEPTIONAL_BEHAVIOUR: "exceptional_behaviour">
+| <EXCEPTIONAL_EXAMPLE: "exceptional_example">
+| <EXISTS: "\\exists">
+| <EXSURES: "exsures">
+| <EXSURES_REDUNDANTLY: "exsures_redundantly">
+| <EXTRACT: "extract">
+| <FIELD: "field">
+| <FORALLQ: "\\forall">
+| <FORALL: "forall">
+| <FOR_EXAMPLE: "for_example">
+| <FRESH: "\\fresh">
+| <GHOST: "ghost">
+| <HELPER: "helper">
+| <HENCE_by: "hence_by">
+| <HENCE_by_REDUNDANTLY: "hence_by_redundantly">
+| <IMPLIES_THAT: "implies_that">
+| <IN: "in">
+| <INITIALIZER: "initializer">
+| <INITIALLY: "initially">
+| <INSTANCE: "instance">
+| <INTO: "\\into">
+| <INVARIANT_REDUNDANTLY: "invariant_redundantly">
+| <INVARIANT_fOR: "\\invariant_for">
+| <IN_redundantly: "in_redundantly">
+| <IS_INITIALIZED: "\\is_initialized">
+| <JAVA_MATH: "\\java_math">
+| <LBLNEG: "\\lblneg">
+| <LBLPOS: "\\lblpos">
+| <LOCKSET: "\\lockset">
+| <LOOP_INVARIANT: "loop_invariant">
+| <LOOP_INVARIANT_REDUNDANTLY: "loop_invariant_redundantly">
+| <MAINTAINING: "maintaining">
+| <MAINTAINING_REDUNDANTLY: "maintaining_redundantly">
+| <MAPS: "maps">
+| <MAPS_REDUNDANTLY: "maps_redundantly">
+| <MAX: "\\max">
+| <MEASURED_BY: "measured_by">
+| <MEASURED_BY_REDUNDANTLY: "measured_by_redundantly">
+| <METHOD: "method">
+| <MIN: "\\min">
+| <MODEL: "model">
+| <MODEL_PROGRAM: "model_program">
+| <MODIFIABLE: "modifiable">
+| <MODIFIABLE_redundantly: "modifiable_redundantly">
+| <MODIFIES: "modifies">
+| <MODIFIES_redundantly: "modifies_redundantly">
+| <MONITORED: "monitored">
+| <MONITORS_FOR: "monitors_for">
+| <NESTED_CONTRACT_END : "|}">
+| <NESTED_CONTRACT_START : "{|">
 | <NEW_OBJECT : "new_objects">
-| <SIGNALS : "signals">
-| <INSTANCE : "instance">
+| <NONNULLELEMENTS: "\\nonnullelements">
+| <NON_NULL: "non_null">
+| <NORMAL_BEHAVIOR: "normal_behavior">
+| <NORMAL_BEHAVIOUR: "normal_behaviour">
+| <NORMAL_EXAMPLE: "normal_example">
+| <NOTHING: "\\nothing">
+| <NOT_ASSIGNED: "\\not_assigned">
+| <NOT_MODIFIED: "\\not_modified">
+| <NOT_SPECIFIED: "\\not_specified">
+| <STRICTLY_NOTHING: "\\strictly_nothing">
+| <NOWARN: "\\nowarn">
+| <NOWARN_OP: "\\nowarn_op">
+| <NULLABLE: "nullable">
+| <NULLABLE_BY_DEFAULT: "nullable_by_default">
+| <NUM_OF: "\\num_of">
+| <OLD_ESC: "\\old">
+| <OLD: "old">
+| <ONLY_ACCESSED: "\\only_accessed">
+| <ONLY_ASSIGNED: "\\only_assigned">
+| <ONLY_CALLED: "\\only_called">
+| <ONLY_CAPTURED: "\\only_captured">
+| <OR: "or">
+| <POST: "post">
+| <POST_REDUNDANTLY: "post_redundantly">
+| <PRE_ESC: "\\pre">
+| <PRE: "pre">
+| <PRE_REDUNDANTLY: "pre_redundantly">
+| <PRODUCT: "\\product">
+| <PURE: "pure">
+| <REACH: "\\reach">
+| <READABLE: "readable">
+| <REAL: "\\real">
+| <REFINING: "refining">
+| <REPRESENTS: "represents">
+| <REPRESENTS_REDUNDANTLY: "represents_redundantly">
+| <REQUIRES_REDUNDANTLY: "requires_redundantly">
+| <RESULT: "\\result">
+| <RETURNS: "returns">
+| <RETURNS_REDUNDANTLY: "returns_redundantly">
+| <RETURN_BEHAVIOR : "return_behaviou?r">
+| <SAFE_MATH: "\\safe_math">
+| <SAME: "\\same">
+| <SET: "set">
+| <SIGNALS: "signals">
+| <SIGNALS_ONLY: "signals_only">
+| <SIGNALS_ONLY_REDUNDANTLY: "signals_only_redundantly">
+| <SIGNALS_REDUNDANTLY: "signals_redundantly">
+| <SPACE_ESC: "\\space">
+| <SPEC_BIGINT_MATH: "spec_bigint_math">
+| <SPEC_JAVA_MATH: "spec_java_math">
+| <SPEC_PACKAGE : "spec_package">
+| <SPEC_PRIVATE : "spec_private">
+| <SPEC_PROTECTED: "spec_protected">
+| <SPEC_PUBLIC: "spec_public">
+| <SPEC_SAFE_MATH: "spec_safe_math">
+| <STATIC_INITIALIZER: "static_initializer">
+| <STRICTLY_PURE : "strictly_pure">
+| <SUBTYPE: "<:">
+| <SUCH_THAT: "\\such_that">
+| <SUM: "\\sum">
+| <TYPE: "\\TYPE">
+| <TYPEOF: "\\typeof">
+| <UNINITIALIZED: "uninitialized">
+| <UNKNOWN_OP: "<#">
+| <UNKNOWN_OP_EQ: "<#=">
+| <UNREACHABLE: "unreachable">
+| <WARN: "\\warn">
+| <WARN_OP: "\\warn_op">
+| <WHEN: "when">
+| <WHEN_REDUNDANTLY: "when_redundantly">
+| <WORKING_SPACE_ESC: "\\working_space">
+| <WORKING_SPACE: "working_space">
+| <WORKING_SPACE_REDUNDANTLY: "working_space_redundantly">
+| <WRITABLE: "writable">
+| <LOCSET: "\\locset">
+| <EMPTYSET: "\\emptyset">
+| <SINGLETON: "\\singleton">  //KeY extension, not official JML
+| <STATIC_INVARIANT_FOR: "\\static_invariant_for">  //KeY extension, not official JML
+| <SETMINUS: "\\set_minus">  //KeY extension, not official JML
+| <ALLFIELDS: "\\all_fields">  //KeY extension, not official JML
+| <ALLOBJECTS: "\\all_objects">  //KeY extension, not official JML
+| <NEWELEMSFRESH: "\\new_elems_fresh">  //KeY extension, not official JML
+| <NEW_OBJECTS: "\\new_objects">  //KeY extension, not official JML
+| <DISJOINT: "\\disjoint">  //KeY extension, not official JML
+| <SUBSET: "\\subset">
+| <UNION: "\\set_union">  //KeY extension, not official JML
+| <INFINITE_UNION: "\\infinite_union">  //KeY extension, not official JML
+| <INTERSECT: "\\intersect">  //KeY extension, not official JML
 }
-
-/*
- * boolean
-     * byte
-     * char
-     * short
-     * int
-     * long
-     * \bigintv
-     * \seq
-     * \locset
-     * nullMod? id ('[]')
-"\\forall"
-  "\\exists"
-*/
 
 /* COMMENTS */
 MORE :
@@ -4396,9 +4534,10 @@ JmlClause contractClause():
 Behavior bbehavior():
 {}
 {
-    <BEHAVIOR> {return Behavior.BEHAVIOR;}
-  | <NORMAL_BEHAVIOR> {return Behavior.NORMAL;}
-  | <EXCEPTIONAL_BEHAVIOR> {return Behavior.EXCEPTIONAL;}
+    (<BEHAVIOUR>|<BEHAVIOR>) {return Behavior.BEHAVIOR;}
+  | (<NORMAL_BEHAVIOR>|<NORMAL_BEHAVIOUR>) {return Behavior.NORMAL;}
+  | (<EXCEPTIONAL_BEHAVIOR>|<EXCEPTIONAL_BEHAVIOUR>) {return Behavior.EXCEPTIONAL;}
+  | (<ABRUPT_BEHAVIOR>|<ABRUPT_BEHAVIOUR>) {return Behavior.BREAK;}
   | <BREAK_BEHAVIOR> {return Behavior.BREAK;}
   | <CONTINUE_BEHAVIOR> {return Behavior.CONTINUE;}
   | <RETURN_BEHAVIOR> {return Behavior.RETURN;}
@@ -4576,10 +4715,98 @@ JmlClause diverges():
   Expression e;
 }
 {
+  (<DIVERGES>|<DIVERGES_REDUNDANTLY> )
   {begin=token();}
-  <DIVERGES> e=Expression()
+  e=Expression()
   { return new DivergesClause(range(begin, token()), e); }
 }
+
+NodeList<LocationSetExpression> StoreRefList():
+{ NodeList<LocationSetExpression> ret = new NodeList<>();
+  LocationSetExpression expr; }
+{
+  expr=StoreRef() {ret.add(expr);} (<COMMA> StoreRef() {ret.add(expr);})*
+  {return ret;}
+}
+
+LocationSetExpression StoreRef():
+{ LocationSetExpression ret;}
+{
+    ( <NOTHING>          {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.NOTHING);}
+    | <EVERYTHING>       {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.EVERYTHING);}
+    | <NOT_SPECIFIED>    {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.NOT_SPECIFIED);}
+    | <STRICTLY_NOTHING> {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.STRICTLY_NOTHING);}
+    | ret=StoreRefExpr() {return ret;}
+    )
+}
+
+
+
+
+LocationSetExpression StoreRefExpr():
+{
+        JavaToken begin;
+        Token tok;
+        NodeList<Expression> arrayIndices = new NodeList<>();
+        NodeList<LocationSetExpression> refs = new NodeList<>();
+        LocationSetExpression expr;
+        Expression predicate = null;
+        VariableDeclarationExpr vars;
+}
+{
+  (<LOCSET> | <SINGLETON>) {begin=token();} <LPAREN> arrayIndices=ExpressionList() <RPAREN>
+  {
+    return new LocationSetLiftExpression(range(begin, token()), arrayIndices);
+  }
+  | <EMPTYSET> {begin=token();}
+  {
+    return new LocationSetPrimary(range(begin, token()),
+                    LocationSetPrimary.Kind.EMPTYSET);
+  }
+  | ( <UNION>    | <INTERSECT> | <SETMINUS> | <ALLFIELDS> | <ALLOBJECTS>
+    | <DISJOINT> | <SUBSET>    | <NEWELEMSFRESH>)
+    {begin=token();}
+    <LPAREN> refs=StoreRefList() <RPAREN>
+    {
+        return new LocationSetPrimary(range(begin, token()),
+                    LocationSetPrimary.Kind.EMPTYSET);
+    }
+  | <LPAREN> {begin=token();} <INFINITE_UNION>
+    vars=VariableDeclarationExpression()  ";"
+    (predicate=Expression() ";" | ";")?
+    expr=StoreRefExpr()
+    <RPAREN>
+    {
+        return new LocationSetBindingExpr(range(begin, token()),
+            LocationSetBindingExpr.Quantifier.INFINITE_UNION,
+            vars, predicate, expr);
+    }
+  | expr=StoreRefField() {return expr;}
+}
+
+LocationSetExpression StoreRefField():
+{
+        JavaToken begin;
+        LocationSetExpression prefix; Name name;
+        Expression expr;
+}
+{
+  name = Name() { prefix=LocationSetFieldAccess.fromQualifiedName(null, name);}
+  ( "." "*" { return LocationSetFieldAccess.forAllFields(range(name, token()), prefix); }
+  | ("[" ( expr=Expression() {prefix = new LocationSetArrayAccess(range(prefix, token()), prefix, expr);}
+         | "*" {prefix = LocationSetArrayAccess.forAllIndices(range(prefix, token()), prefix);}) "]"
+    )+
+  | name=Name() {prefix = LocationSetFieldAccess.fromQualifiedName(prefix, name); }
+  )?
+  {return prefix;}
+}
+
+
+//predornot:} (predicate |NOT_SPECIFIED | SAME);
+//predicate: expression;
+
+
+
 
 
 /*JmlClause determs():

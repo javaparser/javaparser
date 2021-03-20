@@ -26,6 +26,8 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -322,4 +324,16 @@ public interface GenericVisitor<R, A> {
     R visit(JmlContracts n, A arg);
 
     R visit(JmlStatements n, A arg);
+
+    R visit(LocationSetArrayAccess n, A arg);
+
+    R visit(LocationSetBindingExpr n, A arg);
+
+    R visit(LocationSetFieldAccess n, A arg);
+
+    R visit(LocationSetFunction n, A arg);
+
+    R visit(LocationSetLiftExpression n, A arg);
+
+    R visit(LocationSetPrimary n, A arg);
 }
