@@ -21,16 +21,6 @@
 
 package com.github.javaparser.resolution.types;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -42,6 +32,16 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -473,8 +473,8 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                 ResolvedType thisParam = typeParametersValues.get(i);
                 ResolvedType otherParam = other.typeParametersValues().get(i);
                 if (!thisParam.equals(otherParam)) {
-                    if (thisParam instanceof ResolvedWildcard) {
-                        ResolvedWildcard thisParamAsWildcard = (ResolvedWildcard) thisParam;
+                    if (thisParam.isWildcard()) {
+                        ResolvedWildcard thisParamAsWildcard = thisParam.asWildcard();
                         if (thisParamAsWildcard.isSuper() && otherParam.isAssignableBy(thisParamAsWildcard.getBoundedType())) {
                             // ok
                         } else if (thisParamAsWildcard.isExtends() && thisParamAsWildcard.getBoundedType().isAssignableBy(otherParam)) {
@@ -485,7 +485,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                             return false;
                         }
                     } else {
-                        if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
+                        if (thisParam.isTypeVariable() && otherParam.isTypeVariable()) {
                             List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds()
                                     .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
                                     .collect(Collectors.toList());
@@ -493,10 +493,10 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                                     .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
                                     .collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
-                        } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
-                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable)otherParam);
-                        } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
-                            return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
+                        } else if (!(thisParam.isTypeVariable()) && otherParam.isTypeVariable()) {
+                            return compareConsideringVariableTypeParameters(thisParam, otherParam.asTypeVariable());
+                        } else if (thisParam.isTypeVariable() && !(otherParam.isTypeVariable())) {
+                            return compareConsideringVariableTypeParameters(otherParam, thisParam.asTypeVariable());
                         }
                         return false;
                     }
