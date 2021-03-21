@@ -34,7 +34,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -299,7 +298,7 @@ public class JavaParserFacade {
                                 List<LambdaArgumentTypePlaceholder> placeholders) {
         int i = 0;
         for (Expression parameterValue : args) {
-            if (parameterValue instanceof LambdaExpr || parameterValue instanceof MethodReferenceExpr) {
+            if (parameterValue.isLambdaExpr() || parameterValue.isMethodReferenceExpr()) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
                 argumentTypes.add(placeholder);
                 placeholders.add(placeholder);
