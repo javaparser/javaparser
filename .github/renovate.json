@@ -12,5 +12,6 @@
   "prHourlyLimit": 0,
   "semanticCommits": true,
   "dependencyDashboard": true,
-  "configWarningReuseIssue": false
+  "configWarningReuseIssue": false,
+  "labels": ["dependencies"]
 }

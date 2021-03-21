@@ -28,7 +28,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtField;
-import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
@@ -49,13 +48,13 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public ResolvedType getType() {
         try {
-            if (ctField.getGenericSignature() != null && declaringType() instanceof ResolvedTypeParametrizable) {
-                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toFieldSignature(ctField.getGenericSignature());
-                return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
-            } else {
-                return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
+            String signature = ctField.getGenericSignature();
+            if (signature == null) {
+                signature = ctField.getSignature();
             }
-        } catch (NotFoundException | BadBytecode e) {
+            SignatureAttribute.Type genericSignatureType = SignatureAttribute.toTypeSignature(signature);
+            return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
