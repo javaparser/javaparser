@@ -40,15 +40,11 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.VarType;
-import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
@@ -59,7 +55,6 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
@@ -73,7 +68,6 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
@@ -390,7 +384,7 @@ public class JavaParserFacade {
                 NameExpr nameExpr = (NameExpr) node;
                 SymbolReference<ResolvedTypeDeclaration> typeDeclaration = JavaParserFactory.getContext(node, typeSolver)
                         .solveType(nameExpr.getNameAsString());
-                if (typeDeclaration.isSolved() && typeDeclaration.getCorrespondingDeclaration() instanceof ResolvedReferenceTypeDeclaration) {
+                if (typeDeclaration.isSolved() && typeDeclaration.getCorrespondingDeclaration().isType()) {
                     ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = (ResolvedReferenceTypeDeclaration) typeDeclaration.getCorrespondingDeclaration();
                     return ReferenceTypeImpl.undeterminedParameters(resolvedReferenceTypeDeclaration, typeSolver);
                 }
@@ -461,7 +455,7 @@ public class JavaParserFacade {
                 .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
                 .getAllMethods();
 
-        if (scope instanceof TypeExpr) {
+        if (scope.isTypeExpr()) {
             // static methods should match all params
             List<MethodUsage> staticMethodUsages = allMethods.stream()
                     .filter(it -> it.getDeclaration().isStatic())
@@ -678,8 +672,8 @@ public class JavaParserFacade {
         if (context == null) {
             throw new NullPointerException("Context should not be null");
         }
-        if (type instanceof ClassOrInterfaceType) {
-            ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
+        if (type.isClassOrInterfaceType()) {
+            ClassOrInterfaceType classOrInterfaceType = type.asClassOrInterfaceType();
             String name = qName(classOrInterfaceType);
             SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
             if (!ref.isSolved()) {
@@ -693,19 +687,14 @@ public class JavaParserFacade {
                                 .collect(Collectors.toList());
             }
             if (typeDeclaration.isTypeParameter()) {
-                if (typeDeclaration instanceof ResolvedTypeParameterDeclaration) {
-                    return new ResolvedTypeVariable((ResolvedTypeParameterDeclaration) typeDeclaration);
-                } else {
-                    JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) typeDeclaration;
-                    return new ResolvedTypeVariable(javaParserTypeVariableDeclaration.asTypeParameter());
-                }
+                return new ResolvedTypeVariable(typeDeclaration.asTypeParameter());
             } else {
                 return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters, typeSolver);
             }
-        } else if (type instanceof PrimitiveType) {
-            return ResolvedPrimitiveType.byName(((PrimitiveType) type).getType().name());
-        } else if (type instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType) type;
+        } else if (type.isPrimitiveType()) {
+            return ResolvedPrimitiveType.byName(type.asPrimitiveType().getType().name());
+        } else if (type.isWildcardType()) {
+            WildcardType wildcardType = type.asWildcardType();
             if (wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
                 return ResolvedWildcard.extendsBound(convertToUsage(wildcardType.getExtendedType().get(), context)); // removed (ReferenceTypeImpl)
             } else if (!wildcardType.getExtendedType().isPresent() && wildcardType.getSuperType().isPresent()) {
@@ -715,15 +704,15 @@ public class JavaParserFacade {
             } else {
                 throw new UnsupportedOperationException(wildcardType.toString());
             }
-        } else if (type instanceof VoidType) {
+        } else if (type.isVoidType()) {
             return ResolvedVoidType.INSTANCE;
-        } else if (type instanceof ArrayType) {
-            ArrayType jpArrayType = (ArrayType) type;
+        } else if (type.isArrayType()) {
+            ArrayType jpArrayType = type.asArrayType();
             return new ResolvedArrayType(convertToUsage(jpArrayType.getComponentType(), context));
-        } else if (type instanceof UnionType) {
-            UnionType unionType = (UnionType) type;
+        } else if (type.isUnionType()) {
+            UnionType unionType = type.asUnionType();
             return new ResolvedUnionType(unionType.getElements().stream().map(el -> convertToUsage(el, context)).collect(Collectors.toList()));
-        } else if (type instanceof VarType) {
+        } else if (type.isVarType()) {
             Node parent = type.getParentNode().get();
             if (!(parent instanceof VariableDeclarator)) {
                 throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
