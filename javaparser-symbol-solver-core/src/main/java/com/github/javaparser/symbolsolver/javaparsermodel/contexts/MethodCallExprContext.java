@@ -21,17 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -39,12 +30,10 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -56,6 +45,14 @@ import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -97,8 +94,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
             // Consider static method calls
-            if (scope instanceof NameExpr) {
-                String className = ((NameExpr) scope).getName().getId();
+            if (scope.isNameExpr()) {
+                String className = scope.asNameExpr().getName().getId();
                 SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
                 if (ref.isSolved()) {
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
@@ -456,12 +453,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
-        if (type instanceof ResolvedReferenceType) {
-            return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedTypeVariable) {
-            return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedWildcard) {
-            ResolvedWildcard wildcardUsage = (ResolvedWildcard) type;
+        if (type.isReferenceType()) {
+            return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext);
+        } else if (type.isTypeVariable()) {
+            return solveMethodAsUsage(type.asTypeVariable(), name, argumentsTypes, invokationContext);
+        } else if (type.isWildcard()) {
+            ResolvedWildcard wildcardUsage = type.asWildcard();
             if (wildcardUsage.isSuper()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else if (wildcardUsage.isExtends()) {
@@ -469,13 +466,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else {
                 return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, invokationContext);
             }
-        } else if (type instanceof ResolvedLambdaConstraintType){
-            ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
+        } else if (type.isConstraint()){
+            ResolvedLambdaConstraintType constraintType = type.asConstraintType();
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedArrayType) {
+        } else if (type.isArray()) {
             // An array inherits methods from Object not from it's component type
             return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedUnionType) {
+        } else if (type.isUnionType()) {
             Optional<ResolvedReferenceType> commonAncestor = type.asUnionType().getCommonAncestor();
             if (commonAncestor.isPresent()) {
                 return solveMethodAsUsage(commonAncestor.get(), name, argumentsTypes, invokationContext);
