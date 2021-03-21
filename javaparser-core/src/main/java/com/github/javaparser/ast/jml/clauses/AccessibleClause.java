@@ -7,13 +7,17 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.locref.LocationSetExpression;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.AccessibleClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -23,15 +27,16 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
 
     private NodeList<SimpleName> heaps;
 
-    private NodeList<Expression> exprs;
+    private NodeList<LocationSetExpression> exprs;
 
+    @OptionalProperty
     private Expression measuredBy;
 
     public AccessibleClause() {
     }
 
     @AllFieldsConstructor
-    public AccessibleClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
+    public AccessibleClause(NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs, Expression measuredBy) {
         super();
         setHeaps(heaps);
         setExprs(exprs);
@@ -42,7 +47,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AccessibleClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
+    public AccessibleClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs, Expression measuredBy) {
         super(tokenRange);
         setHeaps(heaps);
         setExprs(exprs);
@@ -67,6 +72,12 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
                 return true;
             }
         }
+        if (measuredBy != null) {
+            if (node == measuredBy) {
+                removeMeasuredBy();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -77,7 +88,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
             return false;
         for (int i = 0; i < exprs.size(); i++) {
             if (exprs.get(i) == node) {
-                exprs.set(i, (Expression) replacementNode);
+                exprs.set(i, (LocationSetExpression) replacementNode);
                 return true;
             }
         }
@@ -87,9 +98,11 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
                 return true;
             }
         }
-        if (node == measuredBy) {
-            setMeasuredBy((Expression) replacementNode);
-            return true;
+        if (measuredBy != null) {
+            if (node == measuredBy) {
+                setMeasuredBy((Expression) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -128,12 +141,12 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExprs() {
+    public NodeList<LocationSetExpression> getExprs() {
         return exprs;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AccessibleClause setExprs(final NodeList<Expression> exprs) {
+    public AccessibleClause setExprs(final NodeList<LocationSetExpression> exprs) {
         assertNotNull(exprs);
         if (exprs == this.exprs) {
             return this;
@@ -166,13 +179,12 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getMeasuredBy() {
-        return measuredBy;
+    public Optional<Expression> getMeasuredBy() {
+        return Optional.ofNullable(measuredBy);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AccessibleClause setMeasuredBy(final Expression measuredBy) {
-        assertNotNull(measuredBy);
         if (measuredBy == this.measuredBy) {
             return this;
         }
@@ -182,5 +194,10 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
         this.measuredBy = measuredBy;
         setAsParentNodeOf(measuredBy);
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public AccessibleClause removeMeasuredBy() {
+        return setMeasuredBy(null);
     }
 }

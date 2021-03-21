@@ -27,7 +27,7 @@ public class BreaksClause extends JmlClause {
     @AllFieldsConstructor
     public BreaksClause(SimpleName label, Expression expr) {
         this(null, label, expr);
-        setKind(Kind.BREAKS);
+        setKind(JmlClauseKind.BREAKS);
     }
 
     /**
@@ -42,7 +42,7 @@ public class BreaksClause extends JmlClause {
     }
 
     public BreaksClause() {
-        setKind(Kind.BREAKS);
+        setKind(JmlClauseKind.BREAKS);
     }
 
     @Override

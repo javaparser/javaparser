@@ -25,10 +25,13 @@ public class RequiresClause extends JmlClause implements MethodContractable, Blo
 
     private Expression e;
 
+    {
+        setKind(JmlClauseKind.REQUIRES);
+    }
+
     @AllFieldsConstructor
     public RequiresClause(NodeList<SimpleName> heaps, Expression e) {
         this(null, heaps, e);
-        setKind(Kind.REQUIRES);
     }
 
     /**

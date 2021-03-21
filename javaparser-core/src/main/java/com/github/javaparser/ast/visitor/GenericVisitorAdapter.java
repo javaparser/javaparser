@@ -2038,7 +2038,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlBindingExpr n, final A arg) {
+    public R visit(final JmlQuantifiedExpr n, final A arg) {
         R result;
         {
             result = n.getExpressions().accept(this, arg);
@@ -2070,8 +2070,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        {
-            result = n.getMeasuredBy().accept(this, arg);
+        if (n.getMeasuredBy().isPresent()) {
+            result = n.getMeasuredBy().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2173,22 +2173,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlAssertStmt n, final A arg) {
-        R result;
-        {
-            result = n.getExpression().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlAssumeStmt n, final A arg) {
+    public R visit(final JmlStmtWithExpression n, final A arg) {
         R result;
         {
             result = n.getExpression().accept(this, arg);
@@ -2256,7 +2241,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlSetStmt n, final A arg) {
         R result;
         {
-            result = n.getAssignment().accept(this, arg);
+            result = n.getLhs().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getRhs().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2468,16 +2458,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlDebugStmt n, final A arg) {
-        R result;
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            return result;
-        }
-        return null;
-    }
-
-    @Override
     public R visit(final JmlFunction n, final A arg) {
         R result;
         {
@@ -2490,16 +2470,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlHenceByStmt n, final A arg) {
-        R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2676,7 +2646,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
-            result = n.getModifier().accept(this, arg);
+            result = n.getModifiers().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2810,8 +2780,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        {
-            result = n.getScope().accept(this, arg);
+        if (n.getScope().isPresent()) {
+            result = n.getScope().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2855,6 +2825,26 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final LocationSetPrimary n, final A arg) {
         R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlSetComprehension n, final A arg) {
+        R result;
+        {
+            result = n.getBinding().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getPredicate().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;

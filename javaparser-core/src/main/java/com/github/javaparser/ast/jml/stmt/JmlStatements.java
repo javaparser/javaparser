@@ -3,6 +3,7 @@ package com.github.javaparser.ast.jml.stmt;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.JmlContainer;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -18,7 +19,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (3/18/21)
  */
-public class JmlStatements extends Statement implements Jmlish {
+public class JmlStatements extends Statement implements Jmlish, JmlContainer<JmlStatements, JmlStatement> {
 
     private boolean singleLine;
 
@@ -26,8 +27,12 @@ public class JmlStatements extends Statement implements Jmlish {
 
     private NodeList<JmlStatement> elements;
 
+    public JmlStatements() {
+        this(null);
+    }
+
     public JmlStatements(TokenRange tokenRange) {
-        super(tokenRange);
+        this(tokenRange, true, new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor

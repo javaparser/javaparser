@@ -880,17 +880,17 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlBindingExpr asJmlBindingExpr() {
+    public JmlQuantifiedExpr asJmlBindingExpr() {
         throw new IllegalStateException(f("%s is not JmlBindingExpr, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlBindingExpr> toJmlBindingExpr() {
+    public Optional<JmlQuantifiedExpr> toJmlBindingExpr() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlBindingExpr(Consumer<JmlBindingExpr> action) {
+    public void ifJmlBindingExpr(Consumer<JmlQuantifiedExpr> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -967,5 +967,43 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlMultiCompareExpr(Consumer<JmlMultiCompareExpr> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlQuantifiedExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlQuantifiedExpr asJmlQuantifiedExpr() {
+        throw new IllegalStateException(f("%s is not JmlQuantifiedExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlQuantifiedExpr> toJmlQuantifiedExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlQuantifiedExpr(Consumer<JmlQuantifiedExpr> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlSetComprehension() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlSetComprehension asJmlSetComprehension() {
+        throw new IllegalStateException(f("%s is not JmlSetComprehension, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlSetComprehension> toJmlSetComprehension() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlSetComprehension(Consumer<JmlSetComprehension> action) {
     }
 }

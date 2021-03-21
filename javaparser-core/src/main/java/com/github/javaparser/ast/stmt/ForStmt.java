@@ -25,7 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.jml.clauses.JmlContract;
+import com.github.javaparser.ast.jml.clauses.JmlContracts;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
@@ -69,7 +69,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
-    private NodeList<JmlContract> contracts;
+    private NodeList<JmlContracts> contracts;
 
     private NodeList<Expression> initialization;
 
@@ -89,7 +89,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     }
 
     @AllFieldsConstructor
-    public ForStmt(final NodeList<Expression> initialization, final Expression compare, final NodeList<Expression> update, final Statement body, final NodeList<JmlContract> contracts) {
+    public ForStmt(final NodeList<Expression> initialization, final Expression compare, final NodeList<Expression> update, final Statement body, final NodeList<JmlContracts> contracts) {
         this(null, initialization, compare, update, body, contracts);
     }
 
@@ -101,7 +101,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body, NodeList<JmlContract> contracts) {
+    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body, NodeList<JmlContracts> contracts) {
         super(tokenRange);
         setInitialization(initialization);
         setCompare(compare);
@@ -270,7 +270,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         }
         for (int i = 0; i < contracts.size(); i++) {
             if (contracts.get(i) == node) {
-                contracts.set(i, (JmlContract) replacementNode);
+                contracts.set(i, (JmlContracts) replacementNode);
                 return true;
             }
         }
@@ -314,12 +314,12 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> getContracts() {
+    public NodeList<JmlContracts> getContracts() {
         return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForStmt setContracts(final NodeList<JmlContract> contracts) {
+    public ForStmt setContracts(final NodeList<JmlContracts> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;

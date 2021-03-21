@@ -25,13 +25,13 @@ public class ContinuesClause extends JmlClause {
     private Expression expr;
 
     public ContinuesClause() {
-        setKind(Kind.CONTINUES);
+        setKind(JmlClauseKind.CONTINUES);
     }
 
     @AllFieldsConstructor
     public ContinuesClause(SimpleName label, Expression expr) {
         this(null, label, expr);
-        setKind(Kind.CONTINUES);
+        setKind(JmlClauseKind.CONTINUES);
     }
 
     /**

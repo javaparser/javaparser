@@ -37,14 +37,11 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
-
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.locref.*;
 
@@ -177,7 +174,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final BlockStmt n, final A arg) {
-        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = modifyList(n.getContracts(), arg);
         NodeList<Statement> statements = modifyList(n.getStatements(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setContracts(contracts);
@@ -319,7 +316,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ConstructorDeclaration n, final A arg) {
         BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
-        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = modifyList(n.getContracts(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
@@ -356,7 +353,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final DoStmt n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
         Expression condition = (Expression) n.getCondition().accept(this, arg);
-        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = modifyList(n.getContracts(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (body == null || condition == null)
             return null;
@@ -487,7 +484,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ForEachStmt n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
-        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = modifyList(n.getContracts(), arg);
         Expression iterable = (Expression) n.getIterable().accept(this, arg);
         VariableDeclarationExpr variable = (VariableDeclarationExpr) n.getVariable().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -505,7 +502,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final ForStmt n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
         Expression compare = n.getCompare().map(s -> (Expression) s.accept(this, arg)).orElse(null);
-        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = modifyList(n.getContracts(), arg);
         NodeList<Expression> initialization = modifyList(n.getInitialization(), arg);
         NodeList<Expression> update = modifyList(n.getUpdate(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -642,7 +639,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final MethodDeclaration n, final A arg) {
         BlockStmt body = n.getBody().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
         Type type = (Type) n.getType().accept(this, arg);
-        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = modifyList(n.getContracts(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
@@ -1025,7 +1022,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final WhileStmt n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
         Expression condition = (Expression) n.getCondition().accept(this, arg);
-        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = modifyList(n.getContracts(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (body == null || condition == null)
             return null;
@@ -1300,12 +1297,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final AccessibleClause n, final A arg) {
-        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
+        NodeList<LocationSetExpression> exprs = modifyList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
-        Expression measuredBy = (Expression) n.getMeasuredBy().accept(this, arg);
+        Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (measuredBy == null)
-            return null;
         n.setExprs(exprs);
         n.setHeaps(heaps);
         n.setMeasuredBy(measuredBy);
@@ -1315,7 +1310,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final AssignableClause n, final A arg) {
-        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
+        NodeList<LocationSetExpression> exprs = modifyList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setExprs(exprs);
@@ -1371,7 +1366,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlAssertStmt n, final A arg) {
+    public Visitable visit(final JmlStmtWithExpression n, final A arg) {
         Expression expression = (Expression) n.getExpression().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expression == null)
@@ -1382,18 +1377,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlAssumeStmt n, final A arg) {
-        Expression expression = (Expression) n.getExpression().accept(this, arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expression == null)
-            return null;
-        n.setExpression(expression);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
-    public Visitable visit(final JmlBindingExpr n, final A arg) {
+    public Visitable visit(final JmlQuantifiedExpr n, final A arg) {
         NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
         NodeList<VariableDeclarator> variables = modifyList(n.getVariables(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1440,11 +1424,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlSetStmt n, final A arg) {
-        AssignExpr assignment = (AssignExpr) n.getAssignment().accept(this, arg);
+        Expression lhs = (Expression) n.getLhs().accept(this, arg);
+        Expression rhs = (Expression) n.getRhs().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (assignment == null)
+        if (lhs == null || rhs == null)
             return null;
-        n.setAssignment(assignment);
+        n.setLhs(lhs);
+        n.setRhs(rhs);
         n.setComment(comment);
         return n;
     }
@@ -1487,7 +1473,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final ModifiesClause n, final A arg) {
-        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
+        NodeList<LocationSetExpression> exprs = modifyList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setExprs(exprs);
@@ -1582,13 +1568,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlDebugStmt n, final A arg) {
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final JmlFunction n, final A arg) {
         NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
         JmlName functionName = (JmlName) n.getFunctionName().accept(this, arg);
@@ -1597,13 +1576,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return null;
         n.setArguments(arguments);
         n.setFunctionName(functionName);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
-    public Visitable visit(final JmlHenceByStmt n, final A arg) {
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }
@@ -1712,13 +1684,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlContract n, final A arg) {
         NodeList<JmlClause> clauses = modifyList(n.getClauses(), arg);
-        Modifier modifier = (Modifier) n.getModifier().accept(this, arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<JmlContract> subContracts = modifyList(n.getSubContracts(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (modifier == null)
-            return null;
         n.setClauses(clauses);
-        n.setModifier(modifier);
+        n.setModifiers(modifiers);
         n.setSubContracts(subContracts);
         n.setComment(comment);
         return n;
@@ -1790,9 +1760,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final LocationSetFieldAccess n, final A arg) {
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
-        LocationSetExpression scope = (LocationSetExpression) n.getScope().accept(this, arg);
+        LocationSetExpression scope = n.getScope().map(s -> (LocationSetExpression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (name == null || scope == null)
+        if (name == null)
             return null;
         n.setName(name);
         n.setScope(scope);
@@ -1821,6 +1791,19 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final LocationSetPrimary n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlSetComprehension n, final A arg) {
+        VariableDeclarator binding = (VariableDeclarator) n.getBinding().accept(this, arg);
+        Expression predicate = (Expression) n.getPredicate().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (binding == null || predicate == null)
+            return null;
+        n.setBinding(binding);
+        n.setPredicate(predicate);
         n.setComment(comment);
         return n;
     }

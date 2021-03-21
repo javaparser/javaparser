@@ -25,10 +25,13 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
 
     private Expression expr;
 
+    {
+        setKind(JmlClauseKind.ENSURES);
+    }
+
     @AllFieldsConstructor
     public EnsuresClause(NodeList<SimpleName> heaps, Expression expr) {
         this(null, heaps, expr);
-        setKind(Kind.ENSURES);
     }
 
     /**

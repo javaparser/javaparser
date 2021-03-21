@@ -24,7 +24,7 @@ public class WhenClause extends JmlClause implements MethodContractable {
     @AllFieldsConstructor
     public WhenClause(Expression expr) {
         this(null, expr);
-        setKind(Kind.DURATION);
+        setKind(JmlClauseKind.DURATION);
     }
 
     /**

@@ -19,7 +19,7 @@ public class DurationClause extends JmlClause implements MethodContractable {
     @AllFieldsConstructor
     public DurationClause() {
         this(null);
-        setKind(Kind.DURATION);
+        setKind(JmlClauseKind.DURATION);
     }
 
     /**

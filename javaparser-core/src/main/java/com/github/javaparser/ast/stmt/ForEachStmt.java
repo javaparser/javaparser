@@ -23,7 +23,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.jml.clauses.JmlContract;
+import com.github.javaparser.ast.jml.clauses.JmlContracts;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -47,7 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> {
 
-    private NodeList<JmlContract> contracts;
+    private NodeList<JmlContracts> contracts;
 
     private VariableDeclarationExpr variable;
 
@@ -64,7 +64,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     @AllFieldsConstructor
-    public ForEachStmt(final VariableDeclarationExpr variable, final Expression iterable, final Statement body, final NodeList<JmlContract> contracts) {
+    public ForEachStmt(final VariableDeclarationExpr variable, final Expression iterable, final Statement body, final NodeList<JmlContracts> contracts) {
         this(null, variable, iterable, body, contracts);
     }
 
@@ -72,7 +72,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body, NodeList<JmlContract> contracts) {
+    public ForEachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body, NodeList<JmlContracts> contracts) {
         super(tokenRange);
         setVariable(variable);
         setIterable(iterable);
@@ -214,7 +214,7 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
         }
         for (int i = 0; i < contracts.size(); i++) {
             if (contracts.get(i) == node) {
-                contracts.set(i, (JmlContract) replacementNode);
+                contracts.set(i, (JmlContracts) replacementNode);
                 return true;
             }
         }
@@ -272,12 +272,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> getContracts() {
+    public NodeList<JmlContracts> getContracts() {
         return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ForEachStmt setContracts(final NodeList<JmlContract> contracts) {
+    public ForEachStmt setContracts(final NodeList<JmlContracts> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;

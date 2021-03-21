@@ -736,7 +736,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final AccessibleClause n, final A arg) {
         n.getExprs().forEach(p -> p.accept(this, arg));
         n.getHeaps().forEach(p -> p.accept(this, arg));
-        n.getMeasuredBy().accept(this, arg);
+        n.getMeasuredBy().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -774,19 +774,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlAssertStmt n, final A arg) {
+    public void visit(final JmlStmtWithExpression n, final A arg) {
         n.getExpression().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
-    public void visit(final JmlAssumeStmt n, final A arg) {
-        n.getExpression().accept(this, arg);
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final JmlBindingExpr n, final A arg) {
+    public void visit(final JmlQuantifiedExpr n, final A arg) {
         n.getExpressions().forEach(p -> p.accept(this, arg));
         n.getVariables().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -813,7 +807,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlSetStmt n, final A arg) {
-        n.getAssignment().accept(this, arg);
+        n.getLhs().accept(this, arg);
+        n.getRhs().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -900,19 +895,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlDebugStmt n, final A arg) {
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
     public void visit(final JmlFunction n, final A arg) {
         n.getArguments().forEach(p -> p.accept(this, arg));
         n.getFunctionName().accept(this, arg);
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final JmlHenceByStmt n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -978,7 +963,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlContract n, final A arg) {
         n.getClauses().forEach(p -> p.accept(this, arg));
-        n.getModifier().accept(this, arg);
+        n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getSubContracts().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -1023,7 +1008,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final LocationSetFieldAccess n, final A arg) {
         n.getName().accept(this, arg);
-        n.getScope().accept(this, arg);
+        n.getScope().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -1041,6 +1026,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final LocationSetPrimary n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlSetComprehension n, final A arg) {
+        n.getBinding().accept(this, arg);
+        n.getPredicate().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

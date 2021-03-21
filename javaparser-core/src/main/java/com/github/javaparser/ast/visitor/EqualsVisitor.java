@@ -35,10 +35,8 @@ import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.List;
 import java.util.Optional;
-
 import com.github.javaparser.ast.jml.locref.*;
 
 /**
@@ -1254,24 +1252,18 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JmlAssertStmt n, final Visitable arg) {
-        final JmlAssertStmt n2 = (JmlAssertStmt) arg;
+    public Boolean visit(final JmlStmtWithExpression n, final Visitable arg) {
+        final JmlStmtWithExpression n2 = (JmlStmtWithExpression) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
+            return false;
+        if (!objEquals(n.getKind(), n2.getKind()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
     @Override
-    public Boolean visit(final JmlAssumeStmt n, final Visitable arg) {
-        final JmlAssumeStmt n2 = (JmlAssumeStmt) arg;
-        if (!nodeEquals(n.getExpression(), n2.getExpression()))
-            return false;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
-    public Boolean visit(final JmlBindingExpr n, final Visitable arg) {
-        final JmlBindingExpr n2 = (JmlBindingExpr) arg;
+    public Boolean visit(final JmlQuantifiedExpr n, final Visitable arg) {
+        final JmlQuantifiedExpr n2 = (JmlQuantifiedExpr) arg;
         if (!objEquals(n.getBinder(), n2.getBinder()))
             return false;
         if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
@@ -1312,7 +1304,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlSetStmt n, final Visitable arg) {
         final JmlSetStmt n2 = (JmlSetStmt) arg;
-        if (!nodeEquals(n.getAssignment(), n2.getAssignment()))
+        if (!nodeEquals(n.getLhs(), n2.getLhs()))
+            return false;
+        if (!nodeEquals(n.getRhs(), n2.getRhs()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
@@ -1452,24 +1446,12 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JmlDebugStmt n, final Visitable arg) {
-        final JmlDebugStmt n2 = (JmlDebugStmt) arg;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
     public Boolean visit(final JmlFunction n, final Visitable arg) {
         final JmlFunction n2 = (JmlFunction) arg;
         if (!nodesEquals(n.getArguments(), n2.getArguments()))
             return false;
         if (!nodeEquals(n.getFunctionName(), n2.getFunctionName()))
             return false;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
-    public Boolean visit(final JmlHenceByStmt n, final Visitable arg) {
-        final JmlHenceByStmt n2 = (JmlHenceByStmt) arg;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1570,7 +1552,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodesEquals(n.getClauses(), n2.getClauses()))
             return false;
-        if (!nodeEquals(n.getModifier(), n2.getModifier()))
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
         if (!nodesEquals(n.getSubContracts(), n2.getSubContracts()))
             return false;
@@ -1671,6 +1653,16 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final LocationSetPrimary n, final Visitable arg) {
         final LocationSetPrimary n2 = (LocationSetPrimary) arg;
         if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlSetComprehension n, final Visitable arg) {
+        final JmlSetComprehension n2 = (JmlSetComprehension) arg;
+        if (!nodeEquals(n.getBinding(), n2.getBinding()))
+            return false;
+        if (!nodeEquals(n.getPredicate(), n2.getPredicate()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }

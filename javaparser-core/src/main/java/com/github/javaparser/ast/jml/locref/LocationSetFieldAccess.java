@@ -7,12 +7,17 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LocationSetFieldAccessMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.OptionalProperty;
+
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -20,6 +25,7 @@ import com.github.javaparser.ast.Generated;
  */
 public class LocationSetFieldAccess extends LocationSetExpression {
 
+    @OptionalProperty
     private LocationSetExpression scope;
 
     private SimpleName name;
@@ -45,9 +51,14 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     }
 
     public static LocationSetExpression fromQualifiedName(LocationSetExpression prefix, Name name) {
-        LocationSetExpression cur = prefix;
-        //TODO weigl
-        return cur;
+        return getPrefixWith(name, prefix);
+    }
+
+    private static LocationSetExpression getPrefixWith(Name name, LocationSetExpression prefix) {
+        if (name.getQualifier().isPresent()) {
+            prefix = getPrefixWith(name.getQualifier().get(), prefix);
+        }
+        return new LocationSetFieldAccess(prefix, new SimpleName(name.getIdentifier()));
     }
 
     public static LocationSetExpression forAllFields(TokenRange range, LocationSetExpression prefix) {
@@ -86,13 +97,12 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetExpression getScope() {
-        return scope;
+    public Optional<LocationSetExpression> getScope() {
+        return Optional.ofNullable(scope);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LocationSetFieldAccess setScope(final LocationSetExpression scope) {
-        assertNotNull(scope);
         if (scope == this.scope) {
             return this;
         }
@@ -109,6 +119,12 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (scope != null) {
+            if (node == scope) {
+                removeScope();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -121,9 +137,11 @@ public class LocationSetFieldAccess extends LocationSetExpression {
             setName((SimpleName) replacementNode);
             return true;
         }
-        if (node == scope) {
-            setScope((LocationSetExpression) replacementNode);
-            return true;
+        if (scope != null) {
+            if (node == scope) {
+                setScope((LocationSetExpression) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -138,5 +156,10 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LocationSetFieldAccessMetaModel getMetaModel() {
         return JavaParserMetaModel.locationSetFieldAccessMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public LocationSetFieldAccess removeScope() {
+        return setScope(null);
     }
 }

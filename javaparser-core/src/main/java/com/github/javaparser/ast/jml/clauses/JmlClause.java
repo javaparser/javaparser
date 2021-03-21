@@ -19,62 +19,14 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public abstract class JmlClause extends Node implements Jmlish {
 
-    public enum Kind {
-
-        ENSURES,
-        ENSURES_FREE,
-        ENSURES_REDUNDANTLY,
-        REQUIRES,
-        REQUIRES_FREE,
-        REQUIRES_REDUNDANTLY,
-        DECREASES,
-        MODIFIES,
-        MODIFIABLE,
-        ASSIGNABLE,
-        ACCESSIBLE,
-        PRE,
-        POST,
-        LOOP_INVARIANT,
-        MEASURED_BY,
-        RETURNS,
-        BREAKS,
-        CONTINUES,
-        OLD,
-        FORALL,
-        SIGNALS,
-        SIGNALS_ONLY,
-        WHEN,
-        WORKING_SPACE,
-        CAPTURES,
-        INITIALLY,
-        INVARIANT,
-        ASSIGNABLE_REDUNDANTLY,
-        MODIFIABLE_REDUNDANTLY,
-        MODIFIES_REDUNDANTLY,
-        CAPTURES_REDUNDANTLY,
-        CALLABLE,
-        DIVERGES,
-        DURATION;
-
-        public final String jmlSymbol;
-
-        Kind() {
-            jmlSymbol = name();
-        }
-
-        Kind(String jmlSymbol) {
-            this.jmlSymbol = jmlSymbol;
-        }
-    }
-
-    private Kind kind;
+    private JmlClauseKind kind;
 
     public JmlClause() {
         this((TokenRange) null);
     }
 
     @AllFieldsConstructor
-    public JmlClause(final Kind kind) {
+    public JmlClause(final JmlClauseKind kind) {
         this(null, kind);
     }
 
@@ -125,12 +77,12 @@ public abstract class JmlClause extends Node implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Kind getKind() {
+    public JmlClauseKind getKind() {
         return kind;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClause setKind(final Kind kind) {
+    public JmlClause setKind(final JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -144,7 +96,7 @@ public abstract class JmlClause extends Node implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClause(TokenRange tokenRange, Kind kind) {
+    public JmlClause(TokenRange tokenRange, JmlClauseKind kind) {
         super(tokenRange);
         setKind(kind);
         customInitialization();

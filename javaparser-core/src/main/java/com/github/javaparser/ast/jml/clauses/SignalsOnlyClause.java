@@ -19,13 +19,15 @@ import com.github.javaparser.metamodel.SignalsOnlyClauseMetaModel;
  * @version 1 (2/21/21)
  */
 public class SignalsOnlyClause extends JmlClause implements MethodContractable, BlockContractable {
-
     private NodeList<Type> types;
+
+    {
+        setKind(JmlClauseKind.SIGNALS_ONLY);
+    }
 
     @AllFieldsConstructor
     public SignalsOnlyClause(NodeList<Type> types) {
         this(null, null);
-        setKind(Kind.DIVERGES);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.JmlContainer;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
@@ -18,7 +19,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (2/24/21)
  */
-public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> {
+public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> implements JmlContainer<JmlBodyDeclaration, JmlClassLevel> {
 
     private boolean singleLine;
 

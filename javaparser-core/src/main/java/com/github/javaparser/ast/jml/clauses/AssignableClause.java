@@ -5,8 +5,8 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.locref.LocationSetExpression;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -23,23 +23,26 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
 
     private NodeList<SimpleName> heaps;
 
-    private NodeList<Expression> exprs;
+    private NodeList<LocationSetExpression> exprs;
+
+    {
+        setKind(JmlClauseKind.ASSIGNABLE);
+    }
 
     public AssignableClause() {
         this(null, null);
     }
 
     @AllFieldsConstructor
-    public AssignableClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+    public AssignableClause(NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
         this(null, heaps, exprs);
-        setKind(Kind.ASSIGNABLE);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AssignableClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+    public AssignableClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
         super(tokenRange);
         setHeaps(heaps);
         setExprs(exprs);
@@ -73,7 +76,7 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
             return false;
         for (int i = 0; i < exprs.size(); i++) {
             if (exprs.get(i) == node) {
-                exprs.set(i, (Expression) replacementNode);
+                exprs.set(i, (LocationSetExpression) replacementNode);
                 return true;
             }
         }
@@ -120,12 +123,12 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExprs() {
+    public NodeList<LocationSetExpression> getExprs() {
         return exprs;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignableClause setExprs(final NodeList<Expression> exprs) {
+    public AssignableClause setExprs(final NodeList<LocationSetExpression> exprs) {
         assertNotNull(exprs);
         if (exprs == this.exprs) {
             return this;

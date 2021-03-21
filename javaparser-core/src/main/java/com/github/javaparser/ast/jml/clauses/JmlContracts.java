@@ -1,25 +1,23 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Jmlish;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.JmlContainer;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlContractsMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.JmlContractsMetaModel;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/17/21)
  */
-public class JmlContracts extends Node implements Jmlish {
+public class JmlContracts extends Node implements Jmlish, JmlContainer<JmlContracts, JmlContract> {
 
     private boolean singleLine;
 
@@ -34,6 +32,10 @@ public class JmlContracts extends Node implements Jmlish {
     @AllFieldsConstructor
     public JmlContracts(boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlContract> elements) {
         this(null, singleLine, jmlTags, elements);
+    }
+
+    public JmlContracts() {
+        this(false, new NodeList<>(), new NodeList<>());
     }
 
     @Override

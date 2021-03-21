@@ -2,16 +2,18 @@ package com.github.javaparser.ast.jml.locref;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.jml.JmlKeyword;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.LocationSetFunctionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.LocationSetFunctionMetaModel;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -19,16 +21,31 @@ import com.github.javaparser.ast.Generated;
  */
 public class LocationSetFunction extends LocationSetExpression {
 
-    public enum Function {
+    public enum Function implements JmlKeyword {
 
         UNION,
         INTERSECT,
         SETMINUS,
-        ALLFIELDS,
-        ALLOBJECTS,
+        ALL_FIELDS,
+        ALL_OBJECTS,
         DISJOINT,
         SUBSET,
-        NEWELEMSFRESH
+        NEW_ELEMS_FRESH;
+
+        private final String symbol;
+
+        Function() {
+            symbol = "\\" + name().toLowerCase();
+        }
+
+        Function(String symbol) {
+            this.symbol = symbol;
+        }
+
+        @Override
+        public String jmlSymbol() {
+            return symbol;
+        }
     }
 
     private Function function;

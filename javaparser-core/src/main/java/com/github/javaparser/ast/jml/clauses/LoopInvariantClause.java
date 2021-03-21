@@ -24,7 +24,7 @@ public class LoopInvariantClause extends JmlClause implements LoopContractable {
     @AllFieldsConstructor
     public LoopInvariantClause(Expression expr) {
         this(null, expr);
-        setKind(Kind.LOOP_INVARIANT);
+        setKind(JmlClauseKind.LOOP_INVARIANT);
     }
 
     /**

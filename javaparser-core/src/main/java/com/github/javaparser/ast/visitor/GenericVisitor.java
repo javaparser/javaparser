@@ -243,7 +243,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(PatternExpr n, A arg);
 
-    R visit(JmlBindingExpr n, A arg);
+    R visit(JmlQuantifiedExpr n, A arg);
 
     R visit(AccessibleClause n, A arg);
 
@@ -257,9 +257,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(EnsuresClause n, A arg);
 
-    R visit(JmlAssertStmt n, A arg);
-
-    R visit(JmlAssumeStmt n, A arg);
+    R visit(JmlStmtWithExpression n, A arg);
 
     R visit(JmlLabel n, A arg);
 
@@ -297,11 +295,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(ForallClause n, A arg);
 
-    R visit(JmlDebugStmt n, A arg);
-
     R visit(JmlFunction n, A arg);
-
-    R visit(JmlHenceByStmt n, A arg);
 
     R visit(JmlName n, A arg);
 
@@ -340,4 +334,6 @@ public interface GenericVisitor<R, A> {
     R visit(LocationSetLiftExpression n, A arg);
 
     R visit(LocationSetPrimary n, A arg);
+
+    R visit(JmlSetComprehension n, A arg);
 }

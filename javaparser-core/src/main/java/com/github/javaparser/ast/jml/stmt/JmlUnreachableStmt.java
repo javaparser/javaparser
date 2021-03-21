@@ -4,10 +4,8 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
@@ -92,25 +90,31 @@ public class JmlUnreachableStmt extends JmlStatement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlUnreachableStmt() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlUnreachableStmt asJmlUnreachableStmt() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlUnreachableStmt> toJmlUnreachableStmt() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlUnreachableStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlUnreachableStmtMetaModel;
     }

@@ -236,7 +236,7 @@ public interface VoidVisitor<A> {
 
     void visit(PatternExpr n, A arg);
 
-    void visit(JmlBindingExpr jmlBindingExpr, A arg);
+    void visit(JmlQuantifiedExpr jmlQuantifiedExpr, A arg);
 
     void visit(AccessibleClause n, A arg);
 
@@ -250,9 +250,7 @@ public interface VoidVisitor<A> {
 
     void visit(EnsuresClause n, A arg);
 
-    void visit(JmlAssertStmt n, A arg);
-
-    void visit(JmlAssumeStmt n, A arg);
+    void visit(JmlStmtWithExpression n, A arg);
 
     void visit(JmlLabel n, A arg);
 
@@ -290,11 +288,7 @@ public interface VoidVisitor<A> {
 
     void visit(ForallClause n, A arg);
 
-    void visit(JmlDebugStmt n, A arg);
-
     void visit(JmlFunction n, A arg);
-
-    void visit(JmlHenceByStmt n, A arg);
 
     void visit(JmlName n, A arg);
 
@@ -333,4 +327,6 @@ public interface VoidVisitor<A> {
     void visit(LocationSetLiftExpression n, A arg);
 
     void visit(LocationSetPrimary n, A arg);
+
+    void visit(JmlSetComprehension n, A arg);
 }

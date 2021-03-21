@@ -21,7 +21,6 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-
 import com.github.javaparser.ast.jml.stmt.JmlSetStmt;
 import com.github.javaparser.ast.Generated;
 
@@ -42,5 +41,7 @@ public class JmlSetStmtMetaModel extends JmlStatementMetaModel {
         super(superBaseNodeMetaModel, JmlSetStmt.class, "JmlSetStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 
-    public PropertyMetaModel assignmentPropertyMetaModel;
+    public PropertyMetaModel lhsPropertyMetaModel;
+
+    public PropertyMetaModel rhsPropertyMetaModel;
 }

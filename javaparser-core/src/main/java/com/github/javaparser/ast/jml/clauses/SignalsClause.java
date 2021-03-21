@@ -27,6 +27,10 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
 
     private Expression expr;
 
+    {
+        setKind(JmlClauseKind.SIGNALS);
+    }
+
     public SignalsClause() {
         this(null, null, null);
     }
@@ -34,7 +38,6 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     @AllFieldsConstructor
     public SignalsClause(Type type, SimpleName name, Expression expr) {
         this(null, type, name, expr);
-        setKind(Kind.SIGNALS);
     }
 
     /**

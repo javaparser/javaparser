@@ -19,23 +19,19 @@ public class JmlContract extends Node implements Jmlish {
 
     private Behavior behavior;
 
-    private Modifier modifier;
+    private NodeList<Modifier> modifiers;
 
     private NodeList<JmlClause> clauses = new NodeList<>();
 
     private NodeList<JmlContract> subContracts = new NodeList<>();
 
     public JmlContract() {
-        super(null);
+        this(null, Behavior.NONE, new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public JmlContract(Behavior behavior, Modifier modifier, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
-        super(null);
-        this.behavior = behavior;
-        this.modifier = modifier;
-        this.clauses = clauses;
-        this.subContracts = subContracts;
+    public JmlContract(Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+        this(null, behavior, modifiers, clauses, subContracts);
     }
 
     public JmlContract(TokenRange tokenRange) {
@@ -90,21 +86,21 @@ public class JmlContract extends Node implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Modifier getModifier() {
-        return modifier;
+    public NodeList<Modifier> getModifiers() {
+        return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setModifier(final Modifier modifier) {
-        assertNotNull(modifier);
-        if (modifier == this.modifier) {
+    public JmlContract setModifiers(final NodeList<Modifier> modifiers) {
+        assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.MODIFIER, this.modifier, modifier);
-        if (this.modifier != null)
-            this.modifier.setParentNode(null);
-        this.modifier = modifier;
-        setAsParentNodeOf(modifier);
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
+        this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
         return this;
     }
 
@@ -138,6 +134,12 @@ public class JmlContract extends Node implements Jmlish {
                 return true;
             }
         }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < subContracts.size(); i++) {
             if (subContracts.get(i) == node) {
                 subContracts.remove(i);
@@ -158,9 +160,11 @@ public class JmlContract extends Node implements Jmlish {
                 return true;
             }
         }
-        if (node == modifier) {
-            setModifier((Modifier) replacementNode);
-            return true;
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
         }
         for (int i = 0; i < subContracts.size(); i++) {
             if (subContracts.get(i) == node) {
@@ -181,10 +185,10 @@ public class JmlContract extends Node implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContract(TokenRange tokenRange, Behavior behavior, Modifier modifier, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public JmlContract(TokenRange tokenRange, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
         setBehavior(behavior);
-        setModifier(modifier);
+        setModifiers(modifiers);
         setClauses(clauses);
         setSubContracts(subContracts);
         customInitialization();

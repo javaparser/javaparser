@@ -4,7 +4,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;

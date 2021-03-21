@@ -25,7 +25,7 @@ public class OldClause extends JmlClause implements MethodContractable {
     @AllFieldsConstructor
     public OldClause(NodeList<VariableDeclarator> variables) {
         this(null, variables);
-        setKind(Kind.OLD);
+        setKind(JmlClauseKind.OLD);
     }
 
     /**

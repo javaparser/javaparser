@@ -154,12 +154,13 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.UnaryExpr.class);
         add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
-        add(JmlBindingExpr.class);
+        add(JmlQuantifiedExpr.class);
         add(JmlLetExpr.class);
         add(JmlMultiCompareExpr.class);
         add(JmlLabel.class);
         add(JmlName.class);
         add(JmlFunction.class);
+        add(JmlSetComprehension.class);
 
         add(com.github.javaparser.ast.stmt.AssertStmt.class);
         add(com.github.javaparser.ast.stmt.BlockStmt.class);
@@ -187,10 +188,7 @@ public class MetaModelGenerator extends AbstractGenerator {
 
         add(JmlStatement.class);
         add(JmlSetStmt.class);
-        add(JmlAssertStmt.class);
-        add(JmlAssumeStmt.class);
-        add(JmlHenceByStmt.class);
-        add(JmlDebugStmt.class);
+        add(JmlStmtWithExpression.class);
         add(JmlRefiningStmt.class);
         add(JmlUnreachableStmt.class);
 

@@ -24,7 +24,7 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     @AllFieldsConstructor
     public MeasuredByClause(Expression expr) {
         this(null, expr);
-        setKind(Kind.MEASURED_BY);
+        setKind(JmlClauseKind.MEASURED_BY);
     }
 
     /**

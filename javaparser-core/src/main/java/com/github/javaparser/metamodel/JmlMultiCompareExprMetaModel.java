@@ -21,7 +21,6 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-
 import com.github.javaparser.ast.jml.expr.JmlMultiCompareExpr;
 import com.github.javaparser.ast.Generated;
 

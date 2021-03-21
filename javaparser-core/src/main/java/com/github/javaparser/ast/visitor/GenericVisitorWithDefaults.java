@@ -541,7 +541,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlBindingExpr n, final A arg) {
+    public R visit(final JmlQuantifiedExpr n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -576,12 +576,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlAssertStmt n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlAssumeStmt n, final A arg) {
+    public R visit(final JmlStmtWithExpression n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -676,17 +671,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlDebugStmt n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
     public R visit(final JmlFunction n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlHenceByStmt n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -782,6 +767,11 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final LocationSetPrimary n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final JmlSetComprehension n, final A arg) {
         return defaultAction(n, arg);
     }
 }

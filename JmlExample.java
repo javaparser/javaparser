@@ -24,7 +24,7 @@ public class E {
         //@ assume false;
         //@ hence_by false;
         //@ unreachable;
-        //@ set a = 5
+        //@ set a = 5;
 
         //+key@ assert true;
         //-key@ assert false;

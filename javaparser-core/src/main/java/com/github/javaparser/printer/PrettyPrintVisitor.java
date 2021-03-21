@@ -753,7 +753,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
 
     @Override
-    public void visit(JmlBindingExpr jmlBindingExpr, Void arg) {
+    public void visit(JmlQuantifiedExpr jmlQuantifiedExpr, Void arg) {
 
     }
 
@@ -788,14 +788,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlAssertStmt n, Void arg) {
+    public void visit(JmlStmtWithExpression n, Void arg) {
 
     }
 
-    @Override
-    public void visit(JmlAssumeStmt n, Void arg) {
-
-    }
 
     @Override
     public void visit(JmlLabel n, Void arg) {
@@ -887,20 +883,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     }
 
-    @Override
-    public void visit(JmlDebugStmt n, Void arg) {
-
-    }
 
     @Override
     public void visit(JmlFunction n, Void arg) {
 
     }
 
-    @Override
-    public void visit(JmlHenceByStmt n, Void arg) {
-
-    }
 
     @Override
     public void visit(JmlName n, Void arg) {
@@ -994,6 +982,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(LocationSetPrimary n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlSetComprehension n, Void arg) {
 
     }
 

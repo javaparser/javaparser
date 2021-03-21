@@ -20,7 +20,7 @@ public class DivergesClause extends JmlClause implements MethodContractable {
     @AllFieldsConstructor
     public DivergesClause() {
         this(null);
-        setKind(Kind.DIVERGES);
+        setKind(JmlClauseKind.DIVERGES);
     }
 
     /**
@@ -29,7 +29,7 @@ public class DivergesClause extends JmlClause implements MethodContractable {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public DivergesClause(TokenRange tokenRange, Expression e) {
         super(tokenRange);
-        setKind(Kind.DIVERGES);
+        setKind(JmlClauseKind.DIVERGES);
         customInitialization();
     }
 

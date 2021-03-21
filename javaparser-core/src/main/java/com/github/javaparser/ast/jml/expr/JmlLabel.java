@@ -3,12 +3,11 @@ package com.github.javaparser.ast.jml.expr;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlLabelMetaModel;
@@ -36,9 +35,20 @@ public class JmlLabel extends Expression {
         this(null);
     }
 
-    public enum Kind {
+    public enum Kind implements JmlKeyword {
 
-        NONE, POSITIVE, NEGATIVE
+        NONE("\\lbl"), POSITIVE("\\lblpos"), NEGATIVE("\\lblneg");
+
+        private final String symbol;
+
+        Kind(String symbol) {
+            this.symbol = symbol;
+        }
+
+        @Override
+        public String jmlSymbol() {
+            return symbol;
+        }
     }
 
     @Override

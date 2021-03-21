@@ -19,7 +19,7 @@ public class CallableClause extends JmlClause {
     @AllFieldsConstructor
     public CallableClause() {
         this(null);
-        setKind(Kind.CALLABLE);
+        setKind(JmlClauseKind.CALLABLE);
     }
 
     /**

@@ -25,6 +25,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.clauses.JmlContracts;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.nodeTypes.modifiers.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -61,10 +62,10 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @OptionalProperty
     private ReceiverParameter receiverParameter;
 
-    private NodeList<JmlContract> contracts = new NodeList<>();
+    private NodeList<JmlContracts> contracts = new NodeList<>();
 
     @AllFieldsConstructor
-    CallableDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
+    CallableDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContracts> contracts) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter, contracts);
     }
 
@@ -72,7 +73,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CallableDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
+    public CallableDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContracts> contracts) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -352,7 +353,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             return false;
         for (int i = 0; i < contracts.size(); i++) {
             if (contracts.get(i) == node) {
-                contracts.set(i, (JmlContract) replacementNode);
+                contracts.set(i, (JmlContracts) replacementNode);
                 return true;
             }
         }
@@ -442,13 +443,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> getContracts() {
+    public NodeList<JmlContracts> getContracts() {
         return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public T setContracts(final NodeList<JmlContract> contracts) {
+    public T setContracts(final NodeList<JmlContracts> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return (T) this;

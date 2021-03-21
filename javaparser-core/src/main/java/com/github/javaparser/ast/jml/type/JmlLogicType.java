@@ -26,55 +26,52 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 
 /**
- * A primitive type.
- * <br>{@code int}
- * <br>{@code boolean}
- * <br>{@code short}
- *
- * @author Julio Vilmar Gesser
+ * A primitive type in JML.
  */
 public class JmlLogicType extends Type implements Jmlish {
 
 
-    public enum Primitive {
+    public enum Primitive implements JmlKeyword {
         SET("\\set"),
         SEQ("\\seq"),
         MAP("\\map"),
         BIGINT("\\bigint"),
         BIGFLOAT("\\bigfloat");
 
-        final String descriptor;
+        final String symbol;
 
-        public String asString() {
-            return descriptor;
+        public String jmlSymbol() {
+            return symbol;
         }
 
-        Primitive(String descriptor) {
-            this.descriptor = descriptor;
+        Primitive(String symbol) {
+            this.symbol = symbol;
         }
     }
 
-    private Primitive type;
+    private final Primitive type;
 
-    /*public JmlLogicType() {
-        this(null, Primitive.BIGINT, new NodeList<>());
+    public JmlLogicType() {
+        this(null, Primitive.BIGINT);
     }
 
-    public JmlLogicType(final Primitive type) {
-        this(null, type, new NodeList<>());
-    }
-*/
     @AllFieldsConstructor
-    public JmlLogicType(final Primitive type, NodeList<AnnotationExpr> annotations) {
-        super((TokenRange) null);
-        //this(null, type, annotations);
+    public JmlLogicType(Primitive type) {
+        this(null, type);
     }
+
+    public JmlLogicType(TokenRange range, final Primitive type) {
+        super(range);
+        this.type = type;
+    }
+
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
@@ -95,7 +92,7 @@ public class JmlLogicType extends Type implements Jmlish {
 
     @Override
     public String toDescriptor() {
-        return type.descriptor;
+        return type.symbol;
     }
 
     @Override
