@@ -164,12 +164,20 @@
     </issueManagement>
 
     <distributionManagement>
+        <!-- https://docs.github.com/en/actions/guides/publishing-java-packages-with-maven#publishing-packages-to-the-maven-central-repository -->
+        <!-- https://blog.sonatype.com/what-publishers-need-to-know-about-migrating-from-jcenter-/-bintray-to-the-central-repository -->
+        <!-- New: Publishing directly to Sonatype OSSRH (OSS Repository Hosting), for release to Maven Central -->
+        <!-- URLs available from: https://central.sonatype.org/pages/ossrh-guide.html#accessing-repositories -->
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>bintray-javaparser-JavaParser</id>
-            <name>javaparser-JavaParser</name>
-            <url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/;publish=1</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
 
     <build>
         <plugins>
@@ -180,18 +188,6 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -213,25 +209,36 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>3.0.0-M1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <!-- See also: https://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment-with-the-maven-release-plugin -->
+                    <!-- Plugin for preparing and performing a release (to ossrh / maven central). -->
+                    <!-- TODO: Consider switching to using `mvn versions:set` and org.sonatype.plugins:nexus-staging-maven-plugin -->
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.5.3</version>
                     <configuration>
+                        <!-- When updating versions during release, synchronise versions of sub-modules with the parent-pom. -->
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <!-- Update the readme only when compiling a new release. -->
-                        <preparationGoals>-Preleasing clean verify scm:add scm:checkin</preparationGoals>
+                        <!-- During release:prepare, update the readme (via the "run-release" profile) and add it to git. -->
+                        <preparationGoals>-Prun-release clean verify scm:add scm:checkin</preparationGoals>
+                        <!-- During release:perform, enable the release-specific profiles -->
+                        <releaseProfiles>official-release</releaseProfiles>
                         <!-- Disable pushing of changes (i.e. false, for local testing) -->
                         <pushChanges>false</pushChanges>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.2.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -245,8 +252,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.eluder.coveralls</groupId>
@@ -272,6 +279,8 @@
                     <configuration>
                         <source>${java.version}</source>
                         <additionalOptions>
+                            <!-- doclint requires perfect JavaDoc, and fails the generation of javadoc on even minor problems -->
+                            <!-- Ideally we will have perfectly formatted javadoc, but for now just disable it. -->
                             <additionalOption>-Xdoclint:none</additionalOption>
                         </additionalOptions>
                     </configuration>
@@ -281,6 +290,7 @@
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.9.1</version>
                     <configuration>
+                        <!-- TODO/FIXME: Is this still the way to disable doclint during release/site? -->
                         <additionalOptions>
                             <additionalOption>-Xdoclint:none</additionalOption>
                         </additionalOptions>
@@ -332,6 +342,8 @@
             </plugins>
         </pluginManagement>
     </build>
+
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -382,19 +394,26 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
     <profiles>
         <profile>
+            <!-- doclint requires perfect JavaDoc, and fails the generation of javadoc on even minor problems -->
+            <!-- Ideally we will have perfectly formatted javadoc, but for now just disable it. -->
             <id>doclint-java8-disable</id>
             <activation>
                 <jdk>[1.8,)</jdk>
             </activation>
+            <!-- FIXME: Can this be removed? It appears to be a no-op, with be no action to be done when activated (e.g. set a parameter, configure a plugin, etc.) -->
         </profile>
         <profile>
-            <id>releasing</id>
-            <!-- Update the readme only when compiling a new release. -->
+            <!-- This profile is intended for use when preparing and deploying a release. -->
+            <id>run-release</id>
             <build>
                 <plugins>
+                    <!-- Update the readme with the new version number, but only when compiling a new release. -->
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
                         <executions>
                             <execution>
@@ -419,16 +438,70 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- Commit the updated readme file to the repo.  -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-scm-plugin</artifactId>
                         <configuration>
                             <includes>readme.md</includes>
                             <message>[maven-release-plugin] update readme</message>
-                            <!-- disabled here, as it will be pushed separately (either once the release has been prepared, or manually) -->
+                            <!-- disabled here, as it will be pushed separately -->
+                            <!-- (either once the release has finished being prepared, or manually) -->
                             <pushChanges>false</pushChanges>
                         </configuration>
                     </plugin>
+
+                    <!-- Source plugin - used to include source code within the release JAR -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Javadoc plugin - used to include javadoc within the release JAR -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- GPG plugin - used to sign the release JAR before pushing to OSSRH -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Prevent `gpg` from using pinentry programs -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>
