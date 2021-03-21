@@ -1,4 +1,4 @@
-Next Release (Version 3.21.0)
+Next Release (Version 3.21.2)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/183?closed=1)
 
@@ -21,6 +21,7 @@ Version 3.21.1
 
 ### Changed
 
+* Update changelog (PR [#3178](https://github.com/javaparser/javaparser/pull/3178) by [@MysterAitch](https://github.com/MysterAitch))
 * Minor performance improvement on getCanonicalName method call (PR [#3166](https://github.com/javaparser/javaparser/pull/3166) by [@jlerbsc](https://github.com/jlerbsc))
 
 ### Fixed
@@ -35,6 +36,8 @@ Version 3.21.1
 
 ### Developer Changes
 
+* Publish to OSSRH rather than Bintray (PR [#3180](https://github.com/javaparser/javaparser/pull/3180) by [@MysterAitch](https://github.com/MysterAitch))
+* Remove unused JUnit Pioneer dependency (PR [#3179](https://github.com/javaparser/javaparser/pull/3179) by [@MysterAitch](https://github.com/MysterAitch))
 * Verify builds test correctly under JDK16 (PR [#3175](https://github.com/javaparser/javaparser/pull/3175) by [@MysterAitch](https://github.com/MysterAitch))
 * update renovate to include "dependencies" label on PRs (PR [#3174](https://github.com/javaparser/javaparser/pull/3174) by [@MysterAitch](https://github.com/MysterAitch))
 * chore(deps): update dependency com.google.guava:guava to v30.1.1-jre (PR [#3172](https://github.com/javaparser/javaparser/pull/3172) by [@renovate[bot]](https://github.com/apps/renovate))
