@@ -30,6 +30,7 @@ import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class LazyType implements ResolvedType {
@@ -45,6 +46,15 @@ public class LazyType implements ResolvedType {
             concrete = provider.apply(null);
         }
         return concrete;
+    }
+
+    /**
+     * Get the concrete {@link ResolvedType} for the current {@link LazyType}.
+     *
+     * @return The {@link ResolvedType} if already resolved, otherwise empty.
+     */
+    public Optional<ResolvedType> getConcreteType() {
+        return Optional.ofNullable(concrete);
     }
 
     @Override
