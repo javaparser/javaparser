@@ -21,8 +21,13 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -136,5 +141,15 @@ public class LazyType implements ResolvedType {
     @Override
     public boolean isAssignableBy(ResolvedType other) {
         return getType().isAssignableBy(other);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return getType().equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return getType().hashCode();
     }
 }
