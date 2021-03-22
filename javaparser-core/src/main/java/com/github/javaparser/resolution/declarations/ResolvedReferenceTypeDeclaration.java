@@ -21,17 +21,17 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -45,6 +45,11 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     @Override
     default ResolvedReferenceTypeDeclaration asReferenceType() {
         return this;
+    }
+
+    @Override
+    default boolean isReferenceType() {
+        return true;
     }
 
     ///
