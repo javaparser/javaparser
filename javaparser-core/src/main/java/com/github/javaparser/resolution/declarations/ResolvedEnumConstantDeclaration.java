@@ -21,10 +21,12 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedEnumConstantDeclaration extends ResolvedValueDeclaration {
+public interface ResolvedEnumConstantDeclaration extends ResolvedValueDeclaration, AssociableToAST<EnumConstantDeclaration> {
 
     String getName();
 

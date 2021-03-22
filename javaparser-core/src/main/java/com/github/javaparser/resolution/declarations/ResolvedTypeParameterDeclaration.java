@@ -22,6 +22,7 @@
 package com.github.javaparser.resolution.declarations;
 
 
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.List;
@@ -38,7 +39,7 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaration {
+public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaration, AssociableToAST<TypeParameter> {
 
     /**
      * Instantiate a TypeParameter defined on a Type with the given data.

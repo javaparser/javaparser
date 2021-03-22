@@ -21,12 +21,13 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedAnnotationMemberDeclaration extends ResolvedValueDeclaration {
+public interface ResolvedAnnotationMemberDeclaration extends ResolvedValueDeclaration, AssociableToAST<AnnotationMemberDeclaration> {
 
     Expression getDefaultValue();
 }

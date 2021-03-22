@@ -21,10 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.DoubleLiteralExpr;
@@ -39,7 +36,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
@@ -51,6 +47,11 @@ import javassist.bytecode.annotation.IntegerMemberValue;
 import javassist.bytecode.annotation.LongMemberValue;
 import javassist.bytecode.annotation.MemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @author Malte Skoruppa
@@ -105,5 +106,10 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
     @Override
     public String getName() {
         return annotationMember.getName();
+    }
+
+    @Override
+    public Optional<AnnotationMemberDeclaration> toAst() {
+        return Optional.empty();
     }
 }
