@@ -21,16 +21,38 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserFacadeTest {
 
     private final TypeSolver typeSolver = new ReflectionTypeSolver();
+
+    private JavaParser parser;
+
+    @BeforeEach
+    void beforeEach() {
+        ParserConfiguration configuration = new ParserConfiguration();
+        configuration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        parser = new JavaParser(configuration);
+    }
 
     @Test
     void classToResolvedType_givenPrimitiveShouldBeAReflectionPrimitiveDeclaration() {
@@ -67,6 +89,25 @@ class JavaParserFacadeTest {
      */
     private enum TestEnum {
         A, B;
+    }
+
+    @Test
+    void convertToUsage_whenConvertingTypeWithTypeArgumentsTheArgumentsShouldBeLazy() {
+        CompilationUnit cu = parser.parse("import java.util.List;\nclass A { List<String> list; }").getResult()
+                .orElseThrow(AssertionError::new);
+        Type listType = Navigator.demandNodeOfGivenClass(cu, Type.class);
+        ResolvedReferenceType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(listType).asReferenceType();
+
+        // Get the type parameter and check if it's lazy
+        Optional<ResolvedType> typeParameter = resolvedType.getGenericParameterByName("E");
+        assertTrue(typeParameter.isPresent());
+        assertTrue(typeParameter.get() instanceof LazyType);
+
+        // Check if the lazy type is initialized when needed.
+        LazyType lazyType = (LazyType) typeParameter.get();
+        assertFalse(lazyType.getConcreteType().isPresent());
+        assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
+        assertTrue(lazyType.getConcreteType().isPresent());
     }
 
 }
