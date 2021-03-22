@@ -607,8 +607,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
         if (typeOfNode.isClass()) {
             // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
-            return typeOfNode.asClass().getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly " +
-                    "empty"));
+            return typeOfNode.asClass().getSuperClass()
+                    .orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
         } else {
             throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
