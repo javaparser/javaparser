@@ -28,22 +28,32 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.google.common.base.Preconditions;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class LazyType implements ResolvedType {
+
+    private final Supplier<ResolvedType> supplier;
+
     private ResolvedType concrete;
-    private Function<Void, ResolvedType> provider;
 
     public LazyType(Function<Void, ResolvedType> provider) {
-        this.provider = provider;
+        Preconditions.checkNotNull(provider, "The provider can not be null!");
+        this.supplier = () -> provider.apply(null);
+    }
+
+    public LazyType(Supplier<ResolvedType> supplier) {
+        Preconditions.checkNotNull(supplier, "The supplier can not be null!");
+        this.supplier = supplier;
     }
 
     private ResolvedType getType() {
         if (concrete == null) {
-            concrete = provider.apply(null);
+            concrete = supplier.get();
         }
         return concrete;
     }
@@ -169,4 +179,5 @@ public class LazyType implements ResolvedType {
                 "concrete=" + concrete +
                 '}';
     }
+
 }
