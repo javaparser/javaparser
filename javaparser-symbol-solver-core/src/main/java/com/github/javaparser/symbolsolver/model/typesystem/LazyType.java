@@ -152,4 +152,11 @@ public class LazyType implements ResolvedType {
     public int hashCode() {
         return getType().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "LazyType{" +
+                "concrete=" + concrete +
+                '}';
+    }
 }
