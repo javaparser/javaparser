@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -42,6 +36,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -92,7 +92,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
      */
     @Override
     public boolean isAssignableBy(ResolvedType other) {
-        if (other instanceof NullType) {
+        if (other.isNull()) {
             return !this.isPrimitive();
         }
         // everything is assignable to Object except void
@@ -114,8 +114,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
-        } else if (other instanceof ReferenceTypeImpl) {
-            ReferenceTypeImpl otherRef = (ReferenceTypeImpl) other;
+        } else if (other.isReferenceType()) {
+            ResolvedReferenceType otherRef = other.asReferenceType();
             if (compareConsideringTypeParameters(otherRef)) {
                 return true;
             }
