@@ -20,17 +20,19 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
 import static com.github.javaparser.StaticJavaParser.parseName;
 
 /**
@@ -115,6 +117,7 @@ public class MarkerAnnotationExpr extends AnnotationExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMarkerAnnotationExpr(Consumer<MarkerAnnotationExpr> action) {
         action.accept(this);

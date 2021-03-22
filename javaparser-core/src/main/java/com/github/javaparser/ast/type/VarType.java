@@ -22,6 +22,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -29,11 +30,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.VarTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.metamodel.VarTypeMetaModel;
-import com.github.javaparser.ast.Generated;
 
 /**
  * <h1>A type called "var" waiting for Java to infer it.</h1>
@@ -132,6 +133,7 @@ public class VarType extends Type {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVarType(Consumer<VarType> action) {
         action.accept(this);

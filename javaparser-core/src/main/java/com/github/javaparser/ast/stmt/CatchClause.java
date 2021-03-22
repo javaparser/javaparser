@@ -33,9 +33,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CatchClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The catch part of a try-catch-finally. <br>In {@code try { ... } catch (Exception e) { ... }} the CatchClause
@@ -99,7 +98,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     public CatchClause setParameter(final Parameter parameter) {
         assertNotNull(parameter);
         if (parameter == this.parameter) {
-            return (CatchClause) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
         if (this.parameter != null)
@@ -118,7 +117,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     public CatchClause setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (CatchClause) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)

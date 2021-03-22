@@ -21,14 +21,14 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * This should not be used to represent fields of parameters.

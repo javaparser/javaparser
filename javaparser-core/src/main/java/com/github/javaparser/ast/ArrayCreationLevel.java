@@ -20,22 +20,22 @@
  */
 package com.github.javaparser.ast;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ArrayCreationLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * In {@code new int[1][2];} there are two ArrayCreationLevel objects,
@@ -98,7 +98,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayCreationLevel setDimension(final Expression dimension) {
         if (dimension == this.dimension) {
-            return (ArrayCreationLevel) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.DIMENSION, this.dimension, dimension);
         if (this.dimension != null)
@@ -122,7 +122,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     public ArrayCreationLevel setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (ArrayCreationLevel) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)

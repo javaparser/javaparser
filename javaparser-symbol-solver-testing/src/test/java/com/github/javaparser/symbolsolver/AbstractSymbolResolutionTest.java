@@ -40,14 +40,14 @@ public abstract class AbstractSymbolResolutionTest {
         // clear internal caches
         JavaParserFacade.clearInstances();
     }
-    
+
     @AfterEach
     public void reset() {
         // reset configuration to not potentially disturb others tests.
         // So we have to set specific configuration between each test.
         StaticJavaParser.setConfiguration(new ParserConfiguration());
     }
-    
+
     /**
      * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
      * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
@@ -61,7 +61,9 @@ public abstract class AbstractSymbolResolutionTest {
         JDK12(12),
         JDK13(13),
         JDK14(14),
-        JDK15(15);
+        JDK15(15),
+        JDK16(16),
+        JDK17(17);
 
         private final Integer major;
 
@@ -105,6 +107,10 @@ public abstract class AbstractSymbolResolutionTest {
                 return JDK14;
             } else if("15".equals(javaVersion) || javaVersion.startsWith("15.")) {
                 return JDK15;
+            } else if("16".equals(javaVersion) || javaVersion.startsWith("16.")) {
+                return JDK16;
+            } else if("17".equals(javaVersion) || javaVersion.startsWith("17.")) {
+                return JDK17;
             }
 
             throw new IllegalStateException("Unable to determine the current version of java running");
