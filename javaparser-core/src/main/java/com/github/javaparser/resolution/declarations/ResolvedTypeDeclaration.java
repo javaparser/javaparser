@@ -97,7 +97,7 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     }
 
     /**
-     * Is this a {@link com.github.javaparser.resolution.types.ResolvedReferenceType}?
+     * Is this a {@link ResolvedReferenceTypeDeclaration}?
      *
      * @return {@code True} if it's.
      */
