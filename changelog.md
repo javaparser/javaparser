@@ -1,4 +1,4 @@
-Next Release (Version 3.21.2)
+Next Release (Version 3.21.3)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/183?closed=1)
 
@@ -9,6 +9,10 @@ Next Release (Version 3.21.2)
 ### Fixed
 ### Security
 
+
+Version 3.21.2
+------------------
+**v3.21.1 released as 3.21.2 without change**
 
 Version 3.21.1
 ------------------
