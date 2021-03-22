@@ -683,7 +683,7 @@ public class JavaParserFacade {
             List<ResolvedType> typeParameters = Collections.emptyList();
             if (classOrInterfaceType.getTypeArguments().isPresent()) {
                 typeParameters = classOrInterfaceType.getTypeArguments().get().stream()
-                                .map(typeArg -> new LazyType(v -> convertToUsage(typeArg, context)))
+                                .map(typeArg -> new LazyType(() -> convertToUsage(typeArg, context)))
                                 .collect(Collectors.toList());
             }
             if (typeDeclaration.isTypeParameter()) {
