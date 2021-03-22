@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.google.common.base.Preconditions;
 
@@ -36,6 +37,34 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class LazyType implements ResolvedType {
+
+    /**
+     * Get the concrete type of a {@link ResolvedType}.
+     *
+     * This method is used to unpack the {@link LazyType} when they are nested.
+     *
+     * {@code
+     *      LazyType typeA = new LazyType(() -> ResolvedVoidType.INSTANCE);
+     *      LazyType typeB = new LazyType(() -> typeA);
+     *      LazyType typeC = new LazyType(() -> typeB);
+     * }
+     *
+     * In this example, by calling {@code getConcreteType(typeC)} we would expected the return type to be a
+     * {@link ResolvedVoidType}
+     *
+     * @param type The resolved type to find the concrete type.
+     *
+     * @return The concrete type for the {@link LazyType}.
+     */
+    public static ResolvedType getConcreteType(ResolvedType type) {
+        Preconditions.checkNotNull(type, "The type can not be null!");
+
+        if (type instanceof LazyType) {
+            return getConcreteType(((LazyType) type).getType());
+        } else {
+            return type;
+        }
+    }
 
     private final Supplier<ResolvedType> supplier;
 
@@ -165,7 +194,13 @@ public class LazyType implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        return getType().equals(o);
+        if (o instanceof LazyType) {
+            // If is a LazyType then we should find the concrete value of the other before comparing
+            ResolvedType otherType = getConcreteType((LazyType) o);
+            return getType().equals(otherType);
+        } else {
+            return getType().equals(o);
+        }
     }
 
     @Override
