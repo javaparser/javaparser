@@ -22,7 +22,9 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -43,7 +45,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -136,10 +137,19 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration i
                     JavaParserFacade.get(typeSolver).classToResolvedType(Object.class).asReferenceType()
             );
         } else {
-            return wrappedNode.getTypeBound().stream()
-                    .map(JavaParserFacade.get(typeSolver)::convertToUsage)
-                    .map(ResolvedType::asReferenceType)
-                    .collect(Collectors.toList());
+            List<ResolvedReferenceType> ancestors = new ArrayList<>();
+            for (ClassOrInterfaceType type : wrappedNode.getTypeBound()) {
+                try {
+                    ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(type);
+                    ancestors.add(resolvedType.asReferenceType());
+                } catch (UnsolvedSymbolException e) {
+                    if (!acceptIncompleteList) {
+                        // Only throw if an incomplete ancestor list is unacceptable.
+                        throw e;
+                    }
+                }
+            }
+            return ancestors;
         }
     }
 
