@@ -235,7 +235,7 @@
                         <!-- During release:prepare, update the readme (via the "run-release" profile) and add it to git. -->
                         <preparationGoals>-Prun-release clean verify scm:add scm:checkin</preparationGoals>
                         <!-- During release:perform, enable the release-specific profiles -->
-                        <releaseProfiles>official-release</releaseProfiles>
+                        <releaseProfiles>run-release</releaseProfiles>
                         <!-- Disable pushing of changes (i.e. false, for local testing) -->
                         <pushChanges>false</pushChanges>
                     </configuration>
