@@ -21,20 +21,22 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StringProvider;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapabilityTest;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapabilityTest;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
@@ -45,24 +47,20 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
+class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implements ResolvedEnumDeclarationTest,
+        MethodResolutionCapabilityTest, MethodUsageResolutionCapabilityTest,
+        AssociableToASTTest<EnumDeclaration> {
 
     private TypeSolver typeSolver;
 
@@ -923,4 +921,34 @@ class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals(false, dec.hasDirectlyAnnotation("javax.persistence.Embeddable"));
         assertEquals(true, dec.hasDirectlyAnnotation("MyAnno"));
     }
+
+    @Override
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.of(
+                safeCast(associableToAST, JavaParserEnumDeclaration.class).getWrappedNode()
+        );
+    }
+
+    @Override
+    public JavaParserEnumDeclaration createValue() {
+        EnumDeclaration enumDeclaration = StaticJavaParser.parse("enum A {}")
+                .findFirst(EnumDeclaration.class)
+                .get();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        return new JavaParserEnumDeclaration(enumDeclaration, typeSolver);
+    }
+
+    @Override
+    public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
+        return false;
+    }
+
+    @Disabled(value = "This test was disable in this class due to a bug reported at https://github" +
+            ".com/javaparser/javaparser/issues/3061. It should be renabled when the issue is fixed.")
+    @Test
+    @Override
+    public void containerTypeCantBeNull() {
+        super.containerTypeCantBeNull();
+    }
+
 }

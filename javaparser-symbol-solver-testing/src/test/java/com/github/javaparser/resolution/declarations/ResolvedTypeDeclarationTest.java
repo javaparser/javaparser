@@ -67,16 +67,6 @@ public interface ResolvedTypeDeclarationTest extends ResolvedDeclarationTest {
     }
 
     @Test
-    default void packageNameCantBeNull() {
-        assertNotNull(createValue().getPackageName());
-    }
-
-    @Test
-    default void classNameCantBeNull() {
-        assertNotNull(createValue().getClassName());
-    }
-
-    @Test
     default void qualifiedNameCantBeNull() {
         assertNotNull(createValue().getQualifiedName());
     }

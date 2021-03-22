@@ -31,6 +31,8 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<TypeParameter> {
@@ -44,11 +46,10 @@ class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest 
     }
 
     @Override
-    public TypeParameter getWrappedDeclaration(AssociableToAST<TypeParameter> associableToAST) {
-        if (associableToAST instanceof JavaParserTypeVariableDeclaration)
-            return ((JavaParserTypeVariableDeclaration) associableToAST).getWrappedNode();
-        else
-            throw new UnsupportedOperationException("Unable to get wrapped node for class " + associableToAST.getClass().getName());
+    public Optional<TypeParameter> getWrappedDeclaration(AssociableToAST<TypeParameter> associableToAST) {
+        return Optional.of(
+                safeCast(associableToAST, JavaParserTypeVariableDeclaration.class).getWrappedNode()
+        );
     }
 
     @Override

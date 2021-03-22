@@ -20,23 +20,25 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+import com.github.javaparser.metamodel.SwitchStmtMetaModel;
+
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>The switch statement</h1>
@@ -131,7 +133,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
     public SwitchStmt setEntries(final NodeList<SwitchEntry> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
-            return (SwitchStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         if (this.entries != null)
@@ -145,7 +147,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
     public SwitchStmt setSelector(final Expression selector) {
         assertNotNull(selector);
         if (selector == this.selector) {
-            return (SwitchStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
         if (this.selector != null)
@@ -211,6 +213,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchStmt(Consumer<SwitchStmt> action) {
         action.accept(this);

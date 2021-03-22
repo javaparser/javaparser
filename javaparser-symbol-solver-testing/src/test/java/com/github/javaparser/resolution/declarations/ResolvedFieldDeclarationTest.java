@@ -26,7 +26,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest, AssociableToASTTest<FieldDeclaration> {
+public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest,
+        AssociableToASTTest<FieldDeclaration> {
 
     /**
      * Create a new non-static {@link ResolvedFieldDeclaration}.

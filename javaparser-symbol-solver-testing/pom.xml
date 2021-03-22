@@ -3,7 +3,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.18.1-SNAPSHOT</version>
+        <version>3.20.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -40,6 +40,8 @@
                             <parallel>methods</parallel>
                             <threadCount>4</threadCount>
                             <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
+                            <reportFormat>plain</reportFormat>
+                            <failIfNoTests>true</failIfNoTests>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -55,6 +57,8 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <argLine>-Xms256m -Xmx2g -verbose:gc</argLine>
+                            <reportFormat>plain</reportFormat>
+                            <failIfNoTests>true</failIfNoTests>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -179,10 +183,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit-pioneer</groupId>
-            <artifactId>junit-pioneer</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>

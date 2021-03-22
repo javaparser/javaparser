@@ -20,33 +20,7 @@
  */
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.JavaToken.Kind.EOF;
-import static com.github.javaparser.Providers.UTF8;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.Range.range;
-import static com.github.javaparser.StaticJavaParser.parseImport;
-import static com.github.javaparser.StaticJavaParser.parseName;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.Position;
-import com.github.javaparser.TokenRange;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -69,6 +43,27 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.JavaToken.Kind.EOF;
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Range.range;
+import static com.github.javaparser.StaticJavaParser.parseImport;
+import static com.github.javaparser.StaticJavaParser.parseName;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <p>
@@ -101,7 +96,7 @@ public class CompilationUnit extends Node {
 
     @InternalProperty
     private Storage storage;
-    
+
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
     }
@@ -139,7 +134,7 @@ public class CompilationUnit extends Node {
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
-    
+
     /**
      * Declare a specific printer
      */
@@ -147,20 +142,20 @@ public class CompilationUnit extends Node {
         setData(PRINTER_KEY, printer);
         return this;
     }
-    
+
     /*
      * If there is no declared printer, returns a new default printer else returns a new printer with the current configuration
      */
     @Override
     protected Printer getPrinter() {
         if (!containsData(PRINTER_KEY)) {
-           // create a default printer
+            // create a default printer
             Printer printer = createDefaultPrinter();
             printer(printer);
         }
         return getData(PRINTER_KEY);
     }
-    
+
     /*
      * Return the printer initialized with the specified configuration
      */
@@ -261,7 +256,7 @@ public class CompilationUnit extends Node {
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         if (imports == this.imports) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
         if (this.imports != null)
@@ -328,7 +323,7 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         if (packageDeclaration == this.packageDeclaration) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
         if (this.packageDeclaration != null)
@@ -345,7 +340,7 @@ public class CompilationUnit extends Node {
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         if (types == this.types) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         if (this.types != null)
@@ -544,9 +539,7 @@ public class CompilationUnit extends Node {
      * @param className the class name (case-sensitive)
      */
     public List<ClassOrInterfaceDeclaration> getLocalDeclarationFromClassname(String className) {
-        return findAll(ClassOrInterfaceDeclaration.class).stream()
-                .filter(cid->cid.getFullyQualifiedName().get().endsWith(className))
-                .collect(Collectors.toList());
+        return findAll(ClassOrInterfaceDeclaration.class).stream().filter(cid -> cid.getFullyQualifiedName().get().endsWith(className)).collect(Collectors.toList());
     }
 
     /**
@@ -641,7 +634,7 @@ public class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setModule(final ModuleDeclaration module) {
         if (module == this.module) {
-            return (CompilationUnit) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
         if (this.module != null)

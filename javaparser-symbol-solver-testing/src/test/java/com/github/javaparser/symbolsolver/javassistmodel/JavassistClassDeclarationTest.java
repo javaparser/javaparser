@@ -24,15 +24,25 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractClassDeclarationTest;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -44,9 +54,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
+class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
 
     private TypeSolver typeSolver;
 
@@ -224,6 +233,13 @@ class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetSuperclass() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals("com.github.javaparser.ast.Node", compilationUnit.getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty")).getQualifiedName());
+    }
+
+    @Test
+    void testGetSuperclassOfJavaLangObject() throws NotFoundException {
+        CtClass javaLangObject = ClassPool.getDefault().get("java.lang.Object");
+        JavassistClassDeclaration objectDeclaration = new JavassistClassDeclaration(javaLangObject, typeSolver);
+        assertFalse(objectDeclaration.getSuperClass().isPresent());
     }
 
     @Test
@@ -493,6 +509,59 @@ class JavassistClassDeclarationTest extends AbstractSymbolResolutionTest {
         ancestor = constructorDeclaration.getAllAncestors().get(11);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.T").get().asReferenceType().getQualifiedName());
+    }
+
+    @Nested
+    class TestIsAssignableBy {
+        @Test
+        void whenNullTypeIsProvided() {
+            JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+            assertTrue(cu.isAssignableBy(NullType.INSTANCE));
+        }
+
+        @Test
+        void whenLambdaArgumentTypePlaceholderIsProvided() {
+            JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+            assertFalse(cu.isAssignableBy(new LambdaArgumentTypePlaceholder(0)));
+        }
+
+        @Test
+        void whenEqualTypeIsProvided() {
+            JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+            assertTrue(cu.isAssignableBy(cu));
+        }
+
+        @Test
+        void whenSuperClassIsProvided() {
+            ResolvedReferenceTypeDeclaration node = newTypeSolver.solveType("com.github.javaparser.ast.Node");
+            JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+            assertTrue(cu.isAssignableBy(node));
+        }
+
+        @Test
+        void whenInterfaceIsProvided() {
+            JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) newTypeSolver.solveType(
+                    "com.github.javaparser.ast.nodeTypes.NodeWithImplements");
+            JavassistClassDeclaration classDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType(
+                    "com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
+            assertTrue(classDeclaration.isAssignableBy(nodeWithImplements));
+        }
+    }
+
+    @Override
+    public AbstractClassDeclaration createValue() {
+        try {
+            TypeSolver typeSolver = new ReflectionTypeSolver();
+            CtClass clazz = ClassPool.getDefault().getCtClass("java.lang.StringBuilder");
+            return new JavassistClassDeclaration(clazz, typeSolver);
+        } catch (NotFoundException e) {
+            throw new RuntimeException("Unexpected error.", e);
+        }
+    }
+
+    @Override
+    public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
+        return false;
     }
 
 }

@@ -39,10 +39,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -91,7 +88,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
@@ -110,6 +110,9 @@ public class JavaParserFacade {
     };
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
+    
+    private static String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final SymbolSolver symbolSolver;
@@ -510,9 +513,9 @@ public class JavaParserFacade {
 
         if (operator == BinaryExpr.Operator.PLUS) {
             boolean isLeftString = leftType.isReferenceType() && leftType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             boolean isRightString = rightType.isReferenceType() && rightType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             if (isLeftString || isRightString) {
                 return isLeftString ? leftType : rightType;
             }
@@ -565,14 +568,13 @@ public class JavaParserFacade {
      * @return The first class/interface/enum declaration in the Node's ancestry.
      */
     protected TypeDeclaration<?> findContainingTypeDecl(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            return (ClassOrInterfaceDeclaration) node;
+        Node parent = node;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof TypeDeclaration) {
+                return (TypeDeclaration<?>) parent;
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return (EnumDeclaration) node;
-        }
-        return findContainingTypeDecl(demandParentNode(node));
-
     }
 
     /**
@@ -602,17 +604,22 @@ public class JavaParserFacade {
      * the Node's ancestry.
      */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            return node;
+        Node parent = node;
+        boolean detachFlag = false;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof BodyDeclaration) {
+                if (parent instanceof TypeDeclaration) {
+                    return parent;
+                } else {
+                    detachFlag = true;
+                }
+            } else if (parent instanceof ObjectCreationExpr) {
+                if (detachFlag) {
+                    return parent;
+                }
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return node;
-        }
-        Node parent = demandParentNode(node);
-        if (parent instanceof ObjectCreationExpr && !((ObjectCreationExpr) parent).getArguments().contains(node)) {
-            return parent;
-        }
-        return findContainingTypeDeclOrObjectCreationExpr(parent);
     }
 
     /**
@@ -620,17 +627,22 @@ public class JavaParserFacade {
      * references an outer class -- as its ancestor, return the declaration corresponding to the class name specified.
      */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node, String className) {
-        if (node instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) node).getFullyQualifiedName().get().endsWith(className)) {
-            return node;
+        Node parent = node;
+        boolean detachFlag = false;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof BodyDeclaration) {
+                if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
+                    return parent;
+                } else {
+                    detachFlag = true;
+                }
+            } else if (parent instanceof ObjectCreationExpr) {
+                if (detachFlag) {
+                    return parent;
+                }
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return node;
-        }
-        Node parent = demandParentNode(node);
-        if (parent instanceof ObjectCreationExpr && !((ObjectCreationExpr) parent).getArguments().contains(node)) {
-            return parent;
-        }
-        return findContainingTypeDeclOrObjectCreationExpr(parent, className);
     }
 
 
@@ -789,6 +801,18 @@ public class JavaParserFacade {
         if (clazz.isPrimitive()) {
             return ResolvedPrimitiveType.byName(clazz.getName());
         }
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
+
+        ResolvedReferenceTypeDeclaration declaration;
+        if (clazz.isAnnotation()) {
+            declaration = new ReflectionAnnotationDeclaration(clazz, typeSolver);
+        } else if (clazz.isEnum()) {
+            declaration = new ReflectionEnumDeclaration(clazz, typeSolver);
+        } else if (clazz.isInterface()) {
+            declaration = new ReflectionInterfaceDeclaration(clazz, typeSolver);
+        } else {
+            declaration = new ReflectionClassDeclaration(clazz, typeSolver);
+        }
+        return new ReferenceTypeImpl(declaration, typeSolver);
     }
+
 }
