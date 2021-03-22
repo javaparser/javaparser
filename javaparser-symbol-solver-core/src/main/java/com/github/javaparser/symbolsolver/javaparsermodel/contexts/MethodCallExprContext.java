@@ -235,7 +235,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
             ResolvedType returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             // we don't want to replace the return type in case of UNBOUNDED type (<?>)
-            if (returnType != methodUsage.returnType() && !(returnType == ResolvedWildcard.UNBOUNDED)) {
+            if (!(returnType.equals(methodUsage.returnType())) && !(returnType.equals(ResolvedWildcard.UNBOUNDED))) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
             }
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
