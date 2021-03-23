@@ -21,19 +21,23 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
@@ -72,20 +76,17 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
         Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
         JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
         assertEquals(true, jarTypeSolver2.tryToSolveType("foo.zum.B").isSolved());
-
-
     }
 
     @Test
     void dependenciesBetweenJarsTriggeringReferencesThatCannotBeResolved() throws IOException {
         assertThrows(UnsolvedSymbolException.class, () -> {
-            Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
-        JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
-        ResolvedReferenceTypeDeclaration b = jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
-        b.getAncestors();
-    });
-        
-        }
+                Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
+            JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
+            ResolvedReferenceTypeDeclaration b = jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
+            b.getAncestors();
+        });
+    }
 
     @Test
     void dependenciesBetweenJarsTriggeringReferencesThatCanBeResolved() throws IOException {
@@ -101,22 +102,48 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
         List<ResolvedReferenceType> ancestors = b.getAncestors();
         assertEquals(1, ancestors.size());
     }
-    
+
+    /**
+     * The {@link JarTypeSolver} should not solve the JRE types. If we want to solve the JRE types
+     * we should combine it with a {@link ReflectionTypeSolver}.
+     *
+     * @throws IOException If an I/O exception occur.
+     */
     @Test
-    void cleanUp() throws IOException {
+    void whenJarTypeSolverShouldNotSolveJREType() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
-        JarTypeSolver.ResourceRegistry.getRegistry().cleanUp();
-        jarTypeSolver = new JarTypeSolver(pathToJar);
-        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        assertFalse(typeSolver.tryToSolveType("java.lang.Object").isSolved());
     }
-    
+
     @Test
-    void cleanUpWithIllegalStateException() throws IOException {
+    void solveTypeShouldReturnTheCorrespondingDeclarationWhenAvailable() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
-        JarTypeSolver.ResourceRegistry.getRegistry().cleanUp();
-        assertThrows(IllegalStateException.class, () -> jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        ResolvedReferenceTypeDeclaration nodeType = typeSolver.solveType("com.github.javaparser.ast.Node");
+        assertEquals("com.github.javaparser.ast.Node", nodeType.getQualifiedName());
+    }
+
+    @Test
+    void solveTypeShouldThrowUnsolvedSymbolWhenNotAvailable() throws IOException {
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        assertThrows(UnsolvedSymbolException.class, () -> typeSolver.solveType("java.lang.Object"));
+    }
+
+    @Test
+    void createTypeSolverFromInputStream() throws IOException {
+        Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
+        try (FileInputStream fileInputStream = new FileInputStream(pathToJar.toFile())) {
+            JarTypeSolver typeSolver = new JarTypeSolver(fileInputStream);
+            assertTrue(typeSolver.tryToSolveType("com.github.javaparser.ast.Node").isSolved());
+        }
+    }
+
+    @Test
+    void whenTheJarIsNotFoundShouldThrowAFileNotFoundException(@TempDir Path tempDirectory) {
+        Path pathToJar = tempDirectory.resolve("a_non_existing_file.jar");
+        assertThrows(FileNotFoundException.class, () -> new JarTypeSolver(pathToJar));
     }
 
 }
