@@ -36,8 +36,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Will let the symbol solver look inside a jar file while solving types.
@@ -45,6 +51,8 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public class JarTypeSolver implements TypeSolver {
+
+    private static final String CLASS_EXTENSION = ".class";
 
     /**
      * @deprecated Use of this static method (previously following singleton pattern) is strongly discouraged
@@ -56,7 +64,28 @@ public class JarTypeSolver implements TypeSolver {
         return new JarTypeSolver(pathToJar);
     }
 
+    /**
+     * Convert the entry path into a qualified name.
+     *
+     * The entries in Jar files follows the format {@code com/github/javaparser/ASTParser$JJCalls.class}
+     * while in the type solver we need to work with {@code com.github.javaparser.ASTParser.JJCalls}.
+     *
+     * @param entryPath The entryPath to be converted.
+     *
+     * @return The qualified name for the entryPath.
+     */
+    private static String convertEntryPathToClassName(String entryPath) {
+        if (!entryPath.endsWith(CLASS_EXTENSION)) {
+            throw new IllegalArgumentException(String.format("The entry path should end with %s", CLASS_EXTENSION));
+        }
+        String className = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length());
+        className = className.replace('/', '.');
+        className = className.replace('$', '.');
+        return className;
+    }
+
     private final ClassPool classPool = new ClassPool();
+    private final Set<String> knownClasses = new HashSet<>();
 
     private TypeSolver parent;
 
@@ -65,9 +94,9 @@ public class JarTypeSolver implements TypeSolver {
      *
      * @param pathToJar The path where the jar is located.
      *
-     * @throws FileNotFoundException If the jar file was not found.
+     * @throws IOException If an I/O exception occurs while reading the Jar.
      */
-    public JarTypeSolver(Path pathToJar) throws FileNotFoundException {
+    public JarTypeSolver(Path pathToJar) throws IOException {
         this(pathToJar.toFile());
     }
 
@@ -76,9 +105,9 @@ public class JarTypeSolver implements TypeSolver {
      *
      * @param pathToJar The file pointing to the jar is located.
      *
-     * @throws FileNotFoundException If the jar file was not found.
+     * @throws IOException If an I/O exception occurs while reading the Jar.
      */
-    public JarTypeSolver(File pathToJar) throws FileNotFoundException {
+    public JarTypeSolver(File pathToJar) throws IOException {
         this(pathToJar.getAbsolutePath());
     }
 
@@ -87,9 +116,9 @@ public class JarTypeSolver implements TypeSolver {
      *
      * @param pathToJar The path pointing to the jar.
      *
-     * @throws FileNotFoundException If the jar file was not found.
+     * @throws IOException If an I/O exception occurs while reading the Jar.
      */
-    public JarTypeSolver(String pathToJar) throws FileNotFoundException {
+    public JarTypeSolver(String pathToJar) throws IOException {
         addPathToJar(pathToJar);
     }
 
@@ -139,11 +168,12 @@ public class JarTypeSolver implements TypeSolver {
      *
      * @param pathToJar The path pointing to the jar file.
      *
-     * @throws FileNotFoundException If the jar file was not found.
+     * @throws IOException If an I/O error occurs while reading the JarFile.
      */
-    private void addPathToJar(String pathToJar) throws FileNotFoundException {
+    private void addPathToJar(String pathToJar) throws IOException {
         try {
             classPool.appendClassPath(pathToJar);
+            registerKnownClassesFor(pathToJar);
         } catch (NotFoundException e) {
             // If JavaAssist throws a NotFoundException we should notify the user
             // with a FileNotFoundException.
@@ -151,6 +181,42 @@ public class JarTypeSolver implements TypeSolver {
             jarNotFound.initCause(e);
             throw jarNotFound;
         }
+    }
+
+    /**
+     * Register the list of known classes.
+     *
+     * When we create a new {@link JarTypeSolver} we should store the list of
+     * solvable types.
+     *
+     * @param pathToJar The path to the jar file.
+     *
+     * @throws IOException If an I/O error occurs while reading the JarFile.
+     */
+    private void registerKnownClassesFor(String pathToJar) throws IOException {
+        try (JarFile jarFile = new JarFile(pathToJar)) {
+
+            Enumeration<JarEntry> jarEntries = jarFile.entries();
+            while (jarEntries.hasMoreElements()) {
+
+                JarEntry entry = jarEntries.nextElement();
+                // Check if the entry is a .class file
+                if (!entry.isDirectory() && entry.getName().endsWith(CLASS_EXTENSION)) {
+                    String qualifiedName = convertEntryPathToClassName(entry.getName());
+                    knownClasses.add(qualifiedName);
+                }
+            }
+
+        }
+    }
+
+    /**
+     * Get the set of classes that can be resolved in the current type solver.
+     *
+     * @return The set of known classes.
+     */
+    public Set<String> getKnownClasses() {
+        return Collections.unmodifiableSet(knownClasses);
     }
 
     @Override
@@ -172,7 +238,14 @@ public class JarTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
+
+        // If the name is not registered in the list we can safely say is not solvable here
+        if (!knownClasses.contains(name)) {
+            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+        }
+
         try {
+            // If the type is registered, the we have to search for it
             return SymbolReference.solved(JavassistFactory.toTypeDeclaration(classPool.get(name), getRoot()));
         } catch (NotFoundException e) {
             // it could be an inner class

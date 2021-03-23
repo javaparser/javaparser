@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -144,6 +145,24 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
     void whenTheJarIsNotFoundShouldThrowAFileNotFoundException(@TempDir Path tempDirectory) {
         Path pathToJar = tempDirectory.resolve("a_non_existing_file.jar");
         assertThrows(FileNotFoundException.class, () -> new JarTypeSolver(pathToJar));
+    }
+
+    @Test
+    void theJarTypeShouldCacheTheListOfKnownTypes() throws IOException {
+        String typeA = "foo.bar.A";
+        String typeB = "foo.zum.B";
+
+        Path pathToJar1 = adaptPath("src/test/resources/jar1.jar");
+        JarTypeSolver jarTypeSolver1 = new JarTypeSolver(pathToJar1);
+        assertEquals(Sets.newHashSet(typeA), jarTypeSolver1.getKnownClasses());
+        assertTrue(jarTypeSolver1.tryToSolveType(typeA).isSolved());
+        assertFalse(jarTypeSolver1.tryToSolveType(typeB).isSolved());
+
+        Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
+        JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
+        assertEquals(Sets.newHashSet(typeB), jarTypeSolver2.getKnownClasses());
+        assertTrue(jarTypeSolver2.tryToSolveType(typeB).isSolved());
+        assertFalse(jarTypeSolver2.tryToSolveType(typeA).isSolved());
     }
 
 }
