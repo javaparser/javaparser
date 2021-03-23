@@ -21,31 +21,23 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.utils.Log;
-
 import javassist.ClassPool;
-import javassist.CtClass;
 import javassist.NotFoundException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Will let the symbol solver look inside a jar file while solving types.
@@ -53,75 +45,6 @@ import javassist.NotFoundException;
  * @author Federico Tomassetti
  */
 public class JarTypeSolver implements TypeSolver {
-
-    private TypeSolver parent;
-    private Map<String, ClasspathElement> classpathElements = new HashMap<>();
-    private ClassPool classPool = new ClassPool(false);
-    
-    /*
-     * ResourceRegistry is useful for freeing up resources.
-     */
-    public static class ResourceRegistry {
-        
-        private static ResourceRegistry registry;
-        
-        private List<JarFile> jarfiles;
-        
-        private ResourceRegistry() {
-            jarfiles = new ArrayList<>();
-            // Add a ShutDownHook to free resources when the VM is shutting down
-            Thread cleanerHook = new Thread(() -> cleanUp());
-            Runtime.getRuntime().addShutdownHook(cleanerHook);
-        }
-        
-        public static ResourceRegistry getRegistry() {
-            if (registry == null) {
-                registry = new ResourceRegistry();
-            }
-            return registry;
-        }
-        
-        /*
-         * Add ressources (JarFile) in registry
-         */
-        public boolean add(JarFile jarFile) {
-            return jarfiles.add(jarFile);
-        }
-        
-        /*
-         * Clean up all resources
-         * Jar files can not be reused after this call so it's better to free all references to
-         * jar in the registry. Do we need to clean the classpool too?
-         */
-        public void cleanUp() {
-            jarfiles.stream()
-                    .forEach(file -> {
-                        try {
-                            file.close();
-                        } catch (IOException e) {
-                            // nothing to do except logging
-                            Log.error("Cannot close jar file %s", () -> file.getName());
-                        }
-                    });
-            jarfiles.clear();
-        }
-    }
-
-    public JarTypeSolver(Path pathToJar) throws IOException {
-        this(pathToJar.toFile());
-    }
-
-    public JarTypeSolver(File pathToJar) throws IOException {
-        this(pathToJar.getCanonicalPath());
-    }
-
-    public JarTypeSolver(String pathToJar) throws IOException {
-        addPathToJar(pathToJar);
-    }
-
-    public JarTypeSolver(InputStream jarInputStream) throws IOException {
-        addPathToJar(jarInputStream);
-    }
 
     /**
      * @deprecated Use of this static method (previously following singleton pattern) is strongly discouraged
@@ -133,6 +56,67 @@ public class JarTypeSolver implements TypeSolver {
         return new JarTypeSolver(pathToJar);
     }
 
+    private final ClassPool classPool = new ClassPool();
+
+    private TypeSolver parent;
+
+    /**
+     * Create a {@link JarTypeSolver} from a {@link Path}.
+     *
+     * @param pathToJar The path where the jar is located.
+     *
+     * @throws FileNotFoundException If the jar file was not found.
+     */
+    public JarTypeSolver(Path pathToJar) throws FileNotFoundException {
+        this(pathToJar.toFile());
+    }
+
+    /**
+     * Create a {@link JarTypeSolver} from a {@link File}.
+     *
+     * @param pathToJar The file pointing to the jar is located.
+     *
+     * @throws FileNotFoundException If the jar file was not found.
+     */
+    public JarTypeSolver(File pathToJar) throws FileNotFoundException {
+        this(pathToJar.getAbsolutePath());
+    }
+
+    /**
+     * Create a {@link JarTypeSolver} from a path in a {@link String} format.
+     *
+     * @param pathToJar The path pointing to the jar.
+     *
+     * @throws FileNotFoundException If the jar file was not found.
+     */
+    public JarTypeSolver(String pathToJar) throws FileNotFoundException {
+        addPathToJar(pathToJar);
+    }
+
+    /**
+     * Create a {@link JarTypeSolver} from a {@link InputStream}.
+     *
+     * The content will be dumped into a temporary file to be used in the type solver.
+     *
+     * @param jarInputStream The input stream to be used.
+     *
+     * @throws IOException If an I/O exception occurs while creating the temporary file.
+     */
+    public JarTypeSolver(InputStream jarInputStream) throws IOException {
+        addPathToJar(dumpToTempFile(jarInputStream).getAbsolutePath());
+    }
+
+    /**
+     * Utility function to dump the input stream into a temporary file.
+     *
+     * This file will be deleted when the virtual machine terminates.
+     *
+     * @param inputStream The input to be dumped.
+     *
+     * @return The created file with the dumped information.
+     *
+     * @throws IOException If an I/O exception occurs while creating the temporary file.
+     */
     private File dumpToTempFile(InputStream inputStream) throws IOException {
         File tempFile = File.createTempFile("jar_file_from_input_stream", ".jar");
         tempFile.deleteOnExit();
@@ -150,27 +134,22 @@ public class JarTypeSolver implements TypeSolver {
         return tempFile;
     }
 
-    private void addPathToJar(InputStream jarInputStream) throws IOException {
-        addPathToJar(dumpToTempFile(jarInputStream).getAbsolutePath());
-    }
-
-    private void addPathToJar(String pathToJar) throws IOException {
+    /**
+     * Utility method to register a new class path.
+     *
+     * @param pathToJar The path pointing to the jar file.
+     *
+     * @throws FileNotFoundException If the jar file was not found.
+     */
+    private void addPathToJar(String pathToJar) throws FileNotFoundException {
         try {
             classPool.appendClassPath(pathToJar);
-            classPool.appendSystemPath();
         } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JarFile jarFile = new JarFile(pathToJar);
-        ResourceRegistry.getRegistry().add(jarFile);
-        JarEntry entry;
-        Enumeration<JarEntry> e = jarFile.entries();
-        while (e.hasMoreElements()) {
-            entry = e.nextElement();
-            if (entry != null && !entry.isDirectory() && entry.getName().endsWith(".class")) {
-                String name = entryPathToClassName(entry.getName());
-                classpathElements.put(name, new ClasspathElement(jarFile, entry));
-            }
+            // If JavaAssist throws a NotFoundException we should notify the user
+            // with a FileNotFoundException.
+            FileNotFoundException jarNotFound = new FileNotFoundException(e.getMessage());
+            jarNotFound.initCause(e);
+            throw jarNotFound;
         }
     }
 
@@ -191,27 +170,29 @@ public class JarTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
-    private String entryPathToClassName(String entryPath) {
-        if (!entryPath.endsWith(".class")) {
-            throw new IllegalStateException();
-        }
-        String className = entryPath.substring(0, entryPath.length() - ".class".length());
-        className = className.replace('/', '.');
-        className = className.replace('$', '.');
-        return className;
-    }
-
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         try {
-            if (classpathElements.containsKey(name)) {
-                return SymbolReference.solved(
-                        JavassistFactory.toTypeDeclaration(classpathElements.get(name).toCtClass(), getRoot()));
-            } else {
+            return SymbolReference.solved(JavassistFactory.toTypeDeclaration(classPool.get(name), getRoot()));
+        } catch (NotFoundException e) {
+            // it could be an inner class
+            int lastDot = name.lastIndexOf('.');
+            if (lastDot == -1) {
                 return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+            } else {
+                String parentName = name.substring(0, lastDot);
+                String childName = name.substring(lastDot + 1);
+                SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
+                if (parent.isSolved()) {
+                    Optional<ResolvedReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration()
+                            .internalTypes()
+                            .stream().filter(it -> it.getName().equals(childName)).findFirst();
+                    return innerClass.map(SymbolReference::solved)
+                            .orElseGet(() -> SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
+                } else {
+                    return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+                }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -225,20 +206,4 @@ public class JarTypeSolver implements TypeSolver {
         }
     }
 
-    private class ClasspathElement {
-
-        private JarFile jarFile;
-        private JarEntry entry;
-
-        ClasspathElement(JarFile jarFile, JarEntry entry) {
-            this.jarFile = jarFile;
-            this.entry = entry;
-        }
-
-        CtClass toCtClass() throws IOException {
-            try (InputStream is = jarFile.getInputStream(entry)) {
-                return classPool.makeClassIfNew(is);
-            }
-        }
-    }
 }
