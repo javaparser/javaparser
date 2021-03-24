@@ -36,11 +36,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -84,8 +83,26 @@ public class JarTypeSolver implements TypeSolver {
         return className;
     }
 
+    /**
+     * Convert the entry path into a qualified name to be used in {@link ClassPool}.
+     *
+     * The entries in Jar files follows the format {@code com/github/javaparser/ASTParser$JJCalls.class}
+     * while in the class pool we need to work with {@code com.github.javaparser.ASTParser$JJCalls}.
+     *
+     * @param entryPath The entryPath to be converted.
+     *
+     * @return The qualified name to be used in the class pool.
+     */
+    private static String convertEntryPathToClassPoolName(String entryPath) {
+        if (!entryPath.endsWith(CLASS_EXTENSION)) {
+            throw new IllegalArgumentException(String.format("The entry path should end with %s", CLASS_EXTENSION));
+        }
+        String className = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length());
+        return className.replace('/', '.');
+    }
+
     private final ClassPool classPool = new ClassPool();
-    private final Set<String> knownClasses = new HashSet<>();
+    private final Map<String, String> knownClasses = new HashMap<>();
 
     private TypeSolver parent;
 
@@ -203,7 +220,15 @@ public class JarTypeSolver implements TypeSolver {
                 // Check if the entry is a .class file
                 if (!entry.isDirectory() && entry.getName().endsWith(CLASS_EXTENSION)) {
                     String qualifiedName = convertEntryPathToClassName(entry.getName());
-                    knownClasses.add(qualifiedName);
+                    String classPoolName = convertEntryPathToClassPoolName(entry.getName());
+
+                    // If the qualified name is the same as the class pool name we don't need to duplicate store two
+                    // different String instances. Let's reuse the same.
+                    if (qualifiedName.equals(classPoolName)) {
+                        knownClasses.put(qualifiedName, qualifiedName);
+                    } else {
+                        knownClasses.put(qualifiedName, classPoolName);
+                    }
                 }
             }
 
@@ -216,7 +241,7 @@ public class JarTypeSolver implements TypeSolver {
      * @return The set of known classes.
      */
     public Set<String> getKnownClasses() {
-        return Collections.unmodifiableSet(knownClasses);
+        return knownClasses.keySet();
     }
 
     @Override
@@ -239,33 +264,21 @@ public class JarTypeSolver implements TypeSolver {
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
 
+        String storedKey = knownClasses.get(name);
         // If the name is not registered in the list we can safely say is not solvable here
-        if (!knownClasses.contains(name)) {
+        if (storedKey == null) {
             return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         }
 
         try {
-            // If the type is registered, the we have to search for it
-            return SymbolReference.solved(JavassistFactory.toTypeDeclaration(classPool.get(name), getRoot()));
+            return SymbolReference.solved(JavassistFactory.toTypeDeclaration(classPool.get(storedKey), getRoot()));
         } catch (NotFoundException e) {
-            // it could be an inner class
-            int lastDot = name.lastIndexOf('.');
-            if (lastDot == -1) {
-                return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
-            } else {
-                String parentName = name.substring(0, lastDot);
-                String childName = name.substring(lastDot + 1);
-                SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
-                if (parent.isSolved()) {
-                    Optional<ResolvedReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration()
-                            .internalTypes()
-                            .stream().filter(it -> it.getName().equals(childName)).findFirst();
-                    return innerClass.map(SymbolReference::solved)
-                            .orElseGet(() -> SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
-                } else {
-                    return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
-                }
-            }
+            // The names in stored key should always be resolved.
+            // But if for some reason this happen, the user is notified.
+            throw new IllegalStateException(String.format(
+                    "Unable to get class witj name %s from class pool." +
+                    "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
+                    storedKey));
         }
     }
 
