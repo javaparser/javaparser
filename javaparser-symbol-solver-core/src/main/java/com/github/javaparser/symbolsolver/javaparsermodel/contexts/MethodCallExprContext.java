@@ -52,7 +52,6 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
@@ -218,23 +217,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // In our example Stream.T equal to String, so the R (and the result of the call to collect) is
             // List<? super String>
 
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> derivedValues = new HashMap<>();
-            for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
-                ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
-                ResolvedType parameterType = parameter.getType();
-                // Don't continue if a vararg parameter is reached and there are no arguments left
-                if (parameter.isVariadic() && argumentsTypes.size() < methodUsage.getNoParams()) {
-                    break;
-                }
-                if (!argumentsTypes.get(i).isArray() && parameter.isVariadic()) {
-                    parameterType = parameterType.asArrayType().getComponentType();
-                }
-                inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
-            }
-
-            for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()){
-                methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
-            }
+            methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
 
             ResolvedType returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             // we don't want to replace the return type in case of UNBOUNDED type (<?>)
@@ -339,97 +322,25 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
-        Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters = new HashMap<>();
-
-        if (methodUsage.getDeclaration().hasVariadicParameter()) {
-            if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
-                // the varargs parameter is an Array, so extract the inner type
-                ResolvedType expectedType =
-                    methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
-                // the varargs corresponding type can be either T or Array<T>
-                ResolvedType actualType =
-                    actualParamTypes.get(actualParamTypes.size() - 1).isArray() ?
-                        actualParamTypes.get(actualParamTypes.size() - 1).asArrayType().getComponentType() :
-                        actualParamTypes.get(actualParamTypes.size() - 1);
-                if (!expectedType.isAssignableBy(actualType)) {
-                    for (ResolvedTypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
-                        expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
-                    }
-                }
-                if (!expectedType.isAssignableBy(actualType)) {
-                    // ok, then it needs to be wrapped
-                    throw new UnsupportedOperationException(
-                        String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
-                                      expectedType,
-                                      actualType,
-                                      methodUsage.getDeclaration(),
-                                      methodUsage));
-                }
-                // match only the varargs type
-                matchTypeParameters(expectedType, actualType, matchedTypeParameters);
-            } else {
-                return methodUsage;
+        Map<ResolvedTypeParameterDeclaration, ResolvedType> derivedValues = new HashMap<>();
+        for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
+            ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
+            ResolvedType parameterType = parameter.getType();
+            // Don't continue if a vararg parameter is reached and there are no arguments left
+            if (parameter.isVariadic() && actualParamTypes.size() < methodUsage.getNoParams()) {
+                break;
             }
+            if (!actualParamTypes.get(i).isArray() && parameter.isVariadic()) {
+                parameterType = parameterType.asArrayType().getComponentType();
+            }
+            inferTypes(actualParamTypes.get(i), parameterType, derivedValues);
         }
 
-        int until = methodUsage.getDeclaration().hasVariadicParameter() ?
-            actualParamTypes.size() - 1 :
-            actualParamTypes.size();
+        for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()){
+            methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
+        }
 
-        for (int i = 0; i < until; i++) {
-            ResolvedType expectedType = methodUsage.getParamType(i);
-            ResolvedType actualType = actualParamTypes.get(i);
-            matchTypeParameters(expectedType, actualType, matchedTypeParameters);
-        }
-        for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
-            methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
-        }
         return methodUsage;
-    }
-
-    private void matchTypeParameters(ResolvedType expectedType, ResolvedType actualType, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
-        if (expectedType.isTypeVariable()) {
-            ResolvedType type = actualType;
-            // in case of primitive type, the expected type must be compared with the boxed type of the actual type
-            if (type.isPrimitive()) {
-                type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
-            }
-            /*
-             * "a value of the null type (the null reference is the only such value) may be assigned to any reference type, resulting in a null reference of that type"
-             * https://docs.oracle.com/javase/specs/jls/se15/html/jls-5.html#jls-5.2
-             */
-            if (type.isNull()) {
-                type = MyObjectProvider.INSTANCE.object();
-            }
-            if (!type.isTypeVariable() && !type.isReferenceType()) {
-                throw new UnsupportedOperationException(type.getClass().getCanonicalName());
-            }
-            matchedTypeParameters.put(expectedType.asTypeParameter(), type);
-        } else if (expectedType.isArray()) {
-        	// Issue 2258 : NullType must not fail this search
-            if (!(actualType.isArray() || actualType.isNull())) {
-                throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
-            }
-            matchTypeParameters(
-                    expectedType.asArrayType().getComponentType(),
-                    actualType.isNull() ? actualType : actualType.asArrayType().getComponentType(),
-                    matchedTypeParameters);
-        } else if (expectedType.isReferenceType()) {
-            // avoid cases where the actual type has no type parameters but the expected one has. Such as: "classX extends classY<Integer>"
-            if (actualType.isReferenceType() && actualType.asReferenceType().typeParametersValues().size() > 0) {
-                int i = 0;
-                for (ResolvedType tp : expectedType.asReferenceType().typeParametersValues()) {
-                    matchTypeParameters(tp, actualType.asReferenceType().typeParametersValues().get(i), matchedTypeParameters);
-                    i++;
-                }
-            }
-        } else if (expectedType.isPrimitive()) {
-            // nothing to do
-        } else if (expectedType.isWildcard()) {
-            // nothing to do
-        } else {
-            throw new UnsupportedOperationException(expectedType.getClass().getCanonicalName());
-        }
     }
 
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedTypeVariable tp, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
