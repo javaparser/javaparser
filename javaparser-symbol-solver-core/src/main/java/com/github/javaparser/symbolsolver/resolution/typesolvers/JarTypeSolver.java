@@ -276,7 +276,7 @@ public class JarTypeSolver implements TypeSolver {
             // The names in stored key should always be resolved.
             // But if for some reason this happen, the user is notified.
             throw new IllegalStateException(String.format(
-                    "Unable to get class witj name %s from class pool." +
+                    "Unable to get class with name %s from class pool." +
                     "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
                     storedKey));
         }
