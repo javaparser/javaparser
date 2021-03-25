@@ -59,6 +59,7 @@ public class ResolvedTypeVariable implements ResolvedType {
         if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
         if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType()) return false;
         if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod()) return false;
+        if (!typeParameter.getBounds().equals(that.typeParameter.getBounds())) return false;
 
         return true;
     }
