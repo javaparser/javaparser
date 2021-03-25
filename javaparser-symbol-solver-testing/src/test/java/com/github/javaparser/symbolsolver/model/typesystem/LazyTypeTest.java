@@ -32,7 +32,6 @@ import java.util.function.Supplier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
@@ -118,8 +117,8 @@ class LazyTypeTest {
         assertNotEquals(firstVoidType.hashCode(), booleanType.hashCode());
         assertNotEquals(booleanType.hashCode(), firstVoidType.hashCode());
 
-        assertThrows(NullPointerException.class, () -> firstVoidType.equals(nullReturnType));
-        assertThrows(NullPointerException.class, () -> nullReturnType.equals(firstVoidType));
+        assertNotEquals(nullReturnType, firstVoidType);
+        assertNotEquals(firstVoidType, nullReturnType);
     }
 
 }

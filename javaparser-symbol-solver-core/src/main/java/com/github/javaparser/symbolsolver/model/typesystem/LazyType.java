@@ -32,39 +32,11 @@ import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.google.common.base.Preconditions;
 
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class LazyType implements ResolvedType {
-
-    /**
-     * Get the concrete type of a {@link ResolvedType}.
-     *
-     * This method is used to unpack the {@link LazyType} when they are nested.
-     *
-     * {@code
-     *      LazyType typeA = new LazyType(() -> ResolvedVoidType.INSTANCE);
-     *      LazyType typeB = new LazyType(() -> typeA);
-     *      LazyType typeC = new LazyType(() -> typeB);
-     * }
-     *
-     * In this example, by calling {@code getConcreteType(typeC)} we would expected the return type to be a
-     * {@link ResolvedVoidType}
-     *
-     * @param type The resolved type to find the concrete type.
-     *
-     * @return The concrete type for the {@link LazyType}.
-     */
-    public static ResolvedType getConcreteType(ResolvedType type) {
-        Preconditions.checkNotNull(type, "The type can not be null!");
-
-        if (type instanceof LazyType) {
-            return getConcreteType(((LazyType) type).getType());
-        } else {
-            return type;
-        }
-    }
 
     private final Supplier<ResolvedType> supplier;
 
@@ -80,20 +52,32 @@ public class LazyType implements ResolvedType {
         this.supplier = supplier;
     }
 
-    private ResolvedType getType() {
+    /**
+     * Get the type wrapped by a {@link LazyType}.
+     *
+     * This method is used to get and unpack the {@link LazyType} when they are nested.
+     *
+     * {@code
+     *      LazyType typeA = new LazyType(() -> ResolvedVoidType.INSTANCE);
+     *      LazyType typeB = new LazyType(() -> typeA);
+     *      LazyType typeC = new LazyType(() -> typeB);
+     * }
+     *
+     * In this examples, by calling {@code getType()} we would expected all of them to return {@link ResolvedVoidType}
+     *
+     * @return The concrete type for the {@link LazyType}.
+     */
+    public ResolvedType getType() {
         if (concrete == null) {
             concrete = supplier.get();
         }
-        return concrete;
-    }
 
-    /**
-     * Get the concrete {@link ResolvedType} for the current {@link LazyType}.
-     *
-     * @return The {@link ResolvedType} if already resolved, otherwise empty.
-     */
-    public Optional<ResolvedType> getConcreteType() {
-        return Optional.ofNullable(concrete);
+        // If the concrete value is a lazy type, then get the inner type.
+        if (concrete instanceof LazyType) {
+            return ((LazyType) concrete).getType();
+        } else {
+            return concrete;
+        }
     }
 
     @Override
@@ -193,13 +177,12 @@ public class LazyType implements ResolvedType {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof LazyType) {
-            // If is a LazyType then we should find the concrete value of the other before comparing
-            ResolvedType otherType = getConcreteType((LazyType) o);
-            return getType().equals(otherType);
+    public boolean equals(Object other) {
+        // If is a LazyType then we should find the concrete value of the other type before comparing
+        if (other instanceof LazyType) {
+            return Objects.equals(getType(), ((LazyType) other).getType());
         } else {
-            return getType().equals(o);
+            return Objects.equals(getType(), other);
         }
     }
 
