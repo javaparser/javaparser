@@ -744,6 +744,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print(jmlQuantifiedExpr.getBinder().symbol);
         printer.print(" ");
         printList(jmlQuantifiedExpr.getVariables(), ", ");
+        printer.print(";");
         printList(jmlQuantifiedExpr.getExpressions(), "; ");
         printer.print(")");
     }
@@ -860,7 +861,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     private void printClauseStoreRef(JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
-        printer.print(kind.jmlSymbol);
+        printer.print(kind == null ? "ERROR" : kind.jmlSymbol);
         printList(heaps, "", "", "", "<", ">");
         printer.print(" ");
         printList(exprs, ", ");
@@ -1134,6 +1135,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getPredicate().accept(this, arg);
         printer.print(";");
         printer.print(" }");
+    }
+
+    @Override
+    public void visit(JmlGhostStatements n, Void arg) {
+        printer.print("ghost");
+        printList(n.getStatements(), "\n");
     }
 
     @Override

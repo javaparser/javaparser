@@ -15,6 +15,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -35,7 +36,14 @@ public abstract class JmlClause extends Node implements Jmlish {
     }
 
     protected final void setKindByToken(JavaToken token) {
-        //TODO
+        Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values())
+                .filter(it -> it.jmlSymbol.equals(token.getText()))
+                .findFirst();
+        if (k.isPresent()) {
+            kind = k.get();
+        } else {
+            throw new IllegalArgumentException("Could not find clause kind for: " + token.getText());
+        }
     }
 
     /**

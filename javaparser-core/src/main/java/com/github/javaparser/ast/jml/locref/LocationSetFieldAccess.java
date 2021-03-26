@@ -55,7 +55,8 @@ public class LocationSetFieldAccess extends LocationSetExpression {
         if (name.getQualifier().isPresent()) {
             prefix = getPrefixWith(name.getQualifier().get(), prefix);
         }
-        return new LocationSetFieldAccess(prefix, new SimpleName(name.getIdentifier()));
+        SimpleName field = new SimpleName(name.getTokenRange().get(), name.getIdentifier());
+        return null;
     }
 
     public static LocationSetExpression forAllFields(TokenRange range, LocationSetExpression prefix) {

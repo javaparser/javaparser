@@ -691,4 +691,9 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final JmlSetComprehension n, final Void arg) {
         return (n.getBinding().accept(this, arg)) * 31 + (n.getPredicate().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
+
+    @Override
+    public Integer visit(final JmlGhostStatements n, final Void arg) {
+        return (n.getStatements().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
 }

@@ -13,7 +13,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.MeasuredByClauseMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.metamodel.JmlClauseEMetaModel;
 
 /**

@@ -646,4 +646,19 @@ public abstract class Statement extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlStmtWithExpression(Consumer<JmlStmtWithExpression> action) {
     }
+
+    public boolean isJmlGhostStatements() {
+        return false;
+    }
+
+    public JmlGhostStatements asJmlGhostStatements() {
+        throw new IllegalStateException(f("%s is not JmlGhostStatements, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlGhostStatements> toJmlGhostStatements() {
+        return Optional.empty();
+    }
+
+    public void ifJmlGhostStatements(Consumer<JmlGhostStatements> action) {
+    }
 }

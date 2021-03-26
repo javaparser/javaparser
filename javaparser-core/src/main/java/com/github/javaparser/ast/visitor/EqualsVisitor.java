@@ -1666,4 +1666,12 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
+
+    @Override
+    public Boolean visit(final JmlGhostStatements n, final Visitable arg) {
+        final JmlGhostStatements n2 = (JmlGhostStatements) arg;
+        if (!nodesEquals(n.getStatements(), n2.getStatements()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
 }

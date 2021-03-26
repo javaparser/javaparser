@@ -1807,4 +1807,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final JmlGhostStatements n, final A arg) {
+        NodeList<Statement> statements = modifyList(n.getStatements(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setStatements(statements);
+        n.setComment(comment);
+        return n;
+    }
 }

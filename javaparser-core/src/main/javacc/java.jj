@@ -1980,7 +1980,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         //LOOKAHEAD(JmlStart() Modifiers() (Identifier() | <INVARIANT>) )
         ret = JmlClassOrInterfaceBodyDeclaration()
      |
-        (contracts=JmlContracts())?
+        (LOOKAHEAD(3) contracts=JmlContracts())?
         // Just get all the modifiers out of the way. If you want to do
         // more checks, pass the modifiers down to the member
         modifiers = Modifiers()
@@ -3214,7 +3214,7 @@ String Identifier():
        | <MEASURED_BY_REDUNDANTLY> | <METHOD> | <MODEL> | <MODEL_PROGRAM> | <MODIFIABLE>
        | <MODIFIABLE_REDUNDANTLY> | <MODIFIES> | <MODIFIES_REDUNDANTLY> | <MONITORED>
        | <MONITORS_FOR> | <NEW_OBJECT > | <NON_NULL> | <NORMAL_BEHAVIOR> | <NORMAL_BEHAVIOUR>
-       | <NORMAL_EXAMPLE> | <NULLABLE> | <NULLABLE_BY_DEFAULT> | <OLD> | <OR>
+       | <NORMAL_EXAMPLE> | <NULLABLE> | <NULLABLE_BY_DEFAULT> | <OLD> | <OR> | <OLD_ESC>
        | <POST> | <POST_REDUNDANTLY> | <PRE> | <PRE_REDUNDANTLY> | <PURE>
        | <READABLE> | <REFINING> | <REPRESENTS> | <REPRESENTS_REDUNDANTLY> | <REQUIRES_REDUNDANTLY>
        | <RETURNS> | <RETURNS_REDUNDANTLY> | <RETURN_BEHAVIOR > | <RETURN_BEHAVIOUR > | <SET>
@@ -3222,7 +3222,7 @@ String Identifier():
        | <SPEC_BIGINT_MATH> | <SPEC_JAVA_MATH> | <SPEC_PACKAGE > | <SPEC_PRIVATE >
        | <SPEC_PROTECTED> | <SPEC_PUBLIC> | <SPEC_SAFE_MATH> | <STATIC_INITIALIZER> | <STRICTLY_PURE >
        | <SUBTYPE> | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
-       | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE>
+       | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> | <INVARIANT_FOR>
        | <RESULT>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
@@ -4511,6 +4511,7 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 Statement Statement():
 {
     Statement ret;
+    NodeList<JmlContracts> contracts = emptyNodeList();
 }
 {
     try {
@@ -4520,13 +4521,16 @@ Statement Statement():
             | ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
             | LOOKAHEAD(3) ret = BlockWithContract()
+            | LOOKAHEAD(3)
+              (contracts=JmlLoopInvariants())?
+              ( ret = WhileStatement(contracts)
+              | ret = DoStatement(contracts)
+              | ret = ForStatement(contracts)
+              )
             | ret = EmptyStatement()
             | ret = StatementExpression()
             | ret = SwitchStatement()
             | ret = IfStatement()
-            | ret = WhileStatement()
-            | ret = DoStatement()
-            | ret = ForStatement()
             | ret = BreakStatement()
             | ret = ContinueStatement()
             | ret = ReturnStatement()
@@ -4542,22 +4546,27 @@ Statement Statement():
 }
 
 JmlStatements JmlStatements():
-{ JmlStatements stmts = new JmlStatements(); JavaToken begin; JmlStatement s; }
+{ JmlStatements stmts = new JmlStatements(); JavaToken begin,end; JmlStatement s; }
 {
-  JmlStart(stmts)
+  JmlStart(stmts) {begin=token();}
   (s=JmlStatement() {stmts.getElements().add(s);})*
   JmlEnd()
-  {return stmts; }
+  { stmts.setTokenRange(range(begin,token()));
+    return stmts;
+    }
 }
 
 JmlStatement JmlStatement():
-{ JavaToken begin; Expression expr,target; }
+{ JavaToken begin; Expression expr,target; NodeList<Statement> stmts;}
 {
   ( (<ASSERT> | <ASSUME> | <HENCE_by> | <HENCE_by_REDUNDANTLY> | <SET>)
     { begin = token(); }
     expr=Expression()
     ";"
     { return new JmlStmtWithExpression(range(begin, token()), expr); }
+  | <GHOST>
+    stmts=Statements()     { begin = token(); }
+    { return new JmlGhostStatements(range(begin, token()), stmts); }
   | <UNREACHABLE> ";"
     { return new JmlUnreachableStmt(range(token(), token())); }
   )
@@ -4719,14 +4728,17 @@ NodeList<JmlContracts> JmlContracts():
     NodeList<JmlContracts> contracts = emptyNodeList();
     NodeList<JmlContract> elements = emptyNodeList();
     JmlContracts contract;
+    JavaToken begin, end;
 }
 {
-  (
+  ( LOOKAHEAD(5) //to dinstinguish from JmlModifier
     {contract = new JmlContracts();}
-    JmlStart(contract)
+    JmlStart(contract) {begin=token();}
     elements=JmlContractsInner()
-    JmlEnd()
-    {contract.setElements(elements); contracts.add(contract);}
+    JmlEnd() {end=token();}
+    {contract.setElements(elements); contracts.add(contract);
+     contract.setTokenRange(range(begin,end));
+    }
   )+
   { return contracts;}
 }
@@ -5069,17 +5081,22 @@ LocationSetExpression StoreRefExpr():
 LocationSetExpression StoreRefField():
 {
         JavaToken begin;
-        LocationSetExpression prefix; Name name;
+        LocationSetExpression prefix; SimpleName name;
         Expression expr;
 }
 {
-  name = Name() { prefix=LocationSetFieldAccess.fromQualifiedName(null, name);}
-  ( "." "*" { return LocationSetFieldAccess.forAllFields(range(name, token()), prefix); }
-  | ("[" ( expr=Expression() {prefix = new LocationSetArrayAccess(range(prefix, token()), prefix, expr);}
-         | "*" {prefix = LocationSetArrayAccess.forAllIndices(range(prefix, token()), prefix);}) "]"
-    )+
-  | name=Name() {prefix = LocationSetFieldAccess.fromQualifiedName(prefix, name); }
-  )?
+  name=SimpleName()
+  { prefix=new LocationSetFieldAccess(range(name,name), null, name);}
+  ( ("[" ( expr=Expression()
+            {prefix = new LocationSetArrayAccess(range(prefix, token()), prefix, expr);}
+          | "*" {prefix = LocationSetArrayAccess.forAllIndices(range(prefix, token()), prefix);}
+          )
+       "]"
+     )
+  | "." ( name=SimpleName() {prefix = new LocationSetFieldAccess(range(prefix, token()),prefix, name); }
+        | "*" { return LocationSetFieldAccess.forAllFields(range(prefix, token()), prefix); }
+        )
+  )*
   {assert prefix!=null; return prefix;}
 }
 
@@ -5470,15 +5487,13 @@ IfStmt IfStatement():
  *         while ( Expression ) StatementNoShortIf
  * }</pre>
  */
-WhileStmt WhileStatement():
+WhileStmt WhileStatement(NodeList<JmlContracts> contracts):
 {
     Expression condition;
     Statement body;
     JavaToken begin;
-    NodeList<JmlContracts> contracts = new NodeList<>();
 }
 {
-    (contracts=JmlLoopInvariants())?
     "while" { begin=token(); }
     "("
     condition = Expression()
@@ -5494,15 +5509,13 @@ WhileStmt WhileStatement():
  *         do Statement while ( Expression ) ;
  * }</pre>
  */
-DoStmt DoStatement():
+DoStmt DoStatement(NodeList<JmlContracts> contracts):
 {
     Expression condition;
     Statement body;
     JavaToken begin;
-    NodeList<JmlContracts> contracts = new NodeList<>();
 }
 {
-    (contracts=JmlLoopInvariants())?
     "do" { begin=token(); }
     body = Statement()
     "while"
@@ -5524,7 +5537,7 @@ DoStmt DoStatement():
  *         EnhancedForStatementNoShortIf
  * }</pre>
  */
-Statement ForStatement():
+Statement ForStatement(NodeList<JmlContracts> contracts ):
 {
     VariableDeclarationExpr varExpr = null;
     Expression expr = null;
@@ -5532,10 +5545,8 @@ Statement ForStatement():
     NodeList<Expression> update = emptyNodeList();
     Statement body;
     JavaToken begin;
-    NodeList<JmlContracts> contracts = new NodeList<>();
 }
 {
-    (contracts=JmlLoopInvariants())?
     "for" { begin=token(); }
     "("
 

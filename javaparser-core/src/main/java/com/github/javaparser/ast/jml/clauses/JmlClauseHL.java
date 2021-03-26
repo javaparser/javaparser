@@ -15,7 +15,6 @@ import com.github.javaparser.metamodel.AssignableClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.metamodel.JmlClauseHLMetaModel;
 
 /**

@@ -336,4 +336,6 @@ public interface GenericVisitor<R, A> {
     R visit(LocationSetPrimary n, A arg);
 
     R visit(JmlSetComprehension n, A arg);
+
+    R visit(JmlGhostStatements n, A arg);
 }

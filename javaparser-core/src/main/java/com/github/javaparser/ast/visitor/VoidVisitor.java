@@ -329,4 +329,6 @@ public interface VoidVisitor<A> {
     void visit(LocationSetPrimary n, A arg);
 
     void visit(JmlSetComprehension n, A arg);
+
+    void visit(JmlGhostStatements n, A arg);
 }
