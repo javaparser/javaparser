@@ -651,15 +651,6 @@ public class JavaParserFacade {
         return get(typeSolver).convertToUsage(var.getType(), var);
     }
 
-    // This is an hack around an issue in JavaParser
-    private String qName(ClassOrInterfaceType classOrInterfaceType) {
-        String name = classOrInterfaceType.getName().getId();
-        if (classOrInterfaceType.getScope().isPresent()) {
-            return qName(classOrInterfaceType.getScope().get()) + "." + name;
-        }
-        return name;
-    }
-
     /**
      * Convert a {@link Type} into the corresponding {@link ResolvedType}.
      *
@@ -725,7 +716,7 @@ public class JavaParserFacade {
      * @return The type resolved.
      */
     protected ResolvedType convertClassOrInterfaceTypeToUsage(ClassOrInterfaceType classOrInterfaceType, Context context) {
-        String name = qName(classOrInterfaceType);
+        String name = classOrInterfaceType.getNameWithScope();
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(name);
