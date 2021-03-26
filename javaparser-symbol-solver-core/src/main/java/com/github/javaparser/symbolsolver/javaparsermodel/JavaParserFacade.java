@@ -643,11 +643,18 @@ public class JavaParserFacade {
         }
     }
 
-
     public ResolvedType convertToUsageVariableType(VariableDeclarator var) {
         return get(typeSolver).convertToUsage(var.getType(), var);
     }
 
+    /**
+     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
+     *
+     * @param type      The type to be converted.
+     * @param context   The current context.
+     *
+     * @return The type resolved.
+     */
     public ResolvedType convertToUsage(Type type, Node context) {
         if (type.isUnknownType()) {
             throw new IllegalArgumentException("Inferred lambda parameter type");
@@ -655,6 +662,13 @@ public class JavaParserFacade {
         return convertToUsage(type, JavaParserFactory.getContext(context, typeSolver));
     }
 
+    /**
+     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
+     *
+     * @param type The type to be converted.
+     *
+     * @return The type resolved.
+     */
     public ResolvedType convertToUsage(Type type) {
         return convertToUsage(type, type);
     }
@@ -668,6 +682,14 @@ public class JavaParserFacade {
         return name;
     }
 
+    /**
+     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
+     *
+     * @param type      The type to be converted.
+     * @param context   The current context.
+     *
+     * @return The type resolved.
+     */
     protected ResolvedType convertToUsage(Type type, Context context) {
         if (context == null) {
             throw new NullPointerException("Context should not be null");
@@ -691,6 +713,14 @@ public class JavaParserFacade {
         }
     }
 
+    /**
+     * Convert a {@link ClassOrInterfaceType} into a {@link ResolvedType}.
+     *
+     * @param classOrInterfaceType  The class of interface type to be converted.
+     * @param context               The current context.
+     *
+     * @return The type resolved.
+     */
     protected ResolvedType convertClassOrInterfaceTypeToUsage(ClassOrInterfaceType classOrInterfaceType, Context context) {
         String name = qName(classOrInterfaceType);
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
@@ -709,6 +739,14 @@ public class JavaParserFacade {
         }
     }
 
+    /**
+     * Convert a {@link WildcardType} into a {@link ResolvedType}.
+     *
+     * @param wildcardType  The wildcard type to be converted.
+     * @param context       The current context.
+     *
+     * @return The type resolved.
+     */
     protected ResolvedType convertWildcardTypeToUsage(WildcardType wildcardType, Context context) {
         if (wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
             return ResolvedWildcard.extendsBound(convertToUsage(wildcardType.getExtendedType().get(), context)); // removed (ReferenceTypeImpl)
@@ -721,10 +759,26 @@ public class JavaParserFacade {
         }
     }
 
+    /**
+     * Convert a {@link ArrayType} into a {@link ResolvedType}.
+     *
+     * @param arrayType The array type to be converted.
+     * @param context   The current context.
+     *
+     * @return The type resolved.
+     */
     protected ResolvedType convertArrayTypeToUsage(ArrayType arrayType, Context context) {
         return new ResolvedArrayType(convertToUsage(arrayType.getComponentType(), context));
     }
 
+    /**
+     * Convert a {@link UnionType} into a {@link ResolvedType}.
+     *
+     * @param unionType The union type to be converted.
+     * @param context   The current context.
+     *
+     * @return The type resolved.
+     */
     protected ResolvedType convertUnionTypeToUsage(UnionType unionType, Context context) {
         List<ResolvedType> resolvedElements = unionType.getElements().stream()
                 .map(el -> convertToUsage(el, context))
@@ -732,6 +786,14 @@ public class JavaParserFacade {
         return new ResolvedUnionType(resolvedElements);
     }
 
+    /**
+     * Convert a {@link VarType} into a {@link ResolvedType}.
+     *
+     * @param varType The var type to be converted.
+     * @param context The current context.
+     *
+     * @return The type resolved.
+     */
     protected ResolvedType convertVarTypeToUsage(VarType varType, Context context) {
         Node parent = varType.getParentNode().get();
         if (!(parent instanceof VariableDeclarator)) {
@@ -808,6 +870,13 @@ public class JavaParserFacade {
         return JavaParserFactory.toTypeDeclaration(typeDeclaration, typeSolver);
     }
 
+    /**
+     * Convert a {@link Class} into the corresponding {@link ResolvedType}.
+     *
+     * @param clazz The class to be converted.
+     *
+     * @return The class resolved.
+     */
     public ResolvedType classToResolvedType(Class<?> clazz) {
         if (clazz.isPrimitive()) {
             return ResolvedPrimitiveType.byName(clazz.getName());
