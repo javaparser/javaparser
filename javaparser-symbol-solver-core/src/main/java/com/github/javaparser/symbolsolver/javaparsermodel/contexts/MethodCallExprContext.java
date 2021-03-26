@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -48,6 +49,7 @@ import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -102,6 +104,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 if (ref.isSolved()) {
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
                     if (m.isSolved()) {
+                        if (m.getCorrespondingDeclaration().getName().equals("mapAll")) {
+                            System.out.println("m = " + m);
+                        }
+
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
@@ -235,12 +241,27 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
-        if (source.equals(target)) {
-            return;
-        }
         if (source.isReferenceType() && target.isReferenceType()) {
             ResolvedReferenceType sourceRefType = source.asReferenceType();
             ResolvedReferenceType targetRefType = target.asReferenceType();
+
+            if (!sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
+                List<ResolvedReferenceType> ancestors = sourceRefType.getAllAncestors();
+                final String formalParamTypeQName = targetRefType.getQualifiedName();
+                List<ResolvedType> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+                if (correspondingFormalType.isEmpty()) {
+                    ancestors = targetRefType.getAllAncestors();
+                    final String actualParamTypeQname = sourceRefType.getQualifiedName();
+                    List<ResolvedType> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
+                    if (correspondingActualType.isEmpty()) {
+                        throw new ConfilictingGenericTypesException(target, source);
+                    }
+                    correspondingFormalType = correspondingActualType;
+
+                }
+                sourceRefType = correspondingFormalType.get(0).asReferenceType();
+            }
+
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
             	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
 	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
@@ -248,6 +269,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 	                }
             	}
             }
+            return;
+        }
+        if (source.equals(target)) {
             return;
         }
         if (source.isReferenceType() && target.isWildcard()) {
