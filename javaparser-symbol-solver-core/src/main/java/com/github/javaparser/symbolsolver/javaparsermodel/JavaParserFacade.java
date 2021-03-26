@@ -691,14 +691,7 @@ public class JavaParserFacade {
         } else if (type instanceof UnionType) {
             return convertToUsage((UnionType) type, context);
         } else if (type instanceof VarType) {
-            Node parent = type.getParentNode().get();
-            if (!(parent instanceof VariableDeclarator)) {
-                throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
-            }
-            final VariableDeclarator variableDeclarator = (VariableDeclarator) parent;
-            return variableDeclarator.getInitializer()
-                    .map(Expression::calculateResolvedType)
-                    .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
+            return convertToUsage((VarType) type, context);
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
@@ -748,6 +741,17 @@ public class JavaParserFacade {
                 .map(el -> convertToUsage(el, context))
                 .collect(Collectors.toList());
         return new ResolvedUnionType(resolvedElements);
+    }
+
+    protected ResolvedType convertToUsage(VarType varType, Context context) {
+        Node parent = varType.getParentNode().get();
+        if (!(parent instanceof VariableDeclarator)) {
+            throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
+        }
+        final VariableDeclarator variableDeclarator = (VariableDeclarator) parent;
+        return variableDeclarator.getInitializer()
+                .map(Expression::calculateResolvedType)
+                .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
     }
 
     public ResolvedType convert(Type type, Node node) {
