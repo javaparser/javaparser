@@ -103,7 +103,6 @@ class JavaParserFacadeTest {
         assertTrue(typeParameter.get() instanceof LazyType);
 
         // Check if the lazy type is initialized when needed.
-        LazyType lazyType = (LazyType) typeParameter.get();
         assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
     }
 
