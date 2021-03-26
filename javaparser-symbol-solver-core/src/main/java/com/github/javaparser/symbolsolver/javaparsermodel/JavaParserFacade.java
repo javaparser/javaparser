@@ -647,32 +647,6 @@ public class JavaParserFacade {
         return get(typeSolver).convertToUsage(var.getType(), var);
     }
 
-    /**
-     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
-     *
-     * @param type      The type to be converted.
-     * @param context   The current context.
-     *
-     * @return The type resolved.
-     */
-    public ResolvedType convertToUsage(Type type, Node context) {
-        if (type.isUnknownType()) {
-            throw new IllegalArgumentException("Inferred lambda parameter type");
-        }
-        return convertToUsage(type, JavaParserFactory.getContext(context, typeSolver));
-    }
-
-    /**
-     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
-     *
-     * @param type The type to be converted.
-     *
-     * @return The type resolved.
-     */
-    public ResolvedType convertToUsage(Type type) {
-        return convertToUsage(type, type);
-    }
-
     // This is an hack around an issue in JavaParser
     private String qName(ClassOrInterfaceType classOrInterfaceType) {
         String name = classOrInterfaceType.getName().getId();
@@ -694,7 +668,9 @@ public class JavaParserFacade {
         if (context == null) {
             throw new NullPointerException("Context should not be null");
         }
-        if (type.isClassOrInterfaceType()) {
+        if (type.isUnknownType()) {
+            throw new IllegalArgumentException("Inferred lambda parameter type");
+        } else if (type.isClassOrInterfaceType()) {
             return convertClassOrInterfaceTypeToUsage(type.asClassOrInterfaceType(), context);
         } else if (type.isPrimitiveType()) {
             return ResolvedPrimitiveType.byName(type.asPrimitiveType().getType().name());
@@ -711,6 +687,29 @@ public class JavaParserFacade {
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
+    }
+
+    /**
+     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
+     *
+     * @param type      The type to be converted.
+     * @param context   The current context.
+     *
+     * @return The type resolved.
+     */
+    public ResolvedType convertToUsage(Type type, Node context) {
+        return convertToUsage(type, JavaParserFactory.getContext(context, typeSolver));
+    }
+
+    /**
+     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
+     *
+     * @param type The type to be converted.
+     *
+     * @return The type resolved.
+     */
+    public ResolvedType convertToUsage(Type type) {
+        return convertToUsage(type, type);
     }
 
     /**
