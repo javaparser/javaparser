@@ -36,7 +36,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlClassLevel;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;

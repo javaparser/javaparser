@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.body.ClassInvariantClause;
+import com.github.javaparser.ast.jml.body.ClassInvariantClause;
 import com.github.javaparser.ast.Generated;
 
 /**

@@ -27,7 +27,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlClassLevel;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;

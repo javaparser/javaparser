@@ -24,7 +24,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
