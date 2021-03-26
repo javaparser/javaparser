@@ -44,4 +44,4 @@ comment:
   require_changes: false
   ### Do not comment until coverage reports for all builds have been received
   ### Note: 24 = three OSs (mac, windows, ubuntu) x eight java levels (8,9,10,11,12,13,14,15)
-  after_n_builds: 24 
+  after_n_builds: 24

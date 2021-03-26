@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
+#TODO --- Replace all mentions of Bintray
 
 echo "[JavaParser]"
 echo "[JavaParser]"
 echo "[JavaParser]: See also: http://github.com/javaparser/javaparser/wiki/Release-Process"
-echo "[JavaParser]:"
+echo "[JavaParser]"
+echo "[JavaParser]: ##"
+echo "[JavaParser]: ##"
+echo "[JavaParser]: ## TODO --- Replace all mentions of Bintray"
+echo "[JavaParser]: ##"
+echo "[JavaParser]: ##"
+echo "[JavaParser]"
 echo "[JavaParser]: Before running this script, ensure that your settings.xml file (~/.m/setings.xml) has been updated with your Bintray credentials."
 echo "[JavaParser]: - A template settings.xml file can be found within the dev-files directory."
 echo "[JavaParser]: - You must also be added to the JavaParser organisation on Bintray for releases to be successful."

@@ -31,5 +31,15 @@ import java.util.List;
 public interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDeclaration,
         AssociableToAST<AnnotationDeclaration> {
 
+    @Override
+    default boolean isAnnotation() {
+        return true;
+    }
+
+    @Override
+    default ResolvedAnnotationDeclaration asAnnotation() {
+        return this;
+    }
+
     List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers();
 }
