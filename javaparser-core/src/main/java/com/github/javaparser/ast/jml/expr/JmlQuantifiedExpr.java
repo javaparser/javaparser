@@ -21,11 +21,7 @@
 package com.github.javaparser.ast.jml.expr;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -70,7 +66,7 @@ public class JmlQuantifiedExpr extends Expression {
     private JmlBinder binder;
 
     @NonEmptyProperty
-    private NodeList<VariableDeclarator> variables;
+    private NodeList<JmlBoundVariable> variables;
 
     @NonEmptyProperty
     private NodeList<Expression> expressions;
@@ -79,12 +75,12 @@ public class JmlQuantifiedExpr extends Expression {
         this(null, JmlBinder.EXISTS, new NodeList<>(), new NodeList<>());
     }
 
-    public JmlQuantifiedExpr(final NodeList<VariableDeclarator> variables, final Expression expressions) {
+    public JmlQuantifiedExpr(final NodeList<JmlBoundVariable> variables, final Expression expressions) {
         this(null, JmlBinder.EXISTS, variables, new NodeList<>(expressions));
     }
 
     @AllFieldsConstructor
-    public JmlQuantifiedExpr(final JmlBinder binder, final NodeList<VariableDeclarator> variables, final Expression expressions) {
+    public JmlQuantifiedExpr(final JmlBinder binder, final NodeList<JmlBoundVariable> variables, final Expression expressions) {
         this(null, binder, variables, new NodeList<>(expressions));
     }
 
@@ -92,7 +88,7 @@ public class JmlQuantifiedExpr extends Expression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlQuantifiedExpr(TokenRange tokenRange, JmlBinder binder, NodeList<VariableDeclarator> variables, NodeList<Expression> expressions) {
+    public JmlQuantifiedExpr(TokenRange tokenRange, JmlBinder binder, NodeList<JmlBoundVariable> variables, NodeList<Expression> expressions) {
         super(tokenRange);
         setBinder(binder);
         setVariables(variables);
@@ -156,12 +152,12 @@ public class JmlQuantifiedExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<VariableDeclarator> getVariables() {
+    public NodeList<JmlBoundVariable> getVariables() {
         return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setVariables(final NodeList<VariableDeclarator> variables) {
+    public JmlQuantifiedExpr setVariables(final NodeList<JmlBoundVariable> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -207,7 +203,7 @@ public class JmlQuantifiedExpr extends Expression {
         }
         for (int i = 0; i < variables.size(); i++) {
             if (variables.get(i) == node) {
-                variables.set(i, (VariableDeclarator) replacementNode);
+                variables.set(i, (JmlBoundVariable) replacementNode);
                 return true;
             }
         }

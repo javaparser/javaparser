@@ -48,15 +48,15 @@ public class BinaryExpr extends Expression {
     public enum Operator implements Stringable {
 
         //JML
-        IMPL("==>"),
+        IMPLICATION("==>"),
         SUBTYPE("<:"),
         //12.6.4 Lockset Ordering
         SUB_LOCK("<%"),
         //12.6.4 Lockset Ordering
         SUB_LOCKE("<%="),
-        RIMPL("<=="),
-        EQUIV("<==>"),
-        ANTI("<=!=>"),
+        RIMPLICATION("<=="),
+        EQUIVALENCE("<==>"),
+        ANTIVALENCE("<=!=>"),
         //end
         OR("||"),
         AND("&&"),

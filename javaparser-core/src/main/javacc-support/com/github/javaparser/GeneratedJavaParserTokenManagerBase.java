@@ -50,7 +50,7 @@ abstract class GeneratedJavaParserTokenManagerBase {
             return new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
         } else if (token.kind == MULTI_LINE_COMMENT) {
             return new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-        } else if (token.kind == SINGLE_LINE_COMMENT) {
+        } else if (token.kind == SINGLE_LINE_COMMENT || token.kind == SINGLE_LINE_COMMENT_IN_MULTI_JML) {
             return new LineComment(tokenRange(token), commentText.substring(2));
         }
         throw new AssertionError("Unexpectedly got passed a non-comment token.");

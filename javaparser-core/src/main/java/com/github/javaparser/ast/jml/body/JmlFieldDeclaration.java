@@ -2,40 +2,37 @@ package com.github.javaparser.ast.jml.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlFieldDeclaration extends FieldDeclaration {
+public class JmlFieldDeclaration extends JmlClassLevel {
+    private FieldDeclaration decl;
 
     public JmlFieldDeclaration() {
     }
 
-    public JmlFieldDeclaration(NodeList<Modifier> modifiers, VariableDeclarator variable) {
-        super(modifiers, variable);
-    }
-
-    public JmlFieldDeclaration(NodeList<Modifier> modifiers, NodeList<VariableDeclarator> variables) {
-        super(modifiers, variables);
-    }
-
     @AllFieldsConstructor
-    public JmlFieldDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
-        super(modifiers, annotations, variables);
+    public JmlFieldDeclaration(FieldDeclaration decl) {
+        this.decl = decl;
     }
 
-    public JmlFieldDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
-        super(tokenRange, modifiers, annotations, variables);
+    public JmlFieldDeclaration(TokenRange tokenRange, FieldDeclaration decl) {
+        super(tokenRange);
+        this.decl = decl;
     }
 
-    public JmlFieldDeclaration(NodeList<Modifier> modifiers, Type type, String name) {
-        super(modifiers, type, name);
+    @Override
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+        return null;
+    }
+
+    @Override
+    public <A> void accept(VoidVisitor<A> v, A arg) {
+
     }
 }
