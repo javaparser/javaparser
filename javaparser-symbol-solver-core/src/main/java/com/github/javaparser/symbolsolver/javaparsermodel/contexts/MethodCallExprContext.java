@@ -104,10 +104,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 if (ref.isSolved()) {
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
                     if (m.isSolved()) {
-                        if (m.getCorrespondingDeclaration().getName().equals("mapAll")) {
-                            System.out.println("m = " + m);
-                        }
-
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
