@@ -67,7 +67,7 @@ public class LazyType implements ResolvedType {
      *
      * @return The concrete type for the {@link LazyType}.
      */
-    public ResolvedType getType() {
+    private ResolvedType getType() {
         if (concrete == null) {
             concrete = supplier.get();
         }

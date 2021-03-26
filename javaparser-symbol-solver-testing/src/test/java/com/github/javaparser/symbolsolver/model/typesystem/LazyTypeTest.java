@@ -31,7 +31,6 @@ import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
@@ -50,13 +49,11 @@ class LazyTypeTest {
 
         // Before initialize the concrete type
         verifyNoInteractions(supplier);
-        assertNotNull(lazyType.getType(), "The concrete type should not be initialized at the moment.");
 
         assertTrue(lazyType.isVoid(), "Should be marked as void when, the concrete type is void.");
 
         // After initialize the concrete type
         verify(supplier).get();
-        assertNotNull(lazyType.getType(), "The concrete type should be present.");
     }
 
     @Test
@@ -68,13 +65,11 @@ class LazyTypeTest {
 
         // Before initialize the concrete type
         verifyNoInteractions(provider);
-        assertNotNull(lazyType.getType(),"The concrete type should not be initialized at the moment.");
 
         assertTrue(lazyType.isVoid(), "Should be marked as void when, the concrete type is void.");
 
         // After initialize the concrete type
         verify(provider).apply(isNull());
-        assertNotNull(lazyType.getType(), "The concrete type should be present.");
     }
 
     @Test

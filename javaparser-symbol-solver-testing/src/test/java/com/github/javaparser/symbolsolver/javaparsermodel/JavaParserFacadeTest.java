@@ -38,7 +38,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserFacadeTest {
@@ -106,7 +105,6 @@ class JavaParserFacadeTest {
         // Check if the lazy type is initialized when needed.
         LazyType lazyType = (LazyType) typeParameter.get();
         assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
-        assertNotNull(lazyType.getType());
     }
 
 }
