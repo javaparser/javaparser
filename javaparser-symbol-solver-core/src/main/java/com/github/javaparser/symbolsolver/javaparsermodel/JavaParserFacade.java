@@ -679,25 +679,25 @@ public class JavaParserFacade {
             throw new NullPointerException("Context should not be null");
         }
         if (type instanceof ClassOrInterfaceType) {
-            return convertToUsage((ClassOrInterfaceType) type, context);
+            return convertClassOrInterfaceTypeToUsage((ClassOrInterfaceType) type, context);
         } else if (type instanceof PrimitiveType) {
             return ResolvedPrimitiveType.byName(((PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
-            return convertToUsage((WildcardType) type, context);
+            return convertWildcardTypeToUsage((WildcardType) type, context);
         } else if (type instanceof VoidType) {
             return ResolvedVoidType.INSTANCE;
         } else if (type instanceof ArrayType) {
-            return convertToUsage((ArrayType) type, context);
+            return convertArrayTypeToUsage((ArrayType) type, context);
         } else if (type instanceof UnionType) {
-            return convertToUsage((UnionType) type, context);
+            return convertUnionTypeToUsage((UnionType) type, context);
         } else if (type instanceof VarType) {
-            return convertToUsage((VarType) type, context);
+            return convertVarTypeToUsage((VarType) type, context);
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
     }
 
-    protected ResolvedType convertToUsage(ClassOrInterfaceType classOrInterfaceType, Context context) {
+    protected ResolvedType convertClassOrInterfaceTypeToUsage(ClassOrInterfaceType classOrInterfaceType, Context context) {
         String name = qName(classOrInterfaceType);
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
         if (!ref.isSolved()) {
@@ -720,7 +720,7 @@ public class JavaParserFacade {
         }
     }
 
-    protected ResolvedType convertToUsage(WildcardType wildcardType, Context context) {
+    protected ResolvedType convertWildcardTypeToUsage(WildcardType wildcardType, Context context) {
         if (wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
             return ResolvedWildcard.extendsBound(convertToUsage(wildcardType.getExtendedType().get(), context)); // removed (ReferenceTypeImpl)
         } else if (!wildcardType.getExtendedType().isPresent() && wildcardType.getSuperType().isPresent()) {
@@ -732,18 +732,18 @@ public class JavaParserFacade {
         }
     }
 
-    protected ResolvedType convertToUsage(ArrayType arrayType, Context context) {
+    protected ResolvedType convertArrayTypeToUsage(ArrayType arrayType, Context context) {
         return new ResolvedArrayType(convertToUsage(arrayType.getComponentType(), context));
     }
 
-    protected ResolvedType convertToUsage(UnionType unionType, Context context) {
+    protected ResolvedType convertUnionTypeToUsage(UnionType unionType, Context context) {
         List<ResolvedType> resolvedElements = unionType.getElements().stream()
                 .map(el -> convertToUsage(el, context))
                 .collect(Collectors.toList());
         return new ResolvedUnionType(resolvedElements);
     }
 
-    protected ResolvedType convertToUsage(VarType varType, Context context) {
+    protected ResolvedType convertVarTypeToUsage(VarType varType, Context context) {
         Node parent = varType.getParentNode().get();
         if (!(parent instanceof VariableDeclarator)) {
             throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
