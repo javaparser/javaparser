@@ -468,12 +468,12 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final AssignableClause n, final Void arg) {
+    public Integer visit(final JmlClauseHL n, final Void arg) {
         return (n.getExprs().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
-    public Integer visit(final BreaksClause n, final Void arg) {
+    public Integer visit(final JmlClauseLE n, final Void arg) {
         return (n.getExpr().accept(this, arg)) * 31 + (n.getLabel().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
@@ -533,7 +533,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final MeasuredByClause n, final Void arg) {
+    public Integer visit(final JmlClauseE n, final Void arg) {
         return (n.getExpr().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
@@ -543,8 +543,8 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final RequiresClause n, final Void arg) {
-        return (n.getE().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    public Integer visit(final JmlClauseHE n, final Void arg) {
+        return (n.getExpression().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override

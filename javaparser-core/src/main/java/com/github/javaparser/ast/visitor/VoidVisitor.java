@@ -240,9 +240,9 @@ public interface VoidVisitor<A> {
 
     void visit(AccessibleClause n, A arg);
 
-    void visit(AssignableClause n, A arg);
+    void visit(JmlClauseHL n, A arg);
 
-    void visit(BreaksClause n, A arg);
+    void visit(JmlClauseLE n, A arg);
 
     void visit(ContinuesClause n, A arg);
 
@@ -266,11 +266,11 @@ public interface VoidVisitor<A> {
 
     void visit(LoopVariantClause n, A arg);
 
-    void visit(MeasuredByClause n, A arg);
+    void visit(JmlClauseE n, A arg);
 
     void visit(ModifiesClause n, A arg);
 
-    void visit(RequiresClause n, A arg);
+    void visit(JmlClauseHE n, A arg);
 
     void visit(ReturnsClause n, A arg);
 

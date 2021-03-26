@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -11,7 +12,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClauseMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -28,6 +32,10 @@ public abstract class JmlClause extends Node implements Jmlish {
     @AllFieldsConstructor
     public JmlClause(final JmlClauseKind kind) {
         this(null, kind);
+    }
+
+    protected final void setKindByToken(JavaToken token) {
+        //TODO
     }
 
     /**

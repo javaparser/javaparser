@@ -98,11 +98,6 @@ public class ModifiesClause extends JmlClause implements LoopContractable, Metho
         return (ModifiesClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ModifiesClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.modifiesClauseMetaModel;
-    }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<LocationSetExpression> getExprs() {

@@ -75,11 +75,6 @@ public class LoopInvariantClause extends JmlClause implements LoopContractable {
         return (LoopInvariantClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LoopInvariantClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.loopInvariantClauseMetaModel;
-    }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpr() {

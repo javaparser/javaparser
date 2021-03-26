@@ -551,12 +551,12 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final AssignableClause n, final A arg) {
+    public R visit(final JmlClauseHL n, final A arg) {
         return defaultAction(n, arg);
     }
 
     @Override
-    public R visit(final BreaksClause n, final A arg) {
+    public R visit(final JmlClauseLE n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -616,7 +616,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final MeasuredByClause n, final A arg) {
+    public R visit(final JmlClauseE n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -626,7 +626,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final RequiresClause n, final A arg) {
+    public R visit(final JmlClauseHE n, final A arg) {
         return defaultAction(n, arg);
     }
 

@@ -247,9 +247,9 @@ public interface GenericVisitor<R, A> {
 
     R visit(AccessibleClause n, A arg);
 
-    R visit(AssignableClause n, A arg);
+    R visit(JmlClauseHL n, A arg);
 
-    R visit(BreaksClause n, A arg);
+    R visit(JmlClauseLE n, A arg);
 
     R visit(ContinuesClause n, A arg);
 
@@ -273,11 +273,11 @@ public interface GenericVisitor<R, A> {
 
     R visit(LoopVariantClause n, A arg);
 
-    R visit(MeasuredByClause n, A arg);
+    R visit(JmlClauseE n, A arg);
 
     R visit(ModifiesClause n, A arg);
 
-    R visit(RequiresClause n, A arg);
+    R visit(JmlClauseHE n, A arg);
 
     R visit(ReturnsClause n, A arg);
 

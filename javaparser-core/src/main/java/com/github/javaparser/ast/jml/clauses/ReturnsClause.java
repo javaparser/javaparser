@@ -78,12 +78,6 @@ public class ReturnsClause extends JmlClause implements BlockContractable {
         return (ReturnsClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ReturnsClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.returnsClauseMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */

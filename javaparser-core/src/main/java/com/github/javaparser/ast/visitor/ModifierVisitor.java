@@ -1309,7 +1309,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final AssignableClause n, final A arg) {
+    public Visitable visit(final JmlClauseHL n, final A arg) {
         NodeList<LocationSetExpression> exprs = modifyList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1320,7 +1320,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final BreaksClause n, final A arg) {
+    public Visitable visit(final JmlClauseLE n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
         SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1461,7 +1461,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final MeasuredByClause n, final A arg) {
+    public Visitable visit(final JmlClauseE n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expr == null)
@@ -1483,13 +1483,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final RequiresClause n, final A arg) {
-        Expression e = (Expression) n.getE().accept(this, arg);
+    public Visitable visit(final JmlClauseHE n, final A arg) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (e == null)
+        if (expression == null)
             return null;
-        n.setE(e);
+        n.setExpression(expression);
         n.setHeaps(heaps);
         n.setComment(comment);
         return n;

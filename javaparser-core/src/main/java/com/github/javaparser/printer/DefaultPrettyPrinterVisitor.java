@@ -754,12 +754,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(AssignableClause n, Void arg) {
+    public void visit(JmlClauseHL n, Void arg) {
         printClauseStoreRef(n.getKind(), n.getHeaps(), n.getExprs());
     }
 
     @Override
-    public void visit(BreaksClause n, Void arg) {
+    public void visit(JmlClauseLE n, Void arg) {
         printClause(n.getKind(), n.getLabel(), n.getExpr());
     }
 
@@ -850,7 +850,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(MeasuredByClause n, Void arg) {
+    public void visit(JmlClauseE n, Void arg) {
         printClause(n.getKind(), n.getExpr());
     }
 
@@ -868,8 +868,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(RequiresClause n, Void arg) {
-        printClause(n.getKind(), n.getHeaps(), n.getE());
+    public void visit(JmlClauseHE n, Void arg) {
+        printClause(n.getKind(), n.getHeaps(), n.getExpression());
     }
 
     @Override

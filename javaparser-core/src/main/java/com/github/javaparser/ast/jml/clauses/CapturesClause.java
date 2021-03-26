@@ -52,11 +52,6 @@ public class CapturesClause extends JmlClause {
         return (CapturesClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public CapturesClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.capturesClauseMetaModel;
-    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")

@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.jml.clauses.MeasuredByClause;
+
+import com.github.javaparser.ast.jml.clauses.JmlClauseE;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class MeasuredByClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     MeasuredByClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, MeasuredByClause.class, "MeasuredByClause", "com.github.javaparser.ast.jml.clauses", false, false);
+        super(superBaseNodeMetaModel, JmlClauseE.class, "MeasuredByClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel exprPropertyMetaModel;

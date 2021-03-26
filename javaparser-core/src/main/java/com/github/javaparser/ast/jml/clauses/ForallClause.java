@@ -15,10 +15,13 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @version 1 (2/22/21)
  */
 public class ForallClause extends JmlClause implements MethodContractable {
+
     private NodeList<JmlBoundVariable> variables;
+
     {
         setKind(JmlClauseKind.FORALL);
     }
+
     @AllFieldsConstructor
     public ForallClause(NodeList<JmlBoundVariable> variables) {
         this(null, variables);

@@ -2195,7 +2195,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final AssignableClause n, final A arg) {
+    public List<R> visit(final JmlClauseHL n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2217,7 +2217,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final BreaksClause n, final A arg) {
+    public List<R> visit(final JmlClauseLE n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2431,7 +2431,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final MeasuredByClause n, final A arg) {
+    public List<R> visit(final JmlClauseE n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2470,11 +2470,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final RequiresClause n, final A arg) {
+    public List<R> visit(final JmlClauseHE n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getE().accept(this, arg);
+            tmp = n.getExpression().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

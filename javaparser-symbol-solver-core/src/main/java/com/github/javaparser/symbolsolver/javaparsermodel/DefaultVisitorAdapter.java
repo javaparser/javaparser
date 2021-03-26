@@ -242,12 +242,12 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(AssignableClause n, Boolean arg) {
+    public ResolvedType visit(JmlClauseHL n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(BreaksClause n, Boolean arg) {
+    public ResolvedType visit(JmlClauseLE n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -268,11 +268,6 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
 
     @Override
     public ResolvedType visit(JmlStmtWithExpression n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(JmlAssumeStmt n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -312,7 +307,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(MeasuredByClause n, Boolean arg) {
+    public ResolvedType visit(JmlClauseE n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -322,7 +317,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(RequiresClause n, Boolean arg) {
+    public ResolvedType visit(JmlClauseHE n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -367,19 +362,10 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JmlDebugStmt n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
     public ResolvedType visit(JmlFunction n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
-    @Override
-    public ResolvedType visit(JmlHenceByStmt n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
 
     @Override
     public ResolvedType visit(JmlName n, Boolean arg) {
@@ -582,9 +568,10 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(AssertStmt node, Boolean aBoolean) {
-        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    public ResolvedType visit(AssertStmt n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
+
 
     @Override
     public ResolvedType visit(BlockStmt node, Boolean aBoolean) {

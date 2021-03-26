@@ -959,8 +959,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final AssignableClause n, final Visitable arg) {
-        final AssignableClause n2 = (AssignableClause) arg;
+    public Boolean visit(final JmlClauseHL n, final Visitable arg) {
+        final JmlClauseHL n2 = (JmlClauseHL) arg;
         if (!nodesEquals(n.getExprs(), n2.getExprs()))
             return false;
         if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
@@ -969,8 +969,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final BreaksClause n, final Visitable arg) {
-        final BreaksClause n2 = (BreaksClause) arg;
+    public Boolean visit(final JmlClauseLE n, final Visitable arg) {
+        final JmlClauseLE n2 = (JmlClauseLE) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
             return false;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
@@ -1074,8 +1074,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final MeasuredByClause n, final Visitable arg) {
-        final MeasuredByClause n2 = (MeasuredByClause) arg;
+    public Boolean visit(final JmlClauseE n, final Visitable arg) {
+        final JmlClauseE n2 = (JmlClauseE) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
             return false;
         return objEquals(n.getKind(), n2.getKind());
@@ -1092,9 +1092,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final RequiresClause n, final Visitable arg) {
-        final RequiresClause n2 = (RequiresClause) arg;
-        if (!nodeEquals(n.getE(), n2.getE()))
+    public Boolean visit(final JmlClauseHE n, final Visitable arg) {
+        final JmlClauseHE n2 = (JmlClauseHE) arg;
+        if (!nodeEquals(n.getExpression(), n2.getExpression()))
             return false;
         if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
             return false;

@@ -64,9 +64,4 @@ public class LoopVariantClause extends JmlClause implements LoopContractable {
         return (LoopVariantClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LoopVariantClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.loopVariantClauseMetaModel;
-    }
 }

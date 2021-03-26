@@ -53,11 +53,6 @@ public class WorkingSpaceClause extends JmlClause implements MethodContractable 
         return (WorkingSpaceClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public WorkingSpaceClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.workingSpaceClauseMetaModel;
-    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")

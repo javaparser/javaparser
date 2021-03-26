@@ -67,12 +67,6 @@ public class DivergesClause extends JmlClause implements MethodContractable {
         return (DivergesClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public DivergesClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.divergesClauseMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */

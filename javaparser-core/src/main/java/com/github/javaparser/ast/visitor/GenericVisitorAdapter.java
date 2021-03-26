@@ -2083,7 +2083,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final AssignableClause n, final A arg) {
+    public R visit(final JmlClauseHL n, final A arg) {
         R result;
         {
             result = n.getExprs().accept(this, arg);
@@ -2103,7 +2103,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final BreaksClause n, final A arg) {
+    public R visit(final JmlClauseLE n, final A arg) {
         R result;
         {
             result = n.getExpr().accept(this, arg);
@@ -2293,7 +2293,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final MeasuredByClause n, final A arg) {
+    public R visit(final JmlClauseE n, final A arg) {
         R result;
         {
             result = n.getExpr().accept(this, arg);
@@ -2328,10 +2328,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final RequiresClause n, final A arg) {
+    public R visit(final JmlClauseHE n, final A arg) {
         R result;
         {
-            result = n.getE().accept(this, arg);
+            result = n.getExpression().accept(this, arg);
             if (result != null)
                 return result;
         }

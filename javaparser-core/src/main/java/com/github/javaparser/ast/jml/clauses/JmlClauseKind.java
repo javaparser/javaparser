@@ -51,7 +51,8 @@ public enum JmlClauseKind implements JmlKeyword {
     DIVERGES(GeneratedJavaParserConstants.DIVERGES),
     DIVERGES_REDUNDANTLY(GeneratedJavaParserConstants.DIVERGES_REDUNDANTLY),
     DURATION(GeneratedJavaParserConstants.DURATION),
-    DURATION_REDUNDANTLY(GeneratedJavaParserConstants.DURATION_REDUNDANTLY);
+    DURATION_REDUNDANTLY(GeneratedJavaParserConstants.DURATION_REDUNDANTLY),
+    NONE(-1);
 
     public final String jmlSymbol;
     private final int tokenType;

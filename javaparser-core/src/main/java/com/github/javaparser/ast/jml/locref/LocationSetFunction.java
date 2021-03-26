@@ -12,7 +12,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LocationSetFunctionMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

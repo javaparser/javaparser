@@ -1,289 +1,6 @@
-package java.util;
-import java.io.*;
-
-class Test {
-    /*@ public normal_behavior
-        ensures (a ==> b);
-     */
-    public void f() {}
-}
-
-/**
- * This class implements the <tt>Map</tt> interface with a hash table, using
- * reference-equality in place of object-equality when comparing keys (and
- * values).  In other words, in an <tt>VerifiedIdentityHashMap</tt>, two keys
- * <tt>k1</tt> and <tt>k2</tt> are considered equal if and only if
- * <tt>(k1==k2)</tt>.  (In normal <tt>Map</tt> implementations (like
- * <tt>HashMap</tt>) two keys <tt>k1</tt> and <tt>k2</tt> are considered equal
- * if and only if <tt>(k1==null ? k2==null : k1.equals(k2))</tt>.)
- *
- * <p><b>This class is <i>not</i> a general-purpose <tt>Map</tt>
- * implementation!  While this class implements the <tt>Map</tt> interface, it
- * intentionally violates <tt>Map's</tt> general contract, which mandates the
- * use of the <tt>equals</tt> method when comparing objects.  This class is
- * designed for use only in the rare cases wherein reference-equality
- * semantics are required.</b>
- *
- * <p>A typical use of this class is <i>topology-preserving object graph
- * transformations</i>, such as serialization or deep-copying.  To perform such
- * a transformation, a program must maintain a "node table" that keeps track
- * of all the object references that have already been processed.  The node
- * table must not equate distinct objects even if they happen to be equal.
- * Another typical use of this class is to maintain <i>proxy objects</i>.  For
- * example, a debugging facility might wish to maintain a proxy object for
- * each object in the program being debugged.
- *
- * <p>This class provides all of the optional map operations, and permits
- * <tt>null</tt> values and the <tt>null</tt> key.  This class makes no
- * guarantees as to the order of the map; in particular, it does not guarantee
- * that the order will remain constant over time.
- *
- * <p>This class provides constant-time performance for the basic
- * operations (<tt>get</tt> and <tt>put</tt>), assuming the system
- * identity hash function ({@link System#identityHashCode(Object)})
- * disperses elements properly among the buckets.
- *
- * <p>This class has one tuning parameter (which affects performance but not
- * semantics): <i>expected maximum size</i>.  This parameter is the maximum
- * number of key-value mappings that the map is expected to hold.  Internally,
- * this parameter is used to determine the number of buckets initially
- * comprising the hash table.  The precise relationship between the expected
- * maximum size and the number of buckets is unspecified.
- *
- * <p>If the size of the map (the number of key-value mappings) sufficiently
- * exceeds the expected maximum size, the number of buckets is increased
- * Increasing the number of buckets ("rehashing") may be fairly expensive, so
- * it pays to create identity hash maps with a sufficiently large expected
- * maximum size.  On the other hand, iteration over collection views requires
- * time proportional to the number of buckets in the hash table, so it
- * pays not to set the expected maximum size too high if you are especially
- * concerned with iteration performance or memory usage.
- *
- * <p><strong>Note that this implementation is not synchronized.</strong>
- * If multiple threads access an identity hash map concurrently, and at
- * least one of the threads modifies the map structurally, it <i>must</i>
- * be synchronized externally.  (A structural modification is any operation
- * that adds or deletes one or more mappings; merely changing the value
- * associated with a key that an instance already contains is not a
- * structural modification.)  This is typically accomplished by
- * synchronizing on some object that naturally encapsulates the map.
- *
- * If no such object exists, the map should be "wrapped" using the
- * {@link Collections#synchronizedMap Collections.synchronizedMap}
- * method.  This is best done at creation time, to prevent accidental
- * unsynchronized access to the map:<pre>
- *   Map m = Collections.synchronizedMap(new VerifiedIdentityHashMap(...));</pre>
- *
- * <p>The iterators returned by the <tt>iterator</tt> method of the
- * collections returned by all of this class's "collection view
- * methods" are <i>fail-fast</i>: if the map is structurally modified
- * at any time after the iterator is created, in any way except
- * through the iterator's own <tt>remove</tt> method, the iterator
- * will throw a {@link ConcurrentModificationException}.  Thus, in the
- * face of concurrent modification, the iterator fails quickly and
- * cleanly, rather than risking arbitrary, non-deterministic behavior
- * at an undetermined time in the future.
- *
- * <p>Note that the fail-fast behavior of an iterator cannot be guaranteed
- * as it is, generally speaking, impossible to make any hard guarantees in the
- * presence of unsynchronized concurrent modification.  Fail-fast iterators
- * throw <tt>ConcurrentModificationException</tt> on a best-effort basis.
- * Therefore, it would be wrong to write a program that depended on this
- * exception for its correctness: <i>fail-fast iterators should be used only
- * to detect bugs.</i>
- *
- * <p>Implementation note: This is a simple <i>linear-probe</i> hash table,
- * as described for example in texts by Sedgewick and Knuth.  The array
- * alternates holding keys and values.  (This has better locality for large
- * tables than does using separate arrays.)  For many JRE implementations
- * and operation mixes, this class will yield better performance than
- * {@link HashMap} (which uses <i>chaining</i> rather than linear-probing).
- *
- * <p>This class is a member of the
- * <a href="{@docRoot}/../technotes/guides/collections/index.html">
- * Java Collections Framework</a>.
- *
- * @see     System#identityHashCode(Object)
- * @see     Object#hashCode()
- * @see     Collection
- * @see     Map
- * @see     HashMap
- * @see     TreeMap
- * @author  Doug Lea and Josh Bloch
- * @since   1.4
- */
-
 public class VerifiedIdentityHashMap
         extends AbstractMap
         implements Map, java.io.Serializable, Cloneable {
-    /*+KEY@
-      @ private normal_behavior
-      @   requires
-      @     MAXIMUM_CAPACITY == 536870912 &&
-      @     ((3 * expectedMaxSize) / 2) < 0;
-      @   ensures
-      @     \result == MAXIMUM_CAPACITY;
-      @
-      @ also
-      @ private normal_behavior
-      @   requires
-      @     MAXIMUM_CAPACITY == 536870912 &&
-      @     ((3 * expectedMaxSize) / 2) > MAXIMUM_CAPACITY;
-      @   ensures
-      @     \result == MAXIMUM_CAPACITY;
-      @
-      @ also
-      @ private normal_behavior
-      @   requires
-      @     MINIMUM_CAPACITY == 4 &&
-      @     MAXIMUM_CAPACITY == 536870912 &&
-      @     ((3 * expectedMaxSize) / 2) >= MINIMUM_CAPACITY &&
-      @     ((3 * expectedMaxSize) / 2) <= MAXIMUM_CAPACITY;
-      @   ensures
-      @     \result >= ((3 * expectedMaxSize) / 2) &&
-      @     \result < (3 * expectedMaxSize) &&
-      @     (\exists int i;
-      @       0 <= i < \result;
-      @       \dl_pow(2,i) == \result); // result is a power of two
-      @
-      @ also
-      @ private normal_behavior
-      @   requires
-      @     MINIMUM_CAPACITY == 4 &&
-      @     ((3 * expectedMaxSize) / 2) >= 0 &&
-      @     ((3 * expectedMaxSize) / 2) < MINIMUM_CAPACITY;
-      @   ensures
-      @     \result < MINIMUM_CAPACITY * 2 &&
-      @     \result >= MINIMUM_CAPACITY &&
-      @     (\exists int i;
-      @       0 <= i < \result;
-      @       \dl_pow(2,i) == \result); // result is a power of two
-      @*/
-    /*+OPENJML@
-      @ //private normal_behavior
-      @ //  requires
-      @ //    MAXIMUM_CAPACITY == 4 &&
-      @ //    ((3 * expectedMaxSize) / 2) < 0;
-      @ //  ensures
-      @ //    \result == MAXIMUM_CAPACITY;
-      @
-      @ //also
-      @ //private normal_behavior
-      @ //  requires
-      @ //    MAXIMUM_CAPACITY == 4 &&
-      @ //    ((3 * expectedMaxSize) / 2) > MAXIMUM_CAPACITY;
-      @ //  ensures
-      @ //    \result == MAXIMUM_CAPACITY;
-      @
-      @ //also
-      @ private normal_behavior
-      @   requires
-      @     MINIMUM_CAPACITY == 4 &&
-      @     MAXIMUM_CAPACITY == 4 &&
-      @     ((3 * expectedMaxSize) / 2) >= MINIMUM_CAPACITY &&
-      @     ((3 * expectedMaxSize) / 2) <= MAXIMUM_CAPACITY;
-      @   ensures
-      @     \result >= ((3 * expectedMaxSize) / 2) &&
-      @     \result < (3 * expectedMaxSize) &&
-      @     (\result & (\result - 1)) == 0; // result is a power of two
-      @
-      @ //also
-      @ //private normal_behavior
-      @ //  requires
-      @ //    MINIMUM_CAPACITY == 4 &&
-      @ //    ((3 * expectedMaxSize) / 2) >= 0 &&
-      @ //    ((3 * expectedMaxSize) / 2) < MINIMUM_CAPACITY;
-      @ //  ensures
-      @ //    \result < MINIMUM_CAPACITY * 2 &&
-      @ //    \result >= MINIMUM_CAPACITY &&
-      @ //    (\result & (\result - 1)) == 0; // result is a power of two
-      @*/
-    private /*@ pure @*/ int capacity(int expectedMaxSize)
-    {
-        int result;
-        if (minCapacity > MAXIMUM_CAPACITY || minCapacity < 0) {
-            result = MAXIMUM_CAPACITY;
-        } else {
-            result = MINIMUM_CAPACITY;
-            /*+KEY@
-              @ loop_invariant
-              @   true;
-              @ maintaining
-              @   result / 2 < minCapacity;
-              @ maintaining
-              @   (\exists int i;
-              @       0 <= i < result;
-              @       \dl_pow(2,i) == result); // result is a power of two
-              @ decreasing
-              @   (minCapacity - result);
-              @ assignable
-              @   result;
-              */
-            while (result < minCapacity)
-                result <<= 1;
-        }
-        return result;
-    }
-
-    /**
-     * Initializes object to be an empty map with the specified initial
-     * capacity, which is assumed to be a power of two between
-     * MINIMUM_CAPACITY and MAXIMUM_CAPACITY inclusive.
-     */
-    /*+KEY@
-      @ private normal_behavior
-      @   requires
-      @     !initialised &&
-      @     MINIMUM_CAPACITY == 4 &&
-      @     MAXIMUM_CAPACITY == 536870912 &&
-      @     (\exists int i;
-      @       0 <= i < initCapacity;
-      @       \dl_pow(2,i) == initCapacity) &&
-      @     initCapacity >= MINIMUM_CAPACITY &&
-      @     initCapacity <= MAXIMUM_CAPACITY &&
-      @     size == 0;
-      @   assignable
-      @     table, threshold;
-      @   ensures
-      @     initialised &&
-      @     threshold == (2 * initCapacity) / 3 &&
-      @     table.length == 2 * initCapacity;
-      @*/
-    /*+OPENJML@
-      @ private normal_behavior
-      @   requires
-      @     !initialised &&
-      @     MINIMUM_CAPACITY == 4 &&
-      @     MAXIMUM_CAPACITY == 4 &&
-      @     (initCapacity & (initCapacity - 1)) == 0 &&
-      @     initCapacity >= MINIMUM_CAPACITY &&
-      @     initCapacity <= MAXIMUM_CAPACITY &&
-      @     size == 0;
-      @   assignable
-      @     table, threshold;
-      @   ensures
-      @     initialised &&
-      @     threshold == (2 * initCapacity) / 3 &&
-      @     table.length == 2 * initCapacity;
-      @*/
-    private void init(int initCapacity) {
-        // assert (initCapacity & -initCapacity) == initCapacity; // power of 2
-        // assert initCapacity >= MINIMUM_CAPACITY;
-        // assert initCapacity <= MAXIMUM_CAPACITY;
-
-        threshold = (initCapacity * 2) / 3;
-        table = new Object[2 * initCapacity];
-
-        //@ set initialised = true;
-    }
-
-    /**
-     * Constructs a new identity hash map containing the keys-value mappings
-     * in the specified map.
-     *
-     * @param m the map whose mappings are to be placed into this map
-     * @throws NullPointerException if the specified map is null
-     */
     /*+KEY@
       @ public exceptional_behavior
       @   requires
@@ -292,7 +9,7 @@ public class VerifiedIdentityHashMap
       @     NullPointerException;
       @   signals
       @     (NullPointerException e) true;
-      @
+      @ also
       @ public exceptional_behavior
       @   requires
       @     m != null &&
@@ -302,7 +19,7 @@ public class VerifiedIdentityHashMap
       @     IllegalStateException;
       @   signals
       @     (IllegalStateException e) true;
-      @
+      @ also
       @ public normal_behavior
       @   requires
       @     m != null &&
@@ -461,7 +178,7 @@ public class VerifiedIdentityHashMap
         int len =  tab.length;
         int i =  hash(k, len);
 
-        //+KEY@ ghost int hash = i;
+        // +KEY@ ghost int hash = i;
 
         /*+KEY@
           @ loop_invariant true; // TODO: see containsKey()
@@ -515,7 +232,7 @@ public class VerifiedIdentityHashMap
         int len =  tab.length;
         int i =  hash(k, len);
 
-        //+KEY@ ghost int hash = i;
+        // +KEY@ ghost int hash = i;
 
         /*+KEY@
           @ // Local variables (except i) do not change

@@ -5,39 +5,45 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.BreaksClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.MeasuredByClauseMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.JmlClauseLEMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class MeasuredByClause extends JmlClause implements MethodContractable, LoopContractable {
+public class JmlClauseLE extends JmlClause {
+
+    private SimpleName label;
 
     private Expression expr;
 
     @AllFieldsConstructor
-    public MeasuredByClause(Expression expr) {
-        this(null, expr);
-        setKind(JmlClauseKind.MEASURED_BY);
+    public JmlClauseLE(SimpleName label, Expression expr) {
+        this(null, label, expr);
+        setKind(JmlClauseKind.BREAKS);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MeasuredByClause(TokenRange tokenRange, Expression expr) {
+    public JmlClauseLE(TokenRange tokenRange, SimpleName label, Expression expr) {
         super(tokenRange);
+        setLabel(label);
         setExpr(expr);
         customInitialization();
     }
 
-    public MeasuredByClause() {
+    public JmlClauseLE() {
+        setKind(JmlClauseKind.BREAKS);
     }
 
     @Override
@@ -69,26 +75,24 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
             setExpr((Expression) replacementNode);
             return true;
         }
+        if (node == label) {
+            setLabel((SimpleName) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public MeasuredByClause clone() {
-        return (MeasuredByClause) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public MeasuredByClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.measuredByClauseMetaModel;
+    public JmlClauseLE clone() {
+        return (JmlClauseLE) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MeasuredByClause(TokenRange tokenRange) {
+    public JmlClauseLE(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -99,7 +103,7 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MeasuredByClause setExpr(final Expression expr) {
+    public JmlClauseLE setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -110,5 +114,30 @@ public class MeasuredByClause extends JmlClause implements MethodContractable, L
         this.expr = expr;
         setAsParentNodeOf(expr);
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getLabel() {
+        return label;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseLE setLabel(final SimpleName label) {
+        assertNotNull(label);
+        if (label == this.label) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        if (this.label != null)
+            this.label.setParentNode(null);
+        this.label = label;
+        setAsParentNodeOf(label);
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlClauseLEMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClauseLEMetaModel;
     }
 }

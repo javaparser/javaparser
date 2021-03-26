@@ -763,12 +763,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(AssignableClause n, Void arg) {
+    public void visit(JmlClauseHL n, Void arg) {
 
     }
 
     @Override
-    public void visit(BreaksClause n, Void arg) {
+    public void visit(JmlClauseLE n, Void arg) {
 
     }
 
@@ -829,7 +829,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(MeasuredByClause n, Void arg) {
+    public void visit(JmlClauseE n, Void arg) {
 
     }
 
@@ -839,7 +839,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(RequiresClause n, Void arg) {
+    public void visit(JmlClauseHE n, Void arg) {
 
     }
 

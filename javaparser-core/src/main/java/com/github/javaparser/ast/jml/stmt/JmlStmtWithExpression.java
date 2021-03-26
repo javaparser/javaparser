@@ -6,11 +6,9 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -18,7 +16,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.metamodel.JmlStmtWithExpressionMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -28,6 +25,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class JmlStmtWithExpression extends JmlStatement {
 
     public enum JmlStmtKind implements JmlKeyword {
+
         ASSERT(GeneratedJavaParserConstants.ASSERT),
         ASSERT_REDUNDANTLY(GeneratedJavaParserConstants.ASSERT_REDUNDANTLY),
         ASSUME(GeneratedJavaParserConstants.ASSUME),
@@ -60,15 +58,12 @@ public class JmlStmtWithExpression extends JmlStatement {
     public JmlStmtWithExpression(TokenRange range, final Expression expression) {
         this(range, JmlStmtKind.ASSERT, expression);
         int tt = range.getBegin().getKind();
-        Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values())
-                .filter(i -> i.tokenType == tt)
-                .findFirst();
+        Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values()).filter(i -> i.tokenType == tt).findFirst();
         k.ifPresent(this::setKind);
         if (k.isEmpty()) {
             throw new IllegalArgumentException("wrong token type");
         }
     }
-
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
@@ -172,6 +167,7 @@ public class JmlStmtWithExpression extends JmlStatement {
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlStmtWithExpression(TokenRange tokenRange, JmlStmtKind kind, Expression expression) {
         super(tokenRange);
+        setKind(kind);
         setExpression(expression);
         customInitialization();
     }

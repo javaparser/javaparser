@@ -86,11 +86,6 @@ public class EnsuresClause extends JmlClause implements MethodContractable {
         return (EnsuresClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public EnsuresClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.ensuresClauseMetaModel;
-    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")

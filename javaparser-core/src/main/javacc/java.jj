@@ -46,8 +46,8 @@ options {
     JDK_VERSION = "1.8";
     STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    DEBUG_PARSER=true;
-    DEBUG_LOOKAHEAD = true;
+    //DEBUG_PARSER=true;
+    //DEBUG_LOOKAHEAD = true;
 }
 
 
@@ -79,11 +79,10 @@ PARSER_BEGIN(GeneratedJavaParser)
 package com.github.javaparser;
 
 import java.util.*;
-import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.body.*;
@@ -98,7 +97,9 @@ import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.GeneratedJavaParser.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
-import static com.github.javaparser.ast.Node.Parsedness.*;
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.createCommentFromToken;
+
 
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
@@ -2068,19 +2069,21 @@ JmlClassLevel JmlClassInitially(ModifierHolder modifiers):
 
 JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
 {
-    Token b;
+    JavaToken begin;
     SimpleName id;
     Expression expr, measuredBy = null;
     NodeList<Expression> expressions = new NodeList<>();
 }
 {
-  b=<ACCESSIBLE> id=SimpleName() <COLON>
+  (<ACCESSIBLE>|<ACCESSIBLE_REDUNDANTLY>)
+  {begin=token();}
+  id=SimpleName() <COLON>
   expr=Expression() {expressions.add(expr);}
   (<COMMA> expr=Expression() {expressions.add(expr);})*
   (<MEASURED_BY> measuredBy=Expression())?
   ";"
-  { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
-    return new JmlClassAccessibleDeclaration(/*range(begin, token()), modifiers.modifiers, id, expressions, measuredBy*/);}
+  {
+    return new JmlClassAccessibleDeclaration(range(begin, token()), modifiers.modifiers, id, expressions, measuredBy);}
 }
 
 JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
@@ -4651,14 +4654,13 @@ BlockStmt BlockWithContract():
     return b;}
 }
 
-
 JmlClause JmlLoopInvClause():
 { Expression expr; JavaToken begin;}
 {
     (<LOOP_INVARIANT> | <MAINTAINING> | <LOOP_INVARIANT_REDUNDANTLY> | <MAINTAINING_REDUNDANTLY>)
     {begin=token();}
     expr=Expression()
-    {return new EnsuresClause(range(begin, token()), new NodeList<>(), expr);}
+    {return new JmlClauseE(range(begin, token()), begin, expr);}
 }
 
 NodeList<JmlContracts> JmlLoopInvariants():
@@ -4695,17 +4697,17 @@ JmlClause JmlLoopInvClauses():
 }
 {
   ( ret=JmlLoopInvClause()
-  | ret=breaks()
-  | ret=continues()
-  | ret=returns_()
-  //TODO weigl decreases?
+  | ret=JmlBreaksClause()
+  | ret=JmlContinuesClause()
+  | ret=JmlReturnsClause()
+  | ret=JmlDecreasesClause()
   //| ret=signals()
   //| ret=signalsOnly()
-  | ret=diverges()
+  | ret=JmlDivergesClause()
   //| ret=determs()
-  | ret=assign()
+  | ret=JmlAssignableClause()
   //| ret=acc()
-  | ret=mby()
+  | ret=JmlMeasuredBy()
   )
   ";"
   {return ret;}
@@ -4722,27 +4724,27 @@ NodeList<JmlContracts> JmlContracts():
   (
     {contract = new JmlContracts();}
     JmlStart(contract)
-    elements=jmlContractsInner()
+    elements=JmlContractsInner()
     JmlEnd()
     {contract.setElements(elements); contracts.add(contract);}
   )+
   { return contracts;}
 }
 
-NodeList<JmlContract> jmlContractsInner():
+NodeList<JmlContract> JmlContractsInner():
 {
     JmlContract bc = null;
     NodeList<JmlContract> contracts = emptyNodeList();
 }
 {
   (<ALSO>)?
-  bc=jmlContract() {contracts.add(bc);}
-  (<ALSO> bc=jmlContract() {contracts.add(bc);})*
+  bc=JmlContract() {contracts.add(bc);}
+  (<ALSO> bc=JmlContract() {contracts.add(bc);})*
   {return contracts;}
 }
 
 
-JmlContract jmlContract():
+JmlContract JmlContract():
 {
     JavaToken begin;
     NodeList<JmlClause> clauses = new NodeList<>();
@@ -4759,35 +4761,49 @@ JmlContract jmlContract():
    | "protected" { }
    ))? //TODO weigl
   {begin=token();}
-  (b=bbehavior())?
-  (clause=contractClause() {clauses.add(clause);})+
-  (<NESTED_CONTRACT_START> subContracts=jmlContractsInner() <NESTED_CONTRACT_END>)?
+  (b=JmlBehavior())?
+  (clause=JmlContractClause() {clauses.add(clause);})+
+  (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
   {return new JmlContract(range(begin, token()), b, new NodeList<>(), clauses, subContracts);}
 }
 
-JmlClause contractClause():
+JmlClause JmlContractClause():
 {
  JmlClause ret;
 }
 {
   ( ret=ForallClause()
-  | ret=breaks()
-  | ret=continues()
-  | ret=returns_()
-  | ret=requires()
-  | ret=ensures()
-  | ret=signals()
-  | ret=signalsOnly()
-  | ret=diverges()
+  | ret=JmlBreaksClause()
+  | ret=JmlContinuesClause()
+  | ret=JmlReturnsClause()
+  | ret=JmlRequiresClause()
+  | ret=JmlEnsuresClause()
+  | ret=JmlSignalsClause()
+  | ret=JmlSignalsOnlyClause()
+  | ret=JmlDivergesClause()
   //| ret=determs()
-  | ret=assign()
-  | ret=acc()
-  | ret=mby() )
+  | ret=JmlAssignableClause()
+  | ret=JmlAccessibleClause()
+  | ret=JmlMeasuredBy() )
   ";"
   {return ret;}
 }
 
-Behavior bbehavior():
+
+JmlClause JmlDecreasesClause():
+{
+    JavaToken begin;
+    Expression expr;
+}
+{
+  (<DECREASES> | <DECREASING> | <DECREASES_REDUNDANTLY> | <DECREASING_REDUNDANTLY> )
+  {begin=token();}
+  expr=Expression()
+  {return new JmlClauseE(range(begin,token()), begin, expr);}
+}
+
+
+Behavior JmlBehavior():
 {}
 {
     (<BEHAVIOUR>|<BEHAVIOR>) {return Behavior.BEHAVIOR;}
@@ -4810,7 +4826,7 @@ JmlClause ForallClause():
   {return new ForallClause(range(begin, token()), vars);}
 }
 
-JmlClause breaks():
+JmlClause JmlBreaksClause():
 {
     SimpleName label=null;
     Expression expr;
@@ -4820,10 +4836,10 @@ JmlClause breaks():
   <BREAKS>   { begin = token();}
   <LPAREN> (label=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new BreaksClause(range(begin, token()), label, expr); }
+  { return new JmlClauseLE(range(begin, token()), label, expr); }
 }
 
-JmlClause continues():
+JmlClause JmlContinuesClause():
 {
     SimpleName label=null;
     Expression expr;
@@ -4837,7 +4853,7 @@ JmlClause continues():
 }
 
 
-JmlClause returns_():
+JmlClause JmlReturnsClause():
 {
     Expression expr;
     JavaToken begin;
@@ -4869,7 +4885,7 @@ NodeList<SimpleName> heaps():
 
 /**
 */
-JmlClause assign():
+JmlClause JmlAssignableClause():
 {
     Expression e;
     NodeList<SimpleName> heaps=new NodeList<>();
@@ -4882,10 +4898,10 @@ JmlClause assign():
   { begin = token();}
   (heaps=heaps())*
   exprs=StoreRefList()
-  { return new AssignableClause(range(begin, token()), heaps, exprs); }
+  { return new JmlClauseHL(range(begin, token()), begin, heaps, exprs); }
 }
 
-JmlClause acc():
+JmlClause JmlAccessibleClause():
 {
     NodeList<SimpleName> heaps=new NodeList<>();
     Expression e=null;
@@ -4898,13 +4914,13 @@ JmlClause acc():
   (heaps=heaps())*
   exprs=StoreRefList()
   (<MEASURED_BY> e=Expression())?
-  { return new AccessibleClause(range(begin,token()), heaps, exprs, e); }
+  { return new JmlClauseHL(range(begin, token()), begin, heaps, exprs); }
 }
 
 /**
 Measures_by
 */
-JmlClause mby():
+JmlClause JmlMeasuredBy():
 {
     Expression e;
     JavaToken begin;
@@ -4912,10 +4928,10 @@ JmlClause mby():
 {
   { begin = token();}
   <MEASURED_BY> e=Expression()
-  { return new MeasuredByClause(range(begin,token()), e); }
+  { return new JmlClauseE(range(begin,token()), JmlClauseKind.MEASURED_BY, e); }
 }
 
-JmlClause requires():
+JmlClause JmlRequiresClause():
 {
     NodeList<SimpleName> heaps=new NodeList<>();
     Expression e;
@@ -4925,12 +4941,12 @@ JmlClause requires():
   (<REQUIRES> |<REQUIRES_FREE>|<REQUIRES_REDUNDANTLY>)
   { begin = token();}
   (heaps=heaps())? e=Expression()
-  { return new RequiresClause(range(begin, token()), heaps, e); }
+  { return new JmlClauseHE(range(begin, token()), begin, heaps, e); }
 }
 
 /**
 */
-JmlClause ensures():
+JmlClause JmlEnsuresClause():
 {
     NodeList<SimpleName> heaps=new NodeList<>();
     Expression e;
@@ -4940,12 +4956,12 @@ JmlClause ensures():
   (<ENSURES>|<ENSURES_FREE>|<ENSURES_REDUNDANTLY>)
   {begin = token();}
   (heaps=heaps())? e=Expression()
-  { return new EnsuresClause(range(begin, token()), heaps, e); }
+  { return new JmlClauseHE(range(begin, token()), begin, heaps, e); }
 }
 
 /**
 */
-JmlClause signals():
+JmlClause JmlSignalsClause():
 {
     SimpleName id=null;
     Expression e;
@@ -4964,7 +4980,7 @@ signals_only  \nothing;
 singals_only  \everything;
 singals_only  \everything;
 */
-JmlClause signalsOnly():
+JmlClause JmlSignalsOnlyClause():
 {
   JavaToken begin;
   Type type;
@@ -4978,7 +4994,7 @@ JmlClause signalsOnly():
 }
 
 
-JmlClause diverges():
+JmlClause JmlDivergesClause():
 {
   JavaToken begin;
   Expression e;
@@ -4987,7 +5003,7 @@ JmlClause diverges():
   (<DIVERGES>|<DIVERGES_REDUNDANTLY> )
   {begin=token();}
   e=Expression()
-  { return new DivergesClause(range(begin, token()), e); }
+  { return new JmlClauseE(range(begin, token()), begin, e); }
 }
 
 NodeList<LocationSetExpression> StoreRefList():
@@ -5008,9 +5024,6 @@ LocationSetExpression StoreRef():
     | ret=StoreRefExpr() {return ret;}
     )
 }
-
-
-
 
 LocationSetExpression StoreRefExpr():
 {

@@ -63,11 +63,6 @@ public class WhenClause extends JmlClause implements MethodContractable {
         return (WhenClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public WhenClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.whenClauseMetaModel;
-    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")

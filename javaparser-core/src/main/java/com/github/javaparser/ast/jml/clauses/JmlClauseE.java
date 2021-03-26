@@ -1,48 +1,50 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.BreaksClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.MeasuredByClauseMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.metamodel.JmlClauseEMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class BreaksClause extends JmlClause {
-
-    private SimpleName label;
+public class JmlClauseE extends JmlClause implements MethodContractable, LoopContractable {
 
     private Expression expr;
 
     @AllFieldsConstructor
-    public BreaksClause(SimpleName label, Expression expr) {
-        this(null, label, expr);
-        setKind(JmlClauseKind.BREAKS);
+    public JmlClauseE(JmlClauseKind kind, Expression expr) {
+        this(null, kind, expr);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BreaksClause(TokenRange tokenRange, SimpleName label, Expression expr) {
-        super(tokenRange);
-        setLabel(label);
+    public JmlClauseE(TokenRange tokenRange, JmlClauseKind kind, Expression expr) {
+        super(tokenRange, kind);
         setExpr(expr);
         customInitialization();
     }
 
-    public BreaksClause() {
-        setKind(JmlClauseKind.BREAKS);
+    public JmlClauseE() {
+    }
+
+    public JmlClauseE(TokenRange range, JavaToken token, Expression expr) {
+        this(range, JmlClauseKind.NONE, expr);
+        setKindByToken(token);
     }
 
     @Override
@@ -74,30 +76,20 @@ public class BreaksClause extends JmlClause {
             setExpr((Expression) replacementNode);
             return true;
         }
-        if (node == label) {
-            setLabel((SimpleName) replacementNode);
-            return true;
-        }
         return super.replace(node, replacementNode);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public BreaksClause clone() {
-        return (BreaksClause) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public BreaksClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.breaksClauseMetaModel;
+    public JmlClauseE clone() {
+        return (JmlClauseE) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BreaksClause(TokenRange tokenRange) {
+    public JmlClauseE(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -108,7 +100,7 @@ public class BreaksClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BreaksClause setExpr(final Expression expr) {
+    public JmlClauseE setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -121,22 +113,9 @@ public class BreaksClause extends JmlClause {
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getLabel() {
-        return label;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BreaksClause setLabel(final SimpleName label) {
-        assertNotNull(label);
-        if (label == this.label) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null)
-            this.label.setParentNode(null);
-        this.label = label;
-        setAsParentNodeOf(label);
-        return this;
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlClauseEMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClauseEMetaModel;
     }
 }

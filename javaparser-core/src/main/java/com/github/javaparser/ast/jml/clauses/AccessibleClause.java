@@ -114,12 +114,6 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public AccessibleClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.accessibleClauseMetaModel;
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);

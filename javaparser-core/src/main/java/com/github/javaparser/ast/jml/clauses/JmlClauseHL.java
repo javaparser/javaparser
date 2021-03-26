@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -15,34 +16,37 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import com.github.javaparser.metamodel.JmlClauseHLMetaModel;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class AssignableClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
+public class JmlClauseHL extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
 
     private NodeList<SimpleName> heaps;
 
     private NodeList<LocationSetExpression> exprs;
 
-    {
-        setKind(JmlClauseKind.ASSIGNABLE);
-    }
-
-    public AssignableClause() {
-        this(null, null);
+    public JmlClauseHL() {
+        this(null, null, null);
     }
 
     @AllFieldsConstructor
-    public AssignableClause(NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
-        this(null, heaps, exprs);
+    public JmlClauseHL(NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<LocationSetExpression> exprs) {
+        this(null, kind, heaps, exprs);
+    }
+
+    public JmlClauseHL(TokenRange tokenRange, JavaToken token, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
+        this(tokenRange, (JmlClauseKind) null, heaps, exprs);
+        setKindByToken(token);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AssignableClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
+    public JmlClauseHL(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
         super(tokenRange);
         setHeaps(heaps);
         setExprs(exprs);
@@ -91,14 +95,8 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public AssignableClause clone() {
-        return (AssignableClause) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public AssignableClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.assignableClauseMetaModel;
+    public JmlClauseHL clone() {
+        return (JmlClauseHL) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -117,7 +115,7 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AssignableClause(TokenRange tokenRange) {
+    public JmlClauseHL(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -128,7 +126,7 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignableClause setExprs(final NodeList<LocationSetExpression> exprs) {
+    public JmlClauseHL setExprs(final NodeList<LocationSetExpression> exprs) {
         assertNotNull(exprs);
         if (exprs == this.exprs) {
             return this;
@@ -147,7 +145,7 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AssignableClause setHeaps(final NodeList<SimpleName> heaps) {
+    public JmlClauseHL setHeaps(final NodeList<SimpleName> heaps) {
         assertNotNull(heaps);
         if (heaps == this.heaps) {
             return this;
@@ -158,5 +156,22 @@ public class AssignableClause extends JmlClause implements MethodContractable, B
         this.heaps = heaps;
         setAsParentNodeOf(heaps);
         return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlClauseHLMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClauseHLMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlClauseHL(TokenRange tokenRange, NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<LocationSetExpression> exprs) {
+        super(tokenRange, kind);
+        setHeaps(heaps);
+        setExprs(exprs);
+        customInitialization();
     }
 }
