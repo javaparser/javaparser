@@ -689,8 +689,7 @@ public class JavaParserFacade {
         } else if (type instanceof ArrayType) {
             return convertToUsage((ArrayType) type, context);
         } else if (type instanceof UnionType) {
-            UnionType unionType = (UnionType) type;
-            return new ResolvedUnionType(unionType.getElements().stream().map(el -> convertToUsage(el, context)).collect(Collectors.toList()));
+            return convertToUsage((UnionType) type, context);
         } else if (type instanceof VarType) {
             Node parent = type.getParentNode().get();
             if (!(parent instanceof VariableDeclarator)) {
@@ -742,6 +741,13 @@ public class JavaParserFacade {
 
     protected ResolvedType convertToUsage(ArrayType arrayType, Context context) {
         return new ResolvedArrayType(convertToUsage(arrayType.getComponentType(), context));
+    }
+
+    protected ResolvedType convertToUsage(UnionType unionType, Context context) {
+        List<ResolvedType> resolvedElements = unionType.getElements().stream()
+                .map(el -> convertToUsage(el, context))
+                .collect(Collectors.toList());
+        return new ResolvedUnionType(resolvedElements);
     }
 
     public ResolvedType convert(Type type, Node node) {
