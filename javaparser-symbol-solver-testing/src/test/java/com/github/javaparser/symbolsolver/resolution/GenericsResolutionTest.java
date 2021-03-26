@@ -1,0 +1,500 @@
+/*
+ * Copyright (C) 2015-2016 Federico Tomassetti
+ * Copyright (C) 2017-2019 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
+package com.github.javaparser.symbolsolver.resolution;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.Value;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * Tests related to resolved Generics types.
+ */
+class GenericsResolutionTest extends AbstractResolutionTest {
+
+    @Test
+    void resolveFieldWithGenericTypeToString() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
+        VariableDeclarator fieldS = Navigator.demandField(clazz, "s");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("s", fieldS);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("s", symbolReference.get().getName());
+
+        ResolvedType type = symbolReference.get().getType();
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals("java.lang.String", type.asReferenceType().typeParametersValues().get(0).describe());
+    }
+
+    @Test
+    void resolveFieldWithGenericTypeToDeclaredClass() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
+        VariableDeclarator fieldS = Navigator.demandField(clazz, "g");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("g", fieldS);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("g", symbolReference.get().getName());
+
+        ResolvedType type = symbolReference.get().getType();
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals("me.tomassetti.symbolsolver.javaparser.Generics", type.asReferenceType().typeParametersValues().get(0).describe());
+    }
+
+    @Test
+    void resolveFieldWithGenericTypeToInteger() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
+        VariableDeclarator fieldS = Navigator.demandField(clazz, "i");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("i", fieldS);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("i", symbolReference.get().getName());
+
+        ResolvedType type = symbolReference.get().getType();
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals("java.lang.Integer", type.asReferenceType().typeParametersValues().get(0).describe());
+    }
+
+    @Test
+    void resolveFieldOfVariableType() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+        VariableDeclarator field = Navigator.demandField(clazz, "a");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("a", field);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("a", symbolReference.get().getName());
+
+        ResolvedType type = symbolReference.get().getType();
+        assertEquals(true, type.isTypeVariable());
+        assertEquals("A", type.describe());
+    }
+
+    @Test
+    void resolveFieldOfGenericReferringToVariableType() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+        VariableDeclarator field = Navigator.demandField(clazz, "as");
+
+        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("as", field);
+
+        assertEquals(true, symbolReference.isPresent());
+        assertEquals("as", symbolReference.get().getName());
+
+        ResolvedType type = symbolReference.get().getType();
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("java.util.List<A>", type.describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        ResolvedType typeParam = type.asReferenceType().typeParametersValues().get(0);
+        assertEquals(true, typeParam.isTypeVariable());
+        assertEquals("A", typeParam.describe());
+    }
+
+    @Test
+    void resolveUsageOfGenericFieldSimpleCase() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
+
+        ExpressionStmt stmt = (ExpressionStmt) method.getBody().get().getStatements().get(0);
+        Expression expression = stmt.getExpression();
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("java.lang.String", type.describe());
+    }
+
+    //PRIMA UN TEST CHE DICA CHE IL TIPO DEL CAMPO AS e' LIST<A> NON LIST<E>
+    @Test
+    void resolveUsageOfGenericFieldIntermediateCase() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+
+        VariableDeclarator field = Navigator.demandField(clazz, "as");
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(field);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("java.util.List<A>", type.describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals(true, type.asReferenceType().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("A", type.asReferenceType().typeParametersValues().get(0).describe());
+    }
+
+    @Test
+    void resolveUsageOfGenericFieldAdvancedCase() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo2");
+
+        ExpressionStmt stmt = (ExpressionStmt) method.getBody().get().getStatements().get(0);
+        Expression expression = stmt.getExpression();
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("java.util.List<java.lang.String>", type.describe());
+        assertEquals(1, type.asReferenceType().typeParametersValues().size());
+        assertEquals(false, type.asReferenceType().typeParametersValues().get(0).isTypeVariable());
+        assertEquals("java.lang.String", type.asReferenceType().typeParametersValues().get(0).describe());
+    }
+
+    @Test
+    void resolveUsageOfMethodOfGenericClass() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodCalls.Derived");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "caller");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "callee").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("callee", methodUsage.getName());
+    }
+
+    @Test
+    void resolveUsageOfMethodOfGenericClassWithGenericReturnType() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodCalls.Derived");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "caller");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "get").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("get", methodUsage.getName());
+        assertEquals("java.lang.String", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveUsageOfMethodOfGenericClassWithUnboundedWildcard() {
+        CompilationUnit cu = parseSample("GenericsWildcard");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "unbounded");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "toString").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("toString", methodUsage.getName());
+        assertEquals("java.lang.Object", methodUsage.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void resolveUsageOfMethodOfGenericClassWithExtendsWildcard() {
+        CompilationUnit cu = parseSample("GenericsWildcard");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericsWildcard");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bounded");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "bar").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("bar", methodUsage.getName());
+        assertEquals("GenericsWildcard.Foo", methodUsage.declaringType().getQualifiedName());
+    }
+
+    @Test
+    void resolveUsageOfMethodOfGenericClassWithBoxing() {
+        CompilationUnit cu = parseSample("Generics");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericMethodBoxing");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "foo").get();
+
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
+
+        assertEquals("foo", methodUsage.getName());
+        assertEquals("GenericMethodBoxing", methodUsage.declaringType().getName());
+        assertEquals("java.lang.Long", methodUsage.returnType().describe());
+    }
+
+    @Test
+    void resolveElementOfList() {
+        CompilationUnit cu = parseSample("ElementOfList");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ElementOfList");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
+        VariableDeclarator variableDeclarator = Navigator.demandVariableDeclaration(method, "a").get();
+        Expression expression = variableDeclarator.getInitializer().get();
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("Comment", type.describe());
+    }
+
+    @Test
+    void resolveElementOfListAdvancedExample() {
+        CompilationUnit cu = parseSample("ElementOfList");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ElementOfList");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "annotations");
+        VariableDeclarator variableDeclarator = Navigator.demandVariableDeclaration(method, "a").get();
+        Expression expression = variableDeclarator.getInitializer().get();
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("AnnotationExpr", type.describe());
+    }
+
+    @Test
+    void genericsInheritance() {
+        CompilationUnit cu = parseSample("MethodTypeParams");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VoidVisitorAdapter");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "visit");
+        MethodCallExpr call = Navigator.findMethodCall(method, "accept").get();
+        Expression thisRef = call.getArguments().get(0);
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        ResolvedType voidVisitorAdapterOfA = javaParserFacade.getType(thisRef);
+        List<ResolvedReferenceType> allAncestors = voidVisitorAdapterOfA.asReferenceType().getAllAncestors();
+        assertEquals(2, allAncestors.size());
+    }
+
+    @Test
+    void methodTypeParams() {
+        CompilationUnit cu = parseSample("MethodTypeParams");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VoidVisitorAdapter");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "visit");
+        MethodCallExpr call = Navigator.findMethodCall(method, "accept").get();
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(call);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("void", type.describe());
+    }
+
+    @Test
+    void classCastScope() {
+        CompilationUnit cu = parseSample("ClassCast");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassCast");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getNodesByType");
+        MethodCallExpr call = Navigator.findMethodCall(method, "cast").get();
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        Expression scope = call.getScope().get();
+        ResolvedType type = JavaParserFacade.get(typeSolver).getType(scope);
+
+        //System.out.println(typeUsage);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("java.lang.Class<N>", type.describe());
+    }
+
+    @Test
+    void classCast() {
+        CompilationUnit cu = parseSample("ClassCast");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassCast");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "getNodesByType");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(returnStmt.getExpression().get());
+
+        assertEquals(true, type.isTypeVariable());
+        assertEquals("N", type.describe());
+    }
+
+    @Test
+    void typeParamOnReturnTypeStep1() {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        ThisExpr thisExpr = Navigator.demandNodeOfGivenClass(method, ThisExpr.class);
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpr);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("TypeParamOnReturnType", type.describe());
+    }
+
+    @Test
+    void typeParamOnReturnTypeStep2() {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        NameExpr n1 = Navigator.findNameExpression(method, "n1").get();
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(n1);
+
+        assertEquals(true, type.isTypeVariable());
+        assertEquals("T", type.describe());
+    }
+
+    @Test
+    void typeParamOnReturnTypeStep3() {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        MethodCallExpr call = Navigator.findMethodCall(method, "accept").get();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        ResolvedType type = javaParserFacade.getType(call);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("java.lang.Boolean", type.describe());
+    }
+
+    @Test
+    void typeParamOnReturnType() {
+        CompilationUnit cu = parseSample("TypeParamOnReturnType");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "TypeParamOnReturnType");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "nodeEquals");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(returnStmt.getExpression().get());
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("boolean", type.describe());
+    }
+
+    /*@Test
+    public void genericCollectionWithWildcardsAndExtensionsPrep() {
+        CompilationUnit cu = parseSample("GenericCollectionWithExtension");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+
+        TypeSolver typeSolver = new JreTypeSolver();
+        MethodCallExpr call = (MethodCallExpr) returnStmt.getExpr();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        List<TypeUsage> params = new ArrayList<>();
+        if (call.getArgs() != null) {
+            for (Expression param : call.getArgs()) {
+                params.add(javaParserFacade.getType(param, false));
+            }
+        }
+        Context context = JavaParserFactory.getContext(call, typeSolver);
+
+        ReferenceTypeUsage typeOfScope = javaParserFacade.getType(call.getScope()).asReferenceType();
+        me.tomassetti.symbolsolver.model.declarations.TypeDeclaration typeDeclaration = typeOfScope.getTypeDeclaration().orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+        List<TypeUsage> typeParametersValues = typeOfScope.typeParametersValues();
+
+        List<MethodUsage> methods = new ArrayList<>();
+        for (Method m : List.class.getMethods()) {
+            if (m.getName().equals("addAll") && !m.isBridge() && !m.isSynthetic()) {
+                me.tomassetti.symbolsolver.model.declarations.MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(m, typeSolver);
+                if (methods.size() == 0) {
+                    // ok, e' il primo
+                    ReferenceTypeUsage paramType = methodDeclaration.getParam(0).getType(typeSolver).asReferenceType();
+                    assertTrue(paramType.asReferenceType().typeParametersValues().get(0).isWildcard());
+                }
+                MethodUsage mu = new MethodUsage(methodDeclaration, typeSolver);
+                int i = 0;
+                for (TypeParameter tp : typeDeclaration.getTypeParameters()) {
+                    mu = mu.replaceTypeParameter(tp.getName(), typeParametersValues.get(i));
+                    i++;
+                }
+                methods.add(mu);
+            }
+
+        }
+
+        assertTrue(MethodResolutionLogic.isApplicable(methods.get(0), "addAll", params, typeSolver));
+        //Optional<MethodUsage> methodUsage = MethodResolutionLogic.findMostApplicableUsage(methods, "addAll", params, typeSolver);
+
+        //Optional<MethodUsage> methodUsage = typeDeclaration.solveMethodAsUsage("addAll", params, typeSolver, context, typeParametersValues);
+
+        //Optional<MethodUsage> methodUsage = context.solveMethodAsUsage("addAll", params, typeSolver);
+
+        //assertTrue(methodUsage.isPresent());
+
+    }*/
+
+    @Test
+    void genericCollectionWithWildcardsAndExtensions() {
+        CompilationUnit cu = parseSample("GenericCollectionWithExtension");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        Expression returnStmtExpr = returnStmt.getExpression().get();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        ResolvedType type = javaParserFacade.getType(returnStmtExpr);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("boolean", type.describe());
+    }
+
+    @Test
+    void methodWithGenericParameterTypes() {
+        CompilationUnit cu = parseSample("GenericCollectionWithExtension");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        MethodCallExpr methodCall = Navigator.findMethodCall(method, "foo").get();
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        MethodUsage methodUsage = javaParserFacade.solveMethodAsUsage(methodCall);
+
+        assertEquals("foo", methodUsage.getName());
+    }
+
+    @Test
+    void genericCollectionWithWildcards() {
+        CompilationUnit cu = parseSample("GenericCollection");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bar");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        Expression returnStmtExpr = returnStmt.getExpression().get();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        ResolvedType type = javaParserFacade.getType(returnStmtExpr);
+
+        assertEquals(false, type.isTypeVariable());
+        assertEquals("boolean", type.describe());
+    }
+}
