@@ -41,7 +41,7 @@ import com.github.javaparser.metamodel.JmlQuantifiedExprMetaModel;
  *
  * @author Alexander Weigl
  */
-public class JmlQuantifiedExpr extends Expression {
+public class JmlQuantifiedExpr extends Expression implements Jmlish{
 
     /**
      * 12.4.24.2 Generalized Quantifiers

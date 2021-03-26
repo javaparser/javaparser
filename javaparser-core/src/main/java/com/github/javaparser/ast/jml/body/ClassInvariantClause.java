@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.body;
+package com.github.javaparser.ast.jml.body;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;

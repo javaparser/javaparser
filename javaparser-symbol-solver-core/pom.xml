@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-      <artifactId>javaparser-parent</artifactId>
-      <groupId>com.github.javaparser</groupId>
+      <artifactId>jmlparser-parent</artifactId>
+      <groupId>org.key</groupId>
       <version>3.20.1-SNAPSHOT</version>
   </parent>    
   <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-symbol-solver-core</artifactId>
+    <artifactId>jmlparser-symbol-solver-core</artifactId>
     <packaging>jar</packaging>
     <description>A Symbol Solver for Java, built on top of JavaParser (core)</description>
 
@@ -32,8 +32,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-core</artifactId>
+            <groupId>org.key</groupId>
+            <artifactId>jmlparser-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

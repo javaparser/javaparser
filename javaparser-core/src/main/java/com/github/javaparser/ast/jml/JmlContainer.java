@@ -4,6 +4,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -12,7 +13,7 @@ import com.github.javaparser.ast.expr.SimpleName;
  * @author Alexander Weigl
  * @version 1 (3/21/21)
  */
-public interface JmlContainer<R extends Node, T extends Node> {
+public interface JmlContainer<R extends Node, T extends Node> extends Jmlish {
     NodeList<T> getElements();
 
     R setElements(NodeList<T> elements);

@@ -11,8 +11,8 @@
         <module>javaparser-symbol-solver-testing</module>
     </modules>
 
-    <groupId>com.github.javaparser</groupId>
-    <artifactId>javaparser-parent</artifactId>
+    <groupId>org.key</groupId>
+    <artifactId>jmlparser-parent</artifactId>
     <packaging>pom</packaging>
     <version>3.20.1-SNAPSHOT</version>
 

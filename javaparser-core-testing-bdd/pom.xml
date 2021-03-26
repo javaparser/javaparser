@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>javaparser-parent</artifactId>
-        <groupId>com.github.javaparser</groupId>
+        <artifactId>jmlparser-parent</artifactId>
+        <groupId>org.key</groupId>
         <version>3.20.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-core-testing-bdd</artifactId>
+    <artifactId>jmlparser-core-testing-bdd</artifactId>
     <description>The BDD test suite for javaparser-core</description>
 
     <licenses>
@@ -103,8 +103,8 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-core</artifactId>
+            <groupId>org.key</groupId>
+            <artifactId>jmlparser-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

@@ -19,7 +19,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (2/24/21)
  */
-public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> implements JmlContainer<JmlBodyDeclaration, JmlClassLevel> {
+public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> implements JmlContainer<JmlBodyDeclaration, JmlClassLevel>,Jmlish {
 
     private boolean singleLine;
 

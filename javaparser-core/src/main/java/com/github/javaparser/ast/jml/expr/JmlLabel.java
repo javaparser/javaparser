@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.jml.expr;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.JmlKeyword;
@@ -21,7 +22,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlLabel extends Expression {
+public class JmlLabel extends Expression implements Jmlish {
 
     private Kind kind;
 
