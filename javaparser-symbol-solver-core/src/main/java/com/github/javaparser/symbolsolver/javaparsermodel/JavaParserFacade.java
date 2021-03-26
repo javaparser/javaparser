@@ -102,6 +102,8 @@ import static com.github.javaparser.symbolsolver.model.resolution.SymbolReferenc
  */
 public class JavaParserFacade {
 
+    // Start of static class
+
     private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
     };
     private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
@@ -109,25 +111,7 @@ public class JavaParserFacade {
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
     
-    private static String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
-    private final TypeSolver typeSolver;
-    private final TypeExtractor typeExtractor;
-    private final SymbolSolver symbolSolver;
-
-    private JavaParserFacade(TypeSolver typeSolver) {
-        this.typeSolver = typeSolver.getRoot();
-        this.symbolSolver = new SymbolSolver(typeSolver);
-        this.typeExtractor = new TypeExtractor(typeSolver, this);
-    }
-
-    public TypeSolver getTypeSolver() {
-        return typeSolver;
-    }
-
-    public SymbolSolver getSymbolSolver() {
-        return symbolSolver;
-    }
+    private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
 
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
@@ -139,7 +123,7 @@ public class JavaParserFacade {
      * @see <a href="https://github.com/javaparser/javaparser/issues/2668">https://github.com/javaparser/javaparser/issues/2668</a>
      * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
      */
-    public synchronized static JavaParserFacade get(TypeSolver typeSolver) {
+    public static synchronized JavaParserFacade get(TypeSolver typeSolver) {
         return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
     }
 
@@ -166,6 +150,26 @@ public class JavaParserFacade {
             }
         }
         return type;
+    }
+
+    // End of static class
+    
+    private final TypeSolver typeSolver;
+    private final TypeExtractor typeExtractor;
+    private final SymbolSolver symbolSolver;
+
+    private JavaParserFacade(TypeSolver typeSolver) {
+        this.typeSolver = typeSolver.getRoot();
+        this.symbolSolver = new SymbolSolver(typeSolver);
+        this.typeExtractor = new TypeExtractor(typeSolver, this);
+    }
+
+    public TypeSolver getTypeSolver() {
+        return typeSolver;
+    }
+
+    public SymbolSolver getSymbolSolver() {
+        return symbolSolver;
     }
 
     public SymbolReference<? extends ResolvedValueDeclaration> solve(NameExpr nameExpr) {
