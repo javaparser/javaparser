@@ -687,8 +687,7 @@ public class JavaParserFacade {
         } else if (type instanceof VoidType) {
             return ResolvedVoidType.INSTANCE;
         } else if (type instanceof ArrayType) {
-            ArrayType jpArrayType = (ArrayType) type;
-            return new ResolvedArrayType(convertToUsage(jpArrayType.getComponentType(), context));
+            return convertToUsage((ArrayType) type, context);
         } else if (type instanceof UnionType) {
             UnionType unionType = (UnionType) type;
             return new ResolvedUnionType(unionType.getElements().stream().map(el -> convertToUsage(el, context)).collect(Collectors.toList()));
@@ -739,6 +738,10 @@ public class JavaParserFacade {
         } else {
             throw new UnsupportedOperationException(wildcardType.toString());
         }
+    }
+
+    protected ResolvedType convertToUsage(ArrayType arrayType, Context context) {
+        return new ResolvedArrayType(convertToUsage(arrayType.getComponentType(), context));
     }
 
     public ResolvedType convert(Type type, Node node) {
