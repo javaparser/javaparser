@@ -6,14 +6,14 @@ on:
   # Trigger the workflow on push to master (ignoring .md only changes)
   push:
     branches:
-    - master
+      - master
     paths-ignore:
-    - '**.md'
+      - '**.md'
 
   # Trigger the workflow on any pull_request (ignoring .md only changes)
   pull_request:
     paths-ignore:
-    - '**.md'
+      - '**.md'
 
 jobs:
   maven_test:
@@ -79,7 +79,7 @@ jobs:
           fail_ci_if_error: false # optional (default = false)
           verbose: false # optional (default = false):
           flags: javaparser-core,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-          env_vars: OS,JDK
+          env_vars: AlsoSlowTests,OS,JDK
 
       - name: CodeCov - JavaParser Symbol Solver
         uses: codecov/codecov-action@v1
@@ -89,4 +89,4 @@ jobs:
           fail_ci_if_error: false # optional (default = false)
           verbose: false # optional (default = false):
           flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-          env_vars: OS,JDK
+          env_vars: AlsoSlowTests,OS,JDK
