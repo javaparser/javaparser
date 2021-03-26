@@ -683,16 +683,7 @@ public class JavaParserFacade {
         } else if (type instanceof PrimitiveType) {
             return ResolvedPrimitiveType.byName(((PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType) type;
-            if (wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
-                return ResolvedWildcard.extendsBound(convertToUsage(wildcardType.getExtendedType().get(), context)); // removed (ReferenceTypeImpl)
-            } else if (!wildcardType.getExtendedType().isPresent() && wildcardType.getSuperType().isPresent()) {
-                return ResolvedWildcard.superBound(convertToUsage(wildcardType.getSuperType().get(), context)); // removed (ReferenceTypeImpl)
-            } else if (!wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
-                return ResolvedWildcard.UNBOUNDED;
-            } else {
-                throw new UnsupportedOperationException(wildcardType.toString());
-            }
+            return convertToUsage((WildcardType) type, context);
         } else if (type instanceof VoidType) {
             return ResolvedVoidType.INSTANCE;
         } else if (type instanceof ArrayType) {
@@ -735,6 +726,18 @@ public class JavaParserFacade {
             }
         } else {
             return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters, typeSolver);
+        }
+    }
+
+    protected ResolvedType convertToUsage(WildcardType wildcardType, Context context) {
+        if (wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
+            return ResolvedWildcard.extendsBound(convertToUsage(wildcardType.getExtendedType().get(), context)); // removed (ReferenceTypeImpl)
+        } else if (!wildcardType.getExtendedType().isPresent() && wildcardType.getSuperType().isPresent()) {
+            return ResolvedWildcard.superBound(convertToUsage(wildcardType.getSuperType().get(), context)); // removed (ReferenceTypeImpl)
+        } else if (!wildcardType.getExtendedType().isPresent() && !wildcardType.getSuperType().isPresent()) {
+            return ResolvedWildcard.UNBOUNDED;
+        } else {
+            throw new UnsupportedOperationException(wildcardType.toString());
         }
     }
 
