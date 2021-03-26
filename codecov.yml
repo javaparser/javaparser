@@ -44,4 +44,4 @@ comment:
   require_changes: false
   ### Do not comment until coverage reports for all builds have been received
   ### Note: 54 = three OSs (mac, windows, ubuntu) x nine java levels (8,9,10,11,12,13,14,15,16) x two modules (jp-core, jss)
-  after_n_builds: 54
+  #after_n_builds: 54 ## Testing removal of this to see if this is the cause of no comments being added/updated
