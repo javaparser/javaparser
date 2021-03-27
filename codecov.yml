@@ -43,5 +43,6 @@ comment:
   behavior: new
   require_changes: false
   ### Do not comment until coverage reports for all builds have been received
-  ### Note: 54 = three OSs (mac, windows, ubuntu) x nine java levels (8,9,10,11,12,13,14,15,16) x two modules (jp-core, jss)
-  after_n_builds: 54
+  ##### Note: 54 = three OSs (mac, windows, ubuntu) x nine java levels (8,9,10,11,12,13,14,15,16) x two modules (jp-core, jss)
+  ### Note: 6 = three OSs (mac, windows, ubuntu) x one java level (JDK 8 only) x two modules (jp-core, jss)
+  after_n_builds: 6
