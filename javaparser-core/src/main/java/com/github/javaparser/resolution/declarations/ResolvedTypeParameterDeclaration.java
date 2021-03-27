@@ -222,6 +222,16 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
         throw new IllegalStateException();
     }
 
+    @Override
+    default ResolvedTypeParameterDeclaration asTypeParameter() {
+        return this;
+    }
+
+    @Override
+    default boolean isTypeParameter() {
+        return true;
+    }
+
     /**
      * A Bound on a Type Parameter.
      */
