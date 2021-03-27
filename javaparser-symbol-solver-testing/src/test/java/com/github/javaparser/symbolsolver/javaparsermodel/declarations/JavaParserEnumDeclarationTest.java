@@ -44,9 +44,9 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -371,7 +371,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     void testGetAllAncestorsWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
-        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
+        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         
         assertEquals(12, ancestors.size());
 
@@ -944,7 +944,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     }
 
     @Override
-    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+    public Optional<EnumDeclaration> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
                 safeCast(associableToAST, JavaParserEnumDeclaration.class).getWrappedNode()
         );

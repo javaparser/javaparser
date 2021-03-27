@@ -366,7 +366,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest imp
     void testGetAllAncestorsWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
-        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
+        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         
         assertEquals(12, ancestors.size());
 

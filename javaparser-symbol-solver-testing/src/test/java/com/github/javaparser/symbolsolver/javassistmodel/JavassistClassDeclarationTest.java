@@ -467,7 +467,7 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     void testGetAllAncestorsWithTypeParameters() {
         JavassistClassDeclaration constructorDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
-        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
+        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         
         assertEquals(12, ancestors.size());
 
