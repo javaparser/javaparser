@@ -24,11 +24,17 @@ package com.github.javaparser.resolution.declarations;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public interface ResolvedReferenceTypeDeclarationTest extends ResolvedTypeDeclarationTest, ResolvedTypeParametrizableTest {
 
     @Override
     ResolvedReferenceTypeDeclaration createValue();
+
+    @Test
+    default void isReferenceTypeShouldBeTrue() {
+        assertTrue(createValue().isReferenceType());
+    }
 
     @Test
     default void getAllFieldsCantBeNull() {

@@ -21,10 +21,19 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public interface ResolvedTypeParameterDeclarationTest extends ResolvedTypeDeclarationTest {
 
     @Override
     ResolvedTypeParameterDeclaration createValue();
+
+    @Test
+    default void isTypeParameter_shouldBeTrue() {
+        assertTrue(createValue().isTypeParameter());
+    }
 
     // TODO: Test ResolvedTypeParameterDeclaration
 
