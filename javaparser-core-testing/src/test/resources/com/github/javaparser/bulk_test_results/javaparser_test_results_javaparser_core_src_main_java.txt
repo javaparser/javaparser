@@ -1,4 +1,1 @@
-com/github/javaparser/UnicodeEscapeProcessingProvider.java
-Lexical error at line 100, column 57.  Encountered: "\r" (13), after : "// Nothing read yet, this is the end of the stream."
-
-1 problems in 1 files
+0 problems in 0 files

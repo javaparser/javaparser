@@ -277,7 +277,7 @@ TOKEN_MGR_DECLS :
 
 <JML_MULTI_CONTRACT>
 SPECIAL_TOKEN : {
-  <SINGLE_LINE_COMMENT_IN_MULTI_JML: "//" (~["\n","\r"])* "\n">
+  <SINGLE_LINE_COMMENT_IN_MULTI_JML: "//" (~["\n","\r"])*>
 }
 
 /*
@@ -298,8 +298,9 @@ TOKEN : {
   <JML_SINGLE_START: "//" (~[" "])* "@"> : JML_SINGLE_CONTRACT
 }
 
-SPECIAL_TOKEN : {
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")?>
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
 }
 
 TOKEN : {

@@ -112,6 +112,83 @@ public class TokenTypes {
             case MULTI_LINE_COMMENT:
                 return JavaToken.Category.COMMENT;
             case ABSTRACT:
+            case AXIOM:
+            case BEHAVIOUR:
+            case BIGINT:
+            case BIGINT_MATH:
+            case BREAK_BEHAVIOR:
+            case BREAK_BEHAVIOUR:
+            case CALLABLE_REDUNDANTLY:
+            case BY:
+            case DURATION:
+            case CALLABLE:
+            case CAPTURES:
+            case CAPTURES_REDUNDANTLY:
+            case CHOOSE:
+            case CHOOSE_IF:
+            case CONSTRAINT:
+            case CONSTRAINT_REDUNDANTLY:
+            case CONSTRUCTOR:
+            case CONTINUE_BEHAVIOUR:
+            case DECLASSIFIES:
+            case DECREASES:
+            case DECREASES_REDUNDANTLY:
+            case DECREASING_REDUNDANTLY:
+            case DURATION_REDUNDANTLY:
+            case ELEMTYPE:
+            case ENSURES_REDUNDANTLY:
+            case ERASES:
+            case EXAMPLE:
+            case EXCEPTIONAL_EXAMPLE:
+            case EXSURES:
+            case EXSURES_REDUNDANTLY:
+            case EXTRACT:
+            case FIELD:
+            case FRESH:
+            case HELPER:
+            case INITIALIZER:
+            case INITIALLY:
+            case INSTANCE:
+            case INTO:
+            case INVARIANT_REDUNDANTLY:
+            case INVARIANT_FOR:
+            case IN_REDUNDANTLY:
+            case IS_INITIALIZED:
+            case JAVA_MATH:
+            case LBLNEG:
+            case LBLPOS:
+            case MAINTAINING_REDUNDANTLY:
+            case MAPS:
+            case MAPS_REDUNDANTLY:
+            case MODEL_PROGRAM:
+            case MODIFIES:
+            case MONITORED:
+            case MONITORS_FOR:
+            case NONNULLELEMENTS:
+            case NON_NULL:
+            case NOT_SPECIFIED:
+            case ONLY_ACCESSED:
+            case ONLY_ASSIGNED:
+            case ONLY_CALLED:
+            case ONLY_CAPTURED:
+            case OR:
+            case PRODUCT:
+            case REACH:
+            case READABLE:
+            case REAL:
+            case REFINING:
+            case REQUIRES_REDUNDANTLY:
+            case RETURN_BEHAVIOUR:
+            case SPACE_ESC:
+            case SPEC_SAFE_MATH:
+            case STATIC_INITIALIZER:
+            case SUBTYPE:
+            case TYPE:
+            case TYPEOF:
+            case UNINITIALIZED:
+            case WRITABLE:
+            case NEW_OBJECTS:
+            case INFINITE_UNION:
             case ASSERT:
             case BOOLEAN:
             case BREAK:
@@ -142,7 +219,6 @@ public class TokenTypes {
             case LONG:
             case NATIVE:
             case NEW:
-            case INVARIANT_FOR:
             case PACKAGE:
             case PRIVATE:
             case PROTECTED:
@@ -188,7 +264,6 @@ public class TokenTypes {
             case NORMAL_BEHAVIOR:
             case EXCEPTIONAL_BEHAVIOR:
             case BEHAVIOR:
-            case BREAK_BEHAVIOR:
             case CONTINUE_BEHAVIOR:
             case BREAKS:
             case ENSURES_FREE:
@@ -386,6 +461,7 @@ public class TokenTypes {
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
+                throw new IllegalArgumentException("Internal token kind given " + kind);
             default:
                 throw new AssertionError("Invalid token kind " + kind);
         }

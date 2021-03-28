@@ -26,7 +26,14 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.body.ClassInvariantClause;
+import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
+import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.locref.*;
+import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
@@ -51,7 +58,7 @@ import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
 public class ConcreteSyntaxModel {
 
     private static final Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
-    private static Optional<String> initializationError;
+    private static final Optional<String> initializationError;
 
     private static CsmElement modifiers() {
         return list(ObservableProperty.MODIFIERS, space(), none(), space());
@@ -964,7 +971,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(JmlClauseHE.class,sequence(
+        concreteSyntaxModelByClass.put(JmlClauseHE.class, sequence(
                 child(ObservableProperty.KIND),
                 child(HEAPS),
                 space(),
@@ -972,7 +979,7 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 newline()
         ));
-        concreteSyntaxModelByClass.put(JmlClauseHL.class,sequence(
+        concreteSyntaxModelByClass.put(JmlClauseHL.class, sequence(
                 child(ObservableProperty.KIND),
                 child(HEAPS),
                 space(),
@@ -980,7 +987,8 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 newline()
         ));
-        concreteSyntaxModelByClass.put(JmlClauseLE.class,sequence(
+
+        concreteSyntaxModelByClass.put(JmlClauseLE.class, sequence(
                 child(ObservableProperty.KIND),
                 token(LPAREN),
                 child(LABEL),
@@ -991,16 +999,39 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        //CallableClause, ClassInvariantClause, DurationClause, , JmlBodyDeclaration,
-        //JmlBoundVariable, JmlClassAccessibleDeclaration,
-        // JmlContract, JmlContracts, JmlFunction, JmlGhostStatements,
-        // JmlLabel, JmlLetExpr, JmlMultiCompareExpr, JmlName,
-        // JmlQuantifiedExpr, JmlRefiningStmt, JmlRepresentsDeclaration, JmlSetComprehension,
-        // JmlSetStmt, JmlStatements, JmlStmtWithExpression, JmlUnreachableStmt, LocationSetArrayAccess,
-        // LocationSetBindingExpr, LocationSetFieldAccess, LocationSetFunction, LocationSetLiftExpression,
-        // LocationSetPrimary, OldClause, SignalsClause, SignalsOnlyClause
-        //endregion
+        concreteSyntaxModelByClass.put(CallableClause.class, sequence());
+        concreteSyntaxModelByClass.put(ClassInvariantClause.class, sequence());
+        concreteSyntaxModelByClass.put(DurationClause.class, sequence());
+        concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(JmlBoundVariable.class, sequence());
+        concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(JmlContract.class, sequence());
+        concreteSyntaxModelByClass.put(JmlContracts.class, sequence());
+        concreteSyntaxModelByClass.put(JmlGhostStatements.class, sequence());
+        concreteSyntaxModelByClass.put(JmlLabel.class, sequence());
+        concreteSyntaxModelByClass.put(JmlLetExpr.class, sequence());
+        concreteSyntaxModelByClass.put(JmlMultiCompareExpr.class, sequence());
 
+        concreteSyntaxModelByClass.put(JmlFunction.class, sequence());
+        concreteSyntaxModelByClass.put(JmlName.class, sequence());
+        concreteSyntaxModelByClass.put(JmlQuantifiedExpr.class, sequence());
+        concreteSyntaxModelByClass.put(JmlRefiningStmt.class, sequence());
+        concreteSyntaxModelByClass.put(JmlRepresentsDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(JmlSetComprehension.class, sequence());
+        concreteSyntaxModelByClass.put(JmlSetStmt.class, sequence());
+        concreteSyntaxModelByClass.put(JmlStatements.class, sequence());
+        concreteSyntaxModelByClass.put(JmlStmtWithExpression.class, sequence());
+        concreteSyntaxModelByClass.put(JmlUnreachableStmt.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetArrayAccess.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetBindingExpr.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetFieldAccess.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetFunction.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetLiftExpression.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetPrimary.class, sequence());
+        concreteSyntaxModelByClass.put(OldClause.class, sequence());
+        concreteSyntaxModelByClass.put(SignalsClause.class, sequence());
+        concreteSyntaxModelByClass.put(SignalsOnlyClause.class, sequence());
+        //endregion
 
 
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()

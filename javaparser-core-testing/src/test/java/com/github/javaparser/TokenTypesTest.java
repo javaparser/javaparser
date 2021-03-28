@@ -23,10 +23,14 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.stmt.SwitchEntry;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
@@ -42,5 +46,19 @@ public class TokenTypesTest {
         int switchEntries = tokenTypesCu.findAll(SwitchEntry.class).size() - 1;
         // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
         assertEquals(tokenCount, switchEntries);
+    }
+
+    @TestFactory
+    Stream<DynamicTest> everyTokenHasACategory0() throws IOException {
+        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
+        return IntStream.range(0, tokenCount).mapToObj(it ->
+                DynamicTest.dynamicTest("TokenType: " + it,
+                        () -> {
+                            try {
+                                TokenTypes.getCategory(it);
+                            } catch (IllegalArgumentException e) {
+                            }
+                            return;
+                        }));
     }
 }
