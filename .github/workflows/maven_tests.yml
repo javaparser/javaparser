@@ -22,11 +22,11 @@ jobs:
       fail-fast: false
       matrix:
         ## Different OSs have different default line-endings -- test on all combinations.
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         ## Different JDK versions have different implementations etc. -- test on all combinations (ideally 8 to latest).
         ### exclude pre-8 (min development version jdk8)
         ### exclude post-12 (changes to jdk causes reflection tests to fail due to added methods #1701 )
-        jdk: [8,9,10,11,12,13,14,15,16]
+        jdk: [ 8,9,10,11,12,13,14,15,16 ]
     env:
       OS: ${{ matrix.os }}
       JDK: ${{ matrix.jdk }}
@@ -76,17 +76,17 @@ jobs:
         timeout-minutes: 10
         with:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
-          fail_ci_if_error: false # optional (default = false)
+          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
           verbose: false # optional (default = false):
           flags: javaparser-core,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-          env_vars: AlsoSlowTests,OS,JDK
+          env_vars: OS,JDK
 
       - name: CodeCov - JavaParser Symbol Solver
         uses: codecov/codecov-action@v1
         timeout-minutes: 10
         with:
           file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
-          fail_ci_if_error: false # optional (default = false)
+          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
           verbose: false # optional (default = false):
           flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-          env_vars: AlsoSlowTests,OS,JDK
+          env_vars: OS,JDK

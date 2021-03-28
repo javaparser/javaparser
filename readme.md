@@ -1,3 +1,9 @@
+
+<!--
+    Note that edits to this readme should be done via `docs/readme.md`.
+    Modifying this file directly within the root directory risks it being overwritten. 
+-->
+
 # JavaParser
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.javaparser/javaparser-core.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.javaparser%22%20AND%20a%3A%22javaparser-core%22)
@@ -8,24 +14,24 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667378.svg)](https://doi.org/10.5281/zenodo.2667378)
 
 
-This project contains a set of libraries implementing a Java 1.0 - Java 14 Parser with advanced analysis functionalities. This includes preview features to Java 13, with Java 14 preview features work-in-progress.
+This project contains a set of libraries implementing a Java 1.0 - Java 15 Parser with advanced analysis functionalities. This includes preview features to Java 13, with Java 14 preview features work-in-progress.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
 ## Setup
 
-The project binaries are available in Maven Central. 
+The project binaries are available in Maven Central.
 
 We strongly advise users to adopt Maven, Gradle or another build system for their projects.
-If you are not familiar with them we suggest taking a look at the maven quickstart projects 
-([javaparser-maven-sample](https://github.com/javaparser/javaparser-maven-sample), 
+If you are not familiar with them we suggest taking a look at the maven quickstart projects
+([javaparser-maven-sample](https://github.com/javaparser/javaparser-maven-sample),
 [javasymbolsolver-maven-sample](https://github.com/javaparser/javasymbolsolver-maven-sample)).
 
 Just add the following to your maven configuration or tailor to your own dependency management system.
 
 [Please refer to the Migration Guide when upgrading from 2.5.1 to 3.0.0+](https://github.com/javaparser/javaparser/wiki/Migration-Guide)
 
-**Maven**: 
+**Maven**:
 
 ```xml
 <dependency>
@@ -41,13 +47,13 @@ Just add the following to your maven configuration or tailor to your own depende
 implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.20.2'
 ```
 
-Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver. 
-While JavaParser generates an Abstract Syntax Tree, JavaSymbolSolver analyzes that AST and is able to find 
+Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver.
+While JavaParser generates an Abstract Syntax Tree, JavaSymbolSolver analyzes that AST and is able to find
 the relation between an element and its declaration (e.g. for a variable name it could be a parameter of a method, providing information about its type, position in the AST, ect).
 
 Using the dependency above will add both JavaParser and JavaSymbolSolver to your project. If you only need the core functionality of parsing Java source code in order to traverse and manipulate the generated AST, you can reduce your projects boilerplate by only including JavaParser to your project:
 
-**Maven**: 
+**Maven**:
 
 ```xml
 <dependency>
@@ -66,7 +72,7 @@ implementation 'com.github.javaparser:javaparser-core:3.20.2'
 Since version 3.6.17 the AST can be serialized to JSON.
 There is a separate module for this:
 
-**Maven**: 
+**Maven**:
 
 ```xml
 <dependency>
