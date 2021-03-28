@@ -40,7 +40,6 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.jml.JmlPipeline;
 import com.github.javaparser.printer.configuration.ConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;

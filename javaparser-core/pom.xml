@@ -29,17 +29,6 @@
             <artifactId>annotations</artifactId>
             <version>9.0.4</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.18</version>
-        </dependency>
     </dependencies>
 
     <properties>

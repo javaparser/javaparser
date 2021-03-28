@@ -16,10 +16,8 @@ public class Example {
         JavaParser jpb = new JavaParser();
         var result = jpb.parse(new File("./JmlExample.java"));
 
-        JmlPipeline jmlPipeline = new JmlPipeline();
         System.out.println(result);
         result.getResult().ifPresent(it -> {
-            jmlPipeline.processJml(it);
             final var c = new DefaultPrinterConfiguration();
             var v = new DefaultPrettyPrinter(c);
             System.out.println(v.print(it));

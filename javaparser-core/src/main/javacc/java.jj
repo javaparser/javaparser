@@ -282,15 +282,14 @@ SPECIAL_TOKEN : {
 
 MORE :
 {
-  <JML_SINGLE_START0: "//" (~[" "])* "@"> : JML_SINGLE_CONTRACT_PRE
+  <JML_SINGLE_START0: "//" (~[" "])* "@"> /*TODO weigl maybe push token back */ : JML_SINGLE_CONTRACT_PRE
   |
   <SINGLE_LINE_COMMENT0: "//"> : SINGLE_LINE_COMMENT_STATE
 }
 
-
-<SINGLE_LINE_COMMENT_STATE> SPECIAL_TOKEN : { <SINGLE_LINE_COMMENT: (~["\n","\r"])* "\n"> : DEFAULT}
+<SINGLE_LINE_COMMENT_STATE> SPECIAL_TOKEN : { <SINGLE_LINE_COMMENT: (~["\n","\r"])* ("\n"|"\r"|"\r\n")?> : DEFAULT}
 <JML_SINGLE_CONTRACT_PRE> TOKEN: { <JML_SINGLE_START : " "> : JML_SINGLE_CONTRACT}
-
+//FIXME weigl space could be a problem
 
 TOKEN :{
   <JML_MULTI_START: "/*" (~[" "])* "@">  : JML_MULTI_CONTRACT
