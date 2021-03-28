@@ -26,6 +26,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
@@ -945,6 +946,62 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 newline()
         ));
+
+        //region JML
+        concreteSyntaxModelByClass.put(ForallClause.class, sequence(
+                token(GeneratedJavaParserConstants.FORALL),
+                space(),
+                child(ObservableProperty.VARIABLES),
+                semicolon(),
+                newline()
+        ));
+
+        concreteSyntaxModelByClass.put(JmlClauseE.class, sequence(
+                child(ObservableProperty.KIND),
+                space(),
+                child(EXPRESSION),
+                semicolon(),
+                newline()
+        ));
+
+        concreteSyntaxModelByClass.put(JmlClauseHE.class,sequence(
+                child(ObservableProperty.KIND),
+                child(HEAPS),
+                space(),
+                child(EXPRESSION),
+                semicolon(),
+                newline()
+        ));
+        concreteSyntaxModelByClass.put(JmlClauseHL.class,sequence(
+                child(ObservableProperty.KIND),
+                child(HEAPS),
+                space(),
+                child(EXPRS),
+                semicolon(),
+                newline()
+        ));
+        concreteSyntaxModelByClass.put(JmlClauseLE.class,sequence(
+                child(ObservableProperty.KIND),
+                token(LPAREN),
+                child(LABEL),
+                token(RPAREN),
+                space(),
+                child(EXPRESSION),
+                semicolon(),
+                newline()
+        ));
+
+        //CallableClause, ClassInvariantClause, DurationClause, , JmlBodyDeclaration,
+        //JmlBoundVariable, JmlClassAccessibleDeclaration,
+        // JmlContract, JmlContracts, JmlFunction, JmlGhostStatements,
+        // JmlLabel, JmlLetExpr, JmlMultiCompareExpr, JmlName,
+        // JmlQuantifiedExpr, JmlRefiningStmt, JmlRepresentsDeclaration, JmlSetComprehension,
+        // JmlSetStmt, JmlStatements, JmlStmtWithExpression, JmlUnreachableStmt, LocationSetArrayAccess,
+        // LocationSetBindingExpr, LocationSetFieldAccess, LocationSetFunction, LocationSetLiftExpression,
+        // LocationSetPrimary, OldClause, SignalsClause, SignalsOnlyClause
+        //endregion
+
+
 
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType()))
