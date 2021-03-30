@@ -5,7 +5,7 @@ codecov:
 coverage:
   precision: 3
   round: down
-  range: "60...80" # Colour range - 60% coverage (and below) is solid red, 80% coverage (and above) is solid green.
+  range: "70...90" # Colour range - 70% coverage (and below) is solid red, 90% coverage (and above) is solid green.
 
 #  notify:
 #    gitter:
@@ -40,9 +40,8 @@ coverage:
 # Comments on PRs
 comment:
   layout: "reach,diff,flags,files,footer"
-  behavior: new
+  behavior: default
   require_changes: false
-  require_base: no  # [yes :: must have a base report to post]
-  ### Do not comment until coverage reports for all builds have been received
+  ### Do not comment on the PR until coverage reports for all builds has been received
   ### Note: 54 = three OSs (mac, windows, ubuntu) x nine java levels (8,9,10,11,12,13,14,15,16) x two modules (jp-core, jss)
   after_n_builds: 54
