@@ -267,9 +267,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             return;
         }
-        if (source.equals(target)) {
-            return;
-        }
         if (source.isReferenceType() && target.isWildcard()) {
             if (target.asWildcard().isBounded()) {
                 inferTypes(source, target.asWildcard().getBoundedType(), mappings);
@@ -325,6 +322,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         if (source.isTypeVariable() && target.isTypeVariable()) {
+            if (source.equals(target)
+                    && isEqualBounds(source.asTypeVariable(), target.asTypeVariable())) {
+                return;
+            }
             mappings.put(target.asTypeParameter(), source);
             return;
         }
@@ -339,6 +340,33 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         throw new RuntimeException(source.describe() + " " + target.describe());
+    }
+
+    private boolean isEqualBounds(ResolvedTypeVariable typeVariable1, ResolvedTypeVariable typeVariable2) {
+        List<ResolvedTypeParameterDeclaration.Bound> bound1 = typeVariable1.asTypeParameter().getBounds();
+        List<ResolvedTypeParameterDeclaration.Bound> bound2 = typeVariable2.asTypeParameter().getBounds();
+
+        if (bound1.isEmpty() && bound2.isEmpty()) {
+            return true;
+        }
+
+        if (bound1.isEmpty()) {
+            bound1 = Collections.singletonList(
+                    ResolvedTypeParameterDeclaration.Bound.extendsBound(
+                            JavaParserFacade.get(typeSolver).classToResolvedType(Object.class)));
+        }
+
+        if (bound2.isEmpty()) {
+            bound2 = Collections.singletonList(
+                    ResolvedTypeParameterDeclaration.Bound.extendsBound(
+                            JavaParserFacade.get(typeSolver).classToResolvedType(Object.class)));
+        }
+
+        if (bound1.size() != bound2.size()) {
+            return false;
+        }
+
+        return bound1.containsAll(bound2);
     }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
