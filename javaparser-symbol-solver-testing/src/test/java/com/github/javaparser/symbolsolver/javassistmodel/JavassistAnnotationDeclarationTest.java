@@ -91,6 +91,7 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest imp
         ClassPool classPool = new ClassPool(true);
         CtClass fooAnnotation = classPool.makeAnnotation("com.example.Foo");
         CtClass barClass = fooAnnotation.makeNestedClass("Bar", true);
+        CtClass bazClass = barClass.makeNestedClass("Baz", true);
         JavassistAnnotationDeclaration fooClassDeclaration = new JavassistAnnotationDeclaration(fooAnnotation, typeSolver);
 
         List<ResolvedReferenceTypeDeclaration> innerTypes = new ArrayList<>(fooClassDeclaration.internalTypes());
