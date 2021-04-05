@@ -287,9 +287,9 @@ public class RecordDeclarationTest {
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
-        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
-        assertFalse(record.hasModifier(Modifier.Keyword.FINAL));
-        assertTrue(record.isFinal(), "Records are implicitly final.");
+        RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
+        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(recordDeclaration.isFinal(), "Records are implicitly final.");
     }
 
     /**
@@ -301,9 +301,9 @@ public class RecordDeclarationTest {
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
-        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
-        assertFalse(record.getTypeParameters().isEmpty());
-        assertEquals("T", record.getTypeParameters().get(0).getNameAsString());
+        RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
+        assertFalse(recordDeclaration.getTypeParameters().isEmpty());
+        assertEquals("T", recordDeclaration.getTypeParameters().get(0).getNameAsString());
     }
 
 
@@ -559,9 +559,9 @@ public class RecordDeclarationTest {
                 "}"
         );
 
-        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
-        assertThat(record.getNameAsString()).isEqualTo("Range");
-        assertThat(record.getModifiers()).containsExactly(Modifier.publicModifier());
+        RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
+        assertThat(recordDeclaration.getNameAsString()).isEqualTo("Range");
+        assertThat(recordDeclaration.getModifiers()).containsExactly(Modifier.publicModifier());
         // test parameters
         // get constructor
         // test parameters (none)
@@ -582,7 +582,7 @@ public class RecordDeclarationTest {
                 "}"
         );
 
-        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+        RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
 
     }
 
@@ -603,7 +603,7 @@ public class RecordDeclarationTest {
                 "}\n"
         );
 
-        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+        RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
 
     }
 
@@ -626,7 +626,7 @@ public class RecordDeclarationTest {
                 "}\n"
         );
 
-        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+        RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
 
     }
 
