@@ -86,7 +86,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Roger Howell
  * @see <a href="https://openjdk.java.net/jeps/359">https://openjdk.java.net/jeps/359</a>
- * @since 3.19.0
+ * @since 3.21.0
  */
 public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implements NodeWithParameters<RecordDeclaration>, NodeWithImplements<RecordDeclaration>, NodeWithTypeParameters<RecordDeclaration>, NodeWithFinalModifier<RecordDeclaration>, Resolvable<ResolvedReferenceTypeDeclaration> {
 
