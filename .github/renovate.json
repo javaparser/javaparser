@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ],
+  "automergeType": "pr",
+  "prHourlyLimit": 0,
+  "semanticCommits": true,
+  "dependencyDashboard": true,
+  "configWarningReuseIssue": false,
+  "labels": ["dependencies"]
+}

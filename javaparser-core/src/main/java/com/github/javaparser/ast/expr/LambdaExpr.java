@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -42,6 +39,11 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LambdaExprMetaModel;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * <h1>A lambda expression</h1>
  * <h2>Java 1-7</h2>
@@ -50,7 +52,7 @@ import com.github.javaparser.metamodel.LambdaExprMetaModel;
  * {@code (a, b) -> a + b}
  * <br>{@code a -> ...}
  * <br>{@code (Long a) -> { println(a); }}
- * <p/>The parameters are on the left side of the -&gt;.
+ * <p>The parameters are on the left side of the -&gt;.
  * If a parameter uses type inference (it has no type specified) then its type is set to {@code UnknownType}.
  * If they are in ( ), "isEnclosingParameters" is true.
  * <br>The body is to the right of the -&gt;.
@@ -124,7 +126,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     public LambdaExpr setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
-            return (LambdaExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
         if (this.parameters != null)
@@ -146,7 +148,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     public LambdaExpr setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (LambdaExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
@@ -176,7 +178,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LambdaExpr setEnclosingParameters(final boolean isEnclosingParameters) {
         if (isEnclosingParameters == this.isEnclosingParameters) {
-            return (LambdaExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, this.isEnclosingParameters, isEnclosingParameters);
         this.isEnclosingParameters = isEnclosingParameters;
@@ -252,6 +254,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLambdaExpr(Consumer<LambdaExpr> action) {
         action.accept(this);

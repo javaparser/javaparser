@@ -65,6 +65,9 @@ public class AarTypeSolver implements TypeSolver {
 
     @Override
     public void setParent(TypeSolver parent) {
+        if (parent == this)
+            throw new IllegalStateException("The parent of this TypeSolver cannot be itself.");
+
         delegate.setParent(parent);
     }
 

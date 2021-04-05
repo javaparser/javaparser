@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,6 +33,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -147,7 +148,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     public SwitchEntry setLabels(final NodeList<Expression> labels) {
         assertNotNull(labels);
         if (labels == this.labels) {
-            return (SwitchEntry) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.LABELS, this.labels, labels);
         if (this.labels != null)
@@ -161,7 +162,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     public SwitchEntry setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
-            return (SwitchEntry) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
         if (this.statements != null)
@@ -212,7 +213,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     public SwitchEntry setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (SwitchEntry) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;

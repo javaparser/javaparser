@@ -115,21 +115,6 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
     }
 
     @Override
-    public boolean isField() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isParameter() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isType() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }

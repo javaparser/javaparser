@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,6 +22,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
@@ -34,10 +35,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ForStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Generated;
 
 /**
  * <h1>The classic for statement</h1>
@@ -135,7 +137,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (ForStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
@@ -154,7 +156,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setCompare(final Expression compare) {
         if (compare == this.compare) {
-            return (ForStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
         if (this.compare != null)
@@ -168,7 +170,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setInitialization(final NodeList<Expression> initialization) {
         assertNotNull(initialization);
         if (initialization == this.initialization) {
-            return (ForStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
         if (this.initialization != null)
@@ -182,7 +184,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setUpdate(final NodeList<Expression> update) {
         assertNotNull(update);
         if (update == this.update) {
-            return (ForStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
         if (this.update != null)
@@ -277,6 +279,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForStmt(Consumer<ForStmt> action) {
         action.accept(this);

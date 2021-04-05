@@ -149,9 +149,13 @@ public class JavaParserTypeSolver implements TypeSolver {
                     if (!Files.exists(srcFile) || !Files.isRegularFile(srcFile)) {
                         return Optional.empty();
                     }
-                    return javaParser.parse(COMPILATION_UNIT, provider(srcFile))
-                            .getResult()
-                            .map(cu -> cu.setStorage(srcFile));
+
+                    // JavaParser only allow one parse at time.
+                    synchronized (javaParser) {
+                        return javaParser.parse(COMPILATION_UNIT, provider(srcFile))
+                                .getResult()
+                                .map(cu -> cu.setStorage(srcFile));
+                    }
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException("Issue while parsing while type solving: " + srcFile.toAbsolutePath(), e);
                 }

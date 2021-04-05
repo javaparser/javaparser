@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,18 +23,20 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.YieldStmtMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.YieldStmtMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -84,7 +86,7 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     public YieldStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
-            return (YieldStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
@@ -124,6 +126,7 @@ public class YieldStmt extends Statement implements NodeWithExpression {
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifYieldStmt(Consumer<YieldStmt> action) {
         action.accept(this);

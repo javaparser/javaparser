@@ -21,20 +21,51 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.declarations.AssociableToASTTest;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclarationTest;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapabilityTest;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapabilityTest;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
@@ -44,25 +75,10 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
+class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implements ResolvedEnumDeclarationTest,
+        MethodResolutionCapabilityTest, MethodUsageResolutionCapabilityTest,
+        AssociableToASTTest<EnumDeclaration> {
 
     private TypeSolver typeSolver;
 
@@ -354,51 +370,54 @@ class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetAllAncestorsWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        assertEquals(12, constructorDeclaration.getAllAncestors().size());
+        
+        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
+        
+        assertEquals(12, ancestors.size());
 
         ResolvedReferenceType ancestor;
 
-        ancestor = constructorDeclaration.getAllAncestors().get(0);
+        ancestor = ancestors.get(0);
         assertEquals("com.github.javaparser.ast.body.BodyDeclaration", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.BodyDeclaration.T").get().asReferenceType().getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(1);
+        ancestor = ancestors.get(1);
         assertEquals("com.github.javaparser.ast.Node", ancestor.getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(2);
+        ancestor = ancestors.get(2);
         assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(3);
+        ancestor = ancestors.get(3);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.T").get().asReferenceType().getQualifiedName());
 
         ancestor = constructorDeclaration.getAllAncestors().get(4);
         assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(5);
+        ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc.T").get().asReferenceType().getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(6);
+        ancestor = ancestors.get(6);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithDeclaration", ancestor.getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(7);
+        ancestor = ancestors.get(7);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithName", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithName.T").get().asReferenceType().getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(8);
+        ancestor = ancestors.get(8);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithModifiers", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithModifiers.T").get().asReferenceType().getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(9);
+        ancestor = ancestors.get(9);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithParameters", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithParameters.T").get().asReferenceType().getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(10);
+        ancestor = ancestors.get(10);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithThrowable", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithThrowable.T").get().asReferenceType().getQualifiedName());
 
-        ancestor = constructorDeclaration.getAllAncestors().get(11);
+        ancestor = ancestors.get(11);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.T").get().asReferenceType().getQualifiedName());
     }
@@ -923,4 +942,34 @@ class JavaParserEnumDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals(false, dec.hasDirectlyAnnotation("javax.persistence.Embeddable"));
         assertEquals(true, dec.hasDirectlyAnnotation("MyAnno"));
     }
+
+    @Override
+    public Optional<EnumDeclaration> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.of(
+                safeCast(associableToAST, JavaParserEnumDeclaration.class).getWrappedNode()
+        );
+    }
+
+    @Override
+    public JavaParserEnumDeclaration createValue() {
+        EnumDeclaration enumDeclaration = StaticJavaParser.parse("enum A {}")
+                .findFirst(EnumDeclaration.class)
+                .get();
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        return new JavaParserEnumDeclaration(enumDeclaration, typeSolver);
+    }
+
+    @Override
+    public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
+        return false;
+    }
+
+    @Disabled(value = "This test was disable in this class due to a bug reported at https://github" +
+            ".com/javaparser/javaparser/issues/3061. It should be renabled when the issue is fixed.")
+    @Test
+    @Override
+    public void containerTypeCantBeNull() {
+        super.containerTypeCantBeNull();
+    }
+
 }
