@@ -567,6 +567,69 @@ public class RecordDeclarationTest {
         // test parameters (none)
     }
 
+    @Test
+    void recordDeclaration_exampleFromJls_8_10_4_1_normalCanonicalConstructors() {
+        CompilationUnit cu = TestParser.parseCompilationUnit("" +
+                "import java.lang.annotation.Target;\n" +
+                "import java.lang.annotation.ElementType;\n" +
+                "\n" +
+                "@interface Foo {}\n" +
+                "@interface Bar {}\n" +
+                "\n" +
+                "record Person(@Foo String name) {\n" +
+                "    Person(String name2) {\n" +
+                "    }\n" +
+                "}"
+        );
+
+        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+
+    }
+
+    @Test
+    void compactConstructor_exampleFromJls_8_10_4_2_compactConstructors() {
+        CompilationUnit cu = TestParser.parseCompilationUnit("" +
+                "record Rational(int num, int denom) {\n" +
+                "    private static int gcd(int a, int b) {\n" +
+                "        if (b == 0) return Math.abs(a);\n" +
+                "        else return gcd(b, a % b);\n" +
+                "    }\n" +
+                "   \n" +
+                "    Rational {\n" +
+                "        int gcd = gcd(num, denom);\n" +
+                "        num    /= gcd;\n" +
+                "        denom  /= gcd;\n" +
+                "    }\n" +
+                "}\n"
+        );
+
+        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+
+    }
+
+    @Test
+    void nonCompactConstructor_exampleFromJls_8_10_4_2_compactConstructors() {
+        CompilationUnit cu = TestParser.parseCompilationUnit("" +
+                "record Rational(int num, int denom) {\n" +
+                "    private static int gcd(int a, int b) {\n" +
+                "        if (b == 0) return Math.abs(a);\n" +
+                "        else return gcd(b, a % b);\n" +
+                "    }\n" +
+                "   \n" +
+                "    Rational(int num, int demon) {\n" +
+                "        int gcd = gcd(num, denom);\n" +
+                "        num    /= gcd;\n" +
+                "        denom  /= gcd;\n" +
+                "        this.num   = num;\n" +
+                "        this.denom = denom;\n" +
+                "    }\n" +
+                "}\n"
+        );
+
+        RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
+
+    }
+
     private void assertCompilationFails(String s) {
         assertThrows(AssertionFailedError.class, () -> {
             CompilationUnit cu = TestParser.parseCompilationUnit(s);

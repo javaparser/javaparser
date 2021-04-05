@@ -1697,11 +1697,15 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
 }
 
 /**
-* Everything that can go into a "regular" class or interface declaration,
-* can also (usually) be included within a record.
-* Exceptions to this are handled within the validators.
-* Note: This is HEAVILY based on ClassOrInterfaceBody() and ClassOrInterfaceBodyDeclaration()
-*/
+ * Everything that can go into a "regular" class or interface declaration,
+ * can also (usually) be included within a record.
+ * Exceptions to this are handled within the validators.
+ *
+ * Note: This is HEAVILY based on ClassOrInterfaceBody() and ClassOrInterfaceBodyDeclaration(),
+ * and there may be some scope/potential to optimise this and merge some parts together.
+ *
+ * https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.2
+ */
 NodeList<BodyDeclaration<?>> RecordBody():
 {
     NodeList<BodyDeclaration<?>> ret = emptyNodeList();
@@ -1721,8 +1725,17 @@ NodeList<BodyDeclaration<?>> RecordBody():
 
 /**
  * Almost identical to ClassOrInterfaceBodyDeclaration, but:
- * - without a constructor
  * - with a RecordDeclarationConstructor
+ * As a result, there may be some scope/potential to optimize this and merge some parts together.
+ *
+ * https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.2
+ * <pre>{@code
+ *     RecordBody:
+ *         { {RecordBodyDeclaration} }
+ *     RecordBodyDeclaration:
+ *         ClassBodyDeclaration
+ *         CompactConstructorDeclaration
+ * }</pre>
  */
 BodyDeclaration<?> RecordBodyDeclaration():
 {
@@ -1746,8 +1759,13 @@ BodyDeclaration<?> RecordBodyDeclaration():
             LOOKAHEAD("@" "interface")
             ret = AnnotationTypeDeclaration(modifiers)
          |
+            // Compact Record Constructors
             LOOKAHEAD( [ TypeParameters() ] Identifier() "{" )
             ret = RecordDeclarationConstructor(modifiers)
+         |
+            // "Normal" Record Constructors
+            LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
+            ret = ConstructorDeclaration(modifiers)
          |
             LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
             ret = FieldDeclaration(modifiers)
