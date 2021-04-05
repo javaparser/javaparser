@@ -583,6 +583,11 @@ public class RecordDeclarationTest {
         );
 
         RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
+        assertThat(recordDeclaration.getNameAsString()).isEqualTo("Person");
+        assertThat(recordDeclaration.getModifiers()).isEmpty();
+        // test parameters
+        // get constructor
+        // test parameters (none)
 
     }
 
@@ -604,6 +609,11 @@ public class RecordDeclarationTest {
         );
 
         RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
+        assertThat(recordDeclaration.getNameAsString()).isEqualTo("Rational");
+        assertThat(recordDeclaration.getModifiers()).isEmpty();
+        // test parameters
+        // get constructor
+        // test parameters (none)
 
     }
 
@@ -627,6 +637,11 @@ public class RecordDeclarationTest {
         );
 
         RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
+        assertThat(recordDeclaration.getNameAsString()).isEqualTo("Rational");
+        assertThat(recordDeclaration.getModifiers()).isEmpty();
+        // test parameters
+        // get constructor
+        // test parameters (none)
 
     }
 
