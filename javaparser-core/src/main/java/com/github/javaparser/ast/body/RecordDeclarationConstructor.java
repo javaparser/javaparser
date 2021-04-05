@@ -51,12 +51,25 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * A constructor declaration: {@code class X(int a, int b) { public X{ } }} where {@code public X{}} is the record constructor declaration.
+ * <h1>The record declaration's constructor</h1>
+ * <h2>Java 1.0 to 13</h2>
+ * Not available.
+ * <br>
+ * <h2>Java 14 (preview), Java 15 (2nd preview), Java 16</h2>
  * <p>
- * <br>All annotations preceding the name will be set on this object, not on the class.
+ * A record constructor declaration: {@code class X(int a, int b) { public X{ } }} where {@code public X{}} is the record constructor declaration.
+ * <p>
+ * Note that the record constructor is distinct from a "standard" constructor as it does not permit arguments/parameters.
+ * </p>
+ * <p>
+ * All annotations preceding the name will be set on this object, not on the class.
  * JavaParser doesn't know if it they are applicable to the method or the class.
+ * </p>
  *
  * @author Roger Howell
+ * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10">JLS 8.10 - Record Classes</a>
+ * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.4">JLS 8.10.3 - Record Constructor Declarations</a>
+ * @since 3.21.0
  */
 public class RecordDeclarationConstructor extends BodyDeclaration<RecordDeclarationConstructor> implements NodeWithBlockStmt<RecordDeclarationConstructor>, NodeWithAccessModifiers<RecordDeclarationConstructor>, NodeWithJavadoc<RecordDeclarationConstructor>, NodeWithSimpleName<RecordDeclarationConstructor>, NodeWithThrownExceptions<RecordDeclarationConstructor>, NodeWithTypeParameters<RecordDeclarationConstructor>, Resolvable<ResolvedConstructorDeclaration> {
 
