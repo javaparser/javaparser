@@ -51,6 +51,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>The record declaration</h1>
+ * <strong>WARNING: This implementation is subject to change.</strong>
  *
  * <h2>Java 1.0 to 13</h2>
  * Not available.
