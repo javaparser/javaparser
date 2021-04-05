@@ -21,8 +21,11 @@
 
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.validator.ReservedKeywordValidator;
+import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.RecordDeclarationValidator;
 
 /**
  * This validator validates according to Java 14 syntax rules.
@@ -32,6 +35,7 @@ import com.github.javaparser.ast.validator.Validator;
 public class Java14Validator extends Java13Validator {
 
     /**
+     * With the introduction of record classes, {@code record} is no longer permitted as an identifier.
      * <blockquote>
      *     A type identifier is any identifier other than the character sequences var, yield, and record.<br/>
      *     <br/>
@@ -42,6 +46,8 @@ public class Java14Validator extends Java13Validator {
      * https://docs.oracle.com/javase/specs/jls/se15/preview/specs/records-jls.html#jls-3.8
      */
     final Validator recordAsTypeIdentifierNotAllowed = new ReservedKeywordValidator("record");
+
+    final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
 
 
     public Java14Validator() {

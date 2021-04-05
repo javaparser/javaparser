@@ -33,16 +33,16 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Rec
  */
 public class Java16Validator extends Java15Validator {
 
-    final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
-
     public Java16Validator() {
         super();
 
         // Released Language Features
         remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
-        remove(noRecordDeclaration); // Records released within Java 16 - https://openjdk.java.net/jeps/395
-        add(recordAsTypeIdentifierNotAllowed);
-
-        add(recordDeclarationValidator);
+        {
+            // Records released within Java 16 - https://openjdk.java.net/jeps/395
+            remove(noRecordDeclaration);
+            add(recordAsTypeIdentifierNotAllowed);
+            add(recordDeclarationValidator);
+        }
     }
 }
