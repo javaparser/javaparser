@@ -46,8 +46,8 @@ options {
     JDK_VERSION = "1.8";
     STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    //DEBUG_PARSER=true;
-    //DEBUG_LOOKAHEAD = true;
+    DEBUG_PARSER=true;
+    DEBUG_LOOKAHEAD = true;
 }
 
 
@@ -324,6 +324,8 @@ TOKEN : {
   <INVARIANT: "invariant" >
 | <ABRUPT_BEHAVIOR: "abrupt_behavior">
 | <ABRUPT_BEHAVIOUR: "abrupt_behaviour">
+| <MODEL_BEHAVIOR: "model_behavior">
+| <MODEL_BEHAVIOUR: "model_behaviour">
 | <ACCESSIBLE: "accessible">
 | <ACCESSIBLE_REDUNDANTLY: "accessible_redundantly">
 | <ALSO: "also">
@@ -2032,7 +2034,7 @@ JmlBodyDeclaration JmlClassOrInterfaceBodyDeclaration():
         | element = JmlClassAccessible(modifiers)
         | element = JmlClassRepresents(modifiers)
         | element = JmlFieldDeclaration(modifiers)
-        //| element = JmlMethodDeclaration(modifiers)
+        | element = JmlMethodDeclaration(modifiers)
         )
         {ret.getElements().add(element);}
       )+
@@ -2140,7 +2142,7 @@ JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
     }
 }
 
-/*
+
 JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
@@ -2154,9 +2156,16 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
     NodeList<AnnotationExpr> annotations;
     JavaToken begin = modifier.begin;
     ReferenceType throwType;
+    NodeList<JmlClause> clauses = new NodeList<>();
+    JmlClause clause;
+    NodeList<JmlContract> subContracts = null;
 }
 {
-    // Modifiers already matched in the caller!
+    ( (<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>)
+      (clause=JmlContractClause() {clauses.add(clause);})+
+      (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+    )?
+    modifier=Modifiers()
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
     annotations = Annotations() { modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations)); }
     type = ResultType(emptyNodeList()) { begin = orIfInvalid(begin, type); }
@@ -2176,10 +2185,13 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
 
     {
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
+        MethodDeclaration m = new  MethodDeclaration(range(begin, token()),
+            modifier.modifiers, modifier.annotations, typeParameters.list,
+            type, name, parameters.a, throws_, body, parameters.b);
+        return new JmlMethodDeclaration(range(m,m), m);
     }
 }
-*/
+
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3
@@ -3206,6 +3218,7 @@ String Identifier():
         <JML_IDENTIFIER>
         // or a bunch of JML clause words
        | <INVARIANT> | <ABRUPT_BEHAVIOR> | <ABRUPT_BEHAVIOUR> | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>
+       | <MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>
        | <ALSO> | <ASSERT_REDUNDANTLY> | <ASSIGNABLE> | <ASSIGNABLE_REDUNDANTLY> | <ASSUME>
        | <ASSUME_REDUNDANTLY> | <AXIOM> | <BEHAVIOR> | <BEHAVIOUR> | <BREAKS> | <BREAKS_REDUNDANTLY>
        | <BREAK_BEHAVIOR> | <BREAK_BEHAVIOUR> | <CALLABLE> | <CALLABLE_REDUNDANTLY> | <CAPTURES>

@@ -164,17 +164,10 @@
     </issueManagement>
 
     <distributionManagement>
-        <!-- https://docs.github.com/en/actions/guides/publishing-java-packages-with-maven#publishing-packages-to-the-maven-central-repository -->
-        <!-- https://blog.sonatype.com/what-publishers-need-to-know-about-migrating-from-jcenter-/-bintray-to-the-central-repository -->
-        <!-- New: Publishing directly to Sonatype OSSRH (OSS Repository Hosting), for release to Maven Central -->
-        <!-- URLs available from: https://central.sonatype.org/pages/ossrh-guide.html#accessing-repositories -->
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>github</id>
+            <name>GitHub Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/wadoon/jmlparser</url>
         </repository>
     </distributionManagement>
 

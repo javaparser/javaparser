@@ -1,6 +1,8 @@
 package com.github.javaparser.jml;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 
@@ -14,7 +16,7 @@ import java.io.FileNotFoundException;
 public class Example {
     public static void main(String[] args) throws FileNotFoundException {
         JavaParser jpb = new JavaParser();
-        var result = jpb.parse(new File("./JmlExample.java"));
+        ParseResult<CompilationUnit> result = jpb.parse(new File("./JmlExample.java"));
 
         System.out.println(result);
         result.getResult().ifPresent(it -> {

@@ -131,6 +131,155 @@ import java.io.*;
  * @since   1.4
  */
 
+class Node {
+    private int head;
+    private /*@ nullable @*/ Node next;
+
+    //@ public ghost \seq seq;
+    //@ public ghost \locset repr;
+
+
+    /* @ private invariant \subset(this.*, repr) && 1 <= seq.length && seq[0] == head;
+      @ private invariant next == null ==> seq.length == 1;
+      */
+
+    /* @
+      @ private invariant next != null ==> \subset(next.*, repr)
+      @                                    && \subset(next.repr, repr)
+      @                                    && \disjoint(this.*, next.repr)
+      @                                    && seq[1..seq.length] == next.seq
+      @                                    && \invariant_for(next);
+      @*/
+
+    //@ accessible \inv: repr \measured_by seq.length;
+
+
+    /*@ public normal_behaviour
+      @   requires tail == null || \invariant_for(tail);
+      @   ensures \invariant_for(\result);
+      @   ensures tail == null ==> \result.seq == \seq_singleton(x);
+      @   ensures tail != null ==> \result.seq == \seq_concat(\seq_singleton(x), tail.seq);
+      @*/
+    public static /*@pure@*/ Node cons(int x, /*@nullable@*/ Node tail) {
+        Node n = new Node();
+        n.head = x;
+        n.next = tail;
+        //@ set n.seq = \seq_concat(\seq_singleton(x), tail == null ? \seq_empty : tail.seq);
+        //@ set n.repr = \set_union(\all_fields(n), tail == null ? \empty : (\set_union(\all_fields(tail), tail.repr)));
+        return n;
+    }
+
+
+    /*@ public normal_behaviour
+      @   ensures 0 <= \result;
+      @   ensures \result < seq.length && seq[\result] == 0
+      @           || \result == seq.length;
+      @   ensures (\forall int x; 0 <= x && x < \result; seq[x] != 0);
+      @*/
+    public /*@pure@*/ int search() {
+        Node jj = this;
+        int i = 0;
+	/* @ loop_invariant 0 <= i && i <= seq.length
+	  @                && (jj == null && i == seq.length
+	  @                    || jj != null && jj.\inv && jj.seq == seq[i..seq.length])
+	  @                && (\forall int x; 0 <= x && x < i; seq[x] != 0);
+	  @ assignable \strictly_nothing;
+	  @ decreases seq.length - i;
+	  @*/
+        while(jj != null && jj.head != 0) {
+            jj = jj.next;
+            i++;
+        }
+        return i;
+    }
+}
+
+class Cell {
+    int val;
+
+    /*@ model_behavior
+      @ ensures \subset(\result, this.* );
+      @ ensures \subset(\singleton(this.val), \result);
+      @ accessible \nothing;
+      @ model \locset footprint() { return \singleton(this.val); }
+      @*/
+
+    /*@ model_behavior
+      @ ensures \result ==> get()==x;
+      @ accessible footprint();
+      @ model two_state boolean post_set(int x) { return (get() == x); }
+      @*/
+
+    /*@ ensures \result == val;
+      @ accessible footprint();
+      @*/
+    /*@ strictly_pure*/ int get() { return val; }
+
+    /*@ ensures post_set(v); assignable footprint(); @*/
+    void set(int v) { val = v; }
+}
+interface Coll {
+
+    /*@ model_behavior
+      @ ensures x>0 ==> \result;
+      @ model boolean add_pre(int x);
+      @*/
+
+    //@ requires add_pre(x);
+    void add(int x);
+}
+
+class Indirect {
+    /*@ requires \invariant_for(c) && c.add_pre(v); @*/
+    void callAdd(Coll c, int v) {
+        c.add(v);
+    }
+
+    //@ requires \invariant_for(c1) && \invariant_for(c2);
+    //@ ensures true;
+    void test(Coll1 c1, Coll2 c2) {
+        callAdd(c1, 42);
+        callAdd(c2, -42);
+    }
+}
+
+class Coll1 implements Coll {
+
+    /*@ model boolean add_pre(int x) { return (x > 0); } @*/
+
+    public void add(int x) { }
+
+}
+
+
+final class Coll2 implements Coll {
+
+    /*@ model boolean add_pre(int x) { return true; } @*/
+
+    public void add(int x) { }
+
+}
+
+public class Initially {
+
+    protected /*@spec_public@*/ int x;
+    //@ public initially x > 0;
+
+    public Initially (int y) {
+        x = (y>0?y:-y+1);
+    }
+
+    public Initially (boolean b) {
+        x = b ? 1: 42;
+    }
+
+    public Initially (Object[] a) {
+        x = a.length+1;
+    }
+}
+
+
+
 public class VerifiedIdentityHashMap
         extends AbstractMap
         implements Map, java.io.Serializable, Cloneable {
@@ -2635,5 +2784,43 @@ public class VerifiedIdentityHashMap
         }
         tab[i] = k;
         tab[i + 1] = value;
+    }
+}
+
+
+class Loop1 {
+
+    /*@ public invariant x>=0; @*/
+    private /*@ spec_public @*/ int x;
+
+    /*@ public normal_behavior
+      @ requires x>=0;
+      @ assignable \nothing;  // this is a ** constructor **, so the object does not yet exist,
+      @                       // hence "this" object's fields do not need to be in the assignable
+      @ ensures this.x == x;
+      @*/
+    public Loop1(int x) {
+        this.x = x;
+    }
+
+    /*@ public normal_behavior
+      @ assignable \nothing;
+      @ ensures \result == x * x;
+      @*/
+    public int method1() {
+        int y = x;
+        int z = 0;
+        /*@ loop_invariant
+          @  (y >= 0) && (x * y + z == x * x) ;
+          @ assignable \nothing; // only heap locations need to be explicitly mentioned
+          @ // (possibly modified local variables are anonymized automatically by the loop invariant rule)
+          @ // you can list them in the assignable clause but it is not necessary and they are actually ignored
+          @ decreasing y ;
+          @*/
+        while (y > 0) {
+            z = z + x;
+            y = y - 1;
+        }
+        return z;
     }
 }

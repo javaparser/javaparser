@@ -136,6 +136,8 @@ public class TokenTypes {
             case DECREASING_REDUNDANTLY:
             case DURATION_REDUNDANTLY:
             case ELEMTYPE:
+            case MODEL_BEHAVIOR:
+            case MODEL_BEHAVIOUR:
             case ENSURES_REDUNDANTLY:
             case ERASES:
             case EXAMPLE:
