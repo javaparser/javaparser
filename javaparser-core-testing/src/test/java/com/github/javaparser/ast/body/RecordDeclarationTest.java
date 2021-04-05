@@ -5,6 +5,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -12,7 +13,6 @@ import org.opentest4j.AssertionFailedError;
 
 import java.util.List;
 
-import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +27,7 @@ public class RecordDeclarationTest {
     void basicGrammarCompiles_languageLevelValidation_forbidden(ParserConfiguration.LanguageLevel languageLevel) {
         String s = "record Point(int x, int y) { }";
         assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(languageLevel, s);
+            CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
         });
     }
 
@@ -35,7 +35,7 @@ public class RecordDeclarationTest {
     @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_14_PREVIEW", "JAVA_15_PREVIEW", "JAVA_16", "JAVA_16_PREVIEW"})
     void basicGrammarCompiles_languageLevelValidation_permitted(ParserConfiguration.LanguageLevel languageLevel) {
         String s = "record Point(int x, int y) { }";
-        CompilationUnit cu = parseCompilationUnit(languageLevel, s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
     }
 
     @ParameterizedTest
@@ -43,7 +43,7 @@ public class RecordDeclarationTest {
     void languageLevelValidation_recordAsTypeIdentifier_permitted(ParserConfiguration.LanguageLevel languageLevel) {
         String s = "class record {}";
         assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(languageLevel, s);
+            CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
         });
     }
 
@@ -51,7 +51,7 @@ public class RecordDeclarationTest {
     @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_13", "JAVA_13_PREVIEW", "JAVA_14", "JAVA_15"})
     void languageLevelValidation_recordAsTypeIdentifier_forbidden(ParserConfiguration.LanguageLevel languageLevel) {
         String s = "class record {}";
-        CompilationUnit cu = parseCompilationUnit(languageLevel, s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RecordDeclarationTest {
     @Test
     void basicGrammarCompiles() {
         String s = "record Point(int x, int y) { }";
-        assertOneRecordDeclaration(parseCompilationUnit(s));
+        assertOneRecordDeclaration(TestParser.parseCompilationUnit(s));
     }
 
     /**
@@ -69,7 +69,7 @@ public class RecordDeclarationTest {
     @Test
     void basicGrammar() {
         String s = "record Point(int x, int y) { }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
@@ -100,7 +100,7 @@ public class RecordDeclarationTest {
     @Test
     void basicRecordPrints() {
         String s = "record Point(int x, int y) { }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         String expected = "" +
@@ -134,7 +134,7 @@ public class RecordDeclarationTest {
     @Test
     void record_mayImplementInterfaces() {
         String s = "record Point(int x, int y) implements OtherInterface { }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
 
         assertOneRecordDeclaration(cu);
     }
@@ -145,7 +145,7 @@ public class RecordDeclarationTest {
     @Test
     void record_mayBeStatic() {
         String s = "static record Point(int x, int y) { }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
 
         assertOneRecordDeclaration(cu);
     }
@@ -153,7 +153,7 @@ public class RecordDeclarationTest {
     @Test
     void recordWithVarArgs() {
         String s = "record R(T1 c1, Tn... cn){ }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
 
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(1, recordDeclarations.size());
@@ -176,7 +176,7 @@ public class RecordDeclarationTest {
     @Test
     void recordWithAnnotationedParameters() {
         String s = "record Card(@MyAnno Rank rank, @MyAnno Suit suit) { }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
 
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(1, recordDeclarations.size());
@@ -201,7 +201,7 @@ public class RecordDeclarationTest {
     @Test
     void record_emptyMembers() {
         String s = "record Point(int x, int y) { }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
@@ -227,7 +227,7 @@ public class RecordDeclarationTest {
                 "\n" +
                 "}\n" +
                 "";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -242,7 +242,7 @@ public class RecordDeclarationTest {
                 "\n" +
                 "}\n" +
                 "";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -261,7 +261,7 @@ public class RecordDeclarationTest {
                 "\n" +
                 "}\n" +
                 "";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -274,7 +274,7 @@ public class RecordDeclarationTest {
     @Test
     void record_mustAllowStaticFields() {
         String s = "record Point(int x, int y) { static int z; }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -284,7 +284,7 @@ public class RecordDeclarationTest {
     @Test
     void record_isImplicitlyFinal() {
         String s = "record Point(int x, int y) { static int z; }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
@@ -298,7 +298,7 @@ public class RecordDeclarationTest {
     @Test
     void record_canHaveGenerics() {
         String s = "record Point <T> (T x, int y) { }";
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration record = cu.findFirst(RecordDeclaration.class).get();
@@ -325,7 +325,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -337,7 +337,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -349,7 +349,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -364,7 +364,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -375,7 +375,7 @@ public class RecordDeclarationTest {
     void record_componentsAreImplicitlyFinal() {
         String s = "record Point(int x, int y) { }";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
@@ -396,7 +396,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
@@ -419,7 +419,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -436,7 +436,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -453,7 +453,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
 
@@ -475,7 +475,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
 
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(3, recordDeclarations.size());
@@ -488,7 +488,7 @@ public class RecordDeclarationTest {
     void record_topLevelRecordsAreNotStatic() {
         String s = "record Point(int x, int y) { }\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
@@ -507,7 +507,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
@@ -530,7 +530,7 @@ public class RecordDeclarationTest {
                 "    }\n" +
                 "}\n\n";
 
-        CompilationUnit cu = parseCompilationUnit(s);
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
 
         ClassOrInterfaceDeclaration coid = cu.findAll(ClassOrInterfaceDeclaration.class).get(0);
@@ -549,7 +549,7 @@ public class RecordDeclarationTest {
      */
     @Test
     void recordDeclarationFromTheJDK8222777() {
-        CompilationUnit cu = parseCompilationUnit("" +
+        CompilationUnit cu = TestParser.parseCompilationUnit("" +
                 "public record Range(int lo, int hi) {\n" +
                 "\n" +
                 "  public Range {\n" +
@@ -569,7 +569,7 @@ public class RecordDeclarationTest {
 
     private void assertCompilationFails(String s) {
         assertThrows(AssertionFailedError.class, () -> {
-            CompilationUnit cu = parseCompilationUnit(s);
+            CompilationUnit cu = TestParser.parseCompilationUnit(s);
         });
     }
 
