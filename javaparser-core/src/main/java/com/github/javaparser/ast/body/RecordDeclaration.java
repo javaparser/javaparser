@@ -45,9 +45,13 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.RecordDeclarationMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * <h1>The record declaration</h1>
@@ -378,5 +382,17 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
         }
         // Otherwise use the default method.
         return super.isStatic();
+    }
+
+
+    /**
+     * @return Only the "compact" constructors within this record,
+     * not "normal" constructors (which are obtainable via {@link #getConstructors()}).
+     */
+    public List<RecordDeclarationConstructor> getCompactConstructors() {
+        return unmodifiableList(getMembers().stream()
+                .filter(m -> m instanceof RecordDeclarationConstructor)
+                .map(m -> (RecordDeclarationConstructor) m)
+                .collect(toList()));
     }
 }
