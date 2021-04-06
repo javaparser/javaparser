@@ -709,6 +709,11 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.CLASS_DECLARATION)
         ));
 
+        concreteSyntaxModelByClass.put(LocalRecordDeclarationStmt.class, sequence(
+                comment(),
+                child(ObservableProperty.RECORD_DECLARATION)
+        ));
+
         concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.RETURN),

@@ -34,7 +34,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
+import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -182,16 +182,16 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
 
     // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
     /**
-     * @return is this class's parent a LocalClassDeclarationStmt ?
+     * @return is this class's parent a LocalRecordDeclarationStmt ?
      */
-    public boolean isLocalClassDeclaration() {
-        return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
+    public boolean isLocalRecordDeclaration() {
+        return getParentNode().map(p -> p instanceof LocalRecordDeclarationStmt).orElse(false);
     }
 
     // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
     @Override
     public Optional<String> getFullyQualifiedName() {
-        if (isLocalClassDeclaration()) {
+        if (isLocalRecordDeclaration()) {
             return Optional.empty();
         }
         return super.getFullyQualifiedName();
