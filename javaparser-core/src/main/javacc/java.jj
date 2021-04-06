@@ -923,8 +923,6 @@ TOKEN :
 
 /* SEPARATORS */
 /**
- * FIXME: Only ten (10) separators are defined within this grammar, but the JLS lists twelve (12)
- * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators"
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.11
  * Twelve tokens, formed from ASCII characters, are the separators (punctuators).
  * <pre>{@code
@@ -944,14 +942,15 @@ TOKEN :
 | < SEMICOLON: ";" >
 | < COMMA: "," >
 | < DOT: "." >
+| < ELLIPSIS: "..." >
 | < AT: "@" >
+| < DOUBLECOLON: "::" >
 }
 
 
 /* OPERATORS */
 /**
  * Note that {@code >}'s need special attention due to generics syntax, thus are listed separately.
- * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators" (see #2897)
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.12
  * 38 tokens, formed from ASCII characters, are the operators.
  * <pre>{@code
@@ -1007,8 +1006,6 @@ TOKEN :
 | < RSIGNEDSHIFTASSIGN: ">>=" >
 | < RUNSIGNEDSHIFTASSIGN: ">>>=" >
 
-| < ELLIPSIS: "..." >
-| < DOUBLECOLON: "::" >
 }
 
 
