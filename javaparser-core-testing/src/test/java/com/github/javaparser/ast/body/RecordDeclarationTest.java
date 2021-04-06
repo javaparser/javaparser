@@ -6,6 +6,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.utils.TestParser;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -22,36 +23,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RecordDeclarationTest {
 
-    @ParameterizedTest
-    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_13", "JAVA_13_PREVIEW", "JAVA_14", "JAVA_15"})
-    void basicGrammarCompiles_languageLevelValidation_forbidden(ParserConfiguration.LanguageLevel languageLevel) {
-        String s = "record Point(int x, int y) { }";
-        assertThrows(AssertionFailedError.class, () -> {
+    @Nested
+    class LanguageLevels {
+        @ParameterizedTest
+        @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_13", "JAVA_13_PREVIEW", "JAVA_14", "JAVA_15"})
+        void basicGrammarCompiles_languageLevelValidation_forbidden(ParserConfiguration.LanguageLevel languageLevel) {
+            String s = "record Point(int x, int y) { }";
+            assertThrows(AssertionFailedError.class, () -> {
+                CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
+            });
+        }
+
+        @ParameterizedTest
+        @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_14_PREVIEW", "JAVA_15_PREVIEW", "JAVA_16", "JAVA_16_PREVIEW"})
+        void basicGrammarCompiles_languageLevelValidation_permitted(ParserConfiguration.LanguageLevel languageLevel) {
+            String s = "record Point(int x, int y) { }";
             CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
-        });
-    }
+        }
 
-    @ParameterizedTest
-    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_14_PREVIEW", "JAVA_15_PREVIEW", "JAVA_16", "JAVA_16_PREVIEW"})
-    void basicGrammarCompiles_languageLevelValidation_permitted(ParserConfiguration.LanguageLevel languageLevel) {
-        String s = "record Point(int x, int y) { }";
-        CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
-    }
+        @ParameterizedTest
+        @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_14_PREVIEW", "JAVA_15_PREVIEW", "JAVA_16", "JAVA_16_PREVIEW"})
+        void languageLevelValidation_recordAsTypeIdentifier_permitted(ParserConfiguration.LanguageLevel languageLevel) {
+            String s = "class record {}";
+            assertThrows(AssertionFailedError.class, () -> {
+                CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
+            });
+        }
 
-    @ParameterizedTest
-    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_14_PREVIEW", "JAVA_15_PREVIEW", "JAVA_16", "JAVA_16_PREVIEW"})
-    void languageLevelValidation_recordAsTypeIdentifier_permitted(ParserConfiguration.LanguageLevel languageLevel) {
-        String s = "class record {}";
-        assertThrows(AssertionFailedError.class, () -> {
+        @ParameterizedTest
+        @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_13", "JAVA_13_PREVIEW", "JAVA_14", "JAVA_15"})
+        void languageLevelValidation_recordAsTypeIdentifier_forbidden(ParserConfiguration.LanguageLevel languageLevel) {
+            String s = "class record {}";
             CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
-        });
-    }
-
-    @ParameterizedTest
-    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_13", "JAVA_13_PREVIEW", "JAVA_14", "JAVA_15"})
-    void languageLevelValidation_recordAsTypeIdentifier_forbidden(ParserConfiguration.LanguageLevel languageLevel) {
-        String s = "class record {}";
-        CompilationUnit cu = TestParser.parseCompilationUnit(languageLevel, s);
+        }
     }
 
     /**
@@ -211,27 +215,6 @@ public class RecordDeclarationTest {
     }
 
     @Test
-    void record_permitStaticFields() {
-        String s = "" +
-                "record ABC(int x, int y) {\n" +
-                "\n" +
-                "    static int z;\n" +
-                "\n" +
-                "    static {\n" +
-                "        int z = 10;\n" +
-                "    }\n" +
-                "\n" +
-                "    public int x() {\n" +
-                "        return x;\n" +
-                "    }\n" +
-                "\n" +
-                "}\n" +
-                "";
-        CompilationUnit cu = TestParser.parseCompilationUnit(s);
-        assertOneRecordDeclaration(cu);
-    }
-
-    @Test
     void record_permitStaticMethods() {
         String s = "" +
                 "record ABC(int x, int y) {\n" +
@@ -266,14 +249,35 @@ public class RecordDeclarationTest {
     }
 
     @Test
-    void record_mustNotAllowNonStaticFields() {
+    void record_forbidNonStaticFields() {
         String s = "record Point(int x, int y) { int z; }";
         assertCompilationFails(s);
     }
 
     @Test
-    void record_mustAllowStaticFields() {
+    void record_permitStaticFields() {
         String s = "record Point(int x, int y) { static int z; }";
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    @Test
+    void record_permitStaticFields2() {
+        String s = "" +
+                "record ABC(int x, int y) {\n" +
+                "\n" +
+                "    static int z;\n" +
+                "\n" +
+                "    static {\n" +
+                "        int z = 10;\n" +
+                "    }\n" +
+                "\n" +
+                "    public int x() {\n" +
+                "        return x;\n" +
+                "    }\n" +
+                "\n" +
+                "}\n" +
+                "";
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
     }
@@ -283,6 +287,20 @@ public class RecordDeclarationTest {
      */
     @Test
     void record_isImplicitlyFinal() {
+        String s = "record Point(int x, int y) { static int z; }";
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
+        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(recordDeclaration.isFinal(), "Records are implicitly final.");
+    }
+
+    /**
+     * https://openjdk.java.net/jeps/395#Restrictions-on-records
+     */
+    @Test
+    void record_isImplicitlyFinalWithoutExplicit() {
         String s = "record Point(int x, int y) { static int z; }";
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
@@ -589,10 +607,6 @@ public class RecordDeclarationTest {
         assertThat(recordDeclaration.getConstructors()).hasSize(1);
         assertThat(recordDeclaration.getCompactConstructors()).hasSize(0);
 
-        // test parameters
-        // get constructor
-        // test parameters (none)
-
     }
 
     @Test
@@ -618,10 +632,6 @@ public class RecordDeclarationTest {
 
         assertThat(recordDeclaration.getConstructors()).hasSize(0);
         assertThat(recordDeclaration.getCompactConstructors()).hasSize(1);
-
-        // test parameters
-        // get constructor
-        // test parameters (none)
 
     }
 
@@ -650,10 +660,6 @@ public class RecordDeclarationTest {
 
         assertThat(recordDeclaration.getConstructors()).hasSize(1);
         assertThat(recordDeclaration.getCompactConstructors()).hasSize(0);
-
-        // test parameters
-        // get constructor
-        // test parameters (none)
 
     }
 
