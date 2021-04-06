@@ -144,6 +144,7 @@ public class TokenTypes {
             case PRIVATE:
             case PROTECTED:
             case PUBLIC:
+            case RECORD:
             case RETURN:
             case SHORT:
             case STATIC:
@@ -254,7 +255,7 @@ public class TokenTypes {
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
             default:
-                throw new AssertionError("Invalid token kind " + kind);
+                throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
         }
     }
 }
