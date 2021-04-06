@@ -234,6 +234,9 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getClassDeclaration().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
+    public Integer visit(final LocalRecordDeclarationStmt n, final Void arg) {
+return null;    }
+
     public Integer visit(final LongLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }

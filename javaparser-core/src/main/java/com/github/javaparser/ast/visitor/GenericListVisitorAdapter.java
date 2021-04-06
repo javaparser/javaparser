@@ -1086,6 +1086,10 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         return result;
     }
 
+    public List<R> visit(final LocalRecordDeclarationStmt n, final A arg) {
+        return null;
+    }
+
     public List<R> visit(final LongLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;

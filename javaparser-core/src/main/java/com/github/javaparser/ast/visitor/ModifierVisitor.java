@@ -973,6 +973,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
+    public Visitable visit(final LocalRecordDeclarationStmt n, final A arg) {
+        return null;
+    }
+
+    @Override
     public Visitable visit(final TypeParameter n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);

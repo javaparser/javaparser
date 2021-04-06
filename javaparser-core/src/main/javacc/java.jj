@@ -4295,6 +4295,7 @@ Statement BlockStatement():
     Statement ret;
     Expression expr;
     ClassOrInterfaceDeclaration typeDecl;
+    RecordDeclaration recordDeclaration;
     ModifierHolder modifier;
 }
 {
@@ -4303,6 +4304,10 @@ Statement BlockStatement():
             LOOKAHEAD( Modifiers() ("class" | "interface") ) // TODO/FIXME: Is this a bug in the grammar? JLS specifies class or enum, not interface.
             modifier = Modifiers()
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
+         |
+            LOOKAHEAD( Modifiers() "record" )
+            modifier = Modifiers()
+            recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
          |
             LOOKAHEAD(VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()

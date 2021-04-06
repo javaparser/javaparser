@@ -391,6 +391,11 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
+    public R visit(final LocalRecordDeclarationStmt n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
     public R visit(final TypeParameter n, final A arg) {
         return defaultAction(n, arg);
     }

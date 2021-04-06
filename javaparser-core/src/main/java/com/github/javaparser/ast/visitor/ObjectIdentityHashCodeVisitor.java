@@ -230,6 +230,10 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
+    public Integer visit(final LocalRecordDeclarationStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
     public Integer visit(final LongLiteralExpr n, final Void arg) {
         return n.hashCode();
     }

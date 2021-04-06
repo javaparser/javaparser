@@ -160,6 +160,8 @@ public interface GenericVisitor<R, A> {
 
     R visit(LocalClassDeclarationStmt n, A arg);
 
+    R visit(LocalRecordDeclarationStmt n, A arg);
+
     R visit(AssertStmt n, A arg);
 
     R visit(BlockStmt n, A arg);

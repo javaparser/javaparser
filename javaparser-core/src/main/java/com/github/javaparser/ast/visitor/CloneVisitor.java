@@ -762,6 +762,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
+    public Visitable visit(final LocalRecordDeclarationStmt n, final Object arg) {
+        return null;
+    }
+
+    @Override
     public Visitable visit(final AssertStmt n, final Object arg) {
         Expression check = cloneNode(n.getCheck(), arg);
         Expression message = cloneNode(n.getMessage(), arg);

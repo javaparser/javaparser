@@ -910,6 +910,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
+    public Boolean visit(final LocalRecordDeclarationStmt n, final Visitable arg) {
+        return null;
+    }
+
+    @Override
     public Boolean visit(final AssertStmt n, final Visitable arg) {
         final AssertStmt n2 = (AssertStmt) arg;
         if (!nodeEquals(n.getCheck(), n2.getCheck()))

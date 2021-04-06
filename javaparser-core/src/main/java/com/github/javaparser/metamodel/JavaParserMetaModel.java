@@ -245,6 +245,7 @@ public final class JavaParserMetaModel {
         labeledStmtMetaModel.getConstructorParameters().add(labeledStmtMetaModel.labelPropertyMetaModel);
         labeledStmtMetaModel.getConstructorParameters().add(labeledStmtMetaModel.statementPropertyMetaModel);
         localClassDeclarationStmtMetaModel.getConstructorParameters().add(localClassDeclarationStmtMetaModel.classDeclarationPropertyMetaModel);
+        localRecordDeclarationStmtMetaModel.getConstructorParameters().add(localRecordDeclarationStmtMetaModel.recordDeclarationPropertyMetaModel);
         returnStmtMetaModel.getConstructorParameters().add(returnStmtMetaModel.expressionPropertyMetaModel);
         switchEntryMetaModel.getConstructorParameters().add(switchEntryMetaModel.labelsPropertyMetaModel);
         switchEntryMetaModel.getConstructorParameters().add(switchEntryMetaModel.typePropertyMetaModel);
@@ -349,6 +350,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(literalExprMetaModel);
         nodeMetaModels.add(literalStringValueExprMetaModel);
         nodeMetaModels.add(localClassDeclarationStmtMetaModel);
+        nodeMetaModels.add(localRecordDeclarationStmtMetaModel);
         nodeMetaModels.add(longLiteralExprMetaModel);
         nodeMetaModels.add(markerAnnotationExprMetaModel);
         nodeMetaModels.add(memberValuePairMetaModel);
@@ -758,6 +760,8 @@ public final class JavaParserMetaModel {
         labeledStmtMetaModel.getDeclaredPropertyMetaModels().add(labeledStmtMetaModel.statementPropertyMetaModel);
         localClassDeclarationStmtMetaModel.classDeclarationPropertyMetaModel = new PropertyMetaModel(localClassDeclarationStmtMetaModel, "classDeclaration", com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class, Optional.of(classOrInterfaceDeclarationMetaModel), false, false, false, false);
         localClassDeclarationStmtMetaModel.getDeclaredPropertyMetaModels().add(localClassDeclarationStmtMetaModel.classDeclarationPropertyMetaModel);
+        localRecordDeclarationStmtMetaModel.recordDeclarationPropertyMetaModel = new PropertyMetaModel(localRecordDeclarationStmtMetaModel, "recordDeclaration", com.github.javaparser.ast.body.RecordDeclaration.class, Optional.of(recordDeclarationMetaModel), false, false, false, false);
+        localRecordDeclarationStmtMetaModel.getDeclaredPropertyMetaModels().add(localRecordDeclarationStmtMetaModel.recordDeclarationPropertyMetaModel);
         returnStmtMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(returnStmtMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
         returnStmtMetaModel.getDeclaredPropertyMetaModels().add(returnStmtMetaModel.expressionPropertyMetaModel);
         switchEntryMetaModel.labelsPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "labels", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
@@ -1105,6 +1109,9 @@ public final class JavaParserMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final LocalClassDeclarationStmtMetaModel localClassDeclarationStmtMetaModel = new LocalClassDeclarationStmtMetaModel(Optional.of(statementMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final LocalRecordDeclarationStmtMetaModel localRecordDeclarationStmtMetaModel = new LocalRecordDeclarationStmtMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final ReturnStmtMetaModel returnStmtMetaModel = new ReturnStmtMetaModel(Optional.of(statementMetaModel));

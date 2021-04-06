@@ -133,6 +133,8 @@ public interface VoidVisitor<A> {
 
     void visit(LocalClassDeclarationStmt n, A arg);
 
+    void visit(LocalRecordDeclarationStmt n, A arg);
+
     void visit(LongLiteralExpr n, A arg);
 
     void visit(MarkerAnnotationExpr n, A arg);

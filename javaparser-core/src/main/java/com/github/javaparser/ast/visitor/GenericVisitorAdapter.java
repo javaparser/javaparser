@@ -1553,6 +1553,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
+    public R visit(final LocalRecordDeclarationStmt n, final A arg) {
+        return null;
+    }
+
+    @Override
     public R visit(final TypeParameter n, final A arg) {
         R result;
         {
