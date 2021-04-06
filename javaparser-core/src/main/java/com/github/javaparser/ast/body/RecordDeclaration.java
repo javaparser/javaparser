@@ -389,10 +389,10 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
      * @return Only the "compact" constructors within this record,
      * not "normal" constructors (which are obtainable via {@link #getConstructors()}).
      */
-    public List<RecordDeclarationConstructor> getCompactConstructors() {
+    public List<RecordDeclarationCompactConstructor> getCompactConstructors() {
         return unmodifiableList(getMembers().stream()
-                .filter(m -> m instanceof RecordDeclarationConstructor)
-                .map(m -> (RecordDeclarationConstructor) m)
+                .filter(m -> m instanceof RecordDeclarationCompactConstructor)
+                .map(m -> (RecordDeclarationCompactConstructor) m)
                 .collect(toList()));
     }
 }

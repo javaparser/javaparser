@@ -2143,7 +2143,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final RecordDeclarationConstructor n, final A arg) {
+    public R visit(final RecordDeclarationCompactConstructor n, final A arg) {
         R result;
         {
             result = n.getBody().accept(this, arg);

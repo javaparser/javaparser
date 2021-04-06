@@ -525,7 +525,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(RecordDeclarationConstructor node, Boolean aBoolean) {
+    public ResolvedType visit(RecordDeclarationCompactConstructor node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 }

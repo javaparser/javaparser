@@ -1262,7 +1262,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final RecordDeclarationConstructor n, final Object arg) {
+    public Visitable visit(final RecordDeclarationCompactConstructor n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
@@ -1270,7 +1270,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        RecordDeclarationConstructor r = new RecordDeclarationConstructor(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, name, thrownExceptions, body);
+        RecordDeclarationCompactConstructor r = new RecordDeclarationCompactConstructor(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, name, thrownExceptions, body);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

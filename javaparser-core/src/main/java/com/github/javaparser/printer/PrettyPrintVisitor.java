@@ -1140,7 +1140,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
 
     @Override
-    public void visit(final RecordDeclarationConstructor n, final Void arg) {
+    public void visit(final RecordDeclarationCompactConstructor n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);

@@ -356,7 +356,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final RecordDeclarationConstructor n, final A arg) {
+    public Visitable visit(final RecordDeclarationCompactConstructor n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);

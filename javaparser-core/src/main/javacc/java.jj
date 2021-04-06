@@ -1725,7 +1725,7 @@ NodeList<BodyDeclaration<?>> RecordBody():
 
 /**
  * Almost identical to ClassOrInterfaceBodyDeclaration, but:
- * - with a RecordDeclarationConstructor
+ * - with a RecordDeclarationCompactConstructor
  * As a result, there may be some scope/potential to optimize this and merge some parts together.
  *
  * https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.2
@@ -1777,7 +1777,7 @@ BodyDeclaration<?> RecordBodyDeclaration():
          |
             // Compact Record Constructors
             LOOKAHEAD( [ TypeParameters() ] Identifier() "{" )
-            ret = RecordDeclarationConstructor(modifiers)
+            ret = RecordDeclarationCompactConstructor(modifiers)
          |
             // "Normal" Record Constructors
             LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
@@ -1796,12 +1796,12 @@ BodyDeclaration<?> RecordBodyDeclaration():
 /**
  * https://openjdk.java.net/jeps/359#Grammar
  * <pre>{@code
- *     RecordDeclarationConstructor:
+ *     RecordDeclarationCompactConstructor:
  *       {Annotation} {ConstructorModifier} [TypeParameters] SimpleTypeName
  *         [Throws] ConstructorBody
  * }</pre>
  */
-RecordDeclarationConstructor RecordDeclarationConstructor(ModifierHolder modifier):
+RecordDeclarationCompactConstructor RecordDeclarationCompactConstructor(ModifierHolder modifier):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
     SimpleName name;
@@ -1835,7 +1835,7 @@ RecordDeclarationConstructor RecordDeclarationConstructor(ModifierHolder modifie
     if (exConsInv != null) {
         stmts = prepend(stmts, exConsInv);
     }
-    return new RecordDeclarationConstructor(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
+    return new RecordDeclarationCompactConstructor(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
 }
 }
 
