@@ -59,7 +59,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * <br>
  * <h2>Java 14 (preview), Java 15 (2nd preview), Java 16</h2>
  * <p>
- * A record constructor declaration: {@code class X(int a, int b) { public X{ } }} where {@code public X{}} is the record constructor declaration.
+ * A record "compact" constructor declaration: {@code class X(int a, int b) { public X{ } }} where {@code public X{}} is the compact record constructor declaration.
  * <p>
  * Note that the record constructor is distinct from a "standard" constructor as it does not permit arguments/parameters.
  * </p>
