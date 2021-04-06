@@ -179,13 +179,13 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isRecordDeclarationCompactConstructor() {
+    public boolean isCompactConstructorDeclaration() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public RecordDeclarationCompactConstructor asRecordDeclarationCompactConstructor() {
-        throw new IllegalStateException(f("%s is not RecordDeclarationCompactConstructor, it is %s", this, this.getClass().getSimpleName()));
+    public CompactConstructorDeclaration asCompactConstructorDeclaration() {
+        throw new IllegalStateException(f("%s is not CompactConstructorDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -297,7 +297,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifRecordDeclarationCompactConstructor(Consumer<RecordDeclarationCompactConstructor> action) {
+    public void ifCompactConstructorDeclaration(Consumer<CompactConstructorDeclaration> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -371,7 +371,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<RecordDeclarationCompactConstructor> toRecordDeclarationCompactConstructor() {
+    public Optional<CompactConstructorDeclaration> toCompactConstructorDeclaration() {
         return Optional.empty();
     }
 }

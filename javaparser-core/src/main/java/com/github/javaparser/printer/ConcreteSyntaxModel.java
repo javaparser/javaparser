@@ -170,7 +170,7 @@ public class ConcreteSyntaxModel {
                 block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
         ));
 
-        concreteSyntaxModelByClass.put(RecordDeclarationCompactConstructor.class, sequence(
+        concreteSyntaxModelByClass.put(CompactConstructorDeclaration.class, sequence(
                 comment(),
                 memberAnnotations(),
                 modifiers(),

@@ -163,7 +163,7 @@ public interface VoidVisitor<A> {
 
     void visit(RecordDeclaration n, A arg);
 
-    void visit(RecordDeclarationCompactConstructor n, A arg);
+    void visit(CompactConstructorDeclaration n, A arg);
 
     void visit(ReturnStmt n, A arg);
 

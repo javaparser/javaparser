@@ -447,7 +447,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
-    public Integer visit(final RecordDeclarationCompactConstructor n, final Void arg) {
+    public Integer visit(final CompactConstructorDeclaration n, final Void arg) {
         return n.hashCode();
     }
 }

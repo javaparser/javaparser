@@ -1130,8 +1130,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final RecordDeclarationCompactConstructor n, final Visitable arg) {
-        final RecordDeclarationCompactConstructor n2 = (RecordDeclarationCompactConstructor) arg;
+    public Boolean visit(final CompactConstructorDeclaration n, final Visitable arg) {
+        final CompactConstructorDeclaration n2 = (CompactConstructorDeclaration) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))

@@ -22,8 +22,8 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-import com.github.javaparser.ast.body.RecordDeclarationCompactConstructor;
-import com.github.javaparser.ast.body.RecordDeclarationCompactConstructor;
+import com.github.javaparser.ast.body.CompactConstructorDeclaration;
+import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -36,11 +36,11 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class RecordDeclarationCompactConstructorMetaModel extends BodyDeclarationMetaModel {
+public class CompactConstructorDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    RecordDeclarationCompactConstructorMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, RecordDeclarationCompactConstructor.class, "RecordDeclarationCompactConstructor", "com.github.javaparser.ast.body", false, false);
+    CompactConstructorDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, CompactConstructorDeclaration.class, "CompactConstructorDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;

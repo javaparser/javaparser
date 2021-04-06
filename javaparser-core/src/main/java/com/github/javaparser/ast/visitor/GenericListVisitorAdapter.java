@@ -2156,7 +2156,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         return result;
     }
 
-    public List<R> visit(final RecordDeclarationCompactConstructor n, final A arg) {
+    public List<R> visit(final CompactConstructorDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {

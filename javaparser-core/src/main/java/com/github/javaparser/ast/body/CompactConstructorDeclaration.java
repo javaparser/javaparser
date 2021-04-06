@@ -43,7 +43,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.RecordDeclarationCompactConstructorMetaModel;
+import com.github.javaparser.metamodel.CompactConstructorDeclarationMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.Optional;
@@ -73,7 +73,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.4">JLS 8.10.3 - Record Constructor Declarations</a>
  * @since 3.21.0
  */
-public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordDeclarationCompactConstructor> implements NodeWithBlockStmt<RecordDeclarationCompactConstructor>, NodeWithAccessModifiers<RecordDeclarationCompactConstructor>, NodeWithJavadoc<RecordDeclarationCompactConstructor>, NodeWithSimpleName<RecordDeclarationCompactConstructor>, NodeWithThrownExceptions<RecordDeclarationCompactConstructor>, NodeWithTypeParameters<RecordDeclarationCompactConstructor>, Resolvable<ResolvedConstructorDeclaration> {
+public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstructorDeclaration> implements NodeWithBlockStmt<CompactConstructorDeclaration>, NodeWithAccessModifiers<CompactConstructorDeclaration>, NodeWithJavadoc<CompactConstructorDeclaration>, NodeWithSimpleName<CompactConstructorDeclaration>, NodeWithThrownExceptions<CompactConstructorDeclaration>, NodeWithTypeParameters<CompactConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -85,20 +85,20 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
 
     private NodeList<ReferenceType> thrownExceptions;
 
-    public RecordDeclarationCompactConstructor() {
+    public CompactConstructorDeclaration() {
         this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new BlockStmt());
     }
 
-    public RecordDeclarationCompactConstructor(String name) {
+    public CompactConstructorDeclaration(String name) {
         this(null, new NodeList<>(new Modifier()), new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new BlockStmt());
     }
 
-    public RecordDeclarationCompactConstructor(NodeList<Modifier> modifiers, String name) {
+    public CompactConstructorDeclaration(NodeList<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new BlockStmt());
     }
 
     @AllFieldsConstructor
-    public RecordDeclarationCompactConstructor(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public CompactConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, name, thrownExceptions, body);
     }
 
@@ -106,7 +106,7 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public RecordDeclarationCompactConstructor(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public CompactConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -140,10 +140,10 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
      * @return this, the ConstructorDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclarationCompactConstructor setBody(final BlockStmt body) {
+    public CompactConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (RecordDeclarationCompactConstructor) this;
+            return (CompactConstructorDeclaration) this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
@@ -159,10 +159,10 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclarationCompactConstructor setModifiers(final NodeList<Modifier> modifiers) {
+    public CompactConstructorDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (RecordDeclarationCompactConstructor) this;
+            return (CompactConstructorDeclaration) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         if (this.modifiers != null)
@@ -178,10 +178,10 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclarationCompactConstructor setName(final SimpleName name) {
+    public CompactConstructorDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (RecordDeclarationCompactConstructor) this;
+            return (CompactConstructorDeclaration) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -197,10 +197,10 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclarationCompactConstructor setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+    public CompactConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
-            return (RecordDeclarationCompactConstructor) this;
+            return (CompactConstructorDeclaration) this;
         }
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
         if (this.thrownExceptions != null)
@@ -216,10 +216,10 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclarationCompactConstructor setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public CompactConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
-            return (RecordDeclarationCompactConstructor) this;
+            return (CompactConstructorDeclaration) this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
@@ -293,14 +293,14 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public RecordDeclarationCompactConstructor clone() {
-        return (RecordDeclarationCompactConstructor) accept(new CloneVisitor(), null);
+    public CompactConstructorDeclaration clone() {
+        return (CompactConstructorDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public RecordDeclarationCompactConstructorMetaModel getMetaModel() {
-        return JavaParserMetaModel.recordDeclarationCompactConstructorMetaModel;
+    public CompactConstructorDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.compactConstructorDeclarationMetaModel;
     }
 
     @Override
@@ -339,18 +339,18 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isRecordDeclarationCompactConstructor() {
+    public boolean isCompactConstructorDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public RecordDeclarationCompactConstructor asRecordDeclarationCompactConstructor() {
+    public CompactConstructorDeclaration asCompactConstructorDeclaration() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifRecordDeclarationCompactConstructor(Consumer<RecordDeclarationCompactConstructor> action) {
+    public void ifCompactConstructorDeclaration(Consumer<CompactConstructorDeclaration> action) {
         action.accept(this);
     }
 
@@ -361,14 +361,14 @@ public class RecordDeclarationCompactConstructor extends BodyDeclaration<RecordD
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<RecordDeclarationCompactConstructor> toRecordDeclarationCompactConstructor() {
+    public Optional<CompactConstructorDeclaration> toCompactConstructorDeclaration() {
         return Optional.of(this);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
-    public RecordDeclarationCompactConstructor(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, BlockStmt body) {
+    public CompactConstructorDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, BlockStmt body) {
         super(tokenRange, annotations);
         setBody(body);
         customInitialization();
