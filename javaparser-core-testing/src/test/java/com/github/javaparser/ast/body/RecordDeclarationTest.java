@@ -664,17 +664,15 @@ public class RecordDeclarationTest {
     void localRecords() {
         CompilationUnit cu = TestParser.parseCompilationUnit("" +
                 "class Scratch {\n" +
-                "    public static void main(String[] args) {\n" +
-                "        List<Merchant> findTopMerchants(List<Merchant> merchants, int month) {\n" +
-                "            // Local record\n" +
-                "            record MerchantSales(Merchant merchant, double sales) {}\n" +
+                "    List<Merchant> findTopMerchants(List<Merchant> merchants, int month) {\n" +
+                "        // Local record\n" +
+                "        record MerchantSales(Merchant merchant, double sales) {}\n" +
                 "\n" +
-                "            return merchants.stream()\n" +
-                "                    .map(merchant -> new MerchantSales(merchant, computeSales(merchant, month)))\n" +
-                "                    .sorted((m1, m2) -> Double.compare(m2.sales(), m1.sales()))\n" +
-                "                    .map(MerchantSales::merchant)\n" +
-                "                    .collect(toList());\n" +
-                "        }\n" +
+                "        return merchants.stream()\n" +
+                "                .map(merchant -> new MerchantSales(merchant, computeSales(merchant, month)))\n" +
+                "                .sorted((m1, m2) -> Double.compare(m2.sales(), m1.sales()))\n" +
+                "                .map(MerchantSales::merchant)\n" +
+                "                .collect(toList());\n" +
                 "    }\n" +
                 "}\n"
         );
