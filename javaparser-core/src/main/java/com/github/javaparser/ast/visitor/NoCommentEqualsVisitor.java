@@ -742,7 +742,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final LocalRecordDeclarationStmt n, final Visitable arg) {
-        return null;
+        final LocalRecordDeclarationStmt n2 = (LocalRecordDeclarationStmt) arg;
+        if (!nodeEquals(n.getRecordDeclaration(), n2.getRecordDeclaration()))
+            return false;
+        return true;
     }
 
     @Override

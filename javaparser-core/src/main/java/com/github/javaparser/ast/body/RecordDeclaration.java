@@ -45,7 +45,6 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.RecordDeclarationMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -157,7 +156,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     public RecordDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
-            return (RecordDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
         if (this.implementedTypes != null)
@@ -171,7 +170,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     public RecordDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
-            return (RecordDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
@@ -221,6 +220,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifRecordDeclaration(Consumer<RecordDeclaration> action) {
         action.accept(this);
@@ -319,7 +319,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     public RecordDeclaration setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
-            return (RecordDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
         if (this.parameters != null)
@@ -337,7 +337,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public RecordDeclaration setReceiverParameter(final ReceiverParameter receiverParameter) {
         if (receiverParameter == this.receiverParameter) {
-            return (RecordDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
         if (this.receiverParameter != null)
@@ -384,15 +384,11 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
         return super.isStatic();
     }
 
-
     /**
      * @return Only the "compact" constructors within this record,
      * not "normal" constructors (which are obtainable via {@link #getConstructors()}).
      */
     public List<CompactConstructorDeclaration> getCompactConstructors() {
-        return unmodifiableList(getMembers().stream()
-                .filter(m -> m instanceof CompactConstructorDeclaration)
-                .map(m -> (CompactConstructorDeclaration) m)
-                .collect(toList()));
+        return unmodifiableList(getMembers().stream().filter(m -> m instanceof CompactConstructorDeclaration).map(m -> (CompactConstructorDeclaration) m).collect(toList()));
     }
 }

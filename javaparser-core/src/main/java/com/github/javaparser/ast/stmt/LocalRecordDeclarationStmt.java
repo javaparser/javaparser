@@ -30,23 +30,16 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.LocalClassDeclarationStmtMetaModel;
-
+import com.github.javaparser.metamodel.LocalRecordDeclarationStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <h1>A class declaration inside a method.</h1>
- * <h2>Java 1.0</h2>
- * Not available.
- * <h2>Java 1.1+</h2>
- * A statement consisting of a class declaration.
- * <br><code>class X { void m() { <b>class Y { }</b> } }</code>
+ * <h1>A record declaration inside a method.</h1>
  *
+ * @author Roger Howell
  * @see RecordDeclaration
- * @author Julio Vilmar Gesser
  */
 public class LocalRecordDeclarationStmt extends Statement {
 
@@ -94,7 +87,7 @@ public class LocalRecordDeclarationStmt extends Statement {
         if (recordDeclaration == this.recordDeclaration) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.recordDeclaration, recordDeclaration);
+        notifyPropertyChange(ObservableProperty.RECORD_DECLARATION, this.recordDeclaration, recordDeclaration);
         if (this.recordDeclaration != null)
             this.recordDeclaration.setParentNode(null);
         this.recordDeclaration = recordDeclaration;
@@ -118,8 +111,8 @@ public class LocalRecordDeclarationStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LocalClassDeclarationStmtMetaModel getMetaModel() {
-        return JavaParserMetaModel.localClassDeclarationStmtMetaModel;
+    public LocalRecordDeclarationStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.localRecordDeclarationStmtMetaModel;
     }
 
     @Override

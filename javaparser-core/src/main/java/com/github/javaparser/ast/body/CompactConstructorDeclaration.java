@@ -143,7 +143,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     public CompactConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (CompactConstructorDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
@@ -162,7 +162,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     public CompactConstructorDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (CompactConstructorDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         if (this.modifiers != null)
@@ -181,7 +181,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     public CompactConstructorDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (CompactConstructorDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -200,7 +200,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     public CompactConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
-            return (CompactConstructorDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
         if (this.thrownExceptions != null)
@@ -219,7 +219,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     public CompactConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
-            return (CompactConstructorDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
@@ -349,6 +349,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCompactConstructorDeclaration(Consumer<CompactConstructorDeclaration> action) {
         action.accept(this);

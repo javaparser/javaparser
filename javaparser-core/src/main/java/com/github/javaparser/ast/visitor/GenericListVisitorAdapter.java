@@ -29,7 +29,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -1087,7 +1086,19 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     public List<R> visit(final LocalRecordDeclarationStmt n, final A arg) {
-        return null;
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getRecordDeclaration().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
     }
 
     public List<R> visit(final LongLiteralExpr n, final A arg) {

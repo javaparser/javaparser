@@ -227,7 +227,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final LocalRecordDeclarationStmt n, final Void arg) {
-        return null;
+        return (n.getRecordDeclaration().accept(this, arg));
     }
 
     public Integer visit(final LongLiteralExpr n, final Void arg) {

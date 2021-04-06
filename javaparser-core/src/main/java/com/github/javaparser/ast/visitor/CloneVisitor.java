@@ -763,7 +763,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final LocalRecordDeclarationStmt n, final Object arg) {
-        return null;
+        RecordDeclaration recordDeclaration = cloneNode(n.getRecordDeclaration(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocalRecordDeclarationStmt r = new LocalRecordDeclarationStmt(n.getTokenRange().orElse(null), recordDeclaration);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
     }
 
     @Override

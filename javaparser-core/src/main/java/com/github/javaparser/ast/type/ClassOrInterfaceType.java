@@ -22,10 +22,8 @@ package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -44,10 +42,8 @@ import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 

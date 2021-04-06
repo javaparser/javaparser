@@ -1554,6 +1554,17 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     public R visit(final LocalRecordDeclarationStmt n, final A arg) {
+        R result;
+        {
+            result = n.getRecordDeclaration().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         return null;
     }
 

@@ -38,7 +38,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ParameterMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -331,7 +330,6 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
      */
     @Override
     public boolean isFinal() {
-
         // RecordDeclaration-specific code
         if (getParentNode().isPresent()) {
             Node parentNode = getParentNode().get();
@@ -339,7 +337,6 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
                 return true;
             }
         }
-
         // Otherwise use the default implementation.
         return NodeWithFinalModifier.super.isFinal();
     }

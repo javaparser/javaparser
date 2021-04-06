@@ -320,6 +320,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(classOrInterfaceDeclarationMetaModel);
         nodeMetaModels.add(classOrInterfaceTypeMetaModel);
         nodeMetaModels.add(commentMetaModel);
+        nodeMetaModels.add(compactConstructorDeclarationMetaModel);
         nodeMetaModels.add(compilationUnitMetaModel);
         nodeMetaModels.add(conditionalExprMetaModel);
         nodeMetaModels.add(constructorDeclarationMetaModel);
@@ -376,7 +377,6 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(patternExprMetaModel);
         nodeMetaModels.add(primitiveTypeMetaModel);
         nodeMetaModels.add(receiverParameterMetaModel);
-        nodeMetaModels.add(compactConstructorDeclarationMetaModel);
         nodeMetaModels.add(recordDeclarationMetaModel);
         nodeMetaModels.add(referenceTypeMetaModel);
         nodeMetaModels.add(returnStmtMetaModel);
