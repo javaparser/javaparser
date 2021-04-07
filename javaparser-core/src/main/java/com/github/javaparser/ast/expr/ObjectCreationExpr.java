@@ -274,7 +274,7 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ObjectCreationExpr removeScope() {
-        return setScope(null);
+        return setScope((Expression) null);
     }
 
     @Override

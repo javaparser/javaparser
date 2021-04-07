@@ -666,18 +666,22 @@ public abstract class Statement extends Node {
     public void ifJmlStmtWithExpression(Consumer<JmlStmtWithExpression> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlGhostStatements() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlGhostStatements asJmlGhostStatements() {
         throw new IllegalStateException(f("%s is not JmlGhostStatements, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlGhostStatements> toJmlGhostStatements() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlGhostStatements(Consumer<JmlGhostStatements> action) {
     }
 }

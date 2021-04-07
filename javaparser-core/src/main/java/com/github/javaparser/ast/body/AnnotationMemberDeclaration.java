@@ -130,7 +130,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AnnotationMemberDeclaration removeDefaultValue() {
-        return setDefaultValue(null);
+        return setDefaultValue((Expression) null);
     }
 
     /**

@@ -55,34 +55,34 @@ public class JavaToken {
     }
 
     JavaToken(Token token, List<JavaToken> tokens) {
-        //You could be puzzled by the following lines
-        //
-        //The reason why these lines are necessary is the fact that Java is ambiguous. There are cases where the
-        //sequence of characters ">>>" and ">>" should be recognized as the single tokens ">>>" and ">>". In other
-        //cases however we want to split those characters in single GT tokens (">").
-        //
-        //For example, in expressions ">>" and ">>>" are valid, while when defining types we could have this:
-        //
-        //List<List<Set<String>>>>
-        //
-        //You can see that the sequence ">>>>" should be interpreted as four consecutive ">" tokens closing a type
-        //parameter list.
-        //
-        //The JavaCC handle this case by first recognizing always the longest token, and then depending on the context
-        //putting back the unused chars in the stream. However in those cases the token provided is invalid: it has an
-        //image corresponding to the text originally recognized, without considering that after some characters could
-        //have been put back into the stream.
-        //
-        //So in the case of:
-        //
-        //List<List<Set<String>>>>
-        //___   -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
-        //___  -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
-        //__  -> recognized as ">>", then ">" put back in the stream but Token(type=GT, image=">>") passed to this class
-        //_  -> Token(type=GT, image=">") good!
-        //
-        //So given the image could be wrong but the type is correct, we look at the type of the token and we fix
-        //the image. Everybody is happy and we can keep this horrible thing as our little secret.
+        // You could be puzzled by the following lines
+        // 
+        // The reason why these lines are necessary is the fact that Java is ambiguous. There are cases where the
+        // sequence of characters ">>>" and ">>" should be recognized as the single tokens ">>>" and ">>". In other
+        // cases however we want to split those characters in single GT tokens (">").
+        // 
+        // For example, in expressions ">>" and ">>>" are valid, while when defining types we could have this:
+        // 
+        // List<List<Set<String>>>>
+        // 
+        // You can see that the sequence ">>>>" should be interpreted as four consecutive ">" tokens closing a type
+        // parameter list.
+        // 
+        // The JavaCC handle this case by first recognizing always the longest token, and then depending on the context
+        // putting back the unused chars in the stream. However in those cases the token provided is invalid: it has an
+        // image corresponding to the text originally recognized, without considering that after some characters could
+        // have been put back into the stream.
+        // 
+        // So in the case of:
+        // 
+        // List<List<Set<String>>>>
+        // ___   -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
+        // ___  -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
+        // __  -> recognized as ">>", then ">" put back in the stream but Token(type=GT, image=">>") passed to this class
+        // _  -> Token(type=GT, image=">") good!
+        // 
+        // So given the image could be wrong but the type is correct, we look at the type of the token and we fix
+        // the image. Everybody is happy and we can keep this horrible thing as our little secret.
         Range range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
         String text = token.image;
         if (token.kind == GeneratedJavaParserConstants.GT) {
@@ -262,16 +262,16 @@ public class JavaToken {
         UNIX_EOL(4),
         OLD_MAC_EOL(5),
         SINGLE_LINE_COMMENT_IN_MULTI_JML(6),
-        JML_SINGLE_START0(7),
-        SINGLE_LINE_COMMENT0(8),
-        SINGLE_LINE_COMMENT(9),
-        JML_SINGLE_START(10),
-        JML_MULTI_START(11),
-        JML_MULTI_END(12),
-        JML_SINGLE_END(13),
-        INVARIANT(14),
-        ABRUPT_BEHAVIOR(15),
-        ABRUPT_BEHAVIOUR(16),
+        JML_SINGLE_START(7),
+        SINGLE_LINE_COMMENT(8),
+        JML_MULTI_START(9),
+        JML_MULTI_END(10),
+        JML_SINGLE_END(11),
+        INVARIANT(12),
+        ABRUPT_BEHAVIOR(13),
+        ABRUPT_BEHAVIOUR(14),
+        MODEL_BEHAVIOR(15),
+        MODEL_BEHAVIOUR(16),
         ACCESSIBLE(17),
         ACCESSIBLE_REDUNDANTLY(18),
         ALSO(19),
@@ -512,106 +512,107 @@ public class JavaToken {
         PRIVATE(254),
         PROTECTED(255),
         PUBLIC(256),
-        RETURN(257),
-        SHORT(258),
-        STATIC(259),
-        STRICTFP(260),
-        SUPER(261),
-        SWITCH(262),
-        SYNCHRONIZED(263),
-        THIS(264),
-        THROW(265),
-        THROWS(266),
-        TRANSIENT(267),
-        TRUE(268),
-        TRY(269),
-        VOID(270),
-        VOLATILE(271),
-        WHILE(272),
-        YIELD(273),
-        REQUIRES(274),
-        TO(275),
-        WITH(276),
-        OPEN(277),
-        OPENS(278),
-        USES(279),
-        MODULE(280),
-        EXPORTS(281),
-        PROVIDES(282),
-        TRANSITIVE(283),
-        LONG_LITERAL(284),
-        INTEGER_LITERAL(285),
-        DECIMAL_LITERAL(286),
-        HEX_LITERAL(287),
-        OCTAL_LITERAL(288),
-        BINARY_LITERAL(289),
-        FLOATING_POINT_LITERAL(290),
-        DECIMAL_FLOATING_POINT_LITERAL(291),
-        DECIMAL_EXPONENT(292),
-        HEXADECIMAL_FLOATING_POINT_LITERAL(293),
-        HEXADECIMAL_EXPONENT(294),
-        HEX_DIGITS(295),
-        UNICODE_ESCAPE(296),
-        CHARACTER_LITERAL(297),
-        STRING_LITERAL(298),
-        ENTER_TEXT_BLOCK(299),
-        TEXT_BLOCK_LITERAL(300),
-        TEXT_BLOCK_CONTENT(301),
-        JML_IDENTIFIER(302),
-        IDENTIFIER(303),
-        LETTER(304),
-        PART_LETTER(305),
-        LPAREN(306),
-        RPAREN(307),
-        LBRACE(308),
-        RBRACE(309),
-        LBRACKET(310),
-        RBRACKET(311),
-        SEMICOLON(312),
-        COMMA(313),
-        DOT(314),
-        AT(315),
-        ASSIGN(316),
-        LT(317),
-        BANG(318),
-        TILDE(319),
-        HOOK(320),
-        COLON(321),
-        ARROW(322),
-        EQ(323),
-        GE(324),
-        LE(325),
-        NE(326),
-        SC_AND(327),
-        SC_OR(328),
-        INCR(329),
-        DECR(330),
-        PLUS(331),
-        MINUS(332),
-        STAR(333),
-        SLASH(334),
-        BIT_AND(335),
-        BIT_OR(336),
-        XOR(337),
-        REM(338),
-        LSHIFT(339),
-        PLUSASSIGN(340),
-        MINUSASSIGN(341),
-        STARASSIGN(342),
-        SLASHASSIGN(343),
-        ANDASSIGN(344),
-        ORASSIGN(345),
-        XORASSIGN(346),
-        REMASSIGN(347),
-        LSHIFTASSIGN(348),
-        RSIGNEDSHIFTASSIGN(349),
-        RUNSIGNEDSHIFTASSIGN(350),
-        ELLIPSIS(351),
-        DOUBLECOLON(352),
-        RUNSIGNEDSHIFT(353),
-        RSIGNEDSHIFT(354),
-        GT(355),
-        CTRL_Z(356);
+        RECORD(257),
+        RETURN(258),
+        SHORT(259),
+        STATIC(260),
+        STRICTFP(261),
+        SUPER(262),
+        SWITCH(263),
+        SYNCHRONIZED(264),
+        THIS(265),
+        THROW(266),
+        THROWS(267),
+        TRANSIENT(268),
+        TRUE(269),
+        TRY(270),
+        VOID(271),
+        VOLATILE(272),
+        WHILE(273),
+        YIELD(274),
+        REQUIRES(275),
+        TO(276),
+        WITH(277),
+        OPEN(278),
+        OPENS(279),
+        USES(280),
+        MODULE(281),
+        EXPORTS(282),
+        PROVIDES(283),
+        TRANSITIVE(284),
+        LONG_LITERAL(285),
+        INTEGER_LITERAL(286),
+        DECIMAL_LITERAL(287),
+        HEX_LITERAL(288),
+        OCTAL_LITERAL(289),
+        BINARY_LITERAL(290),
+        FLOATING_POINT_LITERAL(291),
+        DECIMAL_FLOATING_POINT_LITERAL(292),
+        DECIMAL_EXPONENT(293),
+        HEXADECIMAL_FLOATING_POINT_LITERAL(294),
+        HEXADECIMAL_EXPONENT(295),
+        HEX_DIGITS(296),
+        UNICODE_ESCAPE(297),
+        CHARACTER_LITERAL(298),
+        STRING_LITERAL(299),
+        ENTER_TEXT_BLOCK(300),
+        TEXT_BLOCK_LITERAL(301),
+        TEXT_BLOCK_CONTENT(302),
+        JML_IDENTIFIER(303),
+        IDENTIFIER(304),
+        LETTER(305),
+        PART_LETTER(306),
+        LPAREN(307),
+        RPAREN(308),
+        LBRACE(309),
+        RBRACE(310),
+        LBRACKET(311),
+        RBRACKET(312),
+        SEMICOLON(313),
+        COMMA(314),
+        DOT(315),
+        ELLIPSIS(316),
+        AT(317),
+        DOUBLECOLON(318),
+        ASSIGN(319),
+        LT(320),
+        BANG(321),
+        TILDE(322),
+        HOOK(323),
+        COLON(324),
+        ARROW(325),
+        EQ(326),
+        GE(327),
+        LE(328),
+        NE(329),
+        SC_AND(330),
+        SC_OR(331),
+        INCR(332),
+        DECR(333),
+        PLUS(334),
+        MINUS(335),
+        STAR(336),
+        SLASH(337),
+        BIT_AND(338),
+        BIT_OR(339),
+        XOR(340),
+        REM(341),
+        LSHIFT(342),
+        PLUSASSIGN(343),
+        MINUSASSIGN(344),
+        STARASSIGN(345),
+        SLASHASSIGN(346),
+        ANDASSIGN(347),
+        ORASSIGN(348),
+        XORASSIGN(349),
+        REMASSIGN(350),
+        LSHIFTASSIGN(351),
+        RSIGNEDSHIFTASSIGN(352),
+        RUNSIGNEDSHIFTASSIGN(353),
+        RUNSIGNEDSHIFT(354),
+        RSIGNEDSHIFT(355),
+        GT(356),
+        CTRL_Z(357);
 
         private final int kind;
 
@@ -620,207 +621,209 @@ public class JavaToken {
         }
 
         public static Kind valueOf(int kind) {
-            switch (kind) {
-                case 356:
+            switch(kind) {
+                case 357:
                     return CTRL_Z;
-                case 355:
+                case 356:
                     return GT;
-                case 354:
+                case 355:
                     return RSIGNEDSHIFT;
-                case 353:
+                case 354:
                     return RUNSIGNEDSHIFT;
-                case 352:
-                    return DOUBLECOLON;
-                case 351:
-                    return ELLIPSIS;
-                case 350:
+                case 353:
                     return RUNSIGNEDSHIFTASSIGN;
-                case 349:
+                case 352:
                     return RSIGNEDSHIFTASSIGN;
-                case 348:
+                case 351:
                     return LSHIFTASSIGN;
-                case 347:
+                case 350:
                     return REMASSIGN;
-                case 346:
+                case 349:
                     return XORASSIGN;
-                case 345:
+                case 348:
                     return ORASSIGN;
-                case 344:
+                case 347:
                     return ANDASSIGN;
-                case 343:
+                case 346:
                     return SLASHASSIGN;
-                case 342:
+                case 345:
                     return STARASSIGN;
-                case 341:
+                case 344:
                     return MINUSASSIGN;
-                case 340:
+                case 343:
                     return PLUSASSIGN;
-                case 339:
+                case 342:
                     return LSHIFT;
-                case 338:
+                case 341:
                     return REM;
-                case 337:
+                case 340:
                     return XOR;
-                case 336:
+                case 339:
                     return BIT_OR;
-                case 335:
+                case 338:
                     return BIT_AND;
-                case 334:
+                case 337:
                     return SLASH;
-                case 333:
+                case 336:
                     return STAR;
-                case 332:
+                case 335:
                     return MINUS;
-                case 331:
+                case 334:
                     return PLUS;
-                case 330:
+                case 333:
                     return DECR;
-                case 329:
+                case 332:
                     return INCR;
-                case 328:
+                case 331:
                     return SC_OR;
-                case 327:
+                case 330:
                     return SC_AND;
-                case 326:
+                case 329:
                     return NE;
-                case 325:
+                case 328:
                     return LE;
-                case 324:
+                case 327:
                     return GE;
-                case 323:
+                case 326:
                     return EQ;
-                case 322:
+                case 325:
                     return ARROW;
-                case 321:
+                case 324:
                     return COLON;
-                case 320:
+                case 323:
                     return HOOK;
-                case 319:
+                case 322:
                     return TILDE;
-                case 318:
+                case 321:
                     return BANG;
-                case 317:
+                case 320:
                     return LT;
-                case 316:
+                case 319:
                     return ASSIGN;
-                case 315:
+                case 318:
+                    return DOUBLECOLON;
+                case 317:
                     return AT;
-                case 314:
+                case 316:
+                    return ELLIPSIS;
+                case 315:
                     return DOT;
-                case 313:
+                case 314:
                     return COMMA;
-                case 312:
+                case 313:
                     return SEMICOLON;
-                case 311:
+                case 312:
                     return RBRACKET;
-                case 310:
+                case 311:
                     return LBRACKET;
-                case 309:
+                case 310:
                     return RBRACE;
-                case 308:
+                case 309:
                     return LBRACE;
-                case 307:
+                case 308:
                     return RPAREN;
-                case 306:
+                case 307:
                     return LPAREN;
-                case 305:
+                case 306:
                     return PART_LETTER;
-                case 304:
+                case 305:
                     return LETTER;
-                case 303:
+                case 304:
                     return IDENTIFIER;
-                case 302:
+                case 303:
                     return JML_IDENTIFIER;
-                case 301:
+                case 302:
                     return TEXT_BLOCK_CONTENT;
-                case 300:
+                case 301:
                     return TEXT_BLOCK_LITERAL;
-                case 299:
+                case 300:
                     return ENTER_TEXT_BLOCK;
-                case 298:
+                case 299:
                     return STRING_LITERAL;
-                case 297:
+                case 298:
                     return CHARACTER_LITERAL;
-                case 296:
+                case 297:
                     return UNICODE_ESCAPE;
-                case 295:
+                case 296:
                     return HEX_DIGITS;
-                case 294:
+                case 295:
                     return HEXADECIMAL_EXPONENT;
-                case 293:
+                case 294:
                     return HEXADECIMAL_FLOATING_POINT_LITERAL;
-                case 292:
+                case 293:
                     return DECIMAL_EXPONENT;
-                case 291:
+                case 292:
                     return DECIMAL_FLOATING_POINT_LITERAL;
-                case 290:
+                case 291:
                     return FLOATING_POINT_LITERAL;
-                case 289:
+                case 290:
                     return BINARY_LITERAL;
-                case 288:
+                case 289:
                     return OCTAL_LITERAL;
-                case 287:
+                case 288:
                     return HEX_LITERAL;
-                case 286:
+                case 287:
                     return DECIMAL_LITERAL;
-                case 285:
+                case 286:
                     return INTEGER_LITERAL;
-                case 284:
+                case 285:
                     return LONG_LITERAL;
-                case 283:
+                case 284:
                     return TRANSITIVE;
-                case 282:
+                case 283:
                     return PROVIDES;
-                case 281:
+                case 282:
                     return EXPORTS;
-                case 280:
+                case 281:
                     return MODULE;
-                case 279:
+                case 280:
                     return USES;
-                case 278:
+                case 279:
                     return OPENS;
-                case 277:
+                case 278:
                     return OPEN;
-                case 276:
+                case 277:
                     return WITH;
-                case 275:
+                case 276:
                     return TO;
-                case 274:
+                case 275:
                     return REQUIRES;
-                case 273:
+                case 274:
                     return YIELD;
-                case 272:
+                case 273:
                     return WHILE;
-                case 271:
+                case 272:
                     return VOLATILE;
-                case 270:
+                case 271:
                     return VOID;
-                case 269:
+                case 270:
                     return TRY;
-                case 268:
+                case 269:
                     return TRUE;
-                case 267:
+                case 268:
                     return TRANSIENT;
-                case 266:
+                case 267:
                     return THROWS;
-                case 265:
+                case 266:
                     return THROW;
-                case 264:
+                case 265:
                     return THIS;
-                case 263:
+                case 264:
                     return SYNCHRONIZED;
-                case 262:
+                case 263:
                     return SWITCH;
-                case 261:
+                case 262:
                     return SUPER;
-                case 260:
+                case 261:
                     return STRICTFP;
-                case 259:
+                case 260:
                     return STATIC;
-                case 258:
+                case 259:
                     return SHORT;
-                case 257:
+                case 258:
                     return RETURN;
+                case 257:
+                    return RECORD;
                 case 256:
                     return PUBLIC;
                 case 255:
@@ -1302,25 +1305,25 @@ public class JavaToken {
                 case 17:
                     return ACCESSIBLE;
                 case 16:
-                    return ABRUPT_BEHAVIOUR;
+                    return MODEL_BEHAVIOUR;
                 case 15:
-                    return ABRUPT_BEHAVIOR;
+                    return MODEL_BEHAVIOR;
                 case 14:
-                    return INVARIANT;
+                    return ABRUPT_BEHAVIOUR;
                 case 13:
-                    return JML_SINGLE_END;
+                    return ABRUPT_BEHAVIOR;
                 case 12:
-                    return JML_MULTI_END;
+                    return INVARIANT;
                 case 11:
-                    return JML_MULTI_START;
+                    return JML_SINGLE_END;
                 case 10:
-                    return JML_SINGLE_START;
+                    return JML_MULTI_END;
                 case 9:
-                    return SINGLE_LINE_COMMENT;
+                    return JML_MULTI_START;
                 case 8:
-                    return SINGLE_LINE_COMMENT0;
+                    return SINGLE_LINE_COMMENT;
                 case 7:
-                    return JML_SINGLE_START0;
+                    return JML_SINGLE_START;
                 case 6:
                     return SINGLE_LINE_COMMENT_IN_MULTI_JML;
                 case 5:

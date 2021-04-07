@@ -217,7 +217,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public InstanceOfExpr removePattern() {
-        return setPattern(null);
+        return setPattern((PatternExpr) null);
     }
 
     @Override

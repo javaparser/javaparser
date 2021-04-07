@@ -235,6 +235,11 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
+    @Override
+    public Integer visit(final LocalRecordDeclarationStmt n, final Void arg) {
+        return n.hashCode();
+    }
+
     public Integer visit(final LongLiteralExpr n, final Void arg) {
         return n.hashCode();
     }
@@ -687,13 +692,17 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
-    
     @Override
     public Integer visit(final RecordDeclaration n, final Void arg) {
         return n.hashCode();
     }
 
     public Integer visit(final CompactConstructorDeclaration n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlMethodDeclaration n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -170,6 +170,6 @@ public class SuperExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SuperExpr removeTypeName() {
-        return setTypeName(null);
+        return setTypeName((Name) null);
     }
 }

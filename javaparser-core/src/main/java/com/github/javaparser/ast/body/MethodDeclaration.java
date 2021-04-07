@@ -290,7 +290,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodDeclaration removeBody() {
-        return setBody(null);
+        return setBody((BlockStmt) null);
     }
 
     @Override

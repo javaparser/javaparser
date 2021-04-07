@@ -337,4 +337,6 @@ public interface VoidVisitor<A> {
     void visit(JmlSetComprehension n, A arg);
 
     void visit(JmlGhostStatements n, A arg);
+
+    void visit(JmlMethodDeclaration n, A arg);
 }

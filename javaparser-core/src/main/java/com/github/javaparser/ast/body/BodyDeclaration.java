@@ -364,8 +364,6 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ClassInvariantClause asClassInvariantClause() {
-        throw new IllegalStateException(f("%s is not ClassInvariantClause, it is %s", this, this.getClass().getSimpleName()));
     public RecordDeclaration asRecordDeclaration() {
         throw new IllegalStateException(f("%s is not RecordDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
@@ -395,7 +393,6 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassAccessibleDeclaration> toJmlClassAccessibleDeclaration() {
     public Optional<CompactConstructorDeclaration> toCompactConstructorDeclaration() {
         return Optional.empty();
     }

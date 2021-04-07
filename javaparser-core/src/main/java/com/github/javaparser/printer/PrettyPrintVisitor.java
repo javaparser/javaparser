@@ -89,6 +89,10 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.jml.clauses.AccessibleClause;
+import com.github.javaparser.ast.jml.clauses.JmlClauseHL;
+import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
+import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleExportsDirective;
 import com.github.javaparser.ast.modules.ModuleOpensDirective;
@@ -101,6 +105,10 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
@@ -1082,6 +1090,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlGhostStatements n, Void arg) {
 
+    }
+
+    @Override
+    public void visit(JmlMethodDeclaration n, Void arg) {
+        n.getMethodDeclaration().accept(this, arg);
     }
 
     @Override

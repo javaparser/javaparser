@@ -154,7 +154,7 @@ public class LocationSetBindingExpr extends LocationSetExpression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public LocationSetBindingExpr removePredicate() {
-        return setPredicate(null);
+        return setPredicate((Expression) null);
     }
 
     @Override

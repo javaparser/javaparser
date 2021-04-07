@@ -147,7 +147,7 @@ public class CompilationUnit extends Node {
     @Override
     protected Printer getPrinter() {
         if (!containsData(PRINTER_KEY)) {
-            //create a default printer
+            // create a default printer
             Printer printer = createDefaultPrinter();
             printer(printer);
         }
@@ -294,17 +294,17 @@ public class CompilationUnit extends Node {
         Optional<Name> importPackageName = getImportPackageName(importDeclaration);
         if (importPackageName.isPresent()) {
             if (parseName(JAVA_LANG).equals(importPackageName.get())) {
-                //java.lang is implicitly imported
+                // java.lang is implicitly imported
                 return true;
             }
             if (packageDeclaration != null) {
-                //the import is within the same package
+                // the import is within the same package
                 Name currentPackageName = packageDeclaration.getName();
                 return currentPackageName.equals(importPackageName.get());
             }
             return false;
         } else {
-            //imports of unnamed package are not allowed
+            // imports of unnamed package are not allowed
             return true;
         }
     }

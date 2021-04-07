@@ -135,7 +135,7 @@ public class BreakStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public BreakStmt removeLabel() {
-        return setLabel(null);
+        return setLabel((SimpleName) null);
     }
 
     @Override

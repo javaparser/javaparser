@@ -244,7 +244,7 @@ public class TryStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public TryStmt removeFinallyBlock() {
-        return setFinallyBlock(null);
+        return setFinallyBlock((BlockStmt) null);
     }
 
     @Override

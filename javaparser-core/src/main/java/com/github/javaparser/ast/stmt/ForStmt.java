@@ -238,7 +238,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ForStmt removeCompare() {
-        return setCompare(null);
+        return setCompare((Expression) null);
     }
 
     @Override

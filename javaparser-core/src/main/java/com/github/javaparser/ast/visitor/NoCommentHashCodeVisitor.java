@@ -233,6 +233,11 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getClassDeclaration().accept(this, arg));
     }
 
+    @Override
+    public Integer visit(final LocalRecordDeclarationStmt n, final Void arg) {
+        return (n.getRecordDeclaration().accept(this, arg));
+    }
+
     public Integer visit(final LongLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode());
     }
@@ -689,7 +694,6 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getStatements().accept(this, arg));
     }
 
-
     @Override
     public Integer visit(final RecordDeclaration n, final Void arg) {
         return (n.getImplementedTypes().accept(this, arg)) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getReceiverParameter().isPresent() ? n.getReceiverParameter().get().accept(this, arg) : 0) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
@@ -699,4 +703,8 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getBody().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
+    @Override
+    public Integer visit(final JmlMethodDeclaration n, final Void arg) {
+        return (n.getMethodDeclaration().accept(this, arg));
+    }
 }

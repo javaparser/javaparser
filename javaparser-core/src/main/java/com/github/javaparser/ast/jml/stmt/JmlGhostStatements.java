@@ -6,14 +6,10 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlGhostStatementsMetaModel;
@@ -56,28 +52,35 @@ public class JmlGhostStatements extends JmlStatement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlGhostStatements() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlGhostStatements asJmlGhostStatements() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlGhostStatements> toJmlGhostStatements() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlGhostStatements(Consumer<JmlGhostStatements> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlGhostStatements setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
@@ -92,6 +95,7 @@ public class JmlGhostStatements extends JmlStatement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -105,6 +109,7 @@ public class JmlGhostStatements extends JmlStatement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -118,11 +123,13 @@ public class JmlGhostStatements extends JmlStatement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlGhostStatements clone() {
         return (JmlGhostStatements) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlGhostStatementsMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlGhostStatementsMetaModel;
     }

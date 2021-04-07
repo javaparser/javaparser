@@ -32,7 +32,7 @@ public class JmlLabel extends Expression implements Jmlish {
 
     @AllFieldsConstructor
     public JmlLabel(final Kind kind, SimpleName label, final Expression expression) {
-        //TODO
+        // TODO
         this(null);
     }
 

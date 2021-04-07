@@ -166,7 +166,7 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public IfStmt removeElseStmt() {
-        return setElseStmt(null);
+        return setElseStmt((Statement) null);
     }
 
     /**

@@ -29,6 +29,7 @@ import com.github.javaparser.ast.modules.ModuleRequiresDirective;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
@@ -162,6 +163,11 @@ public class ModifierValidator extends VisitorValidator {
             validateModifiers(p, reporter, FINAL);
         });
         super.visit(n, reporter);
+    }
+
+    @Override
+    public void visit(LocalRecordDeclarationStmt n, ProblemReporter arg) {
+        n.getRecordDeclaration().accept(this, arg);
     }
 
     @Override

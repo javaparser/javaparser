@@ -152,7 +152,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Name removeQualifier() {
-        return setQualifier(null);
+        return setQualifier((Name) null);
     }
 
     @Override

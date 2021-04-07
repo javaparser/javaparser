@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.jml.locref.LocationSetBindingExpr;
+import com.github.javaparser.ast.jml.body.JmlMethodDeclaration;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -34,18 +34,12 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class LocationSetBindingExprMetaModel extends LocationSetExpressionMetaModel {
+public class JmlMethodDeclarationMetaModel extends JmlClassLevelMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    LocationSetBindingExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LocationSetBindingExpr.class, "LocationSetBindingExpr", "com.github.javaparser.ast.jml.locref", false, false);
+    JmlMethodDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, JmlMethodDeclaration.class, "JmlMethodDeclaration", "com.github.javaparser.ast.jml.body", false, false);
     }
 
-    public PropertyMetaModel boundedVarsPropertyMetaModel;
-
-    public PropertyMetaModel exprPropertyMetaModel;
-
-    public PropertyMetaModel predicatePropertyMetaModel;
-
-    public PropertyMetaModel quantifierPropertyMetaModel;
+    public PropertyMetaModel methodDeclarationPropertyMetaModel;
 }

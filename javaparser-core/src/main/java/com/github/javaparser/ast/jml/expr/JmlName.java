@@ -149,7 +149,7 @@ public class JmlName extends Node implements NodeWithIdentifier<JmlName>, Jmlish
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlName removeQualifier() {
-        return setQualifier(null);
+        return setQualifier((JmlName) null);
     }
 
     @Override

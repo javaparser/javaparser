@@ -158,6 +158,6 @@ public class LocationSetFieldAccess extends LocationSetExpression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public LocationSetFieldAccess removeScope() {
-        return setScope(null);
+        return setScope((LocationSetExpression) null);
     }
 }

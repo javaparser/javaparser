@@ -55,7 +55,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
 
     private NodeList<TypeParameter> typeParameters;
 
-    //Can contain more than one item if this is an interface
+    // Can contain more than one item if this is an interface
     private NodeList<ClassOrInterfaceType> extendedTypes;
 
     private NodeList<ClassOrInterfaceType> implementedTypes;

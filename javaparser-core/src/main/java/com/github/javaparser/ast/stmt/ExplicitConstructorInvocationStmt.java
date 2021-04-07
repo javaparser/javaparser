@@ -214,7 +214,7 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ExplicitConstructorInvocationStmt removeExpression() {
-        return setExpression(null);
+        return setExpression((Expression) null);
     }
 
     @Override

@@ -344,6 +344,11 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
+    public Boolean visit(final LocalRecordDeclarationStmt n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
     public Boolean visit(final AssertStmt n, final Visitable arg) {
         return n == arg;
     }
@@ -773,7 +778,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
         return n == arg;
     }
 
-
     @Override
     public Boolean visit(final RecordDeclaration n, final Visitable arg) {
         return n == arg;
@@ -781,6 +785,11 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final CompactConstructorDeclaration n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final JmlMethodDeclaration n, final Visitable arg) {
         return n == arg;
     }
 }

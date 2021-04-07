@@ -1215,6 +1215,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(JmlMethodDeclaration n, Void arg) {
+        n.getMethodDeclaration().accept(this, arg);
+    }
+
+    @Override
     public void visit(final CharLiteralExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);

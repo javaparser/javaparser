@@ -56,6 +56,11 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
+    public void visit(final LocalRecordDeclarationStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
     public void visit(final AnnotationDeclaration n, final A arg) {
         defaultAction(n, arg);
     }
@@ -778,7 +783,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
         defaultAction(n, arg);
     }
 
-
     @Override
     public void visit(final RecordDeclaration n, final A arg) {
         defaultAction(n, arg);
@@ -786,6 +790,11 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final CompactConstructorDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlMethodDeclaration n, final A arg) {
         defaultAction(n, arg);
     }
 }

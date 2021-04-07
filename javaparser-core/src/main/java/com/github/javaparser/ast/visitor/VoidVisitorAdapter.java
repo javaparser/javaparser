@@ -44,6 +44,12 @@ import com.github.javaparser.ast.jml.locref.*;
 public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
+    public void visit(final LocalRecordDeclarationStmt n, final A arg) {
+        n.getRecordDeclaration().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
     public void visit(final AnnotationDeclaration n, final A arg) {
         n.getMembers().forEach(p -> p.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
@@ -1042,7 +1048,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
-
     @Override
     public void visit(final RecordDeclaration n, final A arg) {
         n.getImplementedTypes().forEach(p -> p.accept(this, arg));
@@ -1067,4 +1072,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
+    @Override
+    public void visit(final JmlMethodDeclaration n, final A arg) {
+        n.getMethodDeclaration().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
 }

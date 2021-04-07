@@ -108,8 +108,8 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
 
     @Override
     protected void customInitialization() {
-        //We register an observer on the type property. When it is changed the MaximumCommonType is changes as well,
-        //because it is derived from the type of the variables it contains, for this reason we notify about the change
+        // We register an observer on the type property. When it is changed the MaximumCommonType is changes as well,
+        // because it is derived from the type of the variables it contains, for this reason we notify about the change
         register(new AstObserverAdapter() {
 
             @Override
@@ -118,7 +118,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
                     VariableDeclarator vd = VariableDeclarator.this;
                     if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
                         NodeWithVariables<?> nodeWithVariables = (NodeWithVariables<?>) vd.getParentNode().get();
-                        //We calculate the value the property will assume after the change will be completed
+                        // We calculate the value the property will assume after the change will be completed
                         Optional<Type> currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
                         List<Type> types = new LinkedList<>();
                         int index = nodeWithVariables.getVariables().indexOf(vd);

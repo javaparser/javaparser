@@ -138,7 +138,7 @@ public class Modifier extends Node {
         NATIVE("native"),
         STRICTFP("strictfp"),
         TRANSITIVE("transitive"),
-        //JML
+        // JML
         JML_PURE("pure"),
         JML_STRICTLY_PURE("strictly_pure"),
         JML_HELPER("helper"),

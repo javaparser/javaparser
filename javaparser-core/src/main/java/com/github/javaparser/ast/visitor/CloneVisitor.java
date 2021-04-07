@@ -229,6 +229,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final MethodDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         Type type = cloneNode(n.getType(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
@@ -1818,7 +1819,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         return r;
     }
 
-
     @Override
     public Visitable visit(final RecordDeclaration n, final Object arg) {
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
@@ -1847,6 +1847,17 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         CompactConstructorDeclaration r = new CompactConstructorDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, name, thrownExceptions, body);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlMethodDeclaration n, final Object arg) {
+        MethodDeclaration methodDeclaration = cloneNode(n.getMethodDeclaration(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlMethodDeclaration r = new JmlMethodDeclaration(n.getTokenRange().orElse(null), methodDeclaration);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

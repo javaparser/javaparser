@@ -144,7 +144,7 @@ public class AssertStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AssertStmt removeMessage() {
-        return setMessage(null);
+        return setMessage((Expression) null);
     }
 
     @Override

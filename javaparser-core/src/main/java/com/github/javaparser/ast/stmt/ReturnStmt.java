@@ -124,7 +124,7 @@ public class ReturnStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ReturnStmt removeExpression() {
-        return setExpression(null);
+        return setExpression((Expression) null);
     }
 
     @Override

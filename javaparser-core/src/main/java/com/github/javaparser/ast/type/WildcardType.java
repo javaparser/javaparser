@@ -173,12 +173,12 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeExtendedType() {
-        return setExtendedType(null);
+        return setExtendedType((ReferenceType) null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeSuperType() {
-        return setSuperType(null);
+        return setSuperType((ReferenceType) null);
     }
 
     @Override
