@@ -59,9 +59,42 @@ public class ResolvedTypeVariable implements ResolvedType {
         if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
         if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType()) return false;
         if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod()) return false;
+        if (!isEqualBounds(typeParameter, that.typeParameter)) return false;
 
         return true;
     }
+
+    private static boolean isEqualBounds(ResolvedTypeParameterDeclaration typeVariable1, ResolvedTypeParameterDeclaration typeVariable2) {
+        List<ResolvedTypeParameterDeclaration.Bound> bounds1 = typeVariable1.getBounds();
+        List<ResolvedTypeParameterDeclaration.Bound> bounds2 = typeVariable2.getBounds();
+
+        if (bounds1.isEmpty() && bounds2.isEmpty()) {
+            return true;
+        }
+
+        if (bounds1.isEmpty() && bounds2.size() == 1) {
+            // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
+            ResolvedTypeParameterDeclaration.Bound bound = bounds2.get(0);
+            return bound.isExtends()
+                    && bound.getType().isReferenceType()
+                    && bound.getType().asReferenceType().isJavaLangObject();
+        }
+
+        if (bounds2.isEmpty() && bounds1.size() == 1) {
+            // if the bounds of a type parameter are empty, then the bound is implicitly "extends Object"
+            ResolvedTypeParameterDeclaration.Bound bound = bounds1.get(0);
+            return bound.isExtends()
+                    && bound.getType().isReferenceType()
+                    && bound.getType().asReferenceType().isJavaLangObject();
+        }
+
+        if (bounds1.size() != bounds2.size()) {
+            return false;
+        }
+
+        return bounds1.containsAll(bounds2);
+    }
+
 
     @Override
     public int hashCode() {
