@@ -393,6 +393,12 @@ class VoidVisitorWithDefaultsTest {
     }
 
     @Test
+    void testThatVisitWithLocalRecordDeclarationStmtAsParameterCallDefaultAction() {
+        visitor.visit(mock(LocalRecordDeclarationStmt.class), argument);
+        assertNodeVisitDefaultAction();
+    }
+
+    @Test
     void testThatVisitWithLongLiteralExprAsParameterCallDefaultAction() {
         visitor.visit(mock(LongLiteralExpr.class), argument);
         assertNodeVisitDefaultAction();

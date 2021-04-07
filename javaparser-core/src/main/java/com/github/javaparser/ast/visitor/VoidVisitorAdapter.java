@@ -542,6 +542,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    public void visit(final LocalRecordDeclarationStmt n, final A arg) {
+        n.getRecordDeclaration().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
     public void visit(final TypeParameter n, final A arg) {
         n.getName().accept(this, arg);
         n.getTypeBound().forEach(p -> p.accept(this, arg));
@@ -717,6 +723,30 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final PatternExpr n, final A arg) {
         n.getName().accept(this, arg);
         n.getType().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final RecordDeclaration n, final A arg) {
+        n.getImplementedTypes().forEach(p -> p.accept(this, arg));
+        n.getParameters().forEach(p -> p.accept(this, arg));
+        n.getReceiverParameter().ifPresent(l -> l.accept(this, arg));
+        n.getTypeParameters().forEach(p -> p.accept(this, arg));
+        n.getMembers().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final CompactConstructorDeclaration n, final A arg) {
+        n.getBody().accept(this, arg);
+        n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getThrownExceptions().forEach(p -> p.accept(this, arg));
+        n.getTypeParameters().forEach(p -> p.accept(this, arg));
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }
