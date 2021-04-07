@@ -46,8 +46,8 @@ options {
     JDK_VERSION = "1.8";
     STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    //DEBUG_PARSER=true;
-    //DEBUG_LOOKAHEAD = true;
+    DEBUG_PARSER=true;
+    DEBUG_LOOKAHEAD = true;
 }
 
 
@@ -2234,7 +2234,7 @@ JmlBodyDeclaration JmlClassOrInterfaceBodyDeclaration():
         | element = JmlClassInitially(modifiers)
         | element = JmlClassAccessible(modifiers)
         | element = JmlClassRepresents(modifiers)
-        | element = JmlFieldDeclaration(modifiers)
+        | LOOKAHEAD(4) element = JmlFieldDeclaration(modifiers)
         | element = JmlMethodDeclaration(modifiers)
         )
         {ret.getElements().add(element);}
