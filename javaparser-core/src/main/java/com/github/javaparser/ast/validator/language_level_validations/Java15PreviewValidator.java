@@ -39,7 +39,11 @@ public class Java15PreviewValidator extends Java15Validator {
 
         // 2nd Preview
         remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - 2nd preview in Java 15 - https://openjdk.java.net/jeps/305
-        // TODO: remove(noRecordDeclaration); // Records - 2nd preview within Java 15 - https://openjdk.java.net/jeps/384
-
+        {
+            // Records - 2nd preview within Java 15 - https://openjdk.java.net/jeps/384
+            remove(noRecordDeclaration);
+            add(recordAsTypeIdentifierNotAllowed);
+            add(recordDeclarationValidator);
+        }
     }
 }

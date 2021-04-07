@@ -30,10 +30,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -820,7 +818,7 @@ public abstract class Expression extends Node {
     }
 
     /*
-     * Verify if the parent node is an assignment context. 
+     * Verify if the parent node is an assignment context.
      */
     public final boolean appearsInAssignmentContext() {
         if (getParentNode().isPresent() && getParentNode().get() instanceof Expression) {
@@ -839,7 +837,7 @@ public abstract class Expression extends Node {
     }
 
     /*
-     * Verify if the parent node is an invocation context. 
+     * Verify if the parent node is an invocation context.
      */
     public final boolean appearsInInvocationContext() {
         if (getParentNode().isPresent() && getParentNode().get() instanceof Expression) {
@@ -858,7 +856,7 @@ public abstract class Expression extends Node {
     }
 
     /*
-     * returns true if the scope of this expression does not define an type argument or if the expression has not a scope (the expression is not qualified) 
+     * returns true if the scope of this expression does not define an type argument or if the expression has not a scope (the expression is not qualified)
      * or if there is a scope it uses <> to elide class type arguments
      * For exemple :
      * m()      ==> true because there is no scope
