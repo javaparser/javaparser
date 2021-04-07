@@ -229,7 +229,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final MethodDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         Type type = cloneNode(n.getType(), arg);
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
@@ -772,6 +771,17 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
+    public Visitable visit(final LocalRecordDeclarationStmt n, final Object arg) {
+        RecordDeclaration recordDeclaration = cloneNode(n.getRecordDeclaration(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocalRecordDeclarationStmt r = new LocalRecordDeclarationStmt(n.getTokenRange().orElse(null), recordDeclaration);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
     public Visitable visit(final AssertStmt n, final Object arg) {
         Expression check = cloneNode(n.getCheck(), arg);
         Expression message = cloneNode(n.getMessage(), arg);
@@ -1039,7 +1049,14 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(NodeList n, Object arg) {
-        return n;
+        NodeList<Node> newNodes = new NodeList<>();
+        for (Object node : n) {
+            Node resultNode = (Node) ((Node) node).accept(this, arg);
+            if (resultNode != null) {
+                newNodes.add(resultNode);
+            }
+        }
+        return newNodes;
     }
 
     @Override
@@ -1795,6 +1812,41 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlGhostStatements r = new JmlGhostStatements(n.getTokenRange().orElse(null), statements);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+
+    @Override
+    public Visitable visit(final RecordDeclaration n, final Object arg) {
+        NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
+        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
+        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
+        NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        RecordDeclaration r = new RecordDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, name, parameters, typeParameters, implementedTypes, members, receiverParameter);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final CompactConstructorDeclaration n, final Object arg) {
+        BlockStmt body = cloneNode(n.getBody(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
+        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        CompactConstructorDeclaration r = new CompactConstructorDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, typeParameters, name, thrownExceptions, body);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

@@ -1346,4 +1346,46 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlGhostStatements n2 = (JmlGhostStatements) arg;
         return nodesEquals(n.getStatements(), n2.getStatements());
     }
+
+
+    @Override
+    public Boolean visit(final RecordDeclaration n, final Visitable arg) {
+        final RecordDeclaration n2 = (RecordDeclaration) arg;
+        if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
+            return false;
+        if (!nodesEquals(n.getParameters(), n2.getParameters()))
+            return false;
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
+            return false;
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
+            return false;
+        if (!nodesEquals(n.getMembers(), n2.getMembers()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final CompactConstructorDeclaration n, final Visitable arg) {
+        final CompactConstructorDeclaration n2 = (CompactConstructorDeclaration) arg;
+        if (!nodeEquals(n.getBody(), n2.getBody()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions()))
+            return false;
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return true;
+    }
+
 }

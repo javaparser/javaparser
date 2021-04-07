@@ -20,6 +20,29 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.joining;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.jml.body.*;
@@ -299,6 +322,54 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 }
             }
         }
+
+        if (!n.getImplementedTypes().isEmpty()) {
+            printer.print(" implements ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+
+        printer.println(" {");
+        printer.indent();
+        if (!isNullOrEmpty(n.getMembers())) {
+            printMembers(n.getMembers(), arg);
+        }
+
+        printOrphanCommentsEnding(n);
+
+        printer.unindent();
+        printer.print("}");
+    }
+
+    @Override
+    public void visit(RecordDeclaration n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        printer.print("record ");
+
+        n.getName().accept(this, arg);
+
+        printer.print("(");
+        if (!isNullOrEmpty(n.getParameters())) {
+            for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
+                final Parameter p = i.next();
+                p.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+        printer.print(")");
+
+        printTypeParameters(n.getTypeParameters(), arg);
 
         if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
@@ -627,6 +698,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
         n.getValue().accept(this, arg);
     }
+
 
 
     /**
@@ -1418,6 +1490,34 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getBody().accept(this, arg);
     }
 
+
+    @Override
+    public void visit(final CompactConstructorDeclaration n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        printTypeParameters(n.getTypeParameters(), arg);
+        if (n.isGeneric()) {
+            printer.print(" ");
+        }
+        n.getName().accept(this, arg);
+
+        if (!isNullOrEmpty(n.getThrownExceptions())) {
+            printer.print(" throws ");
+            for (final Iterator<ReferenceType> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
+                final ReferenceType name = i.next();
+                name.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+        printer.print(" ");
+        n.getBody().accept(this, arg);
+    }
+
     @Override
     public void visit(final MethodDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
@@ -1548,6 +1648,13 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getClassDeclaration().accept(this, arg);
+    }
+
+    @Override
+    public void visit(final LocalRecordDeclarationStmt n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getRecordDeclaration().accept(this, arg);
     }
 
     @Override

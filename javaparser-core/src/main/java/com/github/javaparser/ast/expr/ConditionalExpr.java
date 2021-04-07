@@ -204,7 +204,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     }
 
     /*
-     * A reference conditional expression is a poly expression if it appears in an assignment context or an invocation context (§5.2. §5.3). 
+     * A reference conditional expression is a poly expression if it appears in an assignment context or an invocation context (§5.2. §5.3).
      * Otherwise, it is a standalone expression.
      */
     @Override

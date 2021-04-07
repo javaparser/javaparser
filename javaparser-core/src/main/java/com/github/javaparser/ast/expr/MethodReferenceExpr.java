@@ -237,7 +237,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     /*
-     * Method reference expressions are always poly expressions 
+     * Method reference expressions are always poly expressions
      * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html 15.13. Method Reference Expressions)
      */
     @Override

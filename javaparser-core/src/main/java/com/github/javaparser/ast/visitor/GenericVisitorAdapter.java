@@ -1522,6 +1522,22 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
+    public R visit(final LocalRecordDeclarationStmt n, final A arg) {
+        R result;
+        {
+            result = n.getRecordDeclaration().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
     public R visit(final TypeParameter n, final A arg) {
         R result;
         {
@@ -2863,6 +2879,98 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final RecordDeclaration n, final A arg) {
+        R result;
+        {
+            result = n.getImplementedTypes().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getParameters().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getReceiverParameter().isPresent()) {
+            result = n.getReceiverParameter().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getTypeParameters().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getMembers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final CompactConstructorDeclaration n, final A arg) {
+        R result;
+        {
+            result = n.getBody().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getThrownExceptions().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getTypeParameters().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
         }
         return null;
     }

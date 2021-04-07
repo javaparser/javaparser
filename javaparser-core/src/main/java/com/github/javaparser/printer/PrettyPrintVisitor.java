@@ -37,17 +37,58 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.jml.body.*;
-import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
-import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
-import com.github.javaparser.ast.jml.clauses.*;
-import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.locref.*;
-import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ArrayAccessExpr;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
+import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.DoubleLiteralExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.LongLiteralExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.MemberValuePair;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.SuperExpr;
+import com.github.javaparser.ast.expr.SwitchExpr;
+import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleExportsDirective;
 import com.github.javaparser.ast.modules.ModuleOpensDirective;
@@ -334,6 +375,54 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 }
             }
         }
+
+        if (!n.getImplementedTypes().isEmpty()) {
+            printer.print(" implements ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+
+        printer.println(" {");
+        printer.indent();
+        if (!isNullOrEmpty(n.getMembers())) {
+            printMembers(n.getMembers(), arg);
+        }
+
+        printOrphanCommentsEnding(n);
+
+        printer.unindent();
+        printer.print("}");
+    }
+
+    @Override
+    public void visit(RecordDeclaration n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        printer.print("record ");
+
+        n.getName().accept(this, arg);
+
+        printer.print("(");
+        if (!isNullOrEmpty(n.getParameters())) {
+            for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
+                final Parameter p = i.next();
+                p.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+        printer.print(")");
+
+        printTypeParameters(n.getTypeParameters(), arg);
 
         if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
@@ -1271,6 +1360,34 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getBody().accept(this, arg);
     }
 
+
+    @Override
+    public void visit(final CompactConstructorDeclaration n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiers(n.getModifiers());
+
+        printTypeParameters(n.getTypeParameters(), arg);
+        if (n.isGeneric()) {
+            printer.print(" ");
+        }
+        n.getName().accept(this, arg);
+
+        if (!isNullOrEmpty(n.getThrownExceptions())) {
+            printer.print(" throws ");
+            for (final Iterator<ReferenceType> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
+                final ReferenceType name = i.next();
+                name.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+        printer.print(" ");
+        n.getBody().accept(this, arg);
+    }
+
     @Override
     public void visit(final MethodDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
@@ -1399,6 +1516,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         n.getClassDeclaration().accept(this, arg);
+    }
+
+    @Override
+    public void visit(final LocalRecordDeclarationStmt n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getRecordDeclaration().accept(this, arg);
     }
 
     @Override

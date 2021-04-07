@@ -312,7 +312,9 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             Signature signature = (Signature) o;
             if (!name.equals(signature.name))
                 return false;
-            return parameterTypes.equals(signature.parameterTypes);
+            if (!parameterTypes.equals(signature.parameterTypes))
+                return false;
+            return true;
         }
 
         @Override
@@ -460,7 +462,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CallableDeclaration removeReceiverParameter() {
-        return setReceiverParameter(null);
+        return setReceiverParameter((ReceiverParameter) null);
     }
 
     @Override
@@ -488,14 +490,14 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         setAsParentNodeOf(contracts);
         return (T) this;
     }
-
+    
     /*
      * Returns true if the method has a variable number of arguments
      */
     public boolean isVariableArityMethod() {
         return getParameters().size() > 0 && getParameters().getLast().get().isVarArgs();
     }
-
+    
     /*
      * Returns true if the method has a fixed number of arguments
      */

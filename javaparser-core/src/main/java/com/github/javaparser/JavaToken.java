@@ -1442,6 +1442,8 @@ public class JavaToken {
         JavaToken javaToken = (JavaToken) o;
         if (kind != javaToken.kind)
             return false;
-        return text.equals(javaToken.text);
+        if (!text.equals(javaToken.text))
+            return false;
+        return true;
     }
 }

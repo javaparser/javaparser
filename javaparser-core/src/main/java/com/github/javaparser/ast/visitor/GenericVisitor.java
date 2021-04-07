@@ -59,6 +59,10 @@ public interface GenericVisitor<R, A> {
     //- Body ----------------------------------------------
     R visit(ClassOrInterfaceDeclaration n, A arg);
 
+    R visit(RecordDeclaration n, A arg);
+
+    R visit(CompactConstructorDeclaration n, A arg);
+
     R visit(EnumDeclaration n, A arg);
 
     R visit(EnumConstantDeclaration n, A arg);
@@ -163,6 +167,8 @@ public interface GenericVisitor<R, A> {
     R visit(ExplicitConstructorInvocationStmt n, A arg);
 
     R visit(LocalClassDeclarationStmt n, A arg);
+
+    R visit(LocalRecordDeclarationStmt n, A arg);
 
     R visit(AssertStmt n, A arg);
 
