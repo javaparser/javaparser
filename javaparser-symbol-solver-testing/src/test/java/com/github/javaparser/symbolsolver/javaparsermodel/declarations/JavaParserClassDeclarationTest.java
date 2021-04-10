@@ -276,7 +276,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    void testGetAllInterfacesWithParameters() {
+    void testGetAllInterfacesWithParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAllInterfaces().size());
 
@@ -366,7 +366,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    void testGetAllAncestorsWithTypeParameters() {
+    void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
@@ -788,6 +788,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
             expected.remove("java.lang.Object.registerNatives()");
         }
 
+        assertTrue(signatures.size() == expected.size());
         assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }
 
