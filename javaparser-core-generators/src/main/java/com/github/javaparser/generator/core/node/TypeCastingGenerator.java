@@ -56,7 +56,7 @@ public class TypeCastingGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception {
         Pair<CompilationUnit, ClassOrInterfaceDeclaration> baseCode = null;
         for (BaseNodeMetaModel baseNode : baseNodes) {
-            if(nodeMetaModel == baseNode) {
+            if (nodeMetaModel == baseNode) {
                 // We adjust the base models from the child nodes,
                 // so we don't do anything when we *are* the base model.
                 return;

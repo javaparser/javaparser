@@ -69,7 +69,7 @@ public class ReplaceMethodGenerator extends NodeGenerator {
         } else {
             body.addStatement("return false;");
         }
-        
+
         addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
     }
 

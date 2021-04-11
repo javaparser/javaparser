@@ -65,4 +65,7 @@
 	<suppress checks="FileLength" files="PrettyPrintVisitor.java"/>
 	<suppress checks="MethodLength" files="TokenTypes.java"/>
 
+	<!--  -->
+	<suppress checks="NoWhitespaceBefore" files="CoreGenerator.java"/>
+
 </suppressions>

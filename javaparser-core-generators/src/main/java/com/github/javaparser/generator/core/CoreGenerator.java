@@ -23,10 +23,32 @@ package com.github.javaparser.generator.core;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.generator.core.node.*;
+import com.github.javaparser.generator.core.node.AcceptGenerator;
+import com.github.javaparser.generator.core.node.CloneGenerator;
+import com.github.javaparser.generator.core.node.GetMetaModelGenerator;
+import com.github.javaparser.generator.core.node.MainConstructorGenerator;
+import com.github.javaparser.generator.core.node.NodeModifierGenerator;
+import com.github.javaparser.generator.core.node.PropertyGenerator;
+import com.github.javaparser.generator.core.node.RemoveMethodGenerator;
+import com.github.javaparser.generator.core.node.ReplaceMethodGenerator;
+import com.github.javaparser.generator.core.node.TypeCastingGenerator;
 import com.github.javaparser.generator.core.other.BndGenerator;
 import com.github.javaparser.generator.core.other.TokenKindGenerator;
-import com.github.javaparser.generator.core.visitor.*;
+import com.github.javaparser.generator.core.visitor.CloneVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator;
+import com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator;
+import com.github.javaparser.generator.core.visitor.GenericVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.GenericVisitorWithDefaultsGenerator;
+import com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.NoCommentEqualsVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.NoCommentHashCodeVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.ObjectIdentityEqualsVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.ObjectIdentityHashCodeVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator;
+import com.github.javaparser.generator.core.visitor.VoidVisitorGenerator;
+import com.github.javaparser.generator.core.visitor.VoidVisitorWithDefaultsGenerator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -41,7 +63,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
  * You may want to run_metamodel_generator.sh before that.
  */
 public class CoreGenerator {
-    private static final ParserConfiguration parserConfiguration = new ParserConfiguration()
+    private static final ParserConfiguration PARSER_CONFIGURATION = new ParserConfiguration()
             .setLanguageLevel(RAW)
 //                                .setStoreTokens(false)
 //                                .setAttributeComments(false)
@@ -54,13 +76,13 @@ public class CoreGenerator {
         }
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
+        final SourceRoot sourceRoot = new SourceRoot(root, PARSER_CONFIGURATION)
 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
-        StaticJavaParser.setConfiguration(parserConfiguration);
+        StaticJavaParser.setConfiguration(PARSER_CONFIGURATION);
 
         final Path generatedJavaCcRoot = Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
-        final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
+        final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, PARSER_CONFIGURATION)
 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
 
