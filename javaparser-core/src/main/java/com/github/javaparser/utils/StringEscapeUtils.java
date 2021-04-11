@@ -132,7 +132,7 @@ public final class StringEscapeUtils {
      *
      * @since 3.0
      */
-    private static abstract class CharSequenceTranslator {
+    private abstract static class CharSequenceTranslator {
 
         /**
          * Translate a set of codepoints, represented by an int index into a CharSequence,
@@ -237,23 +237,23 @@ public final class StringEscapeUtils {
         private LookupTranslator(final CharSequence[]... lookup) {
             lookupMap = new HashMap<>();
             prefixSet = new HashSet<>();
-            int _shortest = Integer.MAX_VALUE;
-            int _longest = 0;
+            int shortest = Integer.MAX_VALUE;
+            int longest = 0;
             if (lookup != null) {
                 for (final CharSequence[] seq : lookup) {
                     this.lookupMap.put(seq[0].toString(), seq[1].toString());
                     this.prefixSet.add(seq[0].charAt(0));
                     final int sz = seq[0].length();
-                    if (sz < _shortest) {
-                        _shortest = sz;
+                    if (sz < shortest) {
+                        shortest = sz;
                     }
-                    if (sz > _longest) {
-                        _longest = sz;
+                    if (sz > longest) {
+                        longest = sz;
                     }
                 }
             }
-            shortest = _shortest;
-            longest = _longest;
+            this.shortest = shortest;
+            this.longest = longest;
         }
 
         /**

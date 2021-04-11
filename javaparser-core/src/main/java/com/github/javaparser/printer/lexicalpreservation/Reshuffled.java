@@ -38,7 +38,7 @@ public class Reshuffled implements DifferenceElement {
 
     @Override
     public String toString() {
-        return "Reshuffled{" + nextOrder + ", previous="+ previousOrder+ '}';
+        return "Reshuffled{" + nextOrder + ", previous=" + previousOrder + '}';
     }
 
     @Override

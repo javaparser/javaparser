@@ -219,7 +219,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
                 sb.append("synchronized ");
             }
         }
-        sb.append(getType().toString(prettyPrinterNoCommentsConfiguration));
+        sb.append(getType().toString(PRETTY_PRINTER_NO_COMMENTS_CONFIGURATION));
         sb.append(" ");
         sb.append(getName());
         sb.append("(");
@@ -231,9 +231,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
                 sb.append(", ");
             }
             if (includingParameterName) {
-                sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.toString(PRETTY_PRINTER_NO_COMMENTS_CONFIGURATION));
             } else {
-                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.getType().toString(PRETTY_PRINTER_NO_COMMENTS_CONFIGURATION));
                 if (param.isVarArgs()) {
                     sb.append("...");
                 }

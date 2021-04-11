@@ -29,7 +29,7 @@ import com.github.javaparser.ast.stmt.Statement;
 public interface NodeWithBody<N extends Node> {
     Statement getBody();
 
-    N setBody(final Statement body);
+    N setBody(Statement body);
 
     default BlockStmt createBlockStatementAsBody() {
         BlockStmt b = new BlockStmt();

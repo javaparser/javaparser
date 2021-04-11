@@ -124,11 +124,11 @@ public class ResolvedTypeParametersMap {
         }
     }
 
-    public List<String> getNames(){
+    public List<String> getNames() {
         return new ArrayList<>(nameToValue.keySet());
     }
 
-    public List<ResolvedType> getTypes(){
+    public List<ResolvedType> getTypes() {
         return new ArrayList<>(nameToValue.values());
     }
 

@@ -25,6 +25,10 @@ import com.github.javaparser.ast.Node;
 
 class TextElementMatchers {
 
+    private TextElementMatchers() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     static TextElementMatcher byTokenType(int tokenType) {
         return textElement -> textElement.isToken(tokenType);
     }

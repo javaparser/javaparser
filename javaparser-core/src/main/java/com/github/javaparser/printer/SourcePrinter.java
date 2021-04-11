@@ -51,16 +51,16 @@ public class SourcePrinter {
     SourcePrinter() {
         this(new DefaultPrinterConfiguration());
     }
-    
+
     SourcePrinter(final PrettyPrinterConfiguration configuration) {
         this(configuration.getIndentation(), configuration.getEndOfLineCharacter());
     }
 
     SourcePrinter(final PrinterConfiguration configuration) {
-        this(configuration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue(), 
+        this(configuration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue(),
                 configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString());
     }
-    
+
     SourcePrinter(Indentation indentation, String eol) {
         this.indentation = indentation;
         this.endOfLineCharacter = eol;
@@ -99,7 +99,7 @@ public class SourcePrinter {
     }
 
     private String calculateIndentWithAlignTo(int column) {
-        if (column < lastPrintedIndent.length()){
+        if (column < lastPrintedIndent.length()) {
             throw new IllegalStateException("Attempt to indent less than the previous indent.");
         }
 
@@ -113,7 +113,7 @@ public class SourcePrinter {
                 break;
 
             case TABS:
-                IndentType currentIndentType = indentation.getType(); 
+                IndentType currentIndentType = indentation.getType();
                 int logicalIndentLength = newIndent.length();
                 while ((logicalIndentLength + currentIndentType.getWidth()) <= column) {
                     newIndent.insert(0, currentIndentType.getCar());
@@ -124,7 +124,7 @@ public class SourcePrinter {
                     logicalIndentLength++;
                 }
                 StringBuilder fullTab = new StringBuilder();
-                for(int i=0; i<currentIndentType.getWidth(); i++){
+                for (int i = 0; i < currentIndentType.getWidth(); i++) {
                     fullTab.append(IndentType.SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();

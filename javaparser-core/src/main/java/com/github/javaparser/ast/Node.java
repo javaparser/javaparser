@@ -150,7 +150,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * This can be used to sort nodes on position.
      */
-    public static Comparator<NodeWithRange<?>> NODE_BY_BEGIN_POSITION = (a, b) -> {
+    public static final Comparator<NodeWithRange<?>> NODE_BY_BEGIN_POSITION = (a, b) -> {
         if (a.hasRange() && b.hasRange()) {
             return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }
@@ -166,7 +166,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+    protected static final PrinterConfiguration PRETTY_PRINTER_NO_COMMENTS_CONFIGURATION = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -647,7 +647,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch(mode) {
+        switch (mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -819,7 +819,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     private Iterator<Node> treeIterator(TreeTraversal traversal) {
-        switch(traversal) {
+        switch (traversal) {
             case BREADTHFIRST:
                 return new BreadthFirstIterator(this);
             case POSTORDER:

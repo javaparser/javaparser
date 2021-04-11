@@ -27,6 +27,7 @@ package com.github.javaparser.resolution.types;
  * @author Federico Tomassetti
  */
 public class ResolvedVoidType implements ResolvedType {
+
     public static final ResolvedType INSTANCE = new ResolvedVoidType();
 
     private ResolvedVoidType() {

@@ -23,11 +23,10 @@ package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.utils.Utils;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.github.javaparser.utils.Utils.*;
 
 /**
  * The structured content of a single Javadoc comment.
@@ -83,14 +82,14 @@ public class Javadoc {
         StringBuilder sb = new StringBuilder();
         if (!description.isEmpty()) {
             sb.append(description.toText());
-            sb.append(SYSTEM_EOL);
+            sb.append(Utils.SYSTEM_EOL);
         }
         if (!blockTags.isEmpty()) {
-            sb.append(SYSTEM_EOL);
+            sb.append(Utils.SYSTEM_EOL);
         }
         blockTags.forEach(bt -> {
             sb.append(bt.toText());
-            sb.append(SYSTEM_EOL);
+            sb.append(Utils.SYSTEM_EOL);
         });
         return sb.toString();
     }
@@ -112,14 +111,14 @@ public class Javadoc {
             }
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(SYSTEM_EOL);
+        sb.append(Utils.SYSTEM_EOL);
         final String text = toText();
         if (!text.isEmpty()) {
-            for (String line : text.split(SYSTEM_EOL)) {
+            for (String line : text.split(Utils.SYSTEM_EOL)) {
                 sb.append(indentation);
                 sb.append(" * ");
                 sb.append(line);
-                sb.append(SYSTEM_EOL);
+                sb.append(Utils.SYSTEM_EOL);
             }
         }
         sb.append(indentation);

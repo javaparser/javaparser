@@ -40,29 +40,33 @@ public class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    private static final Map<Node, Boolean> isPhantomNodeCache = synchronizedMap(new IdentityHashMap<>());
+    private static final Map<Node, Boolean> IS_PHANTOM_NODE_CACHE = synchronizedMap(new IdentityHashMap<>());
 
-    private static final AstObserver cacheCleaner = new AstObserverAdapter() {
+    private static final AstObserver CACHE_CLEANER = new AstObserverAdapter() {
         @Override
         public void parentChange(Node observedNode, Node previousParent, Node newParent) {
-            isPhantomNodeCache.remove(observedNode);
+            IS_PHANTOM_NODE_CACHE.remove(observedNode);
         }
     };
 
+    private PhantomNodeLogic() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     static boolean isPhantomNode(Node node) {
-        if (isPhantomNodeCache.containsKey(node)) {
-            return isPhantomNodeCache.get(node);
+        if (IS_PHANTOM_NODE_CACHE.containsKey(node)) {
+            return IS_PHANTOM_NODE_CACHE.get(node);
         } else {
             if (node instanceof UnknownType) {
                 return true;
             }
-            boolean res = (node.getParentNode().isPresent() 
+            boolean res = (node.getParentNode().isPresent()
                     && node.getParentNode().get().hasRange()
                     && node.hasRange()
                     && !node.getParentNode().get().getRange().get().contains(node.getRange().get())
                     || inPhantomNode(node, LEVELS_TO_EXPLORE));
-            isPhantomNodeCache.put(node, res);
-            node.register(cacheCleaner);
+            IS_PHANTOM_NODE_CACHE.put(node, res);
+            node.register(CACHE_CLEANER);
             return res;
         }
     }
@@ -81,6 +85,6 @@ public class PhantomNodeLogic {
      * a JavaParser's configuration setLexicalPreservationEnabled=true.
      */
     public static void cleanUpCache() {
-        isPhantomNodeCache.clear();
+        IS_PHANTOM_NODE_CACHE.clear();
     }
 }

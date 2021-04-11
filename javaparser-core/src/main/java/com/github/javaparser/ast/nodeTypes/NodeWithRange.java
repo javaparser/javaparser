@@ -76,7 +76,7 @@ public interface NodeWithRange<N> {
         }
         return false;
     }
-    
+
     /*
      * Returns true if the node has a range
      */

@@ -2,7 +2,7 @@ package com.github.javaparser.printer.configuration;
 
 public interface ConfigurationOption {
 
-    /* 
+    /*
     * Set a currentValue to an option
     */
     ConfigurationOption value(Object value);

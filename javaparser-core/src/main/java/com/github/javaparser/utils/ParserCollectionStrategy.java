@@ -31,7 +31,9 @@ import java.nio.file.PathMatcher;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static java.nio.file.FileVisitResult.*;
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 
 /**
  * A brute force {@link CollectionStrategy} for discovering a project structure.
@@ -64,14 +66,14 @@ public class ParserCollectionStrategy implements CollectionStrategy {
         ProjectRoot projectRoot = new ProjectRoot(path, parserConfiguration);
         try {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
-                Path current_root;
-                PathMatcher javaMatcher = getPathMatcher("glob:**.java");
+                private Path currentRoot;
+                private final PathMatcher javaMatcher = getPathMatcher("glob:**.java");
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (javaMatcher.matches(file)) {
-                        current_root = getRoot(file).orElse(null);
-                        if (current_root != null) {
+                        currentRoot = getRoot(file).orElse(null);
+                        if (currentRoot != null) {
                             return SKIP_SIBLINGS;
                         }
                     }
@@ -80,7 +82,7 @@ public class ParserCollectionStrategy implements CollectionStrategy {
 
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    if (Files.isHidden(dir) || (current_root != null && dir.startsWith(current_root))) {
+                    if (Files.isHidden(dir) || (currentRoot != null && dir.startsWith(currentRoot))) {
                         return SKIP_SUBTREE;
                     }
                     return CONTINUE;
@@ -88,9 +90,9 @@ public class ParserCollectionStrategy implements CollectionStrategy {
 
                 @Override
                 public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-                    if (current_root != null && Files.isSameFile(dir, current_root)) {
+                    if (currentRoot != null && Files.isSameFile(dir, currentRoot)) {
                         projectRoot.addSourceRoot(dir);
-                        current_root = null;
+                        currentRoot = null;
                     }
                     return CONTINUE;
                 }

@@ -8,13 +8,61 @@
 <suppressions>
 	<!-- TODO: Remove these suppressions. -->
 	<suppress checks="DesignForExtension"/>
+	<suppress checks="EmptyForIteratorPad"/>
 	<suppress checks="FinalParameters"/>
+	<suppress checks="FinalClass"/>
 	<suppress checks="HiddenField"/>
 	<suppress checks="JavadocMethod"/>
 	<suppress checks="JavadocPackage"/>
 	<suppress checks="JavadocStyle"/>
+	<suppress checks="JavadocType"/>
 	<suppress checks="JavadocVariable"/>
 	<suppress checks="LineLength"/>
+	<suppress checks="MagicNumber"/>
 	<suppress checks="MissingJavadocMethod"/>
 	<suppress checks="NeedBraces"/>
+	<suppress checks="OperatorWrap"/>
+	<suppress checks="ParameterNumber"/>
+	<suppress checks="RedundantModifier"/>
+	<suppress checks="TodoComment"/>
+	<suppress checks="UnusedImports"/>
+	<suppress checks="VisibilityModifier"/>
+
+
+	<!-- Allow protected -->
+	<suppress checks="VisibilityModifier" files="VisitorList.java"/>
+
+	<!-- These methods are generated -->
+	<suppress checks="AvoidNestedBlocks" files="GenericListVisitorAdapter.java"/>
+	<!-- These methods are generated -->
+	<suppress checks="AvoidNestedBlocks" files="GenericVisitorAdapter.java"/>
+
+	<!-- These methods are generated -->
+	<suppress checks="ConstantName" files="JavaParserMetaModel.java"/>
+	<!-- These methods are generated -->
+	<suppress checks="MethodLength" files="JavaParserMetaModel.java"/>
+
+	<!--  -->
+	<suppress checks="EmptyBlock" files="LexicalDifferenceCalculator.java"/>
+	<suppress checks="EmptyBlock" files="ResolvedReferenceType.java"/>
+
+	<!--  -->
+	<suppress checks="EmptyForIteratorPad" files="DefaultPrettyPrinterVisitor.java"/>
+	<suppress checks="EmptyForIteratorPad" files="PrettyPrintVisitor.java"/>
+
+	<!-- Some validators legitimately use nested blocks to group together similar validations -->
+	<suppress checks="AvoidNestedBlocks" files="Java.*Validator.java"/>
+	<!-- Some validators use underscores within class names to represent e.g. `Java 1.2` as `Java1_2`  -->
+	<suppress checks="TypeName" files="Java.*Validator.java"/>
+
+	<!-- These files are generated, so we tolerate long files and methods -->
+	<suppress checks="FileLength" files="DefaultPrettyPrinterVisitor.java"/>
+	<suppress checks="FileLength" files="GenericListVisitorAdapter.java"/>
+	<suppress checks="FileLength" files="GenericVisitorAdapter.java"/>
+	<suppress checks="FileLength" files="JavaToken.java"/>
+	<suppress checks="MethodLength" files="JavaToken.java"/>
+	<suppress checks="MethodLength" files="LexicalDifferenceCalculator.java"/>
+	<suppress checks="FileLength" files="PrettyPrintVisitor.java"/>
+	<suppress checks="MethodLength" files="TokenTypes.java"/>
+
 </suppressions>

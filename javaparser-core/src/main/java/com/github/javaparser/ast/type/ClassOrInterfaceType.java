@@ -20,10 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -42,8 +38,10 @@ import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
@@ -137,14 +135,14 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     }
 
     public boolean isBoxedType() {
-        return PrimitiveType.unboxMap.containsKey(name.getIdentifier());
+        return PrimitiveType.UNBOX_MAP.containsKey(name.getIdentifier());
     }
 
     public PrimitiveType toUnboxedType() throws UnsupportedOperationException {
         if (!isBoxedType()) {
             throw new UnsupportedOperationException(name + " isn't a boxed type.");
         }
-        return new PrimitiveType(PrimitiveType.unboxMap.get(name.getIdentifier()));
+        return new PrimitiveType(PrimitiveType.UNBOX_MAP.get(name.getIdentifier()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")

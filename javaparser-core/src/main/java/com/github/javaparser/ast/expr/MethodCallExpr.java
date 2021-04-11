@@ -333,7 +333,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Override
     public boolean isPolyExpression() {
         // A method invocation expression is a poly expression if all of the following are true:
-        // 
+        //
         // 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
         if (!(appearsInAssignmentContext() || appearsInInvocationContext())) {
             return false;

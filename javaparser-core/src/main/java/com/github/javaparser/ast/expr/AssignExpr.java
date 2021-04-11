@@ -73,7 +73,7 @@ public class AssignExpr extends Expression {
         }
 
         public Optional<BinaryExpr.Operator> toBinaryOperator() {
-            switch(this) {
+            switch (this) {
                 case PLUS:
                     return Optional.of(BinaryExpr.Operator.PLUS);
                 case MINUS:

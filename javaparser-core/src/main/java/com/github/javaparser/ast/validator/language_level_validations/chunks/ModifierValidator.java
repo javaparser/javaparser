@@ -43,7 +43,19 @@ import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.Keyword.ABSTRACT;
+import static com.github.javaparser.ast.Modifier.Keyword.DEFAULT;
+import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
+import static com.github.javaparser.ast.Modifier.Keyword.NATIVE;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.Keyword.STRICTFP;
+import static com.github.javaparser.ast.Modifier.Keyword.SYNCHRONIZED;
+import static com.github.javaparser.ast.Modifier.Keyword.TRANSIENT;
+import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
+import static com.github.javaparser.ast.Modifier.Keyword.VOLATILE;
 import static java.util.Arrays.asList;
 
 

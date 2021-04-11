@@ -38,9 +38,9 @@ public interface NodeWithImplements<N extends Node> {
     }
 
     N setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList);
-    
+
     void tryAddImportToParentCompilationUnit(Class<?> clazz);
-    
+
     @SuppressWarnings("unchecked")
     default N setImplementedType(int i, ClassOrInterfaceType implement) {
         getImplementedTypes().set(i, implement);

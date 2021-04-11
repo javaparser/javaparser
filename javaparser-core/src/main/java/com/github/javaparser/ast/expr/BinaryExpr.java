@@ -78,7 +78,7 @@ public class BinaryExpr extends Expression {
         }
 
         public Optional<AssignExpr.Operator> toAssignOperator() {
-            switch(this) {
+            switch (this) {
                 case BINARY_OR:
                     return Optional.of(AssignExpr.Operator.BINARY_OR);
                 case BINARY_AND:

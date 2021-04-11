@@ -96,30 +96,30 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exact same type parameters.
-     * For example 
-     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * For example
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E
      * By default the traversal is depth first
      */
     default List<ResolvedReferenceType> getAllAncestors() {
-        return getAllAncestors(depthFirstFunc);
+        return getAllAncestors(DEPTH_FIRST_FUNC);
     }
-    
+
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exact same type parameters.
-     * For example 
-     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * For example
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E
      * Apply the specified traversal
      */
     default List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         return traverser.apply(this);
     }
-    
+
     /*
      * depth first search all ancestors
      * In the example above, this method returns B,C,E,D
      */
-    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> depthFirstFunc = (rrtd) -> {
+    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> DEPTH_FIRST_FUNC = (rrtd) -> {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
@@ -134,16 +134,16 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         }
         return ancestors;
     };
-    
+
     /*
      * breadth first search all all ancestors
      * In the example above, this method returns B,C,D,E
      */
-    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
+    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> BREADTH_FIRST_FUNC = (rrtd) -> {
         Set<ResolvedReferenceType> ancestors = new HashSet<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
-          // init direct ancestors 
+          // init direct ancestors
           Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<ResolvedReferenceType>(rrtd.getAncestors());
           ancestors.addAll(queuedAncestors);
           while (!queuedAncestors.isEmpty()) {

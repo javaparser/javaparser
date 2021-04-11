@@ -56,7 +56,7 @@ import com.github.javaparser.javadoc.Javadoc;
  * A simpler, static API than {@link JavaParser}.
  */
 public final class StaticJavaParser {
-    
+
     // use ThreadLocal to resolve possible concurrency issues.
     private static ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(() -> new ParserConfiguration());
 

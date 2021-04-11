@@ -90,7 +90,7 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public Iterator<N> iterator() {
         return new Iterator<N>() {
-            final Iterator<EqualsHashcodeOverridingFacade> itr = innerSet.iterator();
+            private final Iterator<EqualsHashcodeOverridingFacade> itr = innerSet.iterator();
 
             @Override
             public boolean hasNext() {

@@ -58,6 +58,10 @@ public class Utils {
     @Deprecated
     public static final String SYSTEM_EOL = LineSeparator.SYSTEM.asRawString();
 
+    private Utils() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
     }

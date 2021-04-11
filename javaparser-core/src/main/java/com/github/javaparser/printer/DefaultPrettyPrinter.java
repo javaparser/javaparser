@@ -32,56 +32,56 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
  * Pretty printer for AST nodes.
  */
 public class DefaultPrettyPrinter implements Printer {
-    
+
     private PrinterConfiguration configuration;
-    
+
     // visitor factory
     Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory;
-    
-    // static methods 
-    
+
+    // static methods
+
     private static Function<PrinterConfiguration, VoidVisitor<Void>> createDefaultVisitor() {
         PrinterConfiguration configuration = createDefaultConfiguration();
         return createDefaultVisitor(configuration);
     }
-    
+
     private static Function<PrinterConfiguration, VoidVisitor<Void>> createDefaultVisitor(PrinterConfiguration configuration) {
         return (config) -> new DefaultPrettyPrinterVisitor(config, new SourcePrinter(config));
     }
-    
+
     private static PrinterConfiguration createDefaultConfiguration() {
         return new DefaultPrinterConfiguration();
     }
-    
+
     // Constructors
 
     /**
      * Build a new DefaultPrettyPrinter with a default configuration and a default factory
      */
     public DefaultPrettyPrinter() {
-        this(createDefaultVisitor(), createDefaultConfiguration() );
+        this(createDefaultVisitor(), createDefaultConfiguration());
     }
-    
+
     /**
      * Build a new DefaultPrettyPrinter with a configuration and a default factory
      * @param configuration
      */
     public DefaultPrettyPrinter(PrinterConfiguration configuration) {
-        this(createDefaultVisitor(configuration), configuration );
+        this(createDefaultVisitor(configuration), configuration);
     }
-    
+
     /**
      * Build a new DefaultPrettyPrinter with a configuration and a factory to create a visitor to browse the nodes of the AST
-     * @param visitorFactory 
+     * @param visitorFactory
      * @param configuration Configuration to apply
      */
     public DefaultPrettyPrinter(Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }
-    
+
     // Methods
-    
+
     /*
      * Returns the Printer configuration
      */

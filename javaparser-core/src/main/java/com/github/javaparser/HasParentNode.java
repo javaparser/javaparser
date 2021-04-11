@@ -38,7 +38,7 @@ public interface HasParentNode<T> extends Observable {
     default boolean hasParentNode() {
         return getParentNode().isPresent();
     }
-    
+
     /**
      * Returns the parent node, or {@code Optional.empty} if no parent is set.
      */

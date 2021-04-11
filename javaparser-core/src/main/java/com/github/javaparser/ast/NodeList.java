@@ -576,7 +576,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         return innerList.stream().map(Node::toString).collect(Collectors.joining(", ", "[", "]"));
     }
 
-    protected class NodeListIterator implements ListIterator<N>{
+    protected class NodeListIterator implements ListIterator<N> {
 
         ListIterator<N> iterator;
         N current = null;

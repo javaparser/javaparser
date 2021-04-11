@@ -33,22 +33,22 @@ import com.github.javaparser.utils.Utils;
  * Configuration options for the {@link Printer}.
  */
 public class DefaultPrinterConfiguration implements PrinterConfiguration {
-    
+
     public enum ConfigOption {
         /**
          * Order imports alphabetically
          */
-        ORDER_IMPORTS(Boolean.class), 
+        ORDER_IMPORTS(Boolean.class),
         /**
          * Print comments only. It can be combined with {@code PRINT_JAVADOC} to print regular comments and javadoc.
          */
-        PRINT_COMMENTS(Boolean.class), 
+        PRINT_COMMENTS(Boolean.class),
         /**
          * Print javadoc comments only. It can be combined with {@code PRINT_COMMENTS} to print regular javadoc and comments
          */
-        PRINT_JAVADOC(Boolean.class), 
-        SPACE_AROUND_OPERATORS(Boolean.class), 
-        COLUMN_ALIGN_PARAMETERS(Boolean.class), 
+        PRINT_JAVADOC(Boolean.class),
+        SPACE_AROUND_OPERATORS(Boolean.class),
+        COLUMN_ALIGN_PARAMETERS(Boolean.class),
         COLUMN_ALIGN_FIRST_METHOD_CHAIN(Boolean.class),
         /**
          * Indent the case when it is true, don't if false
@@ -91,16 +91,16 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Indentation proprerty
          */
         INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4));
-        
+
         Object defaultValue;
-        
+
         Class type;
-        
+
         // DefaultConfigurationOption without currentValue
         ConfigOption(Class clazz) {
             this.type = clazz;
         }
-        
+
         // DefaultConfigurationOption with initial currentValue
         ConfigOption(Class clazz, Object value) {
             this.type = clazz;
@@ -109,10 +109,10 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
             }
             this.defaultValue = value;
         }
-        
-       
+
+
     }
-    
+
     // contains all available options
     // an option contained in the set is considered as activated
     private Set<ConfigurationOption> defaultOptions = new HashSet<>(Arrays.asList(
@@ -127,7 +127,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
 
     public DefaultPrinterConfiguration() {
     }
-    
+
     /*
      * add the specified option if it does not exist or replace the existing option
      */
@@ -137,7 +137,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         defaultOptions.add(option);
         return this;
     }
-    
+
     /*
      * remove the specified option
      */
@@ -146,7 +146,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         defaultOptions.remove(option);
         return this;
     }
-    
+
     /*
      * True if an option is activated
      */
@@ -154,13 +154,13 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
     public boolean isActivated(ConfigurationOption option) {
         return defaultOptions.contains(option);
     }
-    
+
     /*
      * returns the specified option
      */
     @Override
     public Optional<ConfigurationOption> get(ConfigurationOption option) {
-        return defaultOptions.stream().filter(o-> o.equals(option)).findFirst();
+        return defaultOptions.stream().filter(o -> o.equals(option)).findFirst();
     }
 
     /**
@@ -170,5 +170,5 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
     public Set<ConfigurationOption> get() {
         return defaultOptions;
     }
-    
+
 }

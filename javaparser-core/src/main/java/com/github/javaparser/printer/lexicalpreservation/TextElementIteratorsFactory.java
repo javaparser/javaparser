@@ -27,6 +27,10 @@ import java.util.List;
 
 class TextElementIteratorsFactory {
 
+    private TextElementIteratorsFactory() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     static class CascadingIterator<E> implements Iterator<E> {
         interface Provider<E> {
             Iterator<E> provide();
@@ -135,7 +139,7 @@ class TextElementIteratorsFactory {
             if (currIndex >= elements.size()) {
                 return false;
             }
-            if (elements.get(currIndex).hasNext()){
+            if (elements.get(currIndex).hasNext()) {
                 return true;
             }
             currIndex++;
@@ -159,14 +163,14 @@ class TextElementIteratorsFactory {
     private static Iterator<TokenTextElement> reverseIterator(NodeText nodeText, int index) {
         TextElement textElement = nodeText.getTextElement(index);
         if (textElement instanceof TokenTextElement) {
-            return new SingleElementIterator<TokenTextElement>((TokenTextElement)textElement) {
+            return new SingleElementIterator<TokenTextElement>((TokenTextElement) textElement) {
                 @Override
                 public void remove() {
                     nodeText.removeElement(index);
                 }
             };
         } else if (textElement instanceof ChildTextElement) {
-            ChildTextElement childTextElement = (ChildTextElement)textElement;
+            ChildTextElement childTextElement = (ChildTextElement) textElement;
             NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
             return reverseIterator(textForChild);
         } else {
@@ -180,7 +184,7 @@ class TextElementIteratorsFactory {
 
     public static Iterator<TokenTextElement> partialReverseIterator(NodeText nodeText, int fromIndex) {
         List<Iterator<TokenTextElement>> elements = new LinkedList<>();
-        for (int i=fromIndex;i>=0;i--) {
+        for (int i = fromIndex; i >= 0; i--) {
             elements.add(reverseIterator(nodeText, i));
         }
         return new ComposedIterator<>(elements);

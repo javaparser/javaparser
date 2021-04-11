@@ -56,33 +56,31 @@ public class CsmAttribute implements CsmElement {
         switch (property) {
             case IDENTIFIER:
                 return GeneratedJavaParserConstants.IDENTIFIER;
-            case TYPE: {
-                String expectedImage = "\"" + text.toLowerCase() + "\"";
-                for (int i=0;i<GeneratedJavaParserConstants.tokenImage.length;i++) {
-                    if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
-                        return i;
-                    }
-                }
-                throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), text));
-            }
+            case TYPE:
+                return stringToTokenType(text);
             case KEYWORD:
-            case OPERATOR: {
-                String expectedImage = "\"" + tokenText.toLowerCase() + "\"";
-                for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
-                    if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
-                        return i;
-                    }
-                }
-                throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), tokenText));
-            }
+            case OPERATOR:
+                return stringToTokenType(tokenText);
             case VALUE:
                 if (node instanceof IntegerLiteralExpr) {
                     return GeneratedJavaParserConstants.INTEGER_LITERAL;
                 }
             case NAME:
                 return GeneratedJavaParserConstants.IDENTIFIER;
+            default:
+                throw new UnsupportedOperationException(
+                        "getTokenType does not know how to handle property " + property + " with text: " + text
+                );
         }
-        throw new UnsupportedOperationException("getTokenType does not know how to handle property "
-                + property + " with text: " + text);
+    }
+
+    private int stringToTokenType(String text) {
+        String expectedImage = "\"" + text.toLowerCase() + "\"";
+        for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
+            if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
+                return i;
+            }
+        }
+        throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), text));
     }
 }

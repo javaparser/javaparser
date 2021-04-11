@@ -47,7 +47,7 @@ public class ResolvedLambdaConstraintType implements ResolvedType {
         return this;
     }
 
-    public static ResolvedLambdaConstraintType bound(ResolvedType bound){
+    public static ResolvedLambdaConstraintType bound(ResolvedType bound) {
         return new ResolvedLambdaConstraintType(bound);
     }
 

@@ -51,9 +51,9 @@ import com.github.javaparser.utils.Pair;
  */
 public abstract class ResolvedReferenceType implements ResolvedType,
         ResolvedTypeParametrized, ResolvedTypeParameterValueProvider {
-    
-    protected static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-    protected static String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
+
+    protected static final String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    protected static final String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     //
     // Fields
@@ -199,7 +199,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (values.contains(tpToReplace)) {
             int index = values.indexOf(tpToReplace);
             values.set(index, replaced);
-            if(result.getTypeDeclaration().isPresent()) {
+            if (result.getTypeDeclaration().isPresent()) {
                 return create(result.getTypeDeclaration().get(), values);
             }
         }
@@ -376,7 +376,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
         }
-        if(!this.getTypeDeclaration().isPresent()) {
+        if (!this.getTypeDeclaration().isPresent()) {
             return Optional.empty(); // TODO: Consider IllegalStateException or similar
         }
 
@@ -400,7 +400,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
-        if(!this.getTypeDeclaration().isPresent()) {
+        if (!this.getTypeDeclaration().isPresent()) {
             return new ArrayList<>(); // empty list -- consider IllegalStateException or similar
         }
 
@@ -450,7 +450,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration);
 
     /*
-     * Verify if the resolved type is a boxing type of a primitive  
+     * Verify if the resolved type is a boxing type of a primitive
      */
     protected boolean isCorrespondingBoxingType(String typeName) {
         ResolvedPrimitiveType resolvedPrimitiveType = (ResolvedPrimitiveType) ResolvedPrimitiveType.byName(typeName);
@@ -494,7 +494,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                                     .collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
                         } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
-                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable)otherParam);
+                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable) otherParam);
                         } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
                             return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
                         }
@@ -510,10 +510,10 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     //
     // Private methods
     //
-    
+
     private boolean compareConsideringVariableTypeParameters(ResolvedType referenceType, ResolvedTypeVariable typeVariable) {
         // verify if the ResolvedTypeVariable has only one type variable and the bound is
-        // not a reference type with a bound parameter 
+        // not a reference type with a bound parameter
         // for example EnumSet<E> noneOf(Class<E> elementType)
         List<Bound> bounds = typeVariable.asTypeVariable().asTypeParameter().getBounds();
         if (bounds.size() == 1) {
@@ -564,12 +564,12 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                 && hasName() // Consider anonymous classes
                 && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
-    
-    
+
+
     ///
     /// boxing/unboxing capability
     ///
-    
+
     /*
      * Returns true if the reference type can be unboxed to the primitive type
      * For example : Integer to int
@@ -577,7 +577,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isUnboxable() {
         return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> getQualifiedName().equals(pt.getBoxTypeQName()));
     }
-    
+
     /*
      * Returns true if the reference type can be unboxed to the specified primitive type
      * For example : Integer to int
@@ -585,9 +585,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isUnboxableTo(ResolvedPrimitiveType primitiveType) {
         return primitiveType.getBoxTypeQName().equals(this.asReferenceType().describe());
     }
-    
+
     /*
-     * Returns the optional corresponding primitive type 
+     * Returns the optional corresponding primitive type
      */
     public Optional<ResolvedPrimitiveType> toUnboxedType() {
         return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> this.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst();

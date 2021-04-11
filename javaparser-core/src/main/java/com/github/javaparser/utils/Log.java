@@ -34,6 +34,11 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * See <a href="http://javaparser.org/javaparsers-logging-framework-in-one-file/">a blog about this</a>
  */
 public class Log {
+
+    private Log() {
+        // Private constructor to prevent instantiation.
+    }
+
     /**
      * This adapter logs to standard out and standard error.
      */
@@ -102,13 +107,13 @@ public class Log {
         void error(Supplier<Throwable> throwableSupplier, Supplier<String> messageSupplier);
     }
 
-    private static Adapter CURRENT_ADAPTER = new SilentAdapter();
+    private static Adapter currentAdapter = new SilentAdapter();
 
     /**
      * Change how logging is handled. You can set your own implementation that forwards to your logging library.
      */
     public static void setAdapter(Adapter adapter) {
-        CURRENT_ADAPTER = adapter;
+        currentAdapter = adapter;
     }
 
     /**
@@ -116,7 +121,7 @@ public class Log {
      */
     @SafeVarargs
     public static void trace(String format, Supplier<Object>... args) {
-        CURRENT_ADAPTER.trace(makeFormattingSupplier(format, args));
+        currentAdapter.trace(makeFormattingSupplier(format, args));
     }
 
     private static Supplier<String> makeFormattingSupplier(String format, Supplier<Object>[] args) {
@@ -135,14 +140,14 @@ public class Log {
      */
     @SafeVarargs
     public static void info(String format, Supplier<Object>... args) {
-        CURRENT_ADAPTER.info(makeFormattingSupplier(format, args));
+        currentAdapter.info(makeFormattingSupplier(format, args));
     }
 
     /**
      * For drawing attention to an error.
      */
     public static void error(Throwable throwable) {
-        CURRENT_ADAPTER.error(() -> throwable, null);
+        currentAdapter.error(() -> throwable, null);
     }
 
     /**
@@ -150,7 +155,7 @@ public class Log {
      */
     @SafeVarargs
     public static void error(Throwable throwable, String format, Supplier<Object>... args) {
-        CURRENT_ADAPTER.error(() -> throwable, makeFormattingSupplier(format, args));
+        currentAdapter.error(() -> throwable, makeFormattingSupplier(format, args));
     }
 
     /**
@@ -158,6 +163,6 @@ public class Log {
      */
     @SafeVarargs
     public static void error(String format, Supplier<Object>... args) {
-        CURRENT_ADAPTER.error(() -> null, makeFormattingSupplier(format, args));
+        currentAdapter.error(() -> null, makeFormattingSupplier(format, args));
     }
 }

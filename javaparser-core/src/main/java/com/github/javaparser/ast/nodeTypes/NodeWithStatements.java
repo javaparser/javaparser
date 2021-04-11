@@ -47,7 +47,7 @@ public interface NodeWithStatements<N extends Node> {
         return (N) this;
     }
 
-    N setStatements(final NodeList<Statement> statements);
+    N setStatements(NodeList<Statement> statements);
 
     @SuppressWarnings("unchecked")
     default N addStatement(Statement statement) {

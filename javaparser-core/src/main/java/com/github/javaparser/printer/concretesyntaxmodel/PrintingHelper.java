@@ -25,9 +25,13 @@ import com.github.javaparser.printer.Stringable;
 
 class PrintingHelper {
 
+    private PrintingHelper() {
+        // Private constructor to prevent instantiation.
+    }
+
     static String printToString(Object value) {
         if (value instanceof Stringable) {
-            return ((Stringable)value).asString();
+            return ((Stringable) value).asString();
         }
         if (value instanceof Enum) {
             return ((Enum) value).name().toLowerCase();

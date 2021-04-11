@@ -25,33 +25,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClassUtils {
+
+    private ClassUtils() {
+        // Private constructor to prevent initialisation.
+    }
+
     /**
      * Maps primitive {@code Class}es to their corresponding wrapper {@code Class}.
      */
-    private static final Map<Class<?>, Class<?>> primitiveWrapperMap = new HashMap<>();
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_MAP = new HashMap<>();
 
     static {
-        primitiveWrapperMap.put(Boolean.TYPE, Boolean.class);
-        primitiveWrapperMap.put(Byte.TYPE, Byte.class);
-        primitiveWrapperMap.put(Character.TYPE, Character.class);
-        primitiveWrapperMap.put(Short.TYPE, Short.class);
-        primitiveWrapperMap.put(Integer.TYPE, Integer.class);
-        primitiveWrapperMap.put(Long.TYPE, Long.class);
-        primitiveWrapperMap.put(Double.TYPE, Double.class);
-        primitiveWrapperMap.put(Float.TYPE, Float.class);
-        primitiveWrapperMap.put(Void.TYPE, Void.TYPE);
+        PRIMITIVE_WRAPPER_MAP.put(Boolean.TYPE, Boolean.class);
+        PRIMITIVE_WRAPPER_MAP.put(Byte.TYPE, Byte.class);
+        PRIMITIVE_WRAPPER_MAP.put(Character.TYPE, Character.class);
+        PRIMITIVE_WRAPPER_MAP.put(Short.TYPE, Short.class);
+        PRIMITIVE_WRAPPER_MAP.put(Integer.TYPE, Integer.class);
+        PRIMITIVE_WRAPPER_MAP.put(Long.TYPE, Long.class);
+        PRIMITIVE_WRAPPER_MAP.put(Double.TYPE, Double.class);
+        PRIMITIVE_WRAPPER_MAP.put(Float.TYPE, Float.class);
+        PRIMITIVE_WRAPPER_MAP.put(Void.TYPE, Void.TYPE);
     }
 
     /**
      * Maps wrapper {@code Class}es to their corresponding primitive types.
      */
-    private static final Map<Class<?>, Class<?>> wrapperPrimitiveMap = new HashMap<>();
+    private static final Map<Class<?>, Class<?>> WRAPPER_PRIMITIVE_MAP = new HashMap<>();
 
     static {
-        for (final Class<?> primitiveClass : primitiveWrapperMap.keySet()) {
-            final Class<?> wrapperClass = primitiveWrapperMap.get(primitiveClass);
+        for (final Class<?> primitiveClass : PRIMITIVE_WRAPPER_MAP.keySet()) {
+            final Class<?> wrapperClass = PRIMITIVE_WRAPPER_MAP.get(primitiveClass);
             if (!primitiveClass.equals(wrapperClass)) {
-                wrapperPrimitiveMap.put(wrapperClass, primitiveClass);
+                WRAPPER_PRIMITIVE_MAP.put(wrapperClass, primitiveClass);
             }
         }
     }
@@ -83,6 +88,6 @@ public class ClassUtils {
      * @since 3.1
      */
     public static boolean isPrimitiveWrapper(final Class<?> type) {
-        return wrapperPrimitiveMap.containsKey(type);
+        return WRAPPER_PRIMITIVE_MAP.containsKey(type);
     }
 }

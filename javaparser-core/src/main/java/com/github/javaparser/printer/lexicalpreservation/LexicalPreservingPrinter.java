@@ -21,7 +21,20 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import static com.github.javaparser.GeneratedJavaParserConstants.BOOLEAN;
+import static com.github.javaparser.GeneratedJavaParserConstants.BYTE;
+import static com.github.javaparser.GeneratedJavaParserConstants.CHAR;
+import static com.github.javaparser.GeneratedJavaParserConstants.DOUBLE;
+import static com.github.javaparser.GeneratedJavaParserConstants.FLOAT;
+import static com.github.javaparser.GeneratedJavaParserConstants.INT;
+import static com.github.javaparser.GeneratedJavaParserConstants.JAVADOC_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.LBRACKET;
+import static com.github.javaparser.GeneratedJavaParserConstants.LONG;
+import static com.github.javaparser.GeneratedJavaParserConstants.MULTI_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.RBRACKET;
+import static com.github.javaparser.GeneratedJavaParserConstants.SHORT;
+import static com.github.javaparser.GeneratedJavaParserConstants.SINGLE_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
@@ -74,9 +87,9 @@ import com.github.javaparser.utils.Pair;
  * in its original formatting including the AST changes.
  */
 public class LexicalPreservingPrinter {
-    
-    private static String JAVA_UTIL_OPTIONAL = Optional.class.getCanonicalName();
-    private static String JAVAPARSER_AST_NODELIST = NodeList.class.getCanonicalName();
+
+    private static final String JAVA_UTIL_OPTIONAL = Optional.class.getCanonicalName();
+    private static final String JAVAPARSER_AST_NODELIST = NodeList.class.getCanonicalName();
 
     private static AstObserver observer;
 
@@ -87,6 +100,11 @@ public class LexicalPreservingPrinter {
     };
 
     private static final LexicalDifferenceCalculator LEXICAL_DIFFERENCE_CALCULATOR = new LexicalDifferenceCalculator();
+
+
+    private LexicalPreservingPrinter() {
+        // Private constructor to prevent initialisation - instead, use factory methods
+    }
 
     //
     // Factory methods
@@ -144,14 +162,14 @@ public class LexicalPreservingPrinter {
                 Optional<Node> parentNode = observedNode.getParentNode();
                 NodeText nodeText = parentNode
                         .map(parent -> getOrCreateNodeText(parentNode.get()))
-                        // We're at the root node. 
+                        // We're at the root node.
                         .orElse(getOrCreateNodeText(observedNode));
 
                 if (oldValue == null) {
                     int index = parentNode.isPresent() ?
                             // Find the position of the comment node and put in front of it the [...]
                             nodeText.findChild(observedNode) :
-                            // 
+                            //
                             0;
                     // Add the same indent depth of the comment to the following node
                     fixIndentOfMovedNode(nodeText, index);
@@ -368,7 +386,7 @@ public class LexicalPreservingPrinter {
         if (node.isPhantom()) {
             return Optional.empty();
         }
-        if(!node.getRange().isPresent()) {
+        if (!node.getRange().isPresent()) {
             return Optional.empty();
         }
         if (!node.getRange().get().contains(tokenRange)) {

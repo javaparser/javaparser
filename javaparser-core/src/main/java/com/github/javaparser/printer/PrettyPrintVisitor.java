@@ -865,7 +865,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getExpression().accept(this, arg);
         printer.print(" instanceof ");
         n.getType().accept(this, arg);
-        if(n.getName().isPresent()) {
+        if (n.getName().isPresent()) {
             printer.print(" ");
             n.getName().get().accept(this, arg);
         }
@@ -2013,7 +2013,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) return;
 
         // extract all nodes for which the position/range is indicated to avoid to skip orphan comments
-        List<Node> everything = node.getChildNodes().stream().filter(n->n.getRange().isPresent()).collect(Collectors.toList());
+        List<Node> everything = node.getChildNodes().stream().filter(n -> n.getRange().isPresent()).collect(Collectors.toList());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {
             return;
@@ -2032,12 +2032,16 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             everything.get(everything.size() - commentsAtEnd + i).accept(this, null);
         }
     }
-     private void indentIf(boolean expr){
-        if(expr)
+
+    private void indentIf(boolean expr) {
+        if (expr) {
             printer.indent();
-     }
-    private void unindentIf(boolean expr){
-        if(expr)
+        }
+    }
+
+    private void unindentIf(boolean expr) {
+        if (expr) {
             printer.unindent();
+        }
     }
 }

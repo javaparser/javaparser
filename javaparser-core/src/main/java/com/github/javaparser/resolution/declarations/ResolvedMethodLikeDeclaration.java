@@ -150,7 +150,7 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
             return Collections.emptyList();
         } else {
             List<ResolvedType> exceptions = new LinkedList<>();
-            for (int i=0;i<getNumberOfSpecifiedExceptions();i++) {
+            for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
                 exceptions.add(getSpecifiedException(i));
             }
             return exceptions;
