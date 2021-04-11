@@ -26,10 +26,13 @@ import com.github.javaparser.ast.expr.UnaryExpr;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
-
-import static java.util.Arrays.*;
 
 /**
  * Any kind of utility.
@@ -279,7 +282,7 @@ public class Utils {
      */
     @SafeVarargs
     public static <T> Set<T> set(T... items) {
-        return new HashSet<>(asList(items));
+        return new HashSet<>(Arrays.asList(items));
     }
 
     /**
