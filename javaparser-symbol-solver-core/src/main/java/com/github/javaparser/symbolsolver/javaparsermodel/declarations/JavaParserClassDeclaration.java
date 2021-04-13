@@ -113,7 +113,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     ///
     /// Public methods: fields
     ///
-    
+
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
@@ -147,7 +147,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                                 public ResolvedTypeDeclaration declaringType() {
                                     return f.declaringType();
                                 }
-                                
+
                                 @Override
                                 public Optional<FieldDeclaration> toAst() {
                                     return f.toAst();
@@ -193,7 +193,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        if(isJavaLangObject()) {
+        if (isJavaLangObject()) {
             // If this is java.lang.Object, it has no super class.
             return Optional.empty();
         } else if (wrappedNode.getExtendedTypes().isEmpty()) {

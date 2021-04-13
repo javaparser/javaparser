@@ -23,13 +23,65 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchEntry;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AnnotationDeclarationContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AnonymousClassDeclarationContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.BinaryExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.BlockStmtContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CatchClauseContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ConstructorContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnclosedExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ForEachStatementContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ForStatementContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.IfStatementContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.InstanceOfExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodReferenceExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ObjectCreationContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.StatementContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.SwitchEntryContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.TryWithResourceContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.UnaryExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.VariableDeclarationExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.VariableDeclaratorContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
@@ -49,6 +101,10 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandPare
  * @author Federico Tomassetti
  */
 public class JavaParserFactory {
+
+    private JavaParserFactory() {
+        // Private constructor to prevent initialisation of this utility class
+    }
 
     public static Context getContext(Node node, TypeSolver typeSolver) {
         if (node == null) {
@@ -108,7 +164,7 @@ public class JavaParserFactory {
             ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
             return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);
         } else if (node instanceof ObjectCreationExpr) {
-            return new ObjectCreationContext((ObjectCreationExpr)node, typeSolver);
+            return new ObjectCreationContext((ObjectCreationExpr) node, typeSolver);
         } else {
             if (node instanceof NameExpr) {
                 // to resolve a name when in a fieldAccess context, we can go up until we get a node other than FieldAccessExpr,

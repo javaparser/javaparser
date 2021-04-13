@@ -9,6 +9,7 @@
 	<!-- TODO: Remove these suppressions. -->
 	<suppress checks="DesignForExtension"/>
 	<suppress checks="EmptyForIteratorPad"/>
+	<suppress checks="EmptyBlock"/>
 	<suppress checks="FinalParameters"/>
 	<suppress checks="FinalClass"/>
 	<suppress checks="HiddenField"/>
@@ -29,26 +30,17 @@
 	<suppress checks="VisibilityModifier"/>
 
 
-	<!-- Allow protected -->
-	<suppress checks="VisibilityModifier" files="VisitorList.java"/>
-
 	<!-- These methods are generated -->
 	<suppress checks="AvoidNestedBlocks" files="GenericListVisitorAdapter.java"/>
-	<!-- These methods are generated -->
 	<suppress checks="AvoidNestedBlocks" files="GenericVisitorAdapter.java"/>
 
-	<!-- These methods are generated -->
+	<!-- The metamodel is generated -->
 	<suppress checks="ConstantName" files="JavaParserMetaModel.java"/>
-	<!-- These methods are generated -->
 	<suppress checks="MethodLength" files="JavaParserMetaModel.java"/>
 
 	<!--  -->
 	<suppress checks="EmptyBlock" files="LexicalDifferenceCalculator.java"/>
 	<suppress checks="EmptyBlock" files="ResolvedReferenceType.java"/>
-
-	<!--  -->
-	<suppress checks="EmptyForIteratorPad" files="DefaultPrettyPrinterVisitor.java"/>
-	<suppress checks="EmptyForIteratorPad" files="PrettyPrintVisitor.java"/>
 
 	<!-- Some validators legitimately use nested blocks to group together similar validations -->
 	<suppress checks="AvoidNestedBlocks" files="Java.*Validator.java"/>
@@ -65,7 +57,46 @@
 	<suppress checks="FileLength" files="PrettyPrintVisitor.java"/>
 	<suppress checks="MethodLength" files="TokenTypes.java"/>
 
-	<!--  -->
+	<!-- The generator config has some options that are enabled/disabled using line comments, and the end semicolon on its own line -->
 	<suppress checks="NoWhitespaceBefore" files="CoreGenerator.java"/>
+
+	<!-- Algorithms defined within the JLS use uppercase variables, therefore are permitted here: -->
+	<suppress checks="LocalVariableName" files="BoundSet.java"/>
+	<suppress checks="MemberName" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="LocalVariableName" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="ParameterName" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="MemberName" files="LambdaThrowsCompatibleWithType.java"/>
+	<suppress checks="MemberName" files="MethodReferenceThrowsCompatibleWithType.java"/>
+	<suppress checks="LocalVariableName" files="TypeCompatibleWithType.java"/>
+	<suppress checks="MemberName" files="TypeContainedByType.java"/>
+	<suppress checks="ParameterName" files="TypeContainedByType.java"/>
+	<suppress checks="LocalVariableName" files="TypeSameAsType.java"/>
+	<suppress checks="MemberName" files="TypeSameAsType.java"/>
+	<suppress checks="ParameterName" files="TypeSameAsType.java"/>
+	<suppress checks="MemberName" files="TypeSubtypeOfType.java"/>
+	<suppress checks="ParameterName" files="TypeSubtypeOfType.java"/>
+	<suppress checks="LocalVariableName" files="TypeHelper.java"/>
+	<suppress checks="ParameterName" files="TypeHelper.java"/>
+	<suppress checks="LocalVariableName" files="TypeInference.java"/>
+	<suppress checks="ParameterName" files="TypeInference.java"/>
+
+	<!--  -->
+	<suppress checks="SimplifyBooleanExpression" files="BinaryExprContext.java"/>
+
+	<!--  -->
+	<suppress checks="MethodLength" files="BoundSet.java"/>
+	<suppress checks="MethodLength" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="MethodLength" files="JavaSymbolSolver.java"/>
+	<suppress checks="MethodLength" files="NameLogic.java"/>
+	<suppress checks="MethodLength" files="TypeExtractor.java"/>
+
+	<!--  -->
+	<suppress checks="RightCurly" files="BoundSet.java"/>
+	<suppress checks="RightCurly" files="MethodResolutionLogic.java"/>
+	<suppress checks="RightCurly" files="TypeExtractor.java"/>
+	<suppress checks="RightCurly" files="TypeHelper.java"/>
+
+	<!--  -->
+	<suppress checks="MethodName" files="BoundSet.java"/>
 
 </suppressions>

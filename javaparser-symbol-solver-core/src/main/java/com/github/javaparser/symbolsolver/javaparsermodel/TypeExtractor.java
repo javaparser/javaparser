@@ -99,17 +99,17 @@ import com.google.common.collect.ImmutableList;
 public class TypeExtractor extends DefaultVisitorAdapter {
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
-    
-    private ReferenceTypeImpl StringReferenceType;
+
+    private ReferenceTypeImpl stringReferenceType;
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
         this.facade = facade;
         //pre-calculate the String reference (optimization)
-        StringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
+        stringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
     }
 
     @Override
@@ -221,12 +221,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(ConditionalExpr node, Boolean solveLambdas) {
         ResolvedType thenExpr = node.getThenExpr().accept(this, solveLambdas);
         ResolvedType elseExpr = node.getElseExpr().accept(this, solveLambdas);
-        
+
         // manage null expression
-        if ( thenExpr.isNull()) {
+        if (thenExpr.isNull()) {
             return  elseExpr;
         }
-        if ( elseExpr.isNull()) {
+        if (elseExpr.isNull()) {
             return  thenExpr;
         }
         /*
@@ -235,14 +235,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
          * If the second and third operands are both of type Boolean, the conditional expression has type Boolean.
          * Otherwise, the conditional expression has type boolean.
          */
-        if ( thenExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN) 
+        if (thenExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN)
                 && elseExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN)) {
             if (thenExpr.isReferenceType() && elseExpr.isReferenceType()) {
                 return thenExpr.asReferenceType();
             }
             return thenExpr.isPrimitive() ? thenExpr : elseExpr;
         }
-        
+
         /*
          * Numeric conditional expressions are standalone expressions (§15.2).
          * The type of a numeric conditional expression is determined as follows:
@@ -299,11 +299,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
              *  "The constant expression of type int is representable in type T" is a runtime decision!
              */
             else if (thenExpr.isPrimitive() && elseExpr.isPrimitive()) {
-                if (((ResolvedPrimitiveType)thenExpr).in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
+                if (((ResolvedPrimitiveType) thenExpr).in(resolvedPrimitiveTypeSubList)
+                    && ((ResolvedPrimitiveType) elseExpr).equals(ResolvedPrimitiveType.INT)) {
                     return thenExpr;
-                } else if (((ResolvedPrimitiveType)elseExpr).in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
+                } else if (((ResolvedPrimitiveType) elseExpr).in(resolvedPrimitiveTypeSubList)
+                    && ((ResolvedPrimitiveType) thenExpr).equals(ResolvedPrimitiveType.INT)) {
                     return elseExpr;
                 }
             }
@@ -316,26 +316,26 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             else if (thenExpr.isReference() && elseExpr.isPrimitive()
                     && thenExpr.asReferenceType().isUnboxable()
                     && thenExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
+                    && ((ResolvedPrimitiveType) elseExpr).equals(ResolvedPrimitiveType.INT)) {
                 return thenExpr.asReferenceType().toUnboxedType().get();
             } else if (elseExpr.isReference() && thenExpr.isPrimitive()
                     && elseExpr.asReferenceType().isUnboxable()
                     && elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
+                    && ((ResolvedPrimitiveType) thenExpr).equals(ResolvedPrimitiveType.INT)) {
                 return elseExpr.asReferenceType().toUnboxedType().get();
             }
-             
+
             /* Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types,
              * and the type of the conditional expression is the promoted type of the second
              * and third operands.
              */
-            ResolvedPrimitiveType PrimitiveThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive()
+            ResolvedPrimitiveType primitiveThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive()
                     : thenExpr.asReferenceType().toUnboxedType().get();
-            ResolvedPrimitiveType PrimitiveElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive()
+            ResolvedPrimitiveType primitiveElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive()
                     : elseExpr.asReferenceType().toUnboxedType().get();
-            return PrimitiveThenExpr.bnp(PrimitiveElseExpr);
+            return primitiveThenExpr.bnp(primitiveElseExpr);
         }
-        
+
         /*
          * Otherwise, the conditional expression is a reference conditional expression.
          * A reference conditional expression is a poly expression if it appears in an assignment context or an
@@ -359,22 +359,22 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (parentNode.isPresent()) {
                 Node parent = parentNode.get();
                 if (parent instanceof AssignExpr) {
-                    return visit((AssignExpr)parent, solveLambdas);
+                    return visit((AssignExpr) parent, solveLambdas);
                 } else if (parent instanceof MethodCallExpr) {
                     // how to define the target type?
                     // a priori it is the type of the parameter of the method which takes the value of the conditional expression
                     // TODO for the moment we keep the original return type
                     return thenExpr;
                 }
-                throw new RuntimeException("Cannot resolve type of poly expression "+ node.toString());
+                throw new RuntimeException("Cannot resolve type of poly expression " + node.toString());
             } else {
                 throw new RuntimeException("Parent node unexpectedly empty");
             }
-            
+
         }
-        
+
         // The type of a standalone reference conditional expression is determined as follows:
-        
+
         // If the second and third operands have the same type (which may be the null type), then that is the type of
         // the conditional expression.
         if (thenExpr.equals(elseExpr)) {
@@ -383,20 +383,20 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         // If the type of one of the second and third operands is the null type, and the type of the other operand is a
         // reference type, then the type of the conditional expression is that reference type.
         // this case is already supported above
-        
+
         // Otherwise, the second and third operands are of types S1 and S2 respectively. Let T1 be the type that
         // results from applying boxing conversion to S1, and let T2 be the type that results from applying boxing
         // conversion to S2. The type of the conditional expression is the result of applying capture conversion
         // (§5.1.10) to lub(T1, T2).
         ResolvedType resolvedThenType = thenExpr.isPrimitive() ? TypeHelper.toBoxedType(thenExpr.asPrimitive(), typeSolver) : thenExpr;
         ResolvedType resolvedElseType = elseExpr.isPrimitive() ? TypeHelper.toBoxedType(elseExpr.asPrimitive(), typeSolver) : elseExpr;
-        
+
         // TypeHelper.leastUpperBound method is not yet implemented so for the moment we keep the original return type of this method
         // TODO implement TypeHelper.leastUpperBound method
         // return TypeHelper.leastUpperBound(new HashSet<ResolvedType>(Arrays.asList(resolvedThenType, resolvedElseType)));
         return node.getThenExpr().accept(this, solveLambdas);
     }
-    
+
     private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
         return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
         || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
@@ -480,7 +480,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(StringLiteralExpr node, Boolean solveLambdas) {
-        return StringReferenceType;
+        return stringReferenceType;
     }
 
     @Override
@@ -518,18 +518,18 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodCallExpr node, Boolean solveLambdas) {
-        Log.trace("getType on method call %s", ()-> node);
+        Log.trace("getType on method call %s", () -> node);
         // first solve the method
         MethodUsage ref = facade.solveMethodAsUsage(node);
-        Log.trace("getType on method call %s resolved to %s", ()-> node, ()-> ref);
-        Log.trace("getType on method call %s return type is %s", ()-> node, ref::returnType);
+        Log.trace("getType on method call %s resolved to %s", () -> node, () -> ref);
+        Log.trace("getType on method call %s return type is %s", () -> node, ref::returnType);
         return ref.returnType();
         // the type is the return type of the method
     }
 
     @Override
     public ResolvedType visit(NameExpr node, Boolean solveLambdas) {
-        Log.trace("getType on name expr %s", ()-> node);
+        Log.trace("getType on name expr %s", () -> node);
         Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
             throw new UnsolvedSymbolException("Solving " + node, node.getName().getId());
@@ -540,7 +540,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
-        Log.trace("getType on type expr %s", ()-> node);
+        Log.trace("getType on type expr %s", () -> node);
         if (!(node.getType() instanceof ClassOrInterfaceType)) {
             // TODO / FIXME... e.g. System.out::println
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
@@ -653,7 +653,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on lambda expr %s", () -> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
 
                 // The type parameter referred here should be the java.util.stream.Stream.T
@@ -764,7 +764,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on method reference expr %s", () -> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
                 MethodUsage usage = facade.solveMethodAsUsage(callExpr);
                 ResolvedType result = usage.getParamType(pos);

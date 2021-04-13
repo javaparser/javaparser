@@ -46,8 +46,12 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
  * @author Federico Tomassetti
  */
 public class ReflectionFactory {
-    
-    private static String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
+
+    private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
+
+    private ReflectionFactory() {
+        // Private constructor to prevent initialisation of this utility class
+    }
 
     public static ResolvedReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {

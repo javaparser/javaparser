@@ -83,6 +83,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  */
 public class NameLogic {
 
+    private NameLogic() {
+        // Private constructor to prevent initialising this utility class
+    }
+
     /**
      * Is the given node a non-qualified name?
      *

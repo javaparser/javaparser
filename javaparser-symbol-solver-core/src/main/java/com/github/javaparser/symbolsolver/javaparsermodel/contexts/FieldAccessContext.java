@@ -63,7 +63,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         if (wrappedNode.getName().toString().equals(name)) {
             if (wrappedNode.getScope() instanceof ThisExpr) {
                 ResolvedType typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-                if(typeOfThis.asReferenceType().getTypeDeclaration().isPresent()) {
+                if (typeOfThis.asReferenceType().getTypeDeclaration().isPresent()) {
                     return new SymbolSolver(typeSolver).solveSymbolInType(
                             typeOfThis.asReferenceType().getTypeDeclaration().get(),
                             name

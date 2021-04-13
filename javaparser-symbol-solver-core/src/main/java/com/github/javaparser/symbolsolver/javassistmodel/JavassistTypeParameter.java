@@ -21,13 +21,17 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -43,6 +47,15 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
         this.wrapped = wrapped;
         this.typeSolver = typeSolver;
         this.container = container;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                getQualifiedName(),
+                declaredOnType(),
+                declaredOnMethod()
+        );
     }
 
     @Override

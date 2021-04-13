@@ -37,8 +37,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
  * @author Federico Tomassetti
  */
 public final class FunctionalInterfaceLogic {
-    
-    private static String JAVA_LANG_FUNCTIONAL_INTERFACE = FunctionalInterface.class.getCanonicalName();
+
+    private static final String JAVA_LANG_FUNCTIONAL_INTERFACE = FunctionalInterface.class.getCanonicalName();
 
     private FunctionalInterfaceLogic() {
         // prevent instantiation
@@ -49,7 +49,7 @@ public final class FunctionalInterfaceLogic {
      */
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedType type) {
         Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = type.asReferenceType().getTypeDeclaration();
-        if(!optionalTypeDeclaration.isPresent()) {
+        if (!optionalTypeDeclaration.isPresent()) {
             return Optional.empty();
         }
 
@@ -98,7 +98,7 @@ public final class FunctionalInterfaceLogic {
         return p.getType().getCanonicalName();
     }
 
-    private static List<String> OBJECT_METHODS_SIGNATURES = Arrays.stream(Object.class.getDeclaredMethods())
+    private static final List<String> OBJECT_METHODS_SIGNATURES = Arrays.stream(Object.class.getDeclaredMethods())
             .map(method -> getSignature(method))
             .collect(Collectors.toList());
 

@@ -54,7 +54,7 @@ import java.util.function.Function;
  * @author Malte Skoruppa
  */
 public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
-    
+
     private static Map<Class<? extends MemberValue>, Function<MemberValue, ? extends Expression>> memberValueAsExressionConverter = new HashMap<>();
     static {
         memberValueAsExressionConverter.put(BooleanMemberValue.class, (memberValue) -> new BooleanLiteralExpr(BooleanMemberValue.class.cast(memberValue).getValue()));
@@ -82,7 +82,7 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
          if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
          return fn.apply(memberValue);
     }
-    
+
     @Override
     public ResolvedType getType() {
         try {

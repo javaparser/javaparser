@@ -36,6 +36,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  */
 public class ExpressionHelper {
 
+    private ExpressionHelper() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     public static boolean isExplicitlyTyped(LambdaExpr lambdaExpr) {
         return lambdaExpr.getParameters().stream().allMatch(p -> !(p.getType() instanceof UnknownType));
     }

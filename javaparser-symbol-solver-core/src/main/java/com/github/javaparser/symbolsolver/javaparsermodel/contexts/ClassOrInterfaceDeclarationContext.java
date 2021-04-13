@@ -110,7 +110,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         if (wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
-        
+
         // search in implemented type
         for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
             if (implementedType.getName().getId().equals(name)) {
@@ -126,7 +126,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                     .solveType(extendedType.getNameWithScope());
             }
         }
-        
+
         // otherwise search for local type
         List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class, TreeTraversal.BREADTHFIRST);
         for (TypeDeclaration<?> localType : localTypes) {

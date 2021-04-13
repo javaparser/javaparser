@@ -31,7 +31,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
  * @author Federico Tomassetti
  */
 public interface TypeSolver {
-    
+
     String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     /**

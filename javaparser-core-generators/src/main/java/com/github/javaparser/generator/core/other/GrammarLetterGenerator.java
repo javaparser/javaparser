@@ -29,7 +29,7 @@ import java.util.function.Function;
 public class GrammarLetterGenerator {
 
     private GrammarLetterGenerator() {
-        // Private constructor to prevent initialisation of a utility class
+        // Private constructor to prevent initialisation of this utility class
     }
 
     public static void main(String[] args) {

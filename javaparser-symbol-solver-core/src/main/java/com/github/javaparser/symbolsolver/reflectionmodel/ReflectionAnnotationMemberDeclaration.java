@@ -55,7 +55,7 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         valueAsExressionConverter.put(Long.class, (value) -> new LongLiteralExpr(Long.class.cast(value)));
         valueAsExressionConverter.put(String.class, (value) -> new StringLiteralExpr(String.class.cast(value)));
     }
-    
+
     private Method annotationMember;
     private TypeSolver typeSolver;
 

@@ -109,7 +109,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, Ass
         }
         throw new IllegalStateException();
     }
-    
+
     @Override
     public Optional<FieldDeclaration> toAst() {
         return Optional.ofNullable(wrappedNode);

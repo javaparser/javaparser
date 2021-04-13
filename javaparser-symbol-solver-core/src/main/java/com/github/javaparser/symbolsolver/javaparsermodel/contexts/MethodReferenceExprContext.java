@@ -28,8 +28,11 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
@@ -127,7 +130,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                     ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(type));
 
                     ResolvedLambdaConstraintType conType;
-                    if (argType.isWildcard()){
+                    if (argType.isWildcard()) {
                         conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
                     } else {
                         conType = ResolvedLambdaConstraintType.bound(argType);

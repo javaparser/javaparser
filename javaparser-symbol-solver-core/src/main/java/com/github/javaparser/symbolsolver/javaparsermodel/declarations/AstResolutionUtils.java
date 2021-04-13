@@ -44,6 +44,10 @@ import com.google.common.collect.ImmutableList;
  */
 class AstResolutionUtils {
 
+    private AstResolutionUtils() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     static String containerName(Node container) {
         String packageName = getPackageName(container);
         String className = getClassName("", container);

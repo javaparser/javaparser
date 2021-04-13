@@ -197,8 +197,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
         }
 
         // When empty there is no sense in trying to find the most applicable.
-        // This is useful for debugging. Performance is not affected as 
-        // MethodResolutionLogic.findMostApplicable method returns very early 
+        // This is useful for debugging. Performance is not affected as
+        // MethodResolutionLogic.findMostApplicable method returns very early
         // when candidateSolvedMethods is empty.
         if (candidateSolvedMethods.isEmpty()) {
             return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
@@ -355,7 +355,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        if(!reflectionClassAdapter.getSuperClass().isPresent()) {
+        if (!reflectionClassAdapter.getSuperClass().isPresent()) {
             return Optional.empty();
         }
         return Optional.of(reflectionClassAdapter.getSuperClass().get());

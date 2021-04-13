@@ -27,13 +27,13 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         List<PatternExpr> results = new ArrayList<>();
 
         boolean givenNodeIsWithinThenStatement = wrappedNode.getThenStmt().containsWithinRange(child);
-        if(givenNodeIsWithinThenStatement) {
+        if (givenNodeIsWithinThenStatement) {
             results.addAll(conditionContext.patternExprsExposedFromChildren());
         }
 
         wrappedNode.getElseStmt().ifPresent(elseStatement -> {
             boolean givenNodeIsWithinElseStatement = elseStatement.containsWithinRange(child);
-            if(givenNodeIsWithinElseStatement) {
+            if (givenNodeIsWithinElseStatement) {
                 results.addAll(conditionContext.negatedPatternExprsExposedFromChildren());
             }
         });

@@ -62,7 +62,7 @@ public class InferenceVariable implements ResolvedType {
     public boolean isInferenceVariable() {
         return true;
     }
-    
+
     @Override
     public String describe() {
         return name;

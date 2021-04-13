@@ -66,7 +66,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     ///
     /// Static methods
     ///
-    
+
     protected static boolean isQualifiedName(String name) {
         return name.contains(".");
     }
@@ -135,9 +135,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         Node notMethodNode = parentNode;
-        // to avoid an infinite loop if parent scope is the same as wrapped node 
+        // to avoid an infinite loop if parent scope is the same as wrapped node
         while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
-                || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode)) ) {
+                || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode))) {
             notMethodNode = notMethodNode.getParentNode().orElse(null);
         }
         if (notMethodNode == null) {
@@ -146,10 +146,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         Context parentContext = JavaParserFactory.getContext(notMethodNode, typeSolver);
         return Optional.of(parentContext);
     }
-    
-    // before to call this method verify the node has a scope 
+
+    // before to call this method verify the node has a scope
     protected Node getScope(Node node) {
-        return (Node) ((NodeWithOptionalScope)node).getScope().get();
+        return (Node) ((NodeWithOptionalScope) node).getScope().get();
     }
 
 
@@ -162,7 +162,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
         // First check if there are any pattern expressions available to this node.
         Context parentContext = optionalParentContext.get();
-        if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
+        if (parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
             List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
 
             Optional<PatternExpr> localResolutionResults = patternExprs
@@ -171,10 +171,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     .findFirst();
 
             if (localResolutionResults.isPresent()) {
-                if(patternExprs.size() == 1) {
+                if (patternExprs.size() == 1) {
                     JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
                     return SymbolReference.solved(decl);
-                } else if(patternExprs.size() > 1) {
+                } else if (patternExprs.size() > 1) {
                     throw new IllegalStateException("Unexpectedly more than one reference in scope");
                 }
             }

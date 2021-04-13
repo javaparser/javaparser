@@ -237,7 +237,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                                 public ResolvedTypeDeclaration declaringType() {
                                     return f.declaringType();
                                 }
-                                
+
                                 @Override
                                 public Optional<FieldDeclaration> toAst() {
                                     return f.toAst();
@@ -245,7 +245,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                             });
                         })
                 );
-        
+
         return fields;
     }
 
@@ -359,7 +359,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
         Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration) member));
             }
         }
         return res;

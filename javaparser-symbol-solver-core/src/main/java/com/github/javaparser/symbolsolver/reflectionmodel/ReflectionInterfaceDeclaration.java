@@ -25,7 +25,13 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -41,7 +47,13 @@ import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -107,7 +119,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
         return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
-                typeSolver,this, clazz);
+                typeSolver, this, clazz);
     }
 
     @Override
@@ -161,7 +173,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
             }
             try {
                 ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-                for (int j=0;j<parameters.size();j++) {
+                for (int j = 0; j < parameters.size(); j++) {
                     methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
@@ -219,7 +231,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         if (type instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
-            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+            if (otherTypeDeclaration.getTypeDeclaration().isPresent()) {
                 return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(this);
             }
         }
@@ -287,7 +299,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         return res;
     }
-    
+
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return reflectionClassAdapter.containerType();

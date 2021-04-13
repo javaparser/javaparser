@@ -35,7 +35,7 @@ import java.util.Set;
  */
 public class FalseBound extends Bound {
 
-    private static FalseBound INSTANCE = new FalseBound();
+    private static final FalseBound INSTANCE = new FalseBound();
 
     private FalseBound() {
 

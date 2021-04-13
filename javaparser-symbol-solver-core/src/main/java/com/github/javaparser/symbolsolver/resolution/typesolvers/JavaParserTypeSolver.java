@@ -91,7 +91,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         this(srcDir, parserConfiguration, CACHE_SIZE_UNSET);
     }
 
-    private <TKey, TValue> Cache<TKey, TValue> BuildCache(long cacheSizeLimit) {
+    private <TKey, TValue> Cache<TKey, TValue> buildCache(long cacheSizeLimit) {
         CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().softValues();
         if (cacheSizeLimit != CACHE_SIZE_UNSET) {
             cacheBuilder.maximumSize(cacheSizeLimit);
@@ -112,9 +112,9 @@ public class JavaParserTypeSolver implements TypeSolver {
         }
         this.srcDir = srcDir;
         javaParser = new JavaParser(parserConfiguration);
-        parsedFiles = BuildCache(cacheSizeLimit);
-        parsedDirectories = BuildCache(cacheSizeLimit);
-        foundTypes = BuildCache(cacheSizeLimit);
+        parsedFiles = buildCache(cacheSizeLimit);
+        parsedDirectories = buildCache(cacheSizeLimit);
+        foundTypes = buildCache(cacheSizeLimit);
     }
 
     @Override

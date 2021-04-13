@@ -40,6 +40,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  */
 public class ConstructorResolutionLogic {
 
+    private ConstructorResolutionLogic() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     private static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic,
                                                                ResolvedType variadicType) {
         List<ResolvedType> res = new ArrayList<>(argumentsTypes.subList(0, startVariadic));
@@ -198,7 +202,7 @@ public class ConstructorResolutionLogic {
                     }
                 }
             }
-            
+
             return SymbolReference.solved(winningCandidate);
         }
     }

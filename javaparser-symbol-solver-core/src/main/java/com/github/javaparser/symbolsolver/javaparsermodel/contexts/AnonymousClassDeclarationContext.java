@@ -134,7 +134,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
                      SymbolReference.solved(
                          JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType)));
 
-    if(exactMatch.isPresent()){
+    if (exactMatch.isPresent()) {
       return exactMatch.get();
     }
 

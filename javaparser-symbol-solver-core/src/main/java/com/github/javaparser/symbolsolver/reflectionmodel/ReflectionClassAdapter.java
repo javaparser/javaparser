@@ -202,7 +202,7 @@ class ReflectionClassAdapter {
         }
         if (type instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
-            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+            if (otherTypeDeclaration.getTypeDeclaration().isPresent()) {
                 return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(typeDeclaration);
             }
         }
@@ -229,7 +229,7 @@ class ReflectionClassAdapter {
                 .map(m -> new ReflectionConstructorDeclaration(m, typeSolver))
                 .collect(Collectors.toList());
     }
-    
+
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         Class<?> declaringClass = clazz.getDeclaringClass();
         return declaringClass == null ?

@@ -23,9 +23,12 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
@@ -35,6 +38,10 @@ import java.lang.reflect.Modifier;
  * @author Federico Tomassetti
  */
 public class JavassistFactory {
+
+  private JavassistFactory() {
+    // Private constructor to prevent initialisation of this utility class
+  }
 
   public static ResolvedType typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
     try {
