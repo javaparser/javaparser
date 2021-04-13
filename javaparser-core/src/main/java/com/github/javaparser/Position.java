@@ -21,8 +21,6 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.Node;
-
 import java.util.Objects;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;

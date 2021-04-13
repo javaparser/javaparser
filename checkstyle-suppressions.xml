@@ -26,7 +26,6 @@
 	<suppress checks="ParameterNumber"/>
 	<suppress checks="RedundantModifier"/>
 	<suppress checks="TodoComment"/>
-	<suppress checks="UnusedImports"/>
 	<suppress checks="VisibilityModifier"/>
 
 
