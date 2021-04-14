@@ -105,4 +105,17 @@
 	<suppress checks="MethodName" files="LexicalDifferenceCalculator.java"/>
 	<suppress checks="MethodName" files="PrettyPrinterVisitor.java"/>
 
+	<!-- MetaModel classes have imports added/removed, therefore we tolerate unsorted imports -->
+	<suppress checks="CustomImportOrder" files=".*MetaModel.java"/>
+
+	<!-- These classes have a generated switch element, which does not include compliant whitespace -->
+	<suppress checks="WhitespaceAround" files="AssignExpr.java"/>
+	<suppress checks="WhitespaceAround" files="BinaryExpr.java"/>
+	<suppress checks="WhitespaceAround" files="Node.java"/>
+	<suppress checks="WhitespaceAround" files="JavaToken.java"/>
+
+	<!-- These classes have comments touched/modified by the JP generators, which does not include compliant whitespace -->
+	<suppress checks="RegexpSingleline" files="MethodCallExpr.java"/>
+	<suppress checks="RegexpSingleline" files="JavaToken.java"/>
+
 </suppressions>
