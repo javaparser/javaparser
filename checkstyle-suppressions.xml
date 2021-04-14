@@ -6,9 +6,8 @@
 
 <!-- EXAMPLE: https://github.com/checkstyle/checkstyle/blob/master/config/suppressions.xml -->
 <suppressions>
-	<!-- TODO: Remove these suppressions. -->
+	<!-- TODO: Remove these suppressions and/or make them more specific to particular files. -->
 	<suppress checks="DesignForExtension"/>
-	<suppress checks="EmptyForIteratorPad"/>
 	<suppress checks="EmptyBlock"/>
 	<suppress checks="FinalParameters"/>
 	<suppress checks="FinalClass"/>
@@ -97,5 +96,13 @@
 
 	<!--  -->
 	<suppress checks="MethodName" files="BoundSet.java"/>
+
+	<!--  -->
+	<suppress checks="EmptyForIteratorPad"/>
+	<suppress checks="MethodName" files="CsmList.java"/>
+	<suppress checks="MethodName" files="DefaultPrettyPrinterVisitor.java"/>
+	<suppress checks="MethodName" files="Difference.java"/>
+	<suppress checks="MethodName" files="LexicalDifferenceCalculator.java"/>
+	<suppress checks="MethodName" files="PrettyPrinterVisitor.java"/>
 
 </suppressions>
