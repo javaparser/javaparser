@@ -25,9 +25,7 @@
 	<suppress checks="JavadocVariable"/>
 	<suppress checks="LineLength"/>
 	<suppress checks="MagicNumber"/>
-	<suppress checks="MissingJavadocMethod"/>
 	<suppress checks="NeedBraces"/>
-	<suppress checks="ParameterNumber"/>
 	<suppress checks="RedundantModifier"/>
 	<suppress checks="TodoComment"/>
 	<suppress checks="VisibilityModifier"/>
@@ -49,6 +47,14 @@
 	<suppress checks="AvoidNestedBlocks" files="Java.*Validator.java"/>
 	<!-- Some validators use underscores within class names to represent e.g. `Java 1.2` as `Java1_2`  -->
 	<suppress checks="TypeName" files="Java.*Validator.java"/>
+
+	<!-- These files are generated, so we tolerate large numbers of parameters -->
+	<suppress checks="ParameterNumber" files="CallableDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="ClassOrInterfaceDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="ConstructorDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="MethodDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="RecordDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="PropertyMetaModel.java"/>
 
 	<!-- These files are generated, so we tolerate long files and methods -->
 	<suppress checks="FileLength" files="DefaultPrettyPrinterVisitor.java"/>
