@@ -6,11 +6,17 @@
 
 <!-- EXAMPLE: https://github.com/checkstyle/checkstyle/blob/master/config/suppressions.xml -->
 <suppressions>
-	<!-- TODO: Remove these suppressions and/or make them more specific to particular files. -->
+	<!-- TODO/FIXME:
+	        - Remove these suppressions, and/or
+	        - make them more specific to particular files, and/or
+	        - edit the rules
+	-->
 	<suppress checks="DesignForExtension"/>
 	<suppress checks="EmptyBlock"/>
 	<suppress checks="FinalParameters"/>
 	<suppress checks="FinalClass"/>
+	<!-- HiddenField doesn't handle boolean setters well (e.g. expecting setIsStatic(boolean) vs setStatic(boolean) ) -->
+	<!-- HiddenField doesn't handle setters that return generics (e.g. public T setAnnotations() ) -->
 	<suppress checks="HiddenField"/>
 	<suppress checks="JavadocMethod"/>
 	<suppress checks="JavadocPackage"/>
