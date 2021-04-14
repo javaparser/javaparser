@@ -31,10 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.AssignExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Stringable;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -75,7 +73,7 @@ public class AssignExpr extends Expression {
         }
 
         public Optional<BinaryExpr.Operator> toBinaryOperator() {
-            switch (this) {
+            switch(this) {
                 case PLUS:
                     return Optional.of(BinaryExpr.Operator.PLUS);
                 case MINUS:

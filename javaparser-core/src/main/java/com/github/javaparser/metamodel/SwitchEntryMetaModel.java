@@ -20,10 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.stmt.SwitchEntry;
-
 import java.util.Optional;
+import com.github.javaparser.ast.stmt.SwitchEntry;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:

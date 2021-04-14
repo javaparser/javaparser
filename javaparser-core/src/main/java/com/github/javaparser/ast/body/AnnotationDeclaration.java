@@ -37,7 +37,6 @@ import com.github.javaparser.metamodel.AnnotationDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
