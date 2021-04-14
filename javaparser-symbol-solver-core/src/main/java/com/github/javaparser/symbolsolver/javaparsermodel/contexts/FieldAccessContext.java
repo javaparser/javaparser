@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
@@ -46,6 +40,12 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti

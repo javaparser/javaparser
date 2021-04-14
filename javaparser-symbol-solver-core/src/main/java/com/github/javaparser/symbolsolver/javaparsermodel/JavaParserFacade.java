@@ -21,20 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved;
-import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
@@ -100,6 +86,20 @@ import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.utils.Log;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.WeakHashMap;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved;
+import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.

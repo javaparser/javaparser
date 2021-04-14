@@ -26,7 +26,6 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;

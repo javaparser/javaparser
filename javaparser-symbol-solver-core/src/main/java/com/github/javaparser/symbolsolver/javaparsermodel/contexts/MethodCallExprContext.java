@@ -21,14 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -56,6 +48,14 @@ import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 

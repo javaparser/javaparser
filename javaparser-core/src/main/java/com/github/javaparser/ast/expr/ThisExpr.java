@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 

@@ -21,16 +21,16 @@
 
 package com.github.javaparser.utils;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * A set that overrides the equals and hashcode calculation of the added nodes

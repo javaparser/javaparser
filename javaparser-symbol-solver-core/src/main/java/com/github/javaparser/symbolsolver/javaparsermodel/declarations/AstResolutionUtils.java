@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -38,6 +34,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.google.common.collect.ImmutableList;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti

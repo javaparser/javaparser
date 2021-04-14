@@ -21,16 +21,6 @@
 
 package com.github.javaparser.resolution.types;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -42,6 +32,16 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values

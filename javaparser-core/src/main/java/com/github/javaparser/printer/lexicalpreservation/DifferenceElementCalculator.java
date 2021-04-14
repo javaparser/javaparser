@@ -21,10 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
@@ -34,6 +30,10 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 class DifferenceElementCalculator {
 

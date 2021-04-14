@@ -21,8 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -30,6 +28,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
+
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * A reference type S is a subtype of a reference type T

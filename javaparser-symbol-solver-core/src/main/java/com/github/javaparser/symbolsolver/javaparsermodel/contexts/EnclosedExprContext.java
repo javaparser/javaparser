@@ -1,13 +1,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr> {

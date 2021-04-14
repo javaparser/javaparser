@@ -21,11 +21,6 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.DoubleLiteralExpr;
@@ -40,6 +35,11 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Malte Skoruppa

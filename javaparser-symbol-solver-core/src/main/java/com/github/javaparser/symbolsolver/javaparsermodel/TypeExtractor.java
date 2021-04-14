@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -95,6 +89,12 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 

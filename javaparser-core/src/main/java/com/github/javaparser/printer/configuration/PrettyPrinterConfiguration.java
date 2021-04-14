@@ -21,16 +21,16 @@
 
 package com.github.javaparser.printer.configuration;
 
-import static com.github.javaparser.utils.Utils.assertNonNegative;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.assertPositive;
+import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
 
 import java.util.Optional;
 import java.util.Set;
 
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
-import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import static com.github.javaparser.utils.Utils.assertNonNegative;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.assertPositive;
 
 /**
  * Configuration options for the {@link PrettyPrinter}.

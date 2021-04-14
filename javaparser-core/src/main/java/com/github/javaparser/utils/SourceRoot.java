@@ -21,15 +21,12 @@
 
 package com.github.javaparser.utils;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageAbsolutePath;
-import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
-import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
-import static java.nio.file.FileVisitResult.TERMINATE;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -48,12 +45,15 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.printer.DefaultPrettyPrinter;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageAbsolutePath;
+import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
+import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
+import static java.nio.file.FileVisitResult.TERMINATE;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system. The root directory

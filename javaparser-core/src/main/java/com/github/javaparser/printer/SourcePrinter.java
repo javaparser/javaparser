@@ -21,9 +21,6 @@
 
 package com.github.javaparser.printer;
 
-import java.util.Deque;
-import java.util.LinkedList;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
@@ -33,6 +30,9 @@ import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.Utils;
+
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * A support class for code that outputs formatted source code.

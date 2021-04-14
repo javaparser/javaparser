@@ -33,8 +33,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

@@ -21,6 +21,12 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
@@ -31,12 +37,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * @author Federico Tomassetti

@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.WildcardTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 

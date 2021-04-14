@@ -21,17 +21,17 @@
 
 package com.github.javaparser.utils;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
-
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * A list that overrides the equals and hashcode calculation of the added nodes

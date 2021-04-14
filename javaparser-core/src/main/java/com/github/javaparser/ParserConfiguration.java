@@ -54,10 +54,10 @@ import com.github.javaparser.ast.validator.language_level_validations.Java6Valid
 import com.github.javaparser.ast.validator.language_level_validations.Java7Validator;
 import com.github.javaparser.ast.validator.language_level_validations.Java8Validator;
 import com.github.javaparser.ast.validator.language_level_validations.Java9Validator;
+import com.github.javaparser.ast.validator.postprocessors.Java10PostProcessor;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import com.github.javaparser.ast.validator.postprocessors.Java10PostProcessor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;

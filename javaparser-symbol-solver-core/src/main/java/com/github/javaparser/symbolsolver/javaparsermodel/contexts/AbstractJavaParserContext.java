@@ -21,15 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static java.util.Collections.singletonList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
@@ -54,6 +45,15 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static java.util.Collections.singletonList;
 
 /**
  * @author Federico Tomassetti

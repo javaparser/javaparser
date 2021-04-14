@@ -36,8 +36,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 

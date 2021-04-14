@@ -22,14 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 
-
-import static com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.isQualifiedName;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -55,6 +47,11 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti

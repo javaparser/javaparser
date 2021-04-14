@@ -35,10 +35,12 @@ import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.utils.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 

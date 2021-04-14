@@ -21,15 +21,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static java.util.Collections.synchronizedMap;
-
-import java.util.IdentityHashMap;
-import java.util.Map;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.type.UnknownType;
+
+import java.util.IdentityHashMap;
+import java.util.Map;
+
+import static java.util.Collections.synchronizedMap;
 
 /**
  * We want to recognize and ignore "phantom" nodes, like the fake type of variable in FieldDeclaration

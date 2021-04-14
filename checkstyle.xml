@@ -58,7 +58,7 @@
 
 	<!-- Checks that a package-info.java file exists for each package.     -->
 	<!-- See https://checkstyle.org/config_javadoc.html#JavadocPackage -->
-	<module name="JavadocPackage"></module>
+	<module name="JavadocPackage"/>
 
 	<!-- Checks whether files end with a new line.                        -->
 	<!-- See https://checkstyle.org/config_misc.html#NewlineAtEndOfFile -->
@@ -125,6 +125,13 @@
 		<module name="RedundantImport"/>
 		<module name="UnusedImports">
 			<property name="processJavadoc" value="true"/>
+		</module>
+		<module name="CustomImportOrder">
+			<property name="customImportOrderRules" value="THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STANDARD_JAVA_PACKAGE###STATIC"/>
+			<property name="specialImportsRegExp" value="^javax\."/>
+			<property name="standardPackageRegExp" value="^java\."/>
+			<property name="sortImportsInGroupAlphabetically" value="true"/>
+			<property name="separateLineBetweenGroups" value="false"/>
 		</module>
 
 		<!-- Checks for Size Violations.                    -->

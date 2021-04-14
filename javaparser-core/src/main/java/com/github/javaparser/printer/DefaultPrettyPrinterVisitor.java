@@ -20,22 +20,6 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.joining;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -156,6 +140,22 @@ import com.github.javaparser.printer.configuration.ConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Outputs the AST as formatted Java source code.

@@ -20,14 +20,14 @@
 
 package com.github.javaparser.printer.configuration;
 
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.utils.Utils;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
-import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.utils.Utils;
 
 /**
  * Configuration options for the {@link Printer}.

@@ -20,12 +20,6 @@
  */
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -56,6 +50,14 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
