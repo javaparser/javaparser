@@ -75,9 +75,10 @@ class JavassistUtils {
 
         List<MethodUsage> methods = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
-            if (method.getName().equals(name)
-                    && ((method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0)
-                    && ((method.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)) {
+            if (method.getName().equals(name) &&
+                    ((method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0) &&
+                    ((method.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)
+            ) {
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver));
                 for (int i = 0; i < typeParameters.size() && i < typeParameterValues.size(); i++) {
                     ResolvedTypeParameterDeclaration tpToReplace = typeParameters.get(i);

@@ -36,9 +36,10 @@ public class Java9Validator extends Java8Validator {
     final Validator underscoreKeywordValidator = new UnderscoreKeywordValidator();
     final Validator modifiers = new ModifierValidator(true, true, true);
     final SingleNodeTypeValidator<TryStmt> tryWithResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
-        if (n.getCatchClauses().isEmpty()
-                && n.getResources().isEmpty()
-                && !n.getFinallyBlock().isPresent()) {
+        if (n.getCatchClauses().isEmpty() &&
+                n.getResources().isEmpty() &&
+                !n.getFinallyBlock().isPresent()
+        ) {
             reporter.report(n, "Try has no finally, no catch, and no resources.");
         }
     });

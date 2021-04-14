@@ -344,10 +344,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     default boolean isJavaLangObject() {
-        return this.isClass()
-                && !isAnonymousClass()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return this.isClass() &&
+                !isAnonymousClass() &&
+                hasName() && // Consider anonymous classes
+                getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -355,8 +355,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see ResolvedReferenceType#isJavaLangEnum()
      */
     default boolean isJavaLangEnum() {
-        return this.isEnum()
-                && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isEnum() &&
+                getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
 }

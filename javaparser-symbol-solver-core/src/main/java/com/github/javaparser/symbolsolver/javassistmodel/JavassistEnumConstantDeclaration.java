@@ -43,8 +43,10 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
         }
         if ((ctField.getFieldInfo2().getAccessFlags() & AccessFlag.ENUM) == 0) {
             throw new IllegalArgumentException(
-                    "Trying to instantiate a JavassistEnumConstantDeclaration with something which is not an enum field: "
-                            + ctField.toString());
+                    "Trying to instantiate a JavassistEnumConstantDeclaration" +
+                            " with something which is not an enum field: " +
+                            ctField.toString()
+            );
         }
         this.ctField = ctField;
         this.typeSolver = typeSolver;

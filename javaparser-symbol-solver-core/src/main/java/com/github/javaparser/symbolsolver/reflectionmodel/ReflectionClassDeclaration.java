@@ -270,8 +270,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
         if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
         }
-        if (this.clazz.getSuperclass() != null
-                && new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
+        if (this.clazz.getSuperclass() != null &&
+                new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)
+        ) {
             return true;
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {

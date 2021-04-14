@@ -31,9 +31,10 @@ import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
  */
 public class Java7Validator extends Java6Validator {
     final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
-        if (n.getCatchClauses().isEmpty()
-                && n.getResources().isEmpty()
-                && !n.getFinallyBlock().isPresent()) {
+        if (n.getCatchClauses().isEmpty() &&
+                n.getResources().isEmpty() &&
+                !n.getFinallyBlock().isPresent()
+        ) {
             reporter.report(n, "Try has no finally, no catch, and no resources.");
         }
         for (Expression resource : n.getResources()) {

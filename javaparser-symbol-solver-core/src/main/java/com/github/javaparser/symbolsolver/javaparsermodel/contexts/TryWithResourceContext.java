@@ -101,8 +101,10 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
         for (int i = 0; i < resources.size(); i++) {
             if (child == resources.get(i)) {
                 return resources.subList(0, i).stream()
-                        .map(e -> e instanceof VariableDeclarationExpr ? ((VariableDeclarationExpr) e).getVariables()
-                                : Collections.<VariableDeclarator>emptyList())
+                        .map(e -> e instanceof VariableDeclarationExpr ?
+                                ((VariableDeclarationExpr) e).getVariables() :
+                                Collections.<VariableDeclarator>emptyList()
+                        )
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
             }

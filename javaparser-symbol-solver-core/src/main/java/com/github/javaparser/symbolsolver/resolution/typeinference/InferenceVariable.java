@@ -76,8 +76,9 @@ public class InferenceVariable implements ResolvedType {
         InferenceVariable that = (InferenceVariable) o;
 
         if (!name.equals(that.name)) return false;
-        return typeParameterDeclaration != null ? typeParameterDeclaration.equals(that.typeParameterDeclaration)
-                : that.typeParameterDeclaration == null;
+        return typeParameterDeclaration != null ?
+                typeParameterDeclaration.equals(that.typeParameterDeclaration) :
+                that.typeParameterDeclaration == null;
     }
 
     @Override
@@ -93,8 +94,9 @@ public class InferenceVariable implements ResolvedType {
             return true;
         }
         throw new UnsupportedOperationException(
-                "We are unable to determine the assignability of an inference variable without knowing the bounds and"
-                        + " constraints");
+                "We are unable to determine the assignability of an inference variable" +
+                        " without knowing the bounds and constraints"
+        );
     }
 
     public ResolvedTypeParameterDeclaration getTypeParameterDeclaration() {

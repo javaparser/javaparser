@@ -235,8 +235,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
          * If the second and third operands are both of type Boolean, the conditional expression has type Boolean.
          * Otherwise, the conditional expression has type boolean.
          */
-        if (thenExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN)
-                && elseExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN)) {
+        if (thenExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN) &&
+                elseExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN)
+        ) {
             if (thenExpr.isReferenceType() && elseExpr.isReferenceType()) {
                 return thenExpr.asReferenceType();
             }
@@ -265,10 +266,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             /*
              *  If the second and third operands have the same type, then that is the type of the conditional expression.
              */
-            String qnameTypeThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive().describe()
-                    : thenExpr.asReferenceType().describe();
-            String qnameTypeElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive().describe()
-                    : elseExpr.asReferenceType().describe();
+            String qnameTypeThenExpr = thenExpr.isPrimitive() ?
+                    thenExpr.asPrimitive().describe() :
+                    thenExpr.asReferenceType().describe();
+            String qnameTypeElseExpr = elseExpr.isPrimitive() ?
+                    elseExpr.asPrimitive().describe() :
+                    elseExpr.asReferenceType().describe();
             if (qnameTypeThenExpr.equals(qnameTypeElseExpr)) {
                 return thenExpr;
             }
@@ -276,19 +279,21 @@ public class TypeExtractor extends DefaultVisitorAdapter {
              * If one of the second and third operands is of primitive type T, and the type of the other is the result of
              * applying boxing conversion (§5.1.7) to T, then the type of the conditional expression is T.
              */
-            else if ((thenExpr.isPrimitive() && elseExpr.isReferenceType()
-                    && isCompatible(elseExpr.asReferenceType(), thenExpr.asPrimitive()))) {
+            else if ((thenExpr.isPrimitive() && elseExpr.isReferenceType() &&
+                    isCompatible(elseExpr.asReferenceType(), thenExpr.asPrimitive()))) {
                 return thenExpr;
-            } else if ((elseExpr.isPrimitive() && thenExpr.isReferenceType()
-                    && isCompatible(thenExpr.asReferenceType(), elseExpr.asPrimitive()))) {
+            } else if ((elseExpr.isPrimitive() && thenExpr.isReferenceType() &&
+                    isCompatible(thenExpr.asReferenceType(), elseExpr.asPrimitive()))) {
                 return elseExpr;
             }
             /*
              * If one of the operands is of type byte or Byte and the other is of type short or Short, then the type of the
              * conditional expression is short.
              */
-            else if ((isCompatible(thenExpr, ResolvedPrimitiveType.BYTE) && isCompatible(elseExpr, ResolvedPrimitiveType.SHORT))
-                    || (isCompatible(elseExpr, ResolvedPrimitiveType.BYTE) && isCompatible(thenExpr, ResolvedPrimitiveType.SHORT))) {
+            else if (
+                    (isCompatible(thenExpr, ResolvedPrimitiveType.BYTE) && isCompatible(elseExpr, ResolvedPrimitiveType.SHORT)) ||
+                            (isCompatible(elseExpr, ResolvedPrimitiveType.BYTE) && isCompatible(thenExpr, ResolvedPrimitiveType.SHORT))
+            ) {
                 return ResolvedPrimitiveType.SHORT;
             }
             /*
@@ -299,11 +304,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
              *  "The constant expression of type int is representable in type T" is a runtime decision!
              */
             else if (thenExpr.isPrimitive() && elseExpr.isPrimitive()) {
-                if (((ResolvedPrimitiveType) thenExpr).in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType) elseExpr).equals(ResolvedPrimitiveType.INT)) {
+                if (((ResolvedPrimitiveType) thenExpr).in(resolvedPrimitiveTypeSubList) &&
+                        ((ResolvedPrimitiveType) elseExpr).equals(ResolvedPrimitiveType.INT)
+                ) {
                     return thenExpr;
-                } else if (((ResolvedPrimitiveType) elseExpr).in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType) thenExpr).equals(ResolvedPrimitiveType.INT)) {
+                } else if (((ResolvedPrimitiveType) elseExpr).in(resolvedPrimitiveTypeSubList) &&
+                        ((ResolvedPrimitiveType) thenExpr).equals(ResolvedPrimitiveType.INT)
+                ) {
                     return elseExpr;
                 }
             }
@@ -313,15 +320,17 @@ public class TypeExtractor extends DefaultVisitorAdapter {
              * conversion to T, then the type of the conditional expression is U.
              * A priori this is a runtime decision!
              */
-            else if (thenExpr.isReference() && elseExpr.isPrimitive()
-                    && thenExpr.asReferenceType().isUnboxable()
-                    && thenExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType) elseExpr).equals(ResolvedPrimitiveType.INT)) {
+            else if (thenExpr.isReference() && elseExpr.isPrimitive() &&
+                    thenExpr.asReferenceType().isUnboxable() &&
+                    thenExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList) &&
+                    ((ResolvedPrimitiveType) elseExpr).equals(ResolvedPrimitiveType.INT)
+            ) {
                 return thenExpr.asReferenceType().toUnboxedType().get();
-            } else if (elseExpr.isReference() && thenExpr.isPrimitive()
-                    && elseExpr.asReferenceType().isUnboxable()
-                    && elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType) thenExpr).equals(ResolvedPrimitiveType.INT)) {
+            } else if (elseExpr.isReference() && thenExpr.isPrimitive() &&
+                    elseExpr.asReferenceType().isUnboxable() &&
+                    elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList) &&
+                    ((ResolvedPrimitiveType) thenExpr).equals(ResolvedPrimitiveType.INT)
+            ) {
                 return elseExpr.asReferenceType().toUnboxedType().get();
             }
 
@@ -329,10 +338,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
              * and the type of the conditional expression is the promoted type of the second
              * and third operands.
              */
-            ResolvedPrimitiveType primitiveThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive()
-                    : thenExpr.asReferenceType().toUnboxedType().get();
-            ResolvedPrimitiveType primitiveElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive()
-                    : elseExpr.asReferenceType().toUnboxedType().get();
+            ResolvedPrimitiveType primitiveThenExpr = thenExpr.isPrimitive() ?
+                    thenExpr.asPrimitive() :
+                    thenExpr.asReferenceType().toUnboxedType().get();
+            ResolvedPrimitiveType primitiveElseExpr = elseExpr.isPrimitive() ?
+                    elseExpr.asPrimitive() :
+                    elseExpr.asReferenceType().toUnboxedType().get();
             return primitiveThenExpr.bnp(primitiveElseExpr);
         }
 
@@ -398,8 +409,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     }
 
     private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
-        return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
-        || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
+        return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType)) ||
+                (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
     }
 
     @Override

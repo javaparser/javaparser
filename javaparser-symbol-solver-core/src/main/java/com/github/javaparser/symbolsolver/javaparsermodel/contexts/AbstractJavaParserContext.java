@@ -136,8 +136,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         }
         Node notMethodNode = parentNode;
         // to avoid an infinite loop if parent scope is the same as wrapped node
-        while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
-                || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode))) {
+        while (notMethodNode instanceof MethodCallExpr ||
+                notMethodNode instanceof FieldAccessExpr ||
+                (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode))
+        ) {
             notMethodNode = notMethodNode.getParentNode().orElse(null);
         }
         if (notMethodNode == null) {

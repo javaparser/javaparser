@@ -617,8 +617,7 @@ public class LexicalPreservingPrinter {
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
-            if (tte.getTokenKind() == SINGLE_LINE_COMMENT
-                    || tte.isNewline()) {
+            if (tte.getTokenKind() == SINGLE_LINE_COMMENT || tte.isNewline()) {
                 break;
             } else {
                 followingNewlines.add(tte);

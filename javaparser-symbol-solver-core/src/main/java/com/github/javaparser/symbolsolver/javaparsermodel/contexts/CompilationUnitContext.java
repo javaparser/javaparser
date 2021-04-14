@@ -129,8 +129,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             // Look for types in this compilation unit. For instance, if the given name is "A", there may be a class or
             // interface in this compilation unit called "A".
             for (TypeDeclaration<?> type : wrappedNode.getTypes()) {
-                if (type.getName().getId().equals(name)
-                    || type.getFullyQualifiedName().map(qualified -> qualified.equals(name)).orElse(false)) {
+                if (type.getName().getId().equals(name) ||
+                        type.getFullyQualifiedName().map(qualified -> qualified.equals(name)).orElse(false)
+                ) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
                     } else if (type instanceof AnnotationDeclaration) {
@@ -272,9 +273,10 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (importDecl.isAsterisk()) {
                     String importString = importDecl.getNameAsString();
 
-                    if (this.wrappedNode.getPackageDeclaration().isPresent()
-                        && this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier().equals(packageName(importString))
-                        && this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString)))) {
+                    if (this.wrappedNode.getPackageDeclaration().isPresent() &&
+                            this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier().equals(packageName(importString)) &&
+                            this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString)))
+                    ) {
                         // We are using a static import on a type defined in this file. It means the value was not found at
                         // a lower level so this will fail
                         return SymbolReference.unsolved(ResolvedMethodDeclaration.class);

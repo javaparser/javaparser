@@ -85,8 +85,9 @@ public class TypeSameAsType extends ConstraintFormula {
             //   type arguments B1, ..., Bn and T has type arguments A1, ..., An, the constraint reduces to the following
             //   new constraints: for all i (1 ≤ i ≤ n), ‹Bi = Ai›.
 
-            if (S.isReferenceType() && T.isReferenceType()
-                    && S.asReferenceType().toRawType().equals(T.asReferenceType().toRawType())) {
+            if (S.isReferenceType() && T.isReferenceType() &&
+                    S.asReferenceType().toRawType().equals(T.asReferenceType().toRawType())
+            ) {
                 ReductionResult res = ReductionResult.empty();
                 List<ResolvedType> Bs = S.asReferenceType().typeParametersValues();
                 List<ResolvedType> As = T.asReferenceType().typeParametersValues();

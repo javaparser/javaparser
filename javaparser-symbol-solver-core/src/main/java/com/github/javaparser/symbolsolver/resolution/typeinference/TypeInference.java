@@ -678,11 +678,15 @@ public class TypeInference {
             Expression ei = es.get(i);
             ResolvedType fi = Fs.get(i);
             if (isPertinentToApplicability(ei)) {
-                if (ei.isStandaloneExpression() && JavaParserFacade.get(typeSolver).getType(ei).isPrimitive()
-                        && fi.isReferenceType()) {
+                if (ei.isStandaloneExpression() &&
+                        JavaParserFacade.get(typeSolver).getType(ei).isPrimitive() &&
+                        fi.isReferenceType()
+                ) {
                     return Optional.empty();
                 }
-                if (fi.isPrimitive() && (!ei.isStandaloneExpression() || !JavaParserFacade.get(typeSolver).getType(ei).isPrimitive())) {
+                if (fi.isPrimitive() &&
+                        (!ei.isStandaloneExpression() || !JavaParserFacade.get(typeSolver).getType(ei).isPrimitive())
+                ) {
                     return Optional.empty();
                 }
             }

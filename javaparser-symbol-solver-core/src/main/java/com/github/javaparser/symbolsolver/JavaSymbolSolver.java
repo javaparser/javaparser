@@ -308,8 +308,10 @@ public class JavaSymbolSolver implements SymbolResolver {
                 throw new UnsolvedSymbolException("We are unable to find the method declaration corresponding to " + node);
             }
         }
-        throw new UnsupportedOperationException("Unable to find the declaration of type " + resultClass.getSimpleName()
-                + " from " + node.getClass().getSimpleName());
+        throw new UnsupportedOperationException(
+                "Unable to find the declaration of type " + resultClass.getSimpleName() +
+                        " from " + node.getClass().getSimpleName()
+        );
     }
 
     @Override
@@ -318,8 +320,10 @@ public class JavaSymbolSolver implements SymbolResolver {
         if (resultClass.isInstance(resolvedType)) {
             return resultClass.cast(resolvedType);
         }
-        throw new UnsupportedOperationException("Unable to get the resolved type of class "
-                + resultClass.getSimpleName() + " from " + javaparserType);
+        throw new UnsupportedOperationException(
+                "Unable to get the resolved type of class " + resultClass.getSimpleName() +
+                        " from " + javaparserType
+        );
     }
 
     @Override

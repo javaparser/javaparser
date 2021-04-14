@@ -518,11 +518,11 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         List<Bound> bounds = typeVariable.asTypeVariable().asTypeParameter().getBounds();
         if (bounds.size() == 1) {
             ResolvedType boundType = bounds.get(0).getType();
-            boolean hasTypeParameter = boundType.isReferenceType()
-                    && !boundType.asReferenceType().typeParametersMap.isEmpty();
-            return hasTypeParameter
-                    ? compareConsideringTypeParameters(boundType.asReferenceType())
-                    : boundType.isAssignableBy(referenceType);
+            boolean hasTypeParameter = boundType.isReferenceType() &&
+                    !boundType.asReferenceType().typeParametersMap.isEmpty();
+            return hasTypeParameter ?
+                    compareConsideringTypeParameters(boundType.asReferenceType()) :
+                    boundType.isAssignableBy(referenceType);
         }
         return false;
     }
@@ -550,9 +550,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     public boolean isJavaLangObject() {
-        return this.isReferenceType()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return this.isReferenceType() &&
+                hasName() && // Consider anonymous classes
+                getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -560,9 +560,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
      */
     public boolean isJavaLangEnum() {
-        return this.isReferenceType()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isReferenceType() &&
+                hasName() && // Consider anonymous classes
+                getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
 

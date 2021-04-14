@@ -194,8 +194,9 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
         }
-        if (this.clazz.getSuperclass() != null
-                && new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
+        if (this.clazz.getSuperclass() != null &&
+                new ReflectionInterfaceDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)
+        ) {
             return true;
         }
         for (Class interfaze : clazz.getInterfaces()) {

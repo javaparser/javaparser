@@ -150,8 +150,7 @@ public class JavaParserJsonDeserializer {
      * @return true if propertyKey is read from json and set to Node instance
      */
     protected boolean readNonMetaProperties(String name, JsonValue jsonValue, Node node) {
-        return readRange(name, jsonValue, node)
-                || readTokenRange(name, jsonValue, node);
+        return readRange(name, jsonValue, node) || readTokenRange(name, jsonValue, node);
     }
 
     protected boolean readRange(String name, JsonValue jsonValue, Node node) {

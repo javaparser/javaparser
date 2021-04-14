@@ -968,10 +968,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         AtomicBoolean columnAlignFirstMethodChain = new AtomicBoolean();
         if (getOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN).isPresent()) {
             // pick the kind of expressions where vertically aligning method calls is okay.
-            if (n.findAncestor(Statement.class).map(p -> p.isReturnStmt()
-                    || p.isThrowStmt()
-                    || p.isAssertStmt()
-                    || p.isExpressionStmt()).orElse(false)) {
+            if (n.findAncestor(Statement.class).map(p ->
+                    p.isReturnStmt() ||
+                    p.isThrowStmt() ||
+                    p.isAssertStmt() ||
+                    p.isExpressionStmt()).orElse(false)
+            ) {
                 // search for first parent that does not have its child as scope
                 Node c = n;
                 Optional<Node> p = c.getParentNode();
@@ -1991,8 +1993,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             Node nodeToPrint = everything.get(i);
             if (!(nodeToPrint instanceof Comment))
                 throw new RuntimeException(
-                        "Expected comment, instead " + nodeToPrint.getClass() + ". Position of previous child: "
-                                + positionOfPreviousChild + ", position of child " + positionOfTheChild);
+                        "Expected comment, instead " + nodeToPrint.getClass() + "." +
+                                " Position of previous child: " + positionOfPreviousChild + "," +
+                                " position of child " + positionOfTheChild
+                );
             nodeToPrint.accept(this, null);
         }
     }

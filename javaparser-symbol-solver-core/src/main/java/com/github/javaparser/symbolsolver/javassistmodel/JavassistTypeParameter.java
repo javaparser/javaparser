@@ -80,8 +80,8 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
     @Override
     public String toString() {
         return "JavassistTypeParameter{" +
-                wrapped.getName()
-                + '}';
+                wrapped.getName() +
+                '}';
     }
 
     @Override

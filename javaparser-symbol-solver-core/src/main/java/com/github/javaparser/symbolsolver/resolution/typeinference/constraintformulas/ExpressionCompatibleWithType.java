@@ -192,8 +192,10 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //     - If the function type's result is not void and the lambda body is a block that is not
                 //       value-compatible, the constraint reduces to false.
 
-                if (!targetFunctionType.getReturnType().isVoid() && lambdaExpr.getBody() instanceof BlockStmt
-                        && !isValueCompatibleBlock(lambdaExpr.getBody())) {
+                if (!targetFunctionType.getReturnType().isVoid() &&
+                        lambdaExpr.getBody() instanceof BlockStmt &&
+                        !isValueCompatibleBlock(lambdaExpr.getBody())
+                ) {
                     return ReductionResult.falseResult();
                 }
 

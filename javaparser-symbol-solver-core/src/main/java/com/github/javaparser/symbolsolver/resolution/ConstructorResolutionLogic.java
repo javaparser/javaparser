@@ -84,8 +84,9 @@ public class ConstructorResolutionLogic {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
-                        if (actualType.isArray()
-                                && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
+                        if (actualType.isArray() &&
+                                expectedType.isAssignableBy(actualType.asArrayType().getComponentType())
+                        ) {
                             argumentsTypes.set(pos, actualType.asArrayType().getComponentType());
                         } else {
                             argumentsTypes = groupVariadicParamValues(argumentsTypes, pos,
@@ -110,16 +111,18 @@ public class ConstructorResolutionLogic {
         for (int i = 0; i < constructor.getNumberOfParams(); i++) {
             ResolvedType expectedType = constructor.getParam(i).getType();
             ResolvedType actualType = argumentsTypes.get(i);
-            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard()))
-                    && expectedType.asTypeParameter().declaredOnMethod()) {
+            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) &&
+                    expectedType.asTypeParameter().declaredOnMethod()
+            ) {
                 matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
                 continue;
             }
-            boolean isAssignableWithoutSubstitution =
-                    expectedType.isAssignableBy(actualType) || (constructor.getParam(i).isVariadic()
-                            && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
-            if (!isAssignableWithoutSubstitution && expectedType.isReferenceType()
-                    && actualType.isReferenceType()) {
+            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType) ||
+                    (constructor.getParam(i).isVariadic() && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
+            if (!isAssignableWithoutSubstitution &&
+                    expectedType.isReferenceType() &&
+                    actualType.isReferenceType()
+            ) {
                 isAssignableWithoutSubstitution = MethodResolutionLogic.isAssignableMatchTypeParameters(
                         expectedType.asReferenceType(), actualType.asReferenceType(), matchedParameters);
             }

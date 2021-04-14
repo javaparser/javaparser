@@ -128,8 +128,9 @@ public class SourcePrinter {
                     fullTab.append(IndentType.SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= currentIndentType.getWidth())
-                        && newIndent.substring(newIndent.length() - currentIndentType.getWidth()).equals(fullTabString)) {
+                if ((newIndent.length() >= currentIndentType.getWidth()) &&
+                        newIndent.substring(newIndent.length() - currentIndentType.getWidth()).equals(fullTabString)
+                ) {
                     int i = newIndent.indexOf(fullTabString);
                     newIndent.replace(i, i + currentIndentType.getWidth(), currentIndentType.getCar().toString());
                 }

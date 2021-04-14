@@ -56,9 +56,9 @@ public class IfStatementContext extends StatementContext<IfStmt> {
      * @return true, If this is an if inside of an if...
      */
     public boolean nodeContextIsChainedIfElseIf(Context parentContext) {
-        return parentContext instanceof AbstractJavaParserContext
-                && ((AbstractJavaParserContext<?>) this).getWrappedNode() instanceof IfStmt
-                && ((AbstractJavaParserContext<?>) parentContext).getWrappedNode() instanceof IfStmt;
+        return parentContext instanceof AbstractJavaParserContext &&
+                ((AbstractJavaParserContext<?>) this).getWrappedNode() instanceof IfStmt &&
+                ((AbstractJavaParserContext<?>) parentContext).getWrappedNode() instanceof IfStmt;
     }
 
     /**

@@ -760,8 +760,11 @@ public class JavaParserFacade {
         Context context = JavaParserFactory.getContext(call, typeSolver);
         Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName().getId(), params);
         if (!methodUsage.isPresent()) {
-            throw new RuntimeException("Method '" + call.getName() + "' cannot be resolved in context "
-                    + call + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context + ". Parameter types: " + params);
+            throw new RuntimeException(
+                    "Method '" + call.getName() + "' cannot be resolved in context " + call + "" +
+                            " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context + "." +
+                            " Parameter types: " + params
+            );
         }
         return methodUsage.get();
     }

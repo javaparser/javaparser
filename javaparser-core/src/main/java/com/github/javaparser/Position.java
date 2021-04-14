@@ -203,8 +203,8 @@ public class Position implements Comparable<Position> {
 
         Position otherPosition = (Position) o;
 
-        return Objects.equals(line, otherPosition.line)
-                && Objects.equals(column, otherPosition.column);
+        return Objects.equals(line, otherPosition.line) &&
+                Objects.equals(column, otherPosition.column);
     }
 
     @Override

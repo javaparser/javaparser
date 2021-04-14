@@ -123,9 +123,11 @@
 		<module name="IllegalImport"/> <!-- defaults to sun.* packages -->
 		<module name="RedundantImport"/>
 		<module name="UnusedImports">
+			<!-- Edit: JP Deviation from Sun style -->
 			<property name="processJavadoc" value="true"/>
 		</module>
 		<module name="CustomImportOrder">
+			<!-- Edit: JP Deviation from Sun style -->
 			<property name="customImportOrderRules" value="THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STANDARD_JAVA_PACKAGE###STATIC"/>
 			<property name="specialImportsRegExp" value="^javax\."/>
 			<property name="standardPackageRegExp" value="^java\."/>
@@ -145,7 +147,10 @@
 		<module name="MethodParamPad"/>
 		<module name="NoWhitespaceAfter"/>
 		<module name="NoWhitespaceBefore"/>
-		<module name="OperatorWrap"/>
+		<module name="OperatorWrap">
+			<!-- Edit: JP Deviation from Sun style -->
+			<property name="option" value="eol"/>
+		</module>
 		<module name="ParenPad"/>
 		<module name="TypecastParenPad"/>
 		<module name="WhitespaceAfter"/>

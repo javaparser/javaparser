@@ -66,8 +66,7 @@ public class DotPrinter {
 
         String ndName = nextNodeName();
         if (outputNodeType)
-            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName()
-                    + ")\"];");
+            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName() + ")\"];");
         else
             builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + "\"];");
 
@@ -76,8 +75,7 @@ public class DotPrinter {
 
         for (PropertyMetaModel a : attributes) {
             String attrName = nextNodeName();
-            builder.append(SYSTEM_EOL + attrName + " [label=\"" + escape(a.getName()) + "='"
-                    + escape(a.getValue(node).toString()) + "'\"];");
+            builder.append(SYSTEM_EOL + attrName + " [label=\"" + escape(a.getName()) + "='" + escape(a.getValue(node).toString()) + "'\"];");
             builder.append(SYSTEM_EOL + ndName + " -> " + attrName + ";");
 
         }

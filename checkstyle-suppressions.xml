@@ -27,7 +27,6 @@
 	<suppress checks="MagicNumber"/>
 	<suppress checks="MissingJavadocMethod"/>
 	<suppress checks="NeedBraces"/>
-	<suppress checks="OperatorWrap"/>
 	<suppress checks="ParameterNumber"/>
 	<suppress checks="RedundantModifier"/>
 	<suppress checks="TodoComment"/>

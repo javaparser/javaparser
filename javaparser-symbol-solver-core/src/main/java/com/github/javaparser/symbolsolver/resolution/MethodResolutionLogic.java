@@ -473,10 +473,11 @@ public class MethodResolutionLogic {
             }
 
             // If the given argument still isn't applicable even after considering type arguments/generics, this is not a match.
-            if (!expectedArgumentType.isAssignableBy(actualArgumentType)
-                    && !expectedTypeWithSubstitutions.isAssignableBy(actualArgumentType)
-                    && !expectedTypeWithInference.isAssignableBy(actualArgumentType)
-                    && !expectedTypeWithoutSubstitutions.isAssignableBy(actualArgumentType)) {
+            if (!expectedArgumentType.isAssignableBy(actualArgumentType) &&
+                    !expectedTypeWithSubstitutions.isAssignableBy(actualArgumentType) &&
+                    !expectedTypeWithInference.isAssignableBy(actualArgumentType) &&
+                    !expectedTypeWithoutSubstitutions.isAssignableBy(actualArgumentType)
+            ) {
                 return false;
             }
         }
@@ -601,8 +602,9 @@ public class MethodResolutionLogic {
                     winningCandidate = other;
                 } else {
                     throw new MethodAmbiguityException(
-                            "Ambiguous method call: cannot find a most applicable method: " + winningCandidate
-                                    + ", " + other);
+                            "Ambiguous method call: cannot find a most applicable method: " +
+                                    winningCandidate + ", " + other
+                    );
                 }
             }
         }
@@ -697,8 +699,9 @@ public class MethodResolutionLogic {
             // if paramA and paramB are not the last parameters
             // and the type of paramA or paramB (which are not more specific at this stage) is java.lang.Object
             // then we have to consider others parameters before concluding
-            } else if ((i < numberOfArgs - 1)
-                    && (isJavaLangObject(paramTypeB) || (isJavaLangObject(paramTypeA)))) {
+            } else if ((i < numberOfArgs - 1) &&
+                    (isJavaLangObject(paramTypeB) || (isJavaLangObject(paramTypeA)))
+            ) {
                 // consider others parameters
                 // but eventually mark the method A as more specific if the methodB has an argument of type java.lang.Object
                 isMethodAMoreSpecific = isMethodAMoreSpecific || isJavaLangObject(paramTypeB);

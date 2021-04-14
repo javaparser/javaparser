@@ -30,10 +30,9 @@ public enum LineSeparator {
      */
     SYSTEM(
             System.getProperty("line.separator"),
-            "SYSTEM : (" + System.getProperty("line.separator")
-                    .replace("\r", "\\r")
-                    .replace("\n", "\\n")
-                    + ")"
+            "SYSTEM : (" +
+                    StringEscapeUtils.escapeNewlines(System.getProperty("line.separator")) +
+                    ")"
     ),
     /**
      * The ARBITRARY line ending can be used where we do not care about the line separator,

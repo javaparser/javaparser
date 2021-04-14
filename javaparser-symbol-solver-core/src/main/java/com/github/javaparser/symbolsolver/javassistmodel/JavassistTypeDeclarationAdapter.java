@@ -144,8 +144,10 @@ public class JavassistTypeDeclarationAdapter {
 
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(ctClass.getDeclaredMethods())
-                .filter(m -> ((m.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0)
-                        && ((m.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0))
+                .filter(m -> (
+                        (m.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0) &&
+                        ((m.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)
+                )
                 .map(m -> new JavassistMethodDeclaration(m, typeSolver)).collect(Collectors.toSet());
     }
 

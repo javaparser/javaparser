@@ -123,6 +123,12 @@ public final class StringEscapeUtils {
                     {"\\s", " "},
                     {"\\\n", ""}}));
 
+    public static String escapeNewlines(String input) {
+        return input
+                .replaceAll("\\r", "\\\\r")
+                .replaceAll("\\n", "\\\\n");
+    }
+
     /**
      * Adapted from apache commons-lang3 project.
      * <p>
@@ -424,8 +430,11 @@ public final class StringEscapeUtils {
                     }
                     return i + 4;
                 }
-                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '" + input.subSequence(index, input.length())
-                        + "' due to end of CharSequence");
+                throw new IllegalArgumentException(
+                        "Less than 4 hex digits in unicode value:" +
+                        " '" + input.subSequence(index, input.length()) + "'" +
+                        " due to end of CharSequence"
+                );
             }
             return 0;
         }
