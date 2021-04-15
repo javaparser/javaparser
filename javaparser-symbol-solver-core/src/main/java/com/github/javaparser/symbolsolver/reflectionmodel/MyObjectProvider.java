@@ -33,6 +33,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
  */
 public class MyObjectProvider implements ObjectProvider {
 
+    /** Singleton pattern - the single, static, instance of MyObjectProvider. */
     public static final MyObjectProvider INSTANCE = new MyObjectProvider();
 
     private MyObjectProvider() {

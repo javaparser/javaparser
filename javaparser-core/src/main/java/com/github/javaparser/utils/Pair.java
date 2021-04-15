@@ -32,7 +32,11 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * @param <B> type of object b.
  */
 public class Pair<A, B> {
+
+    /** One of the pair items. */
     public final A a;
+
+    /** One of the pair items. */
     public final B b;
 
     public Pair(A a, B b) {

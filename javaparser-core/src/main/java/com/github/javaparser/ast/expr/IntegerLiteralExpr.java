@@ -48,8 +48,20 @@ import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
  */
 public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
+    /**
+     * Note that negative numbers are represented within JavaParser as the negative sign and an
+     * unsigned number. Where {@code Integer.MIN_VALUE} is found, the absolute value cannot be
+     * represented as an {@code Integer}, instead a workarounds are required.
+     * See {@link #asNumber()} for additional detail.
+     */
     public static final String MAX_31_BIT_UNSIGNED_VALUE_AS_STRING = "2147483648";
 
+    /**
+     * Note that negative numbers are represented within JavaParser as the negative sign and an
+     * unsigned number. Where {@code Integer.MIN_VALUE} is found, the absolute value cannot be
+     * represented as an {@code Integer}, instead a workarounds are required.
+     * See {@link #asNumber()} for additional detail.
+     */
     public static final long MAX_31_BIT_UNSIGNED_VALUE_AS_LONG = 2147483648L;
 
     public IntegerLiteralExpr() {

@@ -44,7 +44,10 @@ import java.util.stream.Collectors;
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration,
                                                                   ResolvedTypeParametrizable {
 
+    /** A utility reference to the fully qualified, canonical, name. */
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+
+    /** A utility reference to the fully qualified, canonical, name. */
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
@@ -115,7 +118,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         return traverser.apply(this);
     }
 
-    /*
+    /**
      * depth first search all ancestors
      * In the example above, this method returns B,C,E,D
      */
@@ -135,7 +138,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         return ancestors;
     };
 
-    /*
+    /**
      * breadth first search all all ancestors
      * In the example above, this method returns B,C,D,E
      */

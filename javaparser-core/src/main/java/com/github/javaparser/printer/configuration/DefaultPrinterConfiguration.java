@@ -22,7 +22,7 @@ package com.github.javaparser.printer.configuration;
 
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,18 +47,38 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Print javadoc comments only. It can be combined with {@code PRINT_COMMENTS} to print regular javadoc and comments
          */
         PRINT_JAVADOC(Boolean.class),
+        /**
+         * Whether to include space around operators - e.g. {@code 1+2} when {@code false} vs {@code 1 + 2} when {@code true}.
+         */
         SPACE_AROUND_OPERATORS(Boolean.class),
+        /**
+         * When true, indent wrapped parameters. For example:
+         * <pre>{@code
+         *     public void foo(String a,
+         *                     String b,
+         *                     String c) {}
+         * }<pre>
+         * TODO: Confirm this description and example.
+         */
         COLUMN_ALIGN_PARAMETERS(Boolean.class),
+        /**
+         * When true, indent wrapped method calls. For example:
+         * <pre>{@code
+         *     foo.bar()
+         *        .baz();
+         * }<pre>
+         * TODO: Confirm this description and example.
+         */
         COLUMN_ALIGN_FIRST_METHOD_CHAIN(Boolean.class),
         /**
          * Indent the case when it is true, don't if false
          * <pre>{@code
-         * switch(x) {            switch(x) {
-         *    case 1:             case 1:
-         *        return y;           return y;
-         *    case 2:             case 2:
-         *        return z;           return x;
-         * }                       }
+         *     switch(x) {        |     switch(x) {
+         *        case 1:         |     case 1:
+         *            return y;   |         return y;
+         *        case 2:         |     case 2:
+         *            return z;   |         return x;
+         *     }                  |      }
          * }<pre>
          */
         INDENT_CASE_IN_SWITCH(Boolean.class),
@@ -86,7 +106,12 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Set it to 1 or less to always align vertically.
          */
         MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY(Integer.class, Integer.valueOf(5)),
-        END_OF_LINE_CHARACTER(String.class, Utils.SYSTEM_EOL),
+        /**
+         * The character(s) to use when inserting a newline. Defaults to the system's EOL character.
+         * Options typically include {@code \r} (MacOS), {@code \n} (Linux), {@code \r\n} (Windows).
+         * TODO: Use LineSeparator directly, rather than a String.
+         */
+        END_OF_LINE_CHARACTER(String.class, LineSeparator.SYSTEM.asRawString()),
         /**
          * Indentation proprerty
          */

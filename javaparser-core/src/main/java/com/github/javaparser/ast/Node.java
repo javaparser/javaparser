@@ -825,10 +825,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 return new PostOrderIterator(this);
             case PREORDER:
                 return new PreOrderIterator(this);
-            case DIRECT_CHILDREN:
-                return new DirectChildrenIterator(this);
             case PARENTS:
                 return new ParentsVisitor(this);
+            case DIRECT_CHILDREN:
+                return new DirectChildrenIterator(this);
             default:
                 throw new IllegalArgumentException("Unknown traversal choice.");
         }

@@ -83,9 +83,29 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
 
+    /**
+     * There are multiple "types" of entry within a switch.
+     * The grammar for these different entry types are specified within the grammar (JLS 14.11).
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.11">14.11.1. Switch Blocks</a>
+     */
     public enum Type {
 
-        STATEMENT_GROUP, EXPRESSION, BLOCK, THROWS_STATEMENT
+        /**
+         * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.11">14.11.1. Switch Blocks</a>
+         */
+        STATEMENT_GROUP,
+        /**
+         * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-15.html#jls-15.2">15.2. Forms of Expressions</a>
+         */
+        EXPRESSION,
+        /**
+         * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.2">14.2. Blocks</a>
+         */
+        BLOCK,
+        /**
+         * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.18">14.18. The throw Statement</a>
+         */
+        THROWS_STATEMENT
     }
 
     private NodeList<Expression> labels;

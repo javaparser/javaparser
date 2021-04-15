@@ -59,6 +59,10 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
     private final InitializePropertyMetaModelsStatementsGenerator initializePropertyMetaModelsStatementsGenerator = new InitializePropertyMetaModelsStatementsGenerator();
     private final InitializeConstructorParametersStatementsGenerator initializeConstructorParametersStatementsGenerator = new InitializeConstructorParametersStatementsGenerator();
 
+    /**
+     * A comment to be added at the top of metamodel classes.
+     * This comment is to indicate the class should not be edited directly.
+     */
     public static final String GENERATED_CLASS_COMMENT = "" +
             "This file, class, and its contents are completely generated based on:" +
             "\n<ul>" +

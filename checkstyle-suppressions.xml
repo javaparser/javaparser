@@ -22,7 +22,7 @@
 	<suppress checks="JavadocPackage"/>
 	<suppress checks="JavadocStyle"/>
 	<suppress checks="JavadocType"/>
-	<suppress checks="JavadocVariable"/>
+<!--	<suppress checks="JavadocVariable"/>-->
 	<suppress checks="LineLength"/>
 	<suppress checks="MagicNumber"/>
 	<suppress checks="NeedBraces"/>
@@ -119,6 +119,33 @@
 	<!-- MetaModel classes have imports added/removed, therefore we tolerate unsorted imports -->
 	<suppress checks="CustomImportOrder" files=".*MetaModel.java"/>
 
+	<!-- MetaModel classes have public mutable attributes (instead of using accessor/mutator methods)  -->
+	<suppress checks="JavadocVariable" files=".*MetaModel.java"/>
+
+	<!-- These classes contain generated public enum values, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="ObservableProperty.java"/>
+	<suppress checks="JavadocVariable" files="JavaToken.java"/>
+
+	<!-- These classes contain .... public enum values, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="AccessSpecifier.java"/>
+	<suppress checks="JavadocVariable" files="AssignExpr.java"/>
+	<suppress checks="JavadocVariable" files="BinaryExpr.java"/>
+	<suppress checks="JavadocVariable" files="UnaryExpr.java"/>
+	<suppress checks="JavadocVariable" files="Modifier.java"/>
+	<suppress checks="JavadocVariable" files="PrimitiveType.java"/>
+	<suppress checks="JavadocVariable" files="JavadocInlineTag.java"/>
+	<suppress checks="JavadocVariable" files="JavadocBlockTag.java"/>
+	<suppress checks="JavadocVariable" files="CsmConditional.java"/>
+	<suppress checks="JavadocVariable" files="ResolvedPrimitiveType.java"/>
+	<suppress checks="JavadocVariable" files="Node.java"/>
+	<suppress checks="JavadocVariable" files="NameCategory.java"/>
+
+	<!-- This clas is part of the serialisation module, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="JavaParserJsonSerializer.java"/>
+
+	<!-- These classes contain .... public static final fields, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="ParseStart.java"/>
+
 	<!-- These classes have a generated switch element, which does not include compliant whitespace -->
 	<suppress checks="WhitespaceAround" files="AssignExpr.java"/>
 	<suppress checks="WhitespaceAround" files="BinaryExpr.java"/>
@@ -128,5 +155,7 @@
 	<!-- These classes have comments touched/modified by the JP generators, which does not include compliant whitespace -->
 	<suppress checks="RegexpSingleline" files="MethodCallExpr.java"/>
 	<suppress checks="RegexpSingleline" files="JavaToken.java"/>
+
+	<!-- These classes contain .... public enum values, therefore lack of documents is tolerated -->
 
 </suppressions>

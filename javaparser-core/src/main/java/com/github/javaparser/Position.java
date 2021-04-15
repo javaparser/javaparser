@@ -29,7 +29,17 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * A position in a source file. Lines and columns start counting at 1.
  */
 public class Position implements Comparable<Position> {
+
+    /**
+     * The line that this position points at.
+     * Note that this is not zero-indexed (i.e. the first line is line 1, not 0 - see also {@link #FIRST_LINE}).
+     */
     public final int line;
+
+    /**
+     * The column that this position points at.
+     * Note that this is not zero-indexed (i.e. the first column is line 1, not 0 - see also {@link #FIRST_COLUMN}).
+     */
     public final int column;
 
     /**
@@ -47,10 +57,15 @@ public class Position implements Comparable<Position> {
 
 
     /**
-     * Line numbers must be positive, thus
+     * This special value represents the first line in the file.
+     * Line numbers must be positive, thus we can use negative numbers to represent special values.
      */
     public static final int ABSOLUTE_BEGIN_LINE = -1;
 
+    /**
+     * This special value represents the last line in the file.
+     * Line numbers must be positive, thus we can use negative numbers to represent special values.
+     */
     public static final int ABSOLUTE_END_LINE = -2;
 
 

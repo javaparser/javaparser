@@ -30,6 +30,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * The range of tokens covered by this node.
  */
 public class TokenRange implements Iterable<JavaToken> {
+
+    /** A null-object, representing an invalid token range. */
     public static final TokenRange INVALID = new TokenRange(JavaToken.INVALID, JavaToken.INVALID);
 
     private final JavaToken begin;

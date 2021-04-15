@@ -101,7 +101,10 @@
 		<module name="InvalidJavadocPosition"/>
 		<module name="JavadocMethod"/>
 		<module name="JavadocType"/>
-		<module name="JavadocVariable"/>
+		<module name="JavadocVariable">
+			<!-- Edit: JP Deviation from Sun style -->
+			<property name="scope" value="public"/>
+		</module>
 		<module name="JavadocStyle"/>
 		<module name="MissingJavadocMethod"/>
 

@@ -21,10 +21,21 @@
 
 package com.github.javaparser.symbolsolver.resolution.naming;
 
+import com.github.javaparser.ast.Node;
+
 /**
  * Each Name can be part either of a Declaration or a Reference to a Declaration.
+ * See {@link NameLogic#classifyRole(Node)} for additional detail about how nodes are classified.
  */
 public enum NameRole {
+    /**
+     * A name that is part of a declaration. For example, a parameter, local variable declaration, or class declaration.
+     * See {@link NameLogic#classifyRole(Node)} for additional detail about how nodes are classified.
+     */
     DECLARATION,
+    /**
+     * A name that is a reference. For example, the use of a local variable or a MethodCallExpr.
+     * See {@link NameLogic#classifyRole(Node)} for additional detail about how nodes are classified.
+     */
     REFERENCE
 }

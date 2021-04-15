@@ -30,6 +30,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
  */
 public class NullType implements ResolvedType {
 
+    /** Singleton pattern - the single, static, instance of NullType. */
     public static final NullType INSTANCE = new NullType();
 
     private NullType() {

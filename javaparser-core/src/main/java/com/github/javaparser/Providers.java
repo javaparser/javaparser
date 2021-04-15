@@ -28,17 +28,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Factory for providers of source code for JavaParser. Providers that have no parameter for encoding but need it will
- * use UTF-8.
+ * Factory for providers of source code for JavaParser.
+ * Providers that have no parameter for encoding but need it will use UTF-8.
  */
 public final class Providers {
-    public static final Charset UTF8 = Charset.forName("utf-8");
+
+    /** The Charset to use when processing a given file/string - specifically UTF-8. */
+    public static final Charset UTF8 = StandardCharsets.UTF_8;
 
     private Providers() {
     }
