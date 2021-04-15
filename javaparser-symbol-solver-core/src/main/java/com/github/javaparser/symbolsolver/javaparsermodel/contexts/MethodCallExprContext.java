@@ -21,14 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -56,6 +48,14 @@ import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -190,7 +190,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedReferenceType refType, String name,
                                                      List<ResolvedType> argumentsTypes,
                                                      Context invokationContext) {
-        if(!refType.getTypeDeclaration().isPresent()) {
+        if (!refType.getTypeDeclaration().isPresent()) {
             return Optional.empty();
         }
 
@@ -232,7 +232,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
 
-            for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()){
+            for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()) {
                 methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
             }
 
@@ -259,11 +259,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             ResolvedReferenceType sourceRefType = source.asReferenceType();
             ResolvedReferenceType targetRefType = target.asReferenceType();
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
-            	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
-	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
-	                    inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
-	                }
-            	}
+                if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
+                    for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
+                        inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
+                    }
+                }
             }
             return;
         }
@@ -275,7 +275,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         if (source.isWildcard() && target.isWildcard()) {
-            if (source.asWildcard().isBounded() && target.asWildcard().isBounded()){
+            if (source.asWildcard().isBounded() && target.asWildcard().isBounded()) {
                 inferTypes(source.asWildcard().getBoundedType(), target.asWildcard().getBoundedType(), mappings);
             }
             return;
@@ -294,8 +294,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             inferTypes(sourceComponentType, targetComponentType, mappings);
             return;
         }
-        if (source.isArray() && target.isWildcard()){
-            if(target.asWildcard().isBounded()){
+        if (source.isArray() && target.isWildcard()) {
+            if (target.asWildcard().isBounded()) {
                 inferTypes(source, target.asWildcard().getBoundedType(), mappings);
                 return;
             }
@@ -306,18 +306,18 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
 
-        if (source.isWildcard() && target.isReferenceType()){
-            if (source.asWildcard().isBounded()){
+        if (source.isWildcard() && target.isReferenceType()) {
+            if (source.asWildcard().isBounded()) {
                 inferTypes(source.asWildcard().getBoundedType(), target, mappings);
             }
             return;
         }
-        if (source.isConstraint() && target.isReferenceType()){
+        if (source.isConstraint() && target.isReferenceType()) {
             inferTypes(source.asConstraintType().getBound(), target, mappings);
             return;
         }
 
-        if (source.isConstraint() && target.isTypeVariable()){
+        if (source.isConstraint() && target.isTypeVariable()) {
             inferTypes(source.asConstraintType().getBound(), target, mappings);
             return;
         }
@@ -406,7 +406,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             matchedTypeParameters.put(expectedType.asTypeParameter(), type);
         } else if (expectedType.isArray()) {
-        	// Issue 2258 : NullType must not fail this search
+            // Issue 2258 : NullType must not fail this search
             if (!(actualType.isArray() || actualType.isNull())) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
             }
@@ -469,7 +469,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else {
                 return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, invokationContext);
             }
-        } else if (type instanceof ResolvedLambdaConstraintType){
+        } else if (type instanceof ResolvedLambdaConstraintType) {
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedArrayType) {

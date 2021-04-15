@@ -26,7 +26,20 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.stmt.AssertStmt;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.BreakStmt;
+import com.github.javaparser.ast.stmt.ContinueStmt;
+import com.github.javaparser.ast.stmt.DoStmt;
+import com.github.javaparser.ast.stmt.EmptyStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.LabeledStmt;
+import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
+import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 
@@ -120,7 +133,7 @@ public class ControlFlowLogic {
         if (!isReachable(statement)) {
             return false;
         }
-        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>(){
+        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>() {
             @Override
             public Boolean visit(BlockStmt n, Void arg) {
                 // An empty block that is not a switch block can complete normally iff it is reachable
@@ -211,7 +224,7 @@ public class ControlFlowLogic {
 
     public boolean isReachable(Statement statement) {
 
-        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>(){
+        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>() {
             @Override
             public Boolean visit(BlockStmt n, Void arg) {
                 // The block that is the body of a constructor, method, instance initializer, or static initializer is

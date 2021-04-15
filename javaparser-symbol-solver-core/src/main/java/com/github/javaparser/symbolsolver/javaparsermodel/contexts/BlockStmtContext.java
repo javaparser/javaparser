@@ -21,11 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -37,6 +32,11 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
 
@@ -88,8 +88,8 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
 
             List<VariableDeclarator> variableDeclarators = new LinkedList<>();
             // find all variable declarators exposed to child
-            // given that we don't know the statement we are trying to resolve, we look for all variable declarations 
-            // defined in the context of the wrapped node whether it is located before or after the statement that interests us 
+            // given that we don't know the statement we are trying to resolve, we look for all variable declarations
+            // defined in the context of the wrapped node whether it is located before or after the statement that interests us
             // because a variable cannot be (re)defined after having been used
             wrappedNode.getStatements().getLast().ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
             if (!variableDeclarators.isEmpty()) {

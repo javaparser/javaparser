@@ -57,7 +57,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
             if (typeDeclaration.isEnum()) {
                 if (type instanceof ReferenceTypeImpl) {
                     ReferenceTypeImpl referenceType = (ReferenceTypeImpl) type;
-                    if(referenceType.getTypeDeclaration().isPresent()) {
+                    if (referenceType.getTypeDeclaration().isPresent()) {
                         ResolvedReferenceTypeDeclaration typeUsageTypeDeclaration = referenceType.getTypeDeclaration().get();
                         if (typeUsageTypeDeclaration.asEnum().hasEnumConstant(name)) {
                             return SymbolReference.solved(typeUsageTypeDeclaration.asEnum().getEnumConstant(name));

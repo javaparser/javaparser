@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.Node.TreeTraversal;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -45,6 +41,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -110,7 +110,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         if (wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
-        
+
         // search in implemented type
         for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
             if (implementedType.getName().getId().equals(name)) {
@@ -126,7 +126,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
                     .solveType(extendedType.getNameWithScope());
             }
         }
-        
+
         // otherwise search for local type
         List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class, TreeTraversal.BREADTHFIRST);
         for (TypeDeclaration<?> localType : localTypes) {

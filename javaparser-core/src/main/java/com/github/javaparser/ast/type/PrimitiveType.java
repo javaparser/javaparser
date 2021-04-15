@@ -114,11 +114,11 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         }
     }
 
-    static final HashMap<String, Primitive> unboxMap = new HashMap<>();
+    static final HashMap<String, Primitive> UNBOX_MAP = new HashMap<>();
 
     static {
         for (Primitive unboxedType : Primitive.values()) {
-            unboxMap.put(unboxedType.nameOfBoxedType, unboxedType);
+            UNBOX_MAP.put(unboxedType.nameOfBoxedType, unboxedType);
         }
     }
 

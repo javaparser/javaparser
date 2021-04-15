@@ -21,6 +21,12 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
@@ -32,19 +38,16 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 /**
  * @author Federico Tomassetti
  */
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration,
                                                                   ResolvedTypeParametrizable {
 
+    /** A utility reference to the fully qualified, canonical, name. */
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+
+    /** A utility reference to the fully qualified, canonical, name. */
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
@@ -96,30 +99,30 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exact same type parameters.
-     * For example 
-     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * For example
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E
      * By default the traversal is depth first
      */
     default List<ResolvedReferenceType> getAllAncestors() {
-        return getAllAncestors(depthFirstFunc);
+        return getAllAncestors(DEPTH_FIRST_FUNC);
     }
-    
+
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exact same type parameters.
-     * For example 
-     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * For example
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E
      * Apply the specified traversal
      */
     default List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         return traverser.apply(this);
     }
-    
-    /*
+
+    /**
      * depth first search all ancestors
      * In the example above, this method returns B,C,E,D
      */
-    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> depthFirstFunc = (rrtd) -> {
+    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> DEPTH_FIRST_FUNC = (rrtd) -> {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
@@ -134,16 +137,16 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         }
         return ancestors;
     };
-    
-    /*
+
+    /**
      * breadth first search all all ancestors
      * In the example above, this method returns B,C,D,E
      */
-    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
+    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> BREADTH_FIRST_FUNC = (rrtd) -> {
         Set<ResolvedReferenceType> ancestors = new HashSet<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
-          // init direct ancestors 
+          // init direct ancestors
           Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<ResolvedReferenceType>(rrtd.getAncestors());
           ancestors.addAll(queuedAncestors);
           while (!queuedAncestors.isEmpty()) {
@@ -344,10 +347,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     default boolean isJavaLangObject() {
-        return this.isClass()
-                && !isAnonymousClass()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return this.isClass() &&
+                !isAnonymousClass() &&
+                hasName() && // Consider anonymous classes
+                getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -355,8 +358,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see ResolvedReferenceType#isJavaLangEnum()
      */
     default boolean isJavaLangEnum() {
-        return this.isEnum()
-                && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isEnum() &&
+                getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
 }

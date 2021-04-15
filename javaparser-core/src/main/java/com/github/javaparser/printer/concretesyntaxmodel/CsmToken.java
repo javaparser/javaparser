@@ -27,7 +27,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.utils.LineSeparator;
 
-import static com.github.javaparser.TokenTypes.*;
+import static com.github.javaparser.TokenTypes.isEndOfLineToken;
+import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
 
 public class CsmToken implements CsmElement {
     private final int tokenType;

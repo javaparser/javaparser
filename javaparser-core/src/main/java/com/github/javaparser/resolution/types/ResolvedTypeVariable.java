@@ -80,7 +80,7 @@ public class ResolvedTypeVariable implements ResolvedType {
 
     @Override
     public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
-        if(tpToBeReplaced.getName().equals(this.typeParameter.getName())){
+        if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
         } else {

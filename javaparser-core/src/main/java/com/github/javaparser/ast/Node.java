@@ -37,7 +37,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.metamodel.*;
+import com.github.javaparser.metamodel.InternalProperty;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NodeMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -46,7 +50,18 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Spliterators;
+import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -134,7 +149,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * This can be used to sort nodes on position.
      */
-    public static Comparator<NodeWithRange<?>> NODE_BY_BEGIN_POSITION = (a, b) -> {
+    public static final Comparator<NodeWithRange<?>> NODE_BY_BEGIN_POSITION = (a, b) -> {
         if (a.hasRange() && b.hasRange()) {
             return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }
@@ -150,7 +165,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+    protected static final PrinterConfiguration PRETTY_PRINTER_NO_COMMENTS_CONFIGURATION = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -810,10 +825,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 return new PostOrderIterator(this);
             case PREORDER:
                 return new PreOrderIterator(this);
-            case DIRECT_CHILDREN:
-                return new DirectChildrenIterator(this);
             case PARENTS:
                 return new ParentsVisitor(this);
+            case DIRECT_CHILDREN:
+                return new DirectChildrenIterator(this);
             default:
                 throw new IllegalArgumentException("Unknown traversal choice.");
         }

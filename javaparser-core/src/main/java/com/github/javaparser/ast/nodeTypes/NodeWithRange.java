@@ -21,11 +21,11 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import java.util.Optional;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+
+import java.util.Optional;
 
 /**
  * A node that has a Range, which is every Node.
@@ -76,7 +76,7 @@ public interface NodeWithRange<N> {
         }
         return false;
     }
-    
+
     /*
      * Returns true if the node has a range
      */

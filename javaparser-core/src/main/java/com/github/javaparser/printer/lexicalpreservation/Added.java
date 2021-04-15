@@ -68,9 +68,13 @@ public class Added implements DifferenceElement {
         return false;
     }
 
-    public boolean isIndent() { return element instanceof CsmIndent; }
+    public boolean isIndent() {
+        return element instanceof CsmIndent;
+    }
 
-    public boolean isUnindent() { return element instanceof CsmUnindent; }
+    public boolean isUnindent() {
+        return element instanceof CsmUnindent;
+    }
 
     public TextElement toTextElement() {
         if (element instanceof LexicalDifferenceCalculator.CsmChild) {

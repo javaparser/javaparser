@@ -34,9 +34,9 @@ public abstract class TextElement implements TextElementMatcher {
     abstract boolean isToken(int tokenKind);
 
     final boolean isCommentToken() {
-        return isToken(GeneratedJavaParserConstants.JAVADOC_COMMENT)
-                || isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)
-                || isToken(GeneratedJavaParserConstants.MULTI_LINE_COMMENT);
+        return isToken(GeneratedJavaParserConstants.JAVADOC_COMMENT) ||
+                isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT) ||
+                isToken(GeneratedJavaParserConstants.MULTI_LINE_COMMENT);
     }
 
     @Override

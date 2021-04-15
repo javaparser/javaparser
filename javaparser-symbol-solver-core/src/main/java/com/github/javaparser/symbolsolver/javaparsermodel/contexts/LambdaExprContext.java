@@ -80,7 +80,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                         // Get the functional method in order for us to resolve it's type arguments properly
                         Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
-                        if (functionalMethodOpt.isPresent()){
+                        if (functionalMethodOpt.isPresent()) {
                             MethodUsage functionalMethod = functionalMethodOpt.get();
                             InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
 
@@ -96,26 +96,28 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             // Find the position of this lambda argument
                             boolean found = false;
                             int lambdaParamIndex;
-                            for (lambdaParamIndex = 0; lambdaParamIndex < wrappedNode.getParameters().size(); lambdaParamIndex++){
-                                if (wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name)){
+                            for (lambdaParamIndex = 0; lambdaParamIndex < wrappedNode.getParameters().size(); lambdaParamIndex++) {
+                                if (wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name)) {
                                     found = true;
                                     break;
                                 }
                             }
-                            if (!found) { return Optional.empty(); }
+                            if (!found) {
+                                return Optional.empty();
+                            }
 
                             // Now resolve the argument type using the inference context
                             ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex)));
 
                             ResolvedLambdaConstraintType conType;
-                            if (argType.isWildcard()){
+                            if (argType.isWildcard()) {
                                 conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
                             } else {
                                 conType = ResolvedLambdaConstraintType.bound(argType);
                             }
                             Value value = new Value(conType, name);
                             return Optional.of(value);
-                        } else{
+                        } else {
                             return Optional.empty();
                         }
                     } else if (parentNode instanceof VariableDeclarator) {

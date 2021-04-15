@@ -21,25 +21,15 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved;
-import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -97,6 +87,20 @@ import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.utils.Log;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.WeakHashMap;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved;
+import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved;
+
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
  *
@@ -109,10 +113,10 @@ public class JavaParserFacade {
     private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
     };
 
-    private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
-    
-    private static String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+    private static final Map<TypeSolver, JavaParserFacade> INSTANCES = new WeakHashMap<>();
+
+    private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
+
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final SymbolSolver symbolSolver;
@@ -141,15 +145,15 @@ public class JavaParserFacade {
      * @see <a href="https://github.com/javaparser/javaparser/issues/2668">https://github.com/javaparser/javaparser/issues/2668</a>
      * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
      */
-    public synchronized static JavaParserFacade get(TypeSolver typeSolver) {
-        return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
+    public static synchronized JavaParserFacade get(TypeSolver typeSolver) {
+        return INSTANCES.computeIfAbsent(typeSolver, JavaParserFacade::new);
     }
 
     /**
      * This method is used to clear internal caches for the sake of releasing memory.
      */
     public static void clearInstances() {
-        instances.clear();
+        INSTANCES.clear();
     }
 
     protected static ResolvedType solveGenericTypes(ResolvedType type, Context context) {
@@ -756,8 +760,11 @@ public class JavaParserFacade {
         Context context = JavaParserFactory.getContext(call, typeSolver);
         Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName().getId(), params);
         if (!methodUsage.isPresent()) {
-            throw new RuntimeException("Method '" + call.getName() + "' cannot be resolved in context "
-                    + call + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context + ". Parameter types: " + params);
+            throw new RuntimeException(
+                    "Method '" + call.getName() + "' cannot be resolved in context " + call + "" +
+                            " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context + "." +
+                            " Parameter types: " + params
+            );
         }
         return methodUsage.get();
     }

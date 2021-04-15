@@ -48,7 +48,7 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
         this.hashcodeVisitor = hashcodeVisitor;
         this.equalsVisitor = equalsVisitor;
     }
-    
+
     @Override
     public int size() {
         return innerMap.size();

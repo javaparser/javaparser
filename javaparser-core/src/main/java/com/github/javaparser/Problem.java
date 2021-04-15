@@ -89,8 +89,8 @@ public class Problem {
     /**
      * Sorts problems on position.
      */
-    public static Comparator<Problem> PROBLEM_BY_BEGIN_POSITION = (a, b) -> {
-        final Optional<Position> aBegin= a.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
+    public static final Comparator<Problem> PROBLEM_BY_BEGIN_POSITION = (a, b) -> {
+        final Optional<Position> aBegin = a.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
         final Optional<Position> bBegin = b.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
 
         if (aBegin.isPresent() && bBegin.isPresent()) {

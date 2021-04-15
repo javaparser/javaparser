@@ -21,13 +21,15 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * A range of characters in a source file, from "begin" to "end", including the characters at "begin" and "end".
  */
 public class Range {
+
+    /** The start position of this range. This must be before the {@link #end} position. */
     public final Position begin;
+
+    /** The start position of this range. This must be after the {@link #begin} position. */
     public final Position end;
 
     /**

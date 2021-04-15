@@ -67,11 +67,11 @@ class CommentsInserter {
         List<Node> children = cu.getChildNodes();
 
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackageDeclaration().isPresent()
-                && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, cu.getPackageDeclaration().get()))) {
-            cu.setComment(firstComment);
-            comments.remove(firstComment);
+        if (cu.getPackageDeclaration().isPresent()) {
+            if (children.isEmpty() || PositionUtils.areInOrder(firstComment, cu.getPackageDeclaration().get())) {
+                cu.setComment(firstComment);
+                comments.remove(firstComment);
+            }
         }
     }
 
@@ -143,8 +143,9 @@ class CommentsInserter {
                 }
             } else {
                 if (previousComment != null && !thing.getComment().isPresent()) {
-                    if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines()
-                            || !thereAreLinesBetween(previousComment, thing)) {
+                    if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines() ||
+                            !thereAreLinesBetween(previousComment, thing)
+                    ) {
                         thing.setComment(previousComment);
                         attributedComments.add(previousComment);
                         previousComment = null;
@@ -175,9 +176,9 @@ class CommentsInserter {
                         .forEach(child -> {
                             Range commentRange = comment.getRange().get();
                             Range childRange = child.getRange().get();
-                            if (childRange.end.line == commentRange.begin.line
-                                    && attributeLineCommentToNodeOrChild(child,
-                                    comment.asLineComment())) {
+                            if (childRange.end.line == commentRange.begin.line &&
+                                    attributeLineCommentToNodeOrChild(child, comment.asLineComment())
+                            ) {
                                 attributedComments.add(comment);
                             }
                         }));
@@ -191,8 +192,9 @@ class CommentsInserter {
 
         // The node start and end at the same line as the comment,
         // let's give to it the comment
-        if (node.getBegin().get().line == lineComment.getBegin().get().line
-                && !node.getComment().isPresent()) {
+        if (node.getBegin().get().line == lineComment.getBegin().get().line &&
+                !node.getComment().isPresent()
+        ) {
             if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
             }

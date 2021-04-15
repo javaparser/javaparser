@@ -22,8 +22,8 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.JavaToken;
-import com.github.javaparser.Range;
 import com.github.javaparser.JavaToken.Kind;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
@@ -105,7 +105,7 @@ class TokenTextElement extends TextElement {
     public boolean isComment() {
         return token.getCategory().isComment();
     }
-    
+
     @Override
     public boolean isSeparator() {
         return token.getCategory().isSeparator();
@@ -120,7 +120,7 @@ class TokenTextElement extends TextElement {
     public boolean isChildOfClass(Class<? extends Node> nodeClass) {
         return false;
     }
-    
+
     @Override
     public boolean isIdentifier() {
         return getToken().getCategory().isIdentifier();
@@ -130,7 +130,7 @@ class TokenTextElement extends TextElement {
     public boolean isLiteral() {
         return getToken().getCategory().isLiteral();
     }
-    
+
     @Override
     public boolean isPrimitive() {
         return Kind.valueOf(getTokenKind()).isPrimitive();

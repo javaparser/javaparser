@@ -21,16 +21,6 @@
 
 package com.github.javaparser.resolution.types;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -43,6 +33,16 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
  * specified for the type parameters.
@@ -51,9 +51,11 @@ import com.github.javaparser.utils.Pair;
  */
 public abstract class ResolvedReferenceType implements ResolvedType,
         ResolvedTypeParametrized, ResolvedTypeParameterValueProvider {
-    
-    protected static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-    protected static String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
+
+    /** A utility reference to the fully qualified, canonical, name. */
+    protected static final String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    /** A utility reference to the fully qualified, canonical, name. */
+    protected static final String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     //
     // Fields
@@ -199,7 +201,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (values.contains(tpToReplace)) {
             int index = values.indexOf(tpToReplace);
             values.set(index, replaced);
-            if(result.getTypeDeclaration().isPresent()) {
+            if (result.getTypeDeclaration().isPresent()) {
                 return create(result.getTypeDeclaration().get(), values);
             }
         }
@@ -376,7 +378,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
         }
-        if(!this.getTypeDeclaration().isPresent()) {
+        if (!this.getTypeDeclaration().isPresent()) {
             return Optional.empty(); // TODO: Consider IllegalStateException or similar
         }
 
@@ -400,7 +402,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * that have been overwritten.
      */
     public List<ResolvedMethodDeclaration> getAllMethods() {
-        if(!this.getTypeDeclaration().isPresent()) {
+        if (!this.getTypeDeclaration().isPresent()) {
             return new ArrayList<>(); // empty list -- consider IllegalStateException or similar
         }
 
@@ -450,7 +452,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration);
 
     /*
-     * Verify if the resolved type is a boxing type of a primitive  
+     * Verify if the resolved type is a boxing type of a primitive
      */
     protected boolean isCorrespondingBoxingType(String typeName) {
         ResolvedPrimitiveType resolvedPrimitiveType = (ResolvedPrimitiveType) ResolvedPrimitiveType.byName(typeName);
@@ -494,7 +496,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                                     .collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
                         } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
-                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable)otherParam);
+                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable) otherParam);
                         } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
                             return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
                         }
@@ -510,19 +512,19 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     //
     // Private methods
     //
-    
+
     private boolean compareConsideringVariableTypeParameters(ResolvedType referenceType, ResolvedTypeVariable typeVariable) {
         // verify if the ResolvedTypeVariable has only one type variable and the bound is
-        // not a reference type with a bound parameter 
+        // not a reference type with a bound parameter
         // for example EnumSet<E> noneOf(Class<E> elementType)
         List<Bound> bounds = typeVariable.asTypeVariable().asTypeParameter().getBounds();
         if (bounds.size() == 1) {
             ResolvedType boundType = bounds.get(0).getType();
-            boolean hasTypeParameter = boundType.isReferenceType()
-                    && !boundType.asReferenceType().typeParametersMap.isEmpty();
-            return hasTypeParameter
-                    ? compareConsideringTypeParameters(boundType.asReferenceType())
-                    : boundType.isAssignableBy(referenceType);
+            boolean hasTypeParameter = boundType.isReferenceType() &&
+                    !boundType.asReferenceType().typeParametersMap.isEmpty();
+            return hasTypeParameter ?
+                    compareConsideringTypeParameters(boundType.asReferenceType()) :
+                    boundType.isAssignableBy(referenceType);
         }
         return false;
     }
@@ -550,9 +552,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     public boolean isJavaLangObject() {
-        return this.isReferenceType()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return this.isReferenceType() &&
+                hasName() && // Consider anonymous classes
+                getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -560,16 +562,16 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
      */
     public boolean isJavaLangEnum() {
-        return this.isReferenceType()
-                && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isReferenceType() &&
+                hasName() && // Consider anonymous classes
+                getQualifiedName().equals(JAVA_LANG_ENUM);
     }
-    
-    
+
+
     ///
     /// boxing/unboxing capability
     ///
-    
+
     /*
      * Returns true if the reference type can be unboxed to the primitive type
      * For example : Integer to int
@@ -577,7 +579,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isUnboxable() {
         return Arrays.stream(ResolvedPrimitiveType.values()).anyMatch(pt -> getQualifiedName().equals(pt.getBoxTypeQName()));
     }
-    
+
     /*
      * Returns true if the reference type can be unboxed to the specified primitive type
      * For example : Integer to int
@@ -585,9 +587,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isUnboxableTo(ResolvedPrimitiveType primitiveType) {
         return primitiveType.getBoxTypeQName().equals(this.asReferenceType().describe());
     }
-    
+
     /*
-     * Returns the optional corresponding primitive type 
+     * Returns the optional corresponding primitive type
      */
     public Optional<ResolvedPrimitiveType> toUnboxedType() {
         return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> this.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst();

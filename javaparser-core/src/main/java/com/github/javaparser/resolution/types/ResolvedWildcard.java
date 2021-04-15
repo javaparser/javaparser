@@ -37,7 +37,8 @@ import java.util.Map;
  */
 public class ResolvedWildcard implements ResolvedType {
 
-    public static ResolvedWildcard UNBOUNDED = new ResolvedWildcard(null, null);
+    /** A null-object representing an unbounded wildcard bound - specifically {@code ?), e.g. {@code List<?>}. */
+    public static final ResolvedWildcard UNBOUNDED = new ResolvedWildcard(null, null);
 
     private BoundType type;
     private ResolvedType boundedType;
@@ -176,7 +177,9 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     public enum BoundType {
+        /** A {@code super} bound type, representing a lower bound (e.g. {@code ? super Number}). */
         SUPER,
+        /** An {@code extends} bound type, representing a upper bound (e.g. {@code ? extends Number}). */
         EXTENDS
     }
 

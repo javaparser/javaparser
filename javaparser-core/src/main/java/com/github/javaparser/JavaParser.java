@@ -29,7 +29,11 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -39,13 +43,39 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
-import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParseStart.ANNOTATION;
+import static com.github.javaparser.ParseStart.ANNOTATION_BODY;
+import static com.github.javaparser.ParseStart.BLOCK;
+import static com.github.javaparser.ParseStart.CLASS_BODY;
+import static com.github.javaparser.ParseStart.CLASS_OR_INTERFACE_TYPE;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.EXPLICIT_CONSTRUCTOR_INVOCATION_STMT;
+import static com.github.javaparser.ParseStart.EXPRESSION;
+import static com.github.javaparser.ParseStart.IMPORT_DECLARATION;
+import static com.github.javaparser.ParseStart.METHOD_DECLARATION;
+import static com.github.javaparser.ParseStart.MODULE_DECLARATION;
+import static com.github.javaparser.ParseStart.MODULE_DIRECTIVE;
+import static com.github.javaparser.ParseStart.NAME;
+import static com.github.javaparser.ParseStart.PACKAGE_DECLARATION;
+import static com.github.javaparser.ParseStart.PARAMETER;
+import static com.github.javaparser.ParseStart.SIMPLE_NAME;
+import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParseStart.TYPE;
+import static com.github.javaparser.ParseStart.TYPE_DECLARATION;
+import static com.github.javaparser.ParseStart.TYPE_PARAMETER;
+import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
-import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.Providers.PreProcessor;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Providers.resourceProvider;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -93,7 +123,7 @@ public final class JavaParser {
 
         ParserConfiguration.LanguageLevel languageLevel = configuration.getLanguageLevel();
         if (languageLevel != null) {
-            if(languageLevel.isYieldSupported()) {
+            if (languageLevel.isYieldSupported()) {
                 astParser.setYieldSupported();
             }
         }

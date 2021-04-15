@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+		"-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+		"https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<!-- EXAMPLE: https://github.com/checkstyle/checkstyle/blob/master/config/suppressions.xml -->
+<suppressions>
+	<!-- TODO/FIXME:
+	        - Remove these suppressions, and/or
+	        - make them more specific to particular files, and/or
+	        - edit the rules
+	-->
+	<suppress checks="DesignForExtension"/>
+	<suppress checks="EmptyBlock"/>
+	<suppress checks="FinalParameters"/>
+	<suppress checks="FinalClass"/>
+	<!-- HiddenField doesn't handle boolean setters well (e.g. expecting setIsStatic(boolean) vs setStatic(boolean) ) -->
+	<!-- HiddenField doesn't handle setters that return generics (e.g. public T setAnnotations() ) -->
+	<suppress checks="HiddenField"/>
+	<suppress checks="JavadocMethod"/>
+	<suppress checks="JavadocPackage"/>
+	<suppress checks="JavadocStyle"/>
+	<suppress checks="JavadocType"/>
+<!--	<suppress checks="JavadocVariable"/>-->
+	<suppress checks="LineLength"/>
+	<suppress checks="MagicNumber"/>
+	<suppress checks="NeedBraces"/>
+	<suppress checks="RedundantModifier"/>
+	<suppress checks="TodoComment"/>
+	<suppress checks="VisibilityModifier"/>
+
+
+	<!-- These methods are generated -->
+	<suppress checks="AvoidNestedBlocks" files="GenericListVisitorAdapter.java"/>
+	<suppress checks="AvoidNestedBlocks" files="GenericVisitorAdapter.java"/>
+
+	<!-- The metamodel is generated -->
+	<suppress checks="ConstantName" files="JavaParserMetaModel.java"/>
+	<suppress checks="MethodLength" files="JavaParserMetaModel.java"/>
+
+	<!--  -->
+	<suppress checks="EmptyBlock" files="LexicalDifferenceCalculator.java"/>
+	<suppress checks="EmptyBlock" files="ResolvedReferenceType.java"/>
+
+	<!-- Some validators legitimately use nested blocks to group together similar validations -->
+	<suppress checks="AvoidNestedBlocks" files="Java.*Validator.java"/>
+	<!-- Some validators use underscores within class names to represent e.g. `Java 1.2` as `Java1_2`  -->
+	<suppress checks="TypeName" files="Java.*Validator.java"/>
+
+	<!-- These files are generated, so we tolerate large numbers of parameters -->
+	<suppress checks="ParameterNumber" files="CallableDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="ClassOrInterfaceDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="ConstructorDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="MethodDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="RecordDeclaration.java"/>
+	<suppress checks="ParameterNumber" files="PropertyMetaModel.java"/>
+
+	<!-- These files are generated, so we tolerate long files and methods -->
+	<suppress checks="FileLength" files="DefaultPrettyPrinterVisitor.java"/>
+	<suppress checks="FileLength" files="GenericListVisitorAdapter.java"/>
+	<suppress checks="FileLength" files="GenericVisitorAdapter.java"/>
+	<suppress checks="FileLength" files="JavaToken.java"/>
+	<suppress checks="MethodLength" files="JavaToken.java"/>
+	<suppress checks="MethodLength" files="LexicalDifferenceCalculator.java"/>
+	<suppress checks="FileLength" files="PrettyPrintVisitor.java"/>
+	<suppress checks="MethodLength" files="TokenTypes.java"/>
+
+	<!-- The generator config has some options that are enabled/disabled using line comments, and the end semicolon on its own line -->
+	<suppress checks="NoWhitespaceBefore" files="CoreGenerator.java"/>
+
+	<!-- Algorithms defined within the JLS use uppercase variables, therefore are permitted here: -->
+	<suppress checks="LocalVariableName" files="BoundSet.java"/>
+	<suppress checks="MemberName" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="LocalVariableName" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="ParameterName" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="MemberName" files="LambdaThrowsCompatibleWithType.java"/>
+	<suppress checks="MemberName" files="MethodReferenceThrowsCompatibleWithType.java"/>
+	<suppress checks="LocalVariableName" files="TypeCompatibleWithType.java"/>
+	<suppress checks="MemberName" files="TypeContainedByType.java"/>
+	<suppress checks="ParameterName" files="TypeContainedByType.java"/>
+	<suppress checks="LocalVariableName" files="TypeSameAsType.java"/>
+	<suppress checks="MemberName" files="TypeSameAsType.java"/>
+	<suppress checks="ParameterName" files="TypeSameAsType.java"/>
+	<suppress checks="MemberName" files="TypeSubtypeOfType.java"/>
+	<suppress checks="ParameterName" files="TypeSubtypeOfType.java"/>
+	<suppress checks="LocalVariableName" files="TypeHelper.java"/>
+	<suppress checks="ParameterName" files="TypeHelper.java"/>
+	<suppress checks="LocalVariableName" files="TypeInference.java"/>
+	<suppress checks="ParameterName" files="TypeInference.java"/>
+
+	<!--  -->
+	<suppress checks="SimplifyBooleanExpression" files="BinaryExprContext.java"/>
+
+	<!--  -->
+	<suppress checks="MethodLength" files="BoundSet.java"/>
+	<suppress checks="MethodLength" files="ExpressionCompatibleWithType.java"/>
+	<suppress checks="MethodLength" files="JavaSymbolSolver.java"/>
+	<suppress checks="MethodLength" files="NameLogic.java"/>
+	<suppress checks="MethodLength" files="TypeExtractor.java"/>
+
+	<!--  -->
+	<suppress checks="RightCurly" files="BoundSet.java"/>
+	<suppress checks="RightCurly" files="MethodResolutionLogic.java"/>
+	<suppress checks="RightCurly" files="TypeExtractor.java"/>
+	<suppress checks="RightCurly" files="TypeHelper.java"/>
+
+	<!--  -->
+	<suppress checks="MethodName" files="BoundSet.java"/>
+
+	<!--  -->
+	<suppress checks="EmptyForIteratorPad"/>
+	<suppress checks="MethodName" files="CsmList.java"/>
+	<suppress checks="MethodName" files="DefaultPrettyPrinterVisitor.java"/>
+	<suppress checks="MethodName" files="Difference.java"/>
+	<suppress checks="MethodName" files="LexicalDifferenceCalculator.java"/>
+	<suppress checks="MethodName" files="PrettyPrinterVisitor.java"/>
+
+	<!-- MetaModel classes have imports added/removed, therefore we tolerate unsorted imports -->
+	<suppress checks="CustomImportOrder" files=".*MetaModel.java"/>
+
+	<!-- MetaModel classes have public mutable attributes (instead of using accessor/mutator methods)  -->
+	<suppress checks="JavadocVariable" files=".*MetaModel.java"/>
+
+	<!-- These classes contain generated public enum values, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="ObservableProperty.java"/>
+	<suppress checks="JavadocVariable" files="JavaToken.java"/>
+
+	<!-- These classes contain .... public enum values, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="AccessSpecifier.java"/>
+	<suppress checks="JavadocVariable" files="AssignExpr.java"/>
+	<suppress checks="JavadocVariable" files="BinaryExpr.java"/>
+	<suppress checks="JavadocVariable" files="UnaryExpr.java"/>
+	<suppress checks="JavadocVariable" files="Modifier.java"/>
+	<suppress checks="JavadocVariable" files="PrimitiveType.java"/>
+	<suppress checks="JavadocVariable" files="JavadocInlineTag.java"/>
+	<suppress checks="JavadocVariable" files="JavadocBlockTag.java"/>
+	<suppress checks="JavadocVariable" files="CsmConditional.java"/>
+	<suppress checks="JavadocVariable" files="ResolvedPrimitiveType.java"/>
+	<suppress checks="JavadocVariable" files="Node.java"/>
+	<suppress checks="JavadocVariable" files="NameCategory.java"/>
+
+	<!-- This clas is part of the serialisation module, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="JavaParserJsonSerializer.java"/>
+
+	<!-- These classes contain .... public static final fields, therefore lack of documents is tolerated -->
+	<suppress checks="JavadocVariable" files="ParseStart.java"/>
+
+	<!-- These classes have a generated switch element, which does not include compliant whitespace -->
+	<suppress checks="WhitespaceAround" files="AssignExpr.java"/>
+	<suppress checks="WhitespaceAround" files="BinaryExpr.java"/>
+	<suppress checks="WhitespaceAround" files="Node.java"/>
+	<suppress checks="WhitespaceAround" files="JavaToken.java"/>
+
+	<!-- These classes have comments touched/modified by the JP generators, which does not include compliant whitespace -->
+	<suppress checks="RegexpSingleline" files="MethodCallExpr.java"/>
+	<suppress checks="RegexpSingleline" files="JavaToken.java"/>
+
+	<!-- These classes contain .... public enum values, therefore lack of documents is tolerated -->
+
+</suppressions>

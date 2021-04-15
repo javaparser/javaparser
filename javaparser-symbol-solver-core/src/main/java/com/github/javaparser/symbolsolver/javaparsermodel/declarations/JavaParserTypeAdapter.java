@@ -110,7 +110,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if(wrappedNode instanceof NodeWithTypeParameters<?>) {
+        if (wrappedNode instanceof NodeWithTypeParameters<?>) {
             NodeList<TypeParameter> typeParameters = ((NodeWithTypeParameters<?>) wrappedNode).getTypeParameters();
             for (com.github.javaparser.ast.type.TypeParameter typeParameter : typeParameters) {
                 if (typeParameter.getName().getId().equals(name)) {
@@ -163,7 +163,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                 .getParentNode()
                 .map(node -> JavaParserFactory.toTypeDeclaration(node, typeSolver));
     }
-    
+
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {
         List<ResolvedFieldDeclaration> fields = new ArrayList<>();
         if (wrappedNode.getMembers() != null) {

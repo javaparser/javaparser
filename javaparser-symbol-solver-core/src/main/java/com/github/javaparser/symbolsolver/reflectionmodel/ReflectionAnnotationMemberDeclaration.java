@@ -21,11 +21,6 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.DoubleLiteralExpr;
@@ -41,6 +36,11 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 /**
  * @author Malte Skoruppa
  */
@@ -55,7 +55,7 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         valueAsExressionConverter.put(Long.class, (value) -> new LongLiteralExpr(Long.class.cast(value)));
         valueAsExressionConverter.put(String.class, (value) -> new StringLiteralExpr(String.class.cast(value)));
     }
-    
+
     private Method annotationMember;
     private TypeSolver typeSolver;
 

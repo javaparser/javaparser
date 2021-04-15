@@ -141,8 +141,8 @@ final class RemovedGroup implements Iterable<Removed> {
      * @return true if the RemovedGroup equates to a complete line
      */
     final boolean isACompleteLine() {
-        return hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction)
-                && hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
+        return hasOnlyWhitespace(getFirstElement(), hasOnlyWhitespaceInFrontFunction) &&
+                hasOnlyWhitespace(getLastElement(), hasOnlyWhitespaceBehindFunction);
     }
 
     private final Function<JavaToken, Boolean> hasOnlyWhitespaceJavaTokenInFrontFunction = begin -> hasOnlyWhiteSpaceForTokenFunction(begin, token -> token.getPreviousToken());
@@ -171,18 +171,16 @@ final class RemovedGroup implements Iterable<Removed> {
 
     private boolean hasOnlyWhiteSpaceForTokenFunction(JavaToken token, Function<JavaToken, Optional<JavaToken>> tokenFunction) {
         Optional<JavaToken> tokenResult = tokenFunction.apply(token);
-
-        if (tokenResult.isPresent()) {
-            if (TokenTypes.isWhitespaceButNotEndOfLine(tokenResult.get().getKind())) {
-                return hasOnlyWhiteSpaceForTokenFunction(tokenResult.get(), tokenFunction);
-            } else if (TokenTypes.isEndOfLineToken(tokenResult.get().getKind())) {
-                return true;
-            } else {
-                return false;
-            }
+        if (!tokenResult.isPresent()) {
+            return true;
         }
 
-        return true;
+        JavaToken javaToken = tokenResult.get();
+        if (TokenTypes.isWhitespaceButNotEndOfLine(javaToken.getKind())) {
+            return hasOnlyWhiteSpaceForTokenFunction(javaToken, tokenFunction);
+        }
+
+        return TokenTypes.isEndOfLineToken(javaToken.getKind());
     }
 
     /**
@@ -206,7 +204,7 @@ final class RemovedGroup implements Iterable<Removed> {
                 if (hasOnlyWhitespaceJavaTokenInFrontFunction.apply(begin)) {
                     Optional<JavaToken> previousToken = begin.getPreviousToken();
 
-                    while(previousToken.isPresent() && (TokenTypes.isWhitespaceButNotEndOfLine(previousToken.get().getKind()))) {
+                    while (previousToken.isPresent() && (TokenTypes.isWhitespaceButNotEndOfLine(previousToken.get().getKind()))) {
                         indentation++;
 
                         previousToken = previousToken.get().getPreviousToken();

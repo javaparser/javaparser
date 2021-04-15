@@ -21,15 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-import static java.util.stream.Collectors.toList;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -57,6 +48,15 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.symbolsolver.resolution.typeinference.TypeInference;
 import com.github.javaparser.symbolsolver.resolution.typeinference.TypeInferenceCache;
 import com.github.javaparser.utils.Pair;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+import static java.util.stream.Collectors.toList;
 
 /**
  * An expression is compatible in a loose invocation context with type T
@@ -103,7 +103,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
             //   to ‹Expression' → T›.
 
             if (expression instanceof EnclosedExpr) {
-                EnclosedExpr enclosedExpr = (EnclosedExpr)expression;
+                EnclosedExpr enclosedExpr = (EnclosedExpr) expression;
                 return ReductionResult.oneConstraint(new ExpressionCompatibleWithType(typeSolver, enclosedExpr.getInner(), T));
             }
 
@@ -128,7 +128,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
             //   constraint formulas, ‹e2 → T› and ‹e3 → T›.
 
             if (expression instanceof ConditionalExpr) {
-                ConditionalExpr conditionalExpr = (ConditionalExpr)expression;
+                ConditionalExpr conditionalExpr = (ConditionalExpr) expression;
                 return ReductionResult.withConstraints(
                         new ExpressionCompatibleWithType(typeSolver, conditionalExpr.getThenExpr(), T),
                         new ExpressionCompatibleWithType(typeSolver, conditionalExpr.getElseExpr(), T));
@@ -140,7 +140,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
             // A constraint formula of the form ‹LambdaExpression → T›, where T mentions at least one inference variable, is reduced as follows:
 
             if (expression instanceof LambdaExpr) {
-                LambdaExpr lambdaExpr = (LambdaExpr)expression;
+                LambdaExpr lambdaExpr = (LambdaExpr) expression;
 
                 // - If T is not a functional interface type (§9.8), the constraint reduces to false.
 
@@ -192,8 +192,10 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //     - If the function type's result is not void and the lambda body is a block that is not
                 //       value-compatible, the constraint reduces to false.
 
-                if (!targetFunctionType.getReturnType().isVoid() && lambdaExpr.getBody() instanceof BlockStmt
-                        && !isValueCompatibleBlock(lambdaExpr.getBody())) {
+                if (!targetFunctionType.getReturnType().isVoid() &&
+                        lambdaExpr.getBody() instanceof BlockStmt &&
+                        !isValueCompatibleBlock(lambdaExpr.getBody())
+                ) {
                     return ReductionResult.falseResult();
                 }
 
@@ -221,14 +223,14 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                         //           is not compatible in an assignment context with R, then false.
 
                         if (lambdaExpr.getBody() instanceof BlockStmt) {
-                            List<Expression> resultExpressions = ExpressionHelper.getResultExpressions((BlockStmt)lambdaExpr.getBody());
+                            List<Expression> resultExpressions = ExpressionHelper.getResultExpressions((BlockStmt) lambdaExpr.getBody());
                             for (Expression e : resultExpressions) {
                                 if (!ExpressionHelper.isCompatibleInAssignmentContext(e, R, typeSolver)) {
                                     return ReductionResult.falseResult();
                                 }
                             }
                         } else {
-                            Expression e = ((ExpressionStmt)lambdaExpr.getBody()).getExpression();
+                            Expression e = ((ExpressionStmt) lambdaExpr.getBody()).getExpression();
                             if (!ExpressionHelper.isCompatibleInAssignmentContext(e, R, typeSolver)) {
                                 return ReductionResult.falseResult();
                             }
@@ -239,15 +241,15 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                         //           expressions e1, ..., em, for all i (1 ≤ i ≤ m), ‹ei → R›.
 
                         if (lambdaExpr.getBody() instanceof BlockStmt) {
-                            getAllReturnExpressions((BlockStmt)lambdaExpr.getBody()).forEach(e -> constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R)));
+                            getAllReturnExpressions((BlockStmt) lambdaExpr.getBody()).forEach(e -> constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R)));
                         } else {
                             // FEDERICO: Added - Start
-                            for (int i=0;i<lambdaExpr.getParameters().size();i++) {
+                            for (int i = 0; i < lambdaExpr.getParameters().size(); i++) {
                                 ResolvedType paramType = targetFunctionType.getFormalArgumentTypes().get(i);
                                 TypeInferenceCache.addRecord(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
                             }
                             // FEDERICO: Added - End
-                            Expression e = ((ExpressionStmt)lambdaExpr.getBody()).getExpression();
+                            Expression e = ((ExpressionStmt) lambdaExpr.getBody()).getExpression();
                             constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R));
                         }
                     }

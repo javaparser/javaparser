@@ -27,13 +27,13 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         List<PatternExpr> results = new ArrayList<>();
 
         boolean givenNodeIsWithinThenStatement = wrappedNode.getThenStmt().containsWithinRange(child);
-        if(givenNodeIsWithinThenStatement) {
+        if (givenNodeIsWithinThenStatement) {
             results.addAll(conditionContext.patternExprsExposedFromChildren());
         }
 
         wrappedNode.getElseStmt().ifPresent(elseStatement -> {
             boolean givenNodeIsWithinElseStatement = elseStatement.containsWithinRange(child);
-            if(givenNodeIsWithinElseStatement) {
+            if (givenNodeIsWithinElseStatement) {
                 results.addAll(conditionContext.negatedPatternExprsExposedFromChildren());
             }
         });
@@ -56,9 +56,9 @@ public class IfStatementContext extends StatementContext<IfStmt> {
      * @return true, If this is an if inside of an if...
      */
     public boolean nodeContextIsChainedIfElseIf(Context parentContext) {
-        return parentContext instanceof AbstractJavaParserContext
-                && ((AbstractJavaParserContext<?>) this).getWrappedNode() instanceof IfStmt
-                && ((AbstractJavaParserContext<?>) parentContext).getWrappedNode() instanceof IfStmt;
+        return parentContext instanceof AbstractJavaParserContext &&
+                ((AbstractJavaParserContext<?>) this).getWrappedNode() instanceof IfStmt &&
+                ((AbstractJavaParserContext<?>) parentContext).getWrappedNode() instanceof IfStmt;
     }
 
     /**

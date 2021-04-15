@@ -21,8 +21,6 @@
 
 package com.github.javaparser.generator.core.visitor;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -31,6 +29,8 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
+
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
 
@@ -46,9 +46,11 @@ public class NoCommentEqualsVisitorGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        if (!(node.equals(JavaParserMetaModel.lineCommentMetaModel)
-                || node.equals(JavaParserMetaModel.blockCommentMetaModel)
-                || node.equals(JavaParserMetaModel.javadocCommentMetaModel))) {
+        if (!(
+                node.equals(JavaParserMetaModel.lineCommentMetaModel) ||
+                node.equals(JavaParserMetaModel.blockCommentMetaModel) ||
+                node.equals(JavaParserMetaModel.javadocCommentMetaModel)
+        )) {
 
             body.addStatement(f("final %s n2 = (%s) arg;", node.getTypeName(), node.getTypeName()));
 

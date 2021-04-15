@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
@@ -47,6 +41,12 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+
 /**
  * @author Federico Tomassetti
  */
@@ -63,7 +63,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         if (wrappedNode.getName().toString().equals(name)) {
             if (wrappedNode.getScope() instanceof ThisExpr) {
                 ResolvedType typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-                if(typeOfThis.asReferenceType().getTypeDeclaration().isPresent()) {
+                if (typeOfThis.asReferenceType().getTypeDeclaration().isPresent()) {
                     return new SymbolSolver(typeSolver).solveSymbolInType(
                             typeOfThis.asReferenceType().getTypeDeclaration().get(),
                             name

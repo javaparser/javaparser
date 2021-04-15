@@ -20,7 +20,11 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -29,12 +33,20 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
 
-import javax.json.*;
-import java.util.*;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.metamodel.JavaParserMetaModel.getNodeMetaModel;
-import static com.github.javaparser.serialization.JavaParserJsonSerializer.*;
+import static com.github.javaparser.serialization.JavaParserJsonSerializer.JsonNode;
+import static com.github.javaparser.serialization.JavaParserJsonSerializer.JsonRange;
+import static com.github.javaparser.serialization.JavaParserJsonSerializer.JsonToken;
+import static com.github.javaparser.serialization.JavaParserJsonSerializer.JsonTokenRange;
 
 /**
  * Deserializes the JSON file that was built by {@link JavaParserJsonSerializer}.
@@ -109,7 +121,7 @@ public class JavaParserJsonDeserializer {
             // COMMENT is in the propertyKey meta model, but not required as constructor parameter.
             // Set it after construction
             if (parameters.containsKey(JsonNode.COMMENT.propertyKey)) {
-                node.setComment((Comment)parameters.get(JsonNode.COMMENT.propertyKey));
+                node.setComment((Comment) parameters.get(JsonNode.COMMENT.propertyKey));
             }
 
             for (String name : deferredJsonValues.keySet()) {
@@ -138,13 +150,12 @@ public class JavaParserJsonDeserializer {
      * @return true if propertyKey is read from json and set to Node instance
      */
     protected boolean readNonMetaProperties(String name, JsonValue jsonValue, Node node) {
-        return readRange(name, jsonValue, node)
-                || readTokenRange(name, jsonValue, node);
+        return readRange(name, jsonValue, node) || readTokenRange(name, jsonValue, node);
     }
 
     protected boolean readRange(String name, JsonValue jsonValue, Node node) {
         if (name.equals(JsonNode.RANGE.propertyKey)) {
-            JsonObject jsonObject = (JsonObject)jsonValue;
+            JsonObject jsonObject = (JsonObject) jsonValue;
             Position begin = new Position(
                     jsonObject.getInt(JsonRange.BEGIN_LINE.propertyKey),
                     jsonObject.getInt(JsonRange.BEGIN_COLUMN.propertyKey)
@@ -161,7 +172,7 @@ public class JavaParserJsonDeserializer {
 
     protected boolean readTokenRange(String name, JsonValue jsonValue, Node node) {
         if (name.equals(JsonNode.TOKEN_RANGE.propertyKey)) {
-            JsonObject jsonObject = (JsonObject)jsonValue;
+            JsonObject jsonObject = (JsonObject) jsonValue;
             JavaToken begin = readToken(
                     JsonTokenRange.BEGIN_TOKEN.propertyKey, jsonObject
             );
@@ -193,7 +204,7 @@ public class JavaParserJsonDeserializer {
      */
     private void setSymbolResolverIfCompilationUnit(Node node) {
         if (node instanceof CompilationUnit && StaticJavaParser.getConfiguration().getSymbolResolver().isPresent()) {
-            CompilationUnit cu = (CompilationUnit)node;
+            CompilationUnit cu = (CompilationUnit) node;
             cu.setData(Node.SYMBOL_RESOLVER_KEY, StaticJavaParser.getConfiguration().getSymbolResolver().get());
         }
     }

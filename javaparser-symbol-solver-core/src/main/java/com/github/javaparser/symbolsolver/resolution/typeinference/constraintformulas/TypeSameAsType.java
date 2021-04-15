@@ -21,14 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-
-import java.util.List;
-
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SameAsBound;
+
+import java.util.List;
+
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * A type S is the same as a type T (§4.3.4), or a type argument S is the same as type argument T
@@ -85,8 +85,9 @@ public class TypeSameAsType extends ConstraintFormula {
             //   type arguments B1, ..., Bn and T has type arguments A1, ..., An, the constraint reduces to the following
             //   new constraints: for all i (1 ≤ i ≤ n), ‹Bi = Ai›.
 
-            if (S.isReferenceType() && T.isReferenceType()
-                    && S.asReferenceType().toRawType().equals(T.asReferenceType().toRawType())) {
+            if (S.isReferenceType() && T.isReferenceType() &&
+                    S.asReferenceType().toRawType().equals(T.asReferenceType().toRawType())
+            ) {
                 ReductionResult res = ReductionResult.empty();
                 List<ResolvedType> Bs = S.asReferenceType().typeParametersValues();
                 List<ResolvedType> As = T.asReferenceType().typeParametersValues();

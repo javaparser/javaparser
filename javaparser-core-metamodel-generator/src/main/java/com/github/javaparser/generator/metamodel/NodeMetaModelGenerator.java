@@ -43,8 +43,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static com.github.javaparser.StaticJavaParser.parseExplicitConstructorInvocationStmt;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.StaticJavaParser.parseStatement;
+import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
 import static com.github.javaparser.utils.Utils.decapitalize;
@@ -54,6 +59,10 @@ public class NodeMetaModelGenerator extends AbstractGenerator {
     private final InitializePropertyMetaModelsStatementsGenerator initializePropertyMetaModelsStatementsGenerator = new InitializePropertyMetaModelsStatementsGenerator();
     private final InitializeConstructorParametersStatementsGenerator initializeConstructorParametersStatementsGenerator = new InitializeConstructorParametersStatementsGenerator();
 
+    /**
+     * A comment to be added at the top of metamodel classes.
+     * This comment is to indicate the class should not be edited directly.
+     */
     public static final String GENERATED_CLASS_COMMENT = "" +
             "This file, class, and its contents are completely generated based on:" +
             "\n<ul>" +

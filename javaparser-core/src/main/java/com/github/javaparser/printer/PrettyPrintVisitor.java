@@ -21,22 +21,6 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.joining;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -44,7 +28,22 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.CompactConstructorDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.InitializerDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.ReceiverParameter;
+import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -99,7 +98,31 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTraversableScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.stmt.AssertStmt;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.BreakStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ContinueStmt;
+import com.github.javaparser.ast.stmt.DoStmt;
+import com.github.javaparser.ast.stmt.EmptyStmt;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.LabeledStmt;
+import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
+import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchEntry;
+import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.ast.stmt.SynchronizedStmt;
+import com.github.javaparser.ast.stmt.ThrowStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.UnparsableStmt;
+import com.github.javaparser.ast.stmt.WhileStmt;
+import com.github.javaparser.ast.stmt.YieldStmt;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
@@ -115,6 +138,22 @@ import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -826,7 +865,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getExpression().accept(this, arg);
         printer.print(" instanceof ");
         n.getType().accept(this, arg);
-        if(n.getName().isPresent()) {
+        if (n.getName().isPresent()) {
             printer.print(" ");
             n.getName().get().accept(this, arg);
         }
@@ -940,10 +979,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         AtomicBoolean columnAlignFirstMethodChain = new AtomicBoolean();
         if (configuration.isColumnAlignFirstMethodChain()) {
             // pick the kind of expressions where vertically aligning method calls is okay.
-            if (n.findAncestor(Statement.class).map(p -> p.isReturnStmt()
-                    || p.isThrowStmt()
-                    || p.isAssertStmt()
-                    || p.isExpressionStmt()).orElse(false)) {
+            if (n.findAncestor(Statement.class).map(p ->
+                    p.isReturnStmt() ||
+                    p.isThrowStmt() ||
+                    p.isAssertStmt() ||
+                    p.isExpressionStmt()).orElse(false)
+            ) {
                 // search for first parent that does not have its child as scope
                 Node c = n;
                 Optional<Node> p = c.getParentNode();
@@ -1964,8 +2005,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             Node nodeToPrint = everything.get(i);
             if (!(nodeToPrint instanceof Comment))
                 throw new RuntimeException(
-                        "Expected comment, instead " + nodeToPrint.getClass() + ". Position of previous child: "
-                                + positionOfPreviousChild + ", position of child " + positionOfTheChild);
+                        "Expected comment, instead " + nodeToPrint.getClass() + "." +
+                                " Position of previous child: " + positionOfPreviousChild + "," +
+                                " position of child " + positionOfTheChild
+                );
             nodeToPrint.accept(this, null);
         }
     }
@@ -1974,7 +2017,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) return;
 
         // extract all nodes for which the position/range is indicated to avoid to skip orphan comments
-        List<Node> everything = node.getChildNodes().stream().filter(n->n.getRange().isPresent()).collect(Collectors.toList());
+        List<Node> everything = node.getChildNodes().stream().filter(n -> n.getRange().isPresent()).collect(Collectors.toList());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {
             return;
@@ -1993,12 +2036,16 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             everything.get(everything.size() - commentsAtEnd + i).accept(this, null);
         }
     }
-     private void indentIf(boolean expr){
-        if(expr)
+
+    private void indentIf(boolean expr) {
+        if (expr) {
             printer.indent();
-     }
-    private void unindentIf(boolean expr){
-        if(expr)
+        }
+    }
+
+    private void unindentIf(boolean expr) {
+        if (expr) {
             printer.unindent();
+        }
     }
 }

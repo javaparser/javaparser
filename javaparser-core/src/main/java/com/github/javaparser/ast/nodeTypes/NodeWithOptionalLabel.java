@@ -35,7 +35,7 @@ public interface NodeWithOptionalLabel<T extends Node> {
     Optional<SimpleName> getLabel();
 
     T setLabel(SimpleName label);
-    
+
     T removeLabel();
 
     default T setLabel(String label) {

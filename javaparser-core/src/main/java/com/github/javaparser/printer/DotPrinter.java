@@ -21,16 +21,16 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Outputs a Graphviz diagram of the AST.
@@ -66,8 +66,7 @@ public class DotPrinter {
 
         String ndName = nextNodeName();
         if (outputNodeType)
-            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName()
-                    + ")\"];");
+            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName() + ")\"];");
         else
             builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + "\"];");
 
@@ -76,8 +75,7 @@ public class DotPrinter {
 
         for (PropertyMetaModel a : attributes) {
             String attrName = nextNodeName();
-            builder.append(SYSTEM_EOL + attrName + " [label=\"" + escape(a.getName()) + "='"
-                    + escape(a.getValue(node).toString()) + "'\"];");
+            builder.append(SYSTEM_EOL + attrName + " [label=\"" + escape(a.getName()) + "='" + escape(a.getValue(node).toString()) + "'\"];");
             builder.append(SYSTEM_EOL + ndName + " -> " + attrName + ";");
 
         }

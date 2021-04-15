@@ -26,12 +26,38 @@ import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.validator.*;
-import com.github.javaparser.ast.validator.language_level_validations.*;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java10PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java10Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java11PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java11Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java12PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java12Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java13PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java13Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java14PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java14Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java15PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java15Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java16PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java16Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java17PreviewValidator;
+import com.github.javaparser.ast.validator.language_level_validations.Java17Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java1_0Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java1_1Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java1_2Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java1_3Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java1_4Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java5Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java6Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java7Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java8Validator;
+import com.github.javaparser.ast.validator.language_level_validations.Java9Validator;
+import com.github.javaparser.ast.validator.postprocessors.Java10PostProcessor;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import com.github.javaparser.ast.validator.postprocessors.Java10PostProcessor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -171,24 +197,24 @@ public class ParserConfiguration {
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
          */
-        public static LanguageLevel RAW = null;
+        public static final LanguageLevel RAW = null;
         /**
          * The most used Java version.
          */
-        public static LanguageLevel POPULAR = JAVA_8;
+        public static final LanguageLevel POPULAR = JAVA_8;
         /**
          * The latest Java version that is available.
          */
-        public static LanguageLevel CURRENT = JAVA_16;
+        public static final LanguageLevel CURRENT = JAVA_16;
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_17_PREVIEW;
+        public static final LanguageLevel BLEEDING_EDGE = JAVA_17_PREVIEW;
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{
+        private static final LanguageLevel[] YIELD_SUPPORT = new LanguageLevel[]{
                 JAVA_13, JAVA_13_PREVIEW,
                 JAVA_14, JAVA_14_PREVIEW,
                 JAVA_15, JAVA_15_PREVIEW,
@@ -202,7 +228,7 @@ public class ParserConfiguration {
         }
 
         public boolean isYieldSupported() {
-            return Arrays.stream(yieldSupport).anyMatch(level -> level == this);
+            return Arrays.stream(YIELD_SUPPORT).anyMatch(level -> level == this);
         }
     }
 
@@ -227,13 +253,13 @@ public class ParserConfiguration {
     public ParserConfiguration() {
 
         class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
-            private UnicodeEscapeProcessingProvider _unicodeDecoder;
+            private UnicodeEscapeProcessingProvider unicodeDecoder;
 
             @Override
             public Provider process(Provider innerProvider) {
                 if (isPreprocessUnicodeEscapes()) {
-                    _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
-                    return _unicodeDecoder;
+                    unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
+                    return unicodeDecoder;
                 }
                 return innerProvider;
             }
@@ -244,7 +270,7 @@ public class ParserConfiguration {
                 if (isPreprocessUnicodeEscapes()) {
                     result.getResult().ifPresent(
                             root -> {
-                                PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+                                PositionMapping mapping = unicodeDecoder.getPositionMapping();
                                 if (!mapping.isEmpty()) {
                                     root.walk(
                                             node -> node.getRange().ifPresent(
@@ -257,13 +283,13 @@ public class ParserConfiguration {
         }
 
         class LineEndingProcessor implements PreProcessor, PostProcessor {
-            private LineEndingProcessingProvider _lineEndingProcessingProvider;
+            private LineEndingProcessingProvider lineEndingProcessingProvider;
 
             @Override
             public Provider process(Provider innerProvider) {
                 if (isDetectOriginalLineSeparator()) {
-                    _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
-                    return _lineEndingProcessingProvider;
+                    lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
+                    return lineEndingProcessingProvider;
                 }
                 return innerProvider;
             }
@@ -273,7 +299,7 @@ public class ParserConfiguration {
                 if (isDetectOriginalLineSeparator()) {
                     result.getResult().ifPresent(
                             rootNode -> {
-                                LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
+                                LineSeparator detectedLineSeparator = lineEndingProcessingProvider.getDetectedLineEnding();
 
                                 // Set the line ending on the root node
                                 rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);

@@ -21,15 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -66,16 +57,27 @@ import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * @author Federico Tomassetti
  */
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
         AssociableToAST<EnumDeclaration> {
-    
-    private static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-    private static String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
-    private static String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
+
+    /** A utility reference to the fully qualified, canonical, name. */
+    private static final String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    /** A utility reference to the fully qualified, canonical, name. */
+    private static final String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
+    /** A utility reference to the fully qualified, canonical, name. */
+    private static final String JAVA_IO_SERIALIZABLE = java.io.Serializable.class.getCanonicalName();
 
     private TypeSolver typeSolver;
     private EnumDeclaration wrappedNode;
@@ -242,7 +244,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         this.getAncestors().forEach(a -> fields.addAll(a.getAllFieldsVisibleToInheritors()));
 
         this.wrappedNode.getMembers().stream().filter(m -> m instanceof FieldDeclaration).forEach(m -> {
-                FieldDeclaration fd = (FieldDeclaration)m;
+                FieldDeclaration fd = (FieldDeclaration) m;
                 fd.getVariables().forEach(v -> fields.add(new JavaParserFieldDeclaration(v, typeSolver)));
         });
 
@@ -254,7 +256,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
         ResolvedReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
-        if(enumClass.getTypeDeclaration().isPresent()) {
+        if (enumClass.getTypeDeclaration().isPresent()) {
             ResolvedTypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().get()
                     .getTypeParameters()
                     .get(0);
@@ -564,7 +566,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration) member));
             }
         }
         return res;

@@ -107,7 +107,7 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
             return ((ResolvedMethodLikeDeclaration) container).getQualifiedSignature();
         }
     }
-    
+
     @Override
     public ResolvedTypeParametrizable getContainer() {
         return this.container;

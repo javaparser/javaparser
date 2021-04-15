@@ -25,7 +25,9 @@ import com.github.javaparser.generator.Generator;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,7 +55,7 @@ public class BndGenerator extends Generator {
                 .reduce(null, (packageList, packageName) ->
                         concatPackageName(packageName, packageList, lineSeparator));
         Path output = projectRoot.resolve("bnd.bnd");
-        try(Writer writer = Files.newBufferedWriter(output)) {
+        try (Writer writer = Files.newBufferedWriter(output)) {
             Path templateFile = projectRoot.resolve("bnd.bnd.template");
             String template = new String(Files.readAllBytes(templateFile), StandardCharsets.UTF_8);
             writer.write(template.replace("{exportedPackages}", packagesList));

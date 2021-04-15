@@ -44,7 +44,7 @@ public class AcceptGenerator extends NodeGenerator {
 
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
-        if(nodeMetaModel.isAbstract()){
+        if (nodeMetaModel.isAbstract()) {
             return;
         }
         nodeCu.addImport(GenericVisitor.class);

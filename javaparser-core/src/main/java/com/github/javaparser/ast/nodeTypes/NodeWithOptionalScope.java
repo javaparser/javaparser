@@ -34,7 +34,7 @@ public interface NodeWithOptionalScope<N extends Node> extends NodeWithTraversab
     Optional<Expression> getScope();
 
     N setScope(Expression scope);
-    
+
     N removeScope();
 
     default Optional<Expression> traverseScope() {

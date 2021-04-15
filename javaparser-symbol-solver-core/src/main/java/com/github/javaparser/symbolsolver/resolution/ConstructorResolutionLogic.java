@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -35,10 +29,20 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * @author Fred Lefévère-Laoide
  */
 public class ConstructorResolutionLogic {
+
+    private ConstructorResolutionLogic() {
+        // Private constructor to prevent initialisation of this utility class
+    }
 
     private static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic,
                                                                ResolvedType variadicType) {
@@ -80,8 +84,9 @@ public class ConstructorResolutionLogic {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                     }
                     if (!expectedType.isAssignableBy(actualType)) {
-                        if (actualType.isArray()
-                                && expectedType.isAssignableBy(actualType.asArrayType().getComponentType())) {
+                        if (actualType.isArray() &&
+                                expectedType.isAssignableBy(actualType.asArrayType().getComponentType())
+                        ) {
                             argumentsTypes.set(pos, actualType.asArrayType().getComponentType());
                         } else {
                             argumentsTypes = groupVariadicParamValues(argumentsTypes, pos,
@@ -106,16 +111,18 @@ public class ConstructorResolutionLogic {
         for (int i = 0; i < constructor.getNumberOfParams(); i++) {
             ResolvedType expectedType = constructor.getParam(i).getType();
             ResolvedType actualType = argumentsTypes.get(i);
-            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard()))
-                    && expectedType.asTypeParameter().declaredOnMethod()) {
+            if ((expectedType.isTypeVariable() && !(expectedType.isWildcard())) &&
+                    expectedType.asTypeParameter().declaredOnMethod()
+            ) {
                 matchedParameters.put(expectedType.asTypeParameter().getName(), actualType);
                 continue;
             }
-            boolean isAssignableWithoutSubstitution =
-                    expectedType.isAssignableBy(actualType) || (constructor.getParam(i).isVariadic()
-                            && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
-            if (!isAssignableWithoutSubstitution && expectedType.isReferenceType()
-                    && actualType.isReferenceType()) {
+            boolean isAssignableWithoutSubstitution = expectedType.isAssignableBy(actualType) ||
+                    (constructor.getParam(i).isVariadic() && new ResolvedArrayType(expectedType).isAssignableBy(actualType));
+            if (!isAssignableWithoutSubstitution &&
+                    expectedType.isReferenceType() &&
+                    actualType.isReferenceType()
+            ) {
                 isAssignableWithoutSubstitution = MethodResolutionLogic.isAssignableMatchTypeParameters(
                         expectedType.asReferenceType(), actualType.asReferenceType(), matchedParameters);
             }
@@ -198,7 +205,7 @@ public class ConstructorResolutionLogic {
                     }
                 }
             }
-            
+
             return SymbolReference.solved(winningCandidate);
         }
     }

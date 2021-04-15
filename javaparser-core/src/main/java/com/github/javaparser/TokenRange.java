@@ -21,15 +21,17 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Iterator;
 import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The range of tokens covered by this node.
  */
 public class TokenRange implements Iterable<JavaToken> {
+
+    /** A null-object, representing an invalid token range. */
     public static final TokenRange INVALID = new TokenRange(JavaToken.INVALID, JavaToken.INVALID);
 
     private final JavaToken begin;
@@ -66,7 +68,7 @@ public class TokenRange implements Iterable<JavaToken> {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for(JavaToken t: this) {
+        for (JavaToken t: this) {
             result.append(t.getText());
         }
         return result.toString();
@@ -86,14 +88,14 @@ public class TokenRange implements Iterable<JavaToken> {
             @Override
             public JavaToken next() {
                 JavaToken retval = current;
-                if(current == null){
+                if (current == null) {
                     throw new IllegalStateException("Attempting to move past end of range.");
                 }
                 if (current == end) {
                     hasNext = false;
                 }
                 current = current.getNextToken().orElse(null);
-                if(current == null && hasNext){
+                if (current == null && hasNext) {
                     throw new IllegalStateException("End token is not linked to begin token.");
                 }
                 return retval;

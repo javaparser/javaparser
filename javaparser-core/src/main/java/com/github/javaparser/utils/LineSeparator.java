@@ -30,9 +30,8 @@ public enum LineSeparator {
      */
     SYSTEM(
             System.getProperty("line.separator"),
-            "SYSTEM : (" + System.getProperty("line.separator")
-                    .replace("\r", "\\r")
-                    .replace("\n", "\\n") +
+            "SYSTEM : (" +
+                    StringEscapeUtils.escapeNewlines(System.getProperty("line.separator")) +
                     ")"
     ),
     /**
@@ -161,11 +160,11 @@ public enum LineSeparator {
 
     // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
     private Optional<JavaToken.Kind> asJavaTokenKind() {
-        if(this == CR) {
+        if (this == CR) {
             return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
-        } else if(this == LF) {
+        } else if (this == LF) {
             return Optional.of(JavaToken.Kind.UNIX_EOL);
-        } else if(this == CRLF) {
+        } else if (this == CRLF) {
             return Optional.of(JavaToken.Kind.WINDOWS_EOL);
         }
 

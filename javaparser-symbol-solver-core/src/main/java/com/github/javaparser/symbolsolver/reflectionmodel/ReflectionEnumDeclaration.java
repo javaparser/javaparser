@@ -23,7 +23,13 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -37,7 +43,11 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -87,7 +97,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   public AccessSpecifier accessSpecifier() {
     return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
   }
-  
+
   @Override
   public Optional<ResolvedReferenceTypeDeclaration> containerType() {
       return reflectionClassAdapter.containerType();
@@ -169,8 +179,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
 
   @Override
   public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
-    return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
-            typeSolver,this, clazz);
+    return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly, typeSolver, this, clazz);
   }
 
   public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
@@ -192,7 +201,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
         }
         try {
           ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-            for (int j=0;j<parameters.size();j++) {
+            for (int j = 0; j < parameters.size(); j++) {
                 methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
             }
             methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));

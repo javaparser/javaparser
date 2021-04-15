@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class InferenceVariableSubstitution {
 
-    private final static InferenceVariableSubstitution EMPTY = new InferenceVariableSubstitution();
+    private static final InferenceVariableSubstitution EMPTY = new InferenceVariableSubstitution();
 
     private List<InferenceVariable> inferenceVariables;
     private List<ResolvedType> types;

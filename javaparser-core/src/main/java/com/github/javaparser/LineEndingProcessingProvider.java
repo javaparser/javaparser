@@ -39,22 +39,22 @@ public class LineEndingProcessingProvider implements Provider {
     /**
      * The "other" provider which we are wrapping around / reading from.
      */
-    private final Provider _input;
+    private final Provider input;
 
     /**
      * The buffer that we're storing data within.
      */
-    private final char[] _data;
+    private final char[] data;
 
     /**
-     * The number of characters in {@link #_data}.
+     * The number of characters in {@link #data}.
      */
-    private int _len = 0;
+    private int len = 0;
 
     /**
-     * The position in {@link #_data} where to read the next source character from.
+     * The position in {@link #data} where to read the next source character from.
      */
-    private int _pos = 0;
+    private int pos = 0;
 
     private final Map<LineSeparator, Integer> eolCounts = new HashMap<>();
 
@@ -63,20 +63,20 @@ public class LineEndingProcessingProvider implements Provider {
     }
 
     public LineEndingProcessingProvider(int bufferSize, Provider input) {
-        _input = input;
-        _data = new char[bufferSize];
+        this.input = input;
+        data = new char[bufferSize];
     }
 
     @Override
     public void close() throws IOException {
-        _input.close();
+        input.close();
     }
 
     private int fillBuffer() throws IOException {
-        _pos = 0;
-        int direct = _input.read(_data, 0, _data.length);
+        pos = 0;
+        int direct = input.read(data, 0, data.length);
         if (direct != 0) {
-            _len = direct;
+            len = direct;
         }
         return direct;
     }
@@ -90,11 +90,11 @@ public class LineEndingProcessingProvider implements Provider {
     }
 
     private boolean isBufferEmpty() {
-        return _pos >= _len;
+        return pos >= len;
     }
 
     /**
-     * Retrieves the next un-escaped character from the buffered {@link #_input}.
+     * Retrieves the next un-escaped character from the buffered {@link #input}.
      *
      * @return The next character or {@code -1} if no more input is available.
      */
@@ -105,7 +105,7 @@ public class LineEndingProcessingProvider implements Provider {
                 return EOF;
             }
         }
-        return _data[_pos++];
+        return data[pos++];
     }
 
     @Override

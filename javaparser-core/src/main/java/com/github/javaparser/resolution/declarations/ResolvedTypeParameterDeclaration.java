@@ -74,7 +74,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
             public String getContainerId() {
                 return classQName;
             }
-            
+
             @Override
             public ResolvedTypeParametrizable getContainer() {
                 return null;
@@ -157,7 +157,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * The ID of the container. See TypeContainer.getId
      */
     String getContainerId();
-    
+
     /**
      * The TypeParametrizable of the container. Can be either a ReferenceTypeDeclaration or a MethodLikeDeclaration
      */

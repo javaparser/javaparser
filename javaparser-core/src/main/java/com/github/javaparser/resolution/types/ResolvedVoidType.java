@@ -27,6 +27,8 @@ package com.github.javaparser.resolution.types;
  * @author Federico Tomassetti
  */
 public class ResolvedVoidType implements ResolvedType {
+
+    /** Singleton pattern - the single, static, instance of ResolvedVoidType. */
     public static final ResolvedType INSTANCE = new ResolvedVoidType();
 
     private ResolvedVoidType() {

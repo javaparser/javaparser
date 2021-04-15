@@ -21,11 +21,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Are meta-variables for types - that is, they are special names that allow abstract reasoning about types.
@@ -62,7 +62,7 @@ public class InferenceVariable implements ResolvedType {
     public boolean isInferenceVariable() {
         return true;
     }
-    
+
     @Override
     public String describe() {
         return name;
@@ -76,8 +76,9 @@ public class InferenceVariable implements ResolvedType {
         InferenceVariable that = (InferenceVariable) o;
 
         if (!name.equals(that.name)) return false;
-        return typeParameterDeclaration != null ? typeParameterDeclaration.equals(that.typeParameterDeclaration)
-                : that.typeParameterDeclaration == null;
+        return typeParameterDeclaration != null ?
+                typeParameterDeclaration.equals(that.typeParameterDeclaration) :
+                that.typeParameterDeclaration == null;
     }
 
     @Override
@@ -93,8 +94,9 @@ public class InferenceVariable implements ResolvedType {
             return true;
         }
         throw new UnsupportedOperationException(
-                "We are unable to determine the assignability of an inference variable without knowing the bounds and"
-                        + " constraints");
+                "We are unable to determine the assignability of an inference variable" +
+                        " without knowing the bounds and constraints"
+        );
     }
 
     public ResolvedTypeParameterDeclaration getTypeParameterDeclaration() {

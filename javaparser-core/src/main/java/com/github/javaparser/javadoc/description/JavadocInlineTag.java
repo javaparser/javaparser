@@ -101,7 +101,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     @Override
     public String toText() {
-        return "{@" + tagName + this.content +"}";
+        return "{@" + tagName + this.content + "}";
     }
 
     @Override

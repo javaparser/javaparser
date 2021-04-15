@@ -108,7 +108,7 @@ public class InferenceVariableType implements ResolvedType {
         Set<ResolvedType> result = new HashSet<>();
         result.addAll(inferenceVariableType.equivalentTypes.stream().filter(t -> !t.isTypeVariable() && !(t instanceof InferenceVariableType)).collect(Collectors.toSet()));
         inferenceVariableType.equivalentTypes.stream().filter(t -> t instanceof InferenceVariableType).forEach(t -> {
-            InferenceVariableType ivt = (InferenceVariableType)t;
+            InferenceVariableType ivt = (InferenceVariableType) t;
             if (!considered.contains(ivt)) {
                 result.addAll(concreteEquivalentTypesAlsoIndirectly(considered, ivt));
             }
@@ -144,22 +144,22 @@ public class InferenceVariableType implements ResolvedType {
         }
     }
 
-    private boolean hasInferenceVariables(ResolvedType type){
-        if (type instanceof InferenceVariableType){
+    private boolean hasInferenceVariables(ResolvedType type) {
+        if (type instanceof InferenceVariableType) {
             return true;
         }
 
-        if (type.isReferenceType()){
+        if (type.isReferenceType()) {
             ResolvedReferenceType refType = type.asReferenceType();
-            for (ResolvedType t : refType.typeParametersValues()){
-                if (hasInferenceVariables(t)){
+            for (ResolvedType t : refType.typeParametersValues()) {
+                if (hasInferenceVariables(t)) {
                     return true;
                 }
             }
             return false;
         }
 
-        if (type.isWildcard()){
+        if (type.isWildcard()) {
             ResolvedWildcard wildcardType = type.asWildcard();
             return hasInferenceVariables(wildcardType.getBoundedType());
         }

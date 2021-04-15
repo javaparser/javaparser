@@ -34,7 +34,9 @@ import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;
-import static com.github.javaparser.utils.CodeGenerationUtils.*;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.getterToPropertyName;
+import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 class InitializePropertyMetaModelsStatementsGenerator {

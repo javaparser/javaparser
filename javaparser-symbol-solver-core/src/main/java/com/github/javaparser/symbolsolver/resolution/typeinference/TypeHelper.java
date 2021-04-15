@@ -21,13 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.resolution.MethodUsage;
@@ -45,6 +38,13 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.utils.Pair;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 /**
  * The term "type" is used loosely in this chapter to include type-like syntax that contains inference variables.
  *
@@ -55,6 +55,10 @@ import com.github.javaparser.utils.Pair;
  * @author Federico Tomassetti
  */
 public class TypeHelper {
+
+    private TypeHelper() {
+        // Private constructor to prevent initialisation of this utility class
+    }
 
     /**
      * The term proper type excludes such "types" that mention inference variables.
@@ -68,7 +72,7 @@ public class TypeHelper {
             return referenceType.typeParametersValues().stream().allMatch(it -> isProperType(it));
         }
         if (type instanceof ResolvedWildcard) {
-            ResolvedWildcard wildcard = (ResolvedWildcard)type;
+            ResolvedWildcard wildcard = (ResolvedWildcard) type;
             if (wildcard.isBounded()) {
                 return isProperType(wildcard.getBoundedType());
             } else {
@@ -168,9 +172,9 @@ public class TypeHelper {
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
         throw new UnsupportedOperationException();
     }
-    
+
     // get the resolved boxed type of the specified primitive type
-    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver ) {
+    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver) {
         SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration =  typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
         return new ReferenceTypeImpl(typeDeclaration.getCorrespondingDeclaration(), typeSolver);
     }
@@ -180,7 +184,7 @@ public class TypeHelper {
         if (!correspondingPrimitiveTypeForS.isPresent()) {
             return false;
         }
-        throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s="+s+", t=" + t);
+        throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s=" + s + ", t=" + t);
     }
 
     public static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
@@ -355,7 +359,7 @@ public class TypeHelper {
 
         ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
 
-        for (int i=0;i<AIs.size();i++) {
+        for (int i = 0; i < AIs.size(); i++) {
             ResolvedType Ai = AIs.get(i);
             ResolvedType Ti = null;
 

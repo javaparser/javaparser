@@ -83,6 +83,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  */
 public class NameLogic {
 
+    private NameLogic() {
+        // Private constructor to prevent initialising this utility class
+    }
+
     /**
      * Is the given node a non-qualified name?
      *
@@ -166,8 +170,10 @@ public class NameLogic {
         if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
         }
-        if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) -> p.getExtendedTypes().contains(c)
-                || p.getImplementedTypes().contains(c))) {
+        if (whenParentIs(ClassOrInterfaceDeclaration.class, name, (p, c) ->
+                p.getExtendedTypes().contains(c) ||
+                p.getImplementedTypes().contains(c))
+        ) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ClassOrInterfaceType.class, name, (p, c) -> p.getName() == c)) {
@@ -591,8 +597,11 @@ public class NameLogic {
             return NameCategory.EXPRESSION_NAME;
         }
 
-        throw new UnsupportedOperationException("Unable to classify category of name contained in "
-                + name.getParentNode().get().getClass().getSimpleName() + ". See " + name + " at " + name.getRange());
+        throw new UnsupportedOperationException(
+                "Unable to classify category of name contained in " +
+                        name.getParentNode().get().getClass().getSimpleName() + "." +
+                        " See " + name + " at " + name.getRange()
+        );
     }
 
     private static boolean isSyntacticallyAAmbiguousName(Node name) {
@@ -687,9 +696,10 @@ public class NameLogic {
             return true;
         }
         // 2. To the left of the "." in a qualified PackageName
-        if (whenParentIs(Name.class, name, (p, c) -> p.getQualifier().isPresent()
-                && p.getQualifier().get() == name
-                && isSyntacticallyAPackageName(p))) {
+        if (whenParentIs(Name.class, name, (p, c) -> p.getQualifier().isPresent() &&
+                p.getQualifier().get() == name &&
+                isSyntacticallyAPackageName(p))
+        ) {
             return true;
         }
         return false;
@@ -1033,8 +1043,10 @@ public class NameLogic {
         } else if (name instanceof NameExpr) {
             return ((NameExpr) name).getNameAsString();
         } else {
-            throw new UnsupportedOperationException("Unknown type of name found: " + name + " ("
-                    + name.getClass().getCanonicalName() + ")");
+            throw new UnsupportedOperationException(
+                    "Unknown type of name found: " + name +
+                            " (" + name.getClass().getCanonicalName() + ")"
+            );
         }
     }
 

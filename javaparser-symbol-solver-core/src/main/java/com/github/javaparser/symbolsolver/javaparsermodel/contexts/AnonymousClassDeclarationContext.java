@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -45,6 +41,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.google.common.base.Preconditions;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A symbol resolution context for an object creation node.
@@ -134,7 +134,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
                      SymbolReference.solved(
                          JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType)));
 
-    if(exactMatch.isPresent()){
+    if (exactMatch.isPresent()) {
       return exactMatch.get();
     }
 

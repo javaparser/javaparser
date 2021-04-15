@@ -35,7 +35,7 @@ public class Substitution {
     private List<ResolvedTypeParameterDeclaration> typeParameterDeclarations;
     private List<ResolvedType> types;
 
-    private final static Substitution EMPTY = new Substitution();
+    private static final Substitution EMPTY = new Substitution();
 
     public static Substitution empty() {
         return EMPTY;
@@ -58,7 +58,7 @@ public class Substitution {
 
     public ResolvedType apply(ResolvedType originalType) {
         ResolvedType result = originalType;
-        for (int i=0;i<typeParameterDeclarations.size();i++) {
+        for (int i = 0; i < typeParameterDeclarations.size(); i++) {
             result = result.replaceTypeVariables(typeParameterDeclarations.get(i), types.get(i));
         }
         return result;

@@ -113,6 +113,8 @@ public interface NodeWithModifiers<N extends Node> {
                     return AccessSpecifier.PROTECTED;
                 case PRIVATE:
                     return AccessSpecifier.PRIVATE;
+                default:
+                    // No default
             }
         }
         return AccessSpecifier.PACKAGE_PRIVATE;

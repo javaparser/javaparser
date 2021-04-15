@@ -63,12 +63,12 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         }
         throw new IllegalArgumentException("Name " + name);
     }
-    
+
     /*
      * Returns an array containing all numeric types
      */
     public static ResolvedPrimitiveType[] getNumericPrimitiveTypes() {
-        return new ResolvedPrimitiveType[] {BYTE,SHORT,CHAR,INT,LONG,FLOAT,DOUBLE};
+        return new ResolvedPrimitiveType[]{BYTE, SHORT, CHAR, INT, LONG, FLOAT, DOUBLE};
     }
 
     @Override
@@ -133,14 +133,14 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     public boolean isNumeric() {
         return this != BOOLEAN;
     }
-    
+
     /**
      * Is this a boolean type?
      */
     public boolean isBoolean() {
         return this == BOOLEAN;
     }
-    
+
     /*
      * Binary primitive promotion (see https://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2)
      * If any operand is of a reference type, it is subjected to unboxing conversion (§5.1.8).
@@ -159,13 +159,13 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         // Otherwise, both operands are converted to type int.
         return ResolvedPrimitiveType.INT;
     }
-    
+
     /*
      * Unary primitive promotion (see https://docs.oracle.com/javase/specs/jls/se9/html/jls-5.html#jls-5.6.1)
      */
     public static ResolvedType unp(ResolvedType type) {
         boolean isUnboxable = type.isReferenceType() && type.asReferenceType().isUnboxable();
-        // If the operand is of compile-time type Byte, Short, Character, or Integer, it is subjected to unboxing conversion (§5.1.8). 
+        // If the operand is of compile-time type Byte, Short, Character, or Integer, it is subjected to unboxing conversion (§5.1.8).
         // The result is then promoted to a value of type int by a widening primitive conversion (§5.1.2) or an identity conversion (§5.1.1).
         if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.INT})) {
             return ResolvedPrimitiveType.INT;
@@ -181,12 +181,12 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         // Otherwise, a unary numeric operand remains as is and is not converted.
         return type;
     }
-    
+
     /*
      * Verify if the ResolvedPrimitiveType is in the list of ResolvedPrimitiveType
      */
     public boolean in(ResolvedPrimitiveType[] types) {
-        return Arrays.stream(types).anyMatch(type -> this == type); 
+        return Arrays.stream(types).anyMatch(type -> this == type);
     }
-    
+
 }

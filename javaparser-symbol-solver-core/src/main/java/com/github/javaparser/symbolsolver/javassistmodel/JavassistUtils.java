@@ -27,17 +27,35 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javassist.*;
-import javassist.bytecode.*;
+import javassist.CtBehavior;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.Modifier;
+import javassist.bytecode.AccessFlag;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
+import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.SyntheticAttribute;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -46,6 +64,10 @@ import java.util.stream.Collectors;
  */
 class JavassistUtils {
 
+    private JavassistUtils() {
+        // Private constructor to prevent initialisation of this utility class
+    }
+
     static Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues,
                                                     ResolvedReferenceTypeDeclaration scopeType, CtClass ctClass) {
@@ -53,9 +75,10 @@ class JavassistUtils {
 
         List<MethodUsage> methods = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
-            if (method.getName().equals(name)
-                    && ((method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0)
-                    && ((method.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)) {
+            if (method.getName().equals(name) &&
+                    ((method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0) &&
+                    ((method.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)
+            ) {
                 MethodUsage methodUsage = new MethodUsage(new JavassistMethodDeclaration(method, typeSolver));
                 for (int i = 0; i < typeParameters.size() && i < typeParameterValues.size(); i++) {
                     ResolvedTypeParameterDeclaration tpToReplace = typeParameters.get(i);

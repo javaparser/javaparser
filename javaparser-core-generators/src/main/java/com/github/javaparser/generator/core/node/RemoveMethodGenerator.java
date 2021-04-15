@@ -75,7 +75,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
         } else {
             body.addStatement("return false;");
         }
-        
+
         addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
     }
 

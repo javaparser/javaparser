@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.utils.Utils.*;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static com.github.javaparser.utils.Utils.nextWord;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 
 /**
  * The class responsible for parsing the content of JavadocComments and producing JavadocDocuments.
@@ -39,8 +41,12 @@ import static com.github.javaparser.utils.Utils.*;
  */
 class JavadocParser {
 
-    private static String BLOCK_TAG_PREFIX = "@";
-    private static Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
+    private static final String BLOCK_TAG_PREFIX = "@";
+    private static final Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
+
+    private JavadocParser() {
+        // Private constructor to prevent initialisation of this utility class
+    }
 
     public static Javadoc parse(JavadocComment comment) {
         return parse(comment.getContent());
