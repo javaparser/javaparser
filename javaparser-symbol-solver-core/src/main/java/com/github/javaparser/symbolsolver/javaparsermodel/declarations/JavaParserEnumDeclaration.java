@@ -57,7 +57,6 @@ import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -73,9 +72,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
         AssociableToAST<EnumDeclaration> {
 
+    /** A utility reference to the fully qualified, canonical, name. */
     private static final String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    /** A utility reference to the fully qualified, canonical, name. */
     private static final String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
-    private static final String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
+    /** A utility reference to the fully qualified, canonical, name. */
+    private static final String JAVA_IO_SERIALIZABLE = java.io.Serializable.class.getCanonicalName();
 
     private TypeSolver typeSolver;
     private EnumDeclaration wrappedNode;

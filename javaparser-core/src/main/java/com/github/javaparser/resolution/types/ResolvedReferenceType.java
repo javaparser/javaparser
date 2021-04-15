@@ -52,7 +52,9 @@ import java.util.stream.Collectors;
 public abstract class ResolvedReferenceType implements ResolvedType,
         ResolvedTypeParametrized, ResolvedTypeParameterValueProvider {
 
+    /** A utility reference to the fully qualified, canonical, name. */
     protected static final String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    /** A utility reference to the fully qualified, canonical, name. */
     protected static final String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     //

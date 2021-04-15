@@ -59,7 +59,10 @@ import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
  */
 public class Difference {
 
-    /** How wide should the indentation be. Defaults to 4 columns. TODO: Confirm columns vs characters. */
+    /**
+     * How wide should the indentation be. Defaults to 4 columns.
+     * TODO: Confirm columns vs characters.
+     */
     public static final int STANDARD_INDENTATION_SIZE = 4;
 
     private final NodeText nodeText;

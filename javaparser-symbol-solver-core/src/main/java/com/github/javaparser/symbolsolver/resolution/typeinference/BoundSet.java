@@ -52,6 +52,7 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
  */
 public class BoundSet {
 
+    /** A utility reference to the fully qualified, canonical, name. */
     private static final String JAVA_LANG_RUNTIME_EXCEPTION = RuntimeException.class.getCanonicalName();
 
     private static final BoundSet EMPTY = new BoundSet();
