@@ -38,10 +38,8 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -239,7 +237,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     /*
-     * Method reference expressions are always poly expressions 
+     * Method reference expressions are always poly expressions
      * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html 15.13. Method Reference Expressions)
      */
     @Override

@@ -40,14 +40,12 @@ import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * A definition of a class or interface.<br>{@code class X { ... }}
+ * A definition of a class or interface.<br>{@code class X { ... }}<br>{@code interface X { ... }}
  *
  * @author Julio Vilmar Gesser
  */

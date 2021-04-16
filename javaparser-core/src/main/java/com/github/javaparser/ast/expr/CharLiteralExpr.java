@@ -31,7 +31,6 @@ import com.github.javaparser.metamodel.CharLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.StringEscapeUtils;
 import com.github.javaparser.utils.Utils;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
