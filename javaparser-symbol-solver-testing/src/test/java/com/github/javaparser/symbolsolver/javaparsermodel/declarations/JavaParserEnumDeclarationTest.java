@@ -281,7 +281,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
 //    }
 
     @Test
-    void testGetAllInterfacesWithParameters() {
+    void testGetAllInterfacesWithParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAllInterfaces().size());
 
@@ -362,13 +362,13 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     }
 
     @Test
-    void testGetAllAncestorsWithoutTypeParameters() {
+    void testGetAllAncestorsWithoutTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration cu = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllAncestors().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
-    void testGetAllAncestorsWithTypeParameters() {
+    void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
