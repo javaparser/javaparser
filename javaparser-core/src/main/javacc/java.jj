@@ -280,28 +280,27 @@ SPECIAL_TOKEN : {
   <SINGLE_LINE_COMMENT_IN_MULTI_JML: "//" (~["\n","\r"])*>
 }
 
-/*
-MORE :
-{
-  <JML_SINGLE_START0: "//" (~[" "])* "@"> //TODO weigl maybe push token back
+
+MORE : {
+  <JML_SINGLE_START0: "//" (~[" "])* "@"> //{ input_stream.backup(1); }
    : JML_SINGLE_CONTRACT_PRE
   |
   <SINGLE_LINE_COMMENT0: "//"> : SINGLE_LINE_COMMENT_STATE
 }
 
-<SINGLE_LINE_COMMENT_STATE> SPECIAL_TOKEN : { <SINGLE_LINE_COMMENT: (~["\n","\r"])* ("\n"|"\r"|"\r\n")?> : DEFAULT}
-<JML_SINGLE_CONTRACT_PRE> TOKEN: { <JML_SINGLE_START : " "> : JML_SINGLE_CONTRACT}
+<SINGLE_LINE_COMMENT_STATE> SPECIAL_TOKEN : { <SINGLE_LINE_COMMENT: (~["\n","\r"])*> : DEFAULT}
+<JML_SINGLE_CONTRACT_PRE> TOKEN: { <JML_SINGLE_START : ""> : JML_SINGLE_CONTRACT}
 //FIXME weigl space could be a problem
-*/
 
-TOKEN : {
+
+/*TOKEN : {
   <JML_SINGLE_START: "//" (~[" "])* "@"> : JML_SINGLE_CONTRACT
 }
 
 SPECIAL_TOKEN :
 {
   <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
-}
+}*/
 
 TOKEN : {
   <JML_MULTI_START: "/*" (~[" "])* "@">  : JML_MULTI_CONTRACT
@@ -2185,10 +2184,9 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         LOOKAHEAD(2)
         ret = InitializerDeclaration()
      |
-        //FIXME expensive lookahead, required to distinguish, fields from contracts
-        // maybe large k is sufficient
-        LOOKAHEAD(10, JmlClassOrInterfaceBodyDeclaration())
-        //LOOKAHEAD(JmlStart() Modifiers() (Identifier() | <INVARIANT>) )
+        //FIXME weigl expensive lookahead, required to distinguish, fields from contracts
+        //maybe we should inline the rule below
+        LOOKAHEAD(3, JmlClassOrInterfaceBodyDeclaration())
         ret = JmlClassOrInterfaceBodyDeclaration()
      |
         (LOOKAHEAD(3) contracts=JmlContracts())?
@@ -3448,7 +3446,8 @@ String Identifier():
        | <SPEC_PROTECTED> | <SPEC_PUBLIC> | <SPEC_SAFE_MATH> | <STATIC_INITIALIZER> | <STRICTLY_PURE >
        | <SUBTYPE> | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
        | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> | <INVARIANT_FOR>
-       | <RESULT>
+       | <RESULT> | <SUBSET> | <DISJOINT> | <UNION> | <INTERSECT>
+
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
 }
@@ -4383,18 +4382,25 @@ Expression JmlPrimaryPrefix():
 {
     Expression expr;
     NodeList<Expression> exprs = new NodeList<>();
+    NodeList<LocationSetExpression> lsexprs;
     JavaToken begin;
     NodeList<JmlBoundVariable> vars;
 }
 {
-  "(" {begin=token();}
-     (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX>)
-      vars=JmlBoundedVariables()
-      ";"
-      expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
-   ")"
-   { return new JmlQuantifiedExpr(range(begin, token())
- , JmlQuantifiedExpr.JmlBinder.FORALL, vars, exprs);}
+  (
+    "(" {begin=token();}
+       (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX>)
+        vars=JmlBoundedVariables()
+        ";"
+        expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
+     ")"
+     { return new JmlQuantifiedExpr(range(begin, token()), JmlQuantifiedExpr.JmlBinder.FORALL, vars, exprs);}
+   |
+     (<LOCSET> | <SINGLETON>) {begin=token();} <LPAREN> lsexprs=StoreRefList() <RPAREN>
+     {
+       return new LocationSetWrapperExpression(range(begin, token()), lsexprs);
+     }
+  )
 }
 
 /**
@@ -5312,8 +5318,13 @@ LocationSetExpression StoreRefField():
         Expression expr;
 }
 {
-  name=SimpleName()
-  { prefix=new LocationSetFieldAccess(range(name,name), null, name);}
+  (name=SimpleName()
+     { prefix=new LocationSetFieldAccess(range(name,name), null, name);}
+  |<THIS>
+     { prefix=new LocationSetFieldAccess(range(token(),token()), null, new SimpleName("this"));}
+  |<SUPER>
+     { prefix=new LocationSetFieldAccess(range(token(),token()), null, new SimpleName("super"));}
+  )
   ( ("[" ( expr=Expression()
             {prefix = new LocationSetArrayAccess(range(prefix, token()), prefix, expr);}
           | "*" {prefix = LocationSetArrayAccess.forAllIndices(range(prefix, token()), prefix);}
