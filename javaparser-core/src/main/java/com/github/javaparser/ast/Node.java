@@ -162,10 +162,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Node parentNode;
 
     @InternalProperty
-    private List<Node> childNodes = new LinkedList<>();
+    private ArrayList<Node> childNodes = new ArrayList<>(0);
 
     @InternalProperty
-    private List<Comment> orphanComments = new LinkedList<>();
+    private ArrayList<Comment> orphanComments = new ArrayList<>(0);
 
     @InternalProperty
     private IdentityHashMap<DataKey<?>, Object> data = null;
@@ -174,7 +174,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Comment comment;
 
     @InternalProperty
-    private List<AstObserver> observers = new ArrayList<>(0);
+    private ArrayList<AstObserver> observers = new ArrayList<>(0);
 
     @InternalProperty
     private Parsedness parsed = PARSED;
@@ -368,6 +368,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (removed) {
             notifyPropertyChange(ObservableProperty.COMMENT, comment, null);
             comment.setParentNode(null);
+            orphanComments.trimToSize();
         }
         return removed;
     }
@@ -421,12 +422,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         observers.forEach(o -> o.parentChange(this, parentNode, newParentNode));
         // remove from old parent, if any
         if (parentNode != null) {
-            final List<Node> parentChildNodes = parentNode.childNodes;
+            final ArrayList<Node> parentChildNodes = parentNode.childNodes;
             for (int i = 0; i < parentChildNodes.size(); i++) {
                 if (parentChildNodes.get(i) == this) {
                     parentChildNodes.remove(i);
                 }
             }
+            parentChildNodes.trimToSize();
         }
         parentNode = newParentNode;
         // add to new parent, if any
@@ -616,6 +618,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @Override
     public void unregister(AstObserver observer) {
         this.observers.remove(observer);
+        this.observers.trimToSize();
     }
 
     @Override
