@@ -174,7 +174,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Comment comment;
 
     @InternalProperty
-    private Set<AstObserver> observers = new HashSet<>();
+    private List<AstObserver> observers = new ArrayList<>(0);
 
     @InternalProperty
     private Parsedness parsed = PARSED;
@@ -620,7 +620,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Override
     public void register(AstObserver observer) {
-        this.observers.add(observer);
+        // Check if the observer is not registered yet.
+        // In this case we use a List instead of Set to save on memory space.
+        if (!this.observers.contains(observer)) {
+            this.observers.add(observer);
+        }
     }
 
     /**
