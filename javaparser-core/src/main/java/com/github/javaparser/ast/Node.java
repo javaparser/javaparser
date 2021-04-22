@@ -388,7 +388,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments() {
-        return new LinkedList<>(orphanComments);
+        return unmodifiableList(orphanComments);
     }
 
     /**
@@ -399,8 +399,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments() {
-        List<Comment> comments = new LinkedList<>();
-        comments.addAll(getOrphanComments());
+        List<Comment> comments = new LinkedList<>(orphanComments);
         for (Node child : getChildNodes()) {
             child.getComment().ifPresent(comments::add);
             comments.addAll(child.getAllContainedComments());
@@ -995,7 +994,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         private final Iterator<Node> childrenIterator;
 
         public DirectChildrenIterator(Node node) {
-            childrenIterator = new ArrayList<>(node.getChildNodes()).iterator();
+            childrenIterator = node.getChildNodes().iterator();
         }
 
         @Override
@@ -1084,7 +1083,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
         private void fillStackToLeaf(Node node) {
             while (true) {
-                List<Node> childNodes = new ArrayList<>(node.getChildNodes());
+                List<Node> childNodes = node.getChildNodes();
                 if (childNodes.isEmpty()) {
                     break;
                 }
