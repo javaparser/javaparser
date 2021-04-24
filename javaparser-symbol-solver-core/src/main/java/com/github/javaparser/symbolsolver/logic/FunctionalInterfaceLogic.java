@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
@@ -33,10 +29,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 /**
  * @author Federico Tomassetti
  */
 public final class FunctionalInterfaceLogic {
+    
+    private static String JAVA_LANG_FUNCTIONAL_INTERFACE = FunctionalInterface.class.getCanonicalName();
 
     private FunctionalInterfaceLogic() {
         // prevent instantiation
@@ -81,7 +83,7 @@ public final class FunctionalInterfaceLogic {
     public static boolean isFunctionalInterfaceType(ResolvedType type) {
         if (type.isReferenceType()) {
             Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = type.asReferenceType().getTypeDeclaration();
-            if (optionalTypeDeclaration.isPresent() && optionalTypeDeclaration.get().hasAnnotation(FunctionalInterface.class.getCanonicalName())) {
+            if (optionalTypeDeclaration.isPresent() && optionalTypeDeclaration.get().hasAnnotation(JAVA_LANG_FUNCTIONAL_INTERFACE)) {
                 return true;
             }
         }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,7 +38,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ParameterMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -318,5 +317,27 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     @Override
     public ResolvedParameterDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedParameterDeclaration.class);
+    }
+
+    /**
+     * Record components (parameters here) are implicitly final, even without the explicitly-added modifier.
+     * https://openjdk.java.net/jeps/359#Restrictions-on-records
+     *
+     * If wanting to find out if the keyword {@code final} has been explicitly added to this parameter,
+     * you should use {@code node.hasModifier(Modifier.Keyword.FINAL)}
+     *
+     * @return true if the node parameter is explicitly final (keyword attached) or implicitly final (e.g. parameters to a record)
+     */
+    @Override
+    public boolean isFinal() {
+        // RecordDeclaration-specific code
+        if (getParentNode().isPresent()) {
+            Node parentNode = getParentNode().get();
+            if (parentNode instanceof RecordDeclaration) {
+                return true;
+            }
+        }
+        // Otherwise use the default implementation.
+        return NodeWithFinalModifier.super.isFinal();
     }
 }

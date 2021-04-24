@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -51,6 +51,9 @@ import com.github.javaparser.utils.Pair;
  */
 public abstract class ResolvedReferenceType implements ResolvedType,
         ResolvedTypeParametrized, ResolvedTypeParameterValueProvider {
+    
+    protected static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    protected static String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     //
     // Fields
@@ -549,7 +552,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isJavaLangObject() {
         return this.isReferenceType()
                 && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(java.lang.Object.class.getCanonicalName());
+                && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -559,7 +562,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isJavaLangEnum() {
         return this.isReferenceType()
                 && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(java.lang.Enum.class.getCanonicalName());
+                && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
     
     

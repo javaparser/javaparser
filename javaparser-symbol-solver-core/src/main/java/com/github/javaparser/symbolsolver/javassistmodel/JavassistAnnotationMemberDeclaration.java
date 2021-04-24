@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.DoubleLiteralExpr;
@@ -34,16 +30,14 @@ import com.github.javaparser.ast.expr.LongLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-
-import javassist.CtClass;
 import javassist.CtMethod;
-import javassist.NotFoundException;
 import javassist.bytecode.AnnotationDefaultAttribute;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.annotation.BooleanMemberValue;
 import javassist.bytecode.annotation.CharMemberValue;
 import javassist.bytecode.annotation.DoubleMemberValue;
@@ -51,6 +45,10 @@ import javassist.bytecode.annotation.IntegerMemberValue;
 import javassist.bytecode.annotation.LongMemberValue;
 import javassist.bytecode.annotation.MemberValue;
 import javassist.bytecode.annotation.StringMemberValue;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Malte Skoruppa
@@ -88,16 +86,15 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
     @Override
     public ResolvedType getType() {
         try {
-            CtClass returnType = annotationMember.getReturnType();
-            if (returnType.isPrimitive()) {
-                return ResolvedPrimitiveType.byName(returnType.getName());
+            String descriptor = annotationMember.getMethodInfo().getDescriptor();
+            SignatureAttribute.MethodSignature signature = SignatureAttribute.toMethodSignature(descriptor);
+            SymbolReference<ResolvedReferenceTypeDeclaration> returnType = typeSolver.tryToSolveType(signature.getReturnType().jvmTypeName());
+            if (returnType.isSolved()) {
+                return new ReferenceTypeImpl(returnType.getCorrespondingDeclaration(), typeSolver);
             }
-            SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
-            if (rrtd.isSolved()) {
-                return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration(), typeSolver);
-            }
-        } catch (NotFoundException e) {
-            // nothing to do
+        } catch (BadBytecode e) {
+            // We don't expect this to happen, but we handle it anyway.
+            throw new IllegalStateException("An invalid descriptor was received from JavaAssist.", e);
         }
         throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getLongName()));
     }

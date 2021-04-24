@@ -1,6 +1,6 @@
-Next Release (Version 3.21.0)
+Next Release (Version 3.21.3)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/182?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/183?closed=1)
 
 ### Added
 ### Changed
@@ -8,6 +8,55 @@ Next Release (Version 3.21.0)
 ### Removed
 ### Fixed
 ### Security
+
+
+Version 3.21.2
+------------------
+**v3.21.1 released as 3.21.2 without change**
+
+Version 3.21.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/182?closed=1)
+
+### Added
+
+* Implemented logic for isAssignableBy in JavassistInterfaceDeclaration (PR [#3170](https://github.com/javaparser/javaparser/pull/3170) by [@4everTheOne](https://github.com/4everTheOne))
+* Added additional tests to cover isAssignableBy method in JavassistClassDeclaration (PR [#3169](https://github.com/javaparser/javaparser/pull/3169) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Changed
+
+* Update changelog (PR [#3178](https://github.com/javaparser/javaparser/pull/3178) by [@MysterAitch](https://github.com/MysterAitch))
+* Minor performance improvement on getCanonicalName method call (PR [#3166](https://github.com/javaparser/javaparser/pull/3166) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix Issue #1950 Unambigous ambiguity call with <Void> generics and lambda's (PR [#3168](https://github.com/javaparser/javaparser/pull/3168) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactor the javassist implementation to delegate to the typesolver instead of using its own classpool (PR [#3167](https://github.com/javaparser/javaparser/pull/3167) by [@maartenc](https://github.com/maartenc))
+* Fixed name resolution in casted lambda expressions (PR [#3165](https://github.com/javaparser/javaparser/pull/3165) by [@maartenc](https://github.com/maartenc))
+* Fix issue #3159 JavaParserSymbolDeclaration is used to represent variables, but #isVariable() always returns false (PR [#3160](https://github.com/javaparser/javaparser/pull/3160) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix wrong author attribution in changelog for #3072 (PR [#3155](https://github.com/javaparser/javaparser/pull/3155) by [@Col-E](https://github.com/Col-E))
+* Fixed #3136 - ThisExpr isn't resolved correctly when it is in the scope of an ObjectCreationExpr (PR [#3137](https://github.com/javaparser/javaparser/pull/3137) by [@deadlocklogic](https://github.com/deadlocklogic))
+* Fix race condition in JavaParserTypeSolver (PR [#3091](https://github.com/javaparser/javaparser/pull/3091) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Developer Changes
+
+* Publish to OSSRH rather than Bintray (PR [#3180](https://github.com/javaparser/javaparser/pull/3180) by [@MysterAitch](https://github.com/MysterAitch))
+* Remove unused JUnit Pioneer dependency (PR [#3179](https://github.com/javaparser/javaparser/pull/3179) by [@MysterAitch](https://github.com/MysterAitch))
+* Verify builds test correctly under JDK16 (PR [#3175](https://github.com/javaparser/javaparser/pull/3175) by [@MysterAitch](https://github.com/MysterAitch))
+* update renovate to include "dependencies" label on PRs (PR [#3174](https://github.com/javaparser/javaparser/pull/3174) by [@MysterAitch](https://github.com/MysterAitch))
+* chore(deps): update dependency com.google.guava:guava to v30.1.1-jre (PR [#3172](https://github.com/javaparser/javaparser/pull/3172) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@maartenc](https://github.com/maartenc)
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@deadlocklogic](https://github.com/deadlocklogic)
+* [@4everTheOne](https://github.com/4everTheOne)
+* [@Col-E](https://github.com/Col-E)
+
 
 
 Version 3.20.0

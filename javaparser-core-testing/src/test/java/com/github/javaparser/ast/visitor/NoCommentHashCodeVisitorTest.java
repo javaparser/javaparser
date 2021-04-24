@@ -560,6 +560,15 @@ class NoCommentHashCodeVisitorTest {
 	}
 
 	@Test
+	void testVisitLocalRecordDeclarationStmt() {
+		LocalRecordDeclarationStmt node = spy(new LocalRecordDeclarationStmt());
+		NoCommentHashCodeVisitor.hashCode(node);
+
+		verify(node, times(1)).getRecordDeclaration();
+		verify(node, never()).getComment();
+	}
+
+	@Test
 	void testVisitLongLiteralExpr() {
 		LongLiteralExpr node = spy(new LongLiteralExpr());
 		NoCommentHashCodeVisitor.hashCode(node);

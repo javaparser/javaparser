@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -74,6 +74,9 @@ import com.github.javaparser.utils.Pair;
  * in its original formatting including the AST changes.
  */
 public class LexicalPreservingPrinter {
+    
+    private static String JAVA_UTIL_OPTIONAL = Optional.class.getCanonicalName();
+    private static String JAVAPARSER_AST_NODELIST = NodeList.class.getCanonicalName();
 
     private static AstObserver observer;
 
@@ -617,7 +620,7 @@ public class LexicalPreservingPrinter {
     //
 
     private static boolean isReturningOptionalNodeList(Method m) {
-        if (!m.getReturnType().getCanonicalName().equals(Optional.class.getCanonicalName())) {
+        if (!m.getReturnType().getCanonicalName().equals(JAVA_UTIL_OPTIONAL)) {
             return false;
         }
         if (!(m.getGenericReturnType() instanceof ParameterizedType)) {
@@ -625,13 +628,13 @@ public class LexicalPreservingPrinter {
         }
         ParameterizedType parameterizedType = (ParameterizedType) m.getGenericReturnType();
         java.lang.reflect.Type optionalArgument = parameterizedType.getActualTypeArguments()[0];
-        return (optionalArgument.getTypeName().startsWith(NodeList.class.getCanonicalName()));
+        return (optionalArgument.getTypeName().startsWith(JAVAPARSER_AST_NODELIST));
     }
 
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
-            if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(NodeList.class.getCanonicalName())) {
+            if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
                 try {
                     Object raw = m.invoke(parent);
                     if (!(raw instanceof NodeList)) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,9 +22,14 @@
 package com.github.javaparser.resolution.declarations;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -91,12 +96,34 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     /**
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exact same type parameters.
+     * For example 
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * By default the traversal is depth first
      */
     default List<ResolvedReferenceType> getAllAncestors() {
+        return getAllAncestors(depthFirstFunc);
+    }
+    
+    /**
+     * The list of all the ancestors of the current declaration, direct and indirect.
+     * This list does not contains duplicates with the exact same type parameters.
+     * For example 
+     * if A inherits from B, and B inherits from C and implements D, and C inherits from E 
+     * Apply the specified traversal
+     */
+    default List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
+        return traverser.apply(this);
+    }
+    
+    /*
+     * depth first search all ancestors
+     * In the example above, this method returns B,C,E,D
+     */
+    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> depthFirstFunc = (rrtd) -> {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!isJavaLangObject()) {
-            for (ResolvedReferenceType ancestor : getAncestors()) {
+        if (!rrtd.isJavaLangObject()) {
+            for (ResolvedReferenceType ancestor : rrtd.getAncestors()) {
                 ancestors.add(ancestor);
                 for (ResolvedReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
                     if (!ancestors.contains(inheritedAncestor)) {
@@ -106,7 +133,33 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
             }
         }
         return ancestors;
-    }
+    };
+    
+    /*
+     * breadth first search all all ancestors
+     * In the example above, this method returns B,C,D,E
+     */
+    Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
+        Set<ResolvedReferenceType> ancestors = new HashSet<>();
+        // We want to avoid infinite recursion in case of Object having Object as ancestor
+        if (!rrtd.isJavaLangObject()) {
+          // init direct ancestors 
+          Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<ResolvedReferenceType>(rrtd.getAncestors());
+          ancestors.addAll(queuedAncestors);
+          while (!queuedAncestors.isEmpty()) {
+              ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
+              queuedAncestor.getTypeDeclaration()
+                      .ifPresent(rtd -> new LinkedHashSet<ResolvedReferenceType>(queuedAncestor.getDirectAncestors()).stream()
+                              .forEach(ancestor -> {
+                                  // add this ancestor to the queue (for a deferred search)
+                                  queuedAncestors.add(ancestor);
+                                  // add this ancestor to the list of ancestors
+                                  ancestors.add(ancestor);
+                              }));
+          }
+      }
+      return new ArrayList(ancestors);
+    };
 
     ///
     /// Fields

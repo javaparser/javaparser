@@ -90,7 +90,7 @@ class JavaParserTest {
     	assertFalse(cu.getResult().isPresent());
     	assertEquals("Lexical error at line 1, column 34.  Encountered: \"\\\"\" (34), after : \"\\\"\\\\uABC\"", cu.getProblem(0).getMessage());
     }
-    
+
 	private static ParseResult<CompilationUnit> parseWithUnicodeEscapes(String code) {
 		ParserConfiguration config = new ParserConfiguration();
         config.setPreprocessUnicodeEscapes(true);
@@ -142,7 +142,7 @@ class JavaParserTest {
 
         Problem problem = result.getProblem(0);
         assertEquals(range(1, 9, 1, 17), problem.getLocation().get().toRange().get());
-        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
+        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"record\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
         assertInstanceOf(ParseException.class, problem.getCause().get());
     }
 
@@ -303,7 +303,7 @@ class JavaParserTest {
     void parseTypeDeclaration() {
         StaticJavaParser.parseTypeDeclaration("enum Z {A, B}");
     }
-    
+
     @Test
     void xxx(){
         YamlPrinter.print(StaticJavaParser.parse("class X{}"));

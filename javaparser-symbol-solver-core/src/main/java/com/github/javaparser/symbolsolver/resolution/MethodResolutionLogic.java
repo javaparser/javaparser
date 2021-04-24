@@ -54,6 +54,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
  * @author Federico Tomassetti
  */
 public class MethodResolutionLogic {
+    
+    private static String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     private static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic, ResolvedType variadicType) {
         List<ResolvedType> res = new ArrayList<>(argumentsTypes.subList(0, startVariadic));
@@ -326,7 +328,7 @@ public class MethodResolutionLogic {
                 } else if (bounds.size() == 1) {
                     return bounds.get(0).getType();
                 } else {
-                    return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
+                    return new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver);
                 }
             }
             return type;
@@ -433,15 +435,15 @@ public class MethodResolutionLogic {
             // Consider cases where type variables can be replaced (e.g. add(E element) vs add(String element))
             for (ResolvedTypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds().isEmpty()) {
-                    //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
-                    expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver)));
+                    //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver));
+                    expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver)));
                 } else if (tp.getBounds().size() == 1) {
                     ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
                     if (bound.isExtends()) {
                         //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), bound.getType());
                         expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp, ResolvedWildcard.extendsBound(bound.getType()));
                     } else {
-                        //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                        //expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver));
                         expectedArgumentType = expectedArgumentType.replaceTypeVariables(tp, ResolvedWildcard.superBound(bound.getType()));
                     }
                 } else {
@@ -453,13 +455,13 @@ public class MethodResolutionLogic {
             ResolvedType expectedTypeWithSubstitutions = expectedTypeWithoutSubstitutions;
             for (ResolvedTypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds().isEmpty()) {
-                    expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                    expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver));
                 } else if (tp.getBounds().size() == 1) {
                     ResolvedTypeParameterDeclaration.Bound bound = tp.getBounds().get(0);
                     if (bound.isExtends()) {
                         expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, bound.getType());
                     } else {
-                        expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
+                        expectedTypeWithSubstitutions = expectedTypeWithSubstitutions.replaceTypeVariables(tp, new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver));
                     }
                 } else {
                     throw new UnsupportedOperationException();
@@ -557,7 +559,7 @@ public class MethodResolutionLogic {
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
         }
-
+        
         // Examine the applicable methods found, and evaluate each to determine the "best" one
         ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
         ResolvedMethodDeclaration other = null;
@@ -570,21 +572,33 @@ public class MethodResolutionLogic {
                 possibleAmbiguity = false;
                 winningCandidate = other;
             } else {
-                if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                // 15.12.2.5. Choosing the Most Specific Method
+                // One applicable method m1 is more specific than another applicable method m2, for an invocation with argument
+                // expressions e1, ..., ek, if any of the following are true:
+                // m2 is generic, and m1 is inferred to be more specific than m2 for argument expressions e1, ..., ek by §18.5.4.
+                // 18.5.4. More Specific Method Inference should be verified 
+                // ...
+                if (winningCandidate.isGeneric() && !other.isGeneric()) {
+                    winningCandidate = other;
+                } else if (!winningCandidate.isGeneric() && other.isGeneric()) {
+                    // nothing to do at this stage winningCandidate is the winner
+                } else if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
                     possibleAmbiguity = true;
                 } else {
                     // we expect the methods to be ordered such that inherited methods are later in the list
                 }
             }
         }
-
+        
         if (possibleAmbiguity) {
             // pick the first exact match if it exists
             if (!isExactMatch(winningCandidate, argumentsTypes)) {
                 if (isExactMatch(other, argumentsTypes)) {
                     winningCandidate = other;
                 } else {
-                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
+                    throw new MethodAmbiguityException(
+                            "Ambiguous method call: cannot find a most applicable method: " + winningCandidate
+                                    + ", " + other);
                 }
             }
         }

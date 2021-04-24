@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -196,8 +196,18 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLocalRecordDeclarationStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
         throw new IllegalStateException(f("%s is not LocalClassDeclarationStmt, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocalRecordDeclarationStmt asLocalRecordDeclarationStmt() {
+        throw new IllegalStateException(f("%s is not LocalRecordDeclarationStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -319,6 +329,10 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocalRecordDeclarationStmt(Consumer<LocalRecordDeclarationStmt> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReturnStmt(Consumer<ReturnStmt> action) {
     }
 
@@ -403,6 +417,11 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<LocalRecordDeclarationStmt> toLocalRecordDeclarationStmt() {
         return Optional.empty();
     }
 
