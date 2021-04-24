@@ -79,7 +79,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
         superTypeDeclaration =
                 JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver)
-                        .solveType(superTypeName)
+                        .solveTypeInParentContext(superTypeName)
                         .getCorrespondingDeclaration();
     }
 
