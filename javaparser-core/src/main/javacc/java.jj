@@ -2963,16 +2963,7 @@ Expression Expression():
             "->"
             lambdaBody = LambdaBody()
             {
-                if (ret instanceof CastExpr) {
-                    ret = generateLambda(ret, lambdaBody);
-                } else if (ret instanceof ConditionalExpr) {
-                    ConditionalExpr ce = (ConditionalExpr) ret;
-                    if(ce.getElseExpr() != null) {
-                        ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
-                    }
-                } else {
-                    ret = generateLambda(ret, lambdaBody);
-                }
+                ret = generateLambda(ret, lambdaBody);
             }
          |
             "::"
