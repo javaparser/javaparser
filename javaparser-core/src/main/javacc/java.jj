@@ -2963,7 +2963,16 @@ Expression Expression():
             "->"
             lambdaBody = LambdaBody()
             {
-                ret = generateLambda(ret, lambdaBody);
+                if (ret instanceof CastExpr) {
+                    ret = generateLambda(ret, lambdaBody);
+                } else if (ret instanceof ConditionalExpr) {
+                    ConditionalExpr ce = (ConditionalExpr) ret;
+                    if(ce.getElseExpr() != null) {
+                        ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
+                    }
+                } else {
+                    ret = generateLambda(ret, lambdaBody);
+                }
             }
          |
             "::"
@@ -3036,7 +3045,7 @@ Expression ConditionalExpression():
         "?"
         left = Expression()
         ":"
-        right = Expression()
+        right = ConditionalExpression()
         // TODO: Examine further re: missing(?) {@code LambdaExpression} or whether it is permissive enough to include it.
         {
             ret = new ConditionalExpr(range(ret, token()), ret, left, right);
