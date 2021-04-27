@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class ParseErrorRecoveryTest {
     private final JavaParser parser = new JavaParser();
@@ -59,5 +60,26 @@ class ParseErrorRecoveryTest {
         CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, provider("class X{int x(){aaa:X X X;}}")).getResult().get();
         LabeledStmt xxx = cu.getClassByName("X").get().getMethods().get(0).getBody().get().getStatements().get(0).asLabeledStmt();
         assertEquals(UNPARSABLE, xxx.getStatement().getParsed());
+    }
+
+    @Test
+    void testIncompleteClassParse() {
+        CompilationUnit compilationUnit = parser.parse(getClass().getResourceAsStream("Sample.java")).getResult().get();
+        assertFalse(compilationUnit.getTypes().isEmpty());
+        assertFalse(compilationUnit.getTypes().get(0).getMembers().isEmpty());
+    }
+
+    @Test
+    void testBodyRecoverIf() {
+        CompilationUnit compilationUnit = parser.parse(ParseStart.COMPILATION_UNIT, provider("class A { int a() { if() }}")).getResult().get();
+        assertFalse(compilationUnit.getTypes().isEmpty());
+        assertEquals(1, compilationUnit.getTypes().get(0).getMembers().size());
+    }
+
+    @Test
+    void testBodyRecoverLevel() {
+        CompilationUnit compilationUnit = parser.parse(ParseStart.COMPILATION_UNIT, provider("class A { int a() { int b = if (true) {int c = 5;} }}")).getResult().get();
+        assertFalse(compilationUnit.getTypes().isEmpty());
+        assertEquals(1, compilationUnit.getTypes().get(0).getMembers().size());
     }
 }

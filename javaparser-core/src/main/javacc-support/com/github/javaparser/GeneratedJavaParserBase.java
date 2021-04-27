@@ -54,6 +54,8 @@ abstract class GeneratedJavaParserBase {
 
     abstract Token getNextToken();
 
+    abstract Token getCurrentToken();
+
     ////
 
     /* The problems encountered while parsing */
@@ -193,6 +195,40 @@ abstract class GeneratedJavaParserBase {
         do {
             t = getNextToken();
         } while (t.kind != recoveryTokenType && t.kind != EOF);
+
+        JavaToken end = token();
+
+        TokenRange tokenRange = null;
+        if (begin != null && end != null) {
+            tokenRange = range(begin, end);
+        }
+
+        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
+        return tokenRange;
+    }
+    /* Called from within a catch block to skip forward to a known token,
+        and report the occurred exception as a problem. */
+    TokenRange recoverStatement(int recoveryTokenType, int lBraceType, int rBraceType, ParseException p) {
+        JavaToken begin = null;
+        if (p.currentToken != null) {
+            begin = token();
+        }
+        int level = 0;
+        Token t;
+        do {
+            Token currentToken = getCurrentToken();
+            if (currentToken.next != null && currentToken.next.kind == rBraceType && level == 0) {
+                TokenRange tokenRange = range(begin, token());
+                problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
+                return tokenRange;
+            }
+            t = getNextToken();
+            if (t.kind == lBraceType) {
+                level++;
+            } else if (t.kind == rBraceType) {
+                level--;
+            }
+        } while (!(t.kind == recoveryTokenType && level == 0) && t.kind != EOF);
 
         JavaToken end = token();
 
