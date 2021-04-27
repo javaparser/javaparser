@@ -628,17 +628,10 @@ public class JavaParserFacade {
      */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node, String className) {
         Node parent = node;
-        boolean detachFlag = false;
         while (true) {
             parent = demandParentNode(parent);
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
-                    return parent;
-                } else {
-                    detachFlag = true;
-                }
-            } else if (parent instanceof ObjectCreationExpr) {
-                if (detachFlag) {
                     return parent;
                 }
             }
