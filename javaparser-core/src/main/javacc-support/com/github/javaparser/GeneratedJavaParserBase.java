@@ -54,7 +54,7 @@ abstract class GeneratedJavaParserBase {
 
     abstract Token getNextToken();
 
-    abstract Token getCurrentToken();
+    abstract Token getToken(final int index);
 
     ////
 
@@ -216,8 +216,8 @@ abstract class GeneratedJavaParserBase {
         int level = 0;
         Token t;
         do {
-            Token currentToken = getCurrentToken();
-            if (currentToken.next != null && currentToken.next.kind == rBraceType && level == 0) {
+            Token nextToken = getToken(1);
+            if (nextToken != null && nextToken.kind == rBraceType && level == 0) {
                 TokenRange tokenRange = range(begin, token());
                 problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
                 return tokenRange;
