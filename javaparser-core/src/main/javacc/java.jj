@@ -4178,7 +4178,7 @@ Statement Statement():
         )
         { return ret; }
     } catch (ParseException e) {
-        TokenRange errorRange = recover(SEMICOLON, e);
+        TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);
     }
 }
