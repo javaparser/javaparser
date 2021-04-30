@@ -25,12 +25,12 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.LabeledStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.UnparsableStmt;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ParseErrorRecoveryTest {
     private final JavaParser parser = new JavaParser();
@@ -52,7 +52,8 @@ class ParseErrorRecoveryTest {
     void bodystatementClosingBraceRecovery() {
         MethodDeclaration cu = parser.parse(ParseStart.CLASS_BODY, provider("int x(){X X X}")).getResult().get().asMethodDeclaration();
         Statement xxx = cu.getBody().get();
-        assertEquals(UNPARSABLE, xxx.getParsed());
+        assertEquals(1, xxx.getChildNodes().size());
+        assertTrue(xxx.getChildNodes().get(0) instanceof UnparsableStmt);
     }
 
     @Test
