@@ -153,8 +153,9 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (elseStmt != null) {
             if (node == elseStmt) {
                 removeElseStmt();
@@ -216,8 +217,9 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == condition) {
             setCondition((Expression) replacementNode);
             return true;

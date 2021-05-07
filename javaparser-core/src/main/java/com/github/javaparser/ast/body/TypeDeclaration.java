@@ -159,8 +159,9 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i) == node) {
                 members.remove(i);
@@ -228,8 +229,9 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < members.size(); i++) {
             if (members.get(i) == node) {
                 members.set(i, (BodyDeclaration) replacementNode);

@@ -224,8 +224,9 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (initializer != null) {
             if (node == initializer) {
                 removeInitializer();
@@ -255,8 +256,9 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (initializer != null) {
             if (node == initializer) {
                 setInitializer((Expression) replacementNode);

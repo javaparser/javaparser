@@ -82,14 +82,6 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isTextBlockLiteralExpr() {
         return true;
@@ -111,14 +103,6 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
         action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override

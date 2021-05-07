@@ -173,8 +173,9 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < extendedTypes.size(); i++) {
             if (extendedTypes.get(i) == node) {
                 extendedTypes.remove(i);
@@ -234,8 +235,9 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < extendedTypes.size(); i++) {
             if (extendedTypes.get(i) == node) {
                 extendedTypes.set(i, (ClassOrInterfaceType) replacementNode);
