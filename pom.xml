@@ -232,10 +232,10 @@
                     <configuration>
                         <!-- When updating versions during release, synchronise versions of sub-modules with the parent-pom. -->
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <!-- During release:prepare, update the readme (via the "run-release" profile) and add it to git. -->
-                        <preparationGoals>-Prun-release clean verify scm:add scm:checkin</preparationGoals>
+                        <!-- During release:prepare, update the readme (via the "update-readme-and-commit-to-git" profile) and add it to git. -->
+                        <preparationGoals>-Pupdate-readme-and-commit-to-git compile</preparationGoals>
                         <!-- During release:perform, enable the release-specific profiles -->
-                        <releaseProfiles>run-release</releaseProfiles>
+                        <releaseProfiles> attach-javadocs attach-sources sign-artifacts</releaseProfiles>
                         <!-- Disable pushing of changes (i.e. false, for local testing) -->
                         <pushChanges>false</pushChanges>
                     </configuration>
@@ -406,12 +406,48 @@
             </activation>
             <!-- FIXME: Can this be removed? It appears to be a no-op, with be no action to be done when activated (e.g. set a parameter, configure a plugin, etc.) -->
         </profile>
+
         <profile>
-            <!-- This profile is intended for use when preparing and deploying a release. -->
-            <id>run-release</id>
+            <!-- Update the readme with the new version number. -->
+            <id>update-readme</id>
             <build>
                 <plugins>
-                    <!-- Update the readme with the new version number, but only when compiling a new release. -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-readme</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.basedir}/doc</directory>
+                                            <includes>
+                                                <include>readme.md</include>
+                                            </includes>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                    <encoding>${project.build.sourceEncoding}</encoding>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Update the readme with the new version number, AND commit this updated file. -->
+            <!-- NOTE: If no change, scm:add (and the build) will fail. -->
+            <id>update-readme-and-commit-to-git</id>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
@@ -442,16 +478,33 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-scm-plugin</artifactId>
-                        <configuration>
-                            <includes>readme.md</includes>
-                            <message>[maven-release-plugin] update readme</message>
-                            <!-- disabled here, as it will be pushed separately -->
-                            <!-- (either once the release has finished being prepared, or manually) -->
-                            <pushChanges>false</pushChanges>
-                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>commit-updated-readme</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>add</goal>
+                                    <goal>checkin</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>readme.md</includes>
+                                    <message>[maven] update readme</message>
+                                    <!-- disabled here, as it will be pushed separately -->
+                                    <!-- (either once the release has finished being prepared, or manually) -->
+                                    <pushChanges>false</pushChanges>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-                    <!-- Source plugin - used to include source code within the release JAR -->
+        <profile>
+            <!-- Source plugin - used to include source code within the release JAR -->
+            <id>attach-sources</id>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
@@ -464,7 +517,15 @@
                             </execution>
                         </executions>
                     </plugin>
+                </plugins>
+            </build>
+        </profile>
 
+        <profile>
+            <!-- This profile is intended for use when preparing and deploying a release. -->
+            <id>attach-javadocs</id>
+            <build>
+                <plugins>
                     <!-- Javadoc plugin - used to include javadoc within the release JAR -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -478,8 +539,15 @@
                             </execution>
                         </executions>
                     </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-                    <!-- GPG plugin - used to sign the release JAR before pushing to OSSRH -->
+        <profile>
+            <!-- GPG plugin - used to sign the release JAR before pushing to OSSRH -->
+            <id>sign-artifacts</id>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -487,7 +555,7 @@
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
-                                <phase>verify</phase>
+                                <phase>package</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
@@ -501,9 +569,9 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
+
     </profiles>
 </project>
