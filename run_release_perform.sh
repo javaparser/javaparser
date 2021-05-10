@@ -32,6 +32,6 @@ echo "[JavaParser]"
 
 set -x
 
-mvn -e -Darguments="-DskipTests" release:perform
+./mvnw -e -Darguments="-DskipTests" release:perform
 
 set +x
