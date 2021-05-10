@@ -43,6 +43,7 @@ Version 3.22.0
 
 ### Developer Changes
 
+* Include and use a Maven wrapper (PR [#3254](https://github.com/javaparser/javaparser/pull/3254) by [@MysterAitch](https://github.com/MysterAitch))
 * chore(deps): update dependency org.javassist:javassist to v3.28.0-ga (PR [#3249](https://github.com/javaparser/javaparser/pull/3249) by [@renovate[bot]](https://github.com/apps/renovate))
 * chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.7 (PR [#3246](https://github.com/javaparser/javaparser/pull/3246) by [@renovate[bot]](https://github.com/apps/renovate))
 * chore(deps): update actions/cache action to v2.1.5 (PR [#3226](https://github.com/javaparser/javaparser/pull/3226) by [@renovate[bot]](https://github.com/apps/renovate))
