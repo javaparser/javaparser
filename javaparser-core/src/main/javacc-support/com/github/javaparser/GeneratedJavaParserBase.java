@@ -417,11 +417,11 @@ abstract class GeneratedJavaParserBase {
     Name scopeToName(Expression scope) {
         if (scope.isNameExpr()) {
             SimpleName simpleName = scope.asNameExpr().getName();
-            return new Name(simpleName.getTokenRange().get(), null, simpleName.getIdentifier());
+            return new Name(simpleName.getTokenRange().orElse(null), null, simpleName.getIdentifier());
         }
         if (scope.isFieldAccessExpr()) {
             FieldAccessExpr fieldAccessExpr = scope.asFieldAccessExpr();
-            return new Name(fieldAccessExpr.getTokenRange().get(), scopeToName(fieldAccessExpr.getScope()), fieldAccessExpr.getName().getIdentifier());
+            return new Name(fieldAccessExpr.getTokenRange().orElse(null), scopeToName(fieldAccessExpr.getScope()), fieldAccessExpr.getName().getIdentifier());
 
         }
         throw new IllegalStateException("Unexpected expression type: " + scope.getClass().getSimpleName());

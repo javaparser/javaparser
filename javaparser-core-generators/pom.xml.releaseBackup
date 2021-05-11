@@ -3,12 +3,12 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.22.1-SNAPSHOT</version>
+        <version>3.20.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-core-metamodel-generator</artifactId>
-    <description>The tool that generates the code in the javaparser-metamodel module</description>
+    <artifactId>javaparser-core-generators</artifactId>
+    <description>A code generator framework, and the generators for javaparser-core</description>
 
     <dependencies>
         <dependency>
@@ -16,20 +16,12 @@
             <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <!-- no need to release this module -->
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <profiles>
         <profile>
@@ -41,7 +33,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>generate-javaparser-metamodel</id>
+                                <id>generate-javaparser-core</id>
                                 <phase>test</phase>
                                 <goals>
                                     <goal>java</goal>
@@ -50,7 +42,7 @@
                         </executions>
                         <configuration>
                             <classpathScope>test</classpathScope>
-                            <mainClass>com.github.javaparser.generator.metamodel.MetaModelGenerator</mainClass>
+                            <mainClass>com.github.javaparser.generator.core.CoreGenerator</mainClass>
                             <arguments>
                                 <argument>${project.basedir}</argument>
                             </arguments>
