@@ -104,6 +104,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase {
         return token.javaToken;
     }
 
+    /* Returns the last matched token */
+    Token getCurrentToken() {
+        return token;
+    }
+
     /* Changes the amount by which the horizontal position is increased when a tab character is encountered.
         One by default.*/
     void setTabSize(int size) {
@@ -4173,7 +4178,7 @@ Statement Statement():
         )
         { return ret; }
     } catch (ParseException e) {
-        TokenRange errorRange = recover(SEMICOLON, e);
+        TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);
     }
 }
@@ -4315,7 +4320,7 @@ Statement BlockStatement():
         )
         { return ret; }
     } catch (ParseException e) {
-        TokenRange errorRange = recover(SEMICOLON, e);
+        TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);
     }
 }
