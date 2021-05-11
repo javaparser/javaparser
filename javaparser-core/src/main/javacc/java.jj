@@ -1373,6 +1373,7 @@ RecordDeclaration RecordDeclaration(ModifierHolder modifier):
     JavaToken begin = modifier.begin;
 }
 {
+    // Note that BlockStatement and ClassOrInterfaceBodyDeclaration have extended lookaheads that should be maintained
     // Note that `record` is a "restricted identifier", not a keyword - JLS 3.9 has more detail.
     "record" { begin = orIfInvalid(begin, token()); }
     name = SimpleName()
@@ -1890,7 +1891,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         (
             ret = ClassOrInterfaceDeclaration(modifiers)
          |
-            LOOKAHEAD("record")
+            LOOKAHEAD("record" SimpleName() [ TypeParameters() ] Parameters() )
             ret = RecordDeclaration(modifiers)
          |
             LOOKAHEAD("enum")
@@ -4307,11 +4308,12 @@ Statement BlockStatement():
             modifier = Modifiers()
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
          |
-            LOOKAHEAD( Modifiers() "record" )
+            // Extended lookahead required to allow for e.g. `record.toString()` where looking past "record" is required for disambiguation
+            LOOKAHEAD( Modifiers() "record" SimpleName() [ TypeParameters() ] Parameters() )
             modifier = Modifiers()
             recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
          |
-            LOOKAHEAD(VariableDeclarationExpression() )
+            LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
