@@ -4565,7 +4565,7 @@ SwitchEntry SwitchEntry():
             ";"
             {
                 TokenRange r=range(begin, token());
-                stmts.add(new ExpressionStmt(r, expression));
+                stmts.add(new ExpressionStmt(expression.getTokenRange().get(), expression));
                 ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
             }
          |
