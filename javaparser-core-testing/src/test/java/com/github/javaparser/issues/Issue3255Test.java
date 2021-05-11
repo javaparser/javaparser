@@ -1,34 +1,46 @@
 package com.github.javaparser.issues;
 
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue3255Test {
 
+    private static final String EOL = LineSeparator.SYSTEM.asRawString();
+
     @Test
     public void test() {
-        CompilationUnit compilationUnit = StaticJavaParser.parse("class Test {\n" +
-                "    private void bad() {\n" +
-                "        String record = \"\";\n" +
-                "        record.getBytes();\n" +
-                "    }\n" +
+        JavaParser javaParser = new JavaParser();
+        ParseResult<CompilationUnit> parseResult = javaParser.parse("class Test {" + EOL +
+                "    private void bad() {" + EOL +
+                "        String record = \"\";" + EOL +
+                "        record.getBytes();" + EOL +
+                "    }" + EOL +
                 "}");
 
-        System.out.println(compilationUnit);
+        assertEquals(0, parseResult.getProblems().size());
 
+        CompilationUnit compilationUnit = parseResult.getResult().get();
+        System.out.println(compilationUnit);
     }
 
     @Test
     public void test2() {
-        CompilationUnit compilationUnit = StaticJavaParser.parse("class Test {\n" +
-                "    private void bad() {\n" +
-                "        String record2 = \"\";\n" +
-                "        record2.getBytes();\n" +
-                "    }\n" +
+        JavaParser javaParser = new JavaParser();
+        ParseResult<CompilationUnit> parseResult = javaParser.parse("class Test {" + EOL +
+                "    private void bad() {" + EOL +
+                "        String record2 = \"\";" + EOL +
+                "        record2.getBytes();" + EOL +
+                "    }" + EOL +
                 "}");
 
-        System.out.println(compilationUnit);
+        assertEquals(0, parseResult.getProblems().size());
 
+        CompilationUnit compilationUnit = parseResult.getResult().get();
+        System.out.println(compilationUnit);
     }
 }
