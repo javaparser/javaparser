@@ -21,6 +21,9 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
@@ -36,12 +39,30 @@ class ThisExprTest {
     }
 
     @Test
+    void justThisName() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration()
+                .setStoreTokens(false));
+        ParseResult<Expression> parseResult = javaParser.parseExpression("this.c");
+        FieldAccessExpr fieldAccess = parseResult.getResult().get().asFieldAccessExpr();
+        assertEquals("c", fieldAccess.getName().asString());
+    }
+
+    @Test
     void singleScopeThis() {
         Expression expr = parseExpression("A.this");
 
         Name className = expr.asThisExpr().getTypeName().get();
 
         assertEquals("A", className.asString());
+    }
+
+    @Test
+    void singleScopeThisName() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration()
+                .setStoreTokens(false));
+        ParseResult<Expression> parseResult = javaParser.parseExpression("A.this.c");
+        FieldAccessExpr fieldAccess = parseResult.getResult().get().asFieldAccessExpr();
+        assertEquals("c", fieldAccess.getName().asString());
     }
 
     @Test
@@ -52,4 +73,14 @@ class ThisExprTest {
 
         assertEquals("a.B", className.asString());
     }
+
+    @Test
+    void multiScopeThisName() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration()
+                .setStoreTokens(false));
+        ParseResult<Expression> parseResult = javaParser.parseExpression("a.B.this.c");
+        FieldAccessExpr fieldAccess = parseResult.getResult().get().asFieldAccessExpr();
+        assertEquals("c", fieldAccess.getName().asString());
+    }
+
 }

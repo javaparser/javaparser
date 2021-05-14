@@ -1,6 +1,6 @@
-Next Release (Version 3.21.0)
+Next Release (Version 3.22.1)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/182?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/184?closed=1)
 
 ### Added
 ### Changed
@@ -8,6 +8,109 @@ Next Release (Version 3.21.0)
 ### Removed
 ### Fixed
 ### Security
+
+
+Version 3.22.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/183?closed=1)
+
+
+### API or Behaviour Change
+
+* Implemented isAssignableBy for VoidType - now return `false` instead of throwing `UnsupportedOperationException` (PR [#3197](https://github.com/javaparser/javaparser/pull/3197) by [@4everTheOne](https://github.com/4everTheOne))
+* fixed ellipsis and doublecolon to be categorised as separators not operators (fixes #2897) (PR [#2924](https://github.com/javaparser/javaparser/pull/2924) by [@MysterAitch](https://github.com/MysterAitch))
+
+### Added
+
+* Update parser configuration and validators to include the release of java 16, and java 17 being in development (PR [#3222](https://github.com/javaparser/javaparser/pull/3222) by [@MysterAitch](https://github.com/MysterAitch))
+* Adding convenient methods to find out if a method is a variable/fixed arity method (PR [#3196](https://github.com/javaparser/javaparser/pull/3196) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3173: Add isAnnotation() and asAnnotation() methods for ResolvedTypeDeclaration (PR [#3187](https://github.com/javaparser/javaparser/pull/3187) by [@deadlocklogic](https://github.com/deadlocklogic))
+* Record support (compilation / parsing only, solving to follow separately) (PR [#3022](https://github.com/javaparser/javaparser/pull/3022) by [@MysterAitch](https://github.com/MysterAitch))
+
+### Changed
+
+* Implemented isAssignableBy for VoidType - now return `false` instead of throwing `UnsupportedOperationException` (PR [#3197](https://github.com/javaparser/javaparser/pull/3197) by [@4everTheOne](https://github.com/4everTheOne))
+* Simplify how to find the package name from AstResolutionUtils (PR [#3193](https://github.com/javaparser/javaparser/pull/3193) by [@jlerbsc](https://github.com/jlerbsc))
+* Type resolution improvment (PR [#3189](https://github.com/javaparser/javaparser/pull/3189) by [@jlerbsc](https://github.com/jlerbsc))
+* Memory optimization for JarTypeSolver (Up to 42% less memory) (PR [#3188](https://github.com/javaparser/javaparser/pull/3188) by [@4everTheOne](https://github.com/4everTheOne))
+* Fixes #3048 (`JavaParserSymbolDeclaration#localVar` returning old declaration) and adds tests for `JavaParserSymbolDeclaration` (PR [#3049](https://github.com/javaparser/javaparser/pull/3049) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Fixed
+
+* Fix issue #3244 OrphanComment in BlockStmt not appearing (PR [#3245](https://github.com/javaparser/javaparser/pull/3245) by [@jlerbsc](https://github.com/jlerbsc))
+* fix Log.error() throwing NullPointerException (PR [#3243](https://github.com/javaparser/javaparser/pull/3243) by [@CD4017BE](https://github.com/CD4017BE))
+* fixed ellipsis and doublecolon to be categorised as separators not operators (fixes #2897) (PR [#2924](https://github.com/javaparser/javaparser/pull/2924) by [@MysterAitch](https://github.com/MysterAitch))
+
+### Developer Changes
+
+* Include and use a Maven wrapper (PR [#3254](https://github.com/javaparser/javaparser/pull/3254) by [@MysterAitch](https://github.com/MysterAitch))
+* chore(deps): update dependency org.javassist:javassist to v3.28.0-ga (PR [#3249](https://github.com/javaparser/javaparser/pull/3249) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.7 (PR [#3246](https://github.com/javaparser/javaparser/pull/3246) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/cache action to v2.1.5 (PR [#3226](https://github.com/javaparser/javaparser/pull/3226) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v3.9.0 (PR [#3224](https://github.com/javaparser/javaparser/pull/3224) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/setup-java action to v2 (PR [#3220](https://github.com/javaparser/javaparser/pull/3220) by [@renovate[bot]](https://github.com/apps/renovate))
+* Update javaparser copyright headers (PR [#3212](https://github.com/javaparser/javaparser/pull/3212) by [@jlerbsc](https://github.com/jlerbsc))
+* Update readme template so that #3096 becomes permanent (PR [#3210](https://github.com/javaparser/javaparser/pull/3210) by [@MysterAitch](https://github.com/MysterAitch))
+* Improve tests on `getAllAncestors` method (PR [#3209](https://github.com/javaparser/javaparser/pull/3209) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix surefire configuration to allow jacoco to run correctly on JSS tests (PR [#3208](https://github.com/javaparser/javaparser/pull/3208) by [@MysterAitch](https://github.com/MysterAitch))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@CD4017BE](https://github.com/CD4017BE)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@deadlocklogic](https://github.com/deadlocklogic)
+* [@4everTheOne](https://github.com/4everTheOne)
+
+Version 3.21.2
+------------------
+**v3.21.1 released as 3.21.2 without change**
+
+Version 3.21.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/182?closed=1)
+
+### Added
+
+* Implemented logic for isAssignableBy in JavassistInterfaceDeclaration (PR [#3170](https://github.com/javaparser/javaparser/pull/3170) by [@4everTheOne](https://github.com/4everTheOne))
+* Added additional tests to cover isAssignableBy method in JavassistClassDeclaration (PR [#3169](https://github.com/javaparser/javaparser/pull/3169) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Changed
+
+* Update changelog (PR [#3178](https://github.com/javaparser/javaparser/pull/3178) by [@MysterAitch](https://github.com/MysterAitch))
+* Minor performance improvement on getCanonicalName method call (PR [#3166](https://github.com/javaparser/javaparser/pull/3166) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix Issue #1950 Unambigous ambiguity call with <Void> generics and lambda's (PR [#3168](https://github.com/javaparser/javaparser/pull/3168) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactor the javassist implementation to delegate to the typesolver instead of using its own classpool (PR [#3167](https://github.com/javaparser/javaparser/pull/3167) by [@maartenc](https://github.com/maartenc))
+* Fixed name resolution in casted lambda expressions (PR [#3165](https://github.com/javaparser/javaparser/pull/3165) by [@maartenc](https://github.com/maartenc))
+* Fix issue #3159 JavaParserSymbolDeclaration is used to represent variables, but #isVariable() always returns false (PR [#3160](https://github.com/javaparser/javaparser/pull/3160) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix wrong author attribution in changelog for #3072 (PR [#3155](https://github.com/javaparser/javaparser/pull/3155) by [@Col-E](https://github.com/Col-E))
+* Fixed #3136 - ThisExpr isn't resolved correctly when it is in the scope of an ObjectCreationExpr (PR [#3137](https://github.com/javaparser/javaparser/pull/3137) by [@deadlocklogic](https://github.com/deadlocklogic))
+* Fix race condition in JavaParserTypeSolver (PR [#3091](https://github.com/javaparser/javaparser/pull/3091) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Developer Changes
+
+* Publish to OSSRH rather than Bintray (PR [#3180](https://github.com/javaparser/javaparser/pull/3180) by [@MysterAitch](https://github.com/MysterAitch))
+* Remove unused JUnit Pioneer dependency (PR [#3179](https://github.com/javaparser/javaparser/pull/3179) by [@MysterAitch](https://github.com/MysterAitch))
+* Verify builds test correctly under JDK16 (PR [#3175](https://github.com/javaparser/javaparser/pull/3175) by [@MysterAitch](https://github.com/MysterAitch))
+* update renovate to include "dependencies" label on PRs (PR [#3174](https://github.com/javaparser/javaparser/pull/3174) by [@MysterAitch](https://github.com/MysterAitch))
+* chore(deps): update dependency com.google.guava:guava to v30.1.1-jre (PR [#3172](https://github.com/javaparser/javaparser/pull/3172) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@maartenc](https://github.com/maartenc)
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@deadlocklogic](https://github.com/deadlocklogic)
+* [@4everTheOne](https://github.com/4everTheOne)
+* [@Col-E](https://github.com/Col-E)
+
 
 
 Version 3.20.0

@@ -42,6 +42,6 @@ comment:
   layout: "reach,diff,flags,files,footer"
   behavior: default
   require_changes: false
-  ### Do not comment until coverage reports for all builds have been received
-  ### Note: 24 = three OSs (mac, windows, ubuntu) x eight java levels (8,9,10,11,12,13,14,15)
-  after_n_builds: 24 
+  ### Do not comment on the PR until coverage reports for all builds has been received
+  ### Note: 54 = three OSs (mac, windows, ubuntu) x nine java levels (8,9,10,11,12,13,14,15,16) x two modules (jp-core, jss)
+  after_n_builds: 54

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -387,6 +387,8 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
 
     /**
      * Find all constructors in the members of this node.
+     * Note that only "normal" constructors, not the "compact" constructors", within {@link RecordDeclaration}
+     * are included in the output of this method.
      *
      * @return the constructors found. This list is immutable.
      */

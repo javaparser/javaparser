@@ -323,6 +323,12 @@ class ObjectIdentityHashCodeVisitorTest {
 	}
 
 	@Test
+	void testVisitLocalRecordDeclarationStmt() {
+		LocalRecordDeclarationStmt node = spy(new LocalRecordDeclarationStmt());
+		assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
+	}
+
+	@Test
 	void testVisitLongLiteralExpr() {
 		LongLiteralExpr node = spy(new LongLiteralExpr());
 		assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
