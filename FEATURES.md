@@ -244,17 +244,23 @@ Note: Unless otherwise stated, the JavaParser implementations of features follow
 ## JDK 17 - _targeted for September 2021_
 Source: https://openjdk.java.net/projects/jdk/17/
 
-
-### Schedule (proposed)
-2021/06/10		Rampdown Phase One (fork from main line)
-2021/07/15		Rampdown Phase Two
-2021/08/05		Initial Release Candidate
-2021/08/19		Final Release Candidate
-2021/09/14		General Availability
+### Schedule
+    2021/06/10    Rampdown Phase One (fork from main line)
+    2021/07/15    Rampdown Phase Two
+    2021/08/05    Initial Release Candidate
+    2021/08/19    Final Release Candidate
+    2021/09/14    General Availability
 
 ### Features
-JEPs targeted to JDK 17, so far
-356:	Enhanced Pseudo-Random Number Generators	2021/02/04
-382:	New macOS Rendering Pipeline	2021/03/04
-391:	macOS/AArch64 Port	2021/03/23
-398:	Deprecate the Applet API for Removal	2021/03/23
+    JEPs proposed to target JDK 17                       review ends
+    412: 	Foreign Function & Memory API (Incubator)    2021/05/20
+    414: 	Vector API (Second Incubator)                2021/05/18
+
+    JEPs targeted to JDK 17, so far
+    356:    Enhanced Pseudo-Random Number Generators
+    382:    New macOS Rendering Pipeline
+    391:    macOS/AArch64 Port
+    398:    Deprecate the Applet API for Removal
+    409:    Sealed Classes
+    410:    Remove the Experimental AOT and JIT Compiler
+
