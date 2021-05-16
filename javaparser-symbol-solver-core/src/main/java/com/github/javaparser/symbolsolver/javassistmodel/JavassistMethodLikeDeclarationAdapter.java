@@ -23,11 +23,14 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import javassist.CtBehavior;
 import javassist.bytecode.BadBytecode;
+import javassist.bytecode.ExceptionsAttribute;
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.*;
@@ -82,16 +85,33 @@ public class JavassistMethodLikeDeclarationAdapter {
     }
 
     public int getNumberOfSpecifiedExceptions() {
-        return methodSignature.getExceptionTypes().length;
+        ExceptionsAttribute exceptionsAttribute = ctBehavior.getMethodInfo().getExceptionsAttribute();
+        if (exceptionsAttribute == null) {
+            return 0;
+        }
+
+        String[] exceptions = exceptionsAttribute.getExceptions();
+        return exceptions == null ? 0 : exceptions.length;
     }
 
     public ResolvedType getSpecifiedException(int index) {
-        if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
+        if (index < 0) {
+            throw new IllegalArgumentException(String.format("index < 0: %d", index));
+        }
+
+        ExceptionsAttribute exceptionsAttribute = ctBehavior.getMethodInfo().getExceptionsAttribute();
+        if (exceptionsAttribute == null) {
+            throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: 0", index));
+        }
+
+        String[] exceptions = exceptionsAttribute.getExceptions();
+        if (exceptions == null || index >= exceptions.length) {
             throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
                     index, getNumberOfSpecifiedExceptions()));
         }
 
-        return JavassistUtils.signatureTypeToType(methodSignature.getExceptionTypes()[index], typeSolver, declaration);
+        ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(exceptions[index]);
+        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList(), typeSolver);
     }
 
     public ResolvedType getReturnType() {
