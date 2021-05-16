@@ -1,6 +1,6 @@
-Next Release (Version 3.22.1)
+Next Release (Version 3.22.2)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/184?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/185?closed=1)
 
 ### Added
 ### Changed
@@ -8,6 +8,38 @@ Next Release (Version 3.22.1)
 ### Removed
 ### Fixed
 ### Security
+
+
+Version 3.22.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/184?closed=1)
+
+### Added
+
+* Recover wrong statements no only to ';', but to '}' (not including) as well (PR [#3247](https://github.com/javaparser/javaparser/pull/3247) by [@32kda](https://github.com/32kda))
+
+### Fixed
+
+* update features.md -- fixed release version and date of records support, status of java 16 sealed classes to 2nd preview, and java 17 features (PR [#3263](https://github.com/javaparser/javaparser/pull/3263) by [@MysterAitch](https://github.com/MysterAitch))
+* fixes #3255 -- bugfix grammar case when using `record` to as an identifier (PR [#3256](https://github.com/javaparser/javaparser/pull/3256) by [@MysterAitch](https://github.com/MysterAitch))
+* Fixes issue #3113 -- Arrow missing in Switch Expression + jumbled up in LexicalPreservingPrinter (PR [#3235](https://github.com/javaparser/javaparser/pull/3235) by [@Zoom1111](https://github.com/Zoom1111))
+* Handle possibility of tokens not being available (PR [#3231](https://github.com/javaparser/javaparser/pull/3231) by [@mernst](https://github.com/mernst))
+
+### Developer Changes
+
+* chore(deps): update dependency org.mockito:mockito-core to v3.10.0 (PR [#3259](https://github.com/javaparser/javaparser/pull/3259) by [@renovate[bot]](https://github.com/apps/renovate))
+* Bump codecov/codecov-action from 1 to 1.5.0 (PR [#3258](https://github.com/javaparser/javaparser/pull/3258) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Bump actions/create-release from 1 to 1.1.4 (PR [#3257](https://github.com/javaparser/javaparser/pull/3257) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@32kda](https://github.com/32kda)
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@Zoom1111](https://github.com/Zoom1111)
+* [@mernst](https://github.com/mernst)
+
 
 
 Version 3.22.0
