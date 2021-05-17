@@ -48,8 +48,10 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -76,12 +78,17 @@ public class JavaParserTypeDeclarationAdapter {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
 
-        List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class, TreeTraversal.BREADTHFIRST);
-        for (TypeDeclaration<?> localType : localTypes) {
-            if (localType.getName().getId().equals(name)) {
-                return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
-            } else if (name.startsWith(String.format("%s.", localType.getName()))) {
-                return JavaParserFactory.getContext(localType, typeSolver).solveType(name.substring(localType.getName().getId().length() + 1));
+        // Internal classes
+        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
+                com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
+                if (internalType.getName().getId().equals(name)) {
+                    return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
+                } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1));
+                } else if (name.startsWith(String.format("%s.", internalType.getName()))) {
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1));
+                }
             }
         }
 
