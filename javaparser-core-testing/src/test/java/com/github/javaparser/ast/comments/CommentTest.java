@@ -34,6 +34,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -195,5 +196,12 @@ class CommentTest {
                 "  public void anotherMethod() {\n" +
                 "  }\n" +
                 "}\n", cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
+    }
+    
+    @Test()
+    void testVerifyOrphanCommentInsertedInEmptyBlock() {
+        BlockStmt block = new BlockStmt();
+        block.addOrphanComment(new LineComment("TODO"));
+        assertTrue(block.toString().contains("TODO"));
     }
 }
