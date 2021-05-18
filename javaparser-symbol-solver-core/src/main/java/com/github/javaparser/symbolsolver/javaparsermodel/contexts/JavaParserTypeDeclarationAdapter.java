@@ -82,9 +82,9 @@ public class JavaParserTypeDeclarationAdapter {
                 com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
                 if (internalType.getName().getId().equals(name)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
-                } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
+                } else if (name.startsWith(wrappedNode.getName().getId() + "." + internalType.getName().getId())) {
                     return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1));
-                } else if (name.startsWith(String.format("%s.", internalType.getName()))) {
+                } else if (name.startsWith(internalType.getName().getId() + ".")) {
                     return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1));
                 }
             }
