@@ -392,10 +392,10 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
     }
 
     @Override
-    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+    public List<ResolvedReferenceTypeDeclaration> internalTypes() {
         return Arrays.stream(this.clazz.getDeclaredClasses())
                 .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
