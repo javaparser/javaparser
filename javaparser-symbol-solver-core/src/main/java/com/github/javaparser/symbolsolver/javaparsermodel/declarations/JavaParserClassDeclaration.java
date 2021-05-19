@@ -22,7 +22,9 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -429,7 +431,10 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
+        // Use a special Set implementation that avoids calculating the hashCode of the node,
+        // since this can be very time-consuming for big node trees, and we are sure there are
+        // no duplicates in the members list.
+        Set<ResolvedReferenceTypeDeclaration> res = Collections.newSetFromMap(new IdentityHashMap<>());
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof TypeDeclaration) {
                 res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((TypeDeclaration) member));
