@@ -78,8 +78,8 @@ public class JavaParserTypeDeclarationAdapter {
 
         // Internal classes
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
+            if (member instanceof TypeDeclaration) {
+                TypeDeclaration<?> internalType = (TypeDeclaration<?>) member;
                 if (internalType.getName().getId().equals(name)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
                 } else if (name.startsWith(wrappedNode.getName().getId() + "." + internalType.getName().getId())) {
