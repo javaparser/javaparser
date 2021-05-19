@@ -428,8 +428,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     }
 
     @Override
-    public List<ResolvedReferenceTypeDeclaration> internalTypes() {
-        List<ResolvedReferenceTypeDeclaration> res = new ArrayList<>();
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof TypeDeclaration) {
                 res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((TypeDeclaration) member));

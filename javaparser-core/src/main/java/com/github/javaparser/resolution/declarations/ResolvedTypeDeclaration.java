@@ -23,7 +23,6 @@ package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     /**
      * Get the list of types defined inside the current type.
      */
-    default List<ResolvedReferenceTypeDeclaration> internalTypes() {
+    default Set<ResolvedReferenceTypeDeclaration> internalTypes() {
         throw new UnsupportedOperationException("InternalTypes not available for " + this.getClass().getCanonicalName());
     }
 

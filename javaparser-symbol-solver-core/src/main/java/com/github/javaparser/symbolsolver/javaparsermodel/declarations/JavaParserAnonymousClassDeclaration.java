@@ -249,12 +249,12 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     }
 
     @Override
-    public List<ResolvedReferenceTypeDeclaration> internalTypes() {
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
         return
                 findMembersOfKind(TypeDeclaration.class)
                         .stream()
                         .map(typeMember -> JavaParserFacade.get(typeSolver).getTypeDeclaration(typeMember))
-                        .collect(Collectors.toList());
+                        .collect(Collectors.toSet());
     }
 
     @Override

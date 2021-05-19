@@ -214,10 +214,10 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   }
 
   @Override
-  public List<ResolvedReferenceTypeDeclaration> internalTypes() {
+  public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
     return Arrays.stream(this.clazz.getDeclaredClasses())
             .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
   }
 
   @Override

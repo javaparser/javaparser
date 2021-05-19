@@ -33,7 +33,11 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,8 +67,8 @@ class DefaultPackageTest {
         }
 
         @Override
-        public List<ResolvedReferenceTypeDeclaration> internalTypes() {
-            return new ArrayList<>();
+        public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+            return new HashSet<>();
         }
 
         @Override
