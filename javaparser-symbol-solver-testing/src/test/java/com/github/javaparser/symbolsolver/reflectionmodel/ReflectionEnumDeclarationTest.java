@@ -124,7 +124,7 @@ class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testInternalTypesEmpty() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
-        assertEquals(Collections.emptyList(), modifier.internalTypes());
+        assertEquals(Collections.emptySet(), modifier.internalTypes());
     }
 
 }
