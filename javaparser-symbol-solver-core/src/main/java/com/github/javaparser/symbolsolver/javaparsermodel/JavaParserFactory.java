@@ -129,13 +129,6 @@ public class JavaParserFactory {
                 }
             }
             final Node parentNode = demandParentNode(node);
-            if (parentNode instanceof ObjectCreationExpr) {
-                ObjectCreationExpr parentObjectCreationExpr = (ObjectCreationExpr) parentNode;
-                if (node == parentObjectCreationExpr.getType() || parentObjectCreationExpr.getArguments().contains(node)) {
-                    Node grandParentNode = demandParentNode(parentNode);
-                    return getContext(grandParentNode, typeSolver);
-                }
-            }
             if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
                 ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
                 if (parentDeclaration.getImplementedTypes().contains(node) ||
