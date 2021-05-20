@@ -22,7 +22,11 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
@@ -35,8 +39,14 @@ import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Federico Tomassetti
@@ -205,6 +215,25 @@ public class JavassistTypeDeclarationAdapter {
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+    }
+
+    /**
+     * Get the nested classes.
+     * <br>
+     * {@code class Foo { class Bar {} }
+     * In the example above we expect the nested types for {@code Foo} to be {@code Bar}.
+     *
+     * @return The nested classes.
+     */
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        try {
+            return Stream.of(ctClass.getNestedClasses())
+                    .map(clazz -> JavassistFactory.toTypeDeclaration(clazz, typeSolver))
+                    .collect(Collectors.toSet());
+        } catch (NotFoundException e) {
+            // This should never happen, since the nested type is defined in the current class
+            throw new UnsupportedOperationException("Please report this issue at https://github.com/javaparser/javaparser/issues/new/choose", e);
+        }
     }
 
 }

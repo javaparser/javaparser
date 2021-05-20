@@ -59,17 +59,17 @@ Java 10 support [complete on 25/Feb/2018](https://github.com/javaparser/javapars
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
 | [JEP 286](https://openjdk.java.net/jeps/286) |   **Release**    | **Supported Since: v3.5.15<br>Released on: 25/Feb/2018**                       | **Local-Variable Type Inference**                                 |
-| [JEP 296](https://openjdk.java.net/jeps/296) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Consolidate the JDK Forest into a Single Repository~~           |
-| [JEP 304](https://openjdk.java.net/jeps/304) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Garbage-Collector Interface~~                                   |
-| [JEP 307](https://openjdk.java.net/jeps/307) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Parallel Full GC for G1~~                                       |
-| [JEP 310](https://openjdk.java.net/jeps/310) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Application Class-Data Sharing~~                                |
-| [JEP 312](https://openjdk.java.net/jeps/312) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Thread-Local Handshakes~~                                       |
-| [JEP 313](https://openjdk.java.net/jeps/313) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Native-Header Generation Tool (javah)~~              |
-| [JEP 314](https://openjdk.java.net/jeps/314) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Additional Unicode Language-Tag Extensions~~                    |
-| [JEP 316](https://openjdk.java.net/jeps/316) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Heap Allocation on Alternative Memory Devices~~                 |
-| [JEP 317](https://openjdk.java.net/jeps/317) | ~~Experimental~~ | ~~_Not Applicable (NA)_~~                                                     | ~~Experimental Java-Based JIT Compiler~~                          |
-| [JEP 319](https://openjdk.java.net/jeps/319) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Root Certificates~~                                             |
-| [JEP 322](https://openjdk.java.net/jeps/322) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Time-Based Release Versioning~~                                 |
+| [JEP 296](https://openjdk.java.net/jeps/296) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Consolidate the JDK Forest into a Single Repository~~           |
+| [JEP 304](https://openjdk.java.net/jeps/304) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Garbage-Collector Interface~~                                   |
+| [JEP 307](https://openjdk.java.net/jeps/307) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Parallel Full GC for G1~~                                       |
+| [JEP 310](https://openjdk.java.net/jeps/310) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Application Class-Data Sharing~~                                |
+| [JEP 312](https://openjdk.java.net/jeps/312) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Thread-Local Handshakes~~                                       |
+| [JEP 313](https://openjdk.java.net/jeps/313) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Remove the Native-Header Generation Tool (javah)~~              |
+| [JEP 314](https://openjdk.java.net/jeps/314) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Additional Unicode Language-Tag Extensions~~                    |
+| [JEP 316](https://openjdk.java.net/jeps/316) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Heap Allocation on Alternative Memory Devices~~                 |
+| [JEP 317](https://openjdk.java.net/jeps/317) | ~~Experimental~~ | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Experimental Java-Based JIT Compiler~~                          |
+| [JEP 319](https://openjdk.java.net/jeps/319) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Root Certificates~~                                             |
+| [JEP 322](https://openjdk.java.net/jeps/322) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Time-Based Release Versioning~~                                 |
 
 ## JDK 11 - September 2018
 Source: https://openjdk.java.net/projects/jdk/11/
@@ -78,23 +78,23 @@ Java 11 support [complete on 19/Aug/2018](https://github.com/javaparser/javapars
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 323](https://openjdk.java.net/jeps/323) |   **Release**    | **Supported Since: v3.xx.yy<br>Released on: dd/mmm/yyyy**                       | **Local-Variable Syntax for Lambda Parameters**                   |
-| [JEP 327](https://openjdk.java.net/jeps/327) |    _Release_     | _Discussion Needed <sup id="a_11_JEP327">[JEP327](#f_11_JEP327)_              | _Unicode 10_                                                      |
-| [JEP 181](https://openjdk.java.net/jeps/181) |    _Release_     | _Discussion Needed <sup id="a_11_JEP181">[JEP181](#f_11_JEP181)_              | _Nest-Based Access Control_                                       |
-| [JEP 309](https://openjdk.java.net/jeps/309) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Dynamic Class-File Constants~~                                  |
-| [JEP 315](https://openjdk.java.net/jeps/315) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Improve Aarch64 Intrinsics~~                                    |
-| [JEP 318](https://openjdk.java.net/jeps/318) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Epsilon: A No-Op Garbage Collector~~                            |
-| [JEP 320](https://openjdk.java.net/jeps/320) |  ~~_Release_~~   | ~~_Not Applicable (NA) <sup id="a_11_JEP320">[JEP320](#f_11_JEP320)_~~        | ~~Remove the Java EE and CORBA Modules~~                          |
-| [JEP 321](https://openjdk.java.net/jeps/321) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~HTTP Client (Standard)~~                                        |
-| [JEP 324](https://openjdk.java.net/jeps/324) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Key Agreement with Curve25519 and Curve448~~                    |
-| [JEP 328](https://openjdk.java.net/jeps/328) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Flight Recorder~~                                               |
-| [JEP 329](https://openjdk.java.net/jeps/329) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ChaCha20 and Poly1305 Cryptographic Algorithms~~                |
-| [JEP 330](https://openjdk.java.net/jeps/330) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Launch Single-File Source-Code Programs~~                       |
-| [JEP 331](https://openjdk.java.net/jeps/331) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Low-Overhead Heap Profiling~~                                   |
-| [JEP 332](https://openjdk.java.net/jeps/332) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Transport Layer Security (TLS) 1.3~~                            |
-| [JEP 333](https://openjdk.java.net/jeps/333) | ~~Experimental~~ | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC: A Scalable Low-Latency Garbage Collector (Experimental)~~  |
-| [JEP 335](https://openjdk.java.net/jeps/335) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the Nashorn JavaScript Engine~~                       |
-| [JEP 336](https://openjdk.java.net/jeps/336) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the Pack200 Tools and API~~                           |
+| [JEP 323](https://openjdk.java.net/jeps/323) |   **Release**    | **Supported Since: v3.xx.yy<br>Released on: dd/mmm/yyyy**                     | **Local-Variable Syntax for Lambda Parameters**                   |
+| [JEP 327](https://openjdk.java.net/jeps/327) |    _Release_     | _Discussion Needed <sup id="a_11_JEP327">[JEP327](#f_11_JEP327)</sup>_        | _Unicode 10_                                                      |
+| [JEP 181](https://openjdk.java.net/jeps/181) |    _Release_     | _Discussion Needed <sup id="a_11_JEP181">[JEP181](#f_11_JEP181)</sup>_        | _Nest-Based Access Control_                                       |
+| [JEP 309](https://openjdk.java.net/jeps/309) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Dynamic Class-File Constants~~                                  |
+| [JEP 315](https://openjdk.java.net/jeps/315) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Improve Aarch64 Intrinsics~~                                    |
+| [JEP 318](https://openjdk.java.net/jeps/318) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Epsilon: A No-Op Garbage Collector~~                            |
+| [JEP 320](https://openjdk.java.net/jeps/320) |  ~~_Release_~~   | ~~_Not Applicable - Not a language change (NA) <sup id="a_11_JEP320">[JEP320](#f_11_JEP320)</sup>_~~  | ~~Remove the Java EE and CORBA Modules~~                          |
+| [JEP 321](https://openjdk.java.net/jeps/321) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~HTTP Client (Standard)~~                                        |
+| [JEP 324](https://openjdk.java.net/jeps/324) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Key Agreement with Curve25519 and Curve448~~                    |
+| [JEP 328](https://openjdk.java.net/jeps/328) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Flight Recorder~~                                               |
+| [JEP 329](https://openjdk.java.net/jeps/329) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~ChaCha20 and Poly1305 Cryptographic Algorithms~~                |
+| [JEP 330](https://openjdk.java.net/jeps/330) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Launch Single-File Source-Code Programs~~                       |
+| [JEP 331](https://openjdk.java.net/jeps/331) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Low-Overhead Heap Profiling~~                                   |
+| [JEP 332](https://openjdk.java.net/jeps/332) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Transport Layer Security (TLS) 1.3~~                            |
+| [JEP 333](https://openjdk.java.net/jeps/333) | ~~Experimental~~ | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~ZGC: A Scalable Low-Latency Garbage Collector (Experimental)~~  |
+| [JEP 335](https://openjdk.java.net/jeps/335) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Deprecate the Nashorn JavaScript Engine~~                       |
+| [JEP 336](https://openjdk.java.net/jeps/336) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Deprecate the Pack200 Tools and API~~                           |
 
 ##### Footnotes:
 
@@ -116,85 +116,151 @@ Resolution support for Java 12 complete on ??/??/2019
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 325](https://openjdk.java.net/jeps/325) |  **_Preview_**   | **Supported Since: v3.11.0<br>Released on: 03/Feb/2019**                       | Switch Expressions (Preview)                                      |
-| [JEP 189](https://openjdk.java.net/jeps/189) | ~~Experimental~~ | ~~_Not Applicable (NA)_~~                                                     | ~~Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)~~ |
-| [JEP 230](https://openjdk.java.net/jeps/230) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Microbenchmark Suite~~                                          |
-| [JEP 334](https://openjdk.java.net/jeps/334) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~JVM Constants API~~                                             |
-| [JEP 340](https://openjdk.java.net/jeps/340) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~One AArch64 Port, Not Two~~                                     |
-| [JEP 341](https://openjdk.java.net/jeps/341) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Default CDS Archives~~                                          |
-| [JEP 344](https://openjdk.java.net/jeps/344) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Abortable Mixed Collections for G1~~                            |
-| [JEP 346](https://openjdk.java.net/jeps/346) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Promptly Return Unused Committed Memory from G1~~               |
+| [JEP 325](https://openjdk.java.net/jeps/325) |  **_Preview_**   | **Supported Since: v3.11.0<br>Released on: 03/Feb/2019**                      | Switch Expressions (Preview)                                      |
+| [JEP 189](https://openjdk.java.net/jeps/189) | ~~Experimental~~ | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)~~ |
+| [JEP 230](https://openjdk.java.net/jeps/230) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Microbenchmark Suite~~                                          |
+| [JEP 334](https://openjdk.java.net/jeps/334) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~JVM Constants API~~                                             |
+| [JEP 340](https://openjdk.java.net/jeps/340) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~One AArch64 Port, Not Two~~                                     |
+| [JEP 341](https://openjdk.java.net/jeps/341) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Default CDS Archives~~                                          |
+| [JEP 344](https://openjdk.java.net/jeps/344) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Abortable Mixed Collections for G1~~                            |
+| [JEP 346](https://openjdk.java.net/jeps/346) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Promptly Return Unused Committed Memory from G1~~               |
 
 ## JDK 13 - September 2018
 Source: https://openjdk.java.net/projects/jdk/13/
 
-No language changes in JDK 13 -- thus no "complete" date. Details of preview support is below.
+No language specification changes in JDK 13 -- thus no "complete" date. Details of preview support is below.
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 354](https://openjdk.java.net/jeps/354) |  **_Preview_**   | **Supported Since: v3.11.0<br>Released on: 03/Feb/2019**                       | Switch Expressions (Preview)                                    |
-| [JEP 355](https://openjdk.java.net/jeps/355) |  **_Preview_**   | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                       | Text Blocks (Preview)                                           |
-| [JEP 350](https://openjdk.java.net/jeps/350) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Dynamic CDS Archives~~                                        |
-| [JEP 351](https://openjdk.java.net/jeps/351) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC: Uncommit Unused Memory~~                                 |
-| [JEP 353](https://openjdk.java.net/jeps/353) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Reimplement the Legacy Socket API~~                           |
+| [JEP 354](https://openjdk.java.net/jeps/354) |  **_Preview_**   | **Supported Since: v3.11.0<br>Released on: 03/Feb/2019**                      | Switch Expressions (Preview)                                    |
+| [JEP 355](https://openjdk.java.net/jeps/355) |  **_Preview_**   | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                      | Text Blocks (Preview)                                           |
+| [JEP 350](https://openjdk.java.net/jeps/350) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Dynamic CDS Archives~~                                        |
+| [JEP 351](https://openjdk.java.net/jeps/351) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~ZGC: Uncommit Unused Memory~~                                 |
+| [JEP 353](https://openjdk.java.net/jeps/353) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Reimplement the Legacy Socket API~~                           |
 
 
 
-## JDK 14 (current) - March 2020
+## JDK 14 - March 2020
 Source: https://openjdk.java.net/projects/jdk/14/
 
 Switch support was complete during preview status. 
 
-The preview features of instanceof pattern and records are work-in-progress.
+The preview features of records are work-in-progress.
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 361](https://openjdk.java.net/jeps/361) |  **Release**     | **Supported Since: v3.xx.yy<br>Released on: dd/mmm/yyyy**                       | **Switch Expressions (Standard)**                               |
-| [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                       | **Text Blocks (Second Preview)**                                |
-| [JEP 305](https://openjdk.java.net/jeps/305) |  **_Preview_**   | **WIP - [#2512](https://github.com/javaparser/javaparser/pull/2512)**         | **Pattern Matching for instanceof (Preview)**                   |
-| [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **WIP - [#2654](https://github.com/javaparser/javaparser/pull/2654)**         | **Records (Preview)**                                           |
-| [JEP 343](https://openjdk.java.net/jeps/343) | ~~_Incubator_~~  | ~~_Not Applicable (NA)<sup id="a_14_JEP343">[JEP343](#f_14_JEP343)_~~         | ~~Packaging Tool (Incubator)~~                                  |
-| [JEP 345](https://openjdk.java.net/jeps/345) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~NUMA-Aware Memory Allocation for G1~~                         |
-| [JEP 349](https://openjdk.java.net/jeps/349) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~JFR Event Streaming~~                                         |
-| [JEP 352](https://openjdk.java.net/jeps/352) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Non-Volatile Mapped Byte Buffers~~                            |
-| [JEP 358](https://openjdk.java.net/jeps/358) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Helpful NullPointerExceptions~~                               |
-| [JEP 362](https://openjdk.java.net/jeps/362) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the Solaris and SPARC Ports~~                       |
-| [JEP 363](https://openjdk.java.net/jeps/363) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Concurrent Mark Sweep (CMS) Garbage Collector~~    |
-| [JEP 364](https://openjdk.java.net/jeps/364) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC on macOS~~                                                |
-| [JEP 365](https://openjdk.java.net/jeps/365) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~ZGC on Windows~~                                              |
-| [JEP 366](https://openjdk.java.net/jeps/366) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Deprecate the ParallelScavenge + SerialOld GC Combination~~   |
-| [JEP 367](https://openjdk.java.net/jeps/367) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Remove the Pack200 Tools and API~~                            |
-| [JEP 370](https://openjdk.java.net/jeps/370) |  ~~_Release_~~   | ~~_Not Applicable (NA)_~~                                                     | ~~Foreign-Memory Access API (Incubator)~~                       |
+| [JEP 361](https://openjdk.java.net/jeps/361) |  **Release**     | **Supported Since: v3.xx.yy<br>Released on: dd/mmm/yyyy**                     | **Switch Expressions (Standard)**                               |
+| [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                      | **Text Blocks (Second Preview)**                                |
+| [JEP 305](https://openjdk.java.net/jeps/305) |  **_Preview_**   | **Supported Since: v3.18.0<br>Released on: 01/Dec/2020**                      | **Pattern Matching for instanceof (Preview)**                   |
+| [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **Partial Support Since: v3.22.0<br>Released on: 11/May/2021 <sup id="a_14_JEP359">[JEP343](#f_14_JEP359)</sup>** | **Records (Preview)**                                           |
+| [JEP 343](https://openjdk.java.net/jeps/343) | ~~_Incubator_~~  | ~~_Not Applicable (NA)<sup id="a_14_JEP343">[JEP343](#f_14_JEP343)</sup>_~~   | ~~Packaging Tool (Incubator)~~                                  |
+| [JEP 345](https://openjdk.java.net/jeps/345) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~NUMA-Aware Memory Allocation for G1~~                         |
+| [JEP 349](https://openjdk.java.net/jeps/349) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~JFR Event Streaming~~                                         |
+| [JEP 352](https://openjdk.java.net/jeps/352) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Non-Volatile Mapped Byte Buffers~~                            |
+| [JEP 358](https://openjdk.java.net/jeps/358) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Helpful NullPointerExceptions~~                               |
+| [JEP 362](https://openjdk.java.net/jeps/362) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Deprecate the Solaris and SPARC Ports~~                       |
+| [JEP 363](https://openjdk.java.net/jeps/363) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Remove the Concurrent Mark Sweep (CMS) Garbage Collector~~    |
+| [JEP 364](https://openjdk.java.net/jeps/364) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~ZGC on macOS~~                                                |
+| [JEP 365](https://openjdk.java.net/jeps/365) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~ZGC on Windows~~                                              |
+| [JEP 366](https://openjdk.java.net/jeps/366) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Deprecate the ParallelScavenge + SerialOld GC Combination~~   |
+| [JEP 367](https://openjdk.java.net/jeps/367) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Remove the Pack200 Tools and API~~                            |
+| [JEP 370](https://openjdk.java.net/jeps/370) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~Foreign-Memory Access API (Incubator)~~                       |
 
 ##### Footnotes:
 
 - <b id="f_14_JEP343">JEP343</b> - JEP 343 is marked as not applicable, as it relates to packaging of apps - e.g. as `.exe`/`.msi`/`.deb`/`.rpm`/`.pkg`/`.dmg`. 
-                                     The JEP describes the layout/structure of the output file, suggesting that _maybe_ in the future the files may be examined, 
-                                       and _potentially_ used similarly to a `.jar` or set of `.class` files. 
-                                     This is not going to be actively pursued (_especially_ since this is still in the incubator stage), 
-                                       though tested PRs are always welcome. [↩](#a_14_JEP343)
+  The JEP describes the layout/structure of the output file, suggesting that _maybe_ in the future the files may be examined, and _potentially_ used similarly to a `.jar` or set of `.class` files. 
+  This is not going to be actively pursued (_especially_ since this is still in the incubator stage), though tested PRs are always welcome. 
+  [↩](#a_14_JEP343)
 
 
-## JDK 15 - _targeted for September 2020_
+- <b id="f_14_JEP359">JEP359</b> - The behaviour of records changed between preview/2nd preview/release.
+  Unless otherwise stated, the JavaParser implementation follows the released behaviour.
+  Additionally, note that "partial" support refers to javaparser-core being complete since 3.21.0, and javaparser-symbol-solver-core support is TBC.
+  [↩](#a_14_JEP359)
+
+
+
+## JDK 15 - September 2020
 Source: https://openjdk.java.net/projects/jdk/15/
 
-#### JEPs proposed to target JDK 15 review ends
-- 383: Foreign-Memory Access API (Second Incubator) 2020/05/21
+Note: Unless otherwise stated, the JavaParser implementations of features follows the released behaviour.
 
-#### JEPs targeted to JDK 15, so far
-- JEP 339: Edwards-Curve Digital Signature Algorithm (EdDSA)
-- JEP 360: Sealed Classes (Preview)
-- JEP 371: Hidden Classes
-- JEP 372: Remove the Nashorn JavaScript Engine
-- JEP 373: Reimplement the Legacy DatagramSocket API
-- JEP 374: Disable and Deprecate Biased Locking
-- JEP 375: Pattern Matching for instanceof (Second Preview)
-- JEP 377: ZGC: A Scalable Low-Latency Garbage Collector
-- JEP 378: Text Blocks
-- JEP 379: Shenandoah: A Low-Pause-Time Garbage Collector
-- JEP 381: Remove the Solaris and SPARC Ports
-- JEP 384: Records (Second Preview)
+|  JEP  | Status | JavaParser Since | Description |
+| :---: | :----: | :--------------: | ----------- |
+| [JEP 378](https://openjdk.java.net/jeps/378) |  **_Release_**   | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                        | **Text Blocks**                                        |
+| [JEP 384](https://openjdk.java.net/jeps/384) |  **_Release_**   | **Partial Support Since: v3.22.0<br>Released on: 11/May/2021 <sup id="a_15_JEP384">[JEP384](#f_15_JEP384)</sup>** | **Records (Second Preview)**                           |
+| [JEP 375](https://openjdk.java.net/jeps/375) |  **_Release_**   | **Supported Since: v3.18.0<br>Released on: 01/Dec/2020**                        | **Pattern Matching for instanceof (Second Preview)**   |
+| [JEP 360](https://openjdk.java.net/jeps/360) |  **_Preview_**   |                                                                                 | **Sealed Classes (Preview)**                           |
+| [JEP 339](https://openjdk.java.net/jeps/339) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Edwards-Curve Digital Signature Algorithm (EdDSA)~~  |
+| [JEP 371](https://openjdk.java.net/jeps/371) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Hidden Classes~~                                     |
+| [JEP 372](https://openjdk.java.net/jeps/372) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Remove the Nashorn JavaScript Engine~~               |
+| [JEP 373](https://openjdk.java.net/jeps/373) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Reimplement the Legacy DatagramSocket API~~          |
+| [JEP 374](https://openjdk.java.net/jeps/374) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Disable and Deprecate Biased Locking~~               |
+| [JEP 377](https://openjdk.java.net/jeps/377) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~ZGC: A Scalable Low-Latency Garbage Collector~~      |
+| [JEP 379](https://openjdk.java.net/jeps/379) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Shenandoah: A Low-Pause-Time Garbage Collector~~     |
+| [JEP 381](https://openjdk.java.net/jeps/381) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Remove the Solaris and SPARC Ports~~                 |
+| [JEP 383](https://openjdk.java.net/jeps/383) |  **_Incubator_** | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Foreign-Memory Access API (Second Incubator)~~       |
+| [JEP 385](https://openjdk.java.net/jeps/385) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Deprecate RMI Activation for Removal~~               |
 
-## JDK 16 - _targeted for March 2021_
+- <b id="f_15_JEP384">JEP384</b> - The behaviour of records changed between preview/2nd preview/release. 
+  Unless otherwise stated, the JavaParser implementation follows the released behaviour. 
+  Additionally, note that "partial" support refers to javaparser-core being complete since 3.21.0, and javaparser-symbol-solver-core support is TBC.
+  [↩](#a_15_JEP384)
+  
+
+
+## JDK 16 (current) - March 2021
+Source: https://openjdk.java.net/projects/jdk/16/
+
+Note: Unless otherwise stated, the JavaParser implementations of features follows the released behaviour.
+
+|  JEP  | Status | JavaParser Since | Description |
+| :---: | :----: | :--------------: | ----------- |
+| [JEP 395](https://openjdk.java.net/jeps/395) |  **_Release_**   | **Parser Support Since: v3.22.0<br>Released on: 11/May/2021, Solving TBC  <sup id="a_16_JEP384">[JEP395](#f_16_JEP395)</sup>** | **Records**                                           |
+| [JEP 394](https://openjdk.java.net/jeps/394) |  **_Release_**   | **Supported Since: v3.18.0<br>Released on: 01/Dec/2020**                         | **Pattern Matching for instanceof**                   |
+| [JEP 397](https://openjdk.java.net/jeps/397) |  **2nd Preview** |                                                                                  | **Sealed Classes (Second Preview)**                   |
+| [JEP 338](https://openjdk.java.net/jeps/338) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Vector API (Incubator)~~                            |
+| [JEP 347](https://openjdk.java.net/jeps/347) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Enable C++14 Language Features~~                    |
+| [JEP 357](https://openjdk.java.net/jeps/357) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Migrate from Mercurial to Git~~                     |
+| [JEP 369](https://openjdk.java.net/jeps/369) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Migrate to GitHub~~                                 |
+| [JEP 376](https://openjdk.java.net/jeps/376) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~ZGC: Concurrent Thread-Stack Processing~~           |
+| [JEP 380](https://openjdk.java.net/jeps/380) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Unix-Domain Socket Channels~~                       |
+| [JEP 386](https://openjdk.java.net/jeps/386) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Alpine Linux Port~~                                 |
+| [JEP 387](https://openjdk.java.net/jeps/387) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Elastic Metaspace~~                                 |
+| [JEP 388](https://openjdk.java.net/jeps/388) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Windows/AArch64 Port~~                              |
+| [JEP 389](https://openjdk.java.net/jeps/389) | **_Incubator_**  | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Foreign Linker API (Incubator)~~                    |
+| [JEP 390](https://openjdk.java.net/jeps/390) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Warnings for Value-Based Classes~~                  |
+| [JEP 392](https://openjdk.java.net/jeps/392) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Packaging Tool~~                                    |
+| [JEP 393](https://openjdk.java.net/jeps/393) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Foreign-Memory Access API (Third Incubator)~~       |
+| [JEP 396](https://openjdk.java.net/jeps/396) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Strongly Encapsulate JDK Internals by Default~~     |
+
+- <b id="f_16_JEP395">JEP395</b> - The behaviour of records changed between preview/2nd preview/release.
+  Unless otherwise stated, the JavaParser implementation follows the released behaviour.
+  Additionally, note that "partial" support refers to javaparser-core being complete since 3.21.0, and javaparser-symbol-solver-core support is TBC.
+  [↩](#a_16_JEP395)
+
 
 ## JDK 17 - _targeted for September 2021_
+Source: https://openjdk.java.net/projects/jdk/17/
+
+### Schedule
+    2021/06/10    Rampdown Phase One (fork from main line)
+    2021/07/15    Rampdown Phase Two
+    2021/08/05    Initial Release Candidate
+    2021/08/19    Final Release Candidate
+    2021/09/14    General Availability
+
+### Features
+    JEPs proposed to target JDK 17                       review ends
+    412: 	Foreign Function & Memory API (Incubator)    2021/05/20
+    414: 	Vector API (Second Incubator)                2021/05/18
+
+    JEPs targeted to JDK 17, so far
+    356:    Enhanced Pseudo-Random Number Generators
+    382:    New macOS Rendering Pipeline
+    391:    macOS/AArch64 Port
+    398:    Deprecate the Applet API for Removal
+    409:    Sealed Classes
+    410:    Remove the Experimental AOT and JIT Compiler
+

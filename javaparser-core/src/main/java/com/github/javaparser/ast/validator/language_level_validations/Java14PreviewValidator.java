@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -36,7 +36,12 @@ public class Java14PreviewValidator extends Java14Validator {
 
         // Preview
         remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof - first preview within Java 14 - https://openjdk.java.net/jeps/305
-        // remove(noRecordDeclaration); // Records - first preview within Java 14 - https://openjdk.java.net/jeps/359
+        {
+            // first preview within Java 14 - https://openjdk.java.net/jeps/359
+            remove(noRecordDeclaration);
+            add(recordAsTypeIdentifierNotAllowed);
+            add(recordDeclarationValidator);
+        }
 
         // 2nd Preview
         remove(noTextBlockLiteral); // Text Block Literals - 2nd preview within Java 14 - https://openjdk.java.net/jeps/378

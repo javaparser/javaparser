@@ -26,8 +26,8 @@ set -x
 
 git pull
 
-mvn -e clean
-mvn -e -Darguments="-DskipTests" release:prepare
+./mvnw -e clean
+./mvnw -e -Darguments="-DskipTests" release:prepare
 
 set +x
 

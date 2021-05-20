@@ -40,10 +40,12 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     private com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
     private TypeSolver typeSolver;
+    private JavaParserTypeAdapter<AnnotationDeclaration> javaParserTypeAdapter;
 
     public JavaParserAnnotationDeclaration(AnnotationDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
     }
 
     @Override
@@ -51,6 +53,11 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         ancestors.add(new ReferenceTypeImpl(typeSolver.solveType("java.lang.annotation.Annotation"), typeSolver));
         return ancestors;
+    }
+
+    @Override
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        return javaParserTypeAdapter.internalTypes();
     }
 
     @Override
