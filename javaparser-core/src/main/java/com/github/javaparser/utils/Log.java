@@ -142,7 +142,7 @@ public class Log {
      * For drawing attention to an error.
      */
     public static void error(Throwable throwable) {
-        CURRENT_ADAPTER.error(() -> throwable, null);
+        CURRENT_ADAPTER.error(() -> throwable, () -> null);
     }
 
     /**

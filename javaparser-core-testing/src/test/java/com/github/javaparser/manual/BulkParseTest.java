@@ -105,7 +105,8 @@ class BulkParseTest {
             bulkTest(
                     new SourceRoot(mavenModuleRoot(BulkParseTest.class).resolve("..").resolve(root)),
                     "javaparser_test_results_" + root.replace("-", "_").replace("/", "_") + ".txt",
-                    new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE));
+                    new ParserConfiguration().setLanguageLevel(BLEEDING_EDGE)
+            );
         }
     }
 

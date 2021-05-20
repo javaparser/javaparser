@@ -25,12 +25,9 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.resolution.declarations.HasAccessSpecifier;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
 
@@ -39,6 +36,7 @@ import static com.github.javaparser.ast.NodeList.toNodeList;
  * Note that not all modifiers may be valid for this node.
  */
 public interface NodeWithModifiers<N extends Node> {
+
     /**
      * Return the modifiers of this variable declaration.
      * Warning: modifying the returned set will not trigger observers,
@@ -82,6 +80,10 @@ public interface NodeWithModifiers<N extends Node> {
         }
     }
 
+    /**
+     * @param modifier the modifer being searched for
+     * @return true if the modifier has been explicitly added to this node, else false
+     */
     default boolean hasModifier(Modifier.Keyword modifier) {
         for (Modifier m : getModifiers()) {
             if (m.getKeyword() == modifier) {

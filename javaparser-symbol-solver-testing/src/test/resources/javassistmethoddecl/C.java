@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.List;
 
 public class C<S> {
@@ -12,5 +13,8 @@ public class C<S> {
     }
 
     public void methodWithTypeParameter(List<S> l) {
+    }
+
+    public void methodWithExceptions() throws IllegalArgumentException, IOException {
     }
 }
