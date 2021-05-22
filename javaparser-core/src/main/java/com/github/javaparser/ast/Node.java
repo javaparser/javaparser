@@ -337,7 +337,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj == null || !(obj instanceof Node)) {
+        if (!(obj instanceof Node)) {
             return false;
         }
         return EqualsVisitor.equals(this, (Node) obj);
