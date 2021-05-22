@@ -71,7 +71,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Roger Howell
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10">JLS 8.10 - Record Classes</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.4">JLS 8.10.3 - Record Constructor Declarations</a>
- * @since 3.21.0
+ * @since 3.22.0
  */
 public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstructorDeclaration> implements NodeWithBlockStmt<CompactConstructorDeclaration>, NodeWithAccessModifiers<CompactConstructorDeclaration>, NodeWithJavadoc<CompactConstructorDeclaration>, NodeWithSimpleName<CompactConstructorDeclaration>, NodeWithThrownExceptions<CompactConstructorDeclaration>, NodeWithTypeParameters<CompactConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
 

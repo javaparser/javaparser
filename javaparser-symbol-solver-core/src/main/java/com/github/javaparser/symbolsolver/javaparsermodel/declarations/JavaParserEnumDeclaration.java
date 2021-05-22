@@ -561,13 +561,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
-            }
-        }
-        return res;
+        return javaParserTypeAdapter.internalTypes();
     }
 
     @Override
