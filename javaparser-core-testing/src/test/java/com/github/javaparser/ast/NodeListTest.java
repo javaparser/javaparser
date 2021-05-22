@@ -33,6 +33,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -413,11 +414,8 @@ class NodeListTest {
                 assertTrue(iterator.hasNext());
             }
 
-            @Test
+            @RepeatedTest(4)
             void whenHasNextRepeated() {
-                assertTrue(iterator.hasNext());
-                assertTrue(iterator.hasNext());
-                assertTrue(iterator.hasNext());
                 assertTrue(iterator.hasNext());
             }
 
