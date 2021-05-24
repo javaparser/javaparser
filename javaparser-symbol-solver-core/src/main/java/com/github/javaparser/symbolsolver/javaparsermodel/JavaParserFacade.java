@@ -637,7 +637,7 @@ public class JavaParserFacade {
                 } else {
                     detachFlag = true;
                 }
-            } else if (parent instanceof ObjectCreationExpr) {
+            } else if (parent instanceof ObjectCreationExpr && ((ObjectCreationExpr) parent).getType().getName().asString().equals(className)) {
                 if (detachFlag) {
                     return parent;
                 }
