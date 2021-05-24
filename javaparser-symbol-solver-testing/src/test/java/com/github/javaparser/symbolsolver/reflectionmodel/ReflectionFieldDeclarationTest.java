@@ -44,7 +44,7 @@ class ReflectionFieldDeclarationTest extends AbstractSymbolResolutionTest {
     
     @Test
     void verifyIsNotVolatileVariableDeclaration() {
-        ReflectionClassDeclaration rcd = new ReflectionClassDeclaration(AtomicBoolean.class, typeSolver);
-        assertFalse(rcd.getField("valueOffset").isVolatile());
+        ReflectionClassDeclaration rcd = new ReflectionClassDeclaration(String.class, typeSolver);
+        assertFalse(rcd.getField("serialVersionUID").isVolatile());
     }
 }

@@ -46,9 +46,9 @@ class JavassistFieldDeclarationTest {
     
     @Test
     void verifyIsNotVolatileVariableDeclarationFromJavassist() throws NotFoundException {
-        CtClass clazz = ClassPool.getDefault().getCtClass("java.util.concurrent.atomic.AtomicBoolean");
+        CtClass clazz = ClassPool.getDefault().getCtClass("java.lang.String");
         JavassistClassDeclaration jcd = new JavassistClassDeclaration(clazz, typeSolver);
-        assertFalse(jcd.getField("valueOffset").isVolatile());
+        assertFalse(jcd.getField("serialVersionUID").isVolatile());
     }
     
 }
