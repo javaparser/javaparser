@@ -232,6 +232,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                                 public boolean isStatic() {
                                     return f.isStatic();
                                 }
+                                
+                                @Override
+                                public boolean isVolatile() {
+                                    return f.isVolatile();
+                                }
 
                                 @Override
                                 public ResolvedTypeDeclaration declaringType() {
