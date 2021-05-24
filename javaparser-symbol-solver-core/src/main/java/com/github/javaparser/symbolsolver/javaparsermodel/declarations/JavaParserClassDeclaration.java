@@ -141,6 +141,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                                 public boolean isStatic() {
                                     return f.isStatic();
                                 }
+                                
+                                @Override
+                                public boolean isVolatile() {
+                                    return f.isVolatile();
+                                }
 
                                 @Override
                                 public ResolvedTypeDeclaration declaringType() {
