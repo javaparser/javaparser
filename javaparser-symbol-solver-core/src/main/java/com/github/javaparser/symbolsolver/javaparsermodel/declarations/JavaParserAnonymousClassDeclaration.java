@@ -26,6 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
@@ -55,6 +56,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+
 /**
  * An anonymous class declaration representation.
  */
@@ -77,8 +80,29 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
             superTypeName = superType.getScope().get().asString() + "." + superTypeName;
         }
 
+        if (wrappedNode.hasScope()) {
+            Expression scope = wrappedNode.getScope().get();
+            ResolvedType scopeType = JavaParserFacade.get(typeSolver).getType(scope);
+
+            if (scopeType.isReferenceType() && scopeType.asReferenceType().getTypeDeclaration().isPresent()) {
+                ResolvedReferenceTypeDeclaration scopeTypeDeclaration = scopeType.asReferenceType().getTypeDeclaration().get();
+                for (ResolvedTypeDeclaration it : scopeTypeDeclaration.internalTypes()) {
+                    if (it.getName().equals(superTypeName)) {
+                        superTypeDeclaration = it;
+                        return;
+                    }
+                }
+            }
+        }
+
+        // find first parent node that is not an object creation expression to avoid stack overflow errors, see #3112
+        Node parentNode = demandParentNode(wrappedNode);
+        while (parentNode instanceof ObjectCreationExpr) {
+            parentNode = demandParentNode(parentNode);
+        }
+
         superTypeDeclaration =
-                JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver)
+                JavaParserFactory.getContext(parentNode, typeSolver)
                         .solveType(superTypeName)
                         .getCorrespondingDeclaration();
     }
