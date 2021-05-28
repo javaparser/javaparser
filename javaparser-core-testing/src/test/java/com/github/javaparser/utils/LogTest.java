@@ -51,7 +51,7 @@ class LogTest {
         }
     }
 
-    private TestAdapter testAdapter = new TestAdapter();
+    private final TestAdapter testAdapter = new TestAdapter();
 
     @BeforeEach
     void setAdapter() {
@@ -83,6 +83,7 @@ class LogTest {
         Log.error("a%sc", () -> "b");
         Log.error(new Throwable("!!!"), "abc");
         Log.error(new Throwable("!!!"), "a%sc%s", () -> "b", () -> "d");
-        assertEquals("EabcMnullEabcMnullEabcM!!!EabcdM!!!", testAdapter.output);
+        Log.error(new Throwable("!!!"));
+        assertEquals("EabcMnullEabcMnullEabcM!!!EabcdM!!!EnullM!!!", testAdapter.output);
     }
 }

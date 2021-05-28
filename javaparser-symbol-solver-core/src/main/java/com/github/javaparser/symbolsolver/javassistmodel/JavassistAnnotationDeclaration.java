@@ -41,9 +41,9 @@ import java.util.stream.Stream;
  */
 public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration {
 
-    private CtClass ctClass;
-    private TypeSolver typeSolver;
-    private JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
+    private final CtClass ctClass;
+    private final TypeSolver typeSolver;
+    private final JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
 
     @Override
     public String toString() {
@@ -71,7 +71,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     public String getClassName() {
         String qualifiedName = getQualifiedName();
         if (qualifiedName.contains(".")) {
-            return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1, qualifiedName.length());
+            return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1);
         } else {
             return qualifiedName;
         }
@@ -101,6 +101,11 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
+    }
+
+    @Override
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        return javassistTypeDeclarationAdapter.internalTypes();
     }
 
     @Override

@@ -34,7 +34,6 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -66,9 +65,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
     /// Fields
     ///
 
-    private TypeSolver typeSolver;
-    private ClassOrInterfaceDeclaration wrappedNode;
-    private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
+    private final TypeSolver typeSolver;
+    private final ClassOrInterfaceDeclaration wrappedNode;
+    private final JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
 
     ///
     /// Constructors
@@ -144,10 +143,15 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
                                 }
 
                                 @Override
+                                public boolean isVolatile() {
+                                    return f.isVolatile();
+                                }
+
+                                @Override
                                 public ResolvedTypeDeclaration declaringType() {
                                     return f.declaringType();
                                 }
-                                
+
                                 @Override
                                 public Optional<FieldDeclaration> toAst() {
                                     return f.toAst();
@@ -429,13 +433,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((TypeDeclaration) member));
-            }
-        }
-        return res;
+        return javaParserTypeAdapter.internalTypes();
     }
 
     @Override
@@ -451,7 +449,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
             // look for the qualified name (for example class of type Rectangle2D.Double)
-            className = classOrInterfaceType.getScope().get().toString() + "." + className;
+            className = classOrInterfaceType.getScope().get() + "." + className;
         }
         SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
 

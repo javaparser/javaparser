@@ -43,29 +43,26 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.NotFoundException;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
 public class JavassistClassDeclaration extends AbstractClassDeclaration implements MethodUsageResolutionCapability {
 
-    private CtClass ctClass;
-    private TypeSolver typeSolver;
-    private JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
+    private final CtClass ctClass;
+    private final TypeSolver typeSolver;
+    private final JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
 
     public JavassistClassDeclaration(CtClass ctClass, TypeSolver typeSolver) {
         if (ctClass == null) {
             throw new IllegalArgumentException();
         }
         if (ctClass.isInterface() || ctClass.isAnnotation() || ctClass.isPrimitive() || ctClass.isEnum()) {
-            throw new IllegalArgumentException("Trying to instantiate a JavassistClassDeclaration with something which is not a class: " + ctClass.toString());
+            throw new IllegalArgumentException("Trying to instantiate a JavassistClassDeclaration with something which is not a class: " + ctClass);
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
@@ -299,15 +296,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        try {
-            /*
-            Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
-            Finally, return them in a Set.
-             */
-            return Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.internalTypes();
     }
 
     @Override

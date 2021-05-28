@@ -26,6 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -128,11 +129,13 @@ public class JavaParserFactory {
                 }
             }
             final Node parentNode = demandParentNode(node);
-            if (parentNode instanceof ObjectCreationExpr) {
-                ObjectCreationExpr parentObjectCreationExpr = (ObjectCreationExpr) parentNode;
-                if (node == parentObjectCreationExpr.getType() || parentObjectCreationExpr.getArguments().contains(node)) {
-                    Node grandParentNode = demandParentNode(parentNode);
-                    return getContext(grandParentNode, typeSolver);
+            if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
+                ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
+                if (parentDeclaration.getImplementedTypes().contains(node) ||
+                        parentDeclaration.getExtendedTypes().contains(node)) {
+                    // When resolving names in implements and extends the body of the declaration
+                    // should not be searched so use limited context.
+                    return new ClassOrInterfaceDeclarationExtendsContext(parentDeclaration, typeSolver);
                 }
             }
             return getContext(parentNode, typeSolver);
@@ -175,7 +178,7 @@ public class JavaParserFactory {
         } else if (node instanceof AnnotationDeclaration) {
             return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
         } else if (node instanceof EnumConstantDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
+            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(node), typeSolver);
         } else {
             throw new IllegalArgumentException(node.getClass().getCanonicalName());
         }

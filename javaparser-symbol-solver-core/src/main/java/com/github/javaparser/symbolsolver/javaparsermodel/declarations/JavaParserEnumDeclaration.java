@@ -72,14 +72,14 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
         AssociableToAST<EnumDeclaration> {
-    
-    private static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-    private static String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
-    private static String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
 
-    private TypeSolver typeSolver;
-    private EnumDeclaration wrappedNode;
-    private JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
+    private static final String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    private static final String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
+    private static final String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
+
+    private final TypeSolver typeSolver;
+    private final EnumDeclaration wrappedNode;
+    private final JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
 
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
@@ -151,10 +151,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (otherName.equals(JAVA_IO_SERIALIZABLE)) {
             return true;
         }
-        if (other.isJavaLangObject()) {
-            return true;
-        }
-        return false;
+        return other.isJavaLangObject();
     }
 
     @Override
@@ -204,9 +201,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         JavaParserEnumDeclaration that = (JavaParserEnumDeclaration) o;
 
-        if (!wrappedNode.equals(that.wrappedNode)) return false;
-
-        return true;
+        return wrappedNode.equals(that.wrappedNode);
     }
 
     @Override
@@ -286,7 +281,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
             // look for the qualified name (for example class of type Rectangle2D.Double)
-            className = classOrInterfaceType.getScope().get().toString() + "." + className;
+            className = classOrInterfaceType.getScope().get() + "." + className;
         }
         SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
         if (!ref.isSolved()) {
@@ -358,8 +353,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
      */
     public static class ValuesMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
-        private JavaParserEnumDeclaration enumDeclaration;
-        private TypeSolver typeSolver;
+        private final JavaParserEnumDeclaration enumDeclaration;
+        private final TypeSolver typeSolver;
 
         public ValuesMethod(JavaParserEnumDeclaration enumDeclaration, TypeSolver typeSolver) {
             this.enumDeclaration = enumDeclaration;
@@ -452,8 +447,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
      */
     public static class ValueOfMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
-        private JavaParserEnumDeclaration enumDeclaration;
-        private TypeSolver typeSolver;
+        private final JavaParserEnumDeclaration enumDeclaration;
+        private final TypeSolver typeSolver;
 
         public ValueOfMethod(JavaParserEnumDeclaration enumDeclaration, TypeSolver typeSolver) {
             this.enumDeclaration = enumDeclaration;
@@ -561,13 +556,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
-            }
-        }
-        return res;
+        return javaParserTypeAdapter.internalTypes();
     }
 
     @Override

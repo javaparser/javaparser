@@ -38,12 +38,14 @@ import java.util.stream.Collectors;
  */
 public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration {
 
-    private com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
-    private TypeSolver typeSolver;
+    private final com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
+    private final TypeSolver typeSolver;
+    private final JavaParserTypeAdapter<AnnotationDeclaration> javaParserTypeAdapter;
 
     public JavaParserAnnotationDeclaration(AnnotationDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
     }
 
     @Override
@@ -54,8 +56,13 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        return javaParserTypeAdapter.internalTypes();
+    }
+
+    @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-         return wrappedNode.getFields().stream()
+        return wrappedNode.getFields().stream()
                 .flatMap(field -> field.getVariables().stream())
                 .map(var -> new JavaParserFieldDeclaration(var, typeSolver))
                 .collect(Collectors.toList());

@@ -64,9 +64,9 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
         implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
 
-    private TypeSolver typeSolver;
-    private ClassOrInterfaceDeclaration wrappedNode;
-    private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
+    private final TypeSolver typeSolver;
+    private final ClassOrInterfaceDeclaration wrappedNode;
+    private final JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
 
     public JavaParserInterfaceDeclaration(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         if (!wrappedNode.isInterface()) {
@@ -103,9 +103,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
         JavaParserInterfaceDeclaration that = (JavaParserInterfaceDeclaration) o;
 
-        if (!wrappedNode.equals(that.wrappedNode)) return false;
-
-        return true;
+        return wrappedNode.equals(that.wrappedNode);
     }
 
     @Override
@@ -234,10 +232,15 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                                 }
 
                                 @Override
+                                public boolean isVolatile() {
+                                    return f.isVolatile();
+                                }
+
+                                @Override
                                 public ResolvedTypeDeclaration declaringType() {
                                     return f.declaringType();
                                 }
-                                
+
                                 @Override
                                 public Optional<FieldDeclaration> toAst() {
                                     return f.toAst();
@@ -356,13 +359,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
-            }
-        }
-        return res;
+        return javaParserTypeAdapter.internalTypes();
     }
 
     @Override

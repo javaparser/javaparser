@@ -77,14 +77,27 @@ class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
 
 	@Test
 	void testForIssue3094() {
-		String sourceCode = "@interface Foo { int a = 0; int b = a; }";
-		ParseResult<CompilationUnit> result = javaParser.parse(sourceCode);
-		assertTrue(result.getResult().isPresent());
-		CompilationUnit cu = result.getResult().get();
+        String sourceCode = "@interface Foo { int a = 0; int b = a; }";
+        ParseResult<CompilationUnit> result = javaParser.parse(sourceCode);
+        assertTrue(result.getResult().isPresent());
+        CompilationUnit cu = result.getResult().get();
 
-		Optional<NameExpr> nameExpr = cu.findFirst(NameExpr.class);
-		assertTrue(nameExpr.isPresent());
-		assertDoesNotThrow(nameExpr.get()::resolve);
-	}
+        Optional<NameExpr> nameExpr = cu.findFirst(NameExpr.class);
+        assertTrue(nameExpr.isPresent());
+        assertDoesNotThrow(nameExpr.get()::resolve);
+    }
+
+    @Test
+    void internalTypes_shouldFindAllInnerTypeDeclaration() {
+        String sourceCode = "@interface Foo { class A {} interface B {} @interface C {} enum D {} }";
+
+        ParseResult<CompilationUnit> result = javaParser.parse(sourceCode);
+        assertTrue(result.getResult().isPresent());
+        CompilationUnit cu = result.getResult().get();
+
+        Optional<AnnotationDeclaration> annotation = cu.findFirst(AnnotationDeclaration.class);
+        assertTrue(annotation.isPresent());
+        assertEquals(4, annotation.get().resolve().internalTypes().size());
+    }
 
 }

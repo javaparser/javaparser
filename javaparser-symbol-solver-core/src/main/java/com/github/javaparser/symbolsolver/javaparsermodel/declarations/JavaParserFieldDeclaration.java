@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+
+import java.util.Optional;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -33,18 +37,14 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import java.util.Optional;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
 /**
  * @author Federico Tomassetti
  */
 public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, AssociableToAST<FieldDeclaration> {
 
-    private VariableDeclarator variableDeclarator;
-    private com.github.javaparser.ast.body.FieldDeclaration wrappedNode;
-    private TypeSolver typeSolver;
+    private final VariableDeclarator variableDeclarator;
+    private final com.github.javaparser.ast.body.FieldDeclaration wrappedNode;
+    private final TypeSolver typeSolver;
 
     public JavaParserFieldDeclaration(VariableDeclarator variableDeclarator, TypeSolver typeSolver) {
         if (typeSolver == null) {
@@ -71,6 +71,11 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, Ass
     @Override
     public boolean isStatic() {
         return wrappedNode.hasModifier(Modifier.Keyword.STATIC);
+    }
+
+    @Override
+    public boolean isVolatile() {
+        return wrappedNode.hasModifier(Modifier.Keyword.VOLATILE);
     }
 
     @Override
