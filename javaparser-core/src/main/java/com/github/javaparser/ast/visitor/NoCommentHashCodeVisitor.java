@@ -656,7 +656,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final LocationSetArrayAccess n, final Void arg) {
-        return (n.getIndex().accept(this, arg)) * 31 + (n.getName().accept(this, arg));
+        return (n.getStart().accept(this, arg)) * 31 + (n.getName().accept(this, arg));
     }
 
     @Override

@@ -233,6 +233,7 @@ public class TokenTypes {
             case SWITCH:
             case SYNCHRONIZED:
             case THIS:
+            case LOCSETOF:
             case THROW:
             case THROWS:
             case TRANSIENT:

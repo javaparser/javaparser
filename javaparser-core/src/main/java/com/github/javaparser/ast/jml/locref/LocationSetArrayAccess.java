@@ -3,7 +3,6 @@ package com.github.javaparser.ast.jml.locref;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -14,6 +13,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LocationSetArrayAccessMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 /**
  * @author Alexander Weigl
@@ -25,30 +25,40 @@ public class LocationSetArrayAccess extends LocationSetExpression {
 
     private LocationSetExpression name;
 
-    private Expression index;
+    private Expression start;
+
+    @OptionalProperty
+    private Expression end;
+
 
     public LocationSetArrayAccess() {
-        this(null, null, null);
+        this(null, null, null, null);
+    }
+
+    public LocationSetArrayAccess(LocationSetExpression name, Expression start) {
+        this(null, name, start, start);
     }
 
     @AllFieldsConstructor
-    public LocationSetArrayAccess(LocationSetExpression name, Expression index) {
-        this(null, name, index);
+    public LocationSetArrayAccess(LocationSetExpression name, Expression start, Expression end) {
+        this(null, name, start, end);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocationSetArrayAccess(TokenRange tokenRange, LocationSetExpression name, Expression index) {
+    public LocationSetArrayAccess(TokenRange tokenRange, LocationSetExpression name,
+                                  Expression start, Expression end) {
         super(tokenRange);
         setName(name);
-        setIndex(index);
+        setStart(start);
+        this.end = end;
         customInitialization();
     }
 
     public static LocationSetExpression forAllIndices(TokenRange range, LocationSetExpression prefix) {
-        return new LocationSetArrayAccess(range, prefix, ALL_INDICES);
+        return new LocationSetArrayAccess(range, prefix, ALL_INDICES, ALL_INDICES);
     }
 
     @Override
@@ -64,21 +74,21 @@ public class LocationSetArrayAccess extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getIndex() {
-        return index;
+    public Expression getStart() {
+        return start;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetArrayAccess setIndex(final Expression index) {
-        assertNotNull(index);
-        if (index == this.index) {
+    public LocationSetArrayAccess setStart(final Expression start) {
+        assertNotNull(start);
+        if (start == this.start) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.INDEX, this.index, index);
-        if (this.index != null)
-            this.index.setParentNode(null);
-        this.index = index;
-        setAsParentNodeOf(index);
+        notifyPropertyChange(ObservableProperty.INDEX, this.start, start);
+        if (this.start != null)
+            this.start.setParentNode(null);
+        this.start = start;
+        setAsParentNodeOf(start);
         return this;
     }
 
@@ -114,8 +124,8 @@ public class LocationSetArrayAccess extends LocationSetExpression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (node == index) {
-            setIndex((Expression) replacementNode);
+        if (node == start) {
+            setStart((Expression) replacementNode);
             return true;
         }
         if (node == name) {

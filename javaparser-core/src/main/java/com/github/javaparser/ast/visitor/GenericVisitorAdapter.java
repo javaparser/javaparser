@@ -2871,7 +2871,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final LocationSetArrayAccess n, final A arg) {
         R result;
         {
-            result = n.getIndex().accept(this, arg);
+            result = n.getStart().accept(this, arg);
             if (result != null)
                 return result;
         }

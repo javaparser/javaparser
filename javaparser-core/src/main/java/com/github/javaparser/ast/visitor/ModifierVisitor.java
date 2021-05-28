@@ -1788,12 +1788,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final LocationSetArrayAccess n, final A arg) {
-        Expression index = (Expression) n.getIndex().accept(this, arg);
+        Expression index = (Expression) n.getStart().accept(this, arg);
         LocationSetExpression name = (LocationSetExpression) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (index == null || name == null)
             return null;
-        n.setIndex(index);
+        n.setStart(index);
         n.setName(name);
         n.setComment(comment);
         return n;

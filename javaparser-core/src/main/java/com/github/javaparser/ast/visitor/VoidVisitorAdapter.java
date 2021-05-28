@@ -998,7 +998,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final LocationSetArrayAccess n, final A arg) {
-        n.getIndex().accept(this, arg);
+        n.getStart().accept(this, arg);
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

@@ -1858,7 +1858,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final LocationSetArrayAccess n, final Visitable arg) {
         final LocationSetArrayAccess n2 = (LocationSetArrayAccess) arg;
-        if (!nodeEquals(n.getIndex(), n2.getIndex()))
+        if (!nodeEquals(n.getStart(), n2.getStart()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;

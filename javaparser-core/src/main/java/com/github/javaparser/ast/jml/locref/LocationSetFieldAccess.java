@@ -2,8 +2,10 @@ package com.github.javaparser.ast.jml.locref;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -21,6 +23,7 @@ import java.util.Optional;
  * @version 1 (3/19/21)
  */
 public class LocationSetFieldAccess extends LocationSetExpression {
+    private static final SimpleName ALL_FIELDS = new SimpleName("*");
 
     @OptionalProperty
     private LocationSetExpression scope;
@@ -34,6 +37,10 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     public LocationSetFieldAccess(LocationSetExpression scope, SimpleName name) {
         this.scope = scope;
         this.name = name;
+    }
+
+    public LocationSetFieldAccess(LocationSetExpression scope) {
+        this(scope, ALL_FIELDS);
     }
 
     /**
@@ -158,6 +165,6 @@ public class LocationSetFieldAccess extends LocationSetExpression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public LocationSetFieldAccess removeScope() {
-        return setScope((LocationSetExpression) null);
+        return setScope(null);
     }
 }

@@ -510,6 +510,7 @@ TOKEN : {
 | <WORKING_SPACE_REDUNDANTLY: "working_space_redundantly">
 | <WRITABLE: "writable">
 | <LOCSET: "\\locset">
+| <LOCSETOF: "\\locsetOf">
 | <EMPTYSET: "\\emptyset">
 | <SINGLETON: "\\singleton">  //KeY extension, not official JML
 | <STATIC_INVARIANT_FOR: "\\static_invariant_for">  //KeY extension, not official JML
@@ -3446,7 +3447,7 @@ String Identifier():
        | <SPEC_PROTECTED> | <SPEC_PUBLIC> | <SPEC_SAFE_MATH> | <STATIC_INITIALIZER> | <STRICTLY_PURE >
        | <SUBTYPE> | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
        | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> | <INVARIANT_FOR>
-       | <RESULT> | <SUBSET> | <DISJOINT> | <UNION> | <INTERSECT>
+       | <RESULT> | <SUBSET> | <DISJOINT> | <UNION> | <INTERSECT> | <LOCSET>
 
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
@@ -4383,23 +4384,29 @@ Expression JmlPrimaryPrefix():
     Expression expr;
     NodeList<Expression> exprs = new NodeList<>();
     NodeList<LocationSetExpression> lsexprs;
+    NodeList<Expression> exprs;
     JavaToken begin;
     NodeList<JmlBoundVariable> vars;
 }
 {
   (
-    "(" {begin=token();}
+      "(" {begin=token();}
        (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX>)
-        vars=JmlBoundedVariables()
-        ";"
-        expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
-     ")"
-     { return new JmlQuantifiedExpr(range(begin, token()), JmlQuantifiedExpr.JmlBinder.FORALL, vars, exprs);}
+       vars=JmlBoundedVariables()
+       ";"
+       expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
+      ")"
+      { return new JmlQuantifiedExpr(range(begin, token()), JmlQuantifiedExpr.JmlBinder.FORALL, vars, exprs);}
    |
-     (<LOCSET> | <SINGLETON>) {begin=token();} <LPAREN> lsexprs=StoreRefList() <RPAREN>
-     {
-       return new LocationSetWrapperExpression(range(begin, token()), lsexprs);
-     }
+      (<LOCSET>) {begin=token();} <LPAREN> exprs=ExpressionList() <RPAREN>
+      {
+        return new LocationSetWrapperExpression(range(begin, token()), exprs);
+      }
+    |
+      (<SINGLETON>) {begin=token();} <LPAREN> lsexprs=StoreRefList() <RPAREN>
+      {
+        return new LocationSetWrapperExpression(range(begin, token()), lsexprs);
+      }
   )
 }
 
@@ -4427,7 +4434,7 @@ Expression PrimarySuffix(Expression scope):
  */
 Expression PrimarySuffixWithoutSuper(Expression scope):
 {
-    Expression ret;
+    Expression ret, a, b;
     RangedList<Type> typeArgs = new RangedList<Type>(null);
     NodeList<Expression> args = emptyNodeList();
     boolean hasArgs = false;
@@ -4437,6 +4444,9 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
     (
         "."
         (
+            "*"
+            {ret = new LocationSetFieldAccess(range(scope,token()), scope); }
+         |
             "this"
             { ret = new ThisExpr(range(scope, token()), scopeToName(scope)); }
          |
@@ -4456,9 +4466,17 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
         )
      |
         "["
-        ret = Expression()
+        (
+          "*"
+          { ret = LocationSetArrayAccess.forAllIndices(range(scope, token()), scope); }
+        | LOOKAHEAD(Expression(), "..")
+          a = Expression() ".." b = Expression()
+          { ret = new LocationSetArrayAccess(range(scope, token()), scope, a, b); }
+        |
+          ret = Expression()
+          { ret = new ArrayAccessExpr(range(scope, token()), scope, ret); }
+        )
         "]"
-        { ret = new ArrayAccessExpr(range(scope, token()), scope, ret); }
     )
     { return ret; }
 }
@@ -5154,8 +5172,8 @@ JmlClause JmlAccessibleClause():
     JavaToken begin;
 }
 {
-  { begin = token();}
   (<ACCESSIBLE>)
+  { begin = token();}
   (heaps=heaps())*
   exprs=StoreRefList()
   (<MEASURED_BY> e=Expression())?

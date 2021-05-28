@@ -68,14 +68,7 @@ import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.*;
-import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -1140,7 +1133,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
         printer.print("[");
-        n.getIndex().accept(this, arg);
+        n.getStart().accept(this, arg);
         printer.print("]");
     }
 

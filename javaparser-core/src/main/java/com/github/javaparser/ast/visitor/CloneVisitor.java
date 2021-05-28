@@ -1729,7 +1729,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final LocationSetArrayAccess n, final Object arg) {
-        Expression index = cloneNode(n.getIndex(), arg);
+        Expression index = cloneNode(n.getStart(), arg);
         LocationSetExpression name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         LocationSetArrayAccess r = new LocationSetArrayAccess(n.getTokenRange().orElse(null), name, index);
