@@ -66,7 +66,7 @@ class com.github.javaparser.ast.jml.clauses.AccessibleClause {
 }
 class com.github.javaparser.ast.jml.DefaultJmlContainer {
 }
-class com.github.javaparser.ast.jml.locref.LocationSetLiftExpression {
+class com.github.javaparser.ast.jml.locref.LocationSetConstructorExpression {
 - NodeList<Expression> arguments
 }
 class com.github.javaparser.ast.jml.clauses.JmlContracts {
@@ -267,7 +267,7 @@ com.github.javaparser.ast.jml.clauses.BlockContractable <|.. com.github.javapars
 com.github.javaparser.ast.jml.clauses.LoopContractable <|.. com.github.javaparser.ast.jml.clauses.AccessibleClause
 com.github.javaparser.ast.jml.clauses.JmlClause <|-- com.github.javaparser.ast.jml.clauses.AccessibleClause
 com.github.javaparser.ast.jml.JmlContainer <|.. com.github.javaparser.ast.jml.DefaultJmlContainer
-com.github.javaparser.ast.jml.locref.LocationSetExpression <|-- com.github.javaparser.ast.jml.locref.LocationSetLiftExpression
+com.github.javaparser.ast.jml.locref.LocationSetExpression <|-- com.github.javaparser.ast.jml.locref.LocationSetConstructorExpression
 com.github.javaparser.ast.jml.clauses.Jmlish <|.. com.github.javaparser.ast.jml.clauses.JmlContracts
 com.github.javaparser.ast.jml.JmlContainer <|.. com.github.javaparser.ast.jml.clauses.JmlContracts
 com.github.javaparser.ast.jml.clauses.Node <|-- com.github.javaparser.ast.jml.clauses.JmlContracts

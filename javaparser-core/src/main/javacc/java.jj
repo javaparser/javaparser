@@ -46,8 +46,8 @@ options {
     JDK_VERSION = "1.8";
     STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    DEBUG_PARSER=true;
-    DEBUG_LOOKAHEAD = true;
+    //DEBUG_PARSER=true;
+    //DEBUG_LOOKAHEAD = true;
 }
 
 
@@ -510,7 +510,7 @@ TOKEN : {
 | <WORKING_SPACE_REDUNDANTLY: "working_space_redundantly">
 | <WRITABLE: "writable">
 | <LOCSET: "\\locset">
-| <LOCSETOF: "\\locsetOf">
+| <STOREREF: "\\storeref">
 | <EMPTYSET: "\\emptyset">
 | <SINGLETON: "\\singleton">  //KeY extension, not official JML
 | <STATIC_INVARIANT_FOR: "\\static_invariant_for">  //KeY extension, not official JML
@@ -2358,12 +2358,17 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
     ReferenceType throwType;
     NodeList<JmlClause> clauses = new NodeList<>();
     JmlClause clause;
-    NodeList<JmlContract> subContracts = null;
+    NodeList<JmlContract> subContracts = new NodeList<>();
+    JmlContract c=null;
 }
 {
     ( (<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>)
+      {begin=token();}
       (clause=JmlContractClause() {clauses.add(clause);})+
       (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+      {
+       c = new JmlContract(range(begin,token()), Behavior.MODEL, new NodeList<>(), clauses, subContracts);
+      }
     )?
     modifier=Modifiers()
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
@@ -2382,13 +2387,12 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
      |
         ";"
     )
-
     {
         type = juggleArrayType(type, arrayBracketPairs);
         MethodDeclaration m = new  MethodDeclaration(range(begin, token()),
             modifier.modifiers, modifier.annotations, typeParameters.list,
             type, name, parameters.a, throws_, body, parameters.b);
-        return new JmlMethodDeclaration(range(m,m), m);
+        return new JmlMethodDeclaration(range(m,m), m, c);
     }
 }
 
@@ -3445,10 +3449,9 @@ String Identifier():
        | <SIGNALS> | <SIGNALS_ONLY> | <SIGNALS_ONLY_REDUNDANTLY> | <SIGNALS_REDUNDANTLY>
        | <SPEC_BIGINT_MATH> | <SPEC_JAVA_MATH> | <SPEC_PACKAGE > | <SPEC_PRIVATE >
        | <SPEC_PROTECTED> | <SPEC_PUBLIC> | <SPEC_SAFE_MATH> | <STATIC_INITIALIZER> | <STRICTLY_PURE >
-       | <SUBTYPE> | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
+       | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
        | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> | <INVARIANT_FOR>
-       | <RESULT> | <SUBSET> | <DISJOINT> | <UNION> | <INTERSECT> | <LOCSET>
-
+       | <RESULT> | <SUBSET> | <INTERSECT> | <UNION> | <LOCSET>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
 }
@@ -4384,7 +4387,6 @@ Expression JmlPrimaryPrefix():
     Expression expr;
     NodeList<Expression> exprs = new NodeList<>();
     NodeList<LocationSetExpression> lsexprs;
-    NodeList<Expression> exprs;
     JavaToken begin;
     NodeList<JmlBoundVariable> vars;
 }
@@ -4400,12 +4402,12 @@ Expression JmlPrimaryPrefix():
    |
       (<LOCSET>) {begin=token();} <LPAREN> exprs=ExpressionList() <RPAREN>
       {
-        return new LocationSetWrapperExpression(range(begin, token()), exprs);
+        return new LocationSetConstructorExpression(range(begin, token()), exprs);
       }
     |
-      (<SINGLETON>) {begin=token();} <LPAREN> lsexprs=StoreRefList() <RPAREN>
+      (<STOREREF>) {begin=token();} <LPAREN> lsexprs=StoreRefList() <RPAREN>
       {
-        return new LocationSetWrapperExpression(range(begin, token()), lsexprs);
+        return new LocationSetStoreRef(range(begin, token()), lsexprs);
       }
   )
 }
@@ -4445,7 +4447,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
         "."
         (
             "*"
-            {ret = new LocationSetFieldAccess(range(scope,token()), scope); }
+            {ret = LocationSetFieldAccess.forAllFields(range(scope,token()), scope); }
          |
             "this"
             { ret = new ThisExpr(range(scope, token()), scopeToName(scope)); }
@@ -4469,9 +4471,9 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
         (
           "*"
           { ret = LocationSetArrayAccess.forAllIndices(range(scope, token()), scope); }
-        | LOOKAHEAD(Expression(), "..")
+        /*| LOOKAHEAD(Expression(), "..")
           a = Expression() ".." b = Expression()
-          { ret = new LocationSetArrayAccess(range(scope, token()), scope, a, b); }
+          { ret = new LocationSetArrayAccess(range(scope, token()), scope, a, b); }*/
         |
           ret = Expression()
           { ret = new ArrayAccessExpr(range(scope, token()), scope, ret); }
@@ -5301,7 +5303,7 @@ LocationSetExpression StoreRefExpr():
 {
   (<LOCSET> | <SINGLETON>) {begin=token();} <LPAREN> arrayIndices=ExpressionList() <RPAREN>
   {
-    return new LocationSetLiftExpression(range(begin, token()), arrayIndices);
+    return new LocationSetConstructorExpression(range(begin, token()), arrayIndices);
   }
   | <EMPTYSET> {begin=token();}
   {

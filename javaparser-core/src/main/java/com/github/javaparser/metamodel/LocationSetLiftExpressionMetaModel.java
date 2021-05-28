@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.jml.locref.LocationSetLiftExpression;
+
+import com.github.javaparser.ast.jml.locref.LocationSetConstructorExpression;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class LocationSetLiftExpressionMetaModel extends LocationSetExpressionMet
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LocationSetLiftExpressionMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LocationSetLiftExpression.class, "LocationSetLiftExpression", "com.github.javaparser.ast.jml.locref", false, false);
+        super(superBaseNodeMetaModel, LocationSetConstructorExpression.class, "LocationSetLiftExpression", "com.github.javaparser.ast.jml.locref", false, false);
     }
 
     public PropertyMetaModel argumentsPropertyMetaModel;

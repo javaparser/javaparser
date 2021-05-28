@@ -17,16 +17,18 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/19/21)
  */
 public class LocationSetFieldAccess extends LocationSetExpression {
+
     private static final SimpleName ALL_FIELDS = new SimpleName("*");
 
     @OptionalProperty
-    private LocationSetExpression scope;
+    private Expression scope;
 
     private SimpleName name;
 
@@ -34,12 +36,12 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     }
 
     @AllFieldsConstructor
-    public LocationSetFieldAccess(LocationSetExpression scope, SimpleName name) {
+    public LocationSetFieldAccess(Expression scope, SimpleName name) {
         this.scope = scope;
         this.name = name;
     }
 
-    public LocationSetFieldAccess(LocationSetExpression scope) {
+    public LocationSetFieldAccess(Expression scope) {
         this(scope, ALL_FIELDS);
     }
 
@@ -47,7 +49,7 @@ public class LocationSetFieldAccess extends LocationSetExpression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocationSetFieldAccess(TokenRange tokenRange, LocationSetExpression scope, SimpleName name) {
+    public LocationSetFieldAccess(TokenRange tokenRange, Expression scope, SimpleName name) {
         super(tokenRange);
         setScope(scope);
         setName(name);
@@ -66,7 +68,7 @@ public class LocationSetFieldAccess extends LocationSetExpression {
         return null;
     }
 
-    public static LocationSetExpression forAllFields(TokenRange range, LocationSetExpression prefix) {
+    public static LocationSetExpression forAllFields(TokenRange range, Expression prefix) {
         return new LocationSetFieldAccess(range, prefix, new SimpleName("*"));
     }
 
@@ -102,12 +104,12 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<LocationSetExpression> getScope() {
+    public Optional<Expression> getScope() {
         return Optional.ofNullable(scope);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetFieldAccess setScope(final LocationSetExpression scope) {
+    public LocationSetFieldAccess setScope(final Expression scope) {
         if (scope == this.scope) {
             return this;
         }
@@ -144,7 +146,7 @@ public class LocationSetFieldAccess extends LocationSetExpression {
         }
         if (scope != null) {
             if (node == scope) {
-                setScope((LocationSetExpression) replacementNode);
+                setScope((Expression) replacementNode);
                 return true;
             }
         }
@@ -166,5 +168,29 @@ public class LocationSetFieldAccess extends LocationSetExpression {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public LocationSetFieldAccess removeScope() {
         return setScope(null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLocationSetFieldAccess() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocationSetFieldAccess asLocationSetFieldAccess() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<LocationSetFieldAccess> toLocationSetFieldAccess() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocationSetFieldAccess(Consumer<LocationSetFieldAccess> action) {
+        action.accept(this);
     }
 }

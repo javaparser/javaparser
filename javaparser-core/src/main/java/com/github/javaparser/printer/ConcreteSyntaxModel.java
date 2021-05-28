@@ -1061,7 +1061,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(LocationSetBindingExpr.class, sequence());
         concreteSyntaxModelByClass.put(LocationSetFieldAccess.class, sequence());
         concreteSyntaxModelByClass.put(LocationSetFunction.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetLiftExpression.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetConstructorExpression.class, sequence());
         concreteSyntaxModelByClass.put(LocationSetPrimary.class, sequence());
         concreteSyntaxModelByClass.put(OldClause.class, sequence());
         concreteSyntaxModelByClass.put(SignalsClause.class, sequence());

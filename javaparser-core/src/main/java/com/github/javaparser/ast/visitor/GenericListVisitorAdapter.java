@@ -2936,12 +2936,17 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getStart().accept(this, arg);
+            tmp = n.getName().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
         {
-            tmp = n.getName().accept(this, arg);
+            tmp = n.getStart().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getStop().isPresent()) {
+            tmp = n.getStop().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -3020,7 +3025,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final LocationSetLiftExpression n, final A arg) {
+    public List<R> visit(final LocationSetConstructorExpression n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3184,8 +3189,47 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final JmlMethodDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        if (n.getContract().isPresent()) {
+            tmp = n.getContract().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         {
             tmp = n.getMethodDeclaration().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final LocationSetWrapperExpression n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getExpressions().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final LocationSetStoreRef n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getArguments().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

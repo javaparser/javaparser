@@ -1788,13 +1788,15 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final LocationSetArrayAccess n, final A arg) {
-        Expression index = (Expression) n.getStart().accept(this, arg);
-        LocationSetExpression name = (LocationSetExpression) n.getName().accept(this, arg);
+        Expression name = (Expression) n.getName().accept(this, arg);
+        Expression start = (Expression) n.getStart().accept(this, arg);
+        Expression stop = n.getStop().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (index == null || name == null)
+        if (name == null || start == null)
             return null;
-        n.setStart(index);
         n.setName(name);
+        n.setStart(start);
+        n.setStop(stop);
         n.setComment(comment);
         return n;
     }
@@ -1817,7 +1819,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final LocationSetFieldAccess n, final A arg) {
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
-        LocationSetExpression scope = n.getScope().map(s -> (LocationSetExpression) s.accept(this, arg)).orElse(null);
+        Expression scope = n.getScope().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null)
             return null;
@@ -1837,7 +1839,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final LocationSetLiftExpression n, final A arg) {
+    public Visitable visit(final LocationSetConstructorExpression n, final A arg) {
         NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setArguments(arguments);
@@ -1876,11 +1878,31 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlMethodDeclaration n, final A arg) {
+        JmlContract contract = n.getContract().map(s -> (JmlContract) s.accept(this, arg)).orElse(null);
         MethodDeclaration methodDeclaration = (MethodDeclaration) n.getMethodDeclaration().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (methodDeclaration == null)
             return null;
+        n.setContract(contract);
         n.setMethodDeclaration(methodDeclaration);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetWrapperExpression n, final A arg) {
+        NodeList<LocationSetExpression> expressions = modifyList(n.getExpressions(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setExpressions(expressions);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetStoreRef n, final A arg) {
+        NodeList<LocationSetExpression> arguments = modifyList(n.getArguments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setArguments(arguments);
         n.setComment(comment);
         return n;
     }

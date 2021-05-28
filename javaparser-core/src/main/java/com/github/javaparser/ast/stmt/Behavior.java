@@ -9,7 +9,7 @@ import com.github.javaparser.ast.jml.JmlKeyword;
  */
 public enum Behavior implements Jmlish, JmlKeyword {
     NONE(""), BEHAVIOR("behavior"), NORMAL("normal_behavior"), EXCEPTIONAL("exceptional_behavior"),
-    BREAK("break_behavior"), CONTINUE("continue_behavior"), RETURN("return_behavior");
+    MODEL("model_behavior"), BREAK("break_behavior"), CONTINUE("continue_behavior"), RETURN("return_behavior");
 
     private final String symbol;
 

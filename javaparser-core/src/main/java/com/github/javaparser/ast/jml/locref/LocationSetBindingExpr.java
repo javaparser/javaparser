@@ -19,6 +19,8 @@ import com.github.javaparser.metamodel.LocationSetBindingExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (3/19/21)
@@ -154,7 +156,7 @@ public class LocationSetBindingExpr extends LocationSetExpression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public LocationSetBindingExpr removePredicate() {
-        return setPredicate((Expression) null);
+        return setPredicate(null);
     }
 
     @Override
@@ -203,5 +205,29 @@ public class LocationSetBindingExpr extends LocationSetExpression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LocationSetBindingExprMetaModel getMetaModel() {
         return JavaParserMetaModel.locationSetBindingExprMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLocationSetBindingExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocationSetBindingExpr asLocationSetBindingExpr() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<LocationSetBindingExpr> toLocationSetBindingExpr() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocationSetBindingExpr(Consumer<LocationSetBindingExpr> action) {
+        action.accept(this);
     }
 }

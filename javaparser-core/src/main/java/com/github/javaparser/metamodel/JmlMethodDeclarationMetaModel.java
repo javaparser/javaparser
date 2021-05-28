@@ -41,5 +41,7 @@ public class JmlMethodDeclarationMetaModel extends JmlClassLevelMetaModel {
         super(superBaseNodeMetaModel, JmlMethodDeclaration.class, "JmlMethodDeclaration", "com.github.javaparser.ast.jml.body", false, false);
     }
 
+    public PropertyMetaModel contractPropertyMetaModel;
+
     public PropertyMetaModel methodDeclarationPropertyMetaModel;
 }

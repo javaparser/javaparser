@@ -759,7 +759,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final LocationSetLiftExpression n, final Visitable arg) {
+    public Boolean visit(final LocationSetConstructorExpression n, final Visitable arg) {
         return n == arg;
     }
 
@@ -790,6 +790,16 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final JmlMethodDeclaration n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetWrapperExpression n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final LocationSetStoreRef n, final Visitable arg) {
         return n == arg;
     }
 }

@@ -330,7 +330,7 @@ public interface VoidVisitor<A> {
 
     void visit(LocationSetFunction n, A arg);
 
-    void visit(LocationSetLiftExpression n, A arg);
+    void visit(LocationSetConstructorExpression n, A arg);
 
     void visit(LocationSetPrimary n, A arg);
 
@@ -339,4 +339,8 @@ public interface VoidVisitor<A> {
     void visit(JmlGhostStatements n, A arg);
 
     void visit(JmlMethodDeclaration n, A arg);
+
+    void visit(LocationSetWrapperExpression n, A arg);
+
+    void visit(LocationSetStoreRef n, A arg);
 }

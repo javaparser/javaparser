@@ -656,7 +656,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final LocationSetArrayAccess n, final Void arg) {
-        return (n.getStart().accept(this, arg)) * 31 + (n.getName().accept(this, arg));
+        return (n.getName().accept(this, arg)) * 31 + (n.getStart().accept(this, arg)) * 31 + (n.getStop().isPresent() ? n.getStop().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -675,7 +675,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final LocationSetLiftExpression n, final Void arg) {
+    public Integer visit(final LocationSetConstructorExpression n, final Void arg) {
         return (n.getArguments().accept(this, arg));
     }
 
@@ -705,6 +705,16 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlMethodDeclaration n, final Void arg) {
-        return (n.getMethodDeclaration().accept(this, arg));
+        return (n.getContract().isPresent() ? n.getContract().get().accept(this, arg) : 0) * 31 + (n.getMethodDeclaration().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final LocationSetWrapperExpression n, final Void arg) {
+        return (n.getExpressions().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final LocationSetStoreRef n, final Void arg) {
+        return (n.getArguments().accept(this, arg));
     }
 }

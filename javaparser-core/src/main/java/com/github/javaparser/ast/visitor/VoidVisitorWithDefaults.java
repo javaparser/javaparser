@@ -764,7 +764,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final LocationSetLiftExpression n, final A arg) {
+    public void visit(final LocationSetConstructorExpression n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -795,6 +795,16 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlMethodDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetWrapperExpression n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final LocationSetStoreRef n, final A arg) {
         defaultAction(n, arg);
     }
 }

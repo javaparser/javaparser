@@ -38,7 +38,6 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
-import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlClassLevel;
@@ -227,10 +226,12 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(LocationSetExpression.class);
         add(LocationSetPrimary.class);
         add(LocationSetFunction.class);
-        add(LocationSetLiftExpression.class);
+        add(LocationSetConstructorExpression.class);
         add(LocationSetFieldAccess.class);
         add(LocationSetArrayAccess.class);
         add(LocationSetBindingExpr.class);
+        add(LocationSetWrapperExpression.class);
+        add(LocationSetStoreRef.class);
 
         add(com.github.javaparser.ast.type.ArrayType.class);
         add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);

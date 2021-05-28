@@ -2,32 +2,34 @@ package com.github.javaparser.ast.jml.locref;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.jml.JmlKeyword;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.LocationSetLiftExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.LocationSetFunctionMetaModel;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.metamodel.LocationSetStoreRefMetaModel;
 
 /**
  * @author Alexander Weigl
- * @version 1 (3/20/21)
+ * @version 1 (2021-05-28)
  */
-public class LocationSetLiftExpression extends LocationSetExpression {
+public class LocationSetStoreRef extends LocationSetExpression {
 
-    private NodeList<Expression> arguments;
-
-    public LocationSetLiftExpression() {
-        this(new NodeList<>());
-    }
+    private NodeList<LocationSetExpression> arguments;
 
     @AllFieldsConstructor
-    public LocationSetLiftExpression(NodeList<Expression> arguments) {
+    public LocationSetStoreRef(NodeList<LocationSetExpression> arguments) {
         this(null, arguments);
     }
 
@@ -35,7 +37,7 @@ public class LocationSetLiftExpression extends LocationSetExpression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocationSetLiftExpression(TokenRange tokenRange, NodeList<Expression> arguments) {
+    public LocationSetStoreRef(TokenRange tokenRange, NodeList<LocationSetExpression> arguments) {
         super(tokenRange);
         setArguments(arguments);
         customInitialization();
@@ -54,12 +56,12 @@ public class LocationSetLiftExpression extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getArguments() {
+    public NodeList<LocationSetExpression> getArguments() {
         return arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetLiftExpression setArguments(final NodeList<Expression> arguments) {
+    public LocationSetStoreRef setArguments(final NodeList<LocationSetExpression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;
@@ -93,7 +95,7 @@ public class LocationSetLiftExpression extends LocationSetExpression {
             return false;
         for (int i = 0; i < arguments.size(); i++) {
             if (arguments.get(i) == node) {
-                arguments.set(i, (Expression) replacementNode);
+                arguments.set(i, (LocationSetExpression) replacementNode);
                 return true;
             }
         }
@@ -101,14 +103,38 @@ public class LocationSetLiftExpression extends LocationSetExpression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLocationSetStoreRef() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocationSetStoreRef asLocationSetStoreRef() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<LocationSetStoreRef> toLocationSetStoreRef() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocationSetStoreRef(Consumer<LocationSetStoreRef> action) {
+        action.accept(this);
+    }
+
+    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public LocationSetLiftExpression clone() {
-        return (LocationSetLiftExpression) accept(new CloneVisitor(), null);
+    public LocationSetStoreRef clone() {
+        return (LocationSetStoreRef) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LocationSetLiftExpressionMetaModel getMetaModel() {
-        return JavaParserMetaModel.locationSetLiftExpressionMetaModel;
+    public LocationSetStoreRefMetaModel getMetaModel() {
+        return JavaParserMetaModel.locationSetStoreRefMetaModel;
     }
 }

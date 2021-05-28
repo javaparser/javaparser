@@ -766,7 +766,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final LocationSetLiftExpression n, final A arg) {
+    public R visit(final LocationSetConstructorExpression n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -797,6 +797,16 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlMethodDeclaration n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetWrapperExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final LocationSetStoreRef n, final A arg) {
         return defaultAction(n, arg);
     }
 }

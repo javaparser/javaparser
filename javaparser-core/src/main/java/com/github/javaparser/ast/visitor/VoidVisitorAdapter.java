@@ -998,8 +998,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final LocationSetArrayAccess n, final A arg) {
-        n.getStart().accept(this, arg);
         n.getName().accept(this, arg);
+        n.getStart().accept(this, arg);
+        n.getStop().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -1025,7 +1026,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final LocationSetLiftExpression n, final A arg) {
+    public void visit(final LocationSetConstructorExpression n, final A arg) {
         n.getArguments().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -1074,7 +1075,20 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlMethodDeclaration n, final A arg) {
+        n.getContract().ifPresent(l -> l.accept(this, arg));
         n.getMethodDeclaration().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetWrapperExpression n, final A arg) {
+        n.getExpressions().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final LocationSetStoreRef n, final A arg) {
+        n.getArguments().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

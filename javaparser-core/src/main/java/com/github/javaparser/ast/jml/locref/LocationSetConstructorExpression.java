@@ -5,72 +5,42 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.jml.JmlKeyword;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.LocationSetFunctionMetaModel;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.LocationSetConstructorExpressionMetaModel;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Alexander Weigl
- * @version 1 (3/19/21)
+ * @version 1 (3/20/21)
  */
-public class LocationSetFunction extends LocationSetExpression {
+public class LocationSetConstructorExpression extends LocationSetExpression {
 
-    public enum Function implements JmlKeyword {
+    private NodeList<Expression> arguments;
 
-        UNION,
-        INTERSECT,
-        SETMINUS,
-        ALL_FIELDS,
-        ALL_OBJECTS,
-        DISJOINT,
-        SUBSET,
-        NEW_ELEMS_FRESH;
-
-        private final String symbol;
-
-        Function() {
-            symbol = "\\" + name().toLowerCase();
-        }
-
-        Function(String symbol) {
-            this.symbol = symbol;
-        }
-
-        @Override
-        public String jmlSymbol() {
-            return symbol;
-        }
-    }
-
-    private Function function;
-
-    private NodeList<LocationSetExpression> arguments;
-
-    public LocationSetFunction() {
-        this(Function.UNION, new NodeList<>());
+    public LocationSetConstructorExpression() {
+        this(new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public LocationSetFunction(Function function, NodeList<LocationSetExpression> arguments) {
-        this(null, function, arguments);
+    public LocationSetConstructorExpression(NodeList<Expression> arguments) {
+        this(null, arguments);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocationSetFunction(TokenRange tokenRange, Function function, NodeList<LocationSetExpression> arguments) {
+    public LocationSetConstructorExpression(TokenRange tokenRange, NodeList<Expression> arguments) {
         super(tokenRange);
-        setFunction(function);
         setArguments(arguments);
         customInitialization();
     }
@@ -88,12 +58,12 @@ public class LocationSetFunction extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<LocationSetExpression> getArguments() {
+    public NodeList<Expression> getArguments() {
         return arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetFunction setArguments(final NodeList<LocationSetExpression> arguments) {
+    public LocationSetConstructorExpression setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;
@@ -103,22 +73,6 @@ public class LocationSetFunction extends LocationSetExpression {
             this.arguments.setParentNode(null);
         this.arguments = arguments;
         setAsParentNodeOf(arguments);
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Function getFunction() {
-        return function;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetFunction setFunction(final Function function) {
-        assertNotNull(function);
-        if (function == this.function) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.FUNCTION, this.function, function);
-        this.function = function;
         return this;
     }
 
@@ -143,7 +97,7 @@ public class LocationSetFunction extends LocationSetExpression {
             return false;
         for (int i = 0; i < arguments.size(); i++) {
             if (arguments.get(i) == node) {
-                arguments.set(i, (LocationSetExpression) replacementNode);
+                arguments.set(i, (Expression) replacementNode);
                 return true;
             }
         }
@@ -152,37 +106,61 @@ public class LocationSetFunction extends LocationSetExpression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public LocationSetFunction clone() {
-        return (LocationSetFunction) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LocationSetFunctionMetaModel getMetaModel() {
-        return JavaParserMetaModel.locationSetFunctionMetaModel;
+    public LocationSetConstructorExpression clone() {
+        return (LocationSetConstructorExpression) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isLocationSetFunction() {
+    public boolean isLocationSetLiftExpression() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetFunction asLocationSetFunction() {
+    public LocationSetConstructorExpression asLocationSetLiftExpression() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetFunction> toLocationSetFunction() {
+    public Optional<LocationSetConstructorExpression> toLocationSetLiftExpression() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetFunction(Consumer<LocationSetFunction> action) {
+    public void ifLocationSetLiftExpression(Consumer<LocationSetConstructorExpression> action) {
         action.accept(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLocationSetConstructorExpression() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocationSetConstructorExpression asLocationSetConstructorExpression() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<LocationSetConstructorExpression> toLocationSetConstructorExpression() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocationSetConstructorExpression(Consumer<LocationSetConstructorExpression> action) {
+        action.accept(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public LocationSetConstructorExpressionMetaModel getMetaModel() {
+        return JavaParserMetaModel.locationSetConstructorExpressionMetaModel;
     }
 }

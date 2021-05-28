@@ -1173,7 +1173,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(LocationSetLiftExpression n, Void arg) {
+    public void visit(LocationSetConstructorExpression n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("\\locset");
@@ -1209,7 +1209,23 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlMethodDeclaration n, Void arg) {
+        n.getContract().ifPresent(c -> {
+            c.accept(this, arg);
+            printer.println();
+            printer.indent();
+        });
         n.getMethodDeclaration().accept(this, arg);
+        printer.println();
+    }
+
+    @Override
+    public void visit(LocationSetWrapperExpression n, Void arg) {
+        n.getExpressions().accept(this, arg);
+    }
+
+    @Override
+    public void visit(LocationSetStoreRef n, Void arg) {
+
     }
 
     @Override

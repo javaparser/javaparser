@@ -338,7 +338,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(LocationSetFunction n, A arg);
 
-    R visit(LocationSetLiftExpression n, A arg);
+    R visit(LocationSetConstructorExpression n, A arg);
 
     R visit(LocationSetPrimary n, A arg);
 
@@ -347,4 +347,8 @@ public interface GenericVisitor<R, A> {
     R visit(JmlGhostStatements n, A arg);
 
     R visit(JmlMethodDeclaration n, A arg);
+
+    R visit(LocationSetWrapperExpression n, A arg);
+
+    R visit(LocationSetStoreRef n, A arg);
 }

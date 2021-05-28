@@ -1729,10 +1729,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final LocationSetArrayAccess n, final Object arg) {
-        Expression index = cloneNode(n.getStart(), arg);
-        LocationSetExpression name = cloneNode(n.getName(), arg);
+        Expression name = cloneNode(n.getName(), arg);
+        Expression start = cloneNode(n.getStart(), arg);
+        Expression stop = cloneNode(n.getStop(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        LocationSetArrayAccess r = new LocationSetArrayAccess(n.getTokenRange().orElse(null), name, index);
+        LocationSetArrayAccess r = new LocationSetArrayAccess(n.getTokenRange().orElse(null), name, start, stop);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1755,7 +1756,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final LocationSetFieldAccess n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
-        LocationSetExpression scope = cloneNode(n.getScope(), arg);
+        Expression scope = cloneNode(n.getScope(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         LocationSetFieldAccess r = new LocationSetFieldAccess(n.getTokenRange().orElse(null), scope, name);
         r.setComment(comment);
@@ -1776,10 +1777,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final LocationSetLiftExpression n, final Object arg) {
+    public Visitable visit(final LocationSetConstructorExpression n, final Object arg) {
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        LocationSetLiftExpression r = new LocationSetLiftExpression(n.getTokenRange().orElse(null), arguments);
+        LocationSetConstructorExpression r = new LocationSetConstructorExpression(n.getTokenRange().orElse(null), arguments);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1855,9 +1856,32 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlMethodDeclaration n, final Object arg) {
+        JmlContract contract = cloneNode(n.getContract(), arg);
         MethodDeclaration methodDeclaration = cloneNode(n.getMethodDeclaration(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlMethodDeclaration r = new JmlMethodDeclaration(n.getTokenRange().orElse(null), methodDeclaration);
+        JmlMethodDeclaration r = new JmlMethodDeclaration(n.getTokenRange().orElse(null), methodDeclaration, contract);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetWrapperExpression n, final Object arg) {
+        NodeList<LocationSetExpression> expressions = cloneList(n.getExpressions(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetWrapperExpression r = new LocationSetWrapperExpression(n.getTokenRange().orElse(null), expressions);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final LocationSetStoreRef n, final Object arg) {
+        NodeList<LocationSetExpression> arguments = cloneList(n.getArguments(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocationSetStoreRef r = new LocationSetStoreRef(n.getTokenRange().orElse(null), arguments);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

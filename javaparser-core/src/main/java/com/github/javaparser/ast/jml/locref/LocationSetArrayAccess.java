@@ -7,13 +7,18 @@ import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LocationSetArrayAccessMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
+
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author Alexander Weigl
@@ -23,41 +28,43 @@ public class LocationSetArrayAccess extends LocationSetExpression {
 
     private static final Expression ALL_INDICES = new StringLiteralExpr("*");
 
-    private LocationSetExpression name;
+    private Expression name;
 
     private Expression start;
 
     @OptionalProperty
-    private Expression end;
-
+    private Expression stop;
 
     public LocationSetArrayAccess() {
         this(null, null, null, null);
     }
 
-    public LocationSetArrayAccess(LocationSetExpression name, Expression start) {
+    public LocationSetArrayAccess(Expression name, Expression start) {
         this(null, name, start, start);
     }
 
     @AllFieldsConstructor
-    public LocationSetArrayAccess(LocationSetExpression name, Expression start, Expression end) {
-        this(null, name, start, end);
+    public LocationSetArrayAccess(Expression name, Expression start, Expression stop) {
+        this(null, name, start, stop);
+    }
+
+    public LocationSetArrayAccess(TokenRange range, Expression prefix, Expression expr) {
+        this(range, prefix, expr, expr);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocationSetArrayAccess(TokenRange tokenRange, LocationSetExpression name,
-                                  Expression start, Expression end) {
+    public LocationSetArrayAccess(TokenRange tokenRange, Expression name, Expression start, Expression stop) {
         super(tokenRange);
         setName(name);
         setStart(start);
-        this.end = end;
+        setStop(stop);
         customInitialization();
     }
 
-    public static LocationSetExpression forAllIndices(TokenRange range, LocationSetExpression prefix) {
+    public static LocationSetExpression forAllIndices(TokenRange range, Expression prefix) {
         return new LocationSetArrayAccess(range, prefix, ALL_INDICES, ALL_INDICES);
     }
 
@@ -84,7 +91,7 @@ public class LocationSetArrayAccess extends LocationSetExpression {
         if (start == this.start) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.INDEX, this.start, start);
+        notifyPropertyChange(ObservableProperty.START, this.start, start);
         if (this.start != null)
             this.start.setParentNode(null);
         this.start = start;
@@ -93,12 +100,12 @@ public class LocationSetArrayAccess extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetExpression getName() {
+    public Expression getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetArrayAccess setName(final LocationSetExpression name) {
+    public LocationSetArrayAccess setName(final Expression name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -116,6 +123,12 @@ public class LocationSetArrayAccess extends LocationSetExpression {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (stop != null) {
+            if (node == stop) {
+                removeStop();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -124,13 +137,19 @@ public class LocationSetArrayAccess extends LocationSetExpression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((Expression) replacementNode);
+            return true;
+        }
         if (node == start) {
             setStart((Expression) replacementNode);
             return true;
         }
-        if (node == name) {
-            setName((LocationSetExpression) replacementNode);
-            return true;
+        if (stop != null) {
+            if (node == stop) {
+                setStop((Expression) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -145,5 +164,52 @@ public class LocationSetArrayAccess extends LocationSetExpression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LocationSetArrayAccessMetaModel getMetaModel() {
         return JavaParserMetaModel.locationSetArrayAccessMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLocationSetArrayAccess() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocationSetArrayAccess asLocationSetArrayAccess() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<LocationSetArrayAccess> toLocationSetArrayAccess() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocationSetArrayAccess(Consumer<LocationSetArrayAccess> action) {
+        action.accept(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<Expression> getStop() {
+        return Optional.ofNullable(stop);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public LocationSetArrayAccess setStop(final Expression stop) {
+        if (stop == this.stop) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.STOP, this.stop, stop);
+        if (this.stop != null)
+            this.stop.setParentNode(null);
+        this.stop = stop;
+        setAsParentNodeOf(stop);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public LocationSetArrayAccess removeStop() {
+        return setStop(null);
     }
 }

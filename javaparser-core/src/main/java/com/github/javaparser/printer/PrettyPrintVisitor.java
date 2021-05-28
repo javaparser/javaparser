@@ -1073,7 +1073,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(LocationSetLiftExpression n, Void arg) {
+    public void visit(LocationSetConstructorExpression n, Void arg) {
 
     }
 
@@ -1095,6 +1095,16 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlMethodDeclaration n, Void arg) {
         n.getMethodDeclaration().accept(this, arg);
+    }
+
+    @Override
+    public void visit(LocationSetWrapperExpression n, Void arg) {
+        n.getExpressions().accept(this, arg);
+    }
+
+    @Override
+    public void visit(LocationSetStoreRef n, Void arg) {
+
     }
 
     @Override
@@ -1404,6 +1414,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final MethodDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
+
+        n.getContracts().accept(this, arg);
 
         printComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);

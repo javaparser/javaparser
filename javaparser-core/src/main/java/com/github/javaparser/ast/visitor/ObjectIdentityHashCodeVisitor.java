@@ -673,7 +673,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final LocationSetLiftExpression n, final Void arg) {
+    public Integer visit(final LocationSetConstructorExpression n, final Void arg) {
         return n.hashCode();
     }
 
@@ -703,6 +703,16 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlMethodDeclaration n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetWrapperExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final LocationSetStoreRef n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -1,8 +1,5 @@
-package java.util;
-import java.io.*;
-
 class Cell {
-    int val;
+    //@invariant this.*;
 
     /*@ model_behavior
       @ ensures \subset(\result, this.* );

@@ -41,7 +41,9 @@ public class LocationSetArrayAccessMetaModel extends LocationSetExpressionMetaMo
         super(superBaseNodeMetaModel, LocationSetArrayAccess.class, "LocationSetArrayAccess", "com.github.javaparser.ast.jml.locref", false, false);
     }
 
-    public PropertyMetaModel indexPropertyMetaModel;
-
     public PropertyMetaModel namePropertyMetaModel;
+
+    public PropertyMetaModel startPropertyMetaModel;
+
+    public PropertyMetaModel stopPropertyMetaModel;
 }
