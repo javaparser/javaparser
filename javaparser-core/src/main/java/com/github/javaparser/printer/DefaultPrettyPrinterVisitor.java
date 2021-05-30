@@ -922,7 +922,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlClauseHL n, Void arg) {
-        printClauseStoreRef(n.getKind(), n.getHeaps(), n.getExprs());
+        printClause(n.getKind(), n.getHeaps(), n.getExprs());
     }
 
     @Override

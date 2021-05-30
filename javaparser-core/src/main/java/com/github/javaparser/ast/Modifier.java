@@ -151,7 +151,9 @@ public class Modifier extends Node {
         JML_SPEC_PUBLIC("spec_public"),
         JML_SPEC_PACKAGE("spec_package"),
         JML_SPEC_PROTECTED("spec_protected"),
-        JML_SPEC_PRIVATE("spec_private");
+        JML_SPEC_PRIVATE("spec_private"),
+        NO_STATE("no_state"),
+        TWO_STATE("two_state");
 
         private final String codeRepresentation;
 

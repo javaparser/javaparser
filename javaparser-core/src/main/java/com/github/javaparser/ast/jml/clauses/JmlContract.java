@@ -2,6 +2,7 @@ package com.github.javaparser.ast.jml.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.stmt.Behavior;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -15,7 +16,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
-public class JmlContract extends Node implements Jmlish {
+public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract> {
 
     private Behavior behavior;
 

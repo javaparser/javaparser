@@ -6,6 +6,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.locref.LocationSetExpression;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -25,18 +26,18 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
 
     private NodeList<SimpleName> heaps;
 
-    private NodeList<LocationSetExpression> exprs;
+    private NodeList<Expression> exprs;
 
     public JmlClauseHL() {
         this(null, null, null);
     }
 
     @AllFieldsConstructor
-    public JmlClauseHL(NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<LocationSetExpression> exprs) {
+    public JmlClauseHL(NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<Expression> exprs) {
         this(null, kind, heaps, exprs);
     }
 
-    public JmlClauseHL(TokenRange tokenRange, JavaToken token, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
+    public JmlClauseHL(TokenRange tokenRange, JavaToken token, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
         this(tokenRange, (JmlClauseKind) null, heaps, exprs);
         setKindByToken(token);
     }
@@ -45,7 +46,7 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseHL(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
+    public JmlClauseHL(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
         super(tokenRange);
         setHeaps(heaps);
         setExprs(exprs);
@@ -120,12 +121,12 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<LocationSetExpression> getExprs() {
+    public NodeList<Expression> getExprs() {
         return exprs;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseHL setExprs(final NodeList<LocationSetExpression> exprs) {
+    public JmlClauseHL setExprs(final NodeList<Expression> exprs) {
         assertNotNull(exprs);
         if (exprs == this.exprs) {
             return this;
@@ -167,7 +168,7 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseHL(TokenRange tokenRange, NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<LocationSetExpression> exprs) {
+    public JmlClauseHL(TokenRange tokenRange, NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<Expression> exprs) {
         super(tokenRange, kind);
         setHeaps(heaps);
         setExprs(exprs);

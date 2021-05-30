@@ -1296,7 +1296,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlClauseHL n, final Object arg) {
-        NodeList<LocationSetExpression> exprs = cloneList(n.getExprs(), arg);
+        NodeList<Expression> exprs = cloneList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = cloneList(n.getHeaps(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlClauseHL r = new JmlClauseHL(n.getTokenRange().orElse(null), heaps, n.getKind(), exprs);
@@ -1743,7 +1743,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final LocationSetBindingExpr n, final Object arg) {
         VariableDeclarationExpr boundedVars = cloneNode(n.getBoundedVars(), arg);
-        LocationSetExpression expr = cloneNode(n.getExpr(), arg);
+        Expression expr = cloneNode(n.getExpr(), arg);
         Expression predicate = cloneNode(n.getPredicate(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         LocationSetBindingExpr r = new LocationSetBindingExpr(n.getTokenRange().orElse(null), n.getQuantifier(), boundedVars, predicate, expr);
@@ -1879,7 +1879,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final LocationSetStoreRef n, final Object arg) {
-        NodeList<LocationSetExpression> arguments = cloneList(n.getArguments(), arg);
+        NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         LocationSetStoreRef r = new LocationSetStoreRef(n.getTokenRange().orElse(null), arguments);
         r.setComment(comment);

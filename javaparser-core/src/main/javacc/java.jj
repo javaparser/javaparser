@@ -408,6 +408,8 @@ TOKEN : {
 | <INITIALIZER: "initializer">
 | <INITIALLY: "initially">
 | <INSTANCE: "instance">
+| <TWO_STATE: "two_state">
+| <NO_STATE: "no_state">
 | <INTO: "\\into">
 | <INVARIANT_REDUNDANTLY: "invariant_redundantly">
 | <INVARIANT_FOR: "\\invariant_for">
@@ -425,6 +427,7 @@ TOKEN : {
 | <MAPS_REDUNDANTLY: "maps_redundantly">
 | <MAX: "\\max">
 | <MEASURED_BY: "measured_by">
+| <ESC_MEASURED_BY: "\\measured_by">
 | <MEASURED_BY_REDUNDANTLY: "measured_by_redundantly">
 | <METHOD: "method">
 | <MIN: "\\min">
@@ -520,8 +523,8 @@ TOKEN : {
 | <SINGLETON: "\\singleton">  //KeY extension, not official JML
 | <STATIC_INVARIANT_FOR: "\\static_invariant_for">  //KeY extension, not official JML
 | <SETMINUS: "\\set_minus">  //KeY extension, not official JML
-| <ALLFIELDS: "\\all_fields">  //KeY extension, not official JML
-| <ALLOBJECTS: "\\all_objects">  //KeY extension, not official JML
+//| <ALLFIELDS: "\\all_fields">  //KeY extension, not official JML
+//| <ALLOBJECTS: "\\all_objects">  //KeY extension, not official JML
 | <NEWELEMSFRESH: "\\new_elems_fresh">  //KeY extension, not official JML
 | <NEW_OBJECTS: "\\new_objects">  //KeY extension, not official JML
 | <DISJOINT: "\\disjoint">  //KeY extension, not official JML
@@ -1571,6 +1574,8 @@ void jmlModifiersInner(NodeList<Modifier> modifiers):
   | <SPEC_PACKAGE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PACKAGE));  begin = orIfInvalid(begin, token()); }
   | <SPEC_PROTECTED> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PROTECTED));  begin = orIfInvalid(begin, token()); }
   | <INSTANCE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_INSTANCE));  begin = orIfInvalid(begin, token()); }
+  | <NO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NO_STATE));  begin = orIfInvalid(begin, token()); }
+  | <TWO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TWO_STATE));  begin = orIfInvalid(begin, token()); }
 }
 
 
@@ -2193,7 +2198,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
      |
         //FIXME weigl expensive lookahead, required to distinguish, fields from contracts
         //maybe we should inline the rule below
-        LOOKAHEAD(3, JmlClassOrInterfaceBodyDeclaration())
+        LOOKAHEAD(10, JmlClassOrInterfaceBodyDeclaration())
         ret = JmlClassOrInterfaceBodyDeclaration()
      |
         (LOOKAHEAD(3) contracts=JmlContracts())?
@@ -2299,7 +2304,7 @@ JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
   id=SimpleName() <COLON>
   expr=Expression() {expressions.add(expr);}
   (<COMMA> expr=Expression() {expressions.add(expr);})*
-  (<MEASURED_BY> measuredBy=Expression())?
+  (<ESC_MEASURED_BY> measuredBy=Expression())?
   ";"
   {
     return new JmlClassAccessibleDeclaration(range(begin, token()), modifiers.modifiers, id, expressions, measuredBy);}
@@ -3457,7 +3462,7 @@ String Identifier():
        | <SPEC_PROTECTED> | <SPEC_PUBLIC> | <SPEC_SAFE_MATH> | <STATIC_INITIALIZER> | <STRICTLY_PURE >
        | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
        | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> | <INVARIANT_FOR>
-       | <RESULT> | <SUBSET> | <INTERSECT> | <UNION> | <LOCSET>
+       | <RESULT> | <SUBSET> | <INTERSECT> | <UNION> | <LOCSET> | <SINGLETON>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
 }
@@ -4392,7 +4397,7 @@ Expression JmlPrimaryPrefix():
 {
     Expression expr;
     NodeList<Expression> exprs = new NodeList<>();
-    NodeList<LocationSetExpression> lsexprs;
+    NodeList<Expression> lsexprs;
     JavaToken begin;
     NodeList<JmlBoundVariable> vars;
 }
@@ -5160,7 +5165,7 @@ JmlClause JmlAssignableClause():
 {
     Expression e;
     NodeList<SimpleName> heaps=new NodeList<>();
-    NodeList<LocationSetExpression> exprs = new NodeList<>();
+    NodeList<Expression> exprs = new NodeList<>();
     JavaToken begin;
 }
 {
@@ -5176,15 +5181,15 @@ JmlClause JmlAccessibleClause():
 {
     NodeList<SimpleName> heaps=new NodeList<>();
     Expression e=null;
-    NodeList<LocationSetExpression> exprs = new NodeList<>();
+    NodeList<Expression> exprs = new NodeList<>();
     JavaToken begin;
 }
 {
-  (<ACCESSIBLE>)
+  (<ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>)
   { begin = token();}
   (heaps=heaps())*
   exprs=StoreRefList()
-  (<MEASURED_BY> e=Expression())?
+  (<ESC_MEASURED_BY> e=Expression())?
   { return new JmlClauseHL(range(begin, token()), begin, heaps, exprs); }
 }
 
@@ -5277,32 +5282,34 @@ JmlClause JmlDivergesClause():
   { return new JmlClauseE(range(begin, token()), begin, e); }
 }
 
-NodeList<LocationSetExpression> StoreRefList():
-{ NodeList<LocationSetExpression> ret = new NodeList<>();
-  LocationSetExpression expr; }
+NodeList<Expression> StoreRefList():
+{
+  NodeList<Expression> ret = new NodeList<>();
+  Expression expr;
+}
 {
   expr=StoreRef() {ret.add(expr);} (<COMMA> expr=StoreRef() {ret.add(expr);})*
   {return ret;}
 }
 
-LocationSetExpression StoreRef():
-{ LocationSetExpression ret;}
+Expression StoreRef():
+{ Expression ret;}
 {
     ( <NOTHING>          {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.NOTHING);}
     | <EVERYTHING>       {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.EVERYTHING);}
     | <NOT_SPECIFIED>    {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.NOT_SPECIFIED);}
     | <STRICTLY_NOTHING> {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.STRICTLY_NOTHING);}
-    | ret=StoreRefExpr() {return ret;}
+    | ret=Expression()   {return ret;}
     )
 }
 
-LocationSetExpression StoreRefExpr():
+Expression StoreRefExpr():
 {
         JavaToken begin;
         Token tok;
         NodeList<Expression> arrayIndices = new NodeList<>();
-        NodeList<LocationSetExpression> refs = new NodeList<>();
-        LocationSetExpression expr;
+        NodeList<Expression> refs = new NodeList<>();
+        Expression expr;
         Expression predicate = null;
         VariableDeclarationExpr vars;
 }
@@ -5316,7 +5323,7 @@ LocationSetExpression StoreRefExpr():
     return new LocationSetPrimary(range(begin, token()),
                     LocationSetPrimary.Kind.EMPTYSET);
   }
-  | ( <UNION>    | <INTERSECT> | <SETMINUS> | <ALLFIELDS> | <ALLOBJECTS>
+  | ( <UNION>    | <INTERSECT> | <SETMINUS> /*| <ALLFIELDS> | <ALLOBJECTS>*/
     | <DISJOINT> | <SUBSET>    | <NEWELEMSFRESH>)
     {begin=token();}
     <LPAREN> refs=StoreRefList() <RPAREN>
@@ -5337,10 +5344,10 @@ LocationSetExpression StoreRefExpr():
   | expr=StoreRefField() {return expr;}
 }
 
-LocationSetExpression StoreRefField():
+Expression StoreRefField():
 {
         JavaToken begin;
-        LocationSetExpression prefix; SimpleName name;
+        Expression prefix; SimpleName name;
         Expression expr;
 }
 {

@@ -297,8 +297,6 @@ public class TokenTypes {
             case BREAKS_REDUNDANTLY:
             case CONTINUES_REDUNDANTLY:
             case EXCEPTIONAL_BEHAVIOUR:
-            case ALLFIELDS:
-            case ALLOBJECTS:
             case SINGLETON:
             case LOCKSET:
             case LOCSET:
@@ -326,6 +324,7 @@ public class TokenTypes {
             case SIGNALS_ONLY_REDUNDANTLY:
             case SIGNALS_REDUNDANTLY:
             case SIGNALS:
+            case ESC_MEASURED_BY:
             case MEASURED_BY:
             case MEASURED_BY_REDUNDANTLY:
             case MODEL:
@@ -375,6 +374,8 @@ public class TokenTypes {
             case DETERMINES:
             case UNREACHABLE:
             case NORMAL_EXAMPLE:
+            case TWO_STATE:
+            case NO_STATE:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

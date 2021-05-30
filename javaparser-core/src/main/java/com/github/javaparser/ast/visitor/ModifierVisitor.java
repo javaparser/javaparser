@@ -1367,7 +1367,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlClauseHL n, final A arg) {
-        NodeList<LocationSetExpression> exprs = modifyList(n.getExprs(), arg);
+        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setExprs(exprs);
@@ -1900,7 +1900,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final LocationSetStoreRef n, final A arg) {
-        NodeList<LocationSetExpression> arguments = modifyList(n.getArguments(), arg);
+        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setArguments(arguments);
         n.setComment(comment);

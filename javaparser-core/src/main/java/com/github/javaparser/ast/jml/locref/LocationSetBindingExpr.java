@@ -46,14 +46,14 @@ public class LocationSetBindingExpr extends LocationSetExpression {
     @OptionalProperty
     private Expression predicate;
 
-    private LocationSetExpression expr;
+    private Expression expr;
 
     public LocationSetBindingExpr() {
         this(Quantifier.INFINITE_UNION, new NodeList<>(), null, null);
     }
 
     @AllFieldsConstructor
-    public LocationSetBindingExpr(Quantifier quantifier, NodeList<VariableDeclarator> boundedVars, Expression predicate, LocationSetExpression expr) {
+    public LocationSetBindingExpr(Quantifier quantifier, NodeList<VariableDeclarator> boundedVars, Expression predicate, Expression expr) {
         this(null, Quantifier.INFINITE_UNION, null, predicate, expr);
     }
 
@@ -61,7 +61,7 @@ public class LocationSetBindingExpr extends LocationSetExpression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocationSetBindingExpr(TokenRange tokenRange, Quantifier quantifier, VariableDeclarationExpr boundedVars, Expression predicate, LocationSetExpression expr) {
+    public LocationSetBindingExpr(TokenRange tokenRange, Quantifier quantifier, VariableDeclarationExpr boundedVars, Expression predicate, Expression expr) {
         super(tokenRange);
         setQuantifier(quantifier);
         setBoundedVars(boundedVars);
@@ -102,12 +102,12 @@ public class LocationSetBindingExpr extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetExpression getExpr() {
+    public Expression getExpr() {
         return expr;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetBindingExpr setExpr(final LocationSetExpression expr) {
+    public LocationSetBindingExpr setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;

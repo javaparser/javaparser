@@ -25,6 +25,11 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.jml.body.ClassInvariantClause;
+import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
+import com.github.javaparser.ast.jml.body.JmlMethodDeclaration;
+import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.modules.ModuleRequiresDirective;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
@@ -111,14 +116,20 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(ConstructorDeclaration n, ProblemReporter reporter) {
-        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE);
+        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE,
+                JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL,
+                JML_SPEC_PRIVATE, JML_SPEC_PUBLIC, JML_SPEC_PACKAGE, JML_SPEC_PACKAGE, JML_PURE, JML_STRICTLY_PURE, JML_GHOST, JML_MODEL);
         n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
         super.visit(n, reporter);
     }
 
     @Override
     public void visit(FieldDeclaration n, ProblemReporter reporter) {
-        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE);
+        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE,
+                JML_SPEC_PRIVATE, JML_GHOST, JML_SPEC_PACKAGE, JML_MODEL, JML_SPEC_PROTECTED, JML_SPEC_PUBLIC,
+                JML_STRICTLY_PURE, JML_NON_NULL, JML_NULLABLE, JML_NULLABLE_BY_DEFAULT,
+                JML_PURE, JML_INSTANCE, NO_STATE, TWO_STATE
+        );
         super.visit(n, reporter);
     }
 
@@ -148,7 +159,9 @@ public class ModifierValidator extends VisitorValidator {
                         validateModifiers(n, reporter, interfaceWithNothingSpecial);
                     }
                 } else {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP,
+                            JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL,
+                            JML_SPEC_PRIVATE, JML_SPEC_PUBLIC, JML_SPEC_PACKAGE, JML_SPEC_PACKAGE, JML_PURE, JML_STRICTLY_PURE, JML_GHOST, JML_MODEL);
                 }
             }
         }
@@ -190,6 +203,13 @@ public class ModifierValidator extends VisitorValidator {
 
     private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier.Keyword... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
+        // JML
+        validateAtMostOneOf(n, reporter, JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PUBLIC, JML_SPEC_PROTECTED);
+        validateAtMostOneOf(n, reporter, TWO_STATE, NO_STATE);
+        validateAtMostOneOf(n, reporter, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL, JML_NULLABLE);
+        validateAtMostOneOf(n, reporter, JML_HELPER, JML_PURE, JML_STRICTLY_PURE);
+        // JML ends
+
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
         if (hasStrictfp) {
             validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
@@ -198,7 +218,7 @@ public class ModifierValidator extends VisitorValidator {
         }
         for (Modifier m : n.getModifiers()) {
             if (!arrayContains(allowedModifiers, m.getKeyword())) {
-                reporter.report(n, "'%s' is not allowed here.", m.getKeyword().asString());
+                reporter.report(n, "'%s' is not allowed at %s.", m.getKeyword().asString(), n.getClass().getSimpleName());
             }
         }
     }
@@ -235,4 +255,38 @@ public class ModifierValidator extends VisitorValidator {
         }
     }
 
+    //region jml
+    @Override
+    public void visit(ClassInvariantClause n, ProblemReporter reporter) {
+        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL,
+                JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PROTECTED, JML_SPEC_PUBLIC,
+                JML_INSTANCE, NO_STATE, TWO_STATE
+        );
+        super.visit(n, reporter);
+    }
+
+    @Override
+    public void visit(JmlRepresentsDeclaration n, ProblemReporter arg) {
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(JmlMethodDeclaration n, ProblemReporter arg) {
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(JmlClassAccessibleDeclaration n, ProblemReporter arg) {
+        validateModifiers(n, arg);
+        super.visit(n, arg);
+    }
+
+    @Override
+    public void visit(JmlContract n, ProblemReporter arg) {
+        validateModifiers(n, arg, PUBLIC, PRIVATE, PROTECTED,
+                JML_SPEC_PRIVATE, JML_SPEC_PROTECTED, JML_SPEC_PACKAGE, JML_SPEC_PUBLIC);
+        super.visit(n, arg);
+    }
+
+    //region
 }

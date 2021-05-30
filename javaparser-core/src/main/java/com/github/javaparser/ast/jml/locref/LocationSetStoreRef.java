@@ -5,6 +5,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -26,10 +27,10 @@ import com.github.javaparser.metamodel.LocationSetStoreRefMetaModel;
  */
 public class LocationSetStoreRef extends LocationSetExpression {
 
-    private NodeList<LocationSetExpression> arguments;
+    private NodeList<Expression> arguments;
 
     @AllFieldsConstructor
-    public LocationSetStoreRef(NodeList<LocationSetExpression> arguments) {
+    public LocationSetStoreRef(NodeList<Expression> arguments) {
         this(null, arguments);
     }
 
@@ -37,7 +38,7 @@ public class LocationSetStoreRef extends LocationSetExpression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocationSetStoreRef(TokenRange tokenRange, NodeList<LocationSetExpression> arguments) {
+    public LocationSetStoreRef(TokenRange tokenRange, NodeList<Expression> arguments) {
         super(tokenRange);
         setArguments(arguments);
         customInitialization();
@@ -56,12 +57,12 @@ public class LocationSetStoreRef extends LocationSetExpression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<LocationSetExpression> getArguments() {
+    public NodeList<Expression> getArguments() {
         return arguments;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocationSetStoreRef setArguments(final NodeList<LocationSetExpression> arguments) {
+    public LocationSetStoreRef setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;

@@ -1,6 +1,7 @@
 package com.github.javaparser.jml;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
@@ -14,6 +15,7 @@ import java.io.FileNotFoundException;
  */
 public class Example {
     public static void main(String[] args) throws FileNotFoundException {
+        /*
         GeneratedJavaParserTokenManager manager = new GeneratedJavaParserTokenManager(
                 new SimpleCharStream(new StringProvider("//@ test\n")));
         manager.ReInit(new SimpleCharStream(new StringProvider("//@ test\n")));
@@ -24,7 +26,7 @@ public class Example {
         System.out.println(manager.getNextToken().kind);
         System.out.println(manager.getNextToken().kind);
         System.out.println(manager.getNextToken());
-
+        */
 
         JavaParser jpb = new JavaParser();
         ParseResult<CompilationUnit> result = jpb.parse(new File("./JmlExample.java"));
