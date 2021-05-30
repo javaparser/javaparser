@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
     <version>3.22.2-SNAPSHOT</version>
 
-    <name>javaparser-parent</name>
+    <name>jmlparser-parent</name>
     <url>https://github.com/javaparser</url>
     <inceptionYear>2007</inceptionYear>
     <description>Java Parser and Abstract Syntax Tree for Java</description>

@@ -7,7 +7,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>javaparser-core-serialization</artifactId>
+	<artifactId>jmlparser-core-serialization</artifactId>
 	<description>Serializers for the JavaParser AST.</description>
 
 	<licenses>
