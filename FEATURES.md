@@ -152,7 +152,7 @@ The preview features of records are work-in-progress.
 | [JEP 361](https://openjdk.java.net/jeps/361) |  **Release**     | **Supported Since: v3.xx.yy<br>Released on: dd/mmm/yyyy**                     | **Switch Expressions (Standard)**                               |
 | [JEP 368](https://openjdk.java.net/jeps/368) |  **2nd Preview** | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                      | **Text Blocks (Second Preview)**                                |
 | [JEP 305](https://openjdk.java.net/jeps/305) |  **_Preview_**   | **Supported Since: v3.18.0<br>Released on: 01/Dec/2020**                      | **Pattern Matching for instanceof (Preview)**                   |
-| [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **Partial Support Since: v3.21.0<br>Released on: 11/April/2020 <sup id="a_14_JEP359">[JEP343](#f_14_JEP359)</sup>** | **Records (Preview)**                                           |
+| [JEP 359](https://openjdk.java.net/jeps/359) |  **_Preview_**   | **Partial Support Since: v3.22.0<br>Released on: 11/May/2021 <sup id="a_14_JEP359">[JEP343](#f_14_JEP359)</sup>** | **Records (Preview)**                                           |
 | [JEP 343](https://openjdk.java.net/jeps/343) | ~~_Incubator_~~  | ~~_Not Applicable (NA)<sup id="a_14_JEP343">[JEP343](#f_14_JEP343)</sup>_~~   | ~~Packaging Tool (Incubator)~~                                  |
 | [JEP 345](https://openjdk.java.net/jeps/345) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~NUMA-Aware Memory Allocation for G1~~                         |
 | [JEP 349](https://openjdk.java.net/jeps/349) |  ~~_Release_~~   | ~~_Not Applicable - Not a language specification change (NA)_~~               | ~~JFR Event Streaming~~                                         |
@@ -189,9 +189,9 @@ Note: Unless otherwise stated, the JavaParser implementations of features follow
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
 | [JEP 378](https://openjdk.java.net/jeps/378) |  **_Release_**   | **Supported Since: v3.14.0<br>Released on: 05/May/2019**                        | **Text Blocks**                                        |
-| [JEP 360](https://openjdk.java.net/jeps/360) |  **_Preview_**   |                                                                                 | **Sealed Classes (Preview)**                           |
-| [JEP 384](https://openjdk.java.net/jeps/384) |  **_Release_**   | **Partial Support Since: v3.21.0<br>Released on: 11/April/2020 <sup id="a_15_JEP384">[JEP384](#f_15_JEP384)</sup>** | **Records (Second Preview)**                           |
+| [JEP 384](https://openjdk.java.net/jeps/384) |  **_Release_**   | **Partial Support Since: v3.22.0<br>Released on: 11/May/2021 <sup id="a_15_JEP384">[JEP384](#f_15_JEP384)</sup>** | **Records (Second Preview)**                           |
 | [JEP 375](https://openjdk.java.net/jeps/375) |  **_Release_**   | **Supported Since: v3.18.0<br>Released on: 01/Dec/2020**                        | **Pattern Matching for instanceof (Second Preview)**   |
+| [JEP 360](https://openjdk.java.net/jeps/360) |  **_Preview_**   |                                                                                 | **Sealed Classes (Preview)**                           |
 | [JEP 339](https://openjdk.java.net/jeps/339) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Edwards-Curve Digital Signature Algorithm (EdDSA)~~  |
 | [JEP 371](https://openjdk.java.net/jeps/371) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Hidden Classes~~                                     |
 | [JEP 372](https://openjdk.java.net/jeps/372) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                 | ~~Remove the Nashorn JavaScript Engine~~               |
@@ -217,9 +217,9 @@ Note: Unless otherwise stated, the JavaParser implementations of features follow
 
 |  JEP  | Status | JavaParser Since | Description |
 | :---: | :----: | :--------------: | ----------- |
-| [JEP 395](https://openjdk.java.net/jeps/395) |  **_Release_**   | **Parser Support Since: v3.21.0<br>Released on: 11/April/2020, Solving TBC  <sup id="a_16_JEP384">[JEP395](#f_16_JEP395)</sup>** | **Records**                                           |
-| [JEP 397](https://openjdk.java.net/jeps/397) |  **_Release_**   |                                                                                  | **Sealed Classes (Second Preview)**                   |
+| [JEP 395](https://openjdk.java.net/jeps/395) |  **_Release_**   | **Parser Support Since: v3.22.0<br>Released on: 11/May/2021, Solving TBC  <sup id="a_16_JEP384">[JEP395](#f_16_JEP395)</sup>** | **Records**                                           |
 | [JEP 394](https://openjdk.java.net/jeps/394) |  **_Release_**   | **Supported Since: v3.18.0<br>Released on: 01/Dec/2020**                         | **Pattern Matching for instanceof**                   |
+| [JEP 397](https://openjdk.java.net/jeps/397) |  **2nd Preview** |                                                                                  | **Sealed Classes (Second Preview)**                   |
 | [JEP 338](https://openjdk.java.net/jeps/338) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Vector API (Incubator)~~                            |
 | [JEP 347](https://openjdk.java.net/jeps/347) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Enable C++14 Language Features~~                    |
 | [JEP 357](https://openjdk.java.net/jeps/357) |  **_Release_**   | ~~_Not Applicable - Not a language specification change (NA)_~~                  | ~~Migrate from Mercurial to Git~~                     |
@@ -244,17 +244,23 @@ Note: Unless otherwise stated, the JavaParser implementations of features follow
 ## JDK 17 - _targeted for September 2021_
 Source: https://openjdk.java.net/projects/jdk/17/
 
-
-### Schedule (proposed)
-2021/06/10		Rampdown Phase One (fork from main line)
-2021/07/15		Rampdown Phase Two
-2021/08/05		Initial Release Candidate
-2021/08/19		Final Release Candidate
-2021/09/14		General Availability
+### Schedule
+    2021/06/10    Rampdown Phase One (fork from main line)
+    2021/07/15    Rampdown Phase Two
+    2021/08/05    Initial Release Candidate
+    2021/08/19    Final Release Candidate
+    2021/09/14    General Availability
 
 ### Features
-JEPs targeted to JDK 17, so far
-356:	Enhanced Pseudo-Random Number Generators	2021/02/04
-382:	New macOS Rendering Pipeline	2021/03/04
-391:	macOS/AArch64 Port	2021/03/23
-398:	Deprecate the Applet API for Removal	2021/03/23
+    JEPs proposed to target JDK 17                       review ends
+    412: 	Foreign Function & Memory API (Incubator)    2021/05/20
+    414: 	Vector API (Second Incubator)                2021/05/18
+
+    JEPs targeted to JDK 17, so far
+    356:    Enhanced Pseudo-Random Number Generators
+    382:    New macOS Rendering Pipeline
+    391:    macOS/AArch64 Port
+    398:    Deprecate the Applet API for Removal
+    409:    Sealed Classes
+    410:    Remove the Experimental AOT and JIT Compiler
+
