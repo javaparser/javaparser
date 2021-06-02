@@ -104,6 +104,11 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase {
         return token.javaToken;
     }
 
+    /* Returns the last matched token */
+    Token getCurrentToken() {
+        return token;
+    }
+
     /* Changes the amount by which the horizontal position is increased when a tab character is encountered.
         One by default.*/
     void setTabSize(int size) {
@@ -330,6 +335,7 @@ TOKEN :
 | < PRIVATE: "private" >
 | < PROTECTED: "protected" >
 | < PUBLIC: "public" >
+| < RECORD: "record" >
 | < RETURN: "return" >
 | < SHORT: "short" >
 | < STATIC: "static" >
@@ -922,8 +928,6 @@ TOKEN :
 
 /* SEPARATORS */
 /**
- * FIXME: Only ten (10) separators are defined within this grammar, but the JLS lists twelve (12)
- * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators"
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.11
  * Twelve tokens, formed from ASCII characters, are the separators (punctuators).
  * <pre>{@code
@@ -943,14 +947,15 @@ TOKEN :
 | < SEMICOLON: ";" >
 | < COMMA: "," >
 | < DOT: "." >
+| < ELLIPSIS: "..." >
 | < AT: "@" >
+| < DOUBLECOLON: "::" >
 }
 
 
 /* OPERATORS */
 /**
  * Note that {@code >}'s need special attention due to generics syntax, thus are listed separately.
- * FIXME: It appears that {@code ...} {@code ELLIPSIS} and {@code ::} {@code DOUBLECOLON} are (wrongly) listed in the "operators" section, rather than "separators" (see #2897)
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-3.html#jls-3.12
  * 38 tokens, formed from ASCII characters, are the operators.
  * <pre>{@code
@@ -1006,8 +1011,6 @@ TOKEN :
 | < RSIGNEDSHIFTASSIGN: ">>=" >
 | < RUNSIGNEDSHIFTASSIGN: ">>>=" >
 
-| < ELLIPSIS: "..." >
-| < DOUBLECOLON: "::" >
 }
 
 
@@ -1096,7 +1099,7 @@ public CompilationUnit CompilationUnit():
     ImportDeclaration in = null;
     NodeList<TypeDeclaration<?>> types = emptyNodeList();
     ModifierHolder modifier;
-    TypeDeclaration<?> tn = null;
+    TypeDeclaration<?> typeDeclaration = null;
     ModuleDeclaration module = null;
 }
 {
@@ -1109,11 +1112,13 @@ public CompilationUnit CompilationUnit():
             (
                 modifier = Modifiers()
                 (
-                    tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+                    typeDeclaration = ClassOrInterfaceDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
-                    tn = EnumDeclaration(modifier) { types = add(types, tn); }
+                    typeDeclaration = RecordDeclaration(modifier)  { types = add(types, typeDeclaration); }
                  |
-                    tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+                    typeDeclaration = EnumDeclaration(modifier) { types = add(types, typeDeclaration); }
+                 |
+                    typeDeclaration = AnnotationTypeDeclaration(modifier) { types = add(types, typeDeclaration); }
                  |
                     module = ModuleDeclaration(modifier)
                  |
@@ -1324,6 +1329,60 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     members = ClassOrInterfaceBody()
 
     { return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
+}
+
+/**
+ * https://openjdk.java.net/jeps/395#Java-grammar
+ * <pre>{@code
+ *     RecordDeclaration:
+ *        {ClassModifier} `record` TypeIdentifier [TypeParameters]
+ *          RecordHeader [SuperInterfaces] RecordBody
+ *
+ *      RecordHeader:
+ *       `(` [RecordComponentList] `)`
+ *
+ *      RecordComponentList:
+ *       RecordComponent { `,` RecordComponent}
+ *
+ *      RecordComponent:
+ *       {Annotation} UnannType Identifier
+ *       VariableArityRecordComponent
+ *
+ *      VariableArityRecordComponent:
+ *       {Annotation} UnannType {Annotation} `...` Identifier
+ *
+ *      RecordBody:
+ *        `{` {RecordBodyDeclaration} `}`
+ *
+ *      RecordBodyDeclaration:
+ *        ClassBodyDeclaration
+ *        CompactConstructorDeclaration
+ *
+ *      CompactConstructorDeclaration:
+ *        {ConstructorModifier} SimpleTypeName ConstructorBody
+ * }</pre>
+ */
+
+RecordDeclaration RecordDeclaration(ModifierHolder modifier):
+{
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters;
+    RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyNodeList());
+    NodeList<ClassOrInterfaceType> impList = emptyNodeList();
+    NodeList<BodyDeclaration<?>> members = emptyNodeList();
+    JavaToken begin = modifier.begin;
+}
+{
+    // Note that BlockStatement and ClassOrInterfaceBodyDeclaration have extended lookaheads that should be maintained
+    // Note that `record` is a "restricted identifier", not a keyword - JLS 3.9 has more detail.
+    "record" { begin = orIfInvalid(begin, token()); }
+    name = SimpleName()
+    [ typePar = TypeParameters() ]
+    parameters = Parameters()
+    [ impList = ImplementsList() ]
+    members = RecordBody()
+
+    { return new RecordDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, parameters.a, typePar.list, impList, members, parameters.b); }
 }
 
 /**
@@ -1641,6 +1700,149 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
 }
 
 /**
+ * Everything that can go into a "regular" class or interface declaration,
+ * can also (usually) be included within a record.
+ * Exceptions to this are handled within the validators.
+ *
+ * Note: This is HEAVILY based on ClassOrInterfaceBody() and ClassOrInterfaceBodyDeclaration(),
+ * and there may be some scope/potential to optimise this and merge some parts together.
+ *
+ * https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.2
+ */
+NodeList<BodyDeclaration<?>> RecordBody():
+{
+    NodeList<BodyDeclaration<?>> ret = emptyNodeList();
+    BodyDeclaration member;
+}
+{
+    "{"
+    (
+        member = RecordBodyDeclaration() { ret.add(member); }
+     |
+        ";"
+    )*
+    "}"
+    { return ret; }
+}
+
+
+/**
+ * Almost identical to ClassOrInterfaceBodyDeclaration, but:
+ * - with a CompactConstructorDeclaration
+ * As a result, there may be some scope/potential to optimize this and merge some parts together.
+ *
+ * https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.2
+ * <pre>{@code
+ *     RecordBody:
+ *         { {RecordBodyDeclaration} }
+ *     RecordBodyDeclaration:
+ *         ClassBodyDeclaration
+ *         CompactConstructorDeclaration
+ * }</pre>
+ *
+ * For convenience:
+ * https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.2
+ * <pre>{@code
+ *     ClassBodyDeclaration:
+ *         ClassMemberDeclaration
+ *         InstanceInitializer
+ *         StaticInitializer
+ *         ConstructorDeclaration
+ *     ClassMemberDeclaration:
+ *         FieldDeclaration
+ *         MethodDeclaration
+ *         ClassDeclaration
+ *         InterfaceDeclaration
+ *         ;
+ * }</pre>
+ */
+BodyDeclaration<?> RecordBodyDeclaration():
+{
+    ModifierHolder modifiers;
+    BodyDeclaration<?> ret;
+}
+{
+    (
+        LOOKAHEAD(2)
+        ret = InitializerDeclaration()
+     |
+        // Just get all the modifiers out of the way. If you want to do
+        // more checks, pass the modifiers down to the member
+        modifiers = Modifiers()
+        (
+            ret = ClassOrInterfaceDeclaration(modifiers)
+         |
+            LOOKAHEAD("enum")
+            ret = EnumDeclaration(modifiers)
+         |
+            LOOKAHEAD("@" "interface")
+            ret = AnnotationTypeDeclaration(modifiers)
+         |
+            // Compact Record Constructors
+            LOOKAHEAD( [ TypeParameters() ] Identifier() "{" )
+            ret = CompactConstructorDeclaration(modifiers)
+         |
+            // "Normal" Record Constructors
+            LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
+            ret = ConstructorDeclaration(modifiers)
+         |
+            LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
+            ret = FieldDeclaration(modifiers)
+         |
+            ret = MethodDeclaration(modifiers)
+        )
+    )
+    { return ret; }
+}
+
+
+/**
+ * https://openjdk.java.net/jeps/359#Grammar
+ * <pre>{@code
+ *     CompactConstructorDeclaration:
+ *       {Annotation} {ConstructorModifier} [TypeParameters] SimpleTypeName
+ *         [Throws] ConstructorBody
+ * }</pre>
+ */
+CompactConstructorDeclaration CompactConstructorDeclaration(ModifierHolder modifier):
+{
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
+    NodeList<ReferenceType> throws_ = emptyNodeList();
+    ExplicitConstructorInvocationStmt exConsInv = null;
+    NodeList<Statement> stmts = emptyNodeList();
+    JavaToken begin = modifier.begin;
+    JavaToken blockBegin = INVALID;
+    ReferenceType throwType;
+}
+{
+    [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
+    // Modifiers matched in the caller
+    name = SimpleName() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); begin = orIfInvalid(begin, token()); }
+    //parameters = Parameters()
+    [
+        "throws"
+        throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+        ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })*
+    ]
+    "{" { blockBegin=token(); }
+    [
+        LOOKAHEAD(ExplicitConstructorInvocation())
+        exConsInv = ExplicitConstructorInvocation()
+    ]
+    stmts = Statements()
+    "}"
+
+    {
+    if (exConsInv != null) {
+        stmts = prepend(stmts, exConsInv);
+    }
+    return new CompactConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, throws_, new BlockStmt(range(blockBegin, token()), stmts));
+}
+}
+
+/**
  * Note that {@code ClassDeclaration} and {@code InterfaceDeclaration} (in the JLS) include enum and annotation declarations.
  * Note that {@code InstanceInitializer} and {@code StaticInitializer} are treated as an {@code Initializer} with an
  * optional {@code static} modifier in JavaParser.
@@ -1688,6 +1890,9 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         modifiers = Modifiers()
         (
             ret = ClassOrInterfaceDeclaration(modifiers)
+         |
+            LOOKAHEAD("record" SimpleName() [ TypeParameters() ] Parameters() )
+            ret = RecordDeclaration(modifiers)
          |
             LOOKAHEAD("enum")
             ret = EnumDeclaration(modifiers)
@@ -2724,7 +2929,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> |
         // An actual plain old identifier
         <IDENTIFIER>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
@@ -3862,6 +4067,8 @@ Expression AllocationExpression(Expression scope):
             ]
             { ret = new ObjectCreationExpr(range(begin, token()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
         )
+//     |
+        // TODO: new RecordType
     )
     { return ret; }
 }
@@ -3972,7 +4179,7 @@ Statement Statement():
         )
         { return ret; }
     } catch (ParseException e) {
-        TokenRange errorRange = recover(SEMICOLON, e);
+        TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);
     }
 }
@@ -4091,6 +4298,7 @@ Statement BlockStatement():
     Statement ret;
     Expression expr;
     ClassOrInterfaceDeclaration typeDecl;
+    RecordDeclaration recordDeclaration;
     ModifierHolder modifier;
 }
 {
@@ -4100,7 +4308,12 @@ Statement BlockStatement():
             modifier = Modifiers()
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
          |
-            LOOKAHEAD(VariableDeclarationExpression() )
+            // Extended lookahead required to allow for e.g. `record.toString()` where looking past "record" is required for disambiguation
+            LOOKAHEAD( Modifiers() "record" SimpleName() [ TypeParameters() ] Parameters() )
+            modifier = Modifiers()
+            recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
+         |
+            LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
@@ -4109,7 +4322,7 @@ Statement BlockStatement():
         )
         { return ret; }
     } catch (ParseException e) {
-        TokenRange errorRange = recover(SEMICOLON, e);
+        TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);
     }
 }
@@ -4354,7 +4567,7 @@ SwitchEntry SwitchEntry():
             ";"
             {
                 TokenRange r=range(begin, token());
-                stmts.add(new ExpressionStmt(r, expression));
+                stmts.add(new ExpressionStmt(expression.getTokenRange().get(), expression));
                 ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
             }
          |
@@ -4872,7 +5085,11 @@ NodeList<Expression> Resources():
     Expression expr;
 }
 {
-    expr = Resource() {expressions.add(expr);} (LOOKAHEAD(2) ";" expr = Resource() {expressions.add(expr);})*
+    expr = Resource() {expressions.add(expr);}
+    (LOOKAHEAD(2)
+        ";"
+        expr = Resource() {expressions.add(expr);}
+    )*
     { return expressions; }
 }
 

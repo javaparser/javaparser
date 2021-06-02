@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,11 +23,9 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -443,14 +441,14 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     public Optional<CallableDeclaration> toCallableDeclaration() {
         return Optional.of(this);
     }
-    
+
     /*
      * Returns true if the method has a variable number of arguments
      */
     public boolean isVariableArityMethod() {
         return getParameters().size() > 0 && getParameters().getLast().get().isVarArgs();
     }
-    
+
     /*
      * Returns true if the method has a fixed number of arguments
      */

@@ -35,7 +35,7 @@ public class TypeInferenceCache {
     private static Map<TypeSolver, IdentityHashMap<LambdaExpr, Map<String, ResolvedType>>> typeForLambdaParameters = new HashMap<>();
     private static Map<TypeSolver, IdentityHashMap<LambdaExpr, List<InferenceVariable>>> inferenceVariables = new HashMap<>();
 
-    public static void record(TypeSolver typeSolver, LambdaExpr lambdaExpr, String paramName, ResolvedType type) {
+    public static void addRecord(TypeSolver typeSolver, LambdaExpr lambdaExpr, String paramName, ResolvedType type) {
         if (!typeForLambdaParameters.containsKey(typeSolver)) {
             typeForLambdaParameters.put(typeSolver, new IdentityHashMap<>());
         }

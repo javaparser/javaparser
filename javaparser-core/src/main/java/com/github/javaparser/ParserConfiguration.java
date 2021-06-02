@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -157,7 +157,16 @@ public class ParserConfiguration {
          * Java 16 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_16_PREVIEW(new Java16PreviewValidator(), null);
+        JAVA_16_PREVIEW(new Java16PreviewValidator(), null),
+        /**
+         * Java 16
+         */
+        JAVA_17(new Java17Validator(), null),
+        /**
+         * Java 16 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_17_PREVIEW(new Java17PreviewValidator(), null);
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -170,11 +179,11 @@ public class ParserConfiguration {
         /**
          * The latest Java version that is available.
          */
-        public static LanguageLevel CURRENT = JAVA_15;
+        public static LanguageLevel CURRENT = JAVA_16;
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_16_PREVIEW;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_17_PREVIEW;
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
@@ -183,7 +192,8 @@ public class ParserConfiguration {
                 JAVA_13, JAVA_13_PREVIEW,
                 JAVA_14, JAVA_14_PREVIEW,
                 JAVA_15, JAVA_15_PREVIEW,
-                JAVA_16, JAVA_16_PREVIEW
+                JAVA_16, JAVA_16_PREVIEW,
+                JAVA_17, JAVA_17_PREVIEW
         };
 
         LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
