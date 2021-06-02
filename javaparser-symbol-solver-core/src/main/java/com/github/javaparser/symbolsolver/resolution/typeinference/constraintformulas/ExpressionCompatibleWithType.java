@@ -244,7 +244,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                             // FEDERICO: Added - Start
                             for (int i=0;i<lambdaExpr.getParameters().size();i++) {
                                 ResolvedType paramType = targetFunctionType.getFormalArgumentTypes().get(i);
-                                TypeInferenceCache.record(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
+                                TypeInferenceCache.addRecord(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
                             }
                             // FEDERICO: Added - End
                             Expression e = ((ExpressionStmt)lambdaExpr.getBody()).getExpression();

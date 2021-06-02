@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -46,14 +46,12 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
@@ -339,7 +337,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj == null || !(obj instanceof Node)) {
+        if (!(obj instanceof Node)) {
             return false;
         }
         return EqualsVisitor.equals(this, (Node) obj);

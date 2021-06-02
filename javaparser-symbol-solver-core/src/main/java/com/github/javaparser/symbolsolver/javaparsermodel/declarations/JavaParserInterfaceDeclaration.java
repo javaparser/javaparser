@@ -232,6 +232,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                                 public boolean isStatic() {
                                     return f.isStatic();
                                 }
+                                
+                                @Override
+                                public boolean isVolatile() {
+                                    return f.isVolatile();
+                                }
 
                                 @Override
                                 public ResolvedTypeDeclaration declaringType() {
@@ -356,13 +361,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
-            }
-        }
-        return res;
+        return javaParserTypeAdapter.internalTypes();
     }
 
     @Override

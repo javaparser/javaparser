@@ -37,6 +37,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -101,6 +102,8 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.body.MethodDeclaration.class);
         add(com.github.javaparser.ast.body.Parameter.class);
         add(com.github.javaparser.ast.body.ReceiverParameter.class);
+        add(com.github.javaparser.ast.body.RecordDeclaration.class);
+        add(CompactConstructorDeclaration.class);
         add(com.github.javaparser.ast.body.VariableDeclarator.class);
 
         add(com.github.javaparser.ast.comments.Comment.class); // First, as it is the base of other comment types
@@ -159,6 +162,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.IfStmt.class);
         add(com.github.javaparser.ast.stmt.LabeledStmt.class);
         add(com.github.javaparser.ast.stmt.LocalClassDeclarationStmt.class);
+        add(com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt.class);
         add(com.github.javaparser.ast.stmt.ReturnStmt.class);
         add(com.github.javaparser.ast.stmt.SwitchEntry.class);
         add(com.github.javaparser.ast.stmt.SwitchStmt.class);
