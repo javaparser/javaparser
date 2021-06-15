@@ -51,7 +51,6 @@ public class ArrayDeclTest {
                                     }
                                 }));
         String changed = LexicalPreservingPrinter.print(cu);
-        System.out.println(changed);
         assertEquals(changed, "public class Test { @Nullable\nString[] allTest; }");
     }
 
@@ -77,7 +76,6 @@ public class ArrayDeclTest {
                                     }
                                 }));
         String changed = LexicalPreservingPrinter.print(cu);
-        System.out.println(changed);
         assertEquals(changed, "public class Test { @Nullable\nString allTest[]; }");
     }
 }
