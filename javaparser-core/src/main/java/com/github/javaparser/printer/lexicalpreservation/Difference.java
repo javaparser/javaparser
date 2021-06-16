@@ -756,7 +756,7 @@ public class Difference {
                 // Example 1 : if we insert a statement (a duplicated method call expression ) after this one <code>  value();\n\n</code>
                 // we want to have this result <code>  value();\n  value();\n</code> not <code>  value();\n  \nvalue();</code>
                 // Example 2 : if we want to insert a statement after this one <code>  \n</code> we want to have <code>  value();\n</code> 
-                // not <code>  \nvalue();</code> --> this case appears on member replacement for example
+                // not <code>  \nvalue();</code> --> this case appears on member replacement for example 
                 if (!isPreviousElementNewline && !isFirstElement && !previousIsWhiteSpace) {
                     originalIndex++; // Insert after the new line
                 }
