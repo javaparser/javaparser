@@ -509,7 +509,7 @@ public class Difference {
                 if (kept.isPrimitiveType()) {
                     originalIndex++;
                     diffIndex++;
-                }else{
+                } else {
                     originalIndex++;
                 }
             }
