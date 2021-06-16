@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -59,7 +59,7 @@ public class ArrayDeclTest {
         ClassOrInterfaceDeclaration clazz = getClass(cu, "Test");
         applyFieldAnnot(clazz, "allTest", "Nullable");
         String changed = LexicalPreservingPrinter.print(cu);
-        assertEquals(changed.replaceAll("\r", ""), "public class Test { @Nullable\nString[] allTest; }".replaceAll("\r", ""));
+        assertEqualsStringIgnoringEol(changed, "public class Test { @Nullable\nString[] allTest; }");
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ArrayDeclTest {
         ClassOrInterfaceDeclaration clazz = getClass(cu, "Test");
         applyFieldAnnot(clazz, "allTest", "Nullable");
         String changed = LexicalPreservingPrinter.print(cu);
-        assertEquals(changed, "public class Test { @Nullable\nString allTest[]; }");
+        assertEqualsStringIgnoringEol(changed, "public class Test { @Nullable\nString allTest[]; }");
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ArrayDeclTest {
         ClassOrInterfaceDeclaration clazzB = getClass(cu, "B");
         applyFieldAnnot(clazzB, "allTest", "NotNull");
         String changed = LexicalPreservingPrinter.print(cu);
-        assertEquals(changed.replaceAll("\r", ""), "public class A {\n\t@Nullable\n\tString[] allTest;\n\t@Null\n\tObject[] allObjects;\n}\nclass B {\n\t@NotNull\n\tString[] allTest;\n}".replaceAll("\r", ""));
+        assertEqualsStringIgnoringEol(changed, "public class A {\n\t@Nullable\n\tString[] allTest;\n\t@Null\n\tObject[] allObjects;\n}\nclass B {\n\t@NotNull\n\tString[] allTest;\n}");
     }
 
     @Test
@@ -95,6 +95,6 @@ public class ArrayDeclTest {
         ClassOrInterfaceDeclaration clazzB = getClass(cu, "B");
         applyFieldAnnot(clazzB, "allTest", "NotNull");
         String changed = LexicalPreservingPrinter.print(cu);
-        assertEquals(changed, "public class A {\n\t@Nullable\n\tString allTest[];\n\t@Null\n\tObject allObjects[];\n}\nclass B {\n\t@NotNull\n\tString allTest[];\n}");
+        assertEqualsStringIgnoringEol(changed, "public class A {\n\t@Nullable\n\tString allTest[];\n\t@Null\n\tObject allObjects[];\n}\nclass B {\n\t@NotNull\n\tString allTest[];\n}");
     }
 }
