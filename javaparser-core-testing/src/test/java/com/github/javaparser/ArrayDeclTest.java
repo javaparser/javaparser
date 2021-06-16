@@ -59,7 +59,7 @@ public class ArrayDeclTest {
         ClassOrInterfaceDeclaration clazz = getClass(cu, "Test");
         applyFieldAnnot(clazz, "allTest", "Nullable");
         String changed = LexicalPreservingPrinter.print(cu);
-        assertEquals(changed, "public class Test { @Nullable\nString[] allTest; }");
+        assertEquals(changed.replaceAll("\r", ""), "public class Test { @Nullable\nString[] allTest; }".replaceAll("\r", ""));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ArrayDeclTest {
         ClassOrInterfaceDeclaration clazzB = getClass(cu, "B");
         applyFieldAnnot(clazzB, "allTest", "NotNull");
         String changed = LexicalPreservingPrinter.print(cu);
-        assertEquals(changed, "public class A {\n\t@Nullable\n\tString[] allTest;\n\t@Null\n\tObject[] allObjects;\n}\nclass B {\n\t@NotNull\n\tString[] allTest;\n}");
+        assertEquals(changed.replaceAll("\r", ""), "public class A {\n\t@Nullable\n\tString[] allTest;\n\t@Null\n\tObject[] allObjects;\n}\nclass B {\n\t@NotNull\n\tString[] allTest;\n}".replaceAll("\r", ""));
     }
 
     @Test
