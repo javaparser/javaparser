@@ -24,11 +24,7 @@ package com.github.javaparser.utils;
 import com.github.javaparser.ParserConfiguration;
 
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import static java.nio.file.FileVisitResult.*;
@@ -66,12 +62,12 @@ public class ParserCollectionStrategy implements CollectionStrategy {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                 Path current_root;
                 final PathMatcher javaMatcher = getPathMatcher("glob:**.java");
-                final PathMatcher moduleInfoMatcher = getPathMatcher("glob:module-info.java");
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     // module-info.java is useless for finding the source root, since it can be placed in any directory.
-                    if (javaMatcher.matches(file) && !moduleInfoMatcher.matches(file)) {
+                    boolean isModuleInfoFile = file.getFileName().toString().equals("module-info.java");
+                    if (javaMatcher.matches(file) && !isModuleInfoFile) {
                         current_root = getRoot(file).orElse(null);
                         if (current_root != null) {
                             return SKIP_SIBLINGS;
