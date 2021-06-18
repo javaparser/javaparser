@@ -65,11 +65,13 @@ public class ParserCollectionStrategy implements CollectionStrategy {
         try {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                 Path current_root;
-                PathMatcher javaMatcher = getPathMatcher("glob:**.java");
+                final PathMatcher javaMatcher = getPathMatcher("glob:**.java");
+                final PathMatcher moduleInfoMatcher = getPathMatcher("glob:module-info.java");
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (javaMatcher.matches(file)) {
+                    // module-info.java is useless for finding the source root, since it can be placed in any directory.
+                    if (javaMatcher.matches(file) && !moduleInfoMatcher.matches(file)) {
                         current_root = getRoot(file).orElse(null);
                         if (current_root != null) {
                             return SKIP_SIBLINGS;
