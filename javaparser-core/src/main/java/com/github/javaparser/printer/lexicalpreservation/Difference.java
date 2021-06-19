@@ -513,7 +513,6 @@ public class Difference {
                     originalIndex++;
                 }
             }
-
         } else if (kept.isToken() && originalElementIsToken) {
             TokenTextElement originalTextToken = (TokenTextElement) originalElement;
 
