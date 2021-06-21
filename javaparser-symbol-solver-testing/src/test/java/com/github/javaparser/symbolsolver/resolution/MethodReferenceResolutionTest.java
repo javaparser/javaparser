@@ -34,7 +34,6 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -120,7 +119,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         assertEquals("java.lang.Object.hashCode()", resolvedMethodDeclaration.getQualifiedSignature());
     }
 
-    @Disabled
     @Test
     void fieldAccessMethod() {
         // configure symbol solver before parsing
@@ -137,7 +135,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
 
         // check that the expected method declaration equals the resolved method declaration
-        assertEquals("java.lang.PrintStream.println()", resolvedMethodDeclaration.getQualifiedSignature());
+        assertEquals("java.io.PrintStream.println(java.lang.String)", resolvedMethodDeclaration.getQualifiedSignature());
     }
 
     @Test
@@ -178,7 +176,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         assertEquals("SuperClass.print(java.lang.Integer)", resolvedMethodDeclaration.getQualifiedSignature());
     }
 
-    @Disabled
     @Test
     void instanceMethod() {
         // configure symbol solver before parsing
@@ -195,7 +192,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
 
         // check that the expected method declaration equals the resolved method declaration
-        assertEquals("java.util.AbstractList.add()", resolvedMethodDeclaration.getQualifiedSignature());
+        assertEquals("java.util.List.add(E)", resolvedMethodDeclaration.getQualifiedSignature());
     }
 
     @Test
@@ -529,6 +526,46 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         for (MethodCallExpr expr : methodCallExpr) {
             ResolvedMethodDeclaration rd = expr.resolve();
             System.out.println("\t Solved : " + rd.getQualifiedSignature());
+        }
+
+        assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
+    }
+
+    @Test
+    public void testIssue3289() {
+        String code =
+                "import java.util.ArrayList;\n" +
+                        "import java.util.List;\n" +
+                        "\n" +
+                        "public class testHLS2 {\n" +
+                        "\n" +
+                        "    static class C {\n" +
+                        "        void print(String s) { }\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    public static void main(String[] args) {\n" +
+                        "        C c = new C();\n" +
+                        "        List<String> l = new ArrayList<>();\n" +
+                        "        l.forEach(c::print);\n" +
+                        "    }\n" +
+                        "}\n";
+        TypeSolver typeSolver =
+                new ReflectionTypeSolver();
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        int errorCount = 0;
+
+        Set<MethodReferenceExpr> methodeRefExpr = new HashSet<>(cu.findAll(MethodReferenceExpr.class));
+        for (MethodReferenceExpr expr : methodeRefExpr) {
+            try {
+                ResolvedMethodDeclaration md = expr.resolve();
+                System.out.println("\t Solved : " + md.getQualifiedSignature());
+            } catch (UnsolvedSymbolException e) {
+                System.out.println("\t UNSOLVED: " + expr.toString());
+                e.printStackTrace();
+                errorCount++;
+            }
         }
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
