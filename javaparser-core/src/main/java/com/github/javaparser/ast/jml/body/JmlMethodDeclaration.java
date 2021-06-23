@@ -142,6 +142,6 @@ public class JmlMethodDeclaration extends JmlClassLevel {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlMethodDeclaration removeContract() {
-        return setContract(null);
+        return setContract((JmlContract) null);
     }
 }

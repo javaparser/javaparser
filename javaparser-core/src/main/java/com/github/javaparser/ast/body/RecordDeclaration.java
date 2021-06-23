@@ -349,7 +349,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public RecordDeclaration removeReceiverParameter() {
-        return setReceiverParameter(null);
+        return setReceiverParameter((ReceiverParameter) null);
     }
 
     /**

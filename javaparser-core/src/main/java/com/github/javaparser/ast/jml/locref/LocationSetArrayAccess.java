@@ -207,6 +207,6 @@ public class LocationSetArrayAccess extends LocationSetExpression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public LocationSetArrayAccess removeStop() {
-        return setStop(null);
+        return setStop((Expression) null);
     }
 }
