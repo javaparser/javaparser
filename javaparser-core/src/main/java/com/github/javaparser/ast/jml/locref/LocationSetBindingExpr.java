@@ -18,7 +18,6 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LocationSetBindingExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-
 import java.util.function.Consumer;
 
 /**
@@ -183,7 +182,7 @@ public class LocationSetBindingExpr extends LocationSetExpression {
             return true;
         }
         if (node == expr) {
-            setExpr((LocationSetExpression) replacementNode);
+            setExpr((Expression) replacementNode);
             return true;
         }
         if (predicate != null) {
@@ -229,5 +228,32 @@ public class LocationSetBindingExpr extends LocationSetExpression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLocationSetBindingExpr(Consumer<LocationSetBindingExpr> action) {
         action.accept(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public LocationSetBindingExpr setExpr(final LocationSetExpression expr) {
+        assertNotNull(expr);
+        if (expr == this.expr) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
+        this.expr = expr;
+        setAsParentNodeOf(expr);
+        return this;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public LocationSetBindingExpr(TokenRange tokenRange, Quantifier quantifier, VariableDeclarationExpr boundedVars, Expression predicate, LocationSetExpression expr) {
+        super(tokenRange);
+        setQuantifier(quantifier);
+        setBoundedVars(boundedVars);
+        setPredicate(predicate);
+        setExpr(expr);
+        customInitialization();
     }
 }

@@ -80,7 +80,7 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
             return false;
         for (int i = 0; i < exprs.size(); i++) {
             if (exprs.get(i) == node) {
-                exprs.set(i, (LocationSetExpression) replacementNode);
+                exprs.set(i, (Expression) replacementNode);
                 return true;
             }
         }

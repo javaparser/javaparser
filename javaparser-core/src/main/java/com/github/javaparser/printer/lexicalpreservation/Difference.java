@@ -431,7 +431,7 @@ public class Difference {
                 diffIndex++;
             } else {
                 throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
-            }
+        }
         } else if (removed.isWhiteSpace() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) {
             diffIndex++;
         } else if (originalElement.isWhiteSpace()) {
@@ -598,7 +598,7 @@ public class Difference {
         JavaToken token = next.get();
         Kind kind = Kind.valueOf(token.getKind());
         if (isDiamondOperator(kind)) {
-            if (kind.GT.equals(kind))
+            if (Kind.GT.equals(kind))
                 nestedDiamondOperator--;
             else
                 nestedDiamondOperator++;
@@ -616,7 +616,7 @@ public class Difference {
      * Returns true if the token is possibly a diamond operator
      */
     private boolean isDiamondOperator(Kind kind) {
-        return kind.GT.equals(kind) || kind.LT.equals(kind);
+        return Kind.GT.equals(kind) || Kind.LT.equals(kind);
     }
 
     private boolean openBraceWasOnSameLine() {
@@ -798,7 +798,7 @@ public class Difference {
             for (int counter = 0; counter < previousOrderElements.size() && !found; counter++) {
                 Integer pi = piNext.next();
                 CsmElement pe = previousOrderElements.get(pi);
-                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
+                if (!correspondanceBetweenNextOrderAndPreviousOrder.containsValue(pi)
                         && DifferenceElementCalculator.matching(ne, pe)) {
                     found = true;
                     correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);

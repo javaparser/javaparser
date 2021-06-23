@@ -409,6 +409,8 @@ public class TokenTypes {
             case ELLIPSIS:
             case AT:
             case DOUBLECOLON:
+            case JML_SINGLE_START0:
+            case SINGLE_LINE_COMMENT0:
                 return JavaToken.Category.SEPARATOR;
             case EQUIVALENCE:
             case UNKNOWN_OP:

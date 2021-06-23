@@ -28,7 +28,7 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
 
     @AllFieldsConstructor
     public SignalsOnlyClause(NodeList<Type> types) {
-        this(null, null);
+        this(null, types);
     }
 
     /**

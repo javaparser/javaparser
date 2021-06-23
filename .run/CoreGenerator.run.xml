@@ -2,7 +2,7 @@
     <configuration default="false" name="CoreGenerator" type="Application" factoryName="Application"
                    nameIsGenerated="true">
         <option name="MAIN_CLASS_NAME" value="com.github.javaparser.generator.core.CoreGenerator"/>
-        <module name="javaparser-core-generators"/>
+        <module name="jmlparser-core-generators"/>
         <option name="PROGRAM_PARAMETERS" value="$ContentRoot$"/>
         <extension name="coverage">
             <pattern>

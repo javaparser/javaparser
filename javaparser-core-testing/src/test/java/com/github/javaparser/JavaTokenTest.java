@@ -80,6 +80,18 @@ class JavaTokenTest {
         assertEquals(GeneratedJavaParserConstants.ASSERT, kind.getKind());
     }
 
+    @Test
+    void testKindEnum2() {
+        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
+        for (int i = 0; i < tokenCount; i++) {
+            System.out.println(i);
+            JavaToken.Kind kind = JavaToken.Kind.valueOf(i);
+            //assertEquals(JavaToken.Kind.ASSERT, kind);
+            //assertEquals(GeneratedJavaParserConstants.ASSERT, kind.getKind());
+        }
+
+    }
+
     /**
      * Two places where "generated" token types exist.
      * - Firstly, {@link GeneratedJavaParserConstants} which is produced by JavaCC

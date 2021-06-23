@@ -13,12 +13,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LocationSetFunctionMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.metamodel.LocationSetStoreRefMetaModel;
 
 /**
@@ -96,7 +93,7 @@ public class LocationSetStoreRef extends LocationSetExpression {
             return false;
         for (int i = 0; i < arguments.size(); i++) {
             if (arguments.get(i) == node) {
-                arguments.set(i, (LocationSetExpression) replacementNode);
+                arguments.set(i, (Expression) replacementNode);
                 return true;
             }
         }

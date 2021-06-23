@@ -7,16 +7,13 @@ import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LocationSetArrayAccessMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 

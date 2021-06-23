@@ -26,10 +26,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.body.ClassInvariantClause;
-import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
-import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
-import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.locref.*;
@@ -1046,7 +1043,6 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlLabel.class, sequence());
         concreteSyntaxModelByClass.put(JmlLetExpr.class, sequence());
         concreteSyntaxModelByClass.put(JmlMultiCompareExpr.class, sequence());
-
         concreteSyntaxModelByClass.put(JmlFunction.class, sequence());
         concreteSyntaxModelByClass.put(JmlName.class, sequence());
         concreteSyntaxModelByClass.put(JmlQuantifiedExpr.class, sequence());
@@ -1065,7 +1061,16 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(LocationSetPrimary.class, sequence());
         concreteSyntaxModelByClass.put(OldClause.class, sequence());
         concreteSyntaxModelByClass.put(SignalsClause.class, sequence());
-        concreteSyntaxModelByClass.put(SignalsOnlyClause.class, sequence());
+        concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetStoreRef.class, sequence());
+        concreteSyntaxModelByClass.put(LocationSetWrapperExpression.class, sequence());
+        concreteSyntaxModelByClass.put(SignalsOnlyClause.class, sequence(
+                token(SIGNALS_ONLY),
+                child(TYPES),
+                semicolon(),
+                newline()
+        ));
+
         //endregion
 
 

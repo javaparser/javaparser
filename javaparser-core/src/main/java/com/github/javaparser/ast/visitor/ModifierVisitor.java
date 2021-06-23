@@ -1804,7 +1804,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final LocationSetBindingExpr n, final A arg) {
         VariableDeclarationExpr boundedVars = (VariableDeclarationExpr) n.getBoundedVars().accept(this, arg);
-        LocationSetExpression expr = (LocationSetExpression) n.getExpr().accept(this, arg);
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
         Expression predicate = n.getPredicate().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (boundedVars == null || expr == null)

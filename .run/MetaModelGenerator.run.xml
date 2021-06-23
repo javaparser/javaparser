@@ -2,7 +2,7 @@
     <configuration default="false" name="MetaModelGenerator" type="Application" factoryName="Application"
                    nameIsGenerated="true">
         <option name="MAIN_CLASS_NAME" value="com.github.javaparser.generator.metamodel.MetaModelGenerator"/>
-        <module name="javaparser-core-metamodel-generator"/>
+        <module name="jmlparser-core-metamodel-generator"/>
         <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/javaparser-core-metamodel-generator"/>
         <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/javaparser-core-metamodel-generator"/>
         <method v="2">
