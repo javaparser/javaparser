@@ -102,6 +102,7 @@ public class PositionUtilsTest {
                 "class X {\n" +
                 "}\n" +
                 "";
+
         CompilationUnit cu = StaticJavaParser.parse(code);
         assertEqualsStringIgnoringEol(code, cu.toString(), "Issue with the parsing of the code, not this test.");
 
@@ -129,9 +130,9 @@ public class PositionUtilsTest {
                         "\n - container (%s): %s" +
                         "\n -     other (%s): %s",
                 containerId,
-                x.getRange().get().toString(),
+                x.getRange().get(),
                 otherId,
-                annotationA.getRange().get().toString()
+                annotationA.getRange().get()
         );
     }
 

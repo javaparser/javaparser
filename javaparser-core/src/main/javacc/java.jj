@@ -308,7 +308,8 @@ SPECIAL_TOKEN :
 }*/
 
 TOKEN : {
-  <JML_MULTI_START: "/*" (~[" "])* "@">  : JML_MULTI_CONTRACT
+  //<JML_MULTI_START: "/*" (~[" "])* "@">  : JML_MULTI_CONTRACT
+  <JML_MULTI_START: "/*" (["-","+"]<IDENTIFIER>)* "@">  : JML_MULTI_CONTRACT
 }
 
 <JML_MULTI_CONTRACT>
