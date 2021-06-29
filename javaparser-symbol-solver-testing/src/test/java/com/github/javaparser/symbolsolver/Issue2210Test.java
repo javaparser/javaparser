@@ -39,7 +39,6 @@ public class Issue2210Test extends AbstractResolutionTest {
         // Test
         MethodReferenceExpr expr = Navigator.demandNodeOfGivenClass(cu, MethodReferenceExpr.class);
         ResolvedType type = expr.calculateResolvedType();
-        System.out.println(type.describe());
         assertEquals("java.util.function.Consumer<? super T>", type.describe());
     }
 
