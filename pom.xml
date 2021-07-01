@@ -10,6 +10,7 @@
         <module>javaparser-symbol-solver-core</module>
         <module>javaparser-symbol-solver-testing</module>
         <module>jmlparser-linting</module>
+        <module>jmlparser-web</module>
     </modules>
 
     <groupId>org.key</groupId>
@@ -496,7 +497,6 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
