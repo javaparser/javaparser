@@ -1,0 +1,59 @@
+// This file is part of KeY - Integrated Deductive Software Design 
+//
+// Copyright (C) 2001-2011 Universitaet Karlsruhe (TH), Germany 
+//                         Universitaet Koblenz-Landau, Germany
+//                         Chalmers University of Technology, Sweden
+// Copyright (C) 2011-2013 Karlsruhe Institute of Technology, Germany 
+//                         Technical University Darmstadt, Germany
+//                         Chalmers University of Technology, Sweden
+//
+// The KeY system is protected by the GNU General 
+// Public License. See LICENSE.TXT for details.
+// 
+
+/**
+ * This class provides the static method removeDup. 
+ * 
+ * It takes an int-array and returns an array containing the same integer
+ * values but no duplicates.
+ *
+ * The specification for removeDup was part of a KIT Formal Systems exam
+ * in Feb 2014.
+ * 
+ * @author Mattias Ulbrich
+ */
+class RemoveDup {
+
+    static int[] removeDup(int[] a) {
+        int[] result = new int[a.length];
+        int p = 0;
+
+        for(int k = 0; k < a.length; k++) {
+            if(!contains(result, p, a[k])) {
+                result[p] = a[k];
+                p++;
+            }
+        }
+        return arrayPart(result, p);
+    }
+
+    static boolean contains(int a[], int len, int v) {
+        for(int i = 0; i < len; i++) {
+            if(a[i] == v) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    static int[] arrayPart(int[] a, int length) {
+        int[] result = new int[length];
+
+        for(int i = 0; i < length; i++) {
+            result[i] = a[i];
+        }
+        return result;
+    }
+}
+

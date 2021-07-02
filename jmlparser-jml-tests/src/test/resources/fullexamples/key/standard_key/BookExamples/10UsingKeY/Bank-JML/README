@@ -1,0 +1,24 @@
+If you are using...
+
+KeY 1.0
+=======
+
+From the KeY Book:
+
+"First of all, we activate the JML browser on the directory Bank-JML, by
+loading the entire directory, containing JAVA+JML sources into the
+system. This is done in the same manner as loading problem files and
+proofs by File -> Load or clicking at the load icon in the tool bar . It
+is important that we have the directory, here Bank-JML, selected when
+pressing the Open button (not any of the contained files)."
+
+
+
+KeY 1.4 or newer
+================
+
+Contrary to what the KeY Book says, always load the bankjml.key file in
+the Bank-JML directory. This will open the JML browser, and you will be
+able to select a proof obligation. This is the only method that works.
+
+

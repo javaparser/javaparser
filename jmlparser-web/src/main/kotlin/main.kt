@@ -206,7 +206,7 @@ open class DefaultPage : Template<HTML> {
     override fun HTML.apply() {
         head {
             title("JmlParser -- Playground")
-            style { +STYLE }
+            style { unsafe{+STYLE} }
 
             script { src = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js" }
             script { src = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/clike/clike.min.js" }

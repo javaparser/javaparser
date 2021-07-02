@@ -1,0 +1,8 @@
+Pure methods (in JML) are methods which do not change the part of the
+heap known prior to the invocation. They are, however, allowed to
+create fresh Objects on the heap and to assign to the fresh locations
+which belong to them.
+
+Strictly pure methods are methods which do not touch the heap at all.
+
+This example shows how to specify strictly pure methods in KeY.

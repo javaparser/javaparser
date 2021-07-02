@@ -1,0 +1,31 @@
+results expected for these Problems
+if not stated otherwise, proven by KeY
+
+Problem				expected result
+
+count.key			valid
+count2.key			valid
+count3.key			valid
+equalities.key			valid
+decproc1.key			
+decproc2.key			
+decproc3.key			valid
+decproc3-shortened.key		valid
+equalities2.key			valid
+equalities3.key			valid
+exist1.key			not valid?? (dempending on assumption, if at least one object of every Type exists)
+functions.key			valid	
+ics_ist_uberfordert.key		valid
+mv1.key				valid
+mv2.key				valid
+mv3.key				not valid (p: <=10; q: <10)
+PUZ001p1-eq.key			valid
+PUZ001p1.key			valid
+PUZ031p1.key			
+PUS047p1.key			
+quantifiers.key			valid
+sameName1.key			not valid, but sat (not proven)
+simpleEps.key			valid
+subsorts.key			valid
+
+ 

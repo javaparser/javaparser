@@ -1,0 +1,9 @@
+Some problems from TPTP 2.5.0
+
+
+You should enable automatic application of
+gamma rules within
+
+system/de/uka/ilkd/key/rule/strategy/StrategyManager.java
+
+by setting "USE_GAMMA_STRATEGY" to true

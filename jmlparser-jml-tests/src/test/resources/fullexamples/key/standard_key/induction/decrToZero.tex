@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+
+\usepackage{keylogo}
+\usepackage{a4wide}
+
+\newcommand{\java}[1]{\mbox{\textsf{#1}}}
+
+\begin{document}
+\title{Inductive Proof of a simple while loop}
+\author{Andreas Roth\footnote{originally dated to April 4, 2003. Adapted for newer KeY versions by Mattias Ulbrich}}
+\date{last update: June 26, 2008}
+
+\maketitle
+
+\section*{Proof obligation}
+%\[<\java{int i;}> \forall il:\java{int}. \{i:=il\}(\java{i}\geq 0 \rightarrow ( <\java{while (i$>$0) i\,-\,-;}> \java{i}=0))\]
+\[ \forall il:\java{int}. \{i:=il\}(\java{i}\geq 0 \rightarrow ( <\java{while (i$>$0) i\,-\,-;}> \java{i}=0))\]
+
+\noindent Decrementing a non-negative variable as long as the counter is
+positive sets the variable to zero.
+
+\section*{Proof}
+
+Induction over $\java{il}$.
+
+\section*{Proof with \KeY\footnote{tested with prover release candidate 1.4 (1.3.631-beta)}}
+
+\begin{enumerate}
+\item Load input file \texttt{decrToZero.key} into the standalone
+  prover. The following should be set:
+  \begin{enumerate}
+  \item Java DL (instead of FOL)
+  \item Logical splitting: Normal
+  \item Loop treatment: None
+  \item Arithmetic treatment: Basic
+  \item Quantifier treatment: None
+  \item intRules:arithmenticSemanticsIgnoringOF (the proof is done
+   over the mathematical integers, not the java integers with limited
+   range)
+  \end{enumerate}
+
+\item Select taclet \textsf{int\_induction} (available on sequent
+  arrow)
+
+\item Instantiate schema variables 
+  \begin{itemize} 
+  \item[\textsf{b}] to \\ \texttt{\{i:=il\}(geq(i,0) -> <\{ while
+      ( i>0 )  i--;\}>i = 0)}\\
+    (\emph{Drag and Drop} might help.)
+  \item[\textsf{nv}] to \texttt{il} (the induction variable) 
+  \end{itemize}
+  and click \textsf{OK} in the instantiation dialog.
+
+
+\item Three new goals appear in the proof pane.
+
+  \begin{description}
+  \item[Induction \textbf{Base Case}:] Apply the rule
+    \textsf{loopUnwind} once to the diamond modality in the first
+    formula of the succedent. Then run ``Apply rules automatically
+    here'' from the context menu of the sequent arrow.
+
+  \item[Induction \textbf{Step Case}:] Apply the rule
+    \textsf{loopUnwind} once to the \emph{last} diamond modality in
+    the first formula of the succedent. That is the one prefixed by
+    the update \texttt{\{i:=il+1\}}. Then, apply rules automatically on this
+    branch.
+
+  \item[The \textbf{Use Case}:] First, run the ``Apply rules
+    automatically here'' command on the open goal. Then instantiate
+    the $\forall$ formula in the antecedent with the constant symbol
+    that has been introduced in the succedent (probably some
+    \texttt{il\_{\it n}} for an index $n$). Apply automatic proving
+    again.
+  \end{description}
+
+\item The claim has been proven.
+
+\end{enumerate}
+
+% \section*{Proof with \KeY\footnote{tested with prover version 0.528}}
+
+% \begin{enumerate}
+% 	\item Load input file \texttt{decrToZero.key} into the standalone
+% 	prover. Natural number LDT setting is \emph{Arithmetic semantics
+% 	(ignoring overflow)}. Update simplification setting is \emph{Use
+% 	simultaneous updates} and \emph{Delete simple updates} and \emph{Delete
+% 	unused updates}.  
+
+% 	\item Eliminate the java block that declares the variable \java{i}. Do
+% 	this by the taclets eliminate\_variable\_declaration and
+% 	empty\_diamond.  
+
+% 	\item Select taclet \textsf{int\_induction} (available on sequent
+% 	arrow) \item Instantiate schema variables 
+
+% 	\begin{itemize} 
+
+% 		\item \textsf{b} to \\ \texttt{(geq(il,0))-> \{i:=il\}<\{ while
+% ( i>0 )  i--;\}>i = 0}			
+% (\emph{Drag and Drop} might help.)
+% 		\item \textsf{nv} 
+% 			to \texttt{il} (the induction variable) 
+% 		\end{itemize}
+% 		and click \textsf{OK} in the instantiation dialog.
+% 	\item Run all heuristics.
+% 	\item Induction base case (\emph{Case 1}):
+% 		Apply \textsf{while\_right} on the first formula in the
+% 		succedent and apply all heuristics, which close the base case.
+% 	\item Induction step (\emph{Case 2}) \footnote{Never include
+% \emph{heuristics `loop\_expand'} when doing induction!}:
+		
+% 		Two new goals have to be closed:
+% 		\begin{itemize}
+% 			\item The first one: Apply \textsf{while\_right} on the
+% 				first formula in the 
+% 				succedent and apply all heuristics.
+
+% 				This can be closed by proving the contradiction
+% 				of the formulas in the antecedent. For example
+% 				by running the decision procedure
+% 				``simplify''. Select it from the menu at the
+% 				sequent arrow.
+
+% 			\item The second one: Again, apply
+% 			\textsf{while\_right} on the first formula in the
+% 			succedent and apply all heuristics.
+
+% 			We can close by rewriting the first DL formula in the
+% 			succedent to equal the DL formula in the antecedent. To
+% 			do that, the doubled Java block has to be eliminated
+% 			using the taclet \textsf{elim\_double\_block}.
+
+% 			Apply all heuristics then.
+
+% 		\end{itemize} \item Show original goal with induction
+% 		hypothesis (\emph{Case 3}): Apply \textsf{all\_left} to the
+% 		formula in the antecedent (the induction hypothesis and
+% 		instantiate the schema variable $t$ by the variable on the
+% 		right hand side of the (only) update in the
+% 		succedent. (Currently this is an epsilon term which you can
+% 		utilise by the abbreviation, e.g.~``@eps3''. Apply all
+% 		heuristics \emph{except from the heuristics `loop\_expand'}.
+% \end{enumerate}
+\end{document}

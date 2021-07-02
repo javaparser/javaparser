@@ -88,8 +88,8 @@
                         <!-- This stores method parameter names in the class file, which are used by the metamodel generator -->
                         <arg>-parameters</arg>
                     </compilerArgs>
-                    <source>15</source>
-                    <target>15</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>

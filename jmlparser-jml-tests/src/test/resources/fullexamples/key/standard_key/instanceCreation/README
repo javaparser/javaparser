@@ -1,0 +1,5 @@
+These problems are thought to test correct object creation and initialisation.
+It is tested that
+  1) the object initializer are executed in correct order
+  2) object initializers are not executed after a this() constructor call
+  3) implicit super call

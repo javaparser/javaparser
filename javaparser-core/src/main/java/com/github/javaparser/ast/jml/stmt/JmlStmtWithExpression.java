@@ -60,7 +60,7 @@ public class JmlStmtWithExpression extends JmlStatement {
         int tt = range.getBegin().getKind();
         Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values()).filter(i -> i.tokenType == tt).findFirst();
         k.ifPresent(this::setKind);
-        if (k.isEmpty()) {
+        if (!k.isPresent()) {
             throw new IllegalArgumentException("wrong token type");
         }
     }

@@ -1,0 +1,73 @@
+README for the VSTTE 12 examples
+
+== Contact
+Richard Bubel <bubel@cs.uni-darmstadt.de>
+Daniel Bruns <bruns@kit.edu>
+Mattias Ulbrich <ulbrich@kit.edu>
+
+== Resources
+All solutions were produced using KeY in a modified version of the current development version (1.7). KeY can be downloaded in source or bytecode distribution from its homepage. The easiest way is to use Java Webstart; point your browser to the following address:
+http://www.key-project.org/vstte12/
+
+The internal version is 436134a8464639588288bdb07cb707ce3a06f07e
+To prove problems 1 and 4 in an upstream version of KeY, please merge the file seq.key found in system/resources/de/uka/ilkd/key/proof/rules into your upstream version, it contains additional function definitions and rules.
+
+
+To replay the proofs, start KeY (graphical frontend) and open the respective *.key file in the problem directory and select a method contract. On the top left of the window should be a button with a green "play" icon. Push it.
+To investigate the proof made beforehand without replaying it, you can load the respective *.proof file instead (should be named after the method which contract has been proven). If loading a proof or replaying fails for some reason, please make sure that you have a fresh installation of KeY (no configuration in $home/.key/*).
+
+For some problems, we have provided a screen cast demonstrating live interaction.
+
+== Details on Solutions
+Implementation: Java
+Specification: JML* (JML + dynamic frames + sequence ADT)
+Verification: KeY
+
+--PROBLEM 1:
+[Not working with upstream versions of KeY]
+
+The sorting algorithm has been implemented in class TwoWaySwap. The class contains a boolean typed field "a". This array is sorted when calling the method twoWaySort implementing the algorithm from the task description. As in the original task the method makes use of the helper method swap.
+
+Subtask 1 + 2 + 3 : The twoWaySort method is specified using JML* using a public normal_behavior. The provided method specification already encodes all three subtasks. A normal_behavior contract requires a method to terminate normally, i.e., without throwing an exception. The post condition encodes that the array is sorted afterwards in increasing order and that it is a permutation of the original one. Note: JML has non-null by default semantics, i.e., if not explicitly specified otherwise it requires the parameters, fields (and array components) to be non null.
+
+KeY generates a dynamic logic formula from the provided JML specification which is valid iff the method implementation satisfies the JML method specification. In particular that if the method is called in a state satisfying the precondition then the method terminates normally and satisfies the postcondition as well as respecting the assignable/modifies clause. 
+
+To prove permutation, we use a model field "seq" which represents the boolean array. The permutation property is then proven with help of the permutation predicate provided by the sequent datatype. The loop is annotated with a loop invariant and variant term (for termination). The loop invariant and variant term are used by the loop invariant (Use Branch), which also proves that the loop invariant is an invariant, that the variant term is always non-negative and decreases strictly monotone.
+
+In addition to the required subtasks, KeY also verifies that assignable/modifies clauses of the contract and loop invariant are correct, i.e., no other locations accept those mentioned are changed.
+
+The problem1 directory contains the proofs for all three methods of the class. No interactions were required.
+
+
+--PROBLEM 3:
+[Working with KeY 1.7.3400]
+
+The data structure has been implemented in class RingBuffer with the given operations as instance methods. The content of the buffer is specified using an (ADT) sequence ghost field list which represents the currently allocated area in the buffer. Although Java provides a modulo operator %, we opted to implement a method "modulo" ensuring correct indexing. The arithmetic engine in KeY does not seem to support % very efficiently, so the method with a special contract made proofs shorter (or feasible).
+
+Subtask 1 is fulfilled by showing the absence of exceptions (such as ArrayIndexOutOfBoundsException), indicated by the JML keyword normal_behavior in the method contracts.
+
+Subtask 2 is formalized as the functional operation contracts of the respective FIFO operations. The behavior of the methods is specified by stating its effect on the specification field list and on the pointer first.
+
+Subtask 3: Correctness of the harness is given through proving that it terminates (in comparison to "standard JML", KeY understands the throw of an Error as a kind of non-termination). 
+
+All proofs were done automatically.
+
+
+--PROBLEM 4:
+[Not working with upstream versions of KeY]
+
+The tree datatype is implemented in class Tree which is designed as an immutable data structure. Instances can be constructed with no (Leaf) or two (Node) trees as arguments. Class List provides the mutable list data structure. Failure is implemented by throwing an exception of class TreeException. Like in Problem 3, we use a ghost field -- called heights -- of type sequence (\seq) to encode the subtree of a given through the (relative) heights of its leaves. The constructor Tree(Tree,Tree) contains a ghost assignment which uses a function \dl_seqInc on integer sequences denoting increment by 1 on each sequence item.
+
+Subtask 1: The method "Tree build(int[] array)" takes an array and returns the corresponding tree if there is one. Otherwise an exception is raised. The post condition for that methods states that the ghost field heights depths of the leaves (in infix order from left to right) has the same entries as the argument array.
+
+Subtask 3: JML method contracts are total by default, non-termination must be specified explicitly.
+
+Subtask 4: Since we implemented and verified an implementation in a "real" programming language, testing the harness for concrete value reduces to simply executing it. You can replay this using the following commands from the command line in path "problem4" (in linux):
+   java Harnesses.java src/*.java
+   javac -cp .:src Harnesses
+
+However, we have additionally proved correct the intended semantics of the harnesses in the KeY tool by "symbolically executing" the code. Switching "Method treatment" and "Loop treatment" to "Expand", the proofs run automatically.
+
+Again, all proofs can be conducted fully automatically.
+
+

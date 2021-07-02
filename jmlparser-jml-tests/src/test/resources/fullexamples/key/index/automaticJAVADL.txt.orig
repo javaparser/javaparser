@@ -1,0 +1,141 @@
+# This file is part of KeY - Integrated Deductive Software Design
+# Copyright (C) 2001-2011 Universitaet Karlsruhe Germany
+#                         Universitaet Koblenz-Landau, Germany
+#                         and Chalmers University of Technology, Sweden
+#
+# The KeY system is protected by the GNU General Public License. 
+# See LICENSE.TXT for details.
+
+#
+# This file describes the benchmark problems.
+# Files marked as provable should be closed automatically.
+# Files marked as nonprovable should be not closable.
+#
+# RunAllProofs documentation can be found at: key/doc/README.runAllProofs
+#
+
+/*
+ * Defines a base directory.
+ * All paths in this file are treated relative to base directory (except path for base directory itself).
+ */
+baseDirectory = ../
+
+/*
+ * Defines a statistics file.
+ * Path is relative to base directory.
+ */
+statisticsFile = ../../key.core.test/testresults/runallproofs/runStatistics.csv
+
+/*
+ * Fork mode setting, can be declared to create subprocesses while running tests declared in this file.
+ * Possible modes: noFork - all files are proven within a single process
+ *                 perGroup - one subprocess is created for each group
+ *                 perFile - one subprocess is created for each file
+ */
+forkMode = noFork
+
+/*
+ * Enable or disable proof reloading.
+ * If enabled, closed proofs will be saved and reloaded after prover is finished.
+ */
+reloadEnabled = true
+
+/*
+ * Temporary directory, which is used for inter process communication when using forked mode.
+ * The given path is relative to baseDirectory.
+ */
+tempDir = ../../key.core.test/runallproofs_tmp
+
+/*
+ * If the fork mode is not set to noFork, the launched subprocesses are terminated as
+ * soon as the timeout specified here has elapsed. No timeout occurs if not specified.
+ *
+ * Timeout per subprocess in seconds
+ */
+forkTimeout = 2000
+
+/*
+ * If the fork mode is not set to noFork, the launched subprocesses
+ * get the specified amount of heap memory.
+ *
+ * Heap memory for subprocesses (like 500m or 2G)
+ */
+# forkMemory = 1000m
+
+/*
+ * To run the forked JVM in debug mode, set the TCP port to listen to here.
+ * You can prefix the port with "wait:" to make the JVM suspend till the
+ * process has connected.
+ *
+ * Examples:  forkDebugPort = "8000"
+ *            forkDebugPort = "wait:1234"
+ */
+# forkDebugPort = "wait:1234"
+
+/*
+ * By default runAllProofs does not print a lot of information.
+ * Set this to true to get more output.
+ */
+ verboseOutput = true
+
+/*
+ * By default, runAllProofs runs all groups in this file.
+ * By naming a comma separated list of groups here, the
+ * test can be restricted to these groups (for debugging).
+ */
+# runOnlyOn = group1,group2
+
+keySettings = "#Proof-Settings-Config-File
+#Mon Aug 03 16:58:18 CEST 2009
+[StrategyProperty]STOPMODE_OPTIONS_KEY=STOPMODE_DEFAULT
+[StrategyProperty]METHOD_OPTIONS_KEY=METHOD_CONTRACT
+# The 'Defaults' are ON for the following:
+[StrategyProperty]DEP_OPTIONS_KEY=DEP_OFF
+[StrategyProperty]QUERY_NEW_OPTIONS_KEY=QUERY_OFF
+[StrategyProperty]USER_TACLETS_OPTIONS_KEY3=USER_TACLETS_OFF
+[StrategyProperty]SYMBOLIC_EXECUTION_ALIAS_CHECK_OPTIONS_KEY=SYMBOLIC_EXECUTION_ALIAS_CHECK_NEVER
+[StrategyProperty]SYMBOLIC_EXECUTION_NON_EXECUTION_BRANCH_HIDING_OPTIONS_KEY=SYMBOLIC_EXECUTION_NON_EXECUTION_BRANCH_HIDING_OFF
+[StrategyProperty]LOOP_OPTIONS_KEY=LOOP_SCOPE_INV_TACLET
+[StrategyProperty]USER_TACLETS_OPTIONS_KEY2=USER_TACLETS_OFF
+[StrategyProperty]USER_TACLETS_OPTIONS_KEY1=USER_TACLETS_OFF
+[StrategyProperty]QUANTIFIERS_OPTIONS_KEY=QUANTIFIERS_NON_SPLITTING_WITH_PROGS
+[StrategyProperty]SPLITTING_OPTIONS_KEY=SPLITTING_DELAYED
+# The 'Defaults' are NONE for the following.
+[StrategyProperty]NON_LIN_ARITH_OPTIONS_KEY=NON_LIN_ARITH_DEF_OPS
+[StrategyProperty]STOPMODE_OPTIONS_KEY=STOPMODE_DEFAULT
+[StrategyProperty]QUERYAXIOM_OPTIONS_KEY=QUERYAXIOM_ON
+[StrategyProperty]INF_FLOW_CHECK_PROPERTY=INF_FLOW_CHECK_FALSE
+[StrategyProperty]AUTO_INDUCTION_OPTIONS_KEY=AUTO_INDUCTION_OFF
+[StrategyProperty]BLOCK_OPTIONS_KEY=BLOCK_CONTRACT_INTERNAL
+[StrategyProperty]CLASS_AXIOM_OPTIONS_KEY=CLASS_AXIOM_FREE
+[StrategyProperty]OSS_OPTIONS_KEY=OSS_ON
+[DecisionProcedure]Timeout=60
+[Strategy]Timeout=-1
+[Strategy]MaximumNumberOfAutomaticApplications=10000
+[SMTSettings]integersMaximum=2147483645
+[SMTSettings]integersMinimum=-2147483645
+[SMTSettings]invariantForall=false
+[SMTSettings]UseBuiltUniqueness=false
+[SMTSettings]explicitTypeHierarchy=false
+[SMTSettings]instantiateHierarchyAssumptions=true
+[SMTSettings]useUninterpretedMultiplication=true
+[SMTSettings]SelectedTaclets=
+[Choice]DefaultChoices=assertions-assertions:on , intRules-intRules:arithmeticSemanticsIgnoringOF , initialisation-initialisation:disableStaticInitialisation , programRules-programRules:Java , runtimeExceptions-runtimeExceptions:ban , JavaCard-JavaCard:on , Strings-Strings:on , modelFields-modelFields:showSatisfiability , bigint-bigint:on , sequences-sequences:on , reach-reach:on , integerSimplificationRules-integerSimplificationRules:full , wdOperator-wdOperator:L , wdChecks-wdChecks:off , permissions-permissions:off , moreSeqRules-moreSeqRules:off , mergeGenerateIsWeakeningGoal-mergeGenerateIsWeakeningGoal:off , javaLoopTreatment-javaLoopTreatment:efficient
+[Strategy]ActiveStrategy=JavaCardDLStrategy
+
+"
+
+group SmansEtAl {
+<<<<<<< HEAD
+   provable ./heap/javacard/arrayFillNonAtomic.key
+   //provable ./heap/SmansEtAl/Stack_size.key
+=======
+   //provable ./performance-test/DynamicGhost(DynamicGhost__dynamicGhost_08()).JML_normal_behavior_operation_contract.0.key
+   provable ./heap/SmansEtAl/Stack_size.key
+
+   //provable ./heap/javacard/arrayFillNonAtomic.key
+>>>>>>> b1f475c688... printing
+   //provable ./standard_key/java_dl/jml-free/loopInvFree.key
+   //provable ./heap/block_contracts/Simple__addWithTwoBlockContracts.key
+
+}

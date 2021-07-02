@@ -33,8 +33,8 @@ public class Example {
 
         System.out.println(result);
         result.getResult().ifPresent(it -> {
-            final var c = new DefaultPrinterConfiguration();
-            var v = new DefaultPrettyPrinter(c);
+            DefaultPrinterConfiguration c = new DefaultPrinterConfiguration();
+            DefaultPrettyPrinter v = new DefaultPrettyPrinter(c);
             System.out.println(v.print(it));
         });
     }

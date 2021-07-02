@@ -1,0 +1,17 @@
+The file Sect8.1.4.key if the key prover input file for
+the example from page 399
+start runProver and load this file.
+If you have problems discharging the proof obligation
+of file Sect8.1.4.key you will find a completed proof in
+Sect8.1.4.key.proof
+The prover will read  PayCard.java from 
+the directory paycardChapt8. This saves additional
+declarations in Sect8.1.4.key.
+
+When you open Sect8.1.4.key in your editor you will find
+a few explanations on the problem.
+
+File Fig8.1-A.java contains the source code from Fig. 8.1
+on page 342.
+This was only meant as an illustration. There are no
+proof obligations associated with this example.

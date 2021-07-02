@@ -1,0 +1,29 @@
+macro autopilot-prep;
+
+# the power of autopilot is not enough. run another 10000 on open goals
+tryclose;
+
+# two goals remain open after autopilot
+# both have to do with the seqPerm condition
+
+# first goal: body preserves invariant seqPerm condition
+macro simp-upd;
+rule seqPermFromSwap;
+rule andRight;
+  # the first of the two conjuncts is easy
+  auto;
+  # the 2nd requires instantiations;
+  instantiate hide var=iv with=i_0;
+  instantiate hide var=jv with=j_0;
+  auto;
+
+# 2nd goal: use case, also seqPerm condition, rather similar
+macro simp-upd;
+rule seqPermFromSwap;
+rule andRight;
+  # the first of the two conjuncts is easy
+  auto;
+  # the 2nd requires instantiations
+  instantiate hide var=iv with=i_0;
+  instantiate hide var=jv with=to;
+  auto;

@@ -20,7 +20,7 @@ public class JetbrainsAnnotationSupport {
             @Override
             public void process(Node node) {
                 if (node instanceof NodeWithAnnotations<?>) {
-                    var n = (NodeWithAnnotations<?>) node;
+                    NodeWithAnnotations<?> n = (NodeWithAnnotations<?>) node;
                     //n.getAnnotationByName()
                 }
             }

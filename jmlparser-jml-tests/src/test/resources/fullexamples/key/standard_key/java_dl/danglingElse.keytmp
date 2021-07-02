@@ -1,0 +1,67 @@
+\settings {
+"#Proof-Settings-Config-File
+#Mon Apr 11 17:32:09 CEST 2005
+[View]FontIndex=0
+[General]SuggestiveVarNames=false
+[View]ShowWholeTaclet=false
+[View]MaxTooltipLines=40
+[General]StupidMode=true
+[Strategy]MaximumNumberOfAutomaticApplications=10000
+[StrategyProperty]QUANTIFIERS_OPTIONS_KEY=QUANTIFIERS_NON_SPLITTING
+[StrategyProperty]NON_LIN_ARITH_OPTIONS_KEY=NON_LIN_ARITH_DEF_OPS
+[StrategyProperty]SPLITTING_OPTIONS_KEY=SPLITTING_NORMAL
+[Choice]DefaultChoices=programRules-programRules\:Java , initialisation-initialisation\:disableStaticInitialisation , intRules-intRules\:arithmeticSemanticsIgnoringOF , nullPointerPolicy-nullPointerPolicy\:nullCheck
+[Model]Source=1
+[DecisionProcedure]=SIMPLIFY
+[Strategy]ActiveStrategy=JavaCardDLStrategy
+"
+}
+// This file is part of KeY - Integrated Deductive Software Design 
+//
+// Copyright (C) 2001-2011 Universitaet Karlsruhe (TH), Germany 
+//                         Universitaet Koblenz-Landau, Germany
+//                         Chalmers University of Technology, Sweden
+// Copyright (C) 2011-2013 Karlsruhe Institute of Technology, Germany 
+//                         Technical University Darmstadt, Germany
+//                         Chalmers University of Technology, Sweden
+//
+// The KeY system is protected by the GNU General 
+// Public License. See LICENSE.TXT for details.
+// 
+
+/**
+ *
+ * This example demonstrates a bug source caused by the
+ * dangling else problem. I came across this example twice in the 
+ * last week: 
+ *
+ *   1) when assisting in translating a pascal parser from antlr v2 to antlr v3
+ *
+ *   2) on the git mailing list where during a discussion about coding styles
+ *      a template of the example used below emerged.
+ *
+ *  The problem stated here cannot be proven. There are two possible 
+ *  solutions to this. See: 
+ *     a) danglingElseSolution1.key 
+ *     b) danglingElseSolution2.key
+ *
+ */
+
+\programVariables {
+  int i,j;
+  int a;
+}
+
+\problem {
+
+\<{  
+ 
+  if ( i>10 )
+         if (j<0) a = 0;
+  else
+         a = 1;
+}\> ( 
+      ( ( i > 10 & j < 0 ) -> a = 0 ) &
+        ( i <= 10          -> a = 1 )
+    )
+}

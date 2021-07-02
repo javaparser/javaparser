@@ -1,0 +1,22 @@
+ATM_Example_JML
+This directory contains the files ATM.java, BankCard.java  and
+CentralHost.java. The Java code plus JML specification from 
+Figure 5.14 on page 277 is part of the ATM.java file. 
+
+To run it start the KeY prover ( call runProver) and load the directory. 
+The settings for Loop treatment, Method treatment, Query treatment
+do not matter. Arithmetic treatment should be basic.
+All proof will complete automatically without use interaction.
+
+======================================================================
+While-Example_JML
+This directory contains the file with the Java+JML example from 
+Section 5.3.6 on page 289. The example only considers loop invariants. 
+The file WhileDemo.java contains a method that makes use of this while loop 
+plus JML specification.
+
+To run it start the KeY prover ( call runProver) and load the directory. 
+Make sure that the Proof Search Strategy activates Java DL and  Loop treatment
+is set to "Invariant".
+The proof proceed automatically with to open goals remaining.  These can
+be closed calling an SMT solver.

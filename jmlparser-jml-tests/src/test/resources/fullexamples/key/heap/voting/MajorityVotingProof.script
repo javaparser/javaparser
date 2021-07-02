@@ -1,0 +1,17 @@
+macro autopilot;
+
+# 1 goal remains open
+macro simp-upd;
+
+rule allRight;
+
+cut "votes = x_arr_2";
+  # assume that => infeasible
+  auto;
+
+macro simp-heap;
+
+instantiate var="a" occ="3" with="a_7";
+instantiate var="a" occ="2" with="a_7";
+auto;
+

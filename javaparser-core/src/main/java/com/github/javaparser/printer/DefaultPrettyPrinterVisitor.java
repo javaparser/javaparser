@@ -970,9 +970,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(JmlLabel n, Void arg) {
         printer.print("(");
         switch (n.getKind()) {
-            case NONE -> printer.print("\\lbl");
-            case POSITIVE -> printer.print("\\lblpos");
-            case NEGATIVE -> printer.print("\\lblneg");
+            case NONE:  printer.print("\\lbl"); break;
+            case POSITIVE: printer.print("\\lblpos"); break;
+            case NEGATIVE: printer.print("\\lblneg"); break;
         }
         n.getLabel().accept(this, arg);
         printer.print(" : ");
