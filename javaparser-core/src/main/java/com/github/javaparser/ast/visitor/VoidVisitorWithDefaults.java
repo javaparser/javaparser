@@ -35,7 +35,6 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.jml.clauses.*;
-import com.github.javaparser.ast.jml.locref.*;
 
 /**
  * A visitor that returns nothing, and has default methods that are used when a specific visit method is not
@@ -554,27 +553,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlClauseHL n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlClauseLE n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final ContinuesClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final DivergesClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final EnsuresClause n, final A arg) {
+    public void visit(final JmlClauseLabel n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -599,42 +578,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlSetStmt n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LoopDecreasesClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LoopInvariantClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LoopVariantClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlClauseE n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final ModifiesClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlClauseHE n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final ReturnsClause n, final A arg) {
+    public void visit(final JmlDefaultClause n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -664,11 +608,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final DurationClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
     public void visit(final ForallClause n, final A arg) {
         defaultAction(n, arg);
     }
@@ -694,12 +633,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final WhenClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final WorkingSpaceClause n, final A arg) {
+    public void visit(final JmlClauseIf n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -744,36 +678,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final LocationSetArrayAccess n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LocationSetBindingExpr n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LocationSetFieldAccess n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LocationSetFunction n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LocationSetConstructorExpression n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LocationSetPrimary n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
     public void visit(final JmlSetComprehension n, final A arg) {
         defaultAction(n, arg);
     }
@@ -795,16 +699,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlMethodDeclaration n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LocationSetWrapperExpression n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final LocationSetStoreRef n, final A arg) {
         defaultAction(n, arg);
     }
 }

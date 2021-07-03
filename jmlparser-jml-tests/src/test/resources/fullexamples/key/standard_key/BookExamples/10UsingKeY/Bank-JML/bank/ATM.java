@@ -40,7 +40,7 @@ public class ATM {
                                            accountProxies[i].accountNumber == i ));
 	public invariant (\forall ATM a; a != self; a.insertedCard == null || a.insertedCard != self.insertedCard);
       @*/
-    private /*@ spec_public, nullable @*/ final OfflineAccountProxy[] accountProxies =
+    private /*@ spec_public nullable @*/ final OfflineAccountProxy[] accountProxies =
         new OfflineAccountProxy [maxAccountNumber];
 
     /**
@@ -58,7 +58,7 @@ public class ATM {
     /**
      * A bank card that is possible inserted into the ATM at the time
      */
-    private /*@ spec_public, nullable @*/ BankCard insertedCard          = null;
+    private /*@ spec_public nullable @*/ BankCard insertedCard          = null;
     /**
      * <code>true</code> iff there is a card inserted and the customer has
      * entered the right PIN

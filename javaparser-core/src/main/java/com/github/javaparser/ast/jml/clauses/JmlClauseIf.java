@@ -4,45 +4,29 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.DivergesClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
- * @version 1 (2/21/21)
+ * @version 1 (2/22/21)
  */
-public class DivergesClause extends JmlClause implements MethodContractable {
+public class JmlClauseIf extends JmlClause implements MethodContractable {
 
     @AllFieldsConstructor
-    public DivergesClause() {
+    public JmlClauseIf() {
         this(null);
-        setKind(JmlClauseKind.DIVERGES);
+        setKind(JmlClauseKind.WORKING_SPACE);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public DivergesClause(TokenRange tokenRange, Expression e) {
+    public JmlClauseIf(TokenRange tokenRange) {
         super(tokenRange);
-        setKind(JmlClauseKind.DIVERGES);
         customInitialization();
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
     }
 
     @Override
@@ -63,16 +47,20 @@ public class DivergesClause extends JmlClause implements MethodContractable {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public DivergesClause clone() {
-        return (DivergesClause) accept(new CloneVisitor(), null);
+    public JmlClauseIf clone() {
+        return (JmlClauseIf) accept(new CloneVisitor(), null);
     }
 
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public DivergesClause(TokenRange tokenRange) {
-        super(tokenRange);
-        customInitialization();
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
     }
 }

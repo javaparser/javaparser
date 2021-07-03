@@ -24,7 +24,6 @@ import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
@@ -556,27 +555,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlClauseHL n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlClauseLE n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final ContinuesClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final DivergesClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final EnsuresClause n, final A arg) {
+    public R visit(final JmlClauseLabel n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -601,42 +580,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlSetStmt n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LoopDecreasesClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LoopInvariantClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LoopVariantClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlClauseE n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final ModifiesClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlClauseHE n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final ReturnsClause n, final A arg) {
+    public R visit(final JmlDefaultClause n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -666,11 +610,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final DurationClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
     public R visit(final ForallClause n, final A arg) {
         return defaultAction(n, arg);
     }
@@ -696,12 +635,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final WhenClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final WorkingSpaceClause n, final A arg) {
+    public R visit(final JmlClauseIf n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -746,36 +680,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final LocationSetArrayAccess n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LocationSetBindingExpr n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LocationSetFieldAccess n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LocationSetFunction n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LocationSetConstructorExpression n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LocationSetPrimary n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
     public R visit(final JmlSetComprehension n, final A arg) {
         return defaultAction(n, arg);
     }
@@ -797,16 +701,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlMethodDeclaration n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LocationSetWrapperExpression n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final LocationSetStoreRef n, final A arg) {
         return defaultAction(n, arg);
     }
 }

@@ -1,32 +1,32 @@
 package com.github.javaparser.ast.jml.clauses;
 
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.BreaksClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.JmlClauseLabelMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.JmlClauseLEMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClauseLE extends JmlClause {
+public class JmlClauseLabel extends JmlClause {
 
     private SimpleName label;
 
     private Expression expr;
 
     @AllFieldsConstructor
-    public JmlClauseLE(SimpleName label, Expression expr) {
+    public JmlClauseLabel(SimpleName label, Expression expr) {
         this(null, label, expr);
         setKind(JmlClauseKind.BREAKS);
     }
@@ -35,15 +35,20 @@ public class JmlClauseLE extends JmlClause {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseLE(TokenRange tokenRange, SimpleName label, Expression expr) {
+    public JmlClauseLabel(TokenRange tokenRange, SimpleName label, Expression expr) {
         super(tokenRange);
         setLabel(label);
         setExpr(expr);
         customInitialization();
     }
 
-    public JmlClauseLE() {
+    public JmlClauseLabel() {
         setKind(JmlClauseKind.BREAKS);
+    }
+
+    public JmlClauseLabel(TokenRange range, JavaToken kind, SimpleName label, Expression expr) {
+        this(range, label, expr);
+        setKindByToken(kind);
     }
 
     @Override
@@ -84,15 +89,15 @@ public class JmlClauseLE extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlClauseLE clone() {
-        return (JmlClauseLE) accept(new CloneVisitor(), null);
+    public JmlClauseLabel clone() {
+        return (JmlClauseLabel) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseLE(TokenRange tokenRange) {
+    public JmlClauseLabel(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -103,7 +108,7 @@ public class JmlClauseLE extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLE setExpr(final Expression expr) {
+    public JmlClauseLabel setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -122,7 +127,7 @@ public class JmlClauseLE extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseLE setLabel(final SimpleName label) {
+    public JmlClauseLabel setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -137,7 +142,7 @@ public class JmlClauseLE extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClauseLEMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlClauseLEMetaModel;
+    public JmlClauseLabelMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClauseLabelMetaModel;
     }
 }

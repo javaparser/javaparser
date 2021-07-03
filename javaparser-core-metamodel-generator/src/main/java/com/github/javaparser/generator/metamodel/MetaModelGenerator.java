@@ -21,33 +21,18 @@
 
 package com.github.javaparser.generator.metamodel;
 
-import static com.github.javaparser.utils.Utils.decapitalize;
-
-import java.lang.reflect.Field;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.jml.body.*;
-import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
-import com.github.javaparser.ast.jml.body.JmlClassLevel;
-import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.jml.stmt.*;
-import com.github.javaparser.ast.jml.stmt.JmlStatement;
-import com.github.javaparser.ast.jml.stmt.JmlStatements;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -57,6 +42,15 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
+
+import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator extends AbstractGenerator {
 
@@ -192,7 +186,6 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.YieldStmt.class);
 
         add(JmlStatement.class);
-        add(JmlSetStmt.class);
         add(JmlGhostStatements.class);
         add(JmlStmtWithExpression.class);
         add(JmlRefiningStmt.class);
@@ -205,15 +198,12 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlClause.class);
         add(JmlBodyDeclaration.class);
         add(JmlStatements.class);
-        add(JmlClauseHE.class);
-        add(JmlClauseHL.class);
-        add(JmlClauseE.class);
+        add(JmlDefaultClause.class);
         add(SignalsClause.class);
         add(SignalsOnlyClause.class);
-        add(JmlClauseLE.class);
+        add(JmlClauseLabel.class);
         add(com.github.javaparser.ast.jml.clauses.OldClause.class);
         add(com.github.javaparser.ast.jml.clauses.ForallClause.class);
-        add(DurationClause.class);
         add(CallableClause.class);
         add(com.github.javaparser.ast.jml.clauses.JmlContract.class);
 
@@ -222,16 +212,6 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(ClassInvariantClause.class);
         add(JmlRepresentsDeclaration.class);
         add(JmlClassAccessibleDeclaration.class);
-
-        add(LocationSetExpression.class);
-        add(LocationSetPrimary.class);
-        add(LocationSetFunction.class);
-        add(LocationSetConstructorExpression.class);
-        add(LocationSetFieldAccess.class);
-        add(LocationSetArrayAccess.class);
-        add(LocationSetBindingExpr.class);
-        add(LocationSetWrapperExpression.class);
-        add(LocationSetStoreRef.class);
 
         add(com.github.javaparser.ast.type.ArrayType.class);
         add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);

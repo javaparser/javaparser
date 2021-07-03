@@ -16,7 +16,7 @@ package bank;
 /**
  * Class for representing non-empty lists of transactions. 
  */
-public /*@ pure @*/ class TransactionListCons extends TransactionList {
+public class TransactionListCons extends TransactionList {
     
     /**
      * The first element of the list

@@ -30,8 +30,8 @@ public class JmlStmtWithExpression extends JmlStatement {
         ASSERT_REDUNDANTLY(GeneratedJavaParserConstants.ASSERT_REDUNDANTLY),
         ASSUME(GeneratedJavaParserConstants.ASSUME),
         ASSUME_REDUNDANTLY(GeneratedJavaParserConstants.ASSUME_REDUNDANTLY),
-        HENCE_BY(GeneratedJavaParserConstants.HENCE_by),
-        HENCE_BY_REDUNDANTLY(GeneratedJavaParserConstants.HENCE_by_REDUNDANTLY),
+        HENCE_BY(GeneratedJavaParserConstants.HENCE_BY),
+        HENCE_BY_REDUNDANTLY(GeneratedJavaParserConstants.HENCE_BY_REDUNDANTLY),
         SET(GeneratedJavaParserConstants.SET);
 
         final int tokenType;

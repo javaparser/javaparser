@@ -17,7 +17,7 @@ package bank;
  * Singleton class for empty lists of transactions
  * @stereotype singleton
  */
-public /*@ pure @*/ class TransactionListNIL extends TransactionList {
+public class TransactionListNIL extends TransactionList {
     
     /**
      * This class is a singleton, to access the only object use

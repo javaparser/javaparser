@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -17,7 +19,42 @@ import java.util.stream.Stream;
  * @version 1 (7/2/21)
  */
 public class FullExamplesTest {
-    private JavaParser jpb = new JavaParser();
+    private final JavaParser jpb = new JavaParser();
+
+    Set<String> blocked = new HashSet<>();
+
+    {
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JTextComponent.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/Component.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/BorderLayout.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JScrollPane.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/GridLayout.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/Frame.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JOptionPane.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/Dimension.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JRadioButtonMenuItem.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/Integer.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/Font.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JRadioButton.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/ActionEvent.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JPanel.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/Window.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/ButtonGroup.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JToggleButton.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JLabel.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JComponent.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/PrintStream.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/Container.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/IllegalStateException.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JTextField.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JTextArea.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/AbstractButton.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JFrame.java");
+        blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JButton.java");
+        blocked.add("/key/firstTouch/11-StateMerging/A.java");
+        blocked.add("/key/firstTouch/11-StateMerging/Gcd.java");
+    }
+
 
     @TestFactory
     public Stream<DynamicTest> createTests() throws IOException {
@@ -28,6 +65,7 @@ public class FullExamplesTest {
         Stream<Path> files = Files.walk(dir.toPath());
         return files
                 .filter(it -> it.toString().endsWith(".java"))
+                .filter(it -> !blocked.contains(it.toString().substring(prefix)))
                 .map(it -> {
                             String name = it.toString().substring(prefix);
                             return DynamicTest.dynamicTest(name, () -> testParse(it));

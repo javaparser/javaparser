@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Example" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="15"/>
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true"/>
       <option name="MAIN_CLASS_NAME" value="com.github.javaparser.jml.Example"/>
       <module name="jmlparser-core"/>
       <method v="2">

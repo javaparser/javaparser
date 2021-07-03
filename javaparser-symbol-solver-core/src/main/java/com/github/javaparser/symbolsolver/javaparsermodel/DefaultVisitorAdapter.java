@@ -242,27 +242,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JmlClauseHL n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(JmlClauseLE n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(ContinuesClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(DivergesClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(EnsuresClause n, Boolean arg) {
+    public ResolvedType visit(JmlClauseLabel n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -287,42 +267,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JmlSetStmt n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(LoopDecreasesClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(LoopInvariantClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(LoopVariantClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(JmlClauseE n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(ModifiesClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(JmlClauseHE n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(ReturnsClause n, Boolean arg) {
+    public ResolvedType visit(JmlDefaultClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -348,11 +293,6 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
 
     @Override
     public ResolvedType visit(CapturesClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(DurationClause n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -383,12 +323,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(WhenClause n, Boolean arg) {
-        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
-    }
-
-    @Override
-    public ResolvedType visit(WorkingSpaceClause n, Boolean arg) {
+    public ResolvedType visit(JmlClauseIf n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 

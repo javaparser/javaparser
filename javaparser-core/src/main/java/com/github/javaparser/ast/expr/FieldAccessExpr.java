@@ -84,6 +84,11 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
         customInitialization();
     }
 
+    public static Expression allMemberAccess(TokenRange range, Expression scope) {
+        SimpleName fieldName = new SimpleName(range, "*");
+        return new FieldAccessExpr(scope, null, fieldName);
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

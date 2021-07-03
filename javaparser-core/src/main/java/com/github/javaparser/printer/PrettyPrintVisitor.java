@@ -90,9 +90,7 @@ import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.jml.clauses.AccessibleClause;
-import com.github.javaparser.ast.jml.clauses.JmlClauseHL;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleExportsDirective;
 import com.github.javaparser.ast.modules.ModuleOpensDirective;
@@ -860,27 +858,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlClauseHL n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(JmlClauseLE n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(ContinuesClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(DivergesClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(EnsuresClause n, Void arg) {
+    public void visit(JmlClauseLabel n, Void arg) {
 
     }
 
@@ -906,42 +884,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlSetStmt n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LoopDecreasesClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LoopInvariantClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LoopVariantClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(JmlClauseE n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(ModifiesClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(JmlClauseHE n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(ReturnsClause n, Void arg) {
+    public void visit(JmlDefaultClause n, Void arg) {
 
     }
 
@@ -967,11 +910,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(CapturesClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(DurationClause n, Void arg) {
 
     }
 
@@ -1003,12 +941,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(WhenClause n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(WorkingSpaceClause n, Void arg) {
+    public void visit(JmlClauseIf n, Void arg) {
 
     }
 
@@ -1053,36 +986,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(LocationSetArrayAccess n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LocationSetBindingExpr n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LocationSetFieldAccess n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LocationSetFunction n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LocationSetConstructorExpression n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(LocationSetPrimary n, Void arg) {
-
-    }
-
-    @Override
     public void visit(JmlSetComprehension n, Void arg) {
 
     }
@@ -1095,16 +998,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlMethodDeclaration n, Void arg) {
         n.getMethodDeclaration().accept(this, arg);
-    }
-
-    @Override
-    public void visit(LocationSetWrapperExpression n, Void arg) {
-        n.getExpressions().accept(this, arg);
-    }
-
-    @Override
-    public void visit(LocationSetStoreRef n, Void arg) {
-
     }
 
     @Override

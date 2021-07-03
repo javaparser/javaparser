@@ -31,7 +31,6 @@ import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
@@ -254,15 +253,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(AccessibleClause n, A arg);
 
-    R visit(JmlClauseHL n, A arg);
-
-    R visit(JmlClauseLE n, A arg);
-
-    R visit(ContinuesClause n, A arg);
-
-    R visit(DivergesClause n, A arg);
-
-    R visit(EnsuresClause n, A arg);
+    R visit(JmlClauseLabel n, A arg);
 
     R visit(JmlStmtWithExpression n, A arg);
 
@@ -272,21 +263,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlMultiCompareExpr n, A arg);
 
-    R visit(JmlSetStmt n, A arg);
-
-    R visit(LoopDecreasesClause n, A arg);
-
-    R visit(LoopInvariantClause n, A arg);
-
-    R visit(LoopVariantClause n, A arg);
-
-    R visit(JmlClauseE n, A arg);
-
-    R visit(ModifiesClause n, A arg);
-
-    R visit(JmlClauseHE n, A arg);
-
-    R visit(ReturnsClause n, A arg);
+    R visit(JmlDefaultClause n, A arg);
 
     R visit(SignalsClause n, A arg);
 
@@ -298,8 +275,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(CapturesClause n, A arg);
 
-    R visit(DurationClause n, A arg);
-
     R visit(ForallClause n, A arg);
 
     R visit(JmlFunction n, A arg);
@@ -310,9 +285,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(OldClause n, A arg);
 
-    R visit(WhenClause n, A arg);
-
-    R visit(WorkingSpaceClause n, A arg);
+    R visit(JmlClauseIf n, A arg);
 
     R visit(JmlBoundVariable n, A arg);
 
@@ -330,25 +303,9 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlStatements n, A arg);
 
-    R visit(LocationSetArrayAccess n, A arg);
-
-    R visit(LocationSetBindingExpr n, A arg);
-
-    R visit(LocationSetFieldAccess n, A arg);
-
-    R visit(LocationSetFunction n, A arg);
-
-    R visit(LocationSetConstructorExpression n, A arg);
-
-    R visit(LocationSetPrimary n, A arg);
-
     R visit(JmlSetComprehension n, A arg);
 
     R visit(JmlGhostStatements n, A arg);
 
     R visit(JmlMethodDeclaration n, A arg);
-
-    R visit(LocationSetWrapperExpression n, A arg);
-
-    R visit(LocationSetStoreRef n, A arg);
 }

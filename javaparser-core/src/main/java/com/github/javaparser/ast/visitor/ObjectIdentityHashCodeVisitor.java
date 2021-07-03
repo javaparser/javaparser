@@ -33,7 +33,6 @@ import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.jml.locref.*;
 
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
@@ -463,27 +462,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final JmlClauseHL n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlClauseLE n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final ContinuesClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final DivergesClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final EnsuresClause n, final Void arg) {
+    public Integer visit(final JmlClauseLabel n, final Void arg) {
         return n.hashCode();
     }
 
@@ -508,42 +487,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final JmlSetStmt n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LoopDecreasesClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LoopInvariantClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LoopVariantClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlClauseE n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final ModifiesClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlClauseHE n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final ReturnsClause n, final Void arg) {
+    public Integer visit(final JmlDefaultClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -573,11 +517,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final DurationClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
     public Integer visit(final ForallClause n, final Void arg) {
         return n.hashCode();
     }
@@ -603,12 +542,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final WhenClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final WorkingSpaceClause n, final Void arg) {
+    public Integer visit(final JmlClauseIf n, final Void arg) {
         return n.hashCode();
     }
 
@@ -653,36 +587,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final LocationSetArrayAccess n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LocationSetBindingExpr n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LocationSetFieldAccess n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LocationSetFunction n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LocationSetConstructorExpression n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LocationSetPrimary n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
     public Integer visit(final JmlSetComprehension n, final Void arg) {
         return n.hashCode();
     }
@@ -703,16 +607,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlMethodDeclaration n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LocationSetWrapperExpression n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final LocationSetStoreRef n, final Void arg) {
         return n.hashCode();
     }
 }

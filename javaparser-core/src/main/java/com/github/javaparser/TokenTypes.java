@@ -117,8 +117,7 @@ public class TokenTypes {
             case BIGINT_MATH:
             case BREAK_BEHAVIOR:
             case BREAK_BEHAVIOUR:
-            case CALLABLE_REDUNDANTLY:
-            case BY:
+            case CALLABLE_REDUNDANTLY: //case BY:
             case DURATION:
             case CALLABLE:
             case CAPTURES:
@@ -145,19 +144,19 @@ public class TokenTypes {
             case EXSURES_REDUNDANTLY:
             case EXTRACT:
             case FIELD:
-            case FRESH:
+                //case FRESH:
             case HELPER:
             case INITIALIZER:
             case INITIALLY:
             case INSTANCE:
-            case INTO:
+                //case INTO:
             case INVARIANT_REDUNDANTLY:
-            case INVARIANT_FOR:
+                //case INVARIANT_FOR:
             case IN_REDUNDANTLY:
-            case IS_INITIALIZED:
+                //case IS_INITIALIZED:
             case JAVA_MATH:
-            case LBLNEG:
-            case LBLPOS:
+                //case LBLNEG:
+                //case LBLPOS:
             case MAINTAINING_REDUNDANTLY:
             case MAPS:
             case MAPS_REDUNDANTLY:
@@ -167,11 +166,11 @@ public class TokenTypes {
             case MONITORS_FOR:
             case NONNULLELEMENTS:
             case NON_NULL:
-            case NOT_SPECIFIED:
-            case ONLY_ACCESSED:
+                //case NOT_SPECIFIED:
+            /*case ONLY_ACCESSED:
             case ONLY_ASSIGNED:
             case ONLY_CALLED:
-            case ONLY_CAPTURED:
+            case ONLY_CAPTURED:*/
             case OR:
             case PRODUCT:
             case REACH:
@@ -180,7 +179,7 @@ public class TokenTypes {
             case REFINING:
             case REQUIRES_REDUNDANTLY:
             case RETURN_BEHAVIOUR:
-            case SPACE_ESC:
+                //case SPACE_ESC:
             case SPEC_SAFE_MATH:
             case STATIC_INITIALIZER:
             case SUBTYPE:
@@ -188,8 +187,8 @@ public class TokenTypes {
             case TYPEOF:
             case UNINITIALIZED:
             case WRITABLE:
-            case NEW_OBJECTS:
-            case INFINITE_UNION:
+                //case NEW_OBJECTS:
+                //case INFINITE_UNION:
             case ASSERT:
             case BOOLEAN:
             case BREAK:
@@ -233,7 +232,7 @@ public class TokenTypes {
             case SWITCH:
             case SYNCHRONIZED:
             case THIS:
-            case STOREREF:
+                //case STOREREF:
             case THROW:
             case THROWS:
             case TRANSIENT:
@@ -275,8 +274,8 @@ public class TokenTypes {
             case FORALL:
             case FOR_EXAMPLE:
             case FORALLQ:
-            case HENCE_by_REDUNDANTLY:
-            case HENCE_by:
+            case HENCE_BY_REDUNDANTLY:
+            case HENCE_BY:
             case ASSERT_REDUNDANTLY:
             case ASSUME_REDUNDANTLY:
             case ASSIGNABLE:
@@ -285,7 +284,7 @@ public class TokenTypes {
             case REPRESENTS_REDUNDANTLY:
             case ACCESSIBLE_REDUNDANTLY:
             case OLD:
-            case OLD_ESC:
+                //case OLD_ESC:
             case PRE_ESC:
             case PRE:
             case PRE_REDUNDANTLY:
@@ -297,24 +296,24 @@ public class TokenTypes {
             case BREAKS_REDUNDANTLY:
             case CONTINUES_REDUNDANTLY:
             case EXCEPTIONAL_BEHAVIOUR:
-            case SINGLETON:
-            case LOCKSET:
-            case LOCSET:
-            case UNION:
-            case INTERSECT:
-            case SUBSET:
-            case DISJOINT:
-            case SETMINUS:
+                //case SINGLETON:
+                //case LOCKSET:
+//            case LOCSET:
+//            case UNION:
+//            case INTERSECT:
+//            case SUBSET:
+//            case DISJOINT:
+//            case SETMINUS:
             case NEW_OBJECT:
-            case NEWELEMSFRESH:
-            case EMPTYSET:
-            case NOT_ASSIGNED:
-            case NOT_MODIFIED:
-            case NOTHING:
+                //case NEWELEMSFRESH:
+                //case EMPTYSET:
+                //case NOT_ASSIGNED:
+                //case NOT_MODIFIED:
+                //case NOTHING:
             case STRICTLY_PURE:
             case PURE:
-            case STRICTLY_NOTHING:
-            case EVERYTHING:
+                //case STRICTLY_NOTHING:
+                //case EVERYTHING:
             case DIVERGES:
             case DIVERGES_REDUNDANTLY:
             case WORKING_SPACE:
@@ -334,7 +333,7 @@ public class TokenTypes {
             case RETURNS_REDUNDANTLY:
             case RETURNS:
             case RETURN_BEHAVIOR:
-            case SAME:
+                //case SAME:
             case SET:
             case SAFE_MATH:
             case CODE:
@@ -361,7 +360,7 @@ public class TokenTypes {
             case GHOST:
             case WHEN:
             case WHEN_REDUNDANTLY:
-            case STATIC_INVARIANT_FOR:
+                //case STATIC_INVARIANT_FOR:
             case SUCH_THAT:
             case ALSO:
             case NESTED_CONTRACT_END:

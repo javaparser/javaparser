@@ -33,7 +33,6 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.jml.clauses.*;
-import com.github.javaparser.ast.jml.locref.*;
 
 /**
  * A visitor that does not return anything.
@@ -246,15 +245,7 @@ public interface VoidVisitor<A> {
 
     void visit(AccessibleClause n, A arg);
 
-    void visit(JmlClauseHL n, A arg);
-
-    void visit(JmlClauseLE n, A arg);
-
-    void visit(ContinuesClause n, A arg);
-
-    void visit(DivergesClause n, A arg);
-
-    void visit(EnsuresClause n, A arg);
+    void visit(JmlClauseLabel n, A arg);
 
     void visit(JmlStmtWithExpression n, A arg);
 
@@ -264,21 +255,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlMultiCompareExpr n, A arg);
 
-    void visit(JmlSetStmt n, A arg);
-
-    void visit(LoopDecreasesClause n, A arg);
-
-    void visit(LoopInvariantClause n, A arg);
-
-    void visit(LoopVariantClause n, A arg);
-
-    void visit(JmlClauseE n, A arg);
-
-    void visit(ModifiesClause n, A arg);
-
-    void visit(JmlClauseHE n, A arg);
-
-    void visit(ReturnsClause n, A arg);
+    void visit(JmlDefaultClause n, A arg);
 
     void visit(SignalsClause n, A arg);
 
@@ -290,8 +267,6 @@ public interface VoidVisitor<A> {
 
     void visit(CapturesClause n, A arg);
 
-    void visit(DurationClause n, A arg);
-
     void visit(ForallClause n, A arg);
 
     void visit(JmlFunction n, A arg);
@@ -302,9 +277,7 @@ public interface VoidVisitor<A> {
 
     void visit(OldClause n, A arg);
 
-    void visit(WhenClause n, A arg);
-
-    void visit(WorkingSpaceClause n, A arg);
+    void visit(JmlClauseIf n, A arg);
 
     void visit(JmlBoundVariable n, A arg);
 
@@ -322,25 +295,9 @@ public interface VoidVisitor<A> {
 
     void visit(JmlStatements n, A arg);
 
-    void visit(LocationSetArrayAccess n, A arg);
-
-    void visit(LocationSetBindingExpr n, A arg);
-
-    void visit(LocationSetFieldAccess n, A arg);
-
-    void visit(LocationSetFunction n, A arg);
-
-    void visit(LocationSetConstructorExpression n, A arg);
-
-    void visit(LocationSetPrimary n, A arg);
-
     void visit(JmlSetComprehension n, A arg);
 
     void visit(JmlGhostStatements n, A arg);
 
     void visit(JmlMethodDeclaration n, A arg);
-
-    void visit(LocationSetWrapperExpression n, A arg);
-
-    void visit(LocationSetStoreRef n, A arg);
 }

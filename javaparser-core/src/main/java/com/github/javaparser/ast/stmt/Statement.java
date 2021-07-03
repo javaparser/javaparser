@@ -529,20 +529,6 @@ public abstract class Statement extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlSetStmt asJmlSetStmt() {
-        throw new IllegalStateException(f("%s is not JmlSetStmt, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlSetStmt> toJmlSetStmt() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlSetStmt(Consumer<JmlSetStmt> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isUnreachableStmt() {
         return false;
     }

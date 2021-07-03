@@ -36,7 +36,7 @@ public class CentralHost {
                                            ||
                                            accounts[i].accountNumber == i ));
       @*/
-    private /*@ spec_public, nullable @*/ final PermanentAccount[] accounts =
+    private /*@ spec_public nullable @*/ final PermanentAccount[] accounts =
         new PermanentAccount [maxAccountNumber];
     
         

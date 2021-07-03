@@ -19,7 +19,7 @@ package bank;
  * cannot be altered after creation. There are two subclasses, which correspond
  * to the two common constructors NIL (singleton) and CONS of lists.
  */
-public /*@ pure @*/ abstract class TransactionList {
+public abstract class TransactionList {
 
     //@ static public invariant EMPTY_LIST != null;
     public final static TransactionList EMPTY_LIST = new TransactionListNIL ();

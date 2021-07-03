@@ -20,149 +20,21 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.joining;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.CompactConstructorDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.ReceiverParameter;
-import com.github.javaparser.ast.body.RecordDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.jml.body.*;
-import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
-import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
-import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayAccessExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.MemberValuePair;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
-import com.github.javaparser.ast.expr.SwitchExpr;
-import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.modules.ModuleDeclaration;
-import com.github.javaparser.ast.modules.ModuleExportsDirective;
-import com.github.javaparser.ast.modules.ModuleOpensDirective;
-import com.github.javaparser.ast.modules.ModuleProvidesDirective;
-import com.github.javaparser.ast.modules.ModuleRequiresDirective;
-import com.github.javaparser.ast.modules.ModuleUsesDirective;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithTraversableScope;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
-import com.github.javaparser.ast.nodeTypes.SwitchNode;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
-import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.UnparsableStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.stmt.YieldStmt;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VarType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.ConfigurationOption;
@@ -170,7 +42,13 @@ import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.*;
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -795,7 +673,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
 
-
     /**
      * work in progress for issue-545
      */
@@ -917,16 +794,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(AccessibleClause n, Void arg) {
-        printClauseStoreRef(n.getKind(), n.getHeaps(), n.getExprs());
-    }
-
-    @Override
-    public void visit(JmlClauseHL n, Void arg) {
         printClause(n.getKind(), n.getHeaps(), n.getExprs());
     }
 
     @Override
-    public void visit(JmlClauseLE n, Void arg) {
+    public void visit(JmlClauseLabel n, Void arg) {
         printClause(n.getKind(), n.getLabel(), n.getExpr());
     }
 
@@ -939,23 +811,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print(";");
     }
 
-    @Override
-    public void visit(ContinuesClause n, Void arg) {
-        printClause(n.getKind(), n.getExpr());
-    }
-
     private void printClause(JmlClauseKind name, Expression expr) {
         printClause(name, new NodeList<>(), expr);
-    }
-
-    @Override
-    public void visit(DivergesClause n, Void arg) {
-        //printClause(n.getKind(), );
-    }
-
-    @Override
-    public void visit(EnsuresClause n, Void arg) {
-        printClause(n.getKind(), n.getHeaps(), n.getExpr());
     }
 
     @Override
@@ -970,9 +827,15 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(JmlLabel n, Void arg) {
         printer.print("(");
         switch (n.getKind()) {
-            case NONE:  printer.print("\\lbl"); break;
-            case POSITIVE: printer.print("\\lblpos"); break;
-            case NEGATIVE: printer.print("\\lblneg"); break;
+            case NONE:
+                printer.print("\\lbl");
+                break;
+            case POSITIVE:
+                printer.print("\\lblpos");
+                break;
+            case NEGATIVE:
+                printer.print("\\lblneg");
+                break;
         }
         n.getLabel().accept(this, arg);
         printer.print(" : ");
@@ -995,53 +858,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlSetStmt n, Void arg) {
-        printer.print("set ");
-        //TODO weigl n.getAssignment().accept(this, arg);
-        printer.println(";");
-    }
-
-    @Override
-    public void visit(LoopDecreasesClause n, Void arg) {
-        //TODO weigl
-    }
-
-    @Override
-    public void visit(LoopInvariantClause n, Void arg) {
-        printClause(n.getKind(), null);
-    }
-
-    @Override
-    public void visit(LoopVariantClause n, Void arg) {
-        //TODO weigl
-    }
-
-    @Override
-    public void visit(JmlClauseE n, Void arg) {
-        printClause(n.getKind(), n.getExpr());
-    }
-
-    @Override
-    public void visit(ModifiesClause n, Void arg) {
-        printClauseStoreRef(n.getKind(), n.getHeaps(), n.getExprs());
-    }
-
-    private void printClauseStoreRef(JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<LocationSetExpression> exprs) {
-        printer.print(kind == null ? "ERROR" : kind.jmlSymbol);
-        printList(heaps, "", "", "", "<", ">");
-        printer.print(" ");
-        printList(exprs, ", ");
-        printer.print(";");
-    }
-
-    @Override
-    public void visit(JmlClauseHE n, Void arg) {
-        printClause(n.getKind(), n.getHeaps(), n.getExpression());
-    }
-
-    @Override
-    public void visit(ReturnsClause n, Void arg) {
-        printClause(n.getKind(), n.getExpr());
+    public void visit(JmlDefaultClause n, Void arg) {
+        printClause(n.getKind(), n.getHeaps().orElse(new NodeList<>()), n.getExpression());
     }
 
     @Override
@@ -1069,11 +887,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(CapturesClause n, Void arg) {
-        //TODO weigl
-    }
-
-    @Override
-    public void visit(DurationClause n, Void arg) {
         //TODO weigl
     }
 
@@ -1120,13 +933,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(WhenClause n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printClause(n.getKind(), n.getExpr());
-    }
-
-    @Override
-    public void visit(WorkingSpaceClause n, Void arg) {
+    public void visit(JmlClauseIf n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printClause(n.getKind(), new StringLiteralExpr(("")));
         //TODO weigl printClause(n.getKind(),);
@@ -1158,9 +965,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getLabel().accept(this, arg);
         printer.print(" : ");
         printList(n.getExpressions(), ", ");
-        if (n.getMeasuredBy() != null) {
+        if (n.getMeasuredBy().isPresent()) {
             printer.print("\\measured_by");
-            n.getMeasuredBy().accept(this, arg);
+            n.getMeasuredBy().get().accept(this, arg);
         }
         printer.print(";");
     }
@@ -1230,68 +1037,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(LocationSetArrayAccess n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
-        printer.print("[");
-        n.getStart().accept(this, arg);
-        printer.print("]");
-    }
-
-    @Override
-    public void visit(LocationSetBindingExpr n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printComment(n.getComment(), arg);
-        printer.print("(");
-        printer.print(n.getQuantifier().jmlSymbol());
-        printer.print(" ");
-        n.getBoundedVars().accept(this, arg);
-        printer.print(";");
-        n.getExpr().accept(this, arg);
-        printer.print(")");
-
-    }
-
-    @Override
-    public void visit(LocationSetFieldAccess n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printComment(n.getComment(), arg);
-        n.getScope().ifPresent(it -> {
-            it.accept(this, arg);
-            printer.print(".");
-        });
-        n.getName().accept(this, arg);
-    }
-
-    @Override
-    public void visit(LocationSetFunction n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printComment(n.getComment(), arg);
-        printer.print(n.getFunction().jmlSymbol());
-        printer.print("(");
-        printList(n.getArguments(), ", ");
-        printer.print(")");
-    }
-
-    @Override
-    public void visit(LocationSetConstructorExpression n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printComment(n.getComment(), arg);
-        printer.print("\\locset");
-        printer.print("(");
-        printList(n.getArguments(), ", ");
-        printer.print(")");
-    }
-
-    @Override
-    public void visit(LocationSetPrimary n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printComment(n.getComment(), arg);
-        printer.print(n.getKind().jmlSymbol());
-    }
-
-    @Override
     public void visit(JmlSetComprehension n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
@@ -1318,16 +1063,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         });
         n.getMethodDeclaration().accept(this, arg);
         printer.println();
-    }
-
-    @Override
-    public void visit(LocationSetWrapperExpression n, Void arg) {
-        n.getExpressions().accept(this, arg);
-    }
-
-    @Override
-    public void visit(LocationSetStoreRef n, Void arg) {
-
     }
 
     @Override

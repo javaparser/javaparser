@@ -15,7 +15,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -29,6 +32,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
 
     private NodeList<Expression> expressions;
 
+    @OptionalProperty
     private Expression measuredBy;
 
     public JmlClassAccessibleDeclaration() {
@@ -104,6 +108,12 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
                 return true;
             }
         }
+        if (measuredBy != null) {
+            if (node == measuredBy) {
+                removeMeasuredBy();
+                return true;
+            }
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
@@ -128,9 +138,11 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
             setLabel((SimpleName) replacementNode);
             return true;
         }
-        if (node == measuredBy) {
-            setMeasuredBy((Expression) replacementNode);
-            return true;
+        if (measuredBy != null) {
+            if (node == measuredBy) {
+                setMeasuredBy((Expression) replacementNode);
+                return true;
+            }
         }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
@@ -192,13 +204,12 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getMeasuredBy() {
-        return measuredBy;
+    public Optional<Expression> getMeasuredBy() {
+        return Optional.ofNullable(measuredBy);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlClassAccessibleDeclaration setMeasuredBy(final Expression measuredBy) {
-        assertNotNull(measuredBy);
         if (measuredBy == this.measuredBy) {
             return this;
         }
@@ -208,5 +219,9 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
         this.measuredBy = measuredBy;
         setAsParentNodeOf(measuredBy);
         return this;
+    }
+
+    public JmlClassAccessibleDeclaration removeMeasuredBy() {
+        return setMeasuredBy(null);
     }
 }

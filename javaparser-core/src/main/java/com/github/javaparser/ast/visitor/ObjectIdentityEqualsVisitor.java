@@ -33,7 +33,6 @@ import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.jml.locref.*;
 
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
@@ -549,27 +548,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final JmlClauseHL n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlClauseLE n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final ContinuesClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final DivergesClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final EnsuresClause n, final Visitable arg) {
+    public Boolean visit(final JmlClauseLabel n, final Visitable arg) {
         return n == arg;
     }
 
@@ -594,42 +573,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final JmlSetStmt n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LoopDecreasesClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LoopInvariantClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LoopVariantClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlClauseE n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final ModifiesClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlClauseHE n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final ReturnsClause n, final Visitable arg) {
+    public Boolean visit(final JmlDefaultClause n, final Visitable arg) {
         return n == arg;
     }
 
@@ -659,11 +603,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final DurationClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
     public Boolean visit(final ForallClause n, final Visitable arg) {
         return n == arg;
     }
@@ -689,12 +628,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final WhenClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final WorkingSpaceClause n, final Visitable arg) {
+    public Boolean visit(final JmlClauseIf n, final Visitable arg) {
         return n == arg;
     }
 
@@ -739,36 +673,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final LocationSetArrayAccess n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LocationSetBindingExpr n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LocationSetFieldAccess n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LocationSetFunction n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LocationSetConstructorExpression n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LocationSetPrimary n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
     public Boolean visit(final JmlSetComprehension n, final Visitable arg) {
         return n == arg;
     }
@@ -790,16 +694,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final JmlMethodDeclaration n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LocationSetWrapperExpression n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final LocationSetStoreRef n, final Visitable arg) {
         return n == arg;
     }
 }

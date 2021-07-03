@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -1014,36 +1013,8 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetArrayAccess asLocationSetArrayAccess() {
-        throw new IllegalStateException(f("%s is not LocationSetArrayAccess, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetArrayAccess> toLocationSetArrayAccess() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetArrayAccess(Consumer<LocationSetArrayAccess> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLocationSetBindingExpr() {
         return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetBindingExpr asLocationSetBindingExpr() {
-        throw new IllegalStateException(f("%s is not LocationSetBindingExpr, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetBindingExpr> toLocationSetBindingExpr() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetBindingExpr(Consumer<LocationSetBindingExpr> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -1052,36 +1023,8 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetExpression asLocationSetExpression() {
-        throw new IllegalStateException(f("%s is not LocationSetExpression, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetExpression> toLocationSetExpression() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetExpression(Consumer<LocationSetExpression> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLocationSetFieldAccess() {
         return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetFieldAccess asLocationSetFieldAccess() {
-        throw new IllegalStateException(f("%s is not LocationSetFieldAccess, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetFieldAccess> toLocationSetFieldAccess() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetFieldAccess(Consumer<LocationSetFieldAccess> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -1090,36 +1033,8 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetFunction asLocationSetFunction() {
-        throw new IllegalStateException(f("%s is not LocationSetFunction, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetFunction> toLocationSetFunction() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetFunction(Consumer<LocationSetFunction> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLocationSetLiftExpression() {
         return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetConstructorExpression asLocationSetLiftExpression() {
-        throw new IllegalStateException(f("%s is not LocationSetLiftExpression, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetConstructorExpression> toLocationSetLiftExpression() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetLiftExpression(Consumer<LocationSetConstructorExpression> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -1128,36 +1043,8 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetPrimary asLocationSetPrimary() {
-        throw new IllegalStateException(f("%s is not LocationSetPrimary, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetPrimary> toLocationSetPrimary() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetPrimary(Consumer<LocationSetPrimary> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLocationSetWrapperExpression() {
         return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetWrapperExpression asLocationSetWrapperExpression() {
-        throw new IllegalStateException(f("%s is not LocationSetWrapperExpression, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetWrapperExpression> toLocationSetWrapperExpression() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetWrapperExpression(Consumer<LocationSetWrapperExpression> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -1166,35 +1053,7 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetConstructorExpression asLocationSetConstructorExpression() {
-        throw new IllegalStateException(f("%s is not LocationSetConstructorExpression, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetConstructorExpression> toLocationSetConstructorExpression() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetConstructorExpression(Consumer<LocationSetConstructorExpression> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLocationSetStoreRef() {
         return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocationSetStoreRef asLocationSetStoreRef() {
-        throw new IllegalStateException(f("%s is not LocationSetStoreRef, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocationSetStoreRef> toLocationSetStoreRef() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocationSetStoreRef(Consumer<LocationSetStoreRef> action) {
     }
 }

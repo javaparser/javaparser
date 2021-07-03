@@ -8,49 +8,60 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.jml.locref.LocationSetExpression;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.AssignableClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.JmlDefaultClauseMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.JmlClauseHLMetaModel;
+
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClauseHL extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
+public class JmlDefaultClause extends JmlClause implements MethodContractable, BlockContractable {
 
+    @OptionalProperty
     private NodeList<SimpleName> heaps;
 
-    private NodeList<Expression> exprs;
-
-    public JmlClauseHL() {
-        this(null, null, null);
-    }
+    private NodeList<Expression> expression;
 
     @AllFieldsConstructor
-    public JmlClauseHL(NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<Expression> exprs) {
-        this(null, kind, heaps, exprs);
-    }
-
-    public JmlClauseHL(TokenRange tokenRange, JavaToken token, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
-        this(tokenRange, (JmlClauseKind) null, heaps, exprs);
-        setKindByToken(token);
+    public JmlDefaultClause(JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
+        this(null, kind, heaps, expression);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseHL(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
-        super(tokenRange);
+    public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
+        super(tokenRange, kind);
         setHeaps(heaps);
-        setExprs(exprs);
+        setExpression(expression);
         customInitialization();
+    }
+
+    public JmlDefaultClause() {
+    }
+
+    public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<SimpleName> heaps, Expression expression) {
+        this(range, JmlClauseKind.NONE, heaps, new NodeList<>(expression));
+        setKindByToken(begin);
+    }
+
+    public JmlDefaultClause(TokenRange range, JavaToken begin, Expression expr) {
+        this(range, begin, null, expr);
+    }
+
+    public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+        this(range, JmlClauseKind.NONE, heaps, exprs);
+        setKindByToken(begin);
     }
 
     @Override
@@ -58,16 +69,18 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < exprs.size(); i++) {
-            if (exprs.get(i) == node) {
-                exprs.remove(i);
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression.get(i) == node) {
+                expression.remove(i);
                 return true;
             }
         }
-        for (int i = 0; i < heaps.size(); i++) {
-            if (heaps.get(i) == node) {
-                heaps.remove(i);
-                return true;
+        if (heaps != null) {
+            for (int i = 0; i < heaps.size(); i++) {
+                if (heaps.get(i) == node) {
+                    heaps.remove(i);
+                    return true;
+                }
             }
         }
         return super.remove(node);
@@ -78,16 +91,18 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        for (int i = 0; i < exprs.size(); i++) {
-            if (exprs.get(i) == node) {
-                exprs.set(i, (Expression) replacementNode);
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression.get(i) == node) {
+                expression.set(i, (Expression) replacementNode);
                 return true;
             }
         }
-        for (int i = 0; i < heaps.size(); i++) {
-            if (heaps.get(i) == node) {
-                heaps.set(i, (SimpleName) replacementNode);
-                return true;
+        if (heaps != null) {
+            for (int i = 0; i < heaps.size(); i++) {
+                if (heaps.get(i) == node) {
+                    heaps.set(i, (SimpleName) replacementNode);
+                    return true;
+                }
             }
         }
         return super.replace(node, replacementNode);
@@ -95,8 +110,8 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlClauseHL clone() {
-        return (JmlClauseHL) accept(new CloneVisitor(), null);
+    public JmlDefaultClause clone() {
+        return (JmlDefaultClause) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -115,38 +130,37 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseHL(TokenRange tokenRange) {
+    public JmlDefaultClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExprs() {
-        return exprs;
+    public NodeList<Expression> getExpression() {
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseHL setExprs(final NodeList<Expression> exprs) {
-        assertNotNull(exprs);
-        if (exprs == this.exprs) {
+    public JmlDefaultClause setExpression(final NodeList<Expression> expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPRS, this.exprs, exprs);
-        if (this.exprs != null)
-            this.exprs.setParentNode(null);
-        this.exprs = exprs;
-        setAsParentNodeOf(exprs);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> getHeaps() {
-        return heaps;
+    public Optional<NodeList<SimpleName>> getHeaps() {
+        return Optional.ofNullable(heaps);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseHL setHeaps(final NodeList<SimpleName> heaps) {
-        assertNotNull(heaps);
+    public JmlDefaultClause setHeaps(final NodeList<SimpleName> heaps) {
         if (heaps == this.heaps) {
             return this;
         }
@@ -160,18 +174,7 @@ public class JmlClauseHL extends JmlClause implements MethodContractable, BlockC
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClauseHLMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlClauseHLMetaModel;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseHL(TokenRange tokenRange, NodeList<SimpleName> heaps, JmlClauseKind kind, NodeList<Expression> exprs) {
-        super(tokenRange, kind);
-        setHeaps(heaps);
-        setExprs(exprs);
-        customInitialization();
+    public JmlDefaultClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlDefaultClauseMetaModel;
     }
 }

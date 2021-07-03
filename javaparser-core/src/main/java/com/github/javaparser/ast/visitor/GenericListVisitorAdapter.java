@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import com.github.javaparser.ast.jml.locref.*;
 
 /**
  * A visitor that has a return value of {@link List List&lt;R&gt;}, and has a default implementation for all its visit
@@ -2211,29 +2210,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final JmlClauseHL n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExprs().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getHeaps().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final JmlClauseLE n, final A arg) {
+    public List<R> visit(final JmlClauseLabel n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2243,62 +2220,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getLabel().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final ContinuesClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpr().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getLabel().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final DivergesClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final EnsuresClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpr().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getHeaps().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2384,109 +2305,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final JmlSetStmt n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getLhs().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getRhs().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LoopDecreasesClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LoopInvariantClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpr().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LoopVariantClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final JmlClauseE n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpr().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final ModifiesClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExprs().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getHeaps().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final JmlClauseHE n, final A arg) {
+    public List<R> visit(final JmlDefaultClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2494,25 +2313,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        {
-            tmp = n.getHeaps().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final ReturnsClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpr().accept(this, arg);
+        if (n.getHeaps().isPresent()) {
+            tmp = n.getHeaps().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2594,18 +2396,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
 
     @Override
     public List<R> visit(final CapturesClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final DurationClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2702,24 +2492,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final WhenClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpr().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final WorkingSpaceClause n, final A arg) {
+    public List<R> visit(final JmlClauseIf n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2788,8 +2561,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        {
-            tmp = n.getMeasuredBy().accept(this, arg);
+        if (n.getMeasuredBy().isPresent()) {
+            tmp = n.getMeasuredBy().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2923,128 +2696,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetArrayAccess n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getName().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getStart().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getStop().isPresent()) {
-            tmp = n.getStop().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetBindingExpr n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getBoundedVars().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getExpr().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getPredicate().isPresent()) {
-            tmp = n.getPredicate().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetFieldAccess n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getName().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getScope().isPresent()) {
-            tmp = n.getScope().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetFunction n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getArguments().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetConstructorExpression n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getArguments().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetPrimary n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)
@@ -3196,40 +2847,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getMethodDeclaration().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetWrapperExpression n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpressions().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final LocationSetStoreRef n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getArguments().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

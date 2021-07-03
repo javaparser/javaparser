@@ -46,8 +46,8 @@ options {
     JDK_VERSION = "1.8";
     STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    //DEBUG_PARSER=true;
-    //DEBUG_LOOKAHEAD = true;
+    DEBUG_PARSER=true;
+    DEBUG_LOOKAHEAD = true;
 }
 
 
@@ -87,7 +87,6 @@ import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.stmt.*;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.jml.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
@@ -349,7 +348,7 @@ TOKEN : {
 | <BREAKS_REDUNDANTLY: "breaks_redundantly">
 | <BREAK_BEHAVIOR : "break_behavior">
 | <BREAK_BEHAVIOUR : "break_behaviour">
-| <BY : "\\by">
+//| <BY : "\\by">
 | <CALLABLE: "callable">
 | <CALLABLE_REDUNDANTLY: "callable_redundantly">
 | <CAPTURES: "captures">
@@ -386,7 +385,7 @@ TOKEN : {
 | <IMPLICATION: "==>">
 | <IMPLICATION_BACKWARD: "<==">
 | <ERASES :  "erases">
-| <EVERYTHING: "\\everything">
+//| <EVERYTHING: "\\everything">
 | <EXAMPLE: "example">
 | <EXCEPTIONAL_BEHAVIOR: "exceptional_behavior">
 | <EXCEPTIONAL_BEHAVIOUR: "exceptional_behaviour">
@@ -399,11 +398,11 @@ TOKEN : {
 | <FORALLQ: "\\forall">
 | <FORALL: "forall">
 | <FOR_EXAMPLE: "for_example">
-| <FRESH: "\\fresh">
+//| <FRESH: "\\fresh">
 | <GHOST: "ghost">
 | <HELPER: "helper">
-| <HENCE_by: "hence_by">
-| <HENCE_by_REDUNDANTLY: "hence_by_redundantly">
+| <HENCE_BY: "hence_by">
+| <HENCE_BY_REDUNDANTLY: "hence_by_redundantly">
 | <IMPLIES_THAT: "implies_that">
 | <IN: "in">
 | <INITIALIZER: "initializer">
@@ -411,15 +410,15 @@ TOKEN : {
 | <INSTANCE: "instance">
 | <TWO_STATE: "two_state">
 | <NO_STATE: "no_state">
-| <INTO: "\\into">
+//| <INTO: "\\into">
 | <INVARIANT_REDUNDANTLY: "invariant_redundantly">
-| <INVARIANT_FOR: "\\invariant_for">
+//| <INVARIANT_FOR: "\\invariant_for">
 | <IN_REDUNDANTLY: "in_redundantly">
-| <IS_INITIALIZED: "\\is_initialized">
+//| <IS_INITIALIZED: "\\is_initialized">
 | <JAVA_MATH: "\\java_math">
-| <LBLNEG: "\\lblneg">
-| <LBLPOS: "\\lblpos">
-| <LOCKSET: "\\lockset">
+//| <LBLNEG: "\\lblneg">
+//| <LBLPOS: "\\lblpos">
+//| <LOCKSET: "\\lockset">
 | <LOOP_INVARIANT: "loop_invariant">
 | <LOOP_INVARIANT_REDUNDANTLY: "loop_invariant_redundantly">
 | <MAINTAINING: "maintaining">
@@ -448,22 +447,22 @@ TOKEN : {
 | <NORMAL_BEHAVIOR: "normal_behavior">
 | <NORMAL_BEHAVIOUR: "normal_behaviour">
 | <NORMAL_EXAMPLE: "normal_example">
-| <NOTHING: "\\nothing">
-| <NOT_ASSIGNED: "\\not_assigned">
-| <NOT_MODIFIED: "\\not_modified">
-| <NOT_SPECIFIED: "\\not_specified">
-| <STRICTLY_NOTHING: "\\strictly_nothing">
+//| <NOTHING: "\\nothing">
+//| <NOT_ASSIGNED: "\\not_assigned">
+//| <NOT_MODIFIED: "\\not_modified">
+//| <NOT_SPECIFIED: "\\not_specified">
+//| <STRICTLY_NOTHING: "\\strictly_nothing">
 | <NOWARN: "\\nowarn">
 | <NOWARN_OP: "\\nowarn_op">
 | <NULLABLE: "nullable">
 | <NULLABLE_BY_DEFAULT: "nullable_by_default">
 | <NUM_OF: "\\num_of">
-| <OLD_ESC: "\\old">
+//| <OLD_ESC: "\\old">
 | <OLD: "old">
-| <ONLY_ACCESSED: "\\only_accessed">
+/*| <ONLY_ACCESSED: "\\only_accessed">
 | <ONLY_ASSIGNED: "\\only_assigned">
 | <ONLY_CALLED: "\\only_called">
-| <ONLY_CAPTURED: "\\only_captured">
+| <ONLY_CAPTURED: "\\only_captured">*/
 | <OR: "or">
 | <POST: "post">
 | <POST_REDUNDANTLY: "post_redundantly">
@@ -485,13 +484,13 @@ TOKEN : {
 | <RETURN_BEHAVIOR : "return_behavior">
 | <RETURN_BEHAVIOUR : "return_behaviour">
 | <SAFE_MATH: "\\safe_math">
-| <SAME: "\\same">
+//| <SAME: "\\same">
 | <SET: "set">
 | <SIGNALS: "signals">
 | <SIGNALS_ONLY: "signals_only">
 | <SIGNALS_ONLY_REDUNDANTLY: "signals_only_redundantly">
 | <SIGNALS_REDUNDANTLY: "signals_redundantly">
-| <SPACE_ESC: "\\space">
+//| <SPACE_ESC: "\\space">
 | <SPEC_BIGINT_MATH: "spec_bigint_math">
 | <SPEC_JAVA_MATH: "spec_java_math">
 | <SPEC_PACKAGE : "spec_package">
@@ -518,21 +517,21 @@ TOKEN : {
 | <WORKING_SPACE: "working_space">
 | <WORKING_SPACE_REDUNDANTLY: "working_space_redundantly">
 | <WRITABLE: "writable">
-| <LOCSET: "\\locset">
-| <STOREREF: "\\storeref">
-| <EMPTYSET: "\\emptyset">
-| <SINGLETON: "\\singleton">  //KeY extension, not official JML
-| <STATIC_INVARIANT_FOR: "\\static_invariant_for">  //KeY extension, not official JML
-| <SETMINUS: "\\set_minus">  //KeY extension, not official JML
+//| <LOCSET: "\\locset">
+//| <STOREREF: "\\storeref">
+//| <EMPTYSET: "\\emptyset">
+//| <SINGLETON: "\\singleton">  //KeY extension, not official JML
+//| <STATIC_INVARIANT_FOR: "\\static_invariant_for">  //KeY extension, not official JML
+//| <SETMINUS: "\\set_minus">  //KeY extension, not official JML
 //| <ALLFIELDS: "\\all_fields">  //KeY extension, not official JML
 //| <ALLOBJECTS: "\\all_objects">  //KeY extension, not official JML
-| <NEWELEMSFRESH: "\\new_elems_fresh">  //KeY extension, not official JML
-| <NEW_OBJECTS: "\\new_objects">  //KeY extension, not official JML
-| <DISJOINT: "\\disjoint">  //KeY extension, not official JML
-| <SUBSET: "\\subset">
-| <UNION: "\\set_union">  //KeY extension, not official JML
-| <INFINITE_UNION: "\\infinite_union">  //KeY extension, not official JML
-| <INTERSECT: "\\intersect">  //KeY extension, not official JML
+//| <NEWELEMSFRESH: "\\new_elems_fresh">  //KeY extension, not official JML
+//| <NEW_OBJECTS: "\\new_objects">  //KeY extension, not official JML
+//| <DISJOINT: "\\disjoint">  //KeY extension, not official JML
+//| <SUBSET: "\\subset">
+//| <UNION: "\\set_union">  //KeY extension, not official JML
+//| <INFINITE_UNION: "\\infinite_union">  //KeY extension, not official JML
+//| <INTERSECT: "\\intersect">  //KeY extension, not official JML
 }
 
 /* COMMENTS */
@@ -3447,14 +3446,14 @@ String Identifier():
        | <ENSURES_REDUNDANTLY> | <ENSURES_FREE> | <REQUIRES_FREE> | <ERASES>
        | <EXAMPLE> | <EXCEPTIONAL_BEHAVIOR> | <EXCEPTIONAL_BEHAVIOUR> | <EXCEPTIONAL_EXAMPLE>
        | <EXSURES> | <EXSURES_REDUNDANTLY> | <EXTRACT> | <FIELD> | <FORALL>
-       | <FOR_EXAMPLE> | <GHOST> | <HELPER> | <HENCE_by> | <HENCE_by_REDUNDANTLY>
+       | <FOR_EXAMPLE> | <GHOST> | <HELPER> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY>
        | <IMPLIES_THAT> | <IN> | <INITIALIZER> | <INITIALLY> | <INSTANCE>
        | <INVARIANT_REDUNDANTLY> | <LOOP_INVARIANT> | <LOOP_INVARIANT_REDUNDANTLY> | <MAINTAINING>
        | <MAINTAINING_REDUNDANTLY> | <MAPS> | <MAPS_REDUNDANTLY> | <MEASURED_BY>
        | <MEASURED_BY_REDUNDANTLY> | <METHOD> | <MODEL> | <MODEL_PROGRAM> | <MODIFIABLE>
        | <MODIFIABLE_REDUNDANTLY> | <MODIFIES> | <MODIFIES_REDUNDANTLY> | <MONITORED>
        | <MONITORS_FOR> | <NEW_OBJECT > | <NON_NULL> | <NORMAL_BEHAVIOR> | <NORMAL_BEHAVIOUR>
-       | <NORMAL_EXAMPLE> | <NULLABLE> | <NULLABLE_BY_DEFAULT> | <OLD> | <OR> | <OLD_ESC>
+       | <NORMAL_EXAMPLE> | <NULLABLE> | <NULLABLE_BY_DEFAULT> | <OLD> | <OR> //| <OLD_ESC>
        | <POST> | <POST_REDUNDANTLY> | <PRE> | <PRE_REDUNDANTLY> | <PURE>
        | <READABLE> | <REFINING> | <REPRESENTS> | <REPRESENTS_REDUNDANTLY> | <REQUIRES_REDUNDANTLY>
        | <RETURNS> | <RETURNS_REDUNDANTLY> | <RETURN_BEHAVIOR > | <RETURN_BEHAVIOUR > | <SET>
@@ -3462,8 +3461,8 @@ String Identifier():
        | <SPEC_BIGINT_MATH> | <SPEC_JAVA_MATH> | <SPEC_PACKAGE > | <SPEC_PRIVATE >
        | <SPEC_PROTECTED> | <SPEC_PUBLIC> | <SPEC_SAFE_MATH> | <STATIC_INITIALIZER> | <STRICTLY_PURE >
        | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
-       | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> | <INVARIANT_FOR>
-       | <RESULT> | <SUBSET> | <INTERSECT> | <UNION> | <LOCSET> | <SINGLETON>
+       | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> //| <INVARIANT_FOR>
+       | <RESULT> //| <SUBSET> | <INTERSECT> | <UNION> | <LOCSET> | <SINGLETON>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
 }
@@ -4405,13 +4404,13 @@ Expression JmlPrimaryPrefix():
 {
   (
       "(" {begin=token();}
-       (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX>)
+       (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX> | <JML_IDENTIFIER>)
        vars=JmlBoundedVariables()
        ";"
        expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
       ")"
       { return new JmlQuantifiedExpr(range(begin, token()), JmlQuantifiedExpr.JmlBinder.FORALL, vars, exprs);}
-   |
+   /*|
       (<LOCSET>) {begin=token();} <LPAREN> exprs=ExpressionList() <RPAREN>
       {
         return new LocationSetConstructorExpression(range(begin, token()), exprs);
@@ -4420,7 +4419,7 @@ Expression JmlPrimaryPrefix():
       (<STOREREF>) {begin=token();} <LPAREN> lsexprs=StoreRefList() <RPAREN>
       {
         return new LocationSetStoreRef(range(begin, token()), lsexprs);
-      }
+      }*/
   )
 }
 
@@ -4459,7 +4458,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
         "."
         (
             "*"
-            {ret = LocationSetFieldAccess.forAllFields(range(scope,token()), scope); }
+            {ret = FieldAccessExpr.allMemberAccess(range(scope,token()), scope); }
          |
             "this"
             { ret = new ThisExpr(range(scope, token()), scopeToName(scope)); }
@@ -4482,7 +4481,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
         "["
         (
           "*"
-          { ret = LocationSetArrayAccess.forAllIndices(range(scope, token()), scope); }
+            {ret = ArrayAccessExpr.allElementsAccess(range(scope,token()), scope); }
         /*| LOOKAHEAD(Expression(), "..")
           a = Expression() ".." b = Expression()
           { ret = new LocationSetArrayAccess(range(scope, token()), scope, a, b); }*/
@@ -4824,7 +4823,7 @@ JmlStatements JmlStatements():
 JmlStatement JmlStatement():
 { JavaToken begin; Expression expr,target; NodeList<Statement> stmts;}
 {
-  ( (<ASSERT> | <ASSUME> | <HENCE_by> | <HENCE_by_REDUNDANTLY> | <SET>)
+  ( (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
     { begin = token(); }
     expr=Expression()
     ";"
@@ -4916,25 +4915,37 @@ BlockStmt Block():
     }
 }
 
-BlockStmt BlockWithContract():
+Statement BlockWithContract():
 {
     BlockStmt b;
     NodeList<JmlContracts> c = emptyNodeList();
+    SimpleName label = null;
+    JavaToken begin =null;
 }
 {
   (c=JmlContracts())?
+  (label=SimpleName() { begin=token(); } ":")?
+
   b=Block()
-  { //TODO add contracts c to block b.
-    return b;}
+  {
+    b.setContracts(c);
+    if(label==null) return b;
+    else return new LabeledStmt(range(begin, token()), label, b);
+  }
 }
 
 JmlClause JmlLoopInvClause():
 { Expression expr; JavaToken begin;}
 {
-    (<LOOP_INVARIANT> | <MAINTAINING> | <LOOP_INVARIANT_REDUNDANTLY> | <MAINTAINING_REDUNDANTLY>)
+    ( <LOOP_INVARIANT>
+    | <MAINTAINING>
+    | <LOOP_INVARIANT_REDUNDANTLY>
+    | <MAINTAINING_REDUNDANTLY>
+    | <ASSIGNABLE>
+    )
     {begin=token();}
     expr=Expression()
-    {return new JmlClauseE(range(begin, token()), begin, expr);}
+    {return new JmlDefaultClause(range(begin, token()), begin, expr);}
 }
 
 NodeList<JmlContracts> JmlLoopInvariants():
@@ -5076,7 +5087,7 @@ JmlClause JmlDecreasesClause():
   (<DECREASES> | <DECREASING> | <DECREASES_REDUNDANTLY> | <DECREASING_REDUNDANTLY> )
   {begin=token();}
   expr=Expression()
-  {return new JmlClauseE(range(begin,token()), begin, expr);}
+  {return new JmlDefaultClause(range(begin,token()), begin, expr);}
 }
 
 
@@ -5110,10 +5121,10 @@ JmlClause JmlBreaksClause():
     JavaToken begin;
 }
 {
-  <BREAKS>   { begin = token();}
+  (<BREAKS> |<BREAKS_REDUNDANTLY>)  { begin = token();}
   <LPAREN> (label=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new JmlClauseLE(range(begin, token()), label, expr); }
+  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
 }
 
 JmlClause JmlContinuesClause():
@@ -5123,10 +5134,10 @@ JmlClause JmlContinuesClause():
     JavaToken begin;
 }
 {
-  <CONTINUES> { begin = token();}
+  (<CONTINUES>|<CONTINUES_REDUNDANTLY>) { begin = token();}
   <LPAREN> (label=SimpleName())? <RPAREN>
   expr=Expression()
-  { return new ContinuesClause(range(begin, token()), label, expr); }
+  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
 }
 
 
@@ -5138,7 +5149,7 @@ JmlClause JmlReturnsClause():
 {
   <RETURNS> {begin = token();}
   expr=Expression()
-  { return new ReturnsClause(range(begin, token()), expr); }
+  { return new JmlDefaultClause(range(begin, token()), begin, expr); }
 }
 
 SimpleName heap():
@@ -5174,8 +5185,8 @@ JmlClause JmlAssignableClause():
   | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY>)
   { begin = token();}
   (heaps=heaps())*
-  exprs=StoreRefList()
-  { return new JmlClauseHL(range(begin, token()), begin, heaps, exprs); }
+  exprs=ExpressionList()
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
 }
 
 JmlClause JmlAccessibleClause():
@@ -5189,9 +5200,9 @@ JmlClause JmlAccessibleClause():
   (<ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>)
   { begin = token();}
   (heaps=heaps())*
-  exprs=StoreRefList()
-  (<ESC_MEASURED_BY> e=Expression())?
-  { return new JmlClauseHL(range(begin, token()), begin, heaps, exprs); }
+  exprs=ExpressionList()
+  (<ESC_MEASURED_BY> e=Expression())? //TODO weigl: add measured by expression, new ast class
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
 }
 
 /**
@@ -5205,7 +5216,7 @@ JmlClause JmlMeasuredBy():
 {
   { begin = token();}
   <MEASURED_BY> e=Expression()
-  { return new JmlClauseE(range(begin,token()), JmlClauseKind.MEASURED_BY, e); }
+  { return new JmlDefaultClause(range(begin,token()), JmlClauseKind.MEASURED_BY, new NodeList<>(), new NodeList<>(e)); }
 }
 
 JmlClause JmlRequiresClause():
@@ -5218,7 +5229,7 @@ JmlClause JmlRequiresClause():
   (<REQUIRES> |<REQUIRES_FREE>|<REQUIRES_REDUNDANTLY>)
   { begin = token();}
   (heaps=heaps())? e=Expression()
-  { return new JmlClauseHE(range(begin, token()), begin, heaps, e); }
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
 }
 
 /**
@@ -5233,7 +5244,7 @@ JmlClause JmlEnsuresClause():
   (<ENSURES>|<ENSURES_FREE>|<ENSURES_REDUNDANTLY>)
   {begin = token();}
   (heaps=heaps())? e=Expression()
-  { return new JmlClauseHE(range(begin, token()), begin, heaps, e); }
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
 }
 
 /**
@@ -5280,114 +5291,8 @@ JmlClause JmlDivergesClause():
   (<DIVERGES>|<DIVERGES_REDUNDANTLY> )
   {begin=token();}
   e=Expression()
-  { return new JmlClauseE(range(begin, token()), begin, e); }
+  { return new JmlDefaultClause(range(begin, token()), begin, e); }
 }
-
-NodeList<Expression> StoreRefList():
-{
-  NodeList<Expression> ret = new NodeList<>();
-  Expression expr;
-}
-{
-  expr=StoreRef() {ret.add(expr);} (<COMMA> expr=StoreRef() {ret.add(expr);})*
-  {return ret;}
-}
-
-Expression StoreRef():
-{ Expression ret;}
-{
-    ( <NOTHING>          {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.NOTHING);}
-    | <EVERYTHING>       {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.EVERYTHING);}
-    | <NOT_SPECIFIED>    {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.NOT_SPECIFIED);}
-    | <STRICTLY_NOTHING> {return new LocationSetPrimary(range(token(), token()), LocationSetPrimary.Kind.STRICTLY_NOTHING);}
-    | ret=Expression()   {return ret;}
-    )
-}
-
-Expression StoreRefExpr():
-{
-        JavaToken begin;
-        Token tok;
-        NodeList<Expression> arrayIndices = new NodeList<>();
-        NodeList<Expression> refs = new NodeList<>();
-        Expression expr;
-        Expression predicate = null;
-        VariableDeclarationExpr vars;
-}
-{
-  (<LOCSET> | <SINGLETON>) {begin=token();} <LPAREN> arrayIndices=ExpressionList() <RPAREN>
-  {
-    return new LocationSetConstructorExpression(range(begin, token()), arrayIndices);
-  }
-  | <EMPTYSET> {begin=token();}
-  {
-    return new LocationSetPrimary(range(begin, token()),
-                    LocationSetPrimary.Kind.EMPTYSET);
-  }
-  | ( <UNION>    | <INTERSECT> | <SETMINUS> /*| <ALLFIELDS> | <ALLOBJECTS>*/
-    | <DISJOINT> | <SUBSET>    | <NEWELEMSFRESH>)
-    {begin=token();}
-    <LPAREN> refs=StoreRefList() <RPAREN>
-    {
-        return new LocationSetPrimary(range(begin, token()),
-                    LocationSetPrimary.Kind.EMPTYSET);
-    }
-  | <LPAREN> {begin=token();} <INFINITE_UNION>
-    vars=VariableDeclarationExpression()  ";"
-    (predicate=Expression() ";" | ";")?
-    expr=StoreRefExpr()
-    <RPAREN>
-    {
-        return new LocationSetBindingExpr(range(begin, token()),
-            LocationSetBindingExpr.Quantifier.INFINITE_UNION,
-            vars, predicate, expr);
-    }
-  | expr=StoreRefField() {return expr;}
-}
-
-Expression StoreRefField():
-{
-        JavaToken begin;
-        Expression prefix; SimpleName name;
-        Expression expr;
-}
-{
-  (name=SimpleName()
-     { prefix=new LocationSetFieldAccess(range(name,name), null, name);}
-  |<THIS>
-     { prefix=new LocationSetFieldAccess(range(token(),token()), null, new SimpleName("this"));}
-  |<SUPER>
-     { prefix=new LocationSetFieldAccess(range(token(),token()), null, new SimpleName("super"));}
-  )
-  ( ("[" ( expr=Expression()
-            {prefix = new LocationSetArrayAccess(range(prefix, token()), prefix, expr);}
-          | "*" {prefix = LocationSetArrayAccess.forAllIndices(range(prefix, token()), prefix);}
-          )
-       "]"
-     )
-  | "." ( name=SimpleName() {prefix = new LocationSetFieldAccess(range(prefix, token()),prefix, name); }
-        | "*" { return LocationSetFieldAccess.forAllFields(range(prefix, token()), prefix); }
-        )
-  )*
-  {assert prefix!=null; return prefix;}
-}
-
-
-//predornot:} (predicate |NOT_SPECIFIED | SAME);
-//predicate: expression;
-
-
-
-
-
-/*JmlClause determs():
-{}
-{
-  DETERMINES exprs
-    BY exprs
-    ( DECLASSIFIES exprs  | ERASES exprs )?
-    ( NEW_OBJECTS exprs )?
-}*/
 
 /**
  * Classes inside body statements can only be abstract or final. The semantic checks must check it.

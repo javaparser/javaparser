@@ -66,6 +66,11 @@ public class ArrayAccessExpr extends Expression {
         customInitialization();
     }
 
+    public static Expression allElementsAccess(TokenRange range, Expression scope) {
+        SimpleName fieldName = new SimpleName(range, "*");
+        return new ArrayAccessExpr(scope, new NameExpr(range, fieldName));
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

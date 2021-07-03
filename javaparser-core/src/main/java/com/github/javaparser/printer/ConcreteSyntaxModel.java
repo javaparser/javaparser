@@ -29,7 +29,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.locref.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -995,15 +994,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(JmlClauseE.class, sequence(
-                child(ObservableProperty.KIND),
-                space(),
-                child(EXPRESSION),
-                semicolon(),
-                newline()
-        ));
-
-        concreteSyntaxModelByClass.put(JmlClauseHE.class, sequence(
+        concreteSyntaxModelByClass.put(JmlDefaultClause.class, sequence(
                 child(ObservableProperty.KIND),
                 child(HEAPS),
                 space(),
@@ -1011,16 +1002,8 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 newline()
         ));
-        concreteSyntaxModelByClass.put(JmlClauseHL.class, sequence(
-                child(ObservableProperty.KIND),
-                child(HEAPS),
-                space(),
-                child(EXPRS),
-                semicolon(),
-                newline()
-        ));
 
-        concreteSyntaxModelByClass.put(JmlClauseLE.class, sequence(
+        concreteSyntaxModelByClass.put(JmlClauseLabel.class, sequence(
                 child(ObservableProperty.KIND),
                 token(LPAREN),
                 child(LABEL),
@@ -1033,7 +1016,6 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(CallableClause.class, sequence());
         concreteSyntaxModelByClass.put(ClassInvariantClause.class, sequence());
-        concreteSyntaxModelByClass.put(DurationClause.class, sequence());
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlBoundVariable.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
@@ -1049,21 +1031,12 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlRefiningStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlRepresentsDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlSetComprehension.class, sequence());
-        concreteSyntaxModelByClass.put(JmlSetStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlStatements.class, sequence());
         concreteSyntaxModelByClass.put(JmlStmtWithExpression.class, sequence());
         concreteSyntaxModelByClass.put(JmlUnreachableStmt.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetArrayAccess.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetBindingExpr.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetFieldAccess.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetFunction.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetConstructorExpression.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetPrimary.class, sequence());
         concreteSyntaxModelByClass.put(OldClause.class, sequence());
         concreteSyntaxModelByClass.put(SignalsClause.class, sequence());
         concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetStoreRef.class, sequence());
-        concreteSyntaxModelByClass.put(LocationSetWrapperExpression.class, sequence());
         concreteSyntaxModelByClass.put(SignalsOnlyClause.class, sequence(
                 token(SIGNALS_ONLY),
                 child(TYPES),
