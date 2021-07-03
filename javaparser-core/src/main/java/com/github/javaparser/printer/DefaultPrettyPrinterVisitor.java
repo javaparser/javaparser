@@ -802,7 +802,15 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlClauseLabel n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printClause(n.getKind(), n.getLabel(), n.getExpr());
+        printer.print(n.getKind().jmlSymbol);
+        n.getLabel().ifPresent(it -> {
+            printer.print(" (");
+            it.accept(this, null);
+            printer.print(")");
+        });
+        printer.print(" ");
+        n.getExpr().accept(this, null);
+        printer.print(";");
     }
 
     private void printClause(JmlClauseKind kind, SimpleName label, Expression expr) {
@@ -975,7 +983,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printModifiers(n.getModifiers());
         printer.print("accessible");
         printer.print(" ");
-        n.getLabel().accept(this, arg);
+        n.getVariable().accept(this, arg);
         printer.print(" : ");
         printList(n.getExpressions(), ", ");
         if (n.getMeasuredBy().isPresent()) {

@@ -1367,9 +1367,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlClauseLabel n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
-        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
+        SimpleName label = n.getLabel().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null || label == null)
+        if (expr == null)
             return null;
         n.setExpr(expr);
         n.setLabel(label);
@@ -1448,10 +1448,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final SignalsClause n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
-        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Type type = (Type) n.getType().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null || name == null || type == null)
+        if (expr == null || type == null)
             return null;
         n.setExpr(expr);
         n.setName(name);
@@ -1574,14 +1574,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final JmlClassAccessibleDeclaration n, final A arg) {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
-        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
+        Expression label = (Expression) n.getVariable().accept(this, arg);
         Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (label == null)
             return null;
         n.setModifiers(modifiers);
         n.setExpressions(expressions);
-        n.setLabel(label);
+        n.setVariable(label);
         n.setMeasuredBy(measuredBy);
         n.setComment(comment);
         return n;

@@ -2104,8 +2104,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        {
-            result = n.getLabel().accept(this, arg);
+        if (n.getLabel().isPresent()) {
+            result = n.getLabel().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2209,8 +2209,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        {
-            result = n.getName().accept(this, arg);
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2405,7 +2405,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
-            result = n.getLabel().accept(this, arg);
+            result = n.getVariable().accept(this, arg);
             if (result != null)
                 return result;
         }

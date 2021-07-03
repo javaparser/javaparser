@@ -2218,8 +2218,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        {
-            tmp = n.getLabel().accept(this, arg);
+        if (n.getLabel().isPresent()) {
+            tmp = n.getLabel().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2335,8 +2335,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        {
-            tmp = n.getName().accept(this, arg);
+        if (n.getName().isPresent()) {
+            tmp = n.getName().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2557,7 +2557,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
                 result.addAll(tmp);
         }
         {
-            tmp = n.getLabel().accept(this, arg);
+            tmp = n.getVariable().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

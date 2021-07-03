@@ -465,7 +465,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlClauseLabel n, final Void arg) {
-        return (n.getExpr().accept(this, arg)) * 31 + (n.getLabel().accept(this, arg)) * 31 + (n.getKind().hashCode());
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getKind().hashCode());
     }
 
     @Override
@@ -495,7 +495,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final SignalsClause n, final Void arg) {
-        return (n.getExpr().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getKind().hashCode());
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getKind().hashCode());
     }
 
     @Override
@@ -560,7 +560,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlClassAccessibleDeclaration n, final Void arg) {
-        return (n.getExpressions().accept(this, arg)) * 31 + (n.getLabel().accept(this, arg)) * 31 + (n.getMeasuredBy().isPresent() ? n.getMeasuredBy().get().accept(this, arg) : 0) * 31 + (n.getModifiers().accept(this, arg));
+        return (n.getExpressions().accept(this, arg)) * 31 + (n.getVariable().accept(this, arg)) * 31 + (n.getMeasuredBy().isPresent() ? n.getMeasuredBy().get().accept(this, arg) : 0) * 31 + (n.getModifiers().accept(this, arg));
     }
 
     @Override

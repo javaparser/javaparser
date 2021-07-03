@@ -13,10 +13,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlBinaryInfixExprMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -69,28 +67,35 @@ public class JmlBinaryInfixExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlBinaryInfixExpr() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlBinaryInfixExpr asJmlBinaryInfixExpr() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlBinaryInfixExpr> toJmlBinaryInfixExpr() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBinaryInfixExpr(Consumer<JmlBinaryInfixExpr> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getLeft() {
         return left;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlBinaryInfixExpr setLeft(final Expression left) {
         assertNotNull(left);
         if (left == this.left) {
@@ -104,10 +109,12 @@ public class JmlBinaryInfixExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getOperator() {
         return operator;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlBinaryInfixExpr setOperator(final SimpleName operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
@@ -121,10 +128,12 @@ public class JmlBinaryInfixExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getRight() {
         return right;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlBinaryInfixExpr setRight(final Expression right) {
         assertNotNull(right);
         if (right == this.right) {
@@ -139,6 +148,7 @@ public class JmlBinaryInfixExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -146,6 +156,7 @@ public class JmlBinaryInfixExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -165,11 +176,13 @@ public class JmlBinaryInfixExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlBinaryInfixExpr clone() {
         return (JmlBinaryInfixExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlBinaryInfixExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlBinaryInfixExprMetaModel;
     }

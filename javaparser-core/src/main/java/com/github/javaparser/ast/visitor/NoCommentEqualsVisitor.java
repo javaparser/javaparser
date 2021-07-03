@@ -1125,7 +1125,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlClassAccessibleDeclaration n2 = (JmlClassAccessibleDeclaration) arg;
         if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
             return false;
-        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+        if (!nodeEquals(n.getVariable(), n2.getVariable()))
             return false;
         if (!nodeEquals(n.getMeasuredBy(), n2.getMeasuredBy()))
             return false;

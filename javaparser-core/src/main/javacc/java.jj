@@ -2295,17 +2295,16 @@ JmlClassLevel JmlClassInitially(ModifierHolder modifiers):
 JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
 {
     JavaToken begin;
-    SimpleName id;
+    Expression var;
     Expression expr, measuredBy = null;
     NodeList<Expression> expressions = new NodeList<>();
 }
 {
   (<ACCESSIBLE>|<ACCESSIBLE_REDUNDANTLY>)
   {begin=token();}
-  id=SimpleName() <COLON>
-  expr=Expression() {expressions.add(expr);}
-  (<COMMA> expr=Expression() {expressions.add(expr);})*
-  (<ESC_MEASURED_BY> measuredBy=Expression())?
+  var=Expression() <COLON>
+  expressions=ExpressionList()
+  [<ESC_MEASURED_BY> measuredBy=Expression()]
   ";"
   {
     return new JmlClassAccessibleDeclaration(range(begin, token()), modifiers.modifiers, id, expressions, measuredBy);}

@@ -13,7 +13,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SignalsClauseMetaModel;
+
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -23,6 +26,7 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
 
     private Type type;
 
+    @OptionalProperty
     private SimpleName name;
 
     private Expression expr;
@@ -57,6 +61,12 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (name != null) {
+            if (node == name) {
+                removeName();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -69,9 +79,11 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
             setExpr((Expression) replacementNode);
             return true;
         }
-        if (node == name) {
-            setName((SimpleName) replacementNode);
-            return true;
+        if (name != null) {
+            if (node == name) {
+                setName((SimpleName) replacementNode);
+                return true;
+            }
         }
         if (node == type) {
             setType((Type) replacementNode);
@@ -127,13 +139,12 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getName() {
-        return name;
+    public Optional<SimpleName> getName() {
+        return Optional.ofNullable(name);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SignalsClause setName(final SimpleName name) {
-        assertNotNull(name);
         if (name == this.name) {
             return this;
         }
@@ -168,5 +179,10 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SignalsClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.signalsClauseMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public SignalsClause removeName() {
+        return setName(null);
     }
 }

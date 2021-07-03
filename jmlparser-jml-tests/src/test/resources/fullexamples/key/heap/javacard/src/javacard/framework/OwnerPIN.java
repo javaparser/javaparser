@@ -31,7 +31,7 @@ public class OwnerPIN implements PIN {
     /*@ public invariant _pin.length == maxPINSize + 1 &&
                          JCSystem.isTransient(_pin) == JCSystem.NOT_A_TRANSIENT_OBJECT &&
                          !\transactionUpdated(_pin); @*/
-    //@ public represents triesRep = _pin[0], _pin.\transient, \transactionUpdated(_pin);
+    //@ public represents triesRep = \storeref(_pin[0], _pin.\transient, \transactionUpdated(_pin));
     //@ public represents triesLeft = _pin[0];
 
 

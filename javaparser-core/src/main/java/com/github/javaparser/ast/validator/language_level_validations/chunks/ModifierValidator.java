@@ -50,9 +50,15 @@ import static java.util.Arrays.asList;
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class ModifierValidator extends VisitorValidator {
-    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
-    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP,
+            JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL, JML_HELPER,
+            JML_SPEC_PRIVATE, JML_SPEC_PUBLIC, JML_SPEC_PACKAGE, JML_SPEC_PACKAGE, JML_PURE, JML_STRICTLY_PURE, JML_GHOST, JML_MODEL};
+    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT,
+            JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL, JML_HELPER,
+            JML_SPEC_PRIVATE, JML_SPEC_PUBLIC, JML_SPEC_PACKAGE, JML_SPEC_PACKAGE, JML_PURE, JML_STRICTLY_PURE, JML_GHOST, JML_MODEL};
+    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT,
+            JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL, JML_HELPER,
+            JML_SPEC_PRIVATE, JML_SPEC_PUBLIC, JML_SPEC_PACKAGE, JML_SPEC_PACKAGE, JML_PURE, JML_STRICTLY_PURE, JML_GHOST, JML_MODEL};
 
     private final boolean hasStrictfp;
     private final boolean hasDefaultAndStaticInterfaceMethods;
@@ -76,11 +82,11 @@ public class ModifierValidator extends VisitorValidator {
 
     private void validateClassModifiers(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP, JML_NULLABLE_BY_DEFAULT);
         } else if (n.isNestedType()) {
-            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP, JML_NULLABLE_BY_DEFAULT);
         } else if (n.isLocalClassDeclaration()) {
-            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
+            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP, JML_NULLABLE_BY_DEFAULT);
         }
     }
 
@@ -119,7 +125,7 @@ public class ModifierValidator extends VisitorValidator {
         validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE,
                 JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL,
                 JML_SPEC_PRIVATE, JML_SPEC_PUBLIC, JML_SPEC_PACKAGE, JML_SPEC_PACKAGE, JML_PURE, JML_STRICTLY_PURE, JML_GHOST, JML_MODEL);
-        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
+        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL, JML_NULLABLE, JML_NON_NULL));
         super.visit(n, reporter);
     }
 
@@ -160,12 +166,12 @@ public class ModifierValidator extends VisitorValidator {
                     }
                 } else {
                     validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP,
-                            JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL,
+                            JML_NULLABLE, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL, JML_HELPER,
                             JML_SPEC_PRIVATE, JML_SPEC_PUBLIC, JML_SPEC_PACKAGE, JML_SPEC_PACKAGE, JML_PURE, JML_STRICTLY_PURE, JML_GHOST, JML_MODEL);
                 }
             }
         }
-        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
+        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL, JML_NULLABLE, JML_NON_NULL));
         super.visit(n, reporter);
     }
 
@@ -173,7 +179,7 @@ public class ModifierValidator extends VisitorValidator {
     public void visit(LambdaExpr n, ProblemReporter reporter) {
         n.getParameters().forEach(p -> {
             // Final is not allowed on inferred parameters, but those get caught by the parser.
-            validateModifiers(p, reporter, FINAL);
+            validateModifiers(p, reporter, FINAL, JML_NULLABLE, JML_NON_NULL);
         });
         super.visit(n, reporter);
     }
@@ -191,7 +197,7 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(VariableDeclarationExpr n, ProblemReporter reporter) {
-        validateModifiers(n, reporter, FINAL);
+        validateModifiers(n, reporter, FINAL, JML_NULLABLE, JML_NON_NULL);
         super.visit(n, reporter);
     }
 
@@ -207,7 +213,7 @@ public class ModifierValidator extends VisitorValidator {
         validateAtMostOneOf(n, reporter, JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PUBLIC, JML_SPEC_PROTECTED);
         validateAtMostOneOf(n, reporter, TWO_STATE, NO_STATE);
         validateAtMostOneOf(n, reporter, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL, JML_NULLABLE);
-        validateAtMostOneOf(n, reporter, JML_HELPER, JML_PURE, JML_STRICTLY_PURE);
+        validateAtMostOneOf(n, reporter, JML_PURE, JML_STRICTLY_PURE);
         // JML ends
 
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
@@ -278,9 +284,10 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(JmlClassAccessibleDeclaration n, ProblemReporter arg) {
-        validateModifiers(n, arg);
+        validateModifiers(n, arg, PUBLIC, PRIVATE, PROTECTED);
         super.visit(n, arg);
     }
+
 
     @Override
     public void visit(JmlContract n, ProblemReporter arg) {

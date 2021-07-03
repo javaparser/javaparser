@@ -1057,18 +1057,22 @@ public abstract class Expression extends Node {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlBinaryInfixExpr() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlBinaryInfixExpr asJmlBinaryInfixExpr() {
         throw new IllegalStateException(f("%s is not JmlBinaryInfixExpr, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlBinaryInfixExpr> toJmlBinaryInfixExpr() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBinaryInfixExpr(Consumer<JmlBinaryInfixExpr> action) {
     }
 }

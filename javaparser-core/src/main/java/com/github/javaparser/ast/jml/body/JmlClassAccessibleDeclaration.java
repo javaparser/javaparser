@@ -27,7 +27,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
 
     private NodeList<Modifier> modifiers;
 
-    private SimpleName label;
+    private Expression variable;
 
     private NodeList<Expression> expressions;
 
@@ -39,18 +39,18 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
     }
 
     @AllFieldsConstructor
-    public JmlClassAccessibleDeclaration(NodeList<Modifier> modifiers, SimpleName label, NodeList<Expression> expressions, Expression measuredBy) {
-        this(null, modifiers, label, expressions, measuredBy);
+    public JmlClassAccessibleDeclaration(NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
+        this(null, modifiers, variable, expressions, measuredBy);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClassAccessibleDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, SimpleName label, NodeList<Expression> expressions, Expression measuredBy) {
+    public JmlClassAccessibleDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
         super(tokenRange);
         setModifiers(modifiers);
-        setLabel(label);
+        setVariable(variable);
         setExpressions(expressions);
         setMeasuredBy(measuredBy);
         customInitialization();
@@ -133,8 +133,8 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
                 return true;
             }
         }
-        if (node == label) {
-            setLabel((SimpleName) replacementNode);
+        if (node == variable) {
+            setVariable((Expression) replacementNode);
             return true;
         }
         if (measuredBy != null) {
@@ -184,21 +184,21 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getLabel() {
-        return label;
+    public Expression getVariable() {
+        return variable;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassAccessibleDeclaration setLabel(final SimpleName label) {
-        assertNotNull(label);
-        if (label == this.label) {
+    public JmlClassAccessibleDeclaration setVariable(final Expression variable) {
+        assertNotNull(variable);
+        if (variable == this.variable) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null)
-            this.label.setParentNode(null);
-        this.label = label;
-        setAsParentNodeOf(label);
+        notifyPropertyChange(ObservableProperty.LABEL, this.variable, variable);
+        if (this.variable != null)
+            this.variable.setParentNode(null);
+        this.variable = variable;
+        setAsParentNodeOf(variable);
         return this;
     }
 

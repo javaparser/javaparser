@@ -13,7 +13,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClauseLabelMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -21,6 +24,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class JmlClauseLabel extends JmlClause {
 
+    @OptionalProperty
     private SimpleName label;
 
     private Expression expr;
@@ -68,6 +72,12 @@ public class JmlClauseLabel extends JmlClause {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (label != null) {
+            if (node == label) {
+                removeLabel();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -80,9 +90,11 @@ public class JmlClauseLabel extends JmlClause {
             setExpr((Expression) replacementNode);
             return true;
         }
-        if (node == label) {
-            setLabel((SimpleName) replacementNode);
-            return true;
+        if (label != null) {
+            if (node == label) {
+                setLabel((SimpleName) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -122,13 +134,12 @@ public class JmlClauseLabel extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getLabel() {
-        return label;
+    public Optional<SimpleName> getLabel() {
+        return Optional.ofNullable(label);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlClauseLabel setLabel(final SimpleName label) {
-        assertNotNull(label);
         if (label == this.label) {
             return this;
         }
@@ -144,5 +155,9 @@ public class JmlClauseLabel extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClauseLabelMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClauseLabelMetaModel;
+    }
+
+    public JmlClauseLabel removeLabel() {
+        return setLabel(null);
     }
 }
