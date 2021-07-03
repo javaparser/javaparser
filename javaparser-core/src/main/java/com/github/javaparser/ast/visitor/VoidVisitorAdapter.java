@@ -872,9 +872,9 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlClassAccessibleDeclaration n, final A arg) {
         n.getExpressions().forEach(p -> p.accept(this, arg));
-        n.getVariable().accept(this, arg);
         n.getMeasuredBy().ifPresent(l -> l.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getVariable().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

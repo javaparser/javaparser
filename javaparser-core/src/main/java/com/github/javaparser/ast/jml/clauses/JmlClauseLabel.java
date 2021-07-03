@@ -15,7 +15,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClauseLabelMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 
 /**
@@ -157,6 +156,7 @@ public class JmlClauseLabel extends JmlClause {
         return JavaParserMetaModel.jmlClauseLabelMetaModel;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClauseLabel removeLabel() {
         return setLabel(null);
     }

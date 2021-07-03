@@ -1401,11 +1401,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final JmlClassAccessibleDeclaration n2 = (JmlClassAccessibleDeclaration) arg;
         if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
             return false;
-        if (!nodeEquals(n.getVariable(), n2.getVariable()))
-            return false;
         if (!nodeEquals(n.getMeasuredBy(), n2.getMeasuredBy()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getVariable(), n2.getVariable()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }

@@ -1574,15 +1574,15 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final JmlClassAccessibleDeclaration n, final A arg) {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
-        Expression label = (Expression) n.getVariable().accept(this, arg);
         Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        Expression variable = (Expression) n.getVariable().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (label == null)
+        if (variable == null)
             return null;
         n.setModifiers(modifiers);
         n.setExpressions(expressions);
-        n.setVariable(label);
         n.setMeasuredBy(measuredBy);
+        n.setVariable(variable);
         n.setComment(comment);
         return n;
     }

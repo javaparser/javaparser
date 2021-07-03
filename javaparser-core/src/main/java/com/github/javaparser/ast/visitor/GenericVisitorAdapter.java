@@ -2404,11 +2404,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        {
-            result = n.getVariable().accept(this, arg);
-            if (result != null)
-                return result;
-        }
         if (n.getMeasuredBy().isPresent()) {
             result = n.getMeasuredBy().get().accept(this, arg);
             if (result != null)
@@ -2416,6 +2411,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getVariable().accept(this, arg);
             if (result != null)
                 return result;
         }

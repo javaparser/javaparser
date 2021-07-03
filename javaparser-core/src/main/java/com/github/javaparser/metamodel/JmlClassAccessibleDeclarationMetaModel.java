@@ -43,9 +43,9 @@ public class JmlClassAccessibleDeclarationMetaModel extends JmlClassLevelMetaMod
 
     public PropertyMetaModel expressionsPropertyMetaModel;
 
-    public PropertyMetaModel labelPropertyMetaModel;
-
     public PropertyMetaModel measuredByPropertyMetaModel;
 
     public PropertyMetaModel modifiersPropertyMetaModel;
+
+    public PropertyMetaModel variablePropertyMetaModel;
 }

@@ -2556,11 +2556,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        {
-            tmp = n.getVariable().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
         if (n.getMeasuredBy().isPresent()) {
             tmp = n.getMeasuredBy().get().accept(this, arg);
             if (tmp != null)
@@ -2568,6 +2563,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getVariable().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

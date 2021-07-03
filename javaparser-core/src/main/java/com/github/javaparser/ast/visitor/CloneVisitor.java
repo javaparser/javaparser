@@ -1508,11 +1508,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlClassAccessibleDeclaration n, final Object arg) {
         NodeList<Expression> expressions = cloneList(n.getExpressions(), arg);
-        Expression label = cloneNode(n.getVariable(), arg);
         Expression measuredBy = cloneNode(n.getMeasuredBy(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        Expression variable = cloneNode(n.getVariable(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlClassAccessibleDeclaration r = new JmlClassAccessibleDeclaration(n.getTokenRange().orElse(null), modifiers, label, expressions, measuredBy);
+        JmlClassAccessibleDeclaration r = new JmlClassAccessibleDeclaration(n.getTokenRange().orElse(null), modifiers, variable, expressions, measuredBy);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

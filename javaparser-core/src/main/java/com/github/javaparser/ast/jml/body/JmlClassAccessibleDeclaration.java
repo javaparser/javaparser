@@ -133,10 +133,6 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
                 return true;
             }
         }
-        if (node == variable) {
-            setVariable((Expression) replacementNode);
-            return true;
-        }
         if (measuredBy != null) {
             if (node == measuredBy) {
                 setMeasuredBy((Expression) replacementNode);
@@ -148,6 +144,10 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
                 modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
+        }
+        if (node == variable) {
+            setVariable((Expression) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }
@@ -194,7 +194,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
         if (variable == this.variable) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.LABEL, this.variable, variable);
+        notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, variable);
         if (this.variable != null)
             this.variable.setParentNode(null);
         this.variable = variable;

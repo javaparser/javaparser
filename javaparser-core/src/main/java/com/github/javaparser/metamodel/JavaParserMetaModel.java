@@ -327,7 +327,7 @@ public final class JavaParserMetaModel {
         jmlRepresentsDeclarationMetaModel.getConstructorParameters().add(jmlRepresentsDeclarationMetaModel.idPropertyMetaModel);
         jmlRepresentsDeclarationMetaModel.getConstructorParameters().add(jmlRepresentsDeclarationMetaModel.exprPropertyMetaModel);
         jmlClassAccessibleDeclarationMetaModel.getConstructorParameters().add(jmlClassAccessibleDeclarationMetaModel.modifiersPropertyMetaModel);
-        jmlClassAccessibleDeclarationMetaModel.getConstructorParameters().add(jmlClassAccessibleDeclarationMetaModel.labelPropertyMetaModel);
+        jmlClassAccessibleDeclarationMetaModel.getConstructorParameters().add(jmlClassAccessibleDeclarationMetaModel.variablePropertyMetaModel);
         jmlClassAccessibleDeclarationMetaModel.getConstructorParameters().add(jmlClassAccessibleDeclarationMetaModel.expressionsPropertyMetaModel);
         jmlClassAccessibleDeclarationMetaModel.getConstructorParameters().add(jmlClassAccessibleDeclarationMetaModel.measuredByPropertyMetaModel);
         arrayTypeMetaModel.getConstructorParameters().add(arrayTypeMetaModel.componentTypePropertyMetaModel);
@@ -1015,12 +1015,12 @@ public final class JavaParserMetaModel {
         jmlRepresentsDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlRepresentsDeclarationMetaModel.modifiersPropertyMetaModel);
         jmlClassAccessibleDeclarationMetaModel.expressionsPropertyMetaModel = new PropertyMetaModel(jmlClassAccessibleDeclarationMetaModel, "expressions", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
         jmlClassAccessibleDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlClassAccessibleDeclarationMetaModel.expressionsPropertyMetaModel);
-        jmlClassAccessibleDeclarationMetaModel.labelPropertyMetaModel = new PropertyMetaModel(jmlClassAccessibleDeclarationMetaModel, "label", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false);
-        jmlClassAccessibleDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlClassAccessibleDeclarationMetaModel.labelPropertyMetaModel);
         jmlClassAccessibleDeclarationMetaModel.measuredByPropertyMetaModel = new PropertyMetaModel(jmlClassAccessibleDeclarationMetaModel, "measuredBy", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
         jmlClassAccessibleDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlClassAccessibleDeclarationMetaModel.measuredByPropertyMetaModel);
         jmlClassAccessibleDeclarationMetaModel.modifiersPropertyMetaModel = new PropertyMetaModel(jmlClassAccessibleDeclarationMetaModel, "modifiers", com.github.javaparser.ast.Modifier.class, Optional.of(modifierMetaModel), false, false, true, false);
         jmlClassAccessibleDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlClassAccessibleDeclarationMetaModel.modifiersPropertyMetaModel);
+        jmlClassAccessibleDeclarationMetaModel.variablePropertyMetaModel = new PropertyMetaModel(jmlClassAccessibleDeclarationMetaModel, "variable", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
+        jmlClassAccessibleDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlClassAccessibleDeclarationMetaModel.variablePropertyMetaModel);
         arrayTypeMetaModel.componentTypePropertyMetaModel = new PropertyMetaModel(arrayTypeMetaModel, "componentType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false);
         arrayTypeMetaModel.getDeclaredPropertyMetaModels().add(arrayTypeMetaModel.componentTypePropertyMetaModel);
         arrayTypeMetaModel.originPropertyMetaModel = new PropertyMetaModel(arrayTypeMetaModel, "origin", com.github.javaparser.ast.type.ArrayType.Origin.class, Optional.empty(), false, false, false, false);

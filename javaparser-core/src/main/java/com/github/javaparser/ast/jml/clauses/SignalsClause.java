@@ -15,7 +15,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SignalsClauseMetaModel;
-
 import java.util.Optional;
 
 /**
