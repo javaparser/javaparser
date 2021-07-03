@@ -10,7 +10,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlContractMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -195,7 +194,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlContract(TokenRange tokenRange, boolean isLoopContract, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
-        this.isLoopContract = isLoopContract;
+        setLoopContract(isLoopContract);
         setBehavior(behavior);
         setModifiers(modifiers);
         setClauses(clauses);
@@ -209,11 +208,18 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         return JavaParserMetaModel.jmlContractMetaModel;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isLoopContract() {
         return isLoopContract;
     }
 
-    public void setLoopContract(boolean loopContract) {
-        isLoopContract = loopContract;
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlContract setLoopContract(final boolean isLoopContract) {
+        if (isLoopContract == this.isLoopContract) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.LOOP_CONTRACT, this.isLoopContract, isLoopContract);
+        this.isLoopContract = isLoopContract;
+        return this;
     }
 }

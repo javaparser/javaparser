@@ -2685,4 +2685,29 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         return null;
     }
+
+    @Override
+    public R visit(final JmlBinaryInfixExpr n, final A arg) {
+        R result;
+        {
+            result = n.getLeft().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getOperator().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getRight().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
 }

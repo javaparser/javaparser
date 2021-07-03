@@ -959,4 +959,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getMethodDeclaration().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
+
+    @Override
+    public void visit(final JmlBinaryInfixExpr n, final A arg) {
+        n.getLeft().accept(this, arg);
+        n.getOperator().accept(this, arg);
+        n.getRight().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
 }

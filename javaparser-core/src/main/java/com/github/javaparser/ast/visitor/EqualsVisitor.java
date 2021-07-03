@@ -1429,6 +1429,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodesEquals(n.getClauses(), n2.getClauses()))
             return false;
+        if (!objEquals(n.isLoopContract(), n2.isLoopContract()))
+            return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
         if (!nodesEquals(n.getSubContracts(), n2.getSubContracts()))
@@ -1538,6 +1540,18 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getContract(), n2.getContract()))
             return false;
         if (!nodeEquals(n.getMethodDeclaration(), n2.getMethodDeclaration()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlBinaryInfixExpr n, final Visitable arg) {
+        final JmlBinaryInfixExpr n2 = (JmlBinaryInfixExpr) arg;
+        if (!nodeEquals(n.getLeft(), n2.getLeft()))
+            return false;
+        if (!nodeEquals(n.getOperator(), n2.getOperator()))
+            return false;
+        if (!nodeEquals(n.getRight(), n2.getRight()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }

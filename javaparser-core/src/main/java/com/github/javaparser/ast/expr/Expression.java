@@ -1056,4 +1056,19 @@ public abstract class Expression extends Node {
     public boolean isLocationSetStoreRef() {
         return false;
     }
+
+    public boolean isJmlBinaryInfixExpr() {
+        return false;
+    }
+
+    public JmlBinaryInfixExpr asJmlBinaryInfixExpr() {
+        throw new IllegalStateException(f("%s is not JmlBinaryInfixExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlBinaryInfixExpr> toJmlBinaryInfixExpr() {
+        return Optional.empty();
+    }
+
+    public void ifJmlBinaryInfixExpr(Consumer<JmlBinaryInfixExpr> action) {
+    }
 }

@@ -701,4 +701,9 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     public void visit(final JmlMethodDeclaration n, final A arg) {
         defaultAction(n, arg);
     }
+
+    @Override
+    public void visit(final JmlBinaryInfixExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
 }

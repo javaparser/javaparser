@@ -703,4 +703,9 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     public R visit(final JmlMethodDeclaration n, final A arg) {
         return defaultAction(n, arg);
     }
+
+    @Override
+    public R visit(final JmlBinaryInfixExpr n, final A arg) {
+        return defaultAction(n, arg);
+    }
 }

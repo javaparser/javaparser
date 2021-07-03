@@ -17,7 +17,6 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 
 /**
@@ -221,6 +220,7 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClassAccessibleDeclaration removeMeasuredBy() {
         return setMeasuredBy(null);
     }

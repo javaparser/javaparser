@@ -300,4 +300,6 @@ public interface VoidVisitor<A> {
     void visit(JmlGhostStatements n, A arg);
 
     void visit(JmlMethodDeclaration n, A arg);
+
+    void visit(JmlBinaryInfixExpr n, A arg);
 }

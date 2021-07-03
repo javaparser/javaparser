@@ -1684,4 +1684,19 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final JmlBinaryInfixExpr n, final A arg) {
+        Expression left = (Expression) n.getLeft().accept(this, arg);
+        SimpleName operator = (SimpleName) n.getOperator().accept(this, arg);
+        Expression right = (Expression) n.getRight().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (left == null || operator == null || right == null)
+            return null;
+        n.setLeft(left);
+        n.setOperator(operator);
+        n.setRight(right);
+        n.setComment(comment);
+        return n;
+    }
 }

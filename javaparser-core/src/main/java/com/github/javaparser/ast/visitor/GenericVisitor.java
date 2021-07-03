@@ -308,4 +308,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlGhostStatements n, A arg);
 
     R visit(JmlMethodDeclaration n, A arg);
+
+    R visit(JmlBinaryInfixExpr n, A arg);
 }

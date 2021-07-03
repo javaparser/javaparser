@@ -3962,14 +3962,31 @@ Expression RangeExpr():
     Expression right;
 }
 {
-    ret=ShiftExpression()
+    ret=InfixExpr()
     [
        (".."|"." ".")
-       right=ShiftExpression()
+       right=RangeExpr()
        { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.RANGE); }
     ]
     { return ret; }
 }
+
+Expression InfixExpr():
+{
+    Expression ret;
+    Expression right;
+    JavaToken op;
+}
+{
+    ret=ShiftExpression()
+    [
+       <JML_IDENTIFIER> {op=token();}
+       right=InfixExpr()
+       { ret = new JmlBinaryInfixExpr(range(ret, token()), ret, right, op); }
+    ]
+    { return ret; }
+}
+
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-15.html#jls-15.19

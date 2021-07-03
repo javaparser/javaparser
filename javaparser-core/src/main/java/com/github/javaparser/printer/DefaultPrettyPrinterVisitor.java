@@ -1084,6 +1084,18 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(JmlBinaryInfixExpr n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printer.print("(");
+        n.getLeft().accept(this, arg);
+        printer.print(" ");
+        n.getOperator().accept(this, arg);
+        printer.print(" ");
+        n.getRight().accept(this, arg);
+        printer.print(")");
+    }
+
+    @Override
     public void visit(final CharLiteralExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
@@ -1810,7 +1822,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final DoStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().accept(this,arg);
+        n.getContracts().accept(this, arg);
         printComment(n.getComment(), arg);
         printer.print("do ");
         n.getBody().accept(this, arg);

@@ -570,7 +570,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlContract n, final Void arg) {
-        return (n.getBehavior().hashCode()) * 31 + (n.getClauses().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getSubContracts().accept(this, arg));
+        return (n.getBehavior().hashCode()) * 31 + (n.getClauses().accept(this, arg)) * 31 + (n.isLoopContract() ? 1 : 0) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getSubContracts().accept(this, arg));
     }
 
     @Override
@@ -610,5 +610,10 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlMethodDeclaration n, final Void arg) {
         return (n.getContract().isPresent() ? n.getContract().get().accept(this, arg) : 0) * 31 + (n.getMethodDeclaration().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final JmlBinaryInfixExpr n, final Void arg) {
+        return (n.getLeft().accept(this, arg)) * 31 + (n.getOperator().accept(this, arg)) * 31 + (n.getRight().accept(this, arg));
     }
 }
