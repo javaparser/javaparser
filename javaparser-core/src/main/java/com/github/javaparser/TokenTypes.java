@@ -238,6 +238,7 @@ public class TokenTypes {
             case TRANSIENT:
             case TRY:
             case RESULT:
+            case LOOP_CONTRACT:
             case LOOP_INVARIANT:
             case LOOP_INVARIANT_REDUNDANTLY:
             case MAINTAINING:

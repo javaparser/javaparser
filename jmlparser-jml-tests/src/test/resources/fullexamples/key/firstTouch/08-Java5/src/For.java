@@ -23,8 +23,9 @@ class For implements Iterable {
     @ ensures false;
     @*/
   void infiniteLoop() {
-    //@ maintaining \invariant_for(f);
-    //@ assignable \strictly_nothing;
+    /*@ maintaining \invariant_for(f);
+        assignable \strictly_nothing;
+    */
     for (Object o: f);
   }
 

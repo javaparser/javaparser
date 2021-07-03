@@ -50,9 +50,8 @@ public class BinaryExpr extends Expression {
         // JML
         IMPLICATION("==>"),
         SUBTYPE("<:"),
-        // 12.6.4 Lockset Ordering
+        RANGE(".."),
         SUB_LOCK("<%"),
-        // 12.6.4 Lockset Ordering
         SUB_LOCKE("<%="),
         RIMPLICATION("<=="),
         EQUIVALENCE("<==>"),

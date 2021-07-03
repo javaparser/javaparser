@@ -64,6 +64,10 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
         setKindByToken(begin);
     }
 
+    public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<Expression> exprs) {
+        this(range, begin, new NodeList<>(), exprs);
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {

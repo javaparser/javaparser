@@ -84,7 +84,7 @@ public class CentralHost {
 	  @     (\forall int j; (j>=0 && j<i && accounts[j] != null); 
 	  @             accounts[j].balance <= accounts[account].balance))) &&
 	  @    (account == -1 ==> (\forall int j; j>=0 && j<i; accounts[j] == null));
-	  @ assignable i,account;
+	  @ assignable i, account;
 	  @ decreases maxAccountNumber - i; 
 	  @*/
 	 for (int i = 0; i<maxAccountNumber; i++) {	    

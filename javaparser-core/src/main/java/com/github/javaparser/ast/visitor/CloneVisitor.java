@@ -1538,7 +1538,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         NodeList<JmlContract> subContracts = cloneList(n.getSubContracts(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlContract r = new JmlContract(n.getTokenRange().orElse(null), n.getBehavior(), modifiers, clauses, subContracts);
+        JmlContract r = new JmlContract(n.getTokenRange().orElse(null), false, n.getBehavior(), modifiers, clauses, subContracts);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

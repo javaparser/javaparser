@@ -53,6 +53,34 @@ public class FullExamplesTest {
         blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JButton.java");
         blocked.add("/key/firstTouch/11-StateMerging/A.java");
         blocked.add("/key/firstTouch/11-StateMerging/Gcd.java");
+        blocked.add("/key/completionscopes/src/CompletionScopes.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JTextComponent.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/Component.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/BorderLayout.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JScrollPane.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/GridLayout.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/Frame.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JOptionPane.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/Dimension.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JRadioButtonMenuItem.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/Integer.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/Font.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JRadioButton.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/ActionEvent.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JPanel.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/Window.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/ButtonGroup.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JToggleButton.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JLabel.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JComponent.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/PrintStream.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/Container.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/IllegalStateException.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JTextField.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JTextArea.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/AbstractButton.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JFrame.java");
+        blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JButton.java");
     }
 
 

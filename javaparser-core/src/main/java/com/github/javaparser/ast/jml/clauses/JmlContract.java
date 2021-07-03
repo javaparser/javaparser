@@ -3,20 +3,23 @@ package com.github.javaparser.ast.jml.clauses;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.Behavior;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlContractMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlContractMetaModel;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
 public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract> {
+
+    private boolean isLoopContract;
 
     private Behavior behavior;
 
@@ -27,16 +30,20 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     private NodeList<JmlContract> subContracts = new NodeList<>();
 
     public JmlContract() {
-        this(null, Behavior.NONE, new NodeList<>(), new NodeList<>(), new NodeList<>());
+        this(null, false, Behavior.NONE, new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public JmlContract(Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
-        this(null, behavior, modifiers, clauses, subContracts);
+    public JmlContract(boolean isLoopContract, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+        this(null, isLoopContract, behavior, modifiers, clauses, subContracts);
     }
 
     public JmlContract(TokenRange tokenRange) {
         super(tokenRange);
+    }
+
+    public JmlContract(TokenRange range, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+        this(range, false, behavior, modifiers, clauses, subContracts);
     }
 
     @Override
@@ -186,8 +193,9 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContract(TokenRange tokenRange, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public JmlContract(TokenRange tokenRange, boolean isLoopContract, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
+        this.isLoopContract = isLoopContract;
         setBehavior(behavior);
         setModifiers(modifiers);
         setClauses(clauses);
@@ -199,5 +207,13 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlContractMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlContractMetaModel;
+    }
+
+    public boolean isLoopContract() {
+        return isLoopContract;
+    }
+
+    public void setLoopContract(boolean loopContract) {
+        isLoopContract = loopContract;
     }
 }

@@ -46,8 +46,8 @@ options {
     JDK_VERSION = "1.8";
     STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    DEBUG_PARSER=true;
-    DEBUG_LOOKAHEAD = true;
+    //DEBUG_PARSER=true;
+    //DEBUG_LOOKAHEAD = true;
 }
 
 
@@ -419,6 +419,7 @@ TOKEN : {
 //| <LBLNEG: "\\lblneg">
 //| <LBLPOS: "\\lblpos">
 //| <LOCKSET: "\\lockset">
+| <LOOP_CONTRACT : "loop_contract">
 | <LOOP_INVARIANT: "loop_invariant">
 | <LOOP_INVARIANT_REDUNDANTLY: "loop_invariant_redundantly">
 | <MAINTAINING: "maintaining">
@@ -3449,6 +3450,7 @@ String Identifier():
        | <FOR_EXAMPLE> | <GHOST> | <HELPER> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY>
        | <IMPLIES_THAT> | <IN> | <INITIALIZER> | <INITIALLY> | <INSTANCE>
        | <INVARIANT_REDUNDANTLY> | <LOOP_INVARIANT> | <LOOP_INVARIANT_REDUNDANTLY> | <MAINTAINING>
+       | <LOOP_CONTRACT>
        | <MAINTAINING_REDUNDANTLY> | <MAPS> | <MAPS_REDUNDANTLY> | <MEASURED_BY>
        | <MEASURED_BY_REDUNDANTLY> | <METHOD> | <MODEL> | <MODEL_PROGRAM> | <MODIFIABLE>
        | <MODIFIABLE_REDUNDANTLY> | <MODIFIES> | <MODIFIES_REDUNDANTLY> | <MONITORED>
@@ -3935,7 +3937,7 @@ Expression RelationalExpression():
     BinaryExpr.Operator op;
 }
 {
-    ret = ShiftExpression()
+    ret = RangeExpr()
     (
         (
             "<"  { op = BinaryExpr.Operator.LESS; }
@@ -3946,10 +3948,26 @@ Expression RelationalExpression():
          |
             ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
         )
-        right = ShiftExpression()
+        right = RangeExpr()
         { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
     )*
 
+    { return ret; }
+}
+
+
+Expression RangeExpr():
+{
+    Expression ret;
+    Expression right;
+}
+{
+    ret=ShiftExpression()
+    [
+       (".."|"." ".")
+       right=ShiftExpression()
+       { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.RANGE); }
+    ]
     { return ret; }
 }
 
@@ -4410,16 +4428,6 @@ Expression JmlPrimaryPrefix():
        expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
       ")"
       { return new JmlQuantifiedExpr(range(begin, token()), JmlQuantifiedExpr.JmlBinder.FORALL, vars, exprs);}
-   /*|
-      (<LOCSET>) {begin=token();} <LPAREN> exprs=ExpressionList() <RPAREN>
-      {
-        return new LocationSetConstructorExpression(range(begin, token()), exprs);
-      }
-    |
-      (<STOREREF>) {begin=token();} <LPAREN> lsexprs=StoreRefList() <RPAREN>
-      {
-        return new LocationSetStoreRef(range(begin, token()), lsexprs);
-      }*/
   )
 }
 
@@ -4780,7 +4788,12 @@ Statement Statement():
 {
     try {
         (
-              LOOKAHEAD(2) ret = LabeledStatement()
+              //TODO weigl fix is an expresive lookahead
+              //           to speed up this, we need to parse jml contracts and forward the to the
+              //           next suitable statement.
+              LOOKAHEAD(JmlLoopInvariants() SimpleName() ":")
+              ret = JmlLabeledLoopsStatement()
+            | LOOKAHEAD(2) ret = LabeledStatement()
             | LOOKAHEAD(2) ret = JmlStatements()
             | ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
@@ -4860,6 +4873,25 @@ AssertStmt AssertStatement():
     { return new AssertStmt(range(begin, token()), check, msg);  }
 }
 
+LabeledStmt JmlLabeledLoopsStatement():
+{
+    SimpleName label;
+    Statement stmt;
+    JavaToken begin;
+    NodeList<JmlContracts> contracts;
+}
+{
+    contracts=JmlLoopInvariants()
+    label = SimpleName() { begin=token(); }
+    ":"
+    ( stmt = WhileStatement(contracts)
+    | stmt = DoStatement(contracts)
+    | stmt = ForStatement(contracts)
+    )
+    { return new LabeledStmt(range(begin, token()), label, stmt); }
+}
+
+
 /**
  * // TODO: Examine more closely.
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-14.html#jls-14.7
@@ -4935,17 +4967,16 @@ Statement BlockWithContract():
 }
 
 JmlClause JmlLoopInvClause():
-{ Expression expr; JavaToken begin;}
+{ NodeList<Expression> exprs; JavaToken begin;}
 {
     ( <LOOP_INVARIANT>
     | <MAINTAINING>
     | <LOOP_INVARIANT_REDUNDANTLY>
     | <MAINTAINING_REDUNDANTLY>
-    | <ASSIGNABLE>
     )
     {begin=token();}
-    expr=Expression()
-    {return new JmlDefaultClause(range(begin, token()), begin, expr);}
+    exprs=ExpressionList()
+    {return new JmlDefaultClause(range(begin, token()), begin, exprs);}
 }
 
 NodeList<JmlContracts> JmlLoopInvariants():
@@ -4961,14 +4992,27 @@ NodeList<JmlContracts> JmlLoopInvariants():
       JmlContracts contracts = new JmlContracts();
       JmlContract contract = new JmlContract();
       NodeList<JmlContract> elements = new NodeList<>(contract);
+      Behavior b;
     }
-    JmlStart(contracts)
-    {begin=token();}
-    //This line is unfolded rule is important for the fast lookahead
-    clause = JmlLoopInvClause() ";" {contract.getClauses().add(clause);}
+    JmlStart(contracts) {begin=token();}
     (
-      clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
-    )*
+      //loop contract a key special thing
+      <LOOP_CONTRACT>
+      {contract.setLoopContract(true);}
+      (b=JmlBehavior() {contract.setBehavior(b);})?
+      (
+        clause=JmlContractClause() {contract.getClauses().add(clause);}
+      |
+        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
+      )*
+      //(<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+    |
+      //This line is unfolded -- important for the fast lookahead
+      clause = JmlLoopInvClause() ";" {contract.getClauses().add(clause);}
+      (
+        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
+      )*
+    )
     JmlEnd()
     {contracts.getElements().add(contract); containers.add(contracts);}
   )+
@@ -4986,12 +5030,8 @@ JmlClause JmlLoopInvClauses():
   | ret=JmlContinuesClause()
   | ret=JmlReturnsClause()
   | ret=JmlDecreasesClause()
-  //| ret=signals()
-  //| ret=signalsOnly()
   | ret=JmlDivergesClause()
-  //| ret=determs()
   | ret=JmlAssignableClause()
-  //| ret=acc()
   | ret=JmlMeasuredBy()
   )
   ";"
@@ -5181,8 +5221,9 @@ JmlClause JmlAssignableClause():
     JavaToken begin;
 }
 {
-  (<ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES>
-  | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY>)
+  ( <ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES>
+  | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY>
+  )
   { begin = token();}
   (heaps=heaps())*
   exprs=ExpressionList()

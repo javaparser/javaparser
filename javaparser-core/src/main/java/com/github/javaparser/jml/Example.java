@@ -29,7 +29,7 @@ public class Example {
         */
 
         JavaParser jpb = new JavaParser();
-        ParseResult<CompilationUnit> result = jpb.parse(new File("/home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_contracts/src/LabeledBlocksTest.java"));
+        ParseResult<CompilationUnit> result = jpb.parse(new File("/home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/08-Java5/src/For.java"));
 
         System.out.println(result);
         result.getResult().ifPresent(it -> {
