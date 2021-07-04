@@ -1,0 +1,32 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        requires !(a < b); 
+        {|
+          requires (a > b); 
+          ensures \result == 1; 
+        also
+          requires !(a > b); 
+          ensures \result == 0; 
+        |}
+      also
+        requires (a < b); 
+        ensures \result == -1; 
+      |}
+   */
+
+  /*@ pure */ 
+  public int cmp(int a, int b);
+}

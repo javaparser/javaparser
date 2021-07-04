@@ -1,0 +1,31 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A12 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A12();
+  int THE_FIELD;
+    /*+INFERRED@
+    public normal_behavior
+      requires a > 100; 
+        ensures aa.THE_FIELD == 0; 
+        assignable aa.THE_FIELD; 
+        {|
+          requires (this.THE_FIELD > -1); 
+          ensures \result == 0; 
+        also
+          requires !(this.THE_FIELD > -1); 
+          ensures this.THE_FIELD == 100; 
+          ensures \result == -1; 
+          assignable this.THE_FIELD; 
+        |}
+   */
+
+  public int localTest(int a, int b, /*@ non_null */ 
+  A12 aa);
+}

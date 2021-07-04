@@ -1,0 +1,54 @@
+
+
+import org.jmlspecs.annotation.*;
+public class TCWithJml {
+
+    @NonNull
+    public Object m2() ;
+    
+    @NonNull
+    public Object m2ok();
+
+    @NonNull @Nullable  // Error - conflicting annotations
+    public Object m3() ;
+    
+    /*@ non_null nullable */ // Error - conflicting annotations
+    public Object m3a() ;
+    
+    @Monitored // Error - modifier not allowed
+    public Object m4() ;
+    
+    /*@ monitored */  // Error - modifier not allowed
+    public Object m4a() ;
+    
+    int f;   // Error - different modifiers
+    @Nullable Object f1;
+    @Nullable @NonNull Object f2;  // Error - duplicate annotations
+    /*@ non_null nullable */ Object f2a;  // Error - duplicate annotations
+    @Pure Object f3;   // Error - annotation not allowed
+    /*@ pure */ Object f3a;  // Error - annotation not allowed
+    @Nullable Object fok;
+    
+    protected static Object m( int i, final int j, int k, final int l);  // Error - different modifiers (3 places)
+    
+    public static Object p(Integer i, @Nullable Integer j, Integer k, @Nullable  Integer l);
+
+    public static Object q(@NonNull @Nullable Integer j);    // Error - duplicate annotation
+    public static Object qa(/*@ non_null nullable */ Integer j);   // Error - duplicate annotation
+
+    public static Object r(@Pure Integer j);  // Error - annotation not allowed
+    public static Object ra(/*@ pure */ Integer j);  // Error - annotation not allowed
+
+    protected Object mm(); // Error - different modifiers
+    
+}
+
+class AA {} // Error - different annotations
+
+class BB {} // Error - different modifiers
+
+@Pure final class CC {}
+
+@NonNullByDefault @NullableByDefault class DD {}  // Error - duplicate annotations
+
+@SpecPublic class EE {}   // Error - annotation not allowed

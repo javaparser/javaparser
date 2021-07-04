@@ -1,0 +1,41 @@
+
+import java.io.Reader;
+import org.jmlspecs.annotation.*;
+
+public class End {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public End();
+  /*@ spec_public */ /*@ spec_public */ 
+  private long character;
+  /*@ spec_public */ /*@ spec_public */ 
+  private boolean eof;
+  /*@ spec_public */ /*@ spec_public */ 
+  private long index;
+  /*@ spec_public */ /*@ spec_public */ 
+  private long line;
+  /*@ spec_public */ /*@ spec_public */ 
+  private char previous;
+  /*@ spec_public */ /*@ non_null */ /*@ spec_public */ 
+  private Reader reader;
+  /*@ spec_public */ /*@ spec_public */ 
+  private boolean usePrevious;
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        requires this.eof; 
+        ensures \result == !this.usePrevious; 
+      also
+        requires !this.eof; 
+        ensures \result == false; 
+      |}
+   */
+
+  /*@ pure */ 
+  public boolean end();
+}

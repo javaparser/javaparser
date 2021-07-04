@@ -1,0 +1,6 @@
+package testSuperRead;
+
+//@ ghost
+public class B {
+
+}

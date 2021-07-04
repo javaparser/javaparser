@@ -1,0 +1,63 @@
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ByteChannel;
+//import java.util.function.Function;
+
+public class SBB implements SB {
+    
+    private final /*@ spec_public @*/ ByteBuffer buf;
+    private /*@ spec_public @*/ int size;
+
+    //@ public represents _size  = size;
+    //@ public represents _buf   = buf;
+
+    //@ public instance invariant buf.capacity() - size < 16;
+    
+    
+    /*@ private normal_behavior
+      @   requires !buf.isReadOnly();
+      @   requires buf.capacity >= size;
+      @   requires buf.capacity % 16 == 0;
+      @   requires buf.capacity - size < 16;
+      @   requires size >= 0;
+      @   assignable \nothing;
+      @   ensures buf.position == 0;
+      @   ensures buf.mark < 0;
+      @*/
+    private SBB(ByteBuffer buf, int size);
+    
+        /**
+     * Create a new buffer in direct memory with the given capacity.
+     */
+    /*@ public normal_behavior
+      @   requires n >= 0;
+      @   requires n % 16 == 0;
+      @   assignable \nothing;
+      @   ensures \fresh(\result);
+      @   ensures \result.size == n;
+      @
+      @   // more or less copied from ByteBuffer.alloacte()
+      @   ensures \fresh(\result.buf);
+      @   ensures \fresh(\result.buf.contents);
+      @  // ensures \fresh(\result.buf.cryptoState);
+      @   ensures \result.buf.arrayOffset == 0;
+      @   ensures \result.buf.capacity == n;
+      @   ensures \result.buf.position == 0;
+      @   ensures \result.buf.mark < 0;
+      @   ensures \result.buf.limit == \result.buf.capacity;
+      @   ensures !\result.buf.isReadOnly();
+      @  // ensures !\result.buf.isEncrypted;
+      @   ensures \forall int i; 0 <= i && i < n; 
+      @      \result.buf.contents[i] == (byte) 0x00;
+      @
+      @   ensures \result.buf.isDirect();
+      @ also
+      @ public exceptional_behavior
+      @   assignable \nothing;
+      @   requires n < 0 || n % 16 != 0;
+      @   signals_only IllegalArgumentException;
+      @*/
+    public static SBB allocateDirect(int n);
+    
+}

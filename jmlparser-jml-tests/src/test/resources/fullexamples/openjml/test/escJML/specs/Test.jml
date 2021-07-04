@@ -1,0 +1,46 @@
+
+import org.jmlspecs.annotation.*;
+
+public class Test {
+
+    @Nullable Object f;
+
+    void m(@Nullable Object o);
+    void m2(@Nullable Object o);
+    void m3(@Nullable Object o);
+
+    void p();
+    void q();
+    
+    @Nullable Object n();
+    Object nn();
+    
+    void t(Object o);
+    void tt(@Nullable Object ottm);
+
+    @Nullable Object fii;
+
+}
+
+@NullableByDefault
+class A {
+    void m();
+    @NonNull Object mnn();
+    
+    @NonNull Object fnn;
+    Object f;
+    @NonNull Object fii;
+    
+    void t(Object o);
+    void tt(@NonNull Object ott);
+    
+}
+
+@NullableByDefault
+class B {
+
+    void mn(@NonNull Object omn) ;
+    void mn2(@NonNull Object omn2) ;
+    void mn3(@NonNull Object omn3) ;
+
+}

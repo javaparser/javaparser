@@ -1,0 +1,20 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A9 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A9();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+        ensures \result == -1; 
+   */
+
+  /*@ pure */ 
+  public int localTest0();
+}

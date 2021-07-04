@@ -1,0 +1,8 @@
+public class A {
+
+  private /*@ spec_public */ int ii;
+
+  //@ public normal_behavior
+  //@   requires this.ii >= 0;
+  public void m();
+}

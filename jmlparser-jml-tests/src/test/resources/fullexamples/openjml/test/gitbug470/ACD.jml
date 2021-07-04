@@ -1,0 +1,11 @@
+public class ACD {
+
+    //@  ensures \result != 0;
+    private static long instantiate(byte[] a, byte[] b);
+
+    public static class SPI {
+
+        private synchronized void lazyInit();
+	
+    }
+}

@@ -1,0 +1,65 @@
+
+import java.io.Reader;
+import org.jmlspecs.annotation.*;
+
+public class More {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public More();
+  /*@ spec_public */ /*@ spec_public */ 
+  private long character;
+  /*@ spec_public */ /*@ spec_public */ 
+  private boolean eof;
+  /*@ spec_public */ /*@ spec_public */ 
+  private long index;
+  /*@ spec_public */ /*@ spec_public */ 
+  private long line;
+  /*@ spec_public */ /*@ spec_public */ 
+  private char previous;
+  /*@ spec_public */ /*@ non_null */ /*@ spec_public */ 
+  private Reader reader;
+  /*@ spec_public */ /*@ spec_public */ 
+  private boolean usePrevious;
+    /*+INFERRED@
+      requires true; 
+      ensures \result == (eof && !usePrevious); 
+   */
+
+  public boolean end();
+    /*+INFERRED@
+    public normal_behavior
+      requires this.reader != null; 
+      {|
+        requires this.eof; 
+        ensures \result == false; 
+          requires !_$CPRE__2_1; 
+      also
+        requires this.eof; 
+        ensures \result == true; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !this.eof; 
+        ensures \result == false; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !this.eof; 
+        ensures \result == true; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !_$CPRE__2_1; 
+        ensures \result == false; 
+        
+      also
+        requires !_$CPRE__2_1; 
+        ensures \result == true; 
+        
+      |}
+   */
+
+  /*@ pure */ 
+  public boolean more() throws Exception;
+}

@@ -1,0 +1,2378 @@
+package org.apache.commons.cli;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import org.jmlspecs.annotation.*;
+
+public class Option implements Cloneable, Serializable {
+  
+  
+private /*@ spec_public */ String argName;
+
+@SpecPublic
+private /* @ spec_public */ String description;
+
+private /*@ spec_public */ String longOpt;
+  
+  
+  
+  
+  
+  
+  
+  
+    /*@
+    private normal_behavior
+      {|
+//        requires this.argName != null; 
+//        requires this.description != null; 
+//        requires this.longOpt != null; 
+//        requires this.opt != null; 
+//        requires this.values != null; 
+        ensures this.argName == null; 
+        ensures this.description == null; 
+        ensures this.longOpt == null; 
+        ensures this.numberOfArgs == builder.numberOfArgs; 
+        ensures this.opt == null; 
+        ensures this.optionalArg == false; 
+        ensures this.required == false; 
+        ensures this.type == null; 
+        ensures this.values == null; 
+        ensures this.valuesep == builder.valuesep; 
+//        assignable this.argName; 
+//        assignable this.description; 
+//        assignable this.longOpt; 
+//        assignable this.numberOfArgs; 
+//        assignable this.opt; 
+//        assignable this.optionalArg; 
+//        assignable this.required; 
+//        assignable this.type; 
+//        assignable this.values; 
+//        assignable this.valuesep; 
+        
+      also
+//        requires !(this.values != null); 
+//        requires this.argName != null; 
+//        requires this.description != null; 
+//        requires this.longOpt != null; 
+//        requires this.opt != null; 
+        ensures this.argName == null; 
+        ensures this.description == null; 
+        ensures this.longOpt == null; 
+        ensures this.numberOfArgs == builder.numberOfArgs; 
+        ensures this.opt == null; 
+        ensures this.optionalArg == false; 
+        ensures this.required == false; 
+        ensures this.type == null; 
+        ensures this.values == null; 
+        ensures this.valuesep == builder.valuesep; 
+//        assignable this.argName; 
+//        assignable this.description; 
+//        assignable this.longOpt; 
+//        assignable this.numberOfArgs; 
+//        assignable this.opt; 
+//        assignable this.optionalArg; 
+//        assignable this.required; 
+//        assignable this.type; 
+//        assignable this.values; 
+//        assignable this.valuesep; 
+        
+      also
+//        requires !(this.description != null); 
+//        requires this.argName != null; 
+//        requires this.longOpt != null; 
+//        requires this.opt != null; 
+//        requires this.values != null; 
+        ensures this.argName == null; 
+        ensures this.description == null; 
+        ensures this.longOpt == null; 
+        ensures this.numberOfArgs == builder.numberOfArgs; 
+        ensures this.opt == null; 
+        ensures this.optionalArg == false; 
+        ensures this.required == false; 
+        ensures this.type == null; 
+        ensures this.values == null; 
+        ensures this.valuesep == builder.valuesep; 
+//        assignable this.argName; 
+//        assignable this.description; 
+//        assignable this.longOpt; 
+//        assignable this.numberOfArgs; 
+//        assignable this.opt; 
+//        assignable this.optionalArg; 
+//        assignable this.required; 
+//        assignable this.type; 
+//        assignable this.values; 
+//        assignable this.valuesep; 
+        
+      also
+//        requires !(this.argName != null); 
+//        requires this.description != null; 
+//        requires this.longOpt != null; 
+//        requires this.opt != null; 
+//        requires this.values != null; 
+        ensures this.argName == null; 
+        ensures this.description == null; 
+        ensures this.longOpt == null; 
+        ensures this.numberOfArgs == builder.numberOfArgs; 
+        ensures this.opt == null; 
+        ensures this.optionalArg == false; 
+        ensures this.required == false; 
+        ensures this.type == null; 
+        ensures this.values == null; 
+        ensures this.valuesep == builder.valuesep; 
+//        assignable this.argName; 
+//        assignable this.description; 
+//        assignable this.longOpt; 
+//        assignable this.numberOfArgs; 
+//        assignable this.opt; 
+//        assignable this.optionalArg; 
+//        assignable this.required; 
+//        assignable this.type; 
+//        assignable this.values; 
+//        assignable this.valuesep; 
+        
+      also
+//        requires !(this.longOpt != null); 
+//        requires this.argName != null; 
+//        requires this.description != null; 
+//        requires this.opt != null; 
+//        requires this.values != null; 
+        ensures this.argName == null; 
+        ensures this.description == null; 
+        ensures this.longOpt == null; 
+        ensures this.numberOfArgs == builder.numberOfArgs; 
+        ensures this.opt == null; 
+        ensures this.optionalArg == false; 
+        ensures this.required == false; 
+        ensures this.type == null; 
+        ensures this.values == null; 
+        ensures this.valuesep == builder.valuesep; 
+//        assignable this.argName; 
+//        assignable this.description; 
+//        assignable this.longOpt; 
+//        assignable this.numberOfArgs; 
+//        assignable this.opt; 
+//        assignable this.optionalArg; 
+//        assignable this.required; 
+//        assignable this.type; 
+//        assignable this.values; 
+//        assignable this.valuesep; 
+        
+      |} pure
+   */
+
+  private Option(@NonNull 
+  final Builder builder);
+  
+  public Option(@NonNull 
+  String opt, @NonNull 
+  String description2) throws IllegalArgumentException;
+  
+  public Option(@NonNull 
+  String opt, boolean hasArg, @NonNull 
+  String description2) throws IllegalArgumentException;
+  
+  public Option(@NonNull 
+  String opt, @NonNull 
+  String longOpt, boolean hasArg, @NonNull 
+  String description2) throws IllegalArgumentException;
+  
+  @Pure 
+  public int getId();
+    /*@
+    normal_behavior
+      {|
+        requires (this.opt == null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.longOpt; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires !(this.opt == null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.opt; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires (this.opt == null); 
+          ensures \result == this.longOpt; 
+        also
+          requires !(this.opt == null); 
+          ensures \result == this.opt; 
+        |}
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires (this.opt == null); 
+          ensures \result == this.longOpt; 
+        also
+          requires !(this.opt == null); 
+          ensures \result == this.opt; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires (this.opt == null); 
+          ensures \result == this.longOpt; 
+        also
+          requires !(this.opt == null); 
+          ensures \result == this.opt; 
+        |}
+      |}
+   */
+
+  @Pure 
+  String getKey();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.opt; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.opt; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.opt; 
+      |}
+   */
+
+  @Pure 
+  public String getOpt();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (java.lang.Object)this.type; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (java.lang.Object)this.type; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (java.lang.Object)this.type; 
+      |}
+   */
+
+  @Pure 
+  public Object getType();
+  
+  @Deprecated() @Pure 
+  public void setType(@NonNull 
+  Object type);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.type == type; 
+        assignable this.type; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.type == type; 
+        assignable this.type; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.type == type; 
+        assignable this.type; 
+      |}
+   */
+
+  public void setType(@NonNull 
+  Class<?> type);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.longOpt; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.longOpt; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.longOpt; 
+      |}
+   */
+
+  @Pure 
+  public String getLongOpt();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.longOpt == longOpt; 
+        assignable this.longOpt; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.longOpt == longOpt; 
+        assignable this.longOpt; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.longOpt == longOpt; 
+        assignable this.longOpt; 
+      |}
+   */
+
+  public void setLongOpt(@NonNull 
+  String longOpt);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.optionalArg == optionalArg; 
+        assignable this.optionalArg; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.optionalArg == optionalArg; 
+        assignable this.optionalArg; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.optionalArg == optionalArg; 
+        assignable this.optionalArg; 
+      |}
+   */
+
+  public void setOptionalArg(boolean optionalArg);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.optionalArg; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.optionalArg; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.optionalArg; 
+      |}
+   */
+
+  @Pure 
+  public boolean hasOptionalArg();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (this.longOpt != null); 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (this.longOpt != null); 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (this.longOpt != null); 
+      |}
+   */
+
+  @Pure 
+  public boolean hasLongOpt();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.numberOfArgs > 0; 
+        requires this.opt != null; 
+        ensures \result == true; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires !(this.numberOfArgs > 0); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires this.numberOfArgs > 0; 
+          ensures \result == true; 
+        also
+          requires !(this.numberOfArgs > 0); 
+          ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires this.numberOfArgs > 0; 
+          ensures \result == true; 
+        also
+          requires !(this.numberOfArgs > 0); 
+          ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires this.numberOfArgs > 0; 
+          ensures \result == true; 
+        also
+          requires !(this.numberOfArgs > 0); 
+          ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      |}
+   */
+
+  @Pure 
+  public boolean hasArg();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.description; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.description; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.description; 
+      |}
+   */
+
+  @Pure 
+  public String getDescription();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.description == description; 
+        assignable this.description; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.description == description; 
+        assignable this.description; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.description == description; 
+        assignable this.description; 
+      |}
+   */
+
+  public void setDescription(@NonNull 
+  String description2);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.required; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.required; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.required; 
+      |}
+   */
+
+  @Pure 
+  public boolean isRequired();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.required == required; 
+        assignable this.required; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.required == required; 
+        assignable this.required; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.required == required; 
+        assignable this.required; 
+      |}
+   */
+
+  public void setRequired(boolean required);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.argName == argName; 
+        assignable this.argName; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.argName == argName; 
+        assignable this.argName; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.argName == argName; 
+        assignable this.argName; 
+      |}
+   */
+
+  public void setArgName(@NonNull 
+  String argName);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.argName; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.argName; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.argName; 
+      |}
+   */
+
+  @Pure 
+  public String getArgName();
+    /*@
+    public normal_behavior
+      {|
+        requires !(this.argName != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == false; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        requires !(this.argName != null); 
+        ensures \result == 0 > 0; 
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          ensures \result == 0 > 0; 
+        also
+          requires !(this.argName != null); 
+          ensures \result == false; 
+        |}
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+        {|
+          requires this.longOpt != null; 
+        also
+          requires !(this.longOpt != null); 
+          requires this.argName != null; 
+        |}
+      also
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        ensures \result == 0 > 0; 
+        {|
+          requires !(this.values != null); 
+          requires this.longOpt != null; 
+        also
+          requires !(this.longOpt != null); 
+          requires this.values != null; 
+        |}
+      |}
+   */
+
+  @Pure 
+  public boolean hasArgName();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.numberOfArgs > 1; 
+        requires this.opt != null; 
+        ensures \result == true; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires !(this.numberOfArgs > 1); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires this.numberOfArgs > 1; 
+          ensures \result == true; 
+        also
+          requires !(this.numberOfArgs > 1); 
+          ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires this.numberOfArgs > 1; 
+          ensures \result == true; 
+        also
+          requires !(this.numberOfArgs > 1); 
+          ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires this.numberOfArgs > 1; 
+          ensures \result == true; 
+        also
+          requires !(this.numberOfArgs > 1); 
+          ensures \result == (this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      |}
+   */
+
+  @Pure 
+  public boolean hasArgs();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.numberOfArgs == num; 
+        assignable this.numberOfArgs; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.numberOfArgs == num; 
+        assignable this.numberOfArgs; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.numberOfArgs == num; 
+        assignable this.numberOfArgs; 
+      |}
+   */
+
+  public void setArgs(int num);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures this.valuesep == sep; 
+        assignable this.valuesep; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.valuesep == sep; 
+        assignable this.valuesep; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures this.valuesep == sep; 
+        assignable this.valuesep; 
+      |}
+   */
+
+  public void setValueSeparator(char sep);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.valuesep; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.valuesep; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.valuesep; 
+      |}
+   */
+
+  @Pure 
+  public char getValueSeparator();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (int)this.valuesep > 0; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (int)this.valuesep > 0; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (int)this.valuesep > 0; 
+      |}
+   */
+
+  @Pure 
+  public boolean hasValueSeparator();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.numberOfArgs; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.numberOfArgs; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.numberOfArgs; 
+      |}
+   */
+
+  @Pure 
+  public int getArgs();
+  
+  @Pure 
+  void addValueForProcessing(@NonNull 
+  String value);
+  
+  @Pure 
+  private void processValue(@NonNull 
+  String value);
+  
+  @Pure 
+  private void add(@NonNull 
+  String value);
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+          ensures \result == null; 
+      also
+        requires !(this.values != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+          ensures \result == null; 
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+          ensures \result == null; 
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+          ensures \result == null; 
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+          ensures \result == null; 
+      |}
+   */
+
+  @Pure 
+  public String getValue();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == null; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == null; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == null; 
+      |}
+   */
+
+  @Pure 
+  public String getValue(int index) throws IndexOutOfBoundsException;
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          ensures \result != null; 
+        also
+          ensures \result == defaultValue; 
+        |}
+      also
+        requires !(this.values != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        {|
+          ensures \result != null; 
+        also
+          ensures \result == defaultValue; 
+        |}
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          ensures \result != null; 
+        also
+          ensures \result == defaultValue; 
+        |}
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          ensures \result != null; 
+        also
+          ensures \result == defaultValue; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          ensures \result != null; 
+        also
+          ensures \result == defaultValue; 
+        |}
+      |}
+   */
+
+  @Pure 
+  public String getValue(@NonNull 
+  String defaultValue);
+  
+  public String[] getValues();
+    /*@
+    public normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == this.values; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.values; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == this.values; 
+      |}
+   */
+
+  @Pure 
+  public List<String> getValuesList();
+    /*@
+    public normal_behavior
+      {|
+        requires (this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.values != null); 
+        requires (this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.longOpt != null); 
+        requires !(this.values != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.description != null); 
+        requires (this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.description != null); 
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.argName != null); 
+        requires (this.longOpt != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.argName != null); 
+        requires !(this.longOpt != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.longOpt != null); 
+        requires (this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result != null; 
+        
+      |}
+   */
+
+  @Override() @Pure 
+  public String toString();
+    /*@
+    private normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (this.values.values.length == 0); 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (this.values.values.length == 0); 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (this.values.values.length == 0); 
+      |}
+   */
+
+  @Pure 
+  private boolean hasNoValues();
+  
+  @Override() 
+  public boolean equals(@NonNull 
+  Object o);
+  
+  @Override() @Pure 
+  public int hashCode();
+  
+  @Override() @Pure 
+  public Object clone();
+  
+  @Pure 
+  void clearValues();
+  
+  @Deprecated() @Pure 
+  public boolean addValue(@NonNull 
+  String value);
+    /*@
+    normal_behavior
+      {|
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.numberOfArgs <= 0; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.numberOfArgs <= 0); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(true); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+        
+      also
+        requires !(this.values != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.numberOfArgs <= 0; 
+        requires this.opt != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.numberOfArgs <= 0); 
+        requires !(this.values != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.values != null); 
+        requires !(true); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == false; 
+        
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.numberOfArgs <= 0; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.description != null); 
+        requires !(this.numberOfArgs <= 0); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.description != null); 
+        requires !(true); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+        
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.numberOfArgs <= 0; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.argName != null); 
+        requires !(this.numberOfArgs <= 0); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.argName != null); 
+        requires !(true); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+        
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.numberOfArgs <= 0; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.longOpt != null); 
+        requires !(this.numberOfArgs <= 0); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        
+      also
+        requires !(this.longOpt != null); 
+        requires !(true); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+        
+      also
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        {|
+          requires this.numberOfArgs <= 0; 
+        also
+          requires !(this.numberOfArgs <= 0); 
+        |}
+      also
+        requires !(this.values != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (true); 
+        {|
+          requires this.numberOfArgs <= 0; 
+        also
+          requires !(this.numberOfArgs <= 0); 
+        |}
+      also
+        requires !(this.description != null); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        {|
+          requires this.numberOfArgs <= 0; 
+        also
+          requires !(this.numberOfArgs <= 0); 
+        |}
+      also
+        requires !(this.argName != null); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        {|
+          requires this.numberOfArgs <= 0; 
+        also
+          requires !(this.numberOfArgs <= 0); 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == (true); 
+        {|
+          requires this.numberOfArgs <= 0; 
+        also
+          requires !(this.numberOfArgs <= 0); 
+        |}
+      also
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == false; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+      |}
+   */
+
+  @Pure 
+  boolean acceptsArg();
+    /*@
+    normal_behavior
+      {|
+        requires !(this.optionalArg); 
+        requires (this.numberOfArgs == UNLIMITED_VALUES); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == (this.values.values.length == 0); 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires (this.optionalArg); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        ensures \result == false; 
+        {|
+          requires this.values != null; 
+        also
+          requires !(this.values != null); 
+        |}
+      also
+        requires !(this.description != null); 
+        requires !(this.optionalArg); 
+        requires this.argName != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires (this.numberOfArgs == UNLIMITED_VALUES); 
+          ensures \result == (this.values.values.length == 0); 
+        also
+          requires !(this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      also
+        requires !(this.argName != null); 
+        requires !(this.optionalArg); 
+        requires this.description != null; 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires (this.numberOfArgs == UNLIMITED_VALUES); 
+          ensures \result == (this.values.values.length == 0); 
+        also
+          requires !(this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires !(this.optionalArg); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        {|
+          requires (this.numberOfArgs == UNLIMITED_VALUES); 
+          ensures \result == (this.values.values.length == 0); 
+        also
+          requires !(this.numberOfArgs == UNLIMITED_VALUES); 
+        |}
+      also
+        requires (this.optionalArg); 
+        requires this.longOpt != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+        {|
+          requires !(this.description != null); 
+          requires this.argName != null; 
+        also
+          requires !(this.argName != null); 
+          requires this.description != null; 
+        |}
+      also
+        requires !(this.longOpt != null); 
+        requires (this.optionalArg); 
+        requires this.argName != null; 
+        requires this.description != null; 
+        requires this.opt != null; 
+        requires this.values != null; 
+        ensures \result == false; 
+      |}
+   */
+
+  @Pure 
+  boolean requiresArg();
+    /*@
+    public normal_behavior
+        ensures \result != null; 
+   */
+
+  @Pure 
+  public static Builder builder();
+    /*@
+    public normal_behavior
+        ensures \fresh(\result); 
+   */
+
+  @Pure 
+  public static Builder builder(@NonNull 
+  final String opt);
+  
+  public static final class Builder {
+    
+	    private /*@ spec_public */ String description;
+	    private /*@ spec_public */ String longOpt;
+	    private /*@ spec_public */ String argName;
+	    final private /*@ spec_public */ String opt;
+    
+    
+    
+    
+    
+    
+    
+        /*@
+      private normal_behavior
+        {|
+//          requires this.description != null; 
+//          requires this.longOpt != null; 
+//          requires this.opt != null; 
+          ensures this.argName == null; 
+          ensures this.description == null; 
+          ensures this.longOpt == null; 
+          ensures this.numberOfArgs == UNINITIALIZED; 
+          ensures this.opt == opt; 
+          ensures this.optionalArg == false; 
+          ensures this.required == false; 
+          ensures this.type == null; 
+          ensures this.valuesep == '\u0000'; 
+//          assignable this.argName; 
+//          assignable this.description; 
+//          assignable this.longOpt; 
+//          assignable this.numberOfArgs; 
+//          assignable this.opt; 
+//          assignable this.optionalArg; 
+//          assignable this.required; 
+//          assignable this.type; 
+//          assignable this.valuesep; 
+//          {|
+//            requires this.argName != null; 
+//          also
+//            requires !(this.argName != null); 
+//          |}
+        also
+//          requires this.argName != null; 
+//          requires this.opt != null; 
+          ensures this.argName == null; 
+          ensures this.description == null; 
+          ensures this.longOpt == null; 
+          ensures this.numberOfArgs == UNINITIALIZED; 
+          ensures this.opt == opt; 
+          ensures this.optionalArg == false; 
+          ensures this.required == false; 
+          ensures this.type == null; 
+          ensures this.valuesep == '\u0000'; 
+//          assignable this.argName; 
+//          assignable this.description; 
+//          assignable this.longOpt; 
+//          assignable this.numberOfArgs; 
+//          assignable this.opt; 
+//          assignable this.optionalArg; 
+//          assignable this.required; 
+//          assignable this.type; 
+//          assignable this.valuesep; 
+//          {|
+//            requires !(this.longOpt != null); 
+//            requires this.description != null; 
+//          also
+//            requires !(this.description != null); 
+//            requires this.longOpt != null; 
+//          |}
+        |}
+     */
+
+    private Builder(@NonNull 
+    final String opt) throws IllegalArgumentException;
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.argName == argName; 
+          assignable this.argName; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.argName == argName; 
+          assignable this.argName; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder argName(@NonNull 
+    final String argName);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.description == description; 
+          assignable this.description; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.description == description; 
+          assignable this.description; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder desc(@NonNull 
+    final String description);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.longOpt == longOpt; 
+          assignable this.longOpt; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.longOpt == longOpt; 
+          assignable this.longOpt; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder longOpt(@NonNull 
+    final String longOpt);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.numberOfArgs == numberOfArgs; 
+          assignable this.numberOfArgs; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.numberOfArgs == numberOfArgs; 
+          assignable this.numberOfArgs; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder numberOfArgs(final int numberOfArgs);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.optionalArg == isOptional; 
+          assignable this.optionalArg; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.optionalArg == isOptional; 
+          assignable this.optionalArg; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder optionalArg(final boolean isOptional);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result != null; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result != null; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    @Pure 
+    public Builder required();
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.required == required; 
+          assignable this.required; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.required == required; 
+          assignable this.required; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder required(final boolean required);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.type == type; 
+          assignable this.type; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.type == type; 
+          assignable this.type; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder type(@NonNull 
+    final Class<?> type);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result != null; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result != null; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    @Pure 
+    public Builder valueSeparator();
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.valuesep == sep; 
+          assignable this.valuesep; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.valuesep == sep; 
+          assignable this.valuesep; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder valueSeparator(final char sep);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result != null; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result != null; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    @Pure 
+    public Builder hasArg();
+        /*@
+      public normal_behavior
+        {|
+          requires !hasArg; 
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.numberOfArgs == UNINITIALIZED; 
+          assignable this.numberOfArgs; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.numberOfArgs == 1; 
+          assignable this.numberOfArgs; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires !(this.longOpt != null); 
+          requires this.argName != null; 
+          requires this.description != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          assignable this.numberOfArgs; 
+          {|
+            ensures this.numberOfArgs == 1; 
+          also
+            requires !hasArg; 
+            ensures this.numberOfArgs == UNINITIALIZED; 
+          |}
+        also
+          requires !(this.description != null); 
+          requires this.argName != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          assignable this.numberOfArgs; 
+          {|
+            ensures this.numberOfArgs == 1; 
+          also
+            requires !hasArg; 
+            ensures this.numberOfArgs == UNINITIALIZED; 
+          |}
+        |}
+     */
+
+    public Builder hasArg(final boolean hasArg);
+        /*@
+      public normal_behavior
+        {|
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.numberOfArgs == UNLIMITED_VALUES; 
+          assignable this.numberOfArgs; 
+          {|
+            requires this.argName != null; 
+          also
+            requires !(this.argName != null); 
+          |}
+        also
+          requires this.argName != null; 
+          requires this.opt != null; 
+          ensures \result == this; 
+          ensures this.numberOfArgs == UNLIMITED_VALUES; 
+          assignable this.numberOfArgs; 
+          {|
+            requires !(this.longOpt != null); 
+            requires this.description != null; 
+          also
+            requires !(this.description != null); 
+            requires this.longOpt != null; 
+          |}
+        |}
+     */
+
+    public Builder hasArgs();
+        /*@
+      public normal_behavior
+          requires !(this.opt == null); 
+          requires this.argName != null; 
+          requires this.description != null; 
+          requires this.longOpt != null; 
+          requires this.opt != null; 
+          ensures \fresh(\result); 
+     */
+
+    @Pure 
+    public Option build();
+  }
+}

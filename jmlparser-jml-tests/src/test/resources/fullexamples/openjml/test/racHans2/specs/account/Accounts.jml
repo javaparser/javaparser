@@ -1,0 +1,29 @@
+package account;
+
+
+public class Accounts {
+   
+  /*@ 
+    public normal_behavior
+      requires frames != null &&
+        ( \forall int i; 0 <= i && i < frames.length; frames[i] != null );
+  
+      ensures getFrames() != null;
+      ensures getFrames().length == frames.length;
+      ensures(\forall int i; 0 <= i && i < getFrames().length; getFrames()[i].equals(frames[i]) );
+    also
+      exceptional_behavior
+        requires frames == null; 
+        signals (IllegalArgumentException e) true;
+    also
+      exceptional_behavior
+        requires frames != null &&
+          ( \exists int i; 0 <= i && i < frames.length; frames[i] == null );
+        signals (IllegalArgumentException e) true;
+    @*/
+  public Accounts (Object[] frames) throws IllegalArgumentException; 
+
+  //@ pure
+  public Object[] getFrames(); 
+ 
+}

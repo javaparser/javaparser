@@ -1,0 +1,16 @@
+
+
+import org.jmlspecs.annotation.Nullable;
+public final class StorageParameters {
+
+    public @Nullable long[] configurationSizes;
+	
+	//@ pure
+	public StorageParameters(@Nullable long[] sizes );
+	
+	public @Nullable long[] getConfigurationSizes();
+	
+	   @org.jmlspecs.annotation.SkipEsc
+    public static void main(String... args);
+	
+}

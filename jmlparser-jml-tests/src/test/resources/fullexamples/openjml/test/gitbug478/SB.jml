@@ -1,0 +1,29 @@
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ByteChannel;
+
+public interface SB {
+    
+    //@ public model instance int _size;
+    //@ public model instance ByteBuffer _buf;
+
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures \result == _size;
+      @*/
+    /*@ pure @*/ int size();
+    
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures \result == _buf.capacity();
+      @*/
+    /*@ pure @*/ int capacity();
+    
+    /*@ public normal_behavior
+      @   assignable \nothing;
+      @   ensures \result == _buf.remaining();
+      @*/
+    /*@ pure @*/ int remaining();
+    
+}

@@ -1,0 +1,29 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A17 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A17();
+  public int FIELD;
+    /*+INFERRED@
+      requires true; 
+      ensures this.FIELD == 3; 
+      ensures \result == a + b; 
+      assignable this.FIELD; 
+   */
+
+  public int add(int a, int b);
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      
+   */
+
+  /*@ pure */ 
+  public int localTest3(int a, int b);
+}

@@ -1,0 +1,58 @@
+
+import org.jmlspecs.annotation.*;
+
+public class S1 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public S1();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        requires (month) == 1; 
+        ensures \result == "January"; 
+      also
+        requires (month) == 2; 
+        ensures \result == "February"; 
+      also
+        requires (month) == 3; 
+        ensures \result == "March"; 
+      also
+        requires (month) == 4; 
+        ensures \result == "April"; 
+      also
+        requires (month) == 5; 
+        ensures \result == "May"; 
+      also
+        requires (month) == 6; 
+        ensures \result == "June"; 
+      also
+        requires (month) == 7; 
+        ensures \result == "July"; 
+      also
+        requires (month) == 8; 
+        ensures \result == "August"; 
+      also
+        requires (month) == 9; 
+        ensures \result == "September"; 
+      also
+        requires (month) == 10; 
+        ensures \result == "October"; 
+      also
+        requires (month) == 11; 
+        ensures \result == "November"; 
+      also
+        requires (month) == 12; 
+        ensures \result == "December"; 
+      also
+        ensures \result == "Invalid month"; 
+      |}
+   */
+
+  /*@ pure */ 
+  public static String switchTest(int month);
+}

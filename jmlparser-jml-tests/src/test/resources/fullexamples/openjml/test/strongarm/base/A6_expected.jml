@@ -1,0 +1,28 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A6 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A6();
+  int THE_FIELD;
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+        ensures this.THE_FIELD == 999; 
+        assignable this.THE_FIELD; 
+        {|
+          requires (this.THE_FIELD > -1); 
+          ensures \result == 0; 
+        also
+          requires !(this.THE_FIELD > -1); 
+          ensures \result == 1; 
+        |}
+   */
+
+  public int localTest(int a, int b);
+}

@@ -1,0 +1,270 @@
+
+import org.jmlspecs.annotation.*;
+
+public class B {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public B();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        ensures a == b ==> \result == true; 
+      also
+        ensures a != b ==> \result == false; 
+      |}
+   */
+
+  public boolean areEqual(int a, int b);
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        requires !(a != b); 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        requires a == b; 
+        ensures \result == -1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a != b); 
+        requires !(a < b); 
+        requires !_$CPRE__2_2; 
+        requires a == b; 
+        ensures \result == 1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a == b); 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        requires a != b; 
+        ensures \result == -1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a < b); 
+        requires !(a == b); 
+        requires !_$CPRE__2_2; 
+        requires a != b; 
+        ensures \result == 1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        requires a != b; 
+        ensures \result == -1; 
+        
+      also
+        requires !(a < b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires a != b; 
+        ensures \result == 1; 
+        
+      also
+        requires !(a != b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        ensures \result == -1; 
+        
+      also
+        requires !(a != b); 
+        requires !(a < b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        ensures \result == 1; 
+        
+      also
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        requires a == b; 
+        ensures \result == -1; 
+        
+      also
+        requires !(a < b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires a == b; 
+        ensures \result == 1; 
+        
+      also
+        requires !(a == b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        ensures \result == -1; 
+        
+      also
+        requires !(a < b); 
+        requires !(a == b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        ensures \result == 1; 
+        
+      also
+        requires !(a != b); 
+        requires (a < b); 
+        requires a == b; 
+        ensures \result == -1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a != b); 
+        requires !(a < b); 
+        requires a == b; 
+        ensures \result == 1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        requires a == b; 
+        ensures \result == -1; 
+        
+      also
+        requires !(a < b); 
+        requires !_$CPRE__2_2; 
+        requires a == b; 
+        ensures \result == 1; 
+        
+      also
+        requires !(a == b); 
+        requires (a < b); 
+        requires a != b; 
+        ensures \result == -1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a < b); 
+        requires !(a == b); 
+        requires a != b; 
+        ensures \result == 1; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a == b); 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        ensures \result == -1; 
+        
+      also
+        requires !(a < b); 
+        requires !(a == b); 
+        requires !_$CPRE__2_2; 
+        ensures \result == 1; 
+        
+      also
+        requires !_$CPRE__2_1; 
+        requires (a < b); 
+        requires a != b; 
+        ensures \result == -1; 
+        
+      also
+        requires !(a < b); 
+        requires !_$CPRE__2_1; 
+        requires a != b; 
+        ensures \result == 1; 
+        
+      also
+        requires !(a != b); 
+        requires !_$CPRE__2_1; 
+        requires (a < b); 
+        ensures \result == -1; 
+        
+      also
+        requires !(a != b); 
+        requires !(a < b); 
+        requires !_$CPRE__2_1; 
+        ensures \result == 1; 
+        
+      also
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires (a < b); 
+        ensures \result == -1; 
+        
+      also
+        requires !(a < b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        ensures \result == 1; 
+        
+      also
+        requires !(a != b); 
+        requires !_$CPRE__2_2; 
+        requires a == b; 
+        ensures \result == 0; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a == b); 
+        requires !_$CPRE__2_2; 
+        requires a != b; 
+        ensures \result == 0; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires a != b; 
+        ensures \result == 0; 
+        
+      also
+        requires !(a != b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        ensures \result == 0; 
+        
+      also
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        requires a == b; 
+        ensures \result == 0; 
+        
+      also
+        requires !(a == b); 
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        ensures \result == 0; 
+        
+      also
+        requires !(a != b); 
+        requires a == b; 
+        ensures \result == 0; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !_$CPRE__2_2; 
+        requires a == b; 
+        ensures \result == 0; 
+        
+      also
+        requires !(a == b); 
+        requires a != b; 
+        ensures \result == 0; 
+          requires !_$CPRE__2_1; 
+      also
+        requires !(a == b); 
+        requires !_$CPRE__2_2; 
+        ensures \result == 0; 
+        
+      also
+        requires !_$CPRE__2_1; 
+        requires a != b; 
+        ensures \result == 0; 
+        
+      also
+        requires !(a != b); 
+        requires !_$CPRE__2_1; 
+        ensures \result == 0; 
+        
+      also
+        requires !_$CPRE__2_1; 
+        requires !_$CPRE__2_2; 
+        ensures \result == 0; 
+        
+      |}
+   */
+
+  /*@ pure */ 
+  public int cmp(int a, int b);
+}

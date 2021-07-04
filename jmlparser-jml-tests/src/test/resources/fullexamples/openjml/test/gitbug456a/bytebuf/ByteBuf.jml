@@ -1,0 +1,8 @@
+package bytebuf;
+
+public abstract class ByteBuf extends Buf {
+    /*@ public normal_behavior
+      @   requires true;
+      @*/
+    public /*@ pure @*/ byte get(int index);
+}

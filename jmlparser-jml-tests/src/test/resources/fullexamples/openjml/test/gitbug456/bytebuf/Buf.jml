@@ -1,0 +1,11 @@
+package bytebuf;
+
+public abstract class Buf {
+	private /*@ spec_public @*/ int position;
+	private /*@ spec_public @*/ int capacity;
+	private /*@ spec_public @*/ int limit;
+	
+	//@ public instance invariant position >= 0;
+	//@ public instance invariant position <= limit && limit <= capacity;
+	//@ public instance invariant capacity >= 0;
+}

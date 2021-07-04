@@ -1,0 +1,6 @@
+package java.lang;
+
+public class Integer extends Number {
+    
+    xxx yy y zzz
+}

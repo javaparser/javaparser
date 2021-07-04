@@ -1,0 +1,21 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A16 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A16();
+  public int iii;
+    /*+INFERRED@
+    public normal_behavior
+        ensures this.iii == k; 
+        assignable this.iii; 
+        ensures \result == this.iii; 
+   */
+
+  public int set(int k);
+}

@@ -1,0 +1,26 @@
+
+import org.jmlspecs.annotation.*;
+
+public class D {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public D();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        requires (a < 10); 
+        ensures \result == 100; 
+      also
+        requires !(a < 10); 
+        ensures \result == a; 
+      |}
+   */
+
+  /*@ pure */ 
+  public static int pathing(int a);
+}

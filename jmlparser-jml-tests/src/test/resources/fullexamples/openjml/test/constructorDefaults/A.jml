@@ -1,0 +1,6 @@
+public class A {
+	
+	//@ ensures true;
+	public void m();
+	
+}

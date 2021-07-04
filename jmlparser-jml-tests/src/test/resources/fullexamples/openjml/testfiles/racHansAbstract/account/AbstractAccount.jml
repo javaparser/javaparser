@@ -1,0 +1,24 @@
+package account;
+
+public abstract class AbstractAccount {
+
+	//@ public invariant getBalance() >= 0;  
+	
+		
+	/*@ public behavior
+          requires true;
+          ensures \result >= 0;  
+      @*/
+    public /*@ pure @*/ int balance();
+    
+    /*@ 
+      public behavior
+        requires amt > 0 && amt <= getBalance();
+      @*/
+    public abstract void withdraw(int amt);
+    
+    //@ pure helper
+    /*@ spec_public @*/ int getBalance(); 
+
+}
+

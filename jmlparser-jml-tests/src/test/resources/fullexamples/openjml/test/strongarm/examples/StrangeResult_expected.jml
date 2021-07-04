@@ -1,0 +1,19 @@
+
+import org.jmlspecs.annotation.*;
+
+public class StrangeResult {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public StrangeResult();
+    /*+INFERRED@
+    public normal_behavior
+      
+   */
+
+  /*@ pure */ 
+  public int h();
+}

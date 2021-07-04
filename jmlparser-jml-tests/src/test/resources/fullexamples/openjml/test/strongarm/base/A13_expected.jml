@@ -1,0 +1,27 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A13 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A13();
+  int THE_FIELD;
+  /*@ non_null */ 
+  public A13 tricky;
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+        ensures this.THE_FIELD == 0; 
+        assignable this.THE_FIELD; 
+        ensures aa.tricky.tricky.THE_FIELD == 100; 
+        assignable aa.tricky.tricky.THE_FIELD; 
+        ensures \result == -1; 
+   */
+
+  public int localTest(int a, int b, /*@ non_null */ 
+  A13 aa);
+}

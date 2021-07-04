@@ -1,0 +1,36 @@
+
+public class BankingExample {
+	
+	//@ non_null;
+	public static final int MAX_BALANCE;
+	
+	private /*@ spec_public @*/ int balance;
+	
+	private /*@ spec_public @*/ boolean isLocked; 
+	
+	 //@ public invariant balance >= 0 && balance <= MAX_BALANCE;
+
+	 //@ ensures balance == 0;
+	//@ pure
+	public BankingExample();
+	
+	//@ requires 0 < amount && amount + balance < MAX_BALANCE;
+	   //@ assignable balance;
+	   //@ ensures balance == \old(balance) + amount;
+	   public void credit(final int amount);
+	   
+	 //@ requires 0 < amount && amount <= balance;
+	   //@ assignable balance;
+	   //@ ensures balance == \old(balance) - amount;
+	   public void debit(final int amount);
+	   
+	 //@ ensures isLocked == true;
+	   public void lockAccount();
+	   
+	 //@   requires !isLocked;
+	   //@   ensures \result == balance;
+	   //@ also
+	   //@   requires isLocked;
+	   //@   signals_only Exception;
+	   public /*@ pure @*/ int getBalance() throws Exception;
+}

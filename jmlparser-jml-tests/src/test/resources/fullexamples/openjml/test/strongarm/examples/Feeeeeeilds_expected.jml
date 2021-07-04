@@ -1,0 +1,16 @@
+
+import org.jmlspecs.annotation.*;
+
+public class Feeeeeeilds {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public Feeeeeeilds();
+  /*@ spec_public */ 
+  private final int z;
+  /*@ spec_public */ 
+  private static final int r;
+}

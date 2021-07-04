@@ -1,0 +1,46 @@
+
+import org.jmlspecs.annotation.*;
+
+public class C1 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public C1();
+    /*+INFERRED@
+    public normal_behavior
+      requires ar != null; 
+      {|
+        requires !!(0 < ar.length); 
+        requires !(0 < ar.length); 
+        requires -1 < 0 + 1; 
+        requires -1 < 0; 
+        ensures 0 <= ar.length; 
+          requires !(-1 < 0); 
+      also
+        requires !!(0 < ar.length); 
+        requires !(-1 < 0 + 1); 
+        requires !(0 < ar.length); 
+        requires -1 < 0; 
+        ensures 0 <= ar.length; 
+          requires !(-1 < 0); 
+      also
+        requires !(0 < ar.length); 
+        requires -1 < 0; 
+        ensures 0 <= ar.length; 
+        ensures \result == 0; 
+          requires !(-1 < 0); 
+      also
+        requires !!(0 < ar.length); 
+        requires -1 < 0; 
+        ensures 0 <= ar.length; 
+          requires !(-1 < 0); 
+      |}
+   */
+
+  /*@ pure */ 
+  public static int sum(/*@ non_null */ 
+  int[] ar);
+}

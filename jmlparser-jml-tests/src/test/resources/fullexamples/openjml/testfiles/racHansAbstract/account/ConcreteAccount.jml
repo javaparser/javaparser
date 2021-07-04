@@ -1,0 +1,17 @@
+package account;
+
+
+public class ConcreteAccount extends AbstractAccount {
+	
+	/*@ public behavior             
+         requires amt >= 0;
+         ensures getBalance() == amt;  
+      @*/
+	public ConcreteAccount(int amt);
+	
+	/*@ 
+	  also
+        ensures getBalance() == \old(getBalance()) - amt;  
+      @*/
+	public void withdraw(int amt);
+}

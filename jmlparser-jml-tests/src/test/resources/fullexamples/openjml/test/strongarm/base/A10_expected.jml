@@ -1,0 +1,25 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A10 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A10();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+        ensures \result == -1; 
+        {|
+          requires (0 > -1); 
+        also
+          requires !(0 > -1); 
+        |}
+   */
+
+  /*@ pure */ 
+  public int localTest1();
+}

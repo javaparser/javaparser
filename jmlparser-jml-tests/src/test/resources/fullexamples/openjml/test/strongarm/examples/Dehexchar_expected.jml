@@ -1,0 +1,103 @@
+
+import org.jmlspecs.annotation.*;
+
+public class Dehexchar {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public Dehexchar();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        requires !(c <= '9'); 
+        requires !(c <= 'F'); 
+        requires c >= '0'; 
+        requires c >= 'A'; 
+        requires c >= 'a'; 
+        {|
+          requires (c <= 'f'); 
+          ensures \result == (int)c - ((int)'a' - 10); 
+        also
+          requires !(c <= 'f'); 
+          ensures \result == -1; 
+        |}
+      also
+        requires !(c <= '9'); 
+        requires !(c >= 'a'); 
+        requires c >= '0'; 
+        ensures \result == -1; 
+        {|
+          requires !(c <= 'F'); 
+          requires c >= 'A'; 
+        also
+          requires !(c >= 'A'); 
+        |}
+      also
+        requires !(c <= '9'); 
+        requires !(c >= 'A'); 
+        requires c >= '0'; 
+        requires c >= 'a'; 
+        {|
+          requires (c <= 'f'); 
+          ensures \result == (int)c - ((int)'a' - 10); 
+        also
+          requires !(c <= 'f'); 
+          ensures \result == -1; 
+        |}
+      also
+        requires !(c <= 'F'); 
+        requires !(c >= '0'); 
+        requires c >= 'A'; 
+        requires c >= 'a'; 
+        {|
+          requires (c <= 'f'); 
+          ensures \result == (int)c - ((int)'a' - 10); 
+        also
+          requires !(c <= 'f'); 
+          ensures \result == -1; 
+        |}
+      also
+        requires (c <= 'F'); 
+        requires c >= 'A'; 
+        ensures \result == (int)c - ((int)'A' - 10); 
+        {|
+          requires !(c <= '9'); 
+          requires c >= '0'; 
+        also
+          requires !(c >= '0'); 
+        |}
+      also
+        requires !(c >= '0'); 
+        requires !(c >= 'a'); 
+        ensures \result == -1; 
+        {|
+          requires !(c <= 'F'); 
+          requires c >= 'A'; 
+        also
+          requires !(c >= 'A'); 
+        |}
+      also
+        requires !(c >= '0'); 
+        requires !(c >= 'A'); 
+        requires c >= 'a'; 
+        {|
+          requires (c <= 'f'); 
+          ensures \result == (int)c - ((int)'a' - 10); 
+        also
+          requires !(c <= 'f'); 
+          ensures \result == -1; 
+        |}
+      also
+        requires (c <= '9'); 
+        requires c >= '0'; 
+        ensures \result == (int)c - (int)'0'; 
+      |}
+   */
+
+  /*@ pure */ 
+  public static int dehexchar(char c);
+}

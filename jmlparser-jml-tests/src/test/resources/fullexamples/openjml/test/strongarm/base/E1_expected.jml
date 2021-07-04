@@ -1,0 +1,50 @@
+
+import org.jmlspecs.annotation.*;
+
+public class E1 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public E1();
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+      {|
+        requires !(a + b < 10); 
+        requires !(a < 0); 
+        requires !(b < 0); 
+        ensures \result == a - b; 
+        {|
+          requires a - b < 10; 
+        also
+          requires !(a - b < 10); 
+          requires (a * b < 10); 
+        |}
+      also
+        requires !(a < 0); 
+        ensures \result == a - b; 
+        {|
+          requires b < 0; 
+        also
+          requires !(b < 0); 
+          requires a + b < 10; 
+        |}
+      also
+        requires a < 0; 
+        ensures \result == a - b; 
+      also
+        requires !(a * b < 10); 
+        requires !(a + b < 10); 
+        requires !(a - b < 10); 
+        requires !(a < 0); 
+        requires !(b < 0); 
+        ensures \result == a + b; 
+      |}
+   */
+
+  /*@ pure */ 
+  public static int m0(int a, int b);
+}

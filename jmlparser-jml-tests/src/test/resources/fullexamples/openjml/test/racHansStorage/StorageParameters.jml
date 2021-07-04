@@ -1,0 +1,25 @@
+
+
+
+public final class StorageParameters {
+	
+	/*@ 
+	  public behavior	    
+	    requires totalBackingStore > 0;
+	    requires (sizes == null ? true : (\forall int i; 0 <= i && i < sizes.length; sizes[i] >= 0 ));
+	    // or this (should work too): 
+	    // requires (sizes == null || (\forall int i; 0 <= i && i < sizes.length; sizes[i] >= 0 ));
+	    
+	      
+	    ensures getBackingStoreSize() == totalBackingStore;
+	    ensures getConfigurationSizes() == sizes;   
+	  @*/
+	public StorageParameters(long totalBackingStore, long[] sizes );
+	
+
+	//@ pure helper
+	/*@ spec_public @*/ long getBackingStoreSize();
+	
+	//@ pure helper
+	/*@ spec_public @*/ long[] getConfigurationSizes();
+}

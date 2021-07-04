@@ -1,0 +1,28 @@
+
+import org.jmlspecs.annotation.*;
+
+public class A15 {
+    /*+INFERRED@
+    public behavior
+      assignable \nothing; 
+      signals () false; 
+   */
+
+  public A15();
+  public int FIELD;
+    /*+INFERRED@
+      requires true; 
+      ensures this.FIELD == 3; 
+      ensures \result == a + b; 
+      assignable this.FIELD; 
+   */
+
+  public int add(int a, int b);
+    /*+INFERRED@
+    public normal_behavior
+      requires true; 
+   */
+
+  /*@ pure */ 
+  public int localTest(int a, int b);
+}

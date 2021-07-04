@@ -1,0 +1,13 @@
+public class B {
+
+
+
+  /*@ public normal_behavior
+     {|
+     requires this.ii >= 0;
+     also
+     requires this.ii >= 0;
+     |}
+   @*/
+  public void m();
+}

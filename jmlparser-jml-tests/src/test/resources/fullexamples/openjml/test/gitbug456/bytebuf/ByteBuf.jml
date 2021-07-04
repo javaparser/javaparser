@@ -1,0 +1,19 @@
+package bytebuf;
+
+public abstract class ByteBuf extends Buf {
+	//@ public model instance non_null byte[] contents;
+	//@ public instance invariant contents.length == capacity;
+	//@ public instance invariant contents.length >= limit;
+	  
+	/*@ public normal_behavior
+	  @   requires 0 <= index && index < limit;
+	  @   //assignable \nothing; //WHY?!?!?
+	  @   ensures \result == contents[index];
+	  @ also
+	  @ public exceptional_behavior
+	  @   requires index < 0 || index >= this.limit;
+	  @   assignable \nothing;
+	  @   signals_only IndexOutOfBoundsException;
+	  @*/
+    public /*@ pure @*/ byte get(int index);
+}
