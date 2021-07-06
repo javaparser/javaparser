@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarationTest;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -80,6 +82,21 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest imp
         assertEquals(2, ancestors.size());
         assertEquals(Object.class.getCanonicalName(), ancestors.get(0).getQualifiedName());
         assertEquals(Annotation.class.getCanonicalName(), ancestors.get(1).getQualifiedName());
+    }
+
+    @Test
+    void internalTypes_shouldMatchNestedTypes() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+
+        ClassPool classPool = new ClassPool(true);
+        CtClass fooAnnotation = classPool.makeAnnotation("com.example.Foo");
+        CtClass barClass = fooAnnotation.makeNestedClass("Bar", true);
+        CtClass bazClass = barClass.makeNestedClass("Baz", true);
+        JavassistAnnotationDeclaration fooClassDeclaration = new JavassistAnnotationDeclaration(fooAnnotation, typeSolver);
+
+        List<ResolvedReferenceTypeDeclaration> innerTypes = new ArrayList<>(fooClassDeclaration.internalTypes());
+        assertEquals(1, innerTypes.size());
+        assertEquals("com.example.Foo.Bar", innerTypes.get(0).getQualifiedName());
     }
 
 }

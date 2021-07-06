@@ -104,6 +104,11 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        return javassistTypeDeclarationAdapter.internalTypes();
+    }
+
+    @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         // TODO #1838
         throw new UnsupportedOperationException();

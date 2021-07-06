@@ -34,6 +34,11 @@ public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasA
      * Is the field static?
      */
     boolean isStatic();
+    
+    /**
+     * Is the field volatile?
+     */
+    boolean isVolatile();
 
     @Override
     default boolean isField() {

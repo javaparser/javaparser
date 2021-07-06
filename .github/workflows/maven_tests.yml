@@ -55,7 +55,7 @@ jobs:
       ## Use a cache to reduce the build/test times (avoids having to download dependencies on EVERY run).
       ### https://help.github.com/en/actions/language-and-framework-guides/building-and-testing-java-with-maven#caching-dependencies
       - name: Cache Maven packages
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -74,7 +74,7 @@ jobs:
 
 
       - name: CodeCov - JavaParser Core
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.5.2
         timeout-minutes: 10
         with:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
@@ -84,7 +84,7 @@ jobs:
           env_vars: OS,JDK
 
       - name: CodeCov - JavaParser Symbol Solver
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.5.2
         timeout-minutes: 10
         with:
           file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
