@@ -67,7 +67,7 @@ class Issue343Test extends AbstractResolutionTest{
 
     @Test
     void toResolveFloatWeNeedTheAST() {
-        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}")));
+        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}[1]")));
     }
 
     @Test
