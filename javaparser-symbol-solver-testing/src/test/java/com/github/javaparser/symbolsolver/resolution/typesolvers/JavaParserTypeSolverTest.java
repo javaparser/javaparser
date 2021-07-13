@@ -23,22 +23,33 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
+class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolver> {
+
+    private static final Supplier<JavaParserTypeSolver> JAVA_PARSER_PROVIDER = () -> {
+        Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
+        return new JavaParserTypeSolver(src);
+    };
+
+    public JavaParserTypeSolverTest() {
+        super(JAVA_PARSER_PROVIDER);
+    }
 
     @Disabled // Unsure why this test is disabled -- passes locally.
     @Test
@@ -126,6 +137,55 @@ class JavaParserTypeSolverTest extends AbstractSymbolResolutionTest {
         assertTrue(x.isSolved());
         assertNotNull(x.getCorrespondingDeclaration());
         assertTrue(x.getCorrespondingDeclaration().isInterface());
+    }
+    
+    @Test
+    public void givenJavaParserTypeSolver_tryToSolveAnUnexpectedSourceFileName_expectSuccess() {
+        Path src = adaptPath("src/test/test_sourcecode");
+        JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(src);
+
+        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("A<>");
+
+        assertFalse(x.isSolved());
+    }
+
+    /**
+     * {@link com.github.javaparser.JavaParser} doesn't work across multiple threads.
+     *
+     * This test makes sure the concurrency is handled.
+     */
+    @RepeatedTest(25)
+    void testTryToSolveTypeWithMultipleThreads() {
+        class StressRunnable implements Runnable {
+
+            private final String typeToSolve;
+            private final JavaParserTypeSolver javaParserTypeSolver;
+
+            StressRunnable(String typeToSolve, JavaParserTypeSolver javaParserTypeSolver) {
+                this.typeToSolve = typeToSolve;
+                this.javaParserTypeSolver = javaParserTypeSolver;
+            }
+
+            @Override
+            public void run() {
+                javaParserTypeSolver.tryToSolveType(typeToSolve);
+            }
+        }
+
+        JavaParserTypeSolver javaParserTypeSolver = JAVA_PARSER_PROVIDER.get();
+
+        CompletableFuture<Void> tasks = CompletableFuture.allOf(
+                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.body.Object",
+                        javaParserTypeSolver)),
+                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.comments.Object",
+                        javaParserTypeSolver)),
+                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.expr.Object",
+                        javaParserTypeSolver)),
+                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.stmt.Object",
+                        javaParserTypeSolver))
+        );
+        assertDoesNotThrow(tasks::join,
+                "JavaParserTypeSolve should work properly when called from multiple threads.");
     }
 
 }

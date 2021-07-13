@@ -49,7 +49,7 @@ public class Value {
     @Override
     public String toString() {
         return "Value{" +
-                "typeUsage=" + type +
+                "type=" + type +
                 ", name='" + name + '\'' +
                 '}';
     }

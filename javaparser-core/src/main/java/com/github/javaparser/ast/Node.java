@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,6 +27,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
@@ -36,23 +37,21 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.metamodel.InternalProperty;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.NodeMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.metamodel.PropertyMetaModel;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import com.github.javaparser.metamodel.*;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
@@ -136,11 +135,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * This can be used to sort nodes on position.
      */
     public static Comparator<NodeWithRange<?>> NODE_BY_BEGIN_POSITION = (a, b) -> {
-        if (a.getRange().isPresent() && b.getRange().isPresent()) {
+        if (a.hasRange() && b.hasRange()) {
             return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }
-        if (a.getRange().isPresent() || b.getRange().isPresent()) {
-            if (a.getRange().isPresent()) {
+        if (a.hasRange() || b.hasRange()) {
+            if (a.hasRange()) {
                 return 1;
             }
             return -1;
@@ -148,9 +147,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return 0;
     };
 
-    private static PrettyPrinterConfiguration toStringPrettyPrinterConfiguration = new PrettyPrinterConfiguration();
+    // usefull to find if the node is a phantom node
+    private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -162,10 +162,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Node parentNode;
 
     @InternalProperty
-    private List<Node> childNodes = new LinkedList<>();
+    private ArrayList<Node> childNodes = new ArrayList<>(0);
 
     @InternalProperty
-    private List<Comment> orphanComments = new LinkedList<>();
+    private ArrayList<Comment> orphanComments = new ArrayList<>(0);
 
     @InternalProperty
     private IdentityHashMap<DataKey<?>, Object> data = null;
@@ -174,7 +174,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Comment comment;
 
     @InternalProperty
-    private Set<AstObserver> observers = new HashSet<>();
+    private ArrayList<AstObserver> observers = new ArrayList<>(0);
 
     @InternalProperty
     private Parsedness parsed = PARSED;
@@ -189,6 +189,36 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * be overwritten during code generation.
      */
     protected void customInitialization() {
+    }
+
+    /*
+     * If there is a printer defined in CompilationUnit, returns it
+     * else create a new DefaultPrettyPrinter with default parameters
+     */
+    protected Printer getPrinter() {
+        return findCompilationUnit().map(c -> c.getPrinter()).orElse(createDefaultPrinter());
+    }
+
+    /*
+     * Return the printer initialized with the specified configuration
+     */
+    protected Printer getPrinter(PrinterConfiguration configuration) {
+        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
+    }
+
+    protected Printer createDefaultPrinter() {
+        return createDefaultPrinter(getDefaultPrinterConfiguration());
+    }
+
+    protected Printer createDefaultPrinter(PrinterConfiguration configuration) {
+        return new DefaultPrettyPrinter(configuration);
+    }
+
+    /*
+     * returns a default printer configuration
+     */
+    protected PrinterConfiguration getDefaultPrinterConfiguration() {
+        return new DefaultPrinterConfiguration();
     }
 
     /**
@@ -217,7 +247,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
-        if (tokenRange == null || !(tokenRange.getBegin().getRange().isPresent() && tokenRange.getEnd().getRange().isPresent())) {
+        if (tokenRange == null || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
             range = null;
         } else {
             range = new Range(tokenRange.getBegin().getRange().get().begin, tokenRange.getEnd().getRange().get().end);
@@ -278,23 +308,26 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * @return pretty printed source code for this node and its children.
-     * Formatting can be configured with Node.setToStringPrettyPrinterConfiguration.
      */
     @Override
     public final String toString() {
         if (containsData(LINE_SEPARATOR_KEY)) {
+            Printer printer = getPrinter();
             LineSeparator lineSeparator = getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            toStringPrettyPrinterConfiguration.setEndOfLineCharacter(lineSeparator.asRawString());
+            PrinterConfiguration config = printer.getConfiguration();
+            config.addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, lineSeparator.asRawString()));
+            printer.setConfiguration(config);
+            return printer.print(this);
         }
-        return new PrettyPrinter(toStringPrettyPrinterConfiguration).print(this);
+        return getPrinter().print(this);
     }
 
     /**
      * @return pretty printed source code for this node and its children.
-     * Formatting can be configured with parameter prettyPrinterConfiguration.
+     * Formatting can be configured with parameter PrinterConfiguration.
      */
-    public final String toString(PrettyPrinterConfiguration prettyPrinterConfiguration) {
-        return new PrettyPrinter(prettyPrinterConfiguration).print(this);
+    public final String toString(PrinterConfiguration configuration) {
+        return getPrinter(configuration).print(this);
     }
 
     @Override
@@ -304,7 +337,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj == null || !(obj instanceof Node)) {
+        if (!(obj instanceof Node)) {
             return false;
         }
         return EqualsVisitor.equals(this, (Node) obj);
@@ -335,6 +368,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (removed) {
             notifyPropertyChange(ObservableProperty.COMMENT, comment, null);
             comment.setParentNode(null);
+            orphanComments.trimToSize();
         }
         return removed;
     }
@@ -354,7 +388,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments() {
-        return new LinkedList<>(orphanComments);
+        return unmodifiableList(orphanComments);
     }
 
     /**
@@ -365,8 +399,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments() {
-        List<Comment> comments = new LinkedList<>();
-        comments.addAll(getOrphanComments());
+        List<Comment> comments = new LinkedList<>(orphanComments);
         for (Node child : getChildNodes()) {
             child.getComment().ifPresent(comments::add);
             comments.addAll(child.getAllContainedComments());
@@ -388,12 +421,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         observers.forEach(o -> o.parentChange(this, parentNode, newParentNode));
         // remove from old parent, if any
         if (parentNode != null) {
-            final List<Node> parentChildNodes = parentNode.childNodes;
+            final ArrayList<Node> parentChildNodes = parentNode.childNodes;
             for (int i = 0; i < parentChildNodes.size(); i++) {
                 if (parentChildNodes.get(i) == this) {
                     parentChildNodes.remove(i);
                 }
             }
+            parentChildNodes.trimToSize();
         }
         parentNode = newParentNode;
         // add to new parent, if any
@@ -583,11 +617,16 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @Override
     public void unregister(AstObserver observer) {
         this.observers.remove(observer);
+        this.observers.trimToSize();
     }
 
     @Override
     public void register(AstObserver observer) {
-        this.observers.add(observer);
+        // Check if the observer is not registered yet.
+        // In this case we use a List instead of Set to save on memory space.
+        if (!this.observers.contains(observer)) {
+            this.observers.add(observer);
+        }
     }
 
     /**
@@ -681,14 +720,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return this;
     }
 
-    public static PrettyPrinterConfiguration getToStringPrettyPrinterConfiguration() {
-        return toStringPrettyPrinterConfiguration;
-    }
-
-    public static void setToStringPrettyPrinterConfiguration(PrettyPrinterConfiguration toStringPrettyPrinterConfiguration) {
-        Node.toStringPrettyPrinterConfiguration = toStringPrettyPrinterConfiguration;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
@@ -733,21 +764,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public LineSeparator getLineEndingStyle() {
         Node current = this;
-
         // First check this node
-        if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+        if (current.containsData(Node.LINE_SEPARATOR_KEY)) {
             LineSeparator lineSeparator = current.getData(Node.LINE_SEPARATOR_KEY);
             return lineSeparator;
         }
-
         // Then check parent/ancestor nodes
-        while(current.getParentNode().isPresent()) {
+        while (current.getParentNode().isPresent()) {
             current = current.getParentNode().get();
-            if(current.containsData(Node.LINE_SEPARATOR_KEY)) {
+            if (current.containsData(Node.LINE_SEPARATOR_KEY)) {
                 return current.getData(Node.LINE_SEPARATOR_KEY);
             }
         }
-
         // Default to the system line separator if it's not already set within the parsed node/code.
         return LineSeparator.SYSTEM;
     }
@@ -767,6 +795,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     };
 
     public static final DataKey<LineSeparator> LINE_SEPARATOR_KEY = new DataKey<LineSeparator>() {
+    };
+
+    protected static final DataKey<Printer> PRINTER_KEY = new DataKey<Printer>() {
+    };
+
+    protected static final DataKey<Boolean> PHANTOM_KEY = new DataKey<Boolean>() {
     };
 
     public enum TreeTraversal {
@@ -844,6 +878,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public <T extends Node> List<T> findAll(Class<T> nodeType) {
         final List<T> found = new ArrayList<>();
         walk(nodeType, found::add);
+        return found;
+    }
+
+    /**
+     * Walks the AST with specified traversal order, returning all nodes of type "nodeType".
+     */
+    public <T extends Node> List<T> findAll(Class<T> nodeType, TreeTraversal traversal) {
+        final List<T> found = new ArrayList<>();
+        walk(traversal, node -> {
+            if (nodeType.isAssignableFrom(node.getClass())) {
+                found.add(nodeType.cast(node));
+            }
+        });
         return found;
     }
 
@@ -947,7 +994,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         private final Iterator<Node> childrenIterator;
 
         public DirectChildrenIterator(Node node) {
-            childrenIterator = new ArrayList<>(node.getChildNodes()).iterator();
+            childrenIterator = node.getChildNodes().iterator();
         }
 
         @Override
@@ -1036,7 +1083,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
         private void fillStackToLeaf(Node node) {
             while (true) {
-                List<Node> childNodes = new ArrayList<>(node.getChildNodes());
+                List<Node> childNodes = node.getChildNodes();
                 if (childNodes.isEmpty()) {
                     break;
                 }
@@ -1077,5 +1124,34 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             cursorStack.push(cursor + 1);
             return nodes.get(cursor);
         }
+    }
+
+    /*
+     * returns true if the node defines a scope
+     */
+    public boolean hasScope() {
+        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent();
+    }
+
+    /*
+     * A "phantom" node, is a node that is not really an AST node (like the fake type of variable in FieldDeclaration or an UnknownType)
+     */
+    public boolean isPhantom() {
+        return isPhantom(this);
+    }
+
+    private boolean isPhantom(Node node) {
+        if (!node.containsData(PHANTOM_KEY)) {
+            boolean res = (node.getParentNode().isPresent() && node.getParentNode().get().hasRange() && node.hasRange() && !node.getParentNode().get().getRange().get().contains(node.getRange().get()) || inPhantomNode(node, LEVELS_TO_EXPLORE));
+            node.setData(PHANTOM_KEY, res);
+        }
+        return node.getData(PHANTOM_KEY);
+    }
+
+    /**
+     * A node contained in a phantom node is also a phantom node. We limit how many levels up we check just for performance reasons.
+     */
+    private boolean inPhantomNode(Node node, int levels) {
+        return node.getParentNode().isPresent() && (isPhantom(node.getParentNode().get()) || inPhantomNode(node.getParentNode().get(), levels - 1));
     }
 }

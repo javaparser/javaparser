@@ -1,6 +1,7 @@
 package foo.bar;
 
 import java.lang.annotation.*;
+import java.beans.*;
 import org.junit.*;
 
 @Target(ElementType.TYPE)
@@ -24,6 +25,10 @@ public @interface MyAnnotationWithInnerClass {
     MyInnerClass value();
     class MyInnerClass {
     }
+}
+
+public @interface MyAnnotationWithDefaultValue {
+    int value() default 0;
 }
 
 @MyAnnotation
@@ -56,4 +61,17 @@ class CD {
 @org.junit.runner.RunWith(CE.class)
 class CE {
 	@org.junit.Ignore("ignore text") public void testSomething() {}
+}
+
+@MyAnnotationWithDefaultValue()
+class CF {
+}
+
+@MyAnnotationWithDefaultValue()
+class CG {
+    @Ignore public void testSomething() {}
+}
+
+class CH {
+    @Transient public String field;
 }

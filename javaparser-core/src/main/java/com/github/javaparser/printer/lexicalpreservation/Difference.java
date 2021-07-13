@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -476,9 +476,9 @@ public class Difference {
         }
     }
 
-    // note: 
+    // note:
     // increment originalIndex if we want to keep the original element
-    // increment diffIndex if we don't want to skip the diff element 
+    // increment diffIndex if we don't want to skip the diff element
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             originalIndex++;
@@ -525,14 +525,14 @@ public class Difference {
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
                 diffIndex++;
-             // case where originalTextToken is a separator like ";" and
-             // kept is not a new line or whitespace for example "}"
-             // see issue 2351
-            }  else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
-                originalIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
+                originalIndex++;
+            } else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
+                // case where originalTextToken is a separator like ";" and
+                // kept is not a new line or whitespace for example "}"
+                // see issue 2351
                 originalIndex++;
             } else {
                 throw new UnsupportedOperationException("Csm token " + kept.getElement() + " NodeText TOKEN " + originalTextToken);
@@ -579,12 +579,12 @@ public class Difference {
      * For example,
      * List<String> is represented by 4 tokens ([List][<][String][>]) while it's a CsmChild element in the DiffElements list
      * So in this case, getIndexToNextTokenElement(..) on the [List] token returns 3 because we have to skip 3 tokens ([<][String][>]) to synchronize
-     * DiffElements list and originalElements list 
+     * DiffElements list and originalElements list
      * The end of recursivity is reached when there is no next token or if the nested diamond operators are totally managed, to take into account this type of declaration
      * List <List<String>> l
      * Be careful, this method must be call only if diamond operator could be found in the sequence
-     * 
-     * @Param TokenTextElement the token currently analyzed 
+     *
+     * @Param TokenTextElement the token currently analyzed
      * @Param int the number of nested diamond operators
      * @return the number of token to skip in originalElements list
      */
@@ -592,7 +592,7 @@ public class Difference {
         int step = 0; // number of token to skip
         Optional<JavaToken> next = element.getToken().getNextToken();
         if (!next.isPresent()) return step;
-        // because there is a token, first we need to increment the number of token to skip 
+        // because there is a token, first we need to increment the number of token to skip
         step++;
         // manage nested diamond operators by incrementing the level on LT token and decrementing on GT
         JavaToken token = next.get();
@@ -611,7 +611,7 @@ public class Difference {
         // recursively analyze token to skip
         return step += getIndexToNextTokenElement(new TokenTextElement(token), nestedDiamondOperator);
     }
-    
+
     /*
      * Returns true if the token is possibly a diamond operator
      */
@@ -726,6 +726,8 @@ public class Difference {
             boolean currentIsAComment = nodeText.getTextElement(originalIndex).isComment();
             boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
             boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
+            boolean isFirstElement = originalIndex == 0;
+            boolean previousIsWhiteSpace = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isWhiteSpace();
 
             if (sufficientTokensRemainToSkip && currentIsAComment) {
                 // Need to get behind the comment:
@@ -746,8 +748,20 @@ public class Difference {
                 // We want to adjust the indentation while considering the new element that we added
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
                 nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
-
                 originalIndex++; // Now we can increment.
+            } else if (currentIsNewline && addedTextElement.isChild()) {
+                // here we want to place the new child element after the current new line character.
+                // Except if indentation has been inserted just before this step (in the case where isPreviousElementNewline is true) 
+                // or if the previous character is a space (it could be the case if we want to replace a statement)
+                // Example 1 : if we insert a statement (a duplicated method call expression ) after this one <code>  value();\n\n</code>
+                // we want to have this result <code>  value();\n  value();\n</code> not <code>  value();\n  \nvalue();</code>
+                // Example 2 : if we want to insert a statement after this one <code>  \n</code> we want to have <code>  value();\n</code> 
+                // not <code>  \nvalue();</code> --> this case appears on member replacement for example 
+                if (!isPreviousElementNewline && !isFirstElement && !previousIsWhiteSpace) {
+                    originalIndex++; // Insert after the new line
+                }
+                nodeText.addElement(originalIndex, addedTextElement);
+                originalIndex++;
             } else {
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;

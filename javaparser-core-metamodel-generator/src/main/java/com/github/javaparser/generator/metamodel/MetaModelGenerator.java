@@ -21,18 +21,7 @@
 
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.generator.AbstractGenerator;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
-import com.github.javaparser.utils.SourceRoot;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 import java.lang.reflect.Field;
 import java.nio.file.Path;
@@ -41,7 +30,23 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.javaparser.utils.Utils.decapitalize;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.CompactConstructorDeclaration;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.generator.AbstractGenerator;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.utils.SourceRoot;
 
 public class MetaModelGenerator extends AbstractGenerator {
 
@@ -97,6 +102,8 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.body.MethodDeclaration.class);
         add(com.github.javaparser.ast.body.Parameter.class);
         add(com.github.javaparser.ast.body.ReceiverParameter.class);
+        add(com.github.javaparser.ast.body.RecordDeclaration.class);
+        add(CompactConstructorDeclaration.class);
         add(com.github.javaparser.ast.body.VariableDeclarator.class);
 
         add(com.github.javaparser.ast.comments.Comment.class); // First, as it is the base of other comment types
@@ -130,6 +137,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.NormalAnnotationExpr.class);
         add(com.github.javaparser.ast.expr.NullLiteralExpr.class);
         add(com.github.javaparser.ast.expr.ObjectCreationExpr.class);
+        add(com.github.javaparser.ast.expr.PatternExpr.class);
         add(com.github.javaparser.ast.expr.SingleMemberAnnotationExpr.class);
         add(com.github.javaparser.ast.expr.SimpleName.class);
         add(com.github.javaparser.ast.expr.SuperExpr.class);
@@ -154,6 +162,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.IfStmt.class);
         add(com.github.javaparser.ast.stmt.LabeledStmt.class);
         add(com.github.javaparser.ast.stmt.LocalClassDeclarationStmt.class);
+        add(com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt.class);
         add(com.github.javaparser.ast.stmt.ReturnStmt.class);
         add(com.github.javaparser.ast.stmt.SwitchEntry.class);
         add(com.github.javaparser.ast.stmt.SwitchStmt.class);
@@ -195,7 +204,9 @@ public class MetaModelGenerator extends AbstractGenerator {
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.RAW)
                 .setStoreTokens(false);
         final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration);
-        sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
+        PrinterConfiguration config = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, ("\n")));
+        Printer printer = new DefaultPrettyPrinter(config);
+        sourceRoot.setPrinter(printer::print);
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         new MetaModelGenerator(sourceRoot).generate();

@@ -21,27 +21,42 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typeinference.*;
-import com.github.javaparser.utils.Pair;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+import static java.util.stream.Collectors.toList;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper.isPolyExpression;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper.isStandaloneExpression;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-import static java.util.stream.Collectors.*;
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
+import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
+import com.github.javaparser.symbolsolver.resolution.typeinference.ControlFlowLogic;
+import com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
+import com.github.javaparser.symbolsolver.resolution.typeinference.MethodType;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeInference;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeInferenceCache;
+import com.github.javaparser.utils.Pair;
 
 /**
  * An expression is compatible in a loose invocation context with type T
@@ -75,14 +90,14 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
         // Otherwise, if the expression is a standalone expression (§15.2) of type S, the constraint reduces
         // to ‹S → T›.
 
-        if (isStandaloneExpression(expression)) {
+        if (expression.isStandaloneExpression()) {
             ResolvedType s = JavaParserFacade.get(typeSolver).getType(expression, false);
             return ReductionResult.empty().withConstraint(new TypeCompatibleWithType(typeSolver, s, T));
         }
 
         // Otherwise, the expression is a poly expression (§15.2). The result depends on the form of the expression:
 
-        if (isPolyExpression(expression)) {
+        if (expression.isPolyExpression()) {
 
             // - If the expression is a parenthesized expression of the form ( Expression' ), the constraint reduces
             //   to ‹Expression' → T›.
@@ -229,7 +244,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                             // FEDERICO: Added - Start
                             for (int i=0;i<lambdaExpr.getParameters().size();i++) {
                                 ResolvedType paramType = targetFunctionType.getFormalArgumentTypes().get(i);
-                                TypeInferenceCache.record(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
+                                TypeInferenceCache.addRecord(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
                             }
                             // FEDERICO: Added - End
                             Expression e = ((ExpressionStmt)lambdaExpr.getBody()).getExpression();

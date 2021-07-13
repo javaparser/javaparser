@@ -53,4 +53,8 @@ public class Agenda {
     	Lambda a = p -> p.toLowerCase();
     }
 
+    public void testCast(){
+        Object a = (Lambda) p -> p.toLowerCase();
+    }
+
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,7 +20,9 @@
  */
 package com.github.javaparser.ast.modules;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -35,8 +37,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
 import static com.github.javaparser.StaticJavaParser.parseModuleDirective;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
 
 /**
  * A Java 9 Jigsaw module declaration. {@code @Foo module com.github.abc { requires a.B; }}
@@ -98,7 +98,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     public ModuleDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -117,7 +117,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     public ModuleDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (ModuleDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -155,7 +155,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setOpen(final boolean isOpen) {
         if (isOpen == this.isOpen) {
-            return (ModuleDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.OPEN, this.isOpen, isOpen);
         this.isOpen = isOpen;
@@ -171,7 +171,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     public ModuleDeclaration setDirectives(final NodeList<ModuleDirective> directives) {
         assertNotNull(directives);
         if (directives == this.directives) {
-            return (ModuleDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.DIRECTIVES, this.directives, directives);
         if (this.directives != null)

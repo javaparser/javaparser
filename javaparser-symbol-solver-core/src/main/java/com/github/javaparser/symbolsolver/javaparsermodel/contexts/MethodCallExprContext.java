@@ -39,7 +39,6 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -74,13 +73,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<ResolvedType> solveGenericType(String name) {
-        if(wrappedNode.getScope().isPresent()){
-            ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
-            Optional<ResolvedType> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
-            return res;
-        } else{
+        Optional<Expression> nodeScope = wrappedNode.getScope();
+        if (!nodeScope.isPresent()) {
             return Optional.empty();
         }
+
+        // Method calls can have generic types defined, for example: {@code expr.<T1, T2>method(x, y, z);} or {@code super.<T, E>check2(val1, val2).}
+        ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(nodeScope.get());
+        Optional<ResolvedType> resolvedType = typeOfScope.asReferenceType().getGenericParameterByName(name);
+
+        // TODO/FIXME: Consider if we should check if the result is present, else delegate "up" the context chain (e.g. {@code solveGenericTypeInParent()})
+        return resolvedType;
     }
 
     @Override
@@ -91,7 +94,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         ResolvedType typeOfScope;
-        if (wrappedNode.getScope().isPresent()) {
+        if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
             // Consider static method calls
             if (scope instanceof NameExpr) {
@@ -154,16 +157,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
-    }
-
-    @Override
     public Optional<Value> solveSymbolAsValue(String name) {
-        Context parentContext = getParent().orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."));
-        return parentContext.solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -242,7 +237,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
 
             ResolvedType returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
-            if (returnType != methodUsage.returnType()) {
+            // we don't want to replace the return type in case of UNBOUNDED type (<?>)
+            if (returnType != methodUsage.returnType() && !(returnType == ResolvedWildcard.UNBOUNDED)) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
             }
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
@@ -395,8 +391,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (expectedType.isTypeVariable()) {
             ResolvedType type = actualType;
             // in case of primitive type, the expected type must be compared with the boxed type of the actual type
-            if (type.isPrimitive()) { 
+            if (type.isPrimitive()) {
                 type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
+            }
+            /*
+             * "a value of the null type (the null reference is the only such value) may be assigned to any reference type, resulting in a null reference of that type"
+             * https://docs.oracle.com/javase/specs/jls/se15/html/jls-5.html#jls-5.2
+             */
+            if (type.isNull()) {
+                type = MyObjectProvider.INSTANCE.object();
             }
             if (!type.isTypeVariable() && !type.isReferenceType()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());
@@ -487,7 +490,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private ResolvedType usingParameterTypesFromScope(ResolvedType scope, ResolvedType type, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (type.isReferenceType()) {
             for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : type.asReferenceType().getTypeParametersMap()) {
-                if (entry.a.declaredOnType() && scope.asReferenceType().getGenericParameterByName(entry.a.getName()).isPresent()) {
+                if (entry.a.declaredOnType() && scope.isReferenceType() && scope.asReferenceType().getGenericParameterByName(entry.a.getName()).isPresent()) {
                     type = type.replaceTypeVariables(entry.a, scope.asReferenceType().getGenericParameterByName(entry.a.getName()).get(), inferredTypes);
                 }
             }

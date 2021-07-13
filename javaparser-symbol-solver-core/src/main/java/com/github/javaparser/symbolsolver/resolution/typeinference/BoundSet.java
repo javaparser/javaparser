@@ -21,30 +21,42 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.glb;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.leastUpperBound;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.*;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.CapturesBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.FalseBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SameAsBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSameAsType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSubtypeOfType;
 import com.github.javaparser.utils.Pair;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.*;
 
 /**
  * @author Federico Tomassetti
  */
 public class BoundSet {
+    
+    private static String JAVA_LANG_RUNTIME_EXCEPTION = RuntimeException.class.getCanonicalName();
+    
+    private static final BoundSet EMPTY = new BoundSet();
 
     private List<Bound> bounds = new LinkedList<>();
-
-    private static final BoundSet EMPTY = new BoundSet();
 
     @Override
     public boolean equals(Object o) {
@@ -174,7 +186,7 @@ public class BoundSet {
     }
 
     private boolean areSameTypeInference(ResolvedType a, ResolvedType b) {
-        return isInferenceVariable(a) && isInferenceVariable(b) && a.equals(b);
+        return a.isInferenceVariable() && b.isInferenceVariable() && a.equals(b);
     }
 
     private List<Pair<ResolvedReferenceType, ResolvedReferenceType>> findPairsOfCommonAncestors(ResolvedReferenceType r1, ResolvedReferenceType r2) {
@@ -300,7 +312,7 @@ public class BoundSet {
         // - α = U and S = T imply ‹S[α:=U] = T[α:=U]›
 
         newConstraintsSet = forEachPairSameAs((a, b, currentConstraintSet) -> {
-            if (isInferenceVariable(a.getS()) && isProperType(a.getT())) {
+            if (a.getS().isInferenceVariable() && isProperType(a.getT())) {
                 InferenceVariable alpha = (InferenceVariable)a.getS();
                 ResolvedType U = a.getT();
                 ResolvedType S = b.getS();
@@ -308,7 +320,7 @@ public class BoundSet {
                 Substitution sub = Substitution.empty().withPair(alpha.getTypeParameterDeclaration(), U);
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSameAsType(sub.apply(S), sub.apply(T)));
             }
-            if (isInferenceVariable(a.getT()) && isProperType(a.getS())) {
+            if (a.getT().isInferenceVariable() && isProperType(a.getS())) {
                 InferenceVariable alpha = (InferenceVariable)a.getT();
                 ResolvedType U = a.getS();
                 ResolvedType S = b.getS();
@@ -316,7 +328,7 @@ public class BoundSet {
                 Substitution sub = Substitution.empty().withPair(alpha.getTypeParameterDeclaration(), U);
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSameAsType(sub.apply(S), sub.apply(T)));
             }
-            if (isInferenceVariable(b.getS()) && isProperType(b.getT())) {
+            if (b.getS().isInferenceVariable() && isProperType(b.getT())) {
                 InferenceVariable alpha = (InferenceVariable)b.getS();
                 ResolvedType U = b.getT();
                 ResolvedType S = a.getS();
@@ -324,7 +336,7 @@ public class BoundSet {
                 Substitution sub = Substitution.empty().withPair(alpha.getTypeParameterDeclaration(), U);
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSameAsType(sub.apply(S), sub.apply(T)));
             }
-            if (isInferenceVariable(b.getT()) && isProperType(b.getS())) {
+            if (b.getT().isInferenceVariable() && isProperType(b.getS())) {
                 InferenceVariable alpha = (InferenceVariable)b.getT();
                 ResolvedType U = b.getS();
                 ResolvedType S = a.getS();
@@ -338,7 +350,7 @@ public class BoundSet {
         // - α = U and S <: T imply ‹S[α:=U] <: T[α:=U]›
 
         newConstraintsSet = forEachPairSameAndSubtype((a, b, currentConstraintSet) -> {
-            if (isInferenceVariable(a.getS()) && isProperType(a.getT())) {
+            if (a.getS().isInferenceVariable() && isProperType(a.getT())) {
                 InferenceVariable alpha = (InferenceVariable)a.getS();
                 ResolvedType U = a.getT();
                 ResolvedType S = b.getS();
@@ -346,7 +358,7 @@ public class BoundSet {
                 Substitution sub = Substitution.empty().withPair(alpha.getTypeParameterDeclaration(), U);
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSubtypeOfType(typeSolver, sub.apply(S), sub.apply(T)));
             }
-            if (isInferenceVariable(a.getT()) && isProperType(a.getS())) {
+            if (a.getT().isInferenceVariable() && isProperType(a.getS())) {
                 InferenceVariable alpha = (InferenceVariable)a.getT();
                 ResolvedType U = a.getS();
                 ResolvedType S = b.getS();
@@ -363,7 +375,7 @@ public class BoundSet {
         // implied.
 
         newConstraintsSet = forEachPairSubtypeAndSubtype((a, b, currentConstraintSet) -> {
-            if (isInferenceVariable(a.getS()) && isInferenceVariable(b.getS())) {
+            if (a.getS().isInferenceVariable() && b.getS().isInferenceVariable()) {
                 if (a.getT().isReferenceType() && b.getT().isReferenceType()) {
                     ResolvedReferenceType S = a.getT().asReferenceType();
                     ResolvedReferenceType T = b.getT().asReferenceType();
@@ -703,7 +715,7 @@ public class BoundSet {
 
                     boolean throwsBound = bounds.stream().anyMatch(b -> b.isThrowsBoundOn(alphaI));
                     if (Ti == null && throwsBound && properUpperBoundsAreAtMostExceptionThrowableAndObject(alphaI)) {
-                        Ti = new ReferenceTypeImpl(typeSolver.solveType(RuntimeException.class.getCanonicalName()), typeSolver);
+                        Ti = new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_RUNTIME_EXCEPTION), typeSolver);
                     }
 
                     //   - Otherwise, where αi has proper upper bounds U1, ..., Uk, Ti = glb(U1, ..., Uk) (§5.1.10).

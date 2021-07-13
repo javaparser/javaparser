@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -142,7 +142,7 @@ public class Log {
      * For drawing attention to an error.
      */
     public static void error(Throwable throwable) {
-        CURRENT_ADAPTER.error(() -> throwable, null);
+        CURRENT_ADAPTER.error(() -> throwable, () -> null);
     }
 
     /**

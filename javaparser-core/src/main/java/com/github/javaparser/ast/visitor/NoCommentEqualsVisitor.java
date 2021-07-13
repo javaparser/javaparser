@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -526,6 +526,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final InstanceOfExpr n2 = (InstanceOfExpr) arg;
         if (!nodeEquals(n.getExpression(), n2.getExpression()))
             return false;
+        if (!nodeEquals(n.getPattern(), n2.getPattern()))
+            return false;
         if (!nodeEquals(n.getType(), n2.getType()))
             return false;
         return true;
@@ -734,6 +736,14 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final LocalClassDeclarationStmt n, final Visitable arg) {
         final LocalClassDeclarationStmt n2 = (LocalClassDeclarationStmt) arg;
         if (!nodeEquals(n.getClassDeclaration(), n2.getClassDeclaration()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final LocalRecordDeclarationStmt n, final Visitable arg) {
+        final LocalRecordDeclarationStmt n2 = (LocalRecordDeclarationStmt) arg;
+        if (!nodeEquals(n.getRecordDeclaration(), n2.getRecordDeclaration()))
             return false;
         return true;
     }
@@ -1091,6 +1101,56 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
         final TextBlockLiteralExpr n2 = (TextBlockLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final PatternExpr n, final Visitable arg) {
+        final PatternExpr n2 = (PatternExpr) arg;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getType(), n2.getType()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final RecordDeclaration n, final Visitable arg) {
+        final RecordDeclaration n2 = (RecordDeclaration) arg;
+        if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
+            return false;
+        if (!nodesEquals(n.getParameters(), n2.getParameters()))
+            return false;
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
+            return false;
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
+            return false;
+        if (!nodesEquals(n.getMembers(), n2.getMembers()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final CompactConstructorDeclaration n, final Visitable arg) {
+        final CompactConstructorDeclaration n2 = (CompactConstructorDeclaration) arg;
+        if (!nodeEquals(n.getBody(), n2.getBody()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions()))
+            return false;
+        if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return true;
     }

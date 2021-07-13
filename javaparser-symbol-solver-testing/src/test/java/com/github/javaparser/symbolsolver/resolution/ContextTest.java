@@ -21,20 +21,61 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -44,24 +85,16 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class ContextTest extends AbstractSymbolResolutionTest {
 
-    private TypeSolver typeSolver = new CombinedTypeSolver(new MemoryTypeSolver(), new ReflectionTypeSolver());
+    private final TypeSolver typeSolver = new CombinedTypeSolver(new MemoryTypeSolver(), new ReflectionTypeSolver());
 
     private CompilationUnit parseSample(String sampleName) {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
@@ -71,7 +104,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveDeclaredFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method1");
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
@@ -87,7 +120,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveInheritedFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method2");
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
@@ -103,7 +136,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveParameterReference() {
         CompilationUnit cu = parseSample("ReferencesToParameter");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferenceToParameter");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferenceToParameter");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "aMethod");
         NameExpr foo = Navigator.findNameExpression(method1, "foo").get();
 
@@ -118,7 +151,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToImportedType() {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
@@ -142,7 +175,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceUsingQualifiedName() {
         CompilationUnit cu = parseSample("Navigator2");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
@@ -156,7 +189,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        
+
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
         assertTrue(ref.isSolved());
@@ -167,7 +200,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToClassesInTheSamePackage() {
         CompilationUnit cu = parseSample("Navigator3");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
@@ -191,7 +224,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToClassInJavaLang() {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(1);
 
@@ -216,7 +249,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes").get();
 
@@ -235,7 +268,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveCascadeOfReferencesToMethod() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream").get();
 
@@ -251,7 +284,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToMethodCalledOnArrayAccess() {
         CompilationUnit cu = parseSample("ArrayAccess");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
         MethodDeclaration method = Navigator.demandMethod(clazz, "access");
         MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim").get();
 
@@ -267,7 +300,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToJreType() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         com.github.javaparser.ast.type.Type streamJavaParserType = method.getParameters().get(0).getType();
 
@@ -280,7 +313,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToMethodWithLambda() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter").get();
 
@@ -295,7 +328,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToLambdaParamBase() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         NameExpr refToT = Navigator.findNameExpression(method, "t").get();
 
@@ -309,7 +342,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToLambdaParamSimplified() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty").get();
 
@@ -324,7 +357,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr call = Navigator.findMethodCall(method, "getTypes").get();
 
@@ -341,7 +374,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveCompoundGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "doubleTyped");
         MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithDoubleTypedReturnType").get();
 
@@ -356,7 +389,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveNestedGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTyped");
         MethodCallExpr call = Navigator.findMethodCall(method, "genericMethodWithNestedReturnType").get();
 
@@ -371,7 +404,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveSimpleGenericReturnTypeOfMethodInJar() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "simple");
         MethodCallExpr call = Navigator.findMethodCall(method, "get").get();
 
@@ -386,7 +419,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveGenericReturnTypeFromInputParam() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "input");
         MethodCallExpr call = Navigator.findMethodCall(method, "copy").get();
 
@@ -401,7 +434,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveComplexGenericReturnType() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "complex");
         MethodCallExpr call = Navigator.findMethodCall(method, "complexGenerics").get();
 
@@ -416,7 +449,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveDoubleNestedClassType() throws IOException {
         CompilationUnit cu = parseSample("GenericClassNavigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "GenericClassNavigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "nestedTypes");
         MethodCallExpr call = Navigator.findMethodCall(method, "asList").get();
 
@@ -431,7 +464,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveTypeUsageOfFirstMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes").get();
 
@@ -447,7 +480,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveTypeUsageOfMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream").get();
 
@@ -461,7 +494,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveTypeUsageOfCascadeMethodInGenericClass() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter").get();
 
@@ -475,7 +508,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveLambdaType() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter").get();
         Expression lambdaExpr = callToFilter.getArguments().get(0);
@@ -490,7 +523,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName").get();
         Expression referenceToT = callToGetName.getScope().get();
@@ -505,7 +538,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToCallOnLambdaParam() throws IOException {
         CompilationUnit cu = parseSample("Navigator");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName").get();
 
@@ -520,7 +553,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToOverloadMethodWithNullParam() {
         CompilationUnit cu = parseSample("OverloadedMethods");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m1");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
@@ -535,7 +568,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToOverloadMethodFindStricter() {
         CompilationUnit cu = parseSample("OverloadedMethods");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m2");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
@@ -565,7 +598,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveInheritedMethodFromInterface() {
         CompilationUnit cu = parseSample("InterfaceInheritance");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
         MethodDeclaration method = Navigator.demandMethod(clazz, "test");
         MethodCallExpr call = Navigator.findMethodCall(method, "foobar").get();
 
@@ -579,7 +612,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void resolveReferenceToOverloadMethodFindOnlyCompatible() {
         CompilationUnit cu = parseSample("OverloadedMethods");
-        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m3");
         MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
@@ -592,8 +625,12 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     private <PS extends Node> PS parse(String code, ParseStart<PS> parseStart) {
+        return parse(ParserConfiguration.LanguageLevel.JAVA_10, code, parseStart);
+    }
+
+    private <PS extends Node> PS parse(ParserConfiguration.LanguageLevel languageLevel, String code, ParseStart<PS> parseStart) {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_10);
+        parserConfiguration.setLanguageLevel(languageLevel);
         ParseResult<PS> parseResult = new JavaParser(parserConfiguration).parse(parseStart, new StringProvider(code));
         if (!parseResult.isSuccessful()) {
             parseResult.getProblems().forEach(p -> System.out.println("ERR: " + p));
@@ -606,14 +643,45 @@ class ContextTest extends AbstractSymbolResolutionTest {
     @Test
     void localVariableDeclarationInScope() {
         String name = "a";
-        CompilationUnit cu = parse("class A { void foo() {\n" +
-                "SomeClass a; a.aField;" + "\n" +
-                "} }", ParseStart.COMPILATION_UNIT);
+        CompilationUnit cu = parse(
+                "class A {\n" + 
+                "  void foo() {\n" +
+                "    SomeClass a;\n" +
+                "    a.aField;\n" +
+                "  }\n" +
+                "}", ParseStart.COMPILATION_UNIT);
 
         // The block statement expose to the 2nd statement the local var
         BlockStmt blockStmt = cu.findAll(BlockStmt.class).get(0);
         Context context1 = JavaParserFactory.getContext(blockStmt, typeSolver);
         assertEquals(1, context1.localVariablesExposedToChild(blockStmt.getStatement(1)).size());
+
+        Node nameNode = cu.findAll(NameExpr.class).get(0);
+        Context context = JavaParserFactory.getContext(nameNode, typeSolver);
+        assertTrue(context.localVariableDeclarationInScope(name).isPresent());
+    }
+    
+    @Test
+    void localVariableDeclarationInScopeWithMultipleLocalesVariables() {
+        String name = "a";
+        CompilationUnit cu = parse(
+                "class A {\n" + 
+                "  void foo() {\n" +
+                "    SomeClass a;\n" +
+                "    SomeClass b;\n" +
+                "    a.aField;\n" +
+                "    SomeClass c;\n" +
+                "    c.cField;\n" +
+                "  }\n" +
+                "}", ParseStart.COMPILATION_UNIT);
+
+        // The block statement expose to the 2nd statement the local var
+        BlockStmt blockStmt = cu.findAll(BlockStmt.class).get(0);
+        Context context1 = JavaParserFactory.getContext(blockStmt, typeSolver);
+        // verifying the number of variable defined before the statement a.aField 
+        assertEquals(2, context1.localVariablesExposedToChild(blockStmt.getStatement(2)).size());
+        // verifying the number of variable defined before the statement c.cField 
+        assertEquals(3, context1.localVariablesExposedToChild(blockStmt.getStatement(4)).size());
 
         Node nameNode = cu.findAll(NameExpr.class).get(0);
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
@@ -638,7 +706,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     private void assertNumberOfParamsExposedToChildInContextNamed(Node parent, Node child, String paramName,
                                                                   int expectedNumber, String message) {
         assertEquals(expectedNumber, JavaParserFactory.getContext(parent, typeSolver)
-                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count(), message);
+                .parametersExposedToChild(child).stream().filter(p -> p.getNameAsString().equals(paramName)).count(), "[" + paramName + "]: " + message);
     }
 
     private void assertNoVarsExposedToChildInContextNamed(Node parent, Node child, String paramName) {
@@ -653,7 +721,33 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<VariableDeclarator> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .localVariablesExposedToChild(child);
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count(), message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count(), "[" + paramName + "]: " + message);
+    }
+
+    private void assertNoPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 0, message);
+    }
+    private void assertOnePatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 1, message);
+    }
+    private void assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
+                                                                  int expectedNumber, String message) {
+        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .patternExprsExposedFromChildren();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+    }
+
+    private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 0, message);
+    }
+    private void assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
+        assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 1, message);
+    }
+    private void assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
+                                                                  int expectedNumber, String message) {
+        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .negatedPatternExprsExposedFromChildren();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     @Test
@@ -675,7 +769,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
     @Test
     void parametersExposedToChildForLambda() {
-        LambdaExpr lambda = (LambdaExpr)parse("Object myLambda = (myParam) -> myParam * 2;",
+        LambdaExpr lambda = (LambdaExpr) parse("Object myLambda = (myParam) -> myParam * 2;",
                 ParseStart.STATEMENT).asExpressionStmt().getExpression().asVariableDeclarationExpr()
                 .getVariables().get(0).getInitializer().get();
         assertOneParamExposedToChildInContextNamed(lambda, lambda.getBody(), "myParam");
@@ -766,6 +860,751 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
         assertNoVarsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
+    }
+
+    @Nested
+    class PatternExprTests {
+        @Test
+        void instanceOfPatternExpr0() {
+            InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String", ParseStart.EXPRESSION).asInstanceOfExpr();
+            String message = "No Pattern Expr must be available from this expression.";
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", message);
+        }
+
+        @Test
+        void instanceOfPatternExpr1() {
+            String message = "Only s must be available from this expression.";
+            InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s", ParseStart.EXPRESSION).asInstanceOfExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", message);
+        }
+
+        @Test
+        void instanceOfPatternExpr2() {
+            String message = "Only s must be available from this enclosed expression.";
+            EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "(a instanceof String s)", ParseStart.EXPRESSION).asEnclosedExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
+        }
+
+        @Test
+        void instanceOfPatternExpr3() {
+            String message = "Only s must be available from this multiple-enclosed expression.";
+            EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "(((a instanceof String s)))", ParseStart.EXPRESSION).asEnclosedExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
+        }
+
+
+        @Nested
+        class PatternExprNegationTests {
+            @Test
+            void instanceOfPatternExpr4() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExpr5() {
+                String message = "Only s must be available from this double-negated expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", "Double negative means that it is true - it should be available.");
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExpr6() {
+                String message = "Only s (NEGATED) must be available from this triple-negated expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExpr7() {
+                String message = "Only s must be available from this quadruple-negated expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!!!!(a instanceof String s)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message + " -- " + "Double negative means that it is true - it should be available.");
+            }
+        }
+
+
+        @Nested
+        class PatternExprBinaryExprTests {
+
+            @Test
+            void instanceOfPatternExprBinaryExpr1() {
+                String message = "Only s must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s == true", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr2() {
+                String message = "Only s must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "true == a instanceof String s", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr3() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s == false", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr4() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "false == a instanceof String s", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr5() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s != true", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr5_negated() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s != true", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr5b() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "(a instanceof String s != true)", ParseStart.EXPRESSION).asEnclosedExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr5b_negated() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                EnclosedExpr enclosedExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "(a instanceof String s != true)", ParseStart.EXPRESSION).asEnclosedExpr();
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr6() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s != false", ParseStart.EXPRESSION).asBinaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr6_negated() {
+                String message = "Only s (NEGATED) must be available from this expression.";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s != false", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr7() {
+                String message = "Only s (NEGATED) must be available from this double-negated expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!(a instanceof String s != true)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr7_negated() {
+                String message = "Only s must be available from this double-negated expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!(a instanceof String s != true)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr8() {
+                String message = "Only s must be available from this double-negated expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!(a instanceof String s != false)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr8_negated() {
+                String message = "Only s must be available from this double-negated expression.";
+                UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "!(a instanceof String s != false)", ParseStart.EXPRESSION).asUnaryExpr();
+                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprBinaryExpr9() {
+                String message = "Must be no patterns available from this || expression (neither is guaranteed to be true).";
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "(a instanceof String s) || a instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            }
+
+        }
+
+
+        @Nested
+        class PatternExprVariableDeclarationTests {
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclaration() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "boolean x = a instanceof String s == true;", ParseStart.STATEMENT).asExpressionStmt();
+
+                String message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclarator() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "boolean x = a instanceof String s == true;", ParseStart.STATEMENT).asExpressionStmt();
+
+                String message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+
+                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
+                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
+
+
+                message = "No pattern must be available outside of this variable declarator (x).";
+                VariableDeclarator variableDeclaratorX = variables.get(0);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclaratorX, "s2", message);
+
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements1() {
+                String x = "" +
+                        "{\n" +
+                        "    boolean x = a instanceof String s;\n" +
+                        "    boolean result = s.contains(\"b\");\n" +
+                        "}\n" +
+                        "";
+                BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
+
+                NodeList<Statement> statements = blockStmt.getStatements();
+                assertEquals(2, statements.size(), "Expected 2 statements -- issue with test configuration/sample?");
+
+                String message = "No pattern must be available outside of this statement.";
+                Statement xStatement = statements.get(0);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+
+                Statement resultStatement = statements.get(1);
+                Expression expression = resultStatement.asExpressionStmt().getExpression();
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                assertFalse(s.isSolved(), "s is not available -- it is not definitively true when in a separate statement.");
+
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements2() {
+                String x = "" +
+                        "{\n" +
+                        "    boolean x = (a instanceof String s);\n" +
+                        "    boolean y = !(a instanceof String s);\n" +
+                        "    boolean result = s.contains(\"b\");\n" +
+                        "}\n" +
+                        "";
+                BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
+
+                NodeList<Statement> statements = blockStmt.getStatements();
+                assertEquals(3, statements.size(), "Expected 3 statements -- issue with test configuration/sample?");
+
+                String message;
+                message = "No pattern must be available outside of this statement (x)";
+                Statement xStatement = statements.get(0);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+
+                message = "No pattern must be available outside of this statement (y)";
+                Statement yStatement = statements.get(1);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(yStatement, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(yStatement, "s", message);
+
+                Statement resultStatement = statements.get(2);
+                Expression expression = resultStatement.asExpressionStmt().getExpression();
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                assertFalse(s.isSolved(), "s is not available -- it is not definitively true when in a separate statement.");
+            }
+
+            @Test
+            void instanceOfPatternExprVariableDeclaration_variableDeclaratorStatements3() {
+                String x = "" +
+                        "{\n" +
+                        "    boolean x = !(a instanceof String s);\n" +
+                        "    boolean result = s.contains(\"b\");\n" +
+                        "}\n" +
+                        "";
+                BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
+
+                NodeList<Statement> statements = blockStmt.getStatements();
+                assertEquals(2, statements.size(), "Expected 2 statements -- issue with test configuration/sample?");
+
+                String message = "No pattern must be available outside of this statement (x)";
+                Statement xStatement = statements.get(0);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(xStatement, "s", message);
+
+                Statement resultStatement = statements.get(1);
+                Expression expression = resultStatement.asExpressionStmt().getExpression();
+                VariableDeclarationExpr variableDeclarationExpr = expression.asVariableDeclarationExpr();
+
+                Context context = JavaParserFactory.getContext(variableDeclarationExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                assertFalse(s.isSolved(), "s is not available -- it is not definitively true when in a separate statement.");
+
+            }
+
+        }
+
+
+        @Nested
+        class PatternExprScopeTests {
+
+            @Test
+            void instanceOfPatternExprResolution_expr1() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "boolean x = a instanceof String s && a instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
+
+                String message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+
+
+                NodeList<VariableDeclarator> variables = variableDeclarationExpr.getVariables();
+                assertEquals(1, variables.size(), "Expected 1 variable -- issue with test configuration/sample?");
+
+                BinaryExpr binaryExpr = variables.get(0).getInitializer().get().asBinaryExpr();
+
+                message = "Only s must be available from this declarator (left).";
+                Expression leftBranch = binaryExpr.getLeft();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+
+                message = "Only s2 must be available from this declarator (right).";
+                Expression rightBranch = binaryExpr.getRight();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr2() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "boolean x = !(a instanceof String s) && a instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
+
+                String message = "No pattern must be available outside of this variable declaration expression (note that the declaration expr contains many declarators).";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+
+                // TODO: Assert pattern available from the binaryexpr
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr3() {
+                ExpressionStmt expressionStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "boolean x = \"\" instanceof String s || \"\" instanceof String s2;", ParseStart.STATEMENT).asExpressionStmt();
+
+//                String message = "Both s and s2 must be available from this declaration expression (AND).";
+                String message = "No pattern must be available outside of this statement.";
+                VariableDeclarationExpr variableDeclarationExpr = expressionStmt.getExpression().asVariableDeclarationExpr();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(variableDeclarationExpr, "s2", message);
+
+                // TODO: Assert pattern available from the binaryexpr
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr_AND1() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s && s instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
+
+                String message;
+
+                message = "Only s must be available from this declarator (left).";
+                Expression leftBranch = binaryExpr.getLeft();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+
+                message = "s and s2 must be available from this declarator (right).";
+                Expression rightBranch = binaryExpr.getRight();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr_AND_solving1() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s && s instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
+
+                String message;
+
+                message = "Only s must be available on the LEFT branch of an AND.";
+                Expression leftBranch = binaryExpr.getLeft();
+                Context leftBranchContext = JavaParserFactory.getContext(leftBranch, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> left_s = leftBranchContext.solveSymbol("s");
+                assertTrue(left_s.isSolved());
+                Optional<PatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
+                SymbolReference<? extends ResolvedValueDeclaration> left_s2 = leftBranchContext.solveSymbol("s2");
+                assertFalse(left_s2.isSolved());
+
+
+                message = "s and s2 must be available on the RIGHT branch of an AND.";
+                Expression rightBranch = binaryExpr.getRight();
+                Context rightBranchContext = JavaParserFactory.getContext(rightBranch, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> right_s = rightBranchContext.solveSymbol("s");
+                assertTrue(right_s.isSolved());
+                SymbolReference<? extends ResolvedValueDeclaration> right_s2 = rightBranchContext.solveSymbol("s2");
+                assertTrue(right_s2.isSolved());
+            }
+
+            @Test
+            void instanceOfPatternExprResolution_expr_OR1() {
+                BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String s || s instanceof String s2", ParseStart.EXPRESSION).asBinaryExpr();
+
+                String message;
+
+                message = "Only s must be available from this declarator (left).";
+                Expression leftBranch = binaryExpr.getLeft();
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s", message);
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(leftBranch, "s2", message);
+
+                message = "Only s2 must be available from this declarator (right).";
+                Expression rightBranch = binaryExpr.getRight();
+                assertNoPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
+                assertOnePatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
+            }
+
+
+            @Test
+            void instanceOfPatternExprResolution1() {
+                CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "class X { void x() { boolean foo = ((a instanceof String s) && s.length() > 0); } }", ParseStart.COMPILATION_UNIT);
+
+                List<EnclosedExpr> enclosedExprs = compilationUnit.findAll(EnclosedExpr.class);
+                assertEquals(2, enclosedExprs.size());
+
+                EnclosedExpr enclosedExpr = enclosedExprs.get(0);
+
+                List<NameExpr> nameExprs = enclosedExpr.findAll(NameExpr.class);
+                assertEquals(2, nameExprs.size());
+
+                NameExpr nameExpr = nameExprs.get(1);
+                assertEquals("s", nameExpr.getNameAsString());
+
+                Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
+                System.out.println("symbolReference = " + symbolReference);
+
+                assertTrue(symbolReference.isSolved(), "symbol not solved");
+                ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration();
+                assertEquals("s", correspondingDeclaration.getName(), "unexpected name for the solved symbol");
+                assertTrue(correspondingDeclaration.isPattern());
+                assertEquals("s", correspondingDeclaration.asPattern().getName(), "unexpected name for the solved pattern");
+                assertEquals("java.lang.String", correspondingDeclaration.asPattern().getType().asReferenceType().getQualifiedName(), "unexpected type for the solved pattern");
+
+            }
+
+            @Test
+            void instanceOfPatternExprResolution1_negated() {
+                CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "class X { void x() { boolean foo = (!(a instanceof String s) && s.length() > 0); } }", ParseStart.COMPILATION_UNIT);
+
+                List<EnclosedExpr> enclosedExprs = compilationUnit.findAll(EnclosedExpr.class);
+                assertEquals(2, enclosedExprs.size());
+
+                EnclosedExpr enclosedExpr = enclosedExprs.get(0);
+
+                List<NameExpr> nameExprs = enclosedExpr.findAll(NameExpr.class);
+                assertEquals(2, nameExprs.size());
+
+                NameExpr nameExpr = nameExprs.get(1);
+                assertEquals("s", nameExpr.getNameAsString());
+
+                Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
+                System.out.println("symbolReference = " + symbolReference);
+
+                assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
+            }
+
+            @Test
+            void instanceOfPatternExprResolution2() {
+                CompilationUnit compilationUnit = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "class X { void x() { boolean foo = ((a instanceof String s) || s.length() > 0); } }", ParseStart.COMPILATION_UNIT);
+
+                List<EnclosedExpr> enclosedExprs = compilationUnit.findAll(EnclosedExpr.class);
+                assertEquals(2, enclosedExprs.size());
+
+                EnclosedExpr enclosedExpr = enclosedExprs.get(0);
+
+                List<NameExpr> nameExprs = enclosedExpr.findAll(NameExpr.class);
+                assertEquals(2, nameExprs.size());
+
+                NameExpr nameExpr = nameExprs.get(1);
+                assertEquals("s", nameExpr.getNameAsString());
+
+                Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
+                System.out.println("symbolReference = " + symbolReference);
+
+                assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
+            }
+
+            @Nested
+            class IfElse {
+
+
+                @Test
+                void instanceOfPattern_ifBlock1() {
+                    String x = "" +
+                            "if (a instanceof String s) {\n" +
+                            "    result = s.contains(\"in scope\");\n" +
+                            "}\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertTrue(s.isSolved());
+                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifBlock1_noBraces() {
+                    String x = "" +
+                            "if (a instanceof String s) \n" +
+                            "    result = s.contains(\"in scope\");\n" +
+                            "\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertTrue(s.isSolved());
+                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifBlock1_negatedCondition() {
+                    String x = "" +
+                            "if (!(a instanceof String s)) {\n" +
+                            "    result = s.contains(\"NOT in scope\");\n" +
+                            "}\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertFalse(s.isSolved());
+                }
+
+                @Test
+                void instanceOfPattern_ifBlock1_noBraces_negatedCondition() {
+                    String x = "" +
+                            "if (!(a instanceof String s)) \n" +
+                            "    result = s.contains(\"NOT in scope\");\n" +
+                            "\n" +
+                            "";
+                    IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
+
+                    List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(1, methodCallExprs.size());
+
+                    MethodCallExpr methodCallExpr = methodCallExprs.get(0);
+                    Context context = JavaParserFactory.getContext(methodCallExpr, typeSolver);
+
+                    SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
+                    assertFalse(s.isSolved());
+                }
+
+                @Test
+                void instanceOfPattern_ifElseBlock1() {
+                    String x = "" +
+                            "{\n" +
+                            "    List s;\n" +
+                            "    if (!(a instanceof String s)) {\n" +
+                            "        result = s.contains(\"in scope\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"in scope\");\n" +
+                            "    }\n" +
+                            "}\n" +
+                            "";
+                    BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
+
+                    List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(2, methodCallExprs.size());
+
+                    // The first one should resolve to the standard variable (the list)
+                    MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
+                    Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
+                    assertTrue(s_list.isSolved());
+                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+//                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
+
+                    // The second one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
+                    Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
+                    assertTrue(s_string.isSolved());
+                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifElseBlock2() {
+                    String x = "" +
+                            "{\n" +
+                            "    List s;\n" +
+                            "    if (!(a instanceof String s)) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    }\n" +
+                            "}\n" +
+                            "";
+                    BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
+
+                    List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(4, methodCallExprs.size());
+
+                    // The first one should resolve to the standard variable (the list)
+                    MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
+                    Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
+                    assertTrue(s_list.isSolved());
+                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+//                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
+
+                    // The second one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
+                    Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
+                    assertTrue(s_string.isSolved());
+                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+
+                    // The third one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
+                    Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
+                    assertTrue(s_string2.isSolved());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+
+                    // The fourth one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
+                    Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
+                    assertTrue(s_string3.isSolved());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                }
+
+                @Test
+                void instanceOfPattern_ifElseBlock3() {
+                    String x = "" +
+                            "{\n" +
+                            "    List s;\n" +
+                            "    if (false) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (!(a instanceof String s)) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else if (true) {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    } else {\n" +
+                            "        result = s.contains(\"\");\n" +
+                            "    }\n" +
+                            "}\n" +
+                            "";
+                    BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
+
+                    List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
+                    System.out.println("methodCallExprs = " + methodCallExprs);
+                    assertEquals(4, methodCallExprs.size());
+
+                    // The first one should resolve to the standard variable (the list)
+                    MethodCallExpr methodCallExpr_list = methodCallExprs.get(0);
+                    Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
+                    assertTrue(s_list.isSolved());
+                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+
+                    // The second one should resolve to the standard variable (the list).
+                    MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
+                    Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
+                    assertTrue(s_string.isSolved());
+                    assertFalse(s_string.getCorrespondingDeclaration().isPattern());
+
+                    // The third one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
+                    Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
+                    assertTrue(s_string2.isSolved());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+
+                    // The fourth one should resolve to the pattern variable (the string).
+                    MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
+                    Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
+                    SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
+                    assertTrue(s_string3.isSolved());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                }
+            }
+        }
+
     }
 
 }

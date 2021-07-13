@@ -21,22 +21,65 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved;
+import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.WeakHashMap;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.VarType;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
@@ -45,17 +88,14 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.utils.Log;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.*;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
@@ -70,6 +110,9 @@ public class JavaParserFacade {
     };
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
+    
+    private static String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final SymbolSolver symbolSolver;
@@ -332,7 +375,7 @@ public class JavaParserFacade {
      * }
      * </pre>
      * <p>
-     * To accomodate this usage and avoid confusion this method return
+     * To accommodate this usage and avoid confusion this method return
      * the type itself when used on the name of type.
      */
     public ResolvedType getType(Node node) {
@@ -470,9 +513,9 @@ public class JavaParserFacade {
 
         if (operator == BinaryExpr.Operator.PLUS) {
             boolean isLeftString = leftType.isReferenceType() && leftType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             boolean isRightString = rightType.isReferenceType() && rightType.asReferenceType()
-                    .getQualifiedName().equals(String.class.getCanonicalName());
+                    .getQualifiedName().equals(JAVA_LANG_STRING);
             if (isLeftString || isRightString) {
                 return isLeftString ? leftType : rightType;
             }
@@ -492,22 +535,7 @@ public class JavaParserFacade {
         boolean isRightNumeric = rightType.isPrimitive() && rightType.asPrimitive().isNumeric();
 
         if (isLeftNumeric && isRightNumeric) {
-            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.DOUBLE)
-                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.DOUBLE)) {
-                return ResolvedPrimitiveType.DOUBLE;
-            }
-
-            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.FLOAT)
-                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.FLOAT)) {
-                return ResolvedPrimitiveType.FLOAT;
-            }
-
-            if (leftType.asPrimitive().equals(ResolvedPrimitiveType.LONG)
-                    || rightType.asPrimitive().equals(ResolvedPrimitiveType.LONG)) {
-                return ResolvedPrimitiveType.LONG;
-            }
-
-            return ResolvedPrimitiveType.INT;
+            return leftType.asPrimitive().bnp(rightType.asPrimitive());
         }
 
         if (rightType.isAssignableBy(leftType)) {
@@ -540,14 +568,13 @@ public class JavaParserFacade {
      * @return The first class/interface/enum declaration in the Node's ancestry.
      */
     protected TypeDeclaration<?> findContainingTypeDecl(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            return (ClassOrInterfaceDeclaration) node;
+        Node parent = node;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof TypeDeclaration) {
+                return (TypeDeclaration<?>) parent;
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return (EnumDeclaration) node;
-        }
-        return findContainingTypeDecl(demandParentNode(node));
-
     }
 
     /**
@@ -577,18 +604,47 @@ public class JavaParserFacade {
      * the Node's ancestry.
      */
     protected Node findContainingTypeDeclOrObjectCreationExpr(Node node) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            return node;
+        Node parent = node;
+        boolean detachFlag = false;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof BodyDeclaration) {
+                if (parent instanceof TypeDeclaration) {
+                    return parent;
+                } else {
+                    detachFlag = true;
+                }
+            } else if (parent instanceof ObjectCreationExpr) {
+                if (detachFlag) {
+                    return parent;
+                }
+            }
         }
-        if (node instanceof EnumDeclaration) {
-            return node;
-        }
-        Node parent = demandParentNode(node);
-        if (parent instanceof ObjectCreationExpr && !((ObjectCreationExpr) parent).getArguments().contains(node)) {
-            return parent;
-        }
-        return findContainingTypeDeclOrObjectCreationExpr(parent);
     }
+
+    /**
+     * Where a node has an interface/class/enum declaration -- or an object creation expression in an inner class
+     * references an outer class -- as its ancestor, return the declaration corresponding to the class name specified.
+     */
+    protected Node findContainingTypeDeclOrObjectCreationExpr(Node node, String className) {
+        Node parent = node;
+        boolean detachFlag = false;
+        while (true) {
+            parent = demandParentNode(parent);
+            if (parent instanceof BodyDeclaration) {
+                if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
+                    return parent;
+                } else {
+                    detachFlag = true;
+                }
+            } else if (parent instanceof ObjectCreationExpr) {
+                if (detachFlag) {
+                    return parent;
+                }
+            }
+        }
+    }
+
 
     public ResolvedType convertToUsageVariableType(VariableDeclarator var) {
         return get(typeSolver).convertToUsage(var.getType(), var);
@@ -745,6 +801,18 @@ public class JavaParserFacade {
         if (clazz.isPrimitive()) {
             return ResolvedPrimitiveType.byName(clazz.getName());
         }
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz, typeSolver), typeSolver);
+
+        ResolvedReferenceTypeDeclaration declaration;
+        if (clazz.isAnnotation()) {
+            declaration = new ReflectionAnnotationDeclaration(clazz, typeSolver);
+        } else if (clazz.isEnum()) {
+            declaration = new ReflectionEnumDeclaration(clazz, typeSolver);
+        } else if (clazz.isInterface()) {
+            declaration = new ReflectionInterfaceDeclaration(clazz, typeSolver);
+        } else {
+            declaration = new ReflectionClassDeclaration(clazz, typeSolver);
+        }
+        return new ReferenceTypeImpl(declaration, typeSolver);
     }
+
 }

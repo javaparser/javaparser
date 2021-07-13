@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -90,11 +90,11 @@ public final class JavaParser {
         }
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
-        if (configuration.getLanguageLevel() != null) {
-            switch (configuration.getLanguageLevel()) {
-                case JAVA_13:
-                case JAVA_14:
-                    astParser.setYieldSupported();
+
+        ParserConfiguration.LanguageLevel languageLevel = configuration.getLanguageLevel();
+        if (languageLevel != null) {
+            if(languageLevel.isYieldSupported()) {
+                astParser.setYieldSupported();
             }
         }
         return astParser;

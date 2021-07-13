@@ -21,11 +21,22 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static java.util.Collections.singletonList;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -36,19 +47,13 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static java.util.Collections.singletonList;
 
 /**
  * @author Federico Tomassetti
@@ -61,6 +66,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     ///
     /// Static methods
     ///
+    
+    protected static boolean isQualifiedName(String name) {
+        return name.contains(".");
+    }
 
     public static SymbolReference<ResolvedValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name) {
         for (ResolvedValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
@@ -99,48 +108,80 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public int hashCode() {
-        return wrappedNode != null ? wrappedNode.hashCode() : 0;
-    }
-
-    @Override
-    public Optional<ResolvedType> solveGenericType(String name) {
-        Optional<Context> optionalParent = getParent();
-        if (!optionalParent.isPresent()) {
-            return Optional.empty();
-        }
-        return optionalParent.get().solveGenericType(name);
+        return wrappedNode == null ? 0 : wrappedNode.hashCode();
     }
 
     @Override
     public final Optional<Context> getParent() {
-        Node parent = wrappedNode.getParentNode().orElse(null);
-        if (parent instanceof MethodCallExpr) {
-            MethodCallExpr parentCall = (MethodCallExpr) parent;
+        Node parentNode = wrappedNode.getParentNode().orElse(null);
+
+        // TODO/FiXME: Document why the method call expression is treated differently.
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr parentCall = (MethodCallExpr) parentNode;
+            // TODO: Can this be replaced with: boolean found = parentCall.getArguments().contains(wrappedNode);
             boolean found = false;
-            if (parentCall.getArguments() != null) {
-                for (Expression expression : parentCall.getArguments()) {
-                    if (expression == wrappedNode) {
-                        found = true;
-                        break;
-                    }
+            for (Expression expression : parentCall.getArguments()) {
+                if (expression == wrappedNode) {
+                    found = true;
+                    break;
                 }
             }
             if (found) {
-                Node notMethod = parent;
+                Node notMethod = parentNode;
                 while (notMethod instanceof MethodCallExpr) {
                     notMethod = demandParentNode(notMethod);
                 }
                 return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
             }
         }
-        Node notMethod = parent;
-        while (notMethod instanceof MethodCallExpr || notMethod instanceof FieldAccessExpr) {
-            notMethod = notMethod.getParentNode().orElse(null);
+        Node notMethodNode = parentNode;
+        // to avoid an infinite loop if parent scope is the same as wrapped node 
+        while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
+                || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode)) ) {
+            notMethodNode = notMethodNode.getParentNode().orElse(null);
         }
-        if (notMethod == null) {
+        if (notMethodNode == null) {
             return Optional.empty();
         }
-        return Optional.of(JavaParserFactory.getContext(notMethod, typeSolver));
+        Context parentContext = JavaParserFactory.getContext(notMethodNode, typeSolver);
+        return Optional.of(parentContext);
+    }
+    
+    // before to call this method verify the node has a scope 
+    protected Node getScope(Node node) {
+        return (Node) ((NodeWithOptionalScope)node).getScope().get();
+    }
+
+
+    @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
+        Optional<Context> optionalParentContext = getParent();
+        if (!optionalParentContext.isPresent()) {
+            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        }
+
+        // First check if there are any pattern expressions available to this node.
+        Context parentContext = optionalParentContext.get();
+        if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
+            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
+
+            Optional<PatternExpr> localResolutionResults = patternExprs
+                    .stream()
+                    .filter(vd -> vd.getNameAsString().equals(name))
+                    .findFirst();
+
+            if (localResolutionResults.isPresent()) {
+                if(patternExprs.size() == 1) {
+                    JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
+                    return SymbolReference.solved(decl);
+                } else if(patternExprs.size() > 1) {
+                    throw new IllegalStateException("Unexpectedly more than one reference in scope");
+                }
+            }
+        }
+
+        // Delegate solving to the parent context.
+        return parentContext.solveSymbol(name);
     }
 
     ///

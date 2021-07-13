@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -47,7 +44,6 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDec
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The "int id();" in {@code @interface X { int id(); }}
@@ -146,7 +142,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
         if (defaultValue == this.defaultValue) {
-            return (AnnotationMemberDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
         if (this.defaultValue != null)
@@ -160,7 +156,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     public AnnotationMemberDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (AnnotationMemberDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         if (this.modifiers != null)
@@ -174,7 +170,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     public AnnotationMemberDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (AnnotationMemberDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -188,7 +184,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     public AnnotationMemberDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (AnnotationMemberDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -270,6 +266,7 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
         action.accept(this);

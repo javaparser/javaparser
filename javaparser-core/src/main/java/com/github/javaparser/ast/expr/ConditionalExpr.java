@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,20 +20,20 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ConditionalExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The ternary conditional expression.
@@ -101,7 +101,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     public ConditionalExpr setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
-            return (ConditionalExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         if (this.condition != null)
@@ -115,7 +115,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     public ConditionalExpr setElseExpr(final Expression elseExpr) {
         assertNotNull(elseExpr);
         if (elseExpr == this.elseExpr) {
-            return (ConditionalExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
         if (this.elseExpr != null)
@@ -129,7 +129,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     public ConditionalExpr setThenExpr(final Expression thenExpr) {
         assertNotNull(thenExpr);
         if (thenExpr == this.thenExpr) {
-            return (ConditionalExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
         if (this.thenExpr != null)
@@ -191,6 +191,7 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConditionalExpr(Consumer<ConditionalExpr> action) {
         action.accept(this);
@@ -200,5 +201,14 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ConditionalExpr> toConditionalExpr() {
         return Optional.of(this);
+    }
+
+    /*
+     * A reference conditional expression is a poly expression if it appears in an assignment context or an invocation context (§5.2. §5.3).
+     * Otherwise, it is a standalone expression.
+     */
+    @Override
+    public boolean isPolyExpression() {
+        return appearsInAssignmentContext() || appearsInInvocationContext();
     }
 }

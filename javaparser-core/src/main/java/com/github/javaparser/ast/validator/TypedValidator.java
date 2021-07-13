@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,6 +40,7 @@ public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemRep
     default ParseResult.PostProcessor postProcessor() {
         return (result, configuration) ->
                 result.getResult().ifPresent(node ->
-                        accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem))));
+                        accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem)))
+                );
     }
 }

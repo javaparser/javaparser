@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,7 +20,9 @@
  */
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -32,10 +34,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.WildcardTypeMetaModel;
-import java.util.Optional;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-import com.github.javaparser.ast.Generated;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -109,7 +109,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WildcardType setExtendedType(final ReferenceType extendedType) {
         if (extendedType == this.extendedType) {
-            return (WildcardType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
         if (this.extendedType != null)
@@ -128,7 +128,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WildcardType setSuperType(final ReferenceType superType) {
         if (superType == this.superType) {
-            return (WildcardType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
         if (this.superType != null)
@@ -236,6 +236,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWildcardType(Consumer<WildcardType> action) {
         action.accept(this);

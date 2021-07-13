@@ -21,22 +21,26 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -68,9 +72,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then to parent
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
@@ -82,43 +84,25 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
         }
 
         // then to parent
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
     public Optional<ResolvedType> solveGenericType(String name) {
-        for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
+        // First check if the method-like declaration has type parameters defined.
+        // For example: {@code public <T> boolean containsAll(Collection<T> c);}
+        for (TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().getId().equals(name)) {
                 return Optional.of(new ResolvedTypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveGenericType(name);
+
+        // If no generic types on the method declaration, continue to solve as usual.
+        return solveGenericTypeInParentContext(name);
     }
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if (wrappedNode.getName().getId().equals(name)) {
-            return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
-        }
-
-        for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
-            if (implementedType.getName().getId().equals(name)) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver)
-                    .solveType(implementedType.getNameWithScope());
-            }
-        }
-
-        for (ClassOrInterfaceType extendedType : wrappedNode.getExtendedTypes()) {
-            if (extendedType.getName().getId().equals(name)) {
-                return JavaParserFactory.getContext(wrappedNode.getParentNode().orElse(null), typeSolver)
-                    .solveType(extendedType.getNameWithScope());
-            }
-        }
-
         return javaParserTypeDeclarationAdapter.solveType(name);
     }
 

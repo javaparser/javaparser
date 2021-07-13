@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,8 +20,17 @@
  */
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -34,13 +43,6 @@ import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.utils.Pair;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Generated;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -113,7 +115,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setComponentType(final Type componentType) {
         assertNotNull(componentType);
         if (componentType == this.componentType) {
-            return (ArrayType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
         if (this.componentType != null)
@@ -124,9 +126,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     /**
-     * Takes lists of arrayBracketPairs, assumes the lists are ordered left to right and the pairs are ordered left to
-     * right, mirroring the actual code. The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds
-     * to the rightmost ArrayBracketPair.
+     * Takes lists of arrayBracketPairs, assumes the lists are ordered outer to inner and the pairs are ordered left to
+     * right. The type gets wrapped in ArrayTypes so that the outermost ArrayType corresponds to the leftmost
+     * ArrayBracketPair in the first list.
      */
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
@@ -224,7 +226,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setOrigin(final Origin origin) {
         assertNotNull(origin);
         if (origin == this.origin) {
-            return (ArrayType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ORIGIN, this.origin, origin);
         this.origin = origin;
@@ -242,6 +244,14 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     public String asString() {
         return componentType.asString() + "[]";
+    }
+
+    @Override
+    public String toDescriptor() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        sb.append(componentType.toDescriptor());
+        return sb.toString();
     }
 
     @Override
@@ -280,6 +290,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayType(Consumer<ArrayType> action) {
         action.accept(this);
@@ -289,5 +300,23 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayType> toArrayType() {
         return Optional.of(this);
+    }
+    
+    /**
+     * Finds the element type, meaning: the type without ArrayTypes around it.
+     * <p>
+     * In "{@code int[] a[];}", the element type is int.
+     */
+    @Override
+    public Type getElementType() {
+        return this.getComponentType().getElementType();
+    }
+    
+    /**
+     * returns the array level that is 0 for non array type.
+     */
+    @Override
+    public int getArrayLevel() {
+        return 1 + this.getComponentType().getArrayLevel();
     }
 }

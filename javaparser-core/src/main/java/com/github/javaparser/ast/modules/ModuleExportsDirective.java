@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,7 +20,9 @@
  */
 package com.github.javaparser.ast.modules;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
@@ -29,14 +31,12 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;
+import java.util.Optional;
+import java.util.function.Consumer;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 
 /**
  * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}
@@ -102,7 +102,7 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
     public ModuleExportsDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleExportsDirective) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -121,7 +121,7 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
     public ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
         if (moduleNames == this.moduleNames) {
-            return (ModuleExportsDirective) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
         if (this.moduleNames != null)
@@ -201,6 +201,7 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {
         action.accept(this);

@@ -21,15 +21,28 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AarTypeSolverTest extends AbstractSymbolResolutionTest {
+class AarTypeSolverTest extends AbstractTypeSolverTest<AarTypeSolver> {
+
+    private static final Supplier<AarTypeSolver> AAR_SUPLIER = () -> {
+        try {
+            Path pathToJar = adaptPath("src/test/resources/aars/support-compat-24.2.0.aar");
+            return new AarTypeSolver(pathToJar);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to create a AarTypeSolver.", e);
+        }
+    };
+
+    public AarTypeSolverTest() {
+        super(AAR_SUPLIER);
+    }
 
     @Test
     void initial() throws IOException {

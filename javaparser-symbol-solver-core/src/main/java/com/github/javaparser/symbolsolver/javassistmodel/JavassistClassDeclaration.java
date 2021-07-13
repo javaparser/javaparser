@@ -40,25 +40,13 @@ import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.CtMethod;
-import javassist.NotFoundException;
-import javassist.bytecode.AccessFlag;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
-import javassist.bytecode.SyntheticAttribute;
 
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -78,7 +66,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
-        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver);
+        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver, this);
     }
 
     @Override
@@ -138,7 +126,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
     @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
-        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, getTypeParameters(), typeParameterValues);
+        return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }
 
     @Deprecated
@@ -185,78 +173,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        try {
-            getSuperClass().ifPresent(superClass -> ancestors.add(superClass));
-        } catch (UnsolvedSymbolException e) {
-            if (!acceptIncompleteList) {
-                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                throw e;
-            }
-        }
-        try {
-            ancestors.addAll(getInterfaces());
-        } catch (UnsolvedSymbolException e) {
-            if (!acceptIncompleteList) {
-                // we only throw an exception if we require a complete list; otherwise, we attempt to continue gracefully
-                throw e;
-            }
-        }
-        return ancestors;
+        return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
     }
 
     @Override
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
-        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
-        for (CtMethod method : ctClass.getDeclaredMethods()) {
-            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
-            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
-            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
-                ResolvedMethodDeclaration candidate = new JavassistMethodDeclaration(method, typeSolver);
-                candidates.add(candidate);
-
-                // no need to search for overloaded/inherited methods if the method has no parameters
-                if (argumentsTypes.isEmpty() && candidate.getNumberOfParams() == 0) {
-                    return SymbolReference.solved(candidate);
-                }
-            }
-        }
-
-        // add the method declaration of the superclass to the candidates, if present
-        getSuperClass()
-                .flatMap(ResolvedReferenceType::getTypeDeclaration)
-                .ifPresent(superclassTypeDeclaration -> {
-                    SymbolReference<ResolvedMethodDeclaration> superClassMethodRef = MethodResolutionLogic.solveMethodInType(
-                            superclassTypeDeclaration,
-                            name,
-                            argumentsTypes,
-                            staticOnly
-                    );
-                    if (superClassMethodRef.isSolved()) {
-                        candidates.add(superClassMethodRef.getCorrespondingDeclaration());
-                    }
-                });
-
-        // add the method declaration of the interfaces to the candidates, if present
-        for (ResolvedReferenceType interfaceRef : getInterfaces()) {
-            if (interfaceRef.getTypeDeclaration().isPresent()) {
-                SymbolReference<ResolvedMethodDeclaration> interfaceMethodRef = MethodResolutionLogic.solveMethodInType(
-                        interfaceRef.getTypeDeclaration().get(),
-                        name,
-                        argumentsTypes,
-                        staticOnly
-                );
-                if (interfaceMethodRef.isSolved()) {
-                    candidates.add(interfaceMethodRef.getCorrespondingDeclaration());
-                }
-            } else {
-                // Consider IllegalStateException or similar?
-            }
-        }
-
-        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
     public ResolvedType getUsage(Node node) {
@@ -277,19 +200,21 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
         if (type.describe().equals(this.getQualifiedName())) {
             return true;
         }
-        try {
-            if (this.ctClass.getSuperclass() != null
-                    && new JavassistClassDeclaration(this.ctClass.getSuperclass(), typeSolver).isAssignableBy(type)) {
+
+        Optional<ResolvedReferenceType> superClassOpt = getSuperClass();
+        if (superClassOpt.isPresent()) {
+            ResolvedReferenceType superClass = superClassOpt.get();
+            if (superClass.isAssignableBy(type)) {
                 return true;
             }
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                if (new JavassistInterfaceDeclaration(interfaze, typeSolver).isAssignableBy(type)) {
-                    return true;
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
         }
+
+        for (ResolvedReferenceType interfaceType : getInterfaces()) {
+            if (interfaceType.isAssignableBy(type)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -331,51 +256,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        try {
-            if ("java.lang.Object".equals(ctClass.getClassFile().getName())) {
-                // If this is java.lang.Object, ignore the presence of any superclass (preventing any infinite loops).
-                return Optional.empty();
-            }
-            if (ctClass.getGenericSignature() == null) {
-                // Compiled classes have generic types erased, but can be made available for reflection via getGenericSignature().
-                // If it is absent, then no further work is needed and we can return a reference type without generics.
-                return Optional.of(new ReferenceTypeImpl(
-                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())),
-                        typeSolver
-                ));
-            } else {
-                // If there is a generic signature present, solve the types and return it.
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Optional.ofNullable(
-                        JavassistUtils.signatureTypeToType(
-                                classSignature.getSuperClass(),
-                                typeSolver,
-                                this
-                        ).asReferenceType()
-                );
-            }
-        } catch (BadBytecode e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.getSuperClass();
     }
 
     @Override
     public List<ResolvedReferenceType> getInterfaces() {
-        try {
-            if (ctClass.getGenericSignature() == null) {
-                return Arrays.stream(ctClass.getClassFile().getInterfaces())
-                        .map(i -> typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(i)))
-                        .map(i -> new ReferenceTypeImpl(i, typeSolver))
-                        .collect(Collectors.toList());
-            } else {
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.stream(classSignature.getInterfaces())
-                        .map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType())
-                        .collect(Collectors.toList());
-            }
-        } catch (BadBytecode e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.getInterfaces();
     }
 
     @Override
@@ -410,15 +296,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration implemen
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        try {
-            /*
-            Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
-            Finally, return them in a Set.
-             */
-            return Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.internalTypes();
     }
 
     @Override
