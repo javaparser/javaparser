@@ -164,7 +164,7 @@ public class TokenTypes {
             case MODIFIES:
             case MONITORED:
             case MONITORS_FOR:
-            case NONNULLELEMENTS:
+            //case NONNULLELEMENTS:
             case NON_NULL:
                 //case NOT_SPECIFIED:
             /*case ONLY_ACCESSED:

@@ -436,6 +436,7 @@ TOKEN : {
 | <MODEL_PROGRAM: "model_program">
 | <MODIFIABLE: "modifiable">
 | <MODIFIABLE_REDUNDANTLY: "modifiable_redundantly">
+| <LOOP_MODIFIES: "loop_modifies">
 | <MODIFIES: "modifies">
 | <MODIFIES_REDUNDANTLY: "modifies_redundantly">
 | <MONITORED: "monitored">
@@ -443,7 +444,7 @@ TOKEN : {
 | <NESTED_CONTRACT_END : "|}">
 | <NESTED_CONTRACT_START : "{|">
 | <NEW_OBJECT : "new_objects">
-| <NONNULLELEMENTS: "\\nonnullelements">
+//| <NONNULLELEMENTS: "\\nonnullelements">
 | <NON_NULL: "non_null">
 | <NORMAL_BEHAVIOR: "normal_behavior">
 | <NORMAL_BEHAVIOUR: "normal_behaviour">
@@ -2307,7 +2308,7 @@ JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
   [<ESC_MEASURED_BY> measuredBy=Expression()]
   ";"
   {
-    return new JmlClassAccessibleDeclaration(range(begin, token()), modifiers.modifiers, id, expressions, measuredBy);}
+    return new JmlClassAccessibleDeclaration(range(begin, token()), modifiers.modifiers, var  , expressions, measuredBy);}
 }
 
 JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
