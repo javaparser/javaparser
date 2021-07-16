@@ -3,14 +3,15 @@ public class Block {
 
     /*@ public normal_behavior
       @   ensures \fresh(contents);
-      @ pure */
+      */
+    /*@ pure */
     public Block() { contents = new int[10]; }
 
     /*@ public normal_behavior
       @   requires cont != null;
       @   ensures contents == cont;
-      @ pure
-      @*/
+      */
+    /*@ pure @*/
     public Block(int[] cont) {
         contents = cont;
     }

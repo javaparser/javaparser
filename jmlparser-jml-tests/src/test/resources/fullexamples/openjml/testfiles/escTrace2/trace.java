@@ -1,5 +1,6 @@
 public class trace {
-    
+
+
     //@ requires k < 0;
     //@ ensures \result == 0;
     //@ also

@@ -1,4 +1,5 @@
 import java.util.Queue;
+
 public class Test {
     void f1(Queue<Integer> q) {
         //@ loop_modifies q.values;

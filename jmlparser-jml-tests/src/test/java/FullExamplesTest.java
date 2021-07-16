@@ -81,6 +81,10 @@ public class FullExamplesTest {
         blocked.add("/key/standard_key/java_dl/payCardJML/classpath/AbstractButton.java");
         blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JFrame.java");
         blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JButton.java");
+        blocked.add("/openjml/test/anonymousCaptures/Captures.java");
+        blocked.add("/openjml/test/datatype/Test.java");
+        blocked.add("/openjml/test/escFPcompose/Test.java");
+        blocked.add("/openjml/test/gitbug555/Test.java");
     }
 
 

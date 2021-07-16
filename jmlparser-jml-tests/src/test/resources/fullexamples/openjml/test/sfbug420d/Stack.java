@@ -27,7 +27,7 @@ public interface Stack{
 	//@ ensures (\forall int i; 1<=i && i<=\old(count()); itemAt(i)==\old(itemAt(i)));
 	boolean push(int item);
 
-	//@ pure;
+	//@ pure
 	int top();
 
 	boolean remove ( );
