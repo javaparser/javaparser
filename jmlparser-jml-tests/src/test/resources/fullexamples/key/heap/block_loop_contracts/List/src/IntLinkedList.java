@@ -44,14 +44,12 @@ public final class IntLinkedList implements IntList {
           @ assignable \set_union(\singleton(seq), (\infinite_union int j; i <= j && j < size; \singleton(((IntNode)nodeseq[j]).data)));
           @ decreases nodeseq.length - i;
           @*/
-        {
             while (current != null) {
                 ++current.data;
                 //@ set seq = \seq_concat(\seq_sub(seq, 0, i), \seq_concat(\seq_singleton(current.data), \seq_sub(seq, i+1, size)));
                 current = current.next;
                 ++i;
             }
-        }
     }
 
     /*@ normal_behavior

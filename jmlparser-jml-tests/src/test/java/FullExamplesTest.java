@@ -91,7 +91,7 @@ public class FullExamplesTest {
     @TestFactory
     public Stream<DynamicTest> createTests() throws IOException {
         File dir = new File("src/test/resources/fullexamples").getAbsoluteFile();
-        System.out.format("Folder: %s\n", dir);
+        //System.out.format("Folder: %s\n", dir);
         Assumptions.assumeTrue(dir.exists());
         int prefix = dir.toString().length();
         Stream<Path> files = Files.walk(dir.toPath());
@@ -106,11 +106,11 @@ public class FullExamplesTest {
     }
 
     private void testParse(Path p) throws IOException {
-        System.out.println(p);
+        //System.out.println(p);
         ParseResult<CompilationUnit> result = jpb.parse(p);
         result.getProblems().forEach(it -> {
             int line = it.getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1)).orElse(-1);
-            System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toString(), line);
+            //System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toString(), line);
         });
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
     }
