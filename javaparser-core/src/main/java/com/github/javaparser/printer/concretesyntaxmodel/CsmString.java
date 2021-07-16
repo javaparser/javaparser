@@ -31,6 +31,10 @@ public class CsmString implements CsmElement {
     public CsmString(ObservableProperty property) {
         this.property = property;
     }
+    
+    public ObservableProperty getProperty() {
+        return property;
+    }
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
@@ -41,7 +45,7 @@ public class CsmString implements CsmElement {
 
     @Override
     public String toString() {
-        return String.format("CsmString(property:%s)", property);
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 
 }

@@ -57,7 +57,9 @@ public class JavaParserFactory {
         }
 
         // TODO: Is order important here?
-        if (node instanceof AnnotationDeclaration) {
+        if (node instanceof ArrayAccessExpr) {
+            return new ArrayAccessExprContext((ArrayAccessExpr) node, typeSolver);
+        } else if (node instanceof AnnotationDeclaration) {
             return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
         } else if (node instanceof BinaryExpr) {
             return new BinaryExprContext((BinaryExpr) node, typeSolver);
