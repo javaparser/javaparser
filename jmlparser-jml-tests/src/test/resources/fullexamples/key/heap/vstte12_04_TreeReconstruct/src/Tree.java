@@ -1,10 +1,10 @@
 class Tree {
-    
+
     final /*@ nullable @*/ Tree left;
     final /*@ nullable @*/ Tree right;
-    
+
     //@ final ghost \seq heights;
-    
+
     //@ invariant left == null <==> right == null;
 
     /*@ invariant (\forall int i; 0<=i && i<heights.length; 
@@ -22,14 +22,15 @@ class Tree {
     /*@ normal_behavior
       @ ensures left == null && right == null;
       @ ensures heights == \seq_singleton(0);
-      @ pure
       @*/
+
+    /*@ pure*/
     public Tree() {
         //@ set heights = \seq_singleton(0);
-	this.left = null;
-	this.right = null;
+        this.left = null;
+        this.right = null;
     }
-    
+
     /*@ normal_behavior
       @ ensures left == l && right == r;
       @ ensures heights == \dl_seqInc(\seq_concat(l.heights,r.heights));
@@ -37,9 +38,10 @@ class Tree {
       @               (int)heights[i] == heights[i]);
       @ pure
       @*/
-    public Tree(Tree l, Tree r){
+    public Tree(Tree l, Tree r) {
         //@ set heights = \dl_seqInc(\seq_concat(l.heights,r.heights));
-        left = l; right = r;
+        left = l;
+        right = r;
     }
 
     /*@ behaviour
@@ -66,16 +68,16 @@ class Tree {
             throw new TreeException();
         }
 
-        if (h == d){
+        if (h == d) {
             s.pop();
             return new Tree();
         }
 
-        Tree l = build(d+1,s);
-        Tree r = build(d+1,s);
-        return new Tree(l,r);
+        Tree l = build(d + 1, s);
+        Tree r = build(d + 1, s);
+        return new Tree(l, r);
     }
-    
+
     /*@ public behavior
       @   requires (\forall int i; 0<=i && i < array.length; array[i] >= 0);
       @   ensures array.length == \result.heights.length;
@@ -84,14 +86,14 @@ class Tree {
       @   signals_only TreeException;
       @*/
     static Tree build(int[] array) throws TreeException {
-	List s = new List(array);
+        List s = new List(array);
         Tree t = build(0, s);
-        if (!s.isEmpty()) 
-	    throw new TreeException();
+        if (!s.isEmpty())
+            throw new TreeException();
 
         return t;
     }
-    
+
 
     /*@ public behaviour
       @   ensures \result.heights[0] == 1; 
@@ -102,28 +104,28 @@ class Tree {
       @   signals (Exception) false;
       @*/
     static Tree harness1() throws TreeException {
-	int[] orig = new int[]{1,3,3,2};
-	Tree t = build(orig);
-	return t;
+        int[] orig = new int[]{1, 3, 3, 2};
+        Tree t = build(orig);
+        return t;
     }
 
-    
+
     /*@ 
       @ ensures false;
       @ signals (TreeException) true;
       @ signals_only TreeException;
       @*/
     static Tree harness2() throws TreeException {
-        int[] orig = new int[]{1,3,2,2};
+        int[] orig = new int[]{1, 3, 2, 2};
         return build(orig);
     }
 
 
     public String toString() {
-	if(left == null) {
-	    return "Leaf";
-	} else {
-	    return "Node(" + left + "," + right + ")";
-	}
+        if (left == null) {
+            return "Leaf";
+        } else {
+            return "Node(" + left + "," + right + ")";
+        }
     }
 }

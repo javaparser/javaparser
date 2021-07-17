@@ -36,7 +36,7 @@ final class List {
     //@ public invariant (\forall int i; 0<=i && i < a.length; max >= a[i]);
     //@ public invariant (\forall int i; 0<=i && i < a.length; a[i] >= 0);
 
-    //@ accessible <inv> : this.*, this.a[*];
+    //@ accessible \inv : this.*, this.a[*];
     
     //@ pure
     boolean isEmpty() {
