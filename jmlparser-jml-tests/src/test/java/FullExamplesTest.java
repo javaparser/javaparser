@@ -88,30 +88,35 @@ public class FullExamplesTest {
     }
 
 
+    static File dir = new File("src/test/resources/fullexamples").getAbsoluteFile();
+    static int prefixLength = dir.toString().length();
+
     @TestFactory
     public Stream<DynamicTest> createTests() throws IOException {
-        File dir = new File("src/test/resources/fullexamples").getAbsoluteFile();
         //System.out.format("Folder: %s\n", dir);
         Assumptions.assumeTrue(dir.exists());
-        int prefix = dir.toString().length();
         Stream<Path> files = Files.walk(dir.toPath());
         return files
                 .filter(it -> it.toString().endsWith(".java"))
-                .filter(it -> !blocked.contains(it.toString().substring(prefix)))
                 .map(it -> {
-                            String name = it.toString().substring(prefix);
+                    String name = it.toString().substring(prefixLength);
                             return DynamicTest.dynamicTest(name, () -> testParse(it));
                         }
                 );
     }
 
     private void testParse(Path p) throws IOException {
-        //System.out.println(p);
+        Assumptions.assumeFalse(isBlocked(p));
+        System.out.println(p);
         ParseResult<CompilationUnit> result = jpb.parse(p);
         result.getProblems().forEach(it -> {
             int line = it.getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1)).orElse(-1);
-            //System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toString(), line);
+            System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p, line);
         });
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
+    }
+
+    private boolean isBlocked(Path it) {
+        return blocked.contains(it.toString().substring(prefixLength));
     }
 }
