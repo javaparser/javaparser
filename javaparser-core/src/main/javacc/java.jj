@@ -2336,7 +2336,9 @@ NodeList<JmlBoundVariable> JmlBoundedVariables():
    val=SimpleName()
    { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
   ( ","
-    partialType = Type(emptyNodeList())
+    [ LOOKAHEAD( Type() SimpleName())
+      partialType = Type(emptyNodeList())
+    ]
     val=SimpleName()
     { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
   )*
