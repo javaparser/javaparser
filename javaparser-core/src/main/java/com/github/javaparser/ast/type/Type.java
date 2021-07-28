@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -84,7 +84,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (Type) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -100,20 +100,16 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
      * In "{@code int[] a[];}", the element type is int.
      */
     public Type getElementType() {
-        if (this instanceof ArrayType) {
-            return ((ArrayType) this).getComponentType().getElementType();
-        }
         return this;
     }
 
+    /*
+     * returns the array level that is 0 for non array type.
+     */
     public int getArrayLevel() {
-        if (this instanceof ArrayType) {
-            return 1 + ((ArrayType) this).getComponentType().getArrayLevel();
-        } else {
-            return 0;
-        }
+        return 0;
     }
-    
+
     public String toDescriptor() {
         return "";
     }

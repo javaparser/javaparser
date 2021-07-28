@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,8 +38,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The declaration of an enum.<br>{@code enum X { ... }}
@@ -116,7 +114,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     public EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
-            return (EnumDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         if (this.entries != null)
@@ -130,7 +128,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     public EnumDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
-            return (EnumDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
         if (this.implementedTypes != null)
@@ -211,6 +209,7 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
         action.accept(this);

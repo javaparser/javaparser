@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
@@ -31,17 +32,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+import java.util.function.Consumer;
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
- * {@code new int[5][4][][]} or <code>new int[][]{{1},{2,3}}</code>.
+ * {@code new int[5][4][][]} or {@code new int[][]{{1},{2,3}}}.
  *
  * <br>"int" is the element type.
  * <br>All the brackets are stored in the levels field, from left to right.
@@ -114,7 +112,7 @@ public class ArrayCreationExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayCreationExpr setInitializer(final ArrayInitializerExpr initializer) {
         if (initializer == this.initializer) {
-            return (ArrayCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         if (this.initializer != null)
@@ -128,7 +126,7 @@ public class ArrayCreationExpr extends Expression {
     public ArrayCreationExpr setElementType(final Type elementType) {
         assertNotNull(elementType);
         if (elementType == this.elementType) {
-            return (ArrayCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         if (this.elementType != null)
@@ -147,7 +145,7 @@ public class ArrayCreationExpr extends Expression {
     public ArrayCreationExpr setLevels(final NodeList<ArrayCreationLevel> levels) {
         assertNotNull(levels);
         if (levels == this.levels) {
-            return (ArrayCreationExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
         if (this.levels != null)
@@ -256,6 +254,7 @@ public class ArrayCreationExpr extends Expression {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayCreationExpr(Consumer<ArrayCreationExpr> action) {
         action.accept(this);

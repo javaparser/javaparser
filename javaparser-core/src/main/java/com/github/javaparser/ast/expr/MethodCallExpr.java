@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,11 +19,6 @@
  * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser.ast.expr;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-import java.util.function.Consumer;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
@@ -47,9 +42,12 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import java.util.Optional;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * A method call on an object or a class. <br>{@code circle.circumference()} <br>In <code>a.&lt;String&gt;bb(15);</code> a
+ * A method call on an object or a class. <br>{@code circle.circumference()} <br>In {@code a.<String>bb(15);}, a
  * is the scope, String is a type argument, bb is the name and 15 is an argument.
  *
  * @author Julio Vilmar Gesser
@@ -143,7 +141,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
@@ -157,7 +155,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     public MethodCallExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -170,7 +168,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setScope(final Expression scope) {
         if (scope == this.scope) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
@@ -194,7 +192,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
-            return (MethodCallExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
@@ -293,6 +291,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodCallExpr(Consumer<MethodCallExpr> action) {
         action.accept(this);
@@ -321,7 +320,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     public Optional<MethodCallExpr> toMethodCallExpr() {
         return Optional.of(this);
     }
-    
+
     /*
      * A method invocation expression is a poly expression if all of the following are true:
      * 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
@@ -334,31 +333,27 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Override
     public boolean isPolyExpression() {
         // A method invocation expression is a poly expression if all of the following are true:
-        //
+        // 
         // 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
-
         if (!(appearsInAssignmentContext() || appearsInInvocationContext())) {
             return false;
         }
-
         // 2. If the invocation is qualified (that is, any form of MethodInvocation except for the form [MethodName (
         // [ArgumentList] )]), then the invocation elides TypeArguments to the left of the Identifier.
-
         if (isQualified() && !elidesTypeArguments()) {
             return false;
         }
-
         // 3. The method to be invoked, as determined by the following subsections, is generic (§8.4.4) and has a
         // return type that mentions at least one of the method's type parameters.
         // A method is generic if it declares one or more type variables (§4.4).
         if (isGenericMethod() && hasParameterwithSameTypeThanResultType(resolve().getReturnType())) {
-            return true; // it's a poly expression
+            // it's a poly expression
+            return true;
         }
-
         // Otherwise, the method invocation expression is a standalone expression.
-         return false;
+        return false;
     }
-    
+
     /*
      *  A method is generic if it declares one or more type variables (§4.4).
      *  Not sure it's enough to verify that the type arguments list is empty or not.
@@ -366,16 +361,14 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     private boolean isGenericMethod() {
         return getTypeArguments().isPresent() && !getTypeArguments().get().isEmpty();
     }
-    
+
     /*
      *  return true if at least one of the method's type parameters has the same type as the specified type .
      */
     private boolean hasParameterwithSameTypeThanResultType(ResolvedType resolvedReturnType) {
         return getTypeArguments().isPresent() && getTypeArguments().get().stream().anyMatch(argType -> argType.resolve().isAssignableBy(resolvedReturnType));
     }
-    
-    
-    
+
     /*
      * Returns true if the expression is an invocation context.
      * https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3

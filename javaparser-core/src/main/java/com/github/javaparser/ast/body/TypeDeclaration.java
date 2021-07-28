@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,7 +40,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
-import com.github.javaparser.ast.Node;
 
 /**
  * A base class for all types of type declarations.
@@ -194,8 +193,10 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     /**
      * Returns the fully qualified name of this type, derived only from information available in this compilation unit. (So no symbol solving happens.)
      * If the declared type is a local class declaration, it will return Optional.empty().
+     * If the declared type is a local record declaration, it will return Optional.empty().
      * If the declared type is not contained in a compilation unit, it will return Optional.empty().
      * @see com.github.javaparser.ast.stmt.LocalClassDeclarationStmt
+     * @see com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt
      */
     public Optional<String> getFullyQualifiedName() {
         if (isTopLevelType()) {
@@ -260,6 +261,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
         action.accept(this);

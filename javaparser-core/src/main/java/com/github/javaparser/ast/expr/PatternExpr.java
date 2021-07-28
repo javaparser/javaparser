@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,20 +23,20 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.PatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.PatternExprMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * <h1>The instanceof statement</h1>
@@ -124,7 +124,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     public PatternExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (PatternExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -138,7 +138,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     public PatternExpr setType(final ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (PatternExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -166,6 +166,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPatternExpr(Consumer<PatternExpr> action) {
         action.accept(this);

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,7 +20,9 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -39,20 +41,18 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.resolution.Resolvable;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The declaration of a variable.<br>In {@code int x = 14, y = 3;} "int x = 14"  and "int y = 3"  are
  * VariableDeclarators.
- * <p/>The type is on all of the variable declarators because, thanks to array brackets, each variable can have a different type.
+ * <p>The type is on all of the variable declarators because, thanks to array brackets, each variable can have a different type.
  *
  * @author Julio Vilmar Gesser
  */
@@ -163,7 +163,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     public VariableDeclarator setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (VariableDeclarator) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -182,7 +182,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setInitializer(final Expression initializer) {
         if (initializer == this.initializer) {
-            return (VariableDeclarator) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         if (this.initializer != null)
@@ -211,7 +211,7 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (VariableDeclarator) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)

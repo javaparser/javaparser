@@ -7,13 +7,13 @@
 pushd javaparser-core-generators
 
 # Generate code
-mvn -B clean package -P run-generators -DskipTests
+./mvnw -B clean package -P run-generators -DskipTests
 
 # Go back to previous directory
 popd
 
 # Fresh code has been generated in core, so rebuild the whole thing again.
-mvn -B clean install -DskipTests
+./mvnw -B clean install -DskipTests
 if [ "$?" -ne 0 ]; then
     exit 1
 fi

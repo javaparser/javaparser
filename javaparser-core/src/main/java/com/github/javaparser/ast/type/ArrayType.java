@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -115,7 +115,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setComponentType(final Type componentType) {
         assertNotNull(componentType);
         if (componentType == this.componentType) {
-            return (ArrayType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
         if (this.componentType != null)
@@ -226,7 +226,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setOrigin(final Origin origin) {
         assertNotNull(origin);
         if (origin == this.origin) {
-            return (ArrayType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ORIGIN, this.origin, origin);
         this.origin = origin;
@@ -245,7 +245,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public String asString() {
         return componentType.asString() + "[]";
     }
-    
+
     @Override
     public String toDescriptor() {
         StringBuffer sb = new StringBuffer();
@@ -290,6 +290,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayType(Consumer<ArrayType> action) {
         action.accept(this);
@@ -299,5 +300,23 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayType> toArrayType() {
         return Optional.of(this);
+    }
+    
+    /**
+     * Finds the element type, meaning: the type without ArrayTypes around it.
+     * <p>
+     * In "{@code int[] a[];}", the element type is int.
+     */
+    @Override
+    public Type getElementType() {
+        return this.getComponentType().getElementType();
+    }
+    
+    /**
+     * returns the array level that is 0 for non array type.
+     */
+    @Override
+    public int getArrayLevel() {
+        return 1 + this.getComponentType().getArrayLevel();
     }
 }

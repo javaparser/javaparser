@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,114 +20,24 @@
  */
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.ReceiverParameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.ArrayAccessExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.MemberValuePair;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
-import com.github.javaparser.ast.expr.SwitchExpr;
-import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.modules.ModuleDeclaration;
-import com.github.javaparser.ast.modules.ModuleExportsDirective;
-import com.github.javaparser.ast.modules.ModuleOpensDirective;
-import com.github.javaparser.ast.modules.ModuleProvidesDirective;
-import com.github.javaparser.ast.modules.ModuleRequiresDirective;
-import com.github.javaparser.ast.modules.ModuleUsesDirective;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.UnparsableStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.stmt.YieldStmt;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VarType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
-
 /**
- * A visitor that has a return value of ({@link List List<R>}), and has a default implementation for all its visit
+ * A visitor that has a return value of {@link List List&lt;R&gt;}, and has a default implementation for all its visit
  * methods that visits their children in an unspecified order, and all visit methods
- * that returns a value be added to a flattened {@link List List<R>}.
+ * that returns a value be added to a flattened {@link List List&lt;R&gt;}.
  *
  * @author Enno Boland
  */
@@ -1175,6 +1085,22 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         return result;
     }
 
+    public List<R> visit(final LocalRecordDeclarationStmt n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getRecordDeclaration().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
     public List<R> visit(final LongLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
@@ -1236,7 +1162,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.hasScope()) {
+        if (n.getScope().isPresent()) {
             tmp = n.getScope().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -1408,7 +1334,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.hasScope()) {
+        if (n.getScope().isPresent()) {
             tmp = n.getScope().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -2182,6 +2108,99 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getType().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final RecordDeclaration n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getImplementedTypes().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getParameters().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getReceiverParameter().isPresent()) {
+            tmp = n.getReceiverParameter().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getTypeParameters().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getMembers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getName().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    public List<R> visit(final CompactConstructorDeclaration n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getBody().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getName().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getThrownExceptions().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getTypeParameters().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -44,4 +44,10 @@ public class CsmSingleReference implements CsmElement {
             ConcreteSyntaxModel.genericPrettyPrint(child, printer);
         }
     }
+    
+    @Override
+    public String toString() {
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
+    }
+    
 }

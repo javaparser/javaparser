@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,12 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
-
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -42,6 +36,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import java.util.Optional;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * A type parameter. Examples:
@@ -126,7 +124,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
     public TypeParameter setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (TypeParameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -140,7 +138,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
     public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
         assertNotNull(typeBound);
         if (typeBound == this.typeBound) {
-            return (TypeParameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_BOUND, this.typeBound, typeBound);
         if (this.typeBound != null)
@@ -176,8 +174,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         getTypeBound().ifNonEmpty(l -> str.append(l.stream().map(ClassOrInterfaceType::asString).collect(joining("&", " extends ", ""))));
         return str.toString();
     }
-    
-    
+
     @Override
     public String toDescriptor() {
         return String.format("L%s;", resolve().qualifiedName());
@@ -225,6 +222,7 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeParameter(Consumer<TypeParameter> action) {
         action.accept(this);

@@ -26,6 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -56,7 +57,9 @@ public class JavaParserFactory {
         }
 
         // TODO: Is order important here?
-        if (node instanceof AnnotationDeclaration) {
+        if (node instanceof ArrayAccessExpr) {
+            return new ArrayAccessExprContext((ArrayAccessExpr) node, typeSolver);
+        } else if (node instanceof AnnotationDeclaration) {
             return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
         } else if (node instanceof BinaryExpr) {
             return new BinaryExprContext((BinaryExpr) node, typeSolver);
@@ -128,11 +131,13 @@ public class JavaParserFactory {
                 }
             }
             final Node parentNode = demandParentNode(node);
-            if (parentNode instanceof ObjectCreationExpr) {
-                ObjectCreationExpr parentObjectCreationExpr = (ObjectCreationExpr) parentNode;
-                if (node == parentObjectCreationExpr.getType() || parentObjectCreationExpr.getArguments().contains(node)) {
-                    Node grandParentNode = demandParentNode(parentNode);
-                    return getContext(grandParentNode, typeSolver);
+            if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
+                ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
+                if (parentDeclaration.getImplementedTypes().contains(node) ||
+                    parentDeclaration.getExtendedTypes().contains(node)) {
+                    // When resolving names in implements and extends the body of the declaration
+                    // should not be searched so use limited context.
+                    return new ClassOrInterfaceDeclarationExtendsContext(parentDeclaration, typeSolver);
                 }
             }
             return getContext(parentNode, typeSolver);

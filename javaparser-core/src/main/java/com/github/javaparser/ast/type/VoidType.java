@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -36,6 +33,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.VoidTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
@@ -89,7 +88,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     public String asString() {
         return "void";
     }
-    
+
     @Override
     public String toDescriptor() {
         return "V";
@@ -127,6 +126,7 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVoidType(Consumer<VoidType> action) {
         action.accept(this);

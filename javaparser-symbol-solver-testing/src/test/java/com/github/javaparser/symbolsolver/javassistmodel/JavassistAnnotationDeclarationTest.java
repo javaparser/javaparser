@@ -22,6 +22,8 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarationTest;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -31,6 +33,12 @@ import javassist.CtClass;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest implements ResolvedAnnotationDeclarationTest {
 
@@ -57,18 +65,38 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest imp
         super.containerTypeCantBeNull();
     }
 
-    @Disabled(value = "This feature is not yet implemented. See https://github.com/javaparser/javaparser/issues/1837")
-    @Test
-    @Override
-    public void getAllFieldsCantBeNull() {
-        super.getAllFieldsCantBeNull();
-    }
-
     @Disabled(value = "This feature is not yet implemented. See https://github.com/javaparser/javaparser/issues/1838")
     @Test
     @Override
     public void getDeclaredMethodsCantBeNull() {
         super.getDeclaredMethodsCantBeNull();
+    }
+
+    @Test
+    void getAncestors_shouldReturnAnnotation() throws NotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        CtClass clazz = ClassPool.getDefault().getCtClass("java.lang.Override");
+        JavassistAnnotationDeclaration overrideAnnotation = new JavassistAnnotationDeclaration(clazz, typeSolver);
+
+        List<ResolvedReferenceType> ancestors = overrideAnnotation.getAncestors();
+        assertEquals(2, ancestors.size());
+        assertEquals(Object.class.getCanonicalName(), ancestors.get(0).getQualifiedName());
+        assertEquals(Annotation.class.getCanonicalName(), ancestors.get(1).getQualifiedName());
+    }
+
+    @Test
+    void internalTypes_shouldMatchNestedTypes() {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+
+        ClassPool classPool = new ClassPool(true);
+        CtClass fooAnnotation = classPool.makeAnnotation("com.example.Foo");
+        CtClass barClass = fooAnnotation.makeNestedClass("Bar", true);
+        CtClass bazClass = barClass.makeNestedClass("Baz", true);
+        JavassistAnnotationDeclaration fooClassDeclaration = new JavassistAnnotationDeclaration(fooAnnotation, typeSolver);
+
+        List<ResolvedReferenceTypeDeclaration> innerTypes = new ArrayList<>(fooClassDeclaration.internalTypes());
+        assertEquals(1, innerTypes.size());
+        assertEquals("com.example.Foo.Bar", innerTypes.get(0).getQualifiedName());
     }
 
 }

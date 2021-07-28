@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -399,6 +399,11 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
+    public void visit(final LocalRecordDeclarationStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
     public void visit(final TypeParameter n, final A arg) {
         defaultAction(n, arg);
     }
@@ -528,6 +533,16 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final PatternExpr n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final RecordDeclaration n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final CompactConstructorDeclaration n, final A arg) {
         defaultAction(n, arg);
     }
 }

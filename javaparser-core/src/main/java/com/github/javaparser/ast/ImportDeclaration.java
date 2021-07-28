@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,19 +20,17 @@
  */
 package com.github.javaparser.ast;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.StaticJavaParser.parseName;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
+import static com.github.javaparser.StaticJavaParser.parseName;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An import declaration.
@@ -114,7 +112,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setAsterisk(final boolean isAsterisk) {
         if (isAsterisk == this.isAsterisk) {
-            return (ImportDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ASTERISK, this.isAsterisk, isAsterisk);
         this.isAsterisk = isAsterisk;
@@ -125,7 +123,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     public ImportDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ImportDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -138,7 +136,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setStatic(final boolean isStatic) {
         if (isStatic == this.isStatic) {
-            return (ImportDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,6 +22,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -36,9 +37,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
-import com.github.javaparser.ast.Generated;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.1-220">receiver parameter</a> feature of Java.
@@ -112,7 +112,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     public ReceiverParameter setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (ReceiverParameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -138,7 +138,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     public ReceiverParameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (ReceiverParameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -169,7 +169,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
     public ReceiverParameter setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ReceiverParameter) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)

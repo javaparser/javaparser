@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -43,11 +43,9 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
- * A definition of a class or interface.<br>{@code class X { ... }}
+ * A definition of a class or interface.<br>{@code class X { ... }}<br>{@code interface X { ... }}
  *
  * @author Julio Vilmar Gesser
  */
@@ -124,7 +122,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
         if (extendedTypes == this.extendedTypes) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
         if (this.extendedTypes != null)
@@ -138,7 +136,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
         if (this.implementedTypes != null)
@@ -151,7 +149,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setInterface(final boolean isInterface) {
         if (isInterface == this.isInterface) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.INTERFACE, this.isInterface, isInterface);
         this.isInterface = isInterface;
@@ -162,7 +160,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
-            return (ClassOrInterfaceDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
@@ -271,6 +269,7 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceDeclaration(Consumer<ClassOrInterfaceDeclaration> action) {
         action.accept(this);

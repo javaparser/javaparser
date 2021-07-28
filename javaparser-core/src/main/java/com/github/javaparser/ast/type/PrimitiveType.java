@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,13 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -41,6 +34,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.function.Consumer;
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A primitive type.
@@ -88,15 +86,15 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
 
         BOOLEAN("Boolean", "Z"),
         CHAR("Character", "C"),
-        BYTE("Byte" ,"B"),
-        SHORT("Short" ,"S"),
+        BYTE("Byte", "B"),
+        SHORT("Short", "S"),
         INT("Integer", "I"),
-        LONG("Long", "L"),
+        LONG("Long", "J"),
         FLOAT("Float", "F"),
         DOUBLE("Double", "D");
 
         final String nameOfBoxedType;
-        
+
         final String descriptor;
 
         private String codeRepresentation;
@@ -133,7 +131,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     public PrimitiveType(final Primitive type) {
         this(null, type, new NodeList<>());
     }
-    
+
     @AllFieldsConstructor
     public PrimitiveType(final Primitive type, NodeList<AnnotationExpr> annotations) {
         this(null, type, annotations);
@@ -169,7 +167,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     public ClassOrInterfaceType toBoxedType() {
         return type.toBoxedType();
     }
-    
+
     @Override
     public String toDescriptor() {
         return type.descriptor;
@@ -179,7 +177,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     public PrimitiveType setType(final Primitive type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (PrimitiveType) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
@@ -236,6 +234,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPrimitiveType(Consumer<PrimitiveType> action) {
         action.accept(this);

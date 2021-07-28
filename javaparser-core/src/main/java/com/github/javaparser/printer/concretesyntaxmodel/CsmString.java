@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -31,6 +31,10 @@ public class CsmString implements CsmElement {
     public CsmString(ObservableProperty property) {
         this.property = property;
     }
+    
+    public ObservableProperty getProperty() {
+        return property;
+    }
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
@@ -41,7 +45,7 @@ public class CsmString implements CsmElement {
 
     @Override
     public String toString() {
-        return String.format("CsmString(property:%s)", property);
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 
 }

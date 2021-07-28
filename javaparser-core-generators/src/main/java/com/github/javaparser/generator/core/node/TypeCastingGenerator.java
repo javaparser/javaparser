@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -75,42 +75,55 @@ public class TypeCastingGenerator extends NodeGenerator {
         final ClassOrInterfaceDeclaration baseCoid = baseCode.b;
         final CompilationUnit baseCu = baseCode.a;
 
-        generateIsType(baseCu, nodeCoid, baseCoid, typeName);
-        generateAsType(baseCu, nodeCoid, baseCoid, typeName);
-        generateToType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
-        generateIfType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
+        generateIsType(nodeMetaModel, baseCu, nodeCoid, baseCoid, typeName);
+        generateAsType(nodeMetaModel, baseCu, nodeCoid, baseCoid, typeName);
+        generateToType(nodeMetaModel, nodeCu, baseCu, nodeCoid, baseCoid, typeName);
+        generateIfType(nodeMetaModel, nodeCu, baseCu, nodeCoid, baseCoid, typeName);
     }
 
-    private void generateAsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+    private void generateAsType(BaseNodeMetaModel nodeMetaModel, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        baseCu.addImport("com.github.javaparser.utils.CodeGenerationUtils.f", true, false);
+
         final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { throw new IllegalStateException(f(\"%%s is not %s, it is %%s\", this, this.getClass().getSimpleName())); }", typeName, typeName, typeName));
         final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public %s as%s() { return this; }", typeName, typeName));
+
+        annotateWhenOverridden(nodeMetaModel, asTypeNodeMethod);
+
         addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
         addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
-        baseCu.addImport("com.github.javaparser.utils.CodeGenerationUtils.f", true, false);
     }
 
-    private void generateToType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+    private void generateToType(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
         baseCu.addImport(Optional.class);
         nodeCu.addImport(Optional.class);
-        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public Optional<%s> to%s() { return Optional.empty(); }", typeName, typeName, typeName));
-        final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public Optional<%s> to%s() { return Optional.of(this); }", typeName, typeName));
-        addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
-        addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
+
+        final MethodDeclaration toTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public Optional<%s> to%s() { return Optional.empty(); }", typeName, typeName, typeName));
+        final MethodDeclaration toTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public Optional<%s> to%s() { return Optional.of(this); }", typeName, typeName));
+
+        annotateWhenOverridden(nodeMetaModel, toTypeNodeMethod);
+
+        addOrReplaceWhenSameSignature(baseCoid, toTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, toTypeNodeMethod);
     }
 
-    private void generateIfType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
-        final MethodDeclaration ifTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { }", typeName, typeName));
-        final MethodDeclaration ifTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { action.accept(this); }", typeName, typeName));
-        addOrReplaceWhenSameSignature(baseCoid, ifTypeBaseMethod);
-        addOrReplaceWhenSameSignature(nodeCoid, ifTypeNodeMethod);
-
+    private void generateIfType(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
         baseCu.addImport(Consumer.class);
         nodeCu.addImport(Consumer.class);
+
+        final MethodDeclaration ifTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { }", typeName, typeName));
+        final MethodDeclaration ifTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { action.accept(this); }", typeName, typeName));
+
+        annotateWhenOverridden(nodeMetaModel, ifTypeNodeMethod);
+
+        addOrReplaceWhenSameSignature(baseCoid, ifTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, ifTypeNodeMethod);
     }
 
-    private void generateIsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+    private void generateIsType(BaseNodeMetaModel nodeMetaModel, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
         final MethodDeclaration baseIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public boolean is%s() { return false; }", typeName));
         final MethodDeclaration overriddenIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public boolean is%s() { return true; }", typeName));
+
+        annotateWhenOverridden(nodeMetaModel, overriddenIsTypeMethod);
 
         addOrReplaceWhenSameSignature(nodeCoid, overriddenIsTypeMethod);
         addOrReplaceWhenSameSignature(baseCoid, baseIsTypeMethod);

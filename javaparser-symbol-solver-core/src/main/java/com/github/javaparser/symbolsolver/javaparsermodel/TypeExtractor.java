@@ -98,12 +98,18 @@ import com.google.common.collect.ImmutableList;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
+    private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
+    
+    private ReferenceTypeImpl StringReferenceType;
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
         this.facade = facade;
+        //pre-calculate the String reference (optimization)
+        StringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
     }
 
     @Override
@@ -474,7 +480,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(StringLiteralExpr node, Boolean solveLambdas) {
-        return new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
+        return StringReferenceType;
     }
 
     @Override
@@ -536,18 +542,27 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
         Log.trace("getType on type expr %s", ()-> node);
         if (!(node.getType() instanceof ClassOrInterfaceType)) {
-            // TODO / FIXME... e.g. System.out::println
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
         }
+
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) node.getType();
+        String nameWithScope = classOrInterfaceType.getNameWithScope();
+
+        // JLS 15.13 - ReferenceType :: [TypeArguments] Identifier
         SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory
                 .getContext(classOrInterfaceType, typeSolver)
-                .solveType(classOrInterfaceType.getName().getId());
-        if (!typeDeclarationSymbolReference.isSolved()) {
-            throw new UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
-        } else {
+                .solveType(nameWithScope);
+        if (typeDeclarationSymbolReference.isSolved()) {
             return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
+
+        // JLS 15.13 - ExpressionName :: [TypeArguments] Identifier
+        Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameWithScope, node);
+        if (value.isPresent()) {
+            return value.get().getType();
+        }
+
+        throw new UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
     }
 
     @Override
