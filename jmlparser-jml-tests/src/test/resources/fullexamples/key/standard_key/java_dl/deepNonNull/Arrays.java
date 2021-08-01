@@ -13,6 +13,7 @@ public class Arrays {
 
     //@ requires a == o && o != null;
     //@ ensures \invariant_for(this);
+
     //@ helper
     public void unprovable (/*@ nullable @*/ Object o) {}
 }

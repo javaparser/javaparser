@@ -100,6 +100,7 @@ public class TokenTypes {
             case UNIX_EOL:
             case OLD_MAC_EOL:
                 return JavaToken.Category.EOL;
+            case JML_IGNORE_SINGLE_LINE_START:
             case EOF:
             case SPACE:
             case AT_AT_BEGINN:

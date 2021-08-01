@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -20,8 +22,10 @@ import java.util.stream.Stream;
  */
 public class FullExamplesTest {
     private final JavaParser jpb = new JavaParser();
+    private static final File dir = new File("src/test/resources/fullexamples").getAbsoluteFile();
 
     Set<String> blocked = new HashSet<>();
+    Set<Path> blockedPaths;
 
     {
         blocked.add("/key/standard_key/BookExamples/10UsingKeY/Bank-JML/classpath/JTextComponent.java");
@@ -81,14 +85,20 @@ public class FullExamplesTest {
         blocked.add("/key/standard_key/java_dl/payCardJML/classpath/AbstractButton.java");
         blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JFrame.java");
         blocked.add("/key/standard_key/java_dl/payCardJML/classpath/JButton.java");
+        blocked.add("/key/completionscopes/src7CompletionScopes.java");
+        blocked.add("/key/heap/block_loop_contracts/List/src/IntList.java");
+        blocked.add("/key/heap/block_loop_contracts/ListsWithIterators/src/IntList.java");
+        blocked.add("/key/heap/block_loop_contracts/List/src/IntLinkedList.java");
         blocked.add("/openjml/test/anonymousCaptures/Captures.java");
         blocked.add("/openjml/test/datatype/Test.java");
         blocked.add("/openjml/test/escFPcompose/Test.java");
         blocked.add("/openjml/test/gitbug555/Test.java");
+
+        blockedPaths = blocked.stream().map(it -> Paths.get(dir.toString(), it))
+                .collect(Collectors.toSet());
     }
 
 
-    static File dir = new File("src/test/resources/fullexamples").getAbsoluteFile();
     static int prefixLength = dir.toString().length();
 
     @TestFactory
@@ -98,8 +108,9 @@ public class FullExamplesTest {
         Stream<Path> files = Files.walk(dir.toPath());
         return files
                 .filter(it -> it.toString().endsWith(".java"))
+                .filter(it -> !it.toString().contains("openjml"))
                 .map(it -> {
-                    String name = it.toString().substring(prefixLength);
+                            String name = it.toString().substring(prefixLength);
                             return DynamicTest.dynamicTest(name, () -> testParse(it));
                         }
                 );
@@ -117,6 +128,6 @@ public class FullExamplesTest {
     }
 
     private boolean isBlocked(Path it) {
-        return blocked.contains(it.toString().substring(prefixLength));
+        return blockedPaths.contains(it);
     }
 }

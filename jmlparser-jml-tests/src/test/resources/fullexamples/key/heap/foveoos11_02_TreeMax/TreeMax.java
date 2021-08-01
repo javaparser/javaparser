@@ -40,8 +40,9 @@ public final class Tree {
       @ ensures \result >= y;
       @ ensures \result >= z;
       @ ensures \result == x || \result == y || \result == z;
-      @ strictly_pure helper
-      @*/
+     */
+
+    //@ strictly_pure helper
     int maxHelper(int x, int y, int z) {
         if (x > y) return (x > z? x: z);
         else return (y > z? y: z);

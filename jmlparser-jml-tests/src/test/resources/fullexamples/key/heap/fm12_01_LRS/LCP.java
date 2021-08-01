@@ -22,7 +22,9 @@ final class LCP {
   @ ensures a[x+\result] != a[y+\result]
   @             || \result == a.length-x
   @             || \result == a.length-y;
-  @ strictly_pure @*/
+  */
+
+/*@ strictly_pure */
 static int lcp(int[] a, int x, int y) {
     int l = 0;
     /*@ maintaining 0 <= l && l+x <= a.length

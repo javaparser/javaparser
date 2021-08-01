@@ -50,9 +50,10 @@ public final class SuffixArray {
       @               && (\forall int k; 0 <= k && k < j; a[x+k] == a[y+k]));
       @ ensures \result == -compare(y,x);
       @ accessible a, a[*];
-      @ spec_public strictly_pure helper
-      @*/
-    private int compare(int x, int y) {
+      */
+
+    private /*@ spec_public strictly_pure helper */
+    int compare(int x, int y) {
         if (x == y) return 0;
         int l = LCP.lcp(a,x,y);
 
@@ -66,7 +67,7 @@ public final class SuffixArray {
 
 
 
-    private void /*@ helper @*/ sort(final int[] data) {
+    private /*@ helper @*/ void sort(final int[] data) {
         /*@ maintaining data.length == a.length;
           @ maintaining 0 <= k && k <= data.length;
           @ maintaining (\forall int i; 0 <= i && i < a.length;
@@ -97,7 +98,7 @@ public final class SuffixArray {
       @ ensures data[x-1] == \old(data[x]);
       @ assignable data[x], data[x-1];
       @*/
-    private static void /*@ helper @*/ swap(int[] data, int x) {
+    private static  /*@ helper @*/ void swap(int[] data, int x) {
         final int y = x-1;
         final int t = data[x];
         data[x] = data[y];
@@ -106,7 +107,5 @@ public final class SuffixArray {
 
 
 }
-
-
 
 //Based on code by Robert Sedgewick and Kevin Wayne.

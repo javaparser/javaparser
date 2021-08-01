@@ -16,8 +16,9 @@ final class PrefixSumRec {
       @   ensures \result == (\forall int x, y; even(x) == (even(y) == even(x+y)));
       @   ensures \result;
       @   accessible \nothing;
-      @ strictly_pure helper
-      @*/
+     */
+
+    /*@ strictly_pure helper */
     private static boolean evenSumLemma() { return true; }
 
     /*@ public normal_behavior
@@ -27,8 +28,9 @@ final class PrefixSumRec {
       @                     x == (\product int i; 0 <= i && i < b; 2));
       @   measured_by x;
       @   accessible \nothing;
-      @ strictly_pure helper
-      @*/
+     */
+
+    /*@ strictly_pure helper */
     private static boolean isPow2(int x){
       if (x==1) 
           return true;
@@ -44,8 +46,9 @@ final class PrefixSumRec {
       @   ensures \result > x;
       @   accessible \nothing;
       @   measured_by x;
-      @ strictly_pure helper
-      @*/
+      */
+
+    /*@ strictly_pure helper */
     private static int pow2( int x ) {
       return x==0? 1: 2*pow2(x-1);
     }
@@ -57,8 +60,9 @@ final class PrefixSumRec {
       @   ensures \result == x/2;
       @   ensures \result < x;
       @   accessible \nothing;
-      @ strictly_pure helper
-      @*/
+     */
+
+    /*@ strictly_pure helper */
     private static int div2 (int x) {
         return x/2;
     }
@@ -67,8 +71,8 @@ final class PrefixSumRec {
       @   ensures \result == (\exists int y; y*2 == x);
       @   ensures \result != (\exists int y; y*2 == x+1);
       @   accessible \nothing;
-      @ strictly_pure helper
-      @*/
+     */
+    /*@ strictly_pure helper @*/
     private static boolean even (int x) {
         return x%2==0;
     }
@@ -86,8 +90,8 @@ final class PrefixSumRec {
       @   ensures (\forall int z; k% pow2(z+1) == pow2(z)-1; 
       @               z >= \result);
       @   accessible \nothing;
-      @ strictly_pure helper
-      @*/
+      */
+    //@ strictly_pure helper
     private static int min ( int k ) {
         int n = 0;
         /*@ maintaining (\forall int z; 0 <= z && z < n;
