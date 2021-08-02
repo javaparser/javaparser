@@ -438,6 +438,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
         n.getName().accept(this, arg);
 
+        printTypeParameters(n.getTypeParameters(), arg);
+
         printer.print("(");
         if (!isNullOrEmpty(n.getParameters())) {
             for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
@@ -449,9 +451,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             }
         }
         printer.print(")");
-
-        printTypeParameters(n.getTypeParameters(), arg);
-
+        
         if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
             for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
