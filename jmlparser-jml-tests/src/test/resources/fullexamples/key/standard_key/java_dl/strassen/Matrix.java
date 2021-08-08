@@ -1,5 +1,5 @@
 /** a matrix of size 2^n x 2^n */
-final /*@ pure @*/ class Matrix {
+final /* @ weigl: pure on classes? pure @*/ class Matrix {
 
     // recursive case for matrices of size > 2
     //@ nullable

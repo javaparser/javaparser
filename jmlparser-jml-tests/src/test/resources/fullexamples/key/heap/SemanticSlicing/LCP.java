@@ -20,8 +20,8 @@ final class LCP {
   @ ensures \result <= a.length - y;
   @ ensures (\forall int i; 0 <= i && i < \result;
   @                         a[x+i] == a[y+i] );
-  @ strictly_pure @*/
-
+  */
+//@ strictly_pure
 public static int lcp(/*@ nullable */ int[] a, int x, int y) {
     int l = 0;
     /*@ maintaining 0 <= l && l+x <= a.length
@@ -40,15 +40,13 @@ public static int lcp(/*@ nullable */ int[] a, int x, int y) {
 
 
 				/*@ normal_behavior
-				ensures true;
-				strictly_pure
-		*/
-		static int yy_0_helper(){}
+				ensures true; */
+	//@ strictly_pure
+	static int yy_0_helper(){}
 
 				/*@ normal_behavior
-				ensures true;
-				strictly_pure
-		*/
-		static int yy_1_helper(){}
+				ensures true; */
+	//@ strictly_pure
+	static int yy_1_helper(){}
 
 }

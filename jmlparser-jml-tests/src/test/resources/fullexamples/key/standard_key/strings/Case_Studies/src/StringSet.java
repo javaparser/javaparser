@@ -46,7 +46,7 @@ public class StringSet {
       @  assignable \nothing;
       @  ensures \result == false;
       @*/
-    public boolean insert (String /*@ nullable @*/ s) {
+    public boolean insert (/*@ nullable @*/ String s) {
 	if (s==null) return false;
 	int hash = s.hashCode();
 	hash = hash < 0 ? -(hash + 1) : hash; 
@@ -79,7 +79,7 @@ public class StringSet {
       @  assignable \nothing;
       @  ensures \result == false;
       @*/
-    public boolean contains (String /*@ nullable @*/ s) {
+    public boolean contains (/*@ nullable @*/ String s) {
 	if (s==null) return false;
 	int hash = s.hashCode();
 	hash = hash < 0 ? -(hash + 1) : hash; 

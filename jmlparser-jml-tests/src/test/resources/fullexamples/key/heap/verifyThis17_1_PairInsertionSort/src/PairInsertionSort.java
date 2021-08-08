@@ -20,7 +20,7 @@ public class PairInsertionSort {
       @ assignable a[left..right];
       @ ensures (\forall int i; \old(left) - 1 <= i && i < \old(right); a[i] <= a[i + 1]);
       @*/
-    public static void /*@ helper @*/ sort(int[] a, int left, int right) {
+    public static /*@ helper @*/ void sort(int[] a, int left, int right) {
 
 	/*@ loop_invariant right == \old(right) && \old(left) <= \old(right);
 	  @ loop_invariant right == \old(right);

@@ -28,7 +28,7 @@ public class CardRuntimeException extends java.lang.RuntimeException {
     //@ public instance invariant JCSystem.isTransient(_reason) == JCSystem.CLEAR_ON_RESET; 
 
     //@ public represents reason = _reason[0];
-    //@ public represents footprint = _reason, _reason[0], _reason.\transient;
+    //@ public represents footprint = \locset(_reason, _reason[0], _reason.\transient);
 
     /*@ public normal_behavior
       @   ensures \fresh(footprint);

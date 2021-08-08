@@ -3,7 +3,7 @@ public class ArrayList implements List {
     private /*@nullable@*/ Object[] array = new Object[10];
     private int size = 0;
     
-    //@ private represents footprint = array, array[*], size;
+    //@ private represents footprint = \storeref(array, array[*], size);
     
     /*@ private invariant array != null;
       @ private invariant 0 <= size && size <= array.length;
@@ -104,8 +104,8 @@ public class ArrayList implements List {
 	    }
 	}
     }
-    
-    
+
+
     //@ private invariant \subset(\set_union(array, array[*]), footprint); //for concatenate
     
     public void concatenate(List l) {

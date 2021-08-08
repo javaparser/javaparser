@@ -48,7 +48,7 @@ public class Node {
       @ represents footprint = this.*;
       @ accessible footprint : \nothing;
       @ protected model \locset treeFootprint;
-      @ represents treeFootprint = footprint, left.treeFootprint, right.treeFootprint;
+      @ represents treeFootprint = \storeref(footprint, left.treeFootprint, right.treeFootprint);
       @ accessible treeFootprint : treeFootprint \measured_by height;
       @*/
 

@@ -70,23 +70,22 @@ public class LRS {
 
 		/*@ normal_behavior
 				ensures true;
-				strictly_pure
 		*/
+        //@ strictly_pure
 		boolean b_helper(){}
 
 		/*@ normal_behavior
 				ensures true;
-				strictly_pure
 		*/
+        //@ strictly_pure
 		int t_0_helper(){}
 
 
 		/*@ normal_behavior
 				ensures true;
-				strictly_pure
 		*/
+        //@ strictly_pure
 		int s_0_helper(){}
-
 }
 
 //Based on code by Robert Sedgewick and Kevin Wayne.

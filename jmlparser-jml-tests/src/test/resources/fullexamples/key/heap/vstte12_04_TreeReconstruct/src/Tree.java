@@ -36,8 +36,8 @@ class Tree {
       @ ensures heights == \dl_seqInc(\seq_concat(l.heights,r.heights));
       @ ensures (\forall int i; 0<=i && i<heights.length; 
       @               (int)heights[i] == heights[i]);
-      @ pure
       @*/
+    /*@ pure @*/
     public Tree(Tree l, Tree r) {
         //@ set heights = \dl_seqInc(\seq_concat(l.heights,r.heights));
         left = l;

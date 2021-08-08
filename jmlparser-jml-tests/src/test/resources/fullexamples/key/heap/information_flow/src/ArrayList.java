@@ -10,7 +10,7 @@ final class ArrayList {
     
     private int notPartOfFootprint;
     
-    //@ represents footprint = array, array[*], size;    
+    //@ represents footprint = \storeref(array, array[*], size);
     
     //@ invariant array != null;
     //@ invariant 0 <= size && size <= array.length;

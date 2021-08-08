@@ -36,8 +36,8 @@ public class RingBuffer {
     /*@ normal_behavior
       @ requires !isEmpty();
       @ ensures \result == list[0];
-      @ pure
       @*/
+    /*@ pure @*/
     int head() {
         return data[first];
     }
@@ -75,16 +75,17 @@ public class RingBuffer {
     // helper methods
     /*@ normal_behavior
       @ ensures \result == (len == 0);
-      @ strictly_pure helper
       @*/
+
+    /*@ strictly_pure helper @*/
     boolean isEmpty() {
         return len == 0;
     }
     
     /*@ normal_behavior
       @ ensures \result == (len  == data.length);
-      @ strictly_pure
       @*/
+    /*@ strictly_pure @*/
     boolean isFull() {
         return len == data.length;
     }
@@ -93,8 +94,8 @@ public class RingBuffer {
       @   ensures x >= 0 && x < data.length ==> \result == x;
       @   ensures x >= data.length && x < data.length + data.length ==>
       @       \result == x - data.length;
-      @   strictly_pure
       @*/
+    /*@ strictly_pure @*/
     int modulo(int x) {
 	return x < data.length ? x : x - data.length;
     }
@@ -115,5 +116,4 @@ public class RingBuffer {
         h = b.pop();
         assert h == z;
     }
- 
 }

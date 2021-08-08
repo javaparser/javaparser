@@ -55,8 +55,7 @@ public class LogFile {
     /*@ public normal_behavior 
       @    requires balance >= 0;
       @    requires LogRecord.transactionCounter >= 0;
-      @    name "Contract for addRecord";      
-      @    assignable currentRecord, 
+      @    assignable currentRecord,
       @               (\infinite_union int x; 0 <= x && x < logArray.length ? logArray[x].* : \empty),
       @               LogRecord.transactionCounter;
       @    ensures \old(currentRecord) + 1 != logFileSize 

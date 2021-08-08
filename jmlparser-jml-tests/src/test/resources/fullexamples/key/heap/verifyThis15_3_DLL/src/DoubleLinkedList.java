@@ -6,6 +6,7 @@ final class DoubleLinkedList {
     }
 
     /*@ nullable @*/ Node head;
+
     //@ ghost \seq s; // represents the contents
     //@ ghost int len; // represents the number of nodes
 

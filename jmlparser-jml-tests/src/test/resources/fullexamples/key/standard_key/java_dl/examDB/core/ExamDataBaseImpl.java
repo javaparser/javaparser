@@ -10,7 +10,7 @@ public class ExamDataBaseImpl extends ExamDataBase {
     }
 
     /*@ private normal_behavior
-      @  assignable students, \object_creation(Student[]);
+      @  assignable students;
       @  ensures (\forall int i; 0<=i && i<students.length; 
       @               students[i] == (i<\old(students.length) 
       @                               ? \old(students)[i] 

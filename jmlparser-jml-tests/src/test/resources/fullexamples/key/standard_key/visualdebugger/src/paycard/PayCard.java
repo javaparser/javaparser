@@ -26,8 +26,8 @@ public class PayCard implements LimitedIntContainer{
       @ public instance invariant limit >0;
       @ public instance invariant available() >= 0;
       @ public instance invariant unsuccessfulOperations >=0;
-      @ public represents value <- balance;
-      @ public represents regularState  <- (unsuccessfulOperations <= 3);
+      @ public represents value = balance;
+      @ public represents regularState  = (unsuccessfulOperations <= 3);
       @*/
 
     /*@ spec_public @*/ int limit=1000;

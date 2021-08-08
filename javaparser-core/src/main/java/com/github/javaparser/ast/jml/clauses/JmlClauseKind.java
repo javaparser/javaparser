@@ -26,6 +26,7 @@ public enum JmlClauseKind implements JmlKeyword {
     DECREASING(GeneratedJavaParserConstants.DECREASES),
     DECREASES_REDUNDANTLY(GeneratedJavaParserConstants.DECREASES_REDUNDANTLY),
     LOOP_INVARIANT(GeneratedJavaParserConstants.LOOP_INVARIANT),
+    LOOP_INVARIANT_FREE(GeneratedJavaParserConstants.LOOP_INVARIANT_FREE),
     LOOP_INVARIANT_REDUNDANTLY(GeneratedJavaParserConstants.LOOP_INVARIANT_REDUNDANTLY),
     MEASURED_BY(GeneratedJavaParserConstants.MEASURED_BY),
     RETURNS(GeneratedJavaParserConstants.RETURNS),

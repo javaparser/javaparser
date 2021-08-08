@@ -45,9 +45,8 @@ class Perm {
     @*/
 
   /*@ normal_behavior
-    @ ensures \result == (pIdx < a.length);
-    @ strictly_pure helper
-    @*/
+    @ ensures \result == (pIdx < a.length); */
+    //@ strictly_pure helper
   native boolean hasNext();
 
   /*@ normal_behavior

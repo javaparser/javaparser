@@ -93,6 +93,9 @@ public class FullExamplesTest {
         blocked.add("/openjml/test/datatype/Test.java");
         blocked.add("/openjml/test/escFPcompose/Test.java");
         blocked.add("/openjml/test/gitbug555/Test.java");
+        blocked.add("/key/standard_key/java_dl/classpath/IllegalStateException.java");
+        blocked.add("/key/standard_key/java_dl/classpath/InputStream.java");
+
 
         blockedPaths = blocked.stream().map(it -> Paths.get(dir.toString(), it))
                 .collect(Collectors.toSet());
@@ -109,6 +112,7 @@ public class FullExamplesTest {
         return files
                 .filter(it -> it.toString().endsWith(".java"))
                 .filter(it -> !it.toString().contains("openjml"))
+                .filter(it -> !it.toString().contains("InformationFlow"))
                 .map(it -> {
                             String name = it.toString().substring(prefixLength);
                             return DynamicTest.dynamicTest(name, () -> testParse(it));
@@ -122,7 +126,7 @@ public class FullExamplesTest {
         ParseResult<CompilationUnit> result = jpb.parse(p);
         result.getProblems().forEach(it -> {
             int line = it.getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1)).orElse(-1);
-            System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p, line);
+            System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toUri(), line);
         });
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
     }

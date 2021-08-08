@@ -35,10 +35,10 @@ public class OwnerPIN implements PIN {
     //@ public represents triesLeft = _pin[0];
 
 
-    /*@ public represents footprint = 
+    /*@ public represents footprint = \locset(
            this.*,
            _pin[*], _pin.\transient, \transactionUpdated(_pin), 
-           _isValidated[*], _isValidated.\transient, \transactionUpdated(_isValidated);
+           _isValidated[*], _isValidated.\transient, \transactionUpdated(_isValidated));
       @*/
 
     /*@ public normal_behavior

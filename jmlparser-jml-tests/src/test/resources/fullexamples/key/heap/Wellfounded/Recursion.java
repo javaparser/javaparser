@@ -8,7 +8,7 @@ class Recursion {
    int arbNumber();
 
    /*@ normal_behaviour
-     @  measured_by 1, n;
+     @ measured_by n;
      @*/
    void f(int n) {
       if(n > 0) f(n-1);
@@ -16,7 +16,7 @@ class Recursion {
    }
 
    /*@ normal_behaviour
-     @  measured_by 0, m;
+     @  measured_by m;
      @*/
    void g(int m) {
       if(m > 0) g(m-1);

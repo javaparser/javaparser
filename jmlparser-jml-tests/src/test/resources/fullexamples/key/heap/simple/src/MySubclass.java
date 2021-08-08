@@ -1,7 +1,7 @@
 class MySubclass extends MyClass {
     
     Object o;
-    //@ represents footprint = this.*, o.*;
+    //@ represents footprint = \storeref(this.*, o.*);
     
     
     int add27(int i) {

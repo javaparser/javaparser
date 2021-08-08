@@ -4,7 +4,7 @@ final class Tree {
     /*@ nullable @*/ Tree right;
     int data;
 
-    //@ ghost instance int height;
+    //@ instance ghost int height;
 
     /*@ model_behavior 
           requires treeInv();

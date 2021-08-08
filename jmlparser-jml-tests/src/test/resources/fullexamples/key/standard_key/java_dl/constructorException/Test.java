@@ -6,6 +6,7 @@ class Test {
   int w;
 
   //@ invariant x == 4 && w == 0;
+
   //@ requires e != null;
   //@ signals (Exception) y == z;
   //@ signals_only RuntimeException;

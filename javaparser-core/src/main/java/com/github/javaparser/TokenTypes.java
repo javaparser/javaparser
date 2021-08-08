@@ -176,7 +176,8 @@ public class TokenTypes {
             case PRODUCT:
             case REACH:
             case READABLE:
-            case REAL:
+            case LOOP_INVARIANT_FREE:
+            //case REAL:
             case REFINING:
             case REQUIRES_REDUNDANTLY:
             case RETURN_BEHAVIOUR:
@@ -185,7 +186,7 @@ public class TokenTypes {
             case STATIC_INITIALIZER:
             case SUBTYPE:
             case TYPE:
-            case TYPEOF:
+            //case TYPEOF:
             case UNINITIALIZED:
             case WRITABLE:
                 //case NEW_OBJECTS:

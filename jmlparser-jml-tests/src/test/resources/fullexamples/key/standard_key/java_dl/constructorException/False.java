@@ -10,7 +10,8 @@ class False {
      @ requires true;
      @ signals (Exception) false;
      @ diverges true;
-     @ helper
-     @*/
+   */
+
+   /* @ helper */
    False () {}
 }

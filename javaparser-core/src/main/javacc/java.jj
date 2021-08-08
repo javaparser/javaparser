@@ -288,7 +288,7 @@ TOKEN_MGR_DECLS :
 
 /** Jml comments */
 
-<JML_MULTI_CONTRACT>
+<JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
 SPECIAL_TOKEN : {
   <SINGLE_LINE_COMMENT_IN_MULTI_JML: "//" (~["\n","\r"])*>
 }
@@ -429,6 +429,7 @@ TOKEN : {
 //| <LOCKSET: "\\lockset">
 | <LOOP_CONTRACT : "loop_contract">
 | <LOOP_INVARIANT: "loop_invariant">
+| <LOOP_INVARIANT_FREE: "loop_invariant_free">
 | <LOOP_INVARIANT_REDUNDANTLY: "loop_invariant_redundantly">
 | <MAINTAINING: "maintaining">
 | <MAINTAINING_REDUNDANTLY: "maintaining_redundantly">
@@ -483,7 +484,7 @@ TOKEN : {
 | <PURE: "pure">
 | <REACH: "\\reach">
 | <READABLE: "readable">
-| <REAL: "\\real">
+//| <REAL: "\\real">
 | <REFINING: "refining">
 | <REPRESENTS: "represents">
 | <REPRESENTS_REDUNDANTLY: "represents_redundantly">
@@ -513,8 +514,8 @@ TOKEN : {
 | <SUBTYPE: "<:">
 | <SUCH_THAT: "\\such_that">
 | <SUM: "\\sum">
-| <TYPE: "\\TYPE">
-| <TYPEOF: "\\typeof">
+| <TYPE: "\\TYPE" | "\\type">
+//| <TYPEOF: "\\typeof">
 | <UNINITIALIZED: "uninitialized">
 | <UNKNOWN_OP: "<#">
 | <UNKNOWN_OP_EQ: "<#=">
@@ -2208,7 +2209,9 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
      |
         //FIXME weigl expensive lookahead, required to distinguish, fields from contracts
         //maybe we should inline the rule below
-        LOOKAHEAD(10, JmlClassOrInterfaceBodyDeclaration())
+        LOOKAHEAD(10,  JmlStart() Modifiers()
+                       ( <INVARIANT>  | <INITIALLY> | <REPRESENTS> | <REPRESENTS_REDUNDANTLY>
+                       | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY> | FieldDeclaration() | MethodDeclaration()))
         ret = JmlClassOrInterfaceBodyDeclaration()
      |
         (LOOKAHEAD(3) contracts=JmlContracts())?
@@ -2311,6 +2314,7 @@ JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
 {
   (<ACCESSIBLE>|<ACCESSIBLE_REDUNDANTLY>)
   {begin=token();}
+  [Heaps()] //TODO weigl: add to declaration
   var=Expression() <COLON>
   expressions=ExpressionList()
   [<ESC_MEASURED_BY> measuredBy=Expression()]
@@ -4434,18 +4438,26 @@ Expression JmlPrimaryPrefix():
     Expression expr;
     NodeList<Expression> exprs = new NodeList<>();
     NodeList<Expression> lsexprs;
-    JavaToken begin;
+    JavaToken begin, quant;
     NodeList<JmlBoundVariable> vars;
+    Type ret;
 }
 {
   (
       "(" {begin=token();}
        (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX> | <JML_IDENTIFIER>)
+       {quant=token();}
        vars=JmlBoundedVariables()
        ";"
        expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
       ")"
-      { return new JmlQuantifiedExpr(range(begin, token()), JmlQuantifiedExpr.JmlBinder.FORALL, vars, exprs);}
+      { return new JmlQuantifiedExpr(range(begin, token()), quant, vars, exprs);}
+  |
+      <TYPE> {begin=token();} "(" ret=ResultType(new NodeList<>()) ")"
+      {
+        return new MethodCallExpr(range(begin,token()), null, new NodeList<>(),
+                        new SimpleName("\\typeof"), new NodeList<>(/*TODO weigl: ret*/));
+      }
   )
 }
 
@@ -4988,6 +5000,7 @@ JmlClause JmlLoopInvClause():
 { NodeList<Expression> exprs; JavaToken begin;}
 {
     ( <LOOP_INVARIANT>
+    | <LOOP_INVARIANT_FREE>
     | <MAINTAINING>
     | <LOOP_INVARIANT_REDUNDANTLY>
     | <MAINTAINING_REDUNDANTLY>
@@ -5210,7 +5223,7 @@ JmlClause JmlReturnsClause():
   { return new JmlDefaultClause(range(begin, token()), begin, expr); }
 }
 
-SimpleName heap():
+SimpleName Heap():
 {
     SimpleName name;
 }
@@ -5219,13 +5232,13 @@ SimpleName heap():
   { return name; }
 }
 
-NodeList<SimpleName> heaps():
+NodeList<SimpleName> Heaps():
 {
     NodeList<SimpleName> names = new NodeList<SimpleName>();
     SimpleName name;
 }
 {
-  name=heap() { names.add(name); }
+  name=Heap() { names.add(name); }
   { return names; }
 }
 
@@ -5243,7 +5256,7 @@ JmlClause JmlAssignableClause():
   | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY>
   )
   { begin = token();}
-  (heaps=heaps())*
+  (heaps=Heaps())*
   exprs=ExpressionList()
   { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
 }
@@ -5258,7 +5271,7 @@ JmlClause JmlAccessibleClause():
 {
   (<ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>)
   { begin = token();}
-  (heaps=heaps())*
+  (heaps=Heaps())*
   exprs=ExpressionList()
   (<ESC_MEASURED_BY> e=Expression())? //TODO weigl: add measured by expression, new ast class
   { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
@@ -5287,7 +5300,7 @@ JmlClause JmlRequiresClause():
 {
   (<REQUIRES> |<REQUIRES_FREE>|<REQUIRES_REDUNDANTLY>)
   { begin = token();}
-  (heaps=heaps())? e=Expression()
+  (heaps=Heaps())? e=Expression()
   { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
 }
 
@@ -5302,7 +5315,7 @@ JmlClause JmlEnsuresClause():
 {
   (<ENSURES>|<ENSURES_FREE>|<ENSURES_REDUNDANTLY>)
   {begin = token();}
-  (heaps=heaps())? e=Expression()
+  (heaps=Heaps())? e=Expression()
   { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
 }
 

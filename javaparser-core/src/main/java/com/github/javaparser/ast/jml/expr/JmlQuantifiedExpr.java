@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.jml.expr;
 
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.Token;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
@@ -28,12 +30,14 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JmlBindingExprMetaModel;
+import com.github.javaparser.metamodel.JmlQuantifiedExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.JmlQuantifiedExprMetaModel;
 
 /**
  * 12.4.24.2 Generalized Quantifiers
@@ -54,12 +58,24 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
         MIN("\\min"),
         MAX("\\max"),
         SUM("\\sum"),
+        BSUM("\\bsum"),
+        UNION("\\infinite_union"),
+        SEQDEF("\\seq_def"),
         PRODUCT("\\product");
 
         public final String symbol;
 
         JmlBinder(String symbol) {
             this.symbol = symbol;
+        }
+
+        public static JmlBinder valueOf(JavaToken binder) {
+            Optional<JmlBinder> b = Arrays.stream(values()).filter(it -> binder.getText().equals(it.symbol))
+                    .findFirst();
+            if (b.isPresent()) return b.get();
+            else {
+                throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
+            }
         }
     }
 
@@ -82,6 +98,10 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     @AllFieldsConstructor
     public JmlQuantifiedExpr(final JmlBinder binder, final NodeList<JmlBoundVariable> variables, final Expression expressions) {
         this(null, binder, variables, new NodeList<>(expressions));
+    }
+
+    public JmlQuantifiedExpr(TokenRange tokenRange, JavaToken binder, NodeList<JmlBoundVariable> variables, NodeList<Expression> expressions) {
+        this(tokenRange, JmlBinder.valueOf(binder), variables, new NodeList<>(expressions));
     }
 
     /**

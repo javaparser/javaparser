@@ -4,7 +4,7 @@ class Ackermann {
     /*@ normal_behavior
       @ requires 0 <= m && 0 <= n;
       @ ensures \result >= 0;
-      @ measured_by m,n;
+      @ measured_by m+n;
       @*/
     int a (int m, int n) {
         if ( m==0 ) return n+1;

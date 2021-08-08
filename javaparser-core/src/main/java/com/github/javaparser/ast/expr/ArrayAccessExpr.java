@@ -68,7 +68,7 @@ public class ArrayAccessExpr extends Expression {
 
     public static Expression allElementsAccess(TokenRange range, Expression scope) {
         SimpleName fieldName = new SimpleName(range, "*");
-        return new ArrayAccessExpr(scope, new NameExpr(range, fieldName));
+        return new ArrayAccessExpr(range, scope, new NameExpr(range, fieldName));
     }
 
     @Override

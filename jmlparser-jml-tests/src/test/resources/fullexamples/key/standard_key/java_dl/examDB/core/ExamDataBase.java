@@ -139,7 +139,7 @@ public abstract class ExamDataBase {
       @           && (\forall int i; 
       @                   0<=i && i<students.length && students[i]!=null;
       @                       students[i].matrNr!=matrNr);
-      @  assignable students, students[*], \object_creation(Student[]), \object_creation(Student);
+      @  assignable students, students[*];
       @  ensures (\exists int i; 
       @               0<=i && i<students.length && students[i]!=null; 
       @	                  students[i].matrNr==matrNr 
@@ -268,7 +268,7 @@ public abstract class ExamDataBase {
       @                  0<=i && i<students.length && students[i]!=null
       @                  && students[i].matrNr==matrNr)
       @             && 0<=bonusPoints && bonusPoints<=maxPoints);
-      @  assignable \object_creation(ExamDataBaseException);
+      @  assignable \nothing;
       @  signals_only ExamDataBaseException;
       @*/
     public abstract void setBonusPoints(int matrNr, int bonusPoints)
@@ -338,7 +338,7 @@ public abstract class ExamDataBase {
       @               0<=k && k<\result.length 
       @               && 0<=l && l<\result.length && k!=l;
       @                   \result[k]!=\result[l]);
-      @  assignable \object_creation(int[]);
+      @  assignable \nothing;
       @*/
     public abstract int[] getMatrNrs();
 
