@@ -1460,8 +1460,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
+        final String separator = (n.getType() == SwitchEntry.Type.STATEMENT_GROUP) ? ":" : " ->"; // old/new switch
         if (isNullOrEmpty(n.getLabels())) {
-            printer.print("default:");
+            printer.print("default" + separator);
         } else {
             printer.print("case ");
             for (final Iterator<Expression> i = n.getLabels().iterator(); i.hasNext(); ) {
@@ -1471,7 +1472,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                     printer.print(", ");
                 }
             }
-            printer.print(":");
+            printer.print(separator);
         }
         printer.println();
         printer.indent();

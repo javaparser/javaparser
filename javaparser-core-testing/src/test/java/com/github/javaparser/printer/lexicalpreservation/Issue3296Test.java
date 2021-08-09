@@ -60,6 +60,5 @@ public class Issue3296Test extends AbstractLexicalPreservingTest  {
                                 }));
         String changed = LexicalPreservingPrinter.print(cu);
         assertEqualsStringIgnoringEol(changed, expected);
-        System.out.println(changed);
     }
 }

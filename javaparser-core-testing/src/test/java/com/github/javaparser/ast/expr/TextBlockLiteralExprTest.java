@@ -192,4 +192,13 @@ class TextBlockLiteralExprTest {
                 "green \n" +
                 "blue  \n", textBlock.translateEscapes());
     }
+
+    @Test
+    void whiteSpaceLineShorterThanMiniumCommonPrefix() {
+        TextBlockLiteralExpr textBlock = parseStatement("String text = \"\"\" \n" +
+                "  Hello\n" +
+                "  World\"\"\";").findFirst(TextBlockLiteralExpr.class).get();
+        assertEquals("\nHello\n" +
+                "World", textBlock.translateEscapes());
+    }
 }
