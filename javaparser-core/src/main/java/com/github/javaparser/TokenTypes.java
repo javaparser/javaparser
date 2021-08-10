@@ -174,7 +174,7 @@ public class TokenTypes {
             case ONLY_CAPTURED:*/
             case OR:
             case PRODUCT:
-            case REACH:
+            //case REACH:
             case READABLE:
             case LOOP_INVARIANT_FREE:
             //case REAL:
@@ -408,6 +408,7 @@ public class TokenTypes {
             case SEMICOLON:
             case COMMA:
             case DOT:
+            case DOTDOT:
             case ELLIPSIS:
             case AT:
             case DOUBLECOLON:

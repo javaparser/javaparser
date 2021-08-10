@@ -1591,7 +1591,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final JmlRepresentsDeclaration n, final A arg) {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression expr = (Expression) n.getExpr().accept(this, arg);
-        SimpleName id = (SimpleName) n.getId().accept(this, arg);
+        Name id = (Name) n.getId().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expr == null || id == null)
             return null;

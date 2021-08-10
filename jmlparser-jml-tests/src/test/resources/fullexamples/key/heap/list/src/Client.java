@@ -24,7 +24,7 @@ public class Client {
       @   requires list.\inv;
       @   ensures \result == (\exists int i; 0 <= i && i < list.size(); list.get(i) == this);
       @*/
-    boolean /*@pure@*/ listContainsMe(List list) {
+	/*@pure@*/ boolean listContainsMe(List list) {
 	ListIterator it = list.iterator();
 	/*@ loop_invariant it.\inv && it.list == list
 	  @                && 0 <= it.pos && it.pos <= list.size()

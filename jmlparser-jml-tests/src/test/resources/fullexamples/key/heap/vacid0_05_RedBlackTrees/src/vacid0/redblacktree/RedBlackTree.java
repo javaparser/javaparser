@@ -35,7 +35,7 @@ public class RedBlackTree implements AbstractMap {
 
     /*@ private represents contents \such_that (\forall int i; 0 <= i && i < contents.length;
       @            contents[i] == (get(i) == Node.NIL ? deefolt : get(i).value));
-      @ private represents footprint = theNodes, root, root.treeFootprint;
+      @ private represents footprint = \storeref(theNodes, root, root.treeFootprint);
       @ accessible contents : \singleton(theNodes);
       @ accessible \inv : footprint;
       @ accessible footprint : footprint;
@@ -230,8 +230,8 @@ public class RedBlackTree implements AbstractMap {
       @   ensures footprint == \old(footprint);
       @   ensures \invariant_for(this);
       @   ensures theNodes == \old(theNodes);
-      @ helper
-      @*/
+      */
+    //@ helper
     private void insertFix(Node z) {
         /*@ maintaining z.isRed;
           @ maintaining z.parent == root ==> !z.parent.isRed;

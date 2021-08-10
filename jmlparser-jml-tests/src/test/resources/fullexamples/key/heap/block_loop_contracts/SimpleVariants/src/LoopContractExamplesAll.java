@@ -37,11 +37,9 @@ public class LoopContractExamplesAll {
           @ assignable arr[i .. arr.length];
           @ decreases arr.length - i;
           @*/
-        {
-            while (i < arr.length) {
-                ++arr[i];
-                ++i;
-            }
+        while (i < arr.length) {
+            ++arr[i];
+            ++i;
         }
     }
 
@@ -78,10 +76,8 @@ public class LoopContractExamplesAll {
           @ assignable arr[i .. arr.length];
           @ decreases arr.length - i;
           @*/
-        {
-            for (int i = 0; i < arr.length; ++i) {
-                ++arr[i];
-            }
+        for (int i = 0; i < arr.length; ++i) {
+            ++arr[i];
         }
     }
 
@@ -105,6 +101,7 @@ public class LoopContractExamplesAll {
             ++i;
         }
     }
+
     /*@ normal_behavior
       @ requires arr != null;
       @ ensures \result == (\sum int i; 0 <= i && i < arr.length; arr[i]);
@@ -164,12 +161,9 @@ public class LoopContractExamplesAll {
           @ assignable \nothing;
           @ decreases arr.length - \index;
           @*/
-        {
-            for (int el : arr) {
-                sum += el;
-            }
+        for (int el : arr) {
+            sum += el;
         }
-
         return sum;
     }
 

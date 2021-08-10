@@ -1,12 +1,5 @@
 final class Tree {
-
-    /*@ nullable @*/ Tree left; 
-    /*@ nullable @*/ Tree right;
-    int data;
-
-    //@ instance ghost int height;
-
-    /*@ model_behavior 
+    /*@ model_behavior
           requires treeInv();
           ensures true;
           accessible footprint();
@@ -148,8 +141,15 @@ final class Tree {
           }
       @*/
 
-     //@ invariant true;
-     //@ accessible \inv : \nothing;
+
+    /*@ nullable @*/ Tree left;
+    /*@ nullable @*/ Tree right;
+    int data;
+
+    //@ instance ghost int height;
+
+    //@ invariant true;
+    //@ accessible \inv : \nothing;
 
     /*@ normal_behavior
       @ requires t.treeInv();

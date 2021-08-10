@@ -45,7 +45,7 @@ public abstract class AbstractMap implements MapInterface {
      @ ensures (\forall Object o; !\fresh(o));
      @ assignable target[targetIndex..targetIndex + numberCopies - 1];
      @*/
-    abstract void copyMapEntries(MapEntry[] /*@nullable*/ target,
+    abstract void copyMapEntries(/*@nullable*/ MapEntry[] target,
             int targetIndex,
             int entriesIndex,
             int numberCopies);

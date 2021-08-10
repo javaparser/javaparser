@@ -5,6 +5,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -30,12 +31,12 @@ public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithM
 
     private NodeList<Modifier> modifiers;
 
-    private SimpleName id;
+    private Name id;
 
     private Expression expr;
 
     @AllFieldsConstructor
-    public JmlRepresentsDeclaration(NodeList<Modifier> modifiers, SimpleName id, Expression expr) {
+    public JmlRepresentsDeclaration(NodeList<Modifier> modifiers, Name id, Expression expr) {
         this.modifiers = modifiers;
         this.id = id;
         this.expr = expr;
@@ -45,7 +46,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithM
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlRepresentsDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, SimpleName id, Expression expr) {
+    public JmlRepresentsDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Name id, Expression expr) {
         super(tokenRange);
         setModifiers(modifiers);
         setId(id);
@@ -104,12 +105,12 @@ public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithM
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getId() {
+    public Name getId() {
         return id;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRepresentsDeclaration setId(final SimpleName id) {
+    public JmlRepresentsDeclaration setId(final Name id) {
         assertNotNull(id);
         if (id == this.id) {
             return this;
@@ -146,7 +147,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithM
             return true;
         }
         if (node == id) {
-            setId((SimpleName) replacementNode);
+            setId((Name) replacementNode);
             return true;
         }
         for (int i = 0; i < modifiers.size(); i++) {

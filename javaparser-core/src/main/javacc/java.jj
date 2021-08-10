@@ -482,7 +482,7 @@ TOKEN : {
 | <PRE_REDUNDANTLY: "pre_redundantly">
 | <PRODUCT: "\\product">
 | <PURE: "pure">
-| <REACH: "\\reach">
+//| <REACH: "\\reach">
 | <READABLE: "readable">
 //| <REAL: "\\real">
 | <REFINING: "refining">
@@ -528,6 +528,7 @@ TOKEN : {
 | <WORKING_SPACE: "working_space">
 | <WORKING_SPACE_REDUNDANTLY: "working_space_redundantly">
 | <WRITABLE: "writable">
+| <DOTDOT: "..">
 //| <LOCSET: "\\locset">
 //| <STOREREF: "\\storeref">
 //| <EMPTYSET: "\\emptyset">
@@ -2211,7 +2212,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
         //maybe we should inline the rule below
         LOOKAHEAD(10,  JmlStart() Modifiers()
                        ( <INVARIANT>  | <INITIALLY> | <REPRESENTS> | <REPRESENTS_REDUNDANTLY>
-                       | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY> | FieldDeclaration() | MethodDeclaration()))
+                       | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY> | JmlFieldDeclaration() | JmlMethodDeclaration()))
         ret = JmlClassOrInterfaceBodyDeclaration()
      |
         (LOOKAHEAD(3) contracts=JmlContracts())?
@@ -2326,13 +2327,13 @@ JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
 JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
 {
      Token b;
-     SimpleName id=null;
+     Name id=null;
      Expression expr;
 }
 {
   b=<REPRESENTS>
   (
-    id=SimpleName() (<ASSIGN> | <SUCH_THAT>) expr=Expression()
+    id=Name() (<ASSIGN> | <SUCH_THAT>) expr=Expression()
   | LOOKAHEAD(2) expr=Expression()
   )
   ";"
@@ -3969,7 +3970,7 @@ Expression RangeExpr():
 {
     ret=InfixExpr()
     [
-       (".."|"." ".")
+       <DOTDOT>
        right=RangeExpr()
        { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.RANGE); }
     ]
@@ -5006,6 +5007,7 @@ JmlClause JmlLoopInvClause():
     | <MAINTAINING_REDUNDANTLY>
     )
     {begin=token();}
+    ( Heaps() )? //TODO weigl add to clause
     exprs=ExpressionList()
     {return new JmlDefaultClause(range(begin, token()), begin, exprs);}
 }

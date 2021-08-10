@@ -9,7 +9,7 @@ public class Transfer {
 	 assignable this.a;
          assignable<permissions> this.a;
     @*/
-  void /*@ helper @*/ entry() {
+  /*@ helper @*/ void entry() {
      Thread1 t1 = new Thread1(this);
      Thread2 t2 = new Thread2(this, t1);
      t1.start();

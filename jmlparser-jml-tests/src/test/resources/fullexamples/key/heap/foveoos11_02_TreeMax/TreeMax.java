@@ -25,8 +25,8 @@ public final class Tree {
       @ ensures (\forall int z; \dl_contains(z,values); z <= \result);
       @ ensures \dl_contains(\result,values);
       @ measured_by height;
-      @ strictly_pure
-      @*/
+    */
+    //@ strictly_pure
     int max () {
         int res = value;
         if (left != null) {

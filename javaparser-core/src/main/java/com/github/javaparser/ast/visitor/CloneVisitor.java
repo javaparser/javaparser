@@ -1522,7 +1522,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlRepresentsDeclaration n, final Object arg) {
         Expression expr = cloneNode(n.getExpr(), arg);
-        SimpleName id = cloneNode(n.getId(), arg);
+        Name id = cloneNode(n.getId(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlRepresentsDeclaration r = new JmlRepresentsDeclaration(n.getTokenRange().orElse(null), modifiers, id, expr);

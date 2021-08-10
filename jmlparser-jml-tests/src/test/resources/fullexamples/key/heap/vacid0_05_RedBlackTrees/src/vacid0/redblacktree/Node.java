@@ -78,8 +78,8 @@ public class Node {
       @ requires NIL.staticInv;
       @ ensures parent == NIL && left == NIL && right == NIL && this.key == key && this.value == value && !isRed;
       @ ensures \fresh(footprint);
-      @ pure
       @*/
+    //@pure
     Node (int key, int value){
         parent = NIL;
         left = NIL;

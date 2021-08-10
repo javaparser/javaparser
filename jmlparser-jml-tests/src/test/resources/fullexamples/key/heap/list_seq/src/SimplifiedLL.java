@@ -21,7 +21,8 @@ final class SimplifiedLinkedList {
       @ requires n >= 0 && n < size && \invariant_for(this);
       @ ensures \result == (Node)nodeseq[n];
       @ assignable \strictly_nothing;
-      @ helper */
+      */
+	//@ helper
     private Node getNext(int n) {
 	Node result = first;
 	/*@ loop_invariant

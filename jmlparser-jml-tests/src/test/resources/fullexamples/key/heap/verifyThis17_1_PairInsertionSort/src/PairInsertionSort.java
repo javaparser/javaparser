@@ -105,7 +105,7 @@ public class PairInsertionSort {
 	  @ loop_invariant (\forall int i; right + 1 <= i && i < \old(right); a[i] <= a[i + 1]);
 	  @ loop_invariant (\forall int i; right <= i && i < \old(right); last < a[i]);
 	  @ loop_invariant right < \old(right) ==> a[right] <= a[right + 1];
-	  @ assignable a[(\old(left))+1..(\old(right))], right;
+	  @ assignable a[(\old(left))+1 .. (\old(right))], right;
 	  @ decreases right;
 	  @*/
 	while (last < a[--right]) {
