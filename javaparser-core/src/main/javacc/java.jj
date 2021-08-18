@@ -44,9 +44,9 @@ options {
     ERROR_REPORTING = true;
     JAVA_TEMPLATE_TYPE = "modern"; // FIXME: Warning: Bad option name "JAVA_TEMPLATE_TYPE".  Option setting will be ignored.
     JDK_VERSION = "1.8";
-    STATIC = false;
+    //STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    //DEBUG_PARSER=true;
+    //DEBUG_PARSER = true;
     //DEBUG_LOOKAHEAD = true;
 }
 
@@ -293,9 +293,12 @@ SPECIAL_TOKEN : {
   <SINGLE_LINE_COMMENT_IN_MULTI_JML: "//" (~["\n","\r"])*>
 }
 
+/**
+ * A fancy construct
+ */
 
 MORE : {
-  <JML_SINGLE_START0: "//" (~[" "])* "@"> //{ input_stream.backup(1); }
+  <JML_SINGLE_START0: "//" (~[" "])* "@">  //{ input_stream.backup(jjimageLen); }
    : JML_SINGLE_CONTRACT_PRE
   |
   <SINGLE_LINE_COMMENT0: "//"> : SINGLE_LINE_COMMENT_STATE
@@ -418,6 +421,7 @@ TOKEN : {
 | <INSTANCE: "instance">
 | <TWO_STATE: "two_state">
 | <NO_STATE: "no_state">
+| <NON_NULL_BY_DEFAULT: "non_null_by_default">
 //| <INTO: "\\into">
 | <INVARIANT_REDUNDANTLY: "invariant_redundantly">
 //| <INVARIANT_FOR: "\\invariant_for">
@@ -1283,7 +1287,6 @@ TOKEN :
 | < LSHIFT: "<<" >
 // RSIGNEDSHIFT - see below
 // RUNSIGNEDSHIFT - see below
-
 | < PLUSASSIGN: "+=" >
 | < MINUSASSIGN: "-=" >
 | < STARASSIGN: "*=" >
@@ -1567,7 +1570,7 @@ void jmlModifiers(NodeList<Modifier> modifiers):
     JmlStart(c) (jmlModifiersInner(modifiers))* JmlEnd()
   | jmlModifiersInner(modifiers)
   //This seems odd, but is required for model methods/fields which are already wrapped in JML comment.
-  // but this is not a danger overall, as the modifiers are only lexec properly inside JML comments.
+  // but this is not a danger overall, as the modifiers are only lexed properly inside JML comments.
 }
 
 void jmlModifiersInner(NodeList<Modifier> modifiers):
@@ -1588,6 +1591,7 @@ void jmlModifiersInner(NodeList<Modifier> modifiers):
   | <INSTANCE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_INSTANCE));  begin = orIfInvalid(begin, token()); }
   | <NO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NO_STATE));  begin = orIfInvalid(begin, token()); }
   | <TWO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TWO_STATE));  begin = orIfInvalid(begin, token()); }
+  | <NON_NULL_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NON_NULL_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
 }
 
 

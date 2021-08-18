@@ -18,7 +18,7 @@ import org.junit.rules.TestName;
  * of class, source, and specs paths. */
 @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)
 public class compiler {
-    
+
     @Rule
     public TestName name = new TestName();
 
@@ -40,7 +40,7 @@ public class compiler {
     	}
     }
     String expectedFile = null;
-    
+
     @Before
     public void setUp() throws Exception {
         //capture = false; print = true;
@@ -49,7 +49,7 @@ public class compiler {
         if (capture) System.setErr(new PrintStream(berr=new ByteArrayOutputStream(10000)));
         if (capture) System.setOut(new PrintStream(bout=new ByteArrayOutputStream(10000)));
     }
-    
+
     @After
     public void tearDown() {
         // Do this just in case the test fails without having reset the streams
@@ -58,7 +58,7 @@ public class compiler {
         System.setErr(savederr);
         System.setOut(savedout);
     }
-    
+
     /** This is a helper method that runs the compiler on the given set of
      * command-line arguments, checking the result
      * @param args the command-line arguments
@@ -67,7 +67,7 @@ public class compiler {
      * @param all whether the expected output is all of (0) or just the prefix
      *      of (1) or a part of (2) the actual output
      * @param output the expected output as one string; if there are two Strings,
-     * then they are the expected error and standard output 
+     * then they are the expected error and standard output
      */
     public void helper(String[] args, int expectedExitCode, int all, String ... output) {
         int exitCode = org.jmlspecs.openjml.Main.execute(args);
@@ -82,7 +82,7 @@ public class compiler {
         actualOutput = actualOutput.replace("\\","/");
         //actualOutput = actualOutput.replaceAll("temp-release/", "");
         errOutput = errOutput.toString().replace("\\","/");
-        
+
         String expected;
         if (expectedFile != null) {
         	try {
@@ -100,7 +100,7 @@ public class compiler {
         errOutput = errOutput.replace("\r", "");
         expected = expected.replace("\r", "");
         actualOutput = removeNotes(actualOutput);
-        
+
         if (print) System.out.println("EXPECTING: " + output[0]);
         print = false;
         if (print) System.out.println("ACTUAL OUT: " + actualOutput);
@@ -119,7 +119,7 @@ public class compiler {
             if (output.length > 1) {
                 expected = output[1].replace("${PROJ}",projHome).replaceAll("\r", "");
                 int k = actualOutput.indexOf("Note:");
-                String actual = k>=0 ? actualOutput.substring(0,k) : actualOutput; 
+                String actual = k>=0 ? actualOutput.substring(0,k) : actualOutput;
                 if (print) System.out.println("TEST: " + name.getMethodName() + " STANDARD OUT: " + eol + actual);
                 if (all == 0) {
                     assertEquals("The standard out is wrong",expected+tail,actual);
@@ -139,7 +139,7 @@ public class compiler {
             throw ex;
         }
     }
-    
+
     public String removeNotes(String input) {
         while (true) {
         	int p = input.indexOf("Note: ");
@@ -156,7 +156,7 @@ public class compiler {
         String failureMessage = "error: The main entry point org.jmlspecs.openjml.Main.main was called with a null argument" + eol;
         helper(null,2,-1,failureMessage);
     }
-    
+
     /** Test with no arguments at all (empty array for args), which should
      * produce the help message. */
     @Test
@@ -165,24 +165,24 @@ public class compiler {
                                 "where possible options include:" + eol;
         helper(new String[]{},2,1,"",failureMessage);
     }
-    
+
     /** Tests an unknown option */
     @Test
     public void testBadOption() throws Exception {
         String failureMessage = "openjml: invalid flag: -ZZZ" + eol +
-                                "Usage: openjml <options> <source files>" + eol + 
+                                "Usage: openjml <options> <source files>" + eol +
                                 "use -help for a list of possible options" + eol;
         helper(new String[]{"-ZZZ"},2,0,failureMessage);
     }
-    
+
     /** Tests a bad command */
     @Test
     public void testBadCommand() throws Exception {
         String failureMessage = "error: Invalid parameter to the -command option: zzz" + eol;
         helper(new String[]{"-command=zzz"},2,0,failureMessage);
     }
-    
-    /** Tests setting the specs path through the command-line option, by using non-existent 
+
+    /** Tests setting the specs path through the command-line option, by using non-existent
      * directories that then get complaints
      * @throws Exception
      */
@@ -202,14 +202,14 @@ public class compiler {
                   "warning: A specification path directory does not exist: Z" + eol
                   );
     }
-    
+
     /** Tests a recursive definition for the specspath */
     @Test
     public void testRecursiveCP() throws Exception {
         helper(new String[]
                           { "-classpath","test/testNoErrors"+z+"bin"+z+"$CP",
                   //          "-noInternalSpecs",
-                            "test/testNoErrors/A.java",  
+                            "test/testNoErrors/A.java",
                           },0,0,"warning: $CP is included in the specs path recursively or multiple times"+eol
                           + "1 warning" + eol);
     }
@@ -220,7 +220,7 @@ public class compiler {
         helper(new String[]
                           { "-noInternalRuntime","-noInternalSpecs",
                             "-classpath","test/testNoErrors",
-                            "test/testNoErrors/A.java",  
+                            "test/testNoErrors/A.java",
                           },3,0,
                           "Fatal Error: Unable to find package org.jmlspecs.lang" + eol);
 //                          "test/testNoErrors/A.java:1: error: package org.jmlspecs.lang does not exist"+eol+
@@ -234,20 +234,20 @@ public class compiler {
     public void testDuplicateParse() throws Exception {
         helper(new String[]
                           { "-classpath","test/testNoErrors"+z+"bin",
-                            "test/testNoErrors/A.java", "-jmlverbose", "-noInternalSpecs" 
+                            "test/testNoErrors/A.java", "-jmlverbose", "-noInternalSpecs"
                           },0,2,"",
                           //"parsing ${PROJ}/test/testNoErrors/A.java" + eol +
                           //"parsing ${PROJ}/test/testNoErrors/A.refines-java" + eol +
                           "entering test/testNoErrors/A.java" + eol +
                           "  completed entering test/testNoErrors/A.java" + eol +
                           "typechecking A" + eol +
-                          "No specs for java.lang.Object" + eol + 
+                          "No specs for java.lang.Object" + eol +
                           "typechecked A" + eol +
-                          //"flow checks A" + eol + 
+                          //"flow checks A" + eol +
                           "");
     }
 
-    
+
     /** Test that specs in the java file are ignored */
     @Test
     public void testIgnoreJava() throws Exception {
@@ -265,7 +265,7 @@ public class compiler {
                           "typechecking A" + eol +
                           "No specs for java.lang.Object" + eol +
                           "typechecked A" + eol +
-                          //"flow checks A" + eol + 
+                          //"flow checks A" + eol +
                           "");
     }
 
@@ -277,7 +277,7 @@ public class compiler {
                             "-sourcepath","test/testNoErrors"+z+"../OpenJML/runtime",
                             "-specspath","../OpenJML/runtime",
                             "-noInternalSpecs",
-                            "test/testNoErrors/A.java",  
+                            "test/testNoErrors/A.java",
                           },0,0,"",
                           "");
     }
@@ -302,7 +302,7 @@ public class compiler {
 
     /** Tests using having a .jml file on the command line.
      * @throws Exception
-     */ 
+     */
     @Test
     public void testJML() throws Exception {
         helper(new String[]
@@ -319,7 +319,7 @@ public class compiler {
     /** Tests using having a .jml file on the command line, but the corresponding
      * Java file has a type error.
      * @throws Exception
-     */ 
+     */
     @Test
     public void testJML1() throws Exception {
         //print = true;
@@ -337,7 +337,7 @@ public class compiler {
     /** Tests using having a .jml file on the command line, but the corresponding
      * Java file has a type error.
      * @throws Exception
-     */ 
+     */
     @Test
     public void testJML1A() throws Exception {
         helper(new String[]
@@ -352,10 +352,10 @@ public class compiler {
     }
 
     /** Tests using having a .jml file on the command line, but the corresponding
-     * Java file has a type error - but in the JML, so it is ignored since there 
+     * Java file has a type error - but in the JML, so it is ignored since there
      * already is a specs file.
      * @throws Exception
-     */ 
+     */
     @Test
     public void testJML1B() throws Exception {
         helper(new String[]
@@ -371,7 +371,7 @@ public class compiler {
 
     /** Tests having a .jml file on the command line.
      * @throws Exception
-     */ 
+     */
     @Test
     public void testJML2() throws Exception {
         helper(new String[]
@@ -381,13 +381,13 @@ public class compiler {
                             "-noPurityCheck",
                             "test/testNoSource/A.jml"
                           },1,1
-                          ,"error: There is no java or binary file on the sourcepath corresponding to the given jml file: test/testNoSource/A.jml" + eol 
+                          ,"error: There is no java or binary file on the sourcepath corresponding to the given jml file: test/testNoSource/A.jml" + eol
                           );
     }
 
     /** Tests using having a .jml file on the command line.
      * @throws Exception
-     */ 
+     */
     @Test
     public void testJML3() throws Exception {
         helper(new String[]
@@ -440,7 +440,7 @@ public class compiler {
                             "-noPurityCheck",
                             "test/testNoSourceWithClass/A.jml"
                           },1,1
-                          ,"error: There is no java or binary file on the sourcepath corresponding to the given jml file: test/testNoSourceWithClass/A.jml" + eol 
+                          ,"error: There is no java or binary file on the sourcepath corresponding to the given jml file: test/testNoSourceWithClass/A.jml" + eol
                           );
     }
 
@@ -513,7 +513,7 @@ public class compiler {
     // This test requires jmlruntime.jar to have been created - run the Makefile
     // in the OpenJML project
     /** Tests using the runtime jar */
-    //@Test  // FIXME - try running the build programmatically
+    // @Test  // FIXME - try running the build programmatically
     @Test 
     public void testSourcePath4() throws Exception {
         if (!new java.io.File("../OpenJML/tempjars/jmlruntime.jar").exists()) {

@@ -111,7 +111,7 @@ public class FullExamplesTest {
         Stream<Path> files = Files.walk(dir.toPath());
         return files
                 .filter(it -> it.toString().endsWith(".java"))
-                .filter(it -> !it.toString().contains("openjml"))
+                .filter(it -> it.toString().contains("openjml"))
                 .filter(it -> !it.toString().contains("InformationFlow"))
                 .map(it -> {
                             String name = it.toString().substring(prefixLength);
@@ -127,6 +127,7 @@ public class FullExamplesTest {
         result.getProblems().forEach(it -> {
             int line = it.getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1)).orElse(-1);
             System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toUri(), line);
+            it.getCause().ifPresent(c -> c.printStackTrace());
         });
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
     }

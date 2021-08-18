@@ -377,6 +377,7 @@ public class TokenTypes {
             case UNREACHABLE:
             case NORMAL_EXAMPLE:
             case TWO_STATE:
+            case NON_NULL_BY_DEFAULT:
             case NO_STATE:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:

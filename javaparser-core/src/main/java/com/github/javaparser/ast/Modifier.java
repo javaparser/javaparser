@@ -153,8 +153,9 @@ public class Modifier extends Node {
         JML_SPEC_PROTECTED("spec_protected"),
         JML_SPEC_PRIVATE("spec_private"),
         NO_STATE("no_state"),
-        TWO_STATE("two_state");
+        TWO_STATE("two_state"),
 
+        NON_NULL_BY_DEFAULT("non_null_by_default");
         private final String codeRepresentation;
 
         Keyword(String codeRepresentation) {

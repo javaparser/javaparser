@@ -289,7 +289,7 @@ public abstract class JmlTestCase {
      * in the arguments.
      * @param a a sequence of expected values, alternating between error message and column numbers
      */
-    public void checkMessages(/*@ nonnullelements */Object ... a) {
+    public void checkMessages(/*@ nonnullelements */ Object ... a) {
         try {
             assertEquals("Wrong number of messages seen",a.length,2*collector.getDiagnostics().size());
             List<Diagnostic<? extends JavaFileObject>> diags = collector.getDiagnostics();
