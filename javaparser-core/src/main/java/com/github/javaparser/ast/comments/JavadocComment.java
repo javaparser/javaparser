@@ -35,7 +35,7 @@ import java.util.function.Consumer;
 import static com.github.javaparser.StaticJavaParser.parseJavadoc;
 
 /**
- * A Javadoc comment. {@code /&#42;&#42; a comment &#42;/}
+ * A Javadoc comment. {@code /∗∗ a comment ∗/}
  *
  * @author Julio Vilmar Gesser
  */

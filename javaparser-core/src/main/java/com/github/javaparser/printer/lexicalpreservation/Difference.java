@@ -43,6 +43,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
@@ -502,6 +503,11 @@ public class Difference {
                 int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
                 originalIndex += step;
                 originalIndex++;
+            } else if (originalElement.isIdentifier() && isArrayType(kept)) {
+                int step = getArrayLevel(kept);
+                diffIndex++;
+                originalIndex += step*2; // there is a couple of brackets per level
+                originalIndex++;
             } else if (originalElement.isIdentifier()) {
                 originalIndex++;
                 diffIndex++;
@@ -557,6 +563,29 @@ public class Difference {
         } else {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
         }
+    }
+    
+    
+    /*
+     * Returns the array level if the DifferenceElement is a CsmChild representing an ArrayType else 0
+     */
+    private int getArrayLevel(DifferenceElement element) {
+        CsmElement csmElem = element.getElement();
+        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild && 
+                ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType) {
+            Node child = ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild();
+            return ((ArrayType)child).getArrayLevel();
+        }
+        return 0;
+    }
+    
+    /*
+     * Returns true if the DifferenceElement is a CsmChild representing an ArrayType
+     */
+    private boolean isArrayType(DifferenceElement element) {
+        CsmElement csmElem = element.getElement();
+        return csmElem instanceof LexicalDifferenceCalculator.CsmChild && 
+                ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType;
     }
 
     /*
