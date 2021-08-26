@@ -43,7 +43,7 @@ import java.util.function.Predicate;
  */
 public class CombinedTypeSolver implements TypeSolver {
 
-    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> symbolCache;
+    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> typeCache;
 
     private TypeSolver parent;
     private List<TypeSolver> elements = new ArrayList<>();
@@ -84,17 +84,17 @@ public class CombinedTypeSolver implements TypeSolver {
      *
      * @param exceptionHandler  How exception should be handled.
      * @param elements          The list of elements to include by default.
-     * @param symbolCache       The cache to be used to store symbols.
+     * @param typeCache       The cache to be used to store symbols.
      *
      * @see #exceptionHandler
      */
     public CombinedTypeSolver(Predicate<Exception> exceptionHandler,
                               Iterable<TypeSolver> elements,
-                              Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> symbolCache) {
-        Objects.requireNonNull(symbolCache, "The symbolCache can't be null.");
+                              Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> typeCache) {
+        Objects.requireNonNull(typeCache, "The typeCache can't be null.");
 
         setExceptionHandler(exceptionHandler);
-        this.symbolCache = symbolCache;
+        this.typeCache = typeCache;
 
         for (TypeSolver el : elements) {
             add(el, false);
@@ -137,7 +137,7 @@ public class CombinedTypeSolver implements TypeSolver {
 
         // Check if the cache should be reset after inserting
         if (resetCache) {
-            symbolCache.removeAll();
+            typeCache.removeAll();
         }
     }
 
@@ -154,7 +154,7 @@ public class CombinedTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
-        Optional<SymbolReference<ResolvedReferenceTypeDeclaration>> cachedSymbol = symbolCache.get(name);
+        Optional<SymbolReference<ResolvedReferenceTypeDeclaration>> cachedSymbol = typeCache.get(name);
         if (cachedSymbol.isPresent()) {
             return cachedSymbol.get();
         }
@@ -164,7 +164,7 @@ public class CombinedTypeSolver implements TypeSolver {
             try {
                 SymbolReference<ResolvedReferenceTypeDeclaration> res = ts.tryToSolveType(name);
                 if (res.isSolved()) {
-                    symbolCache.put(name, res);
+                    typeCache.put(name, res);
                     return res;
                 }
             } catch (Exception e) {
@@ -176,7 +176,7 @@ public class CombinedTypeSolver implements TypeSolver {
 
         // When unable to solve, cache the value with unsolved symbol
         SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
-        symbolCache.put(name, unsolvedSymbol);
+        typeCache.put(name, unsolvedSymbol);
         return unsolvedSymbol;
     }
 

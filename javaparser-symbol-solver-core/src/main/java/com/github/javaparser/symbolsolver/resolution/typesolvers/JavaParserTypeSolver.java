@@ -176,10 +176,10 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private Optional<CompilationUnit> parse(Path srcFile) {
         try {
-            Optional<Optional<CompilationUnit>> cacheValue = parsedFiles.get(srcFile.toAbsolutePath());
+            Optional<Optional<CompilationUnit>> cachedParsedFile = parsedFiles.get(srcFile.toAbsolutePath());
             // If the value is already cached
-            if (cacheValue.isPresent()) {
-                return cacheValue.get();
+            if (cachedParsedFile.isPresent()) {
+                return cachedParsedFile.get();
             }
 
             // Otherwise load it
