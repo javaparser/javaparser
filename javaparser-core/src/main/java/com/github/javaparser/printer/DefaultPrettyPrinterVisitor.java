@@ -438,6 +438,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
         n.getName().accept(this, arg);
 
+        printTypeParameters(n.getTypeParameters(), arg);
+
         printer.print("(");
         if (!isNullOrEmpty(n.getParameters())) {
             for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
@@ -449,9 +451,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             }
         }
         printer.print(")");
-
-        printTypeParameters(n.getTypeParameters(), arg);
-
+        
         if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
             for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
@@ -1394,8 +1394,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
+        final String separator = (n.getType() == SwitchEntry.Type.STATEMENT_GROUP) ? ":" : " ->"; // old/new switch
+
         if (isNullOrEmpty(n.getLabels())) {
-            printer.print("default:");
+            printer.print("default" + separator);
         } else {
             printer.print("case ");
             for (final Iterator<Expression> i = n.getLabels().iterator(); i.hasNext(); ) {
@@ -1405,7 +1407,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                     printer.print(", ");
                 }
             }
-            printer.print(":");
+            printer.print(separator);
         }
         printer.println();
         printer.indent();
