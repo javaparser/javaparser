@@ -3,6 +3,20 @@ Next Release (Version 3.23.0)
 [issues resolved](https://github.com/javaparser/javaparser/milestone/185?closed=1)
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
+
+Version 3.23.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/185?closed=1)
+
+### Added
 
 * Improving `toString` on CSM classes (PR [#3315](https://github.com/javaparser/javaparser/pull/3315) by [@jlerbsc](https://github.com/jlerbsc))
 * Add test case for issue #2210 Resolution of Method References (PR [#3310](https://github.com/javaparser/javaparser/pull/3310) by [@jlerbsc](https://github.com/jlerbsc))
