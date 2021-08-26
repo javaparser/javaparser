@@ -114,6 +114,19 @@ public class RecordDeclarationTest {
         assertEqualsStringIgnoringEol(expected, cu.toString());
     }
 
+    @Test
+    void genericRecordPrints() {
+        String s = "record Point<X,Y>(X x, Y y) { }";
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+
+        String expected = "" +
+                "record Point<X, Y>(X x, Y y) {\n" +
+                "}\n" +
+                "";
+        assertEqualsStringIgnoringEol(expected, cu.toString());
+    }
+
     /**
      * https://openjdk.java.net/jeps/395#Restrictions-on-record
      */
