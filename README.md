@@ -95,6 +95,11 @@ If you checked out the project from GitHub you can build the project with maven 
 ```
 mvn clean install
 ```
+If you want to generate the jar from GitHub you run the following maven command:
+```
+mvn package
+```
+**NOTE** the jar file can be found in `javaparser/javaparser-core/target/javaparser-core-\<version\>-SNAPSHOT.jar
 
 If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source files; otherwise you will get many compilation complaints in the IDE. (mvn clean install already does this for you.)
 
