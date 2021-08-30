@@ -21,14 +21,14 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 public class CsmList implements CsmElement {
     private final ObservableProperty property;
@@ -116,5 +116,10 @@ public class CsmList implements CsmElement {
                 following.prettyPrint(node, printer);
             }
         }
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

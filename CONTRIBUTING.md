@@ -23,7 +23,7 @@ Our development workflow is based on Pull Request. If you are not familiar with 
 4. Go back to the [javaparser project site](https://github.com/javaparser/javaparser) and it should have a message offering to **create a pull request**. If it doesn't you can [create one manually](https://github.com/javaparser/javaparser/compare).
 
 ### Remember:
-- A pull request should include tests. You can either use BDD ([more information here](https://github.com/javaparser/javaparser/wiki/Testing)) or JUnit.
+- A pull request should include tests. You can either use BDD or JUnit.
 - Every pull request will automatically be checked by a few tools. Make sure AppVeyor and Travis are green.
 - Pull requests often stay open for at least a few days to give people a chance to review it.
 - A pull request is merged when all comments on it have been resolved.
