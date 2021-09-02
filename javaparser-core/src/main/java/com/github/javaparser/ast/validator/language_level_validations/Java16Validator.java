@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.ast.validator.ReservedKeywordValidatorRecord;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.chunks.RecordDeclarationValidator;
@@ -33,6 +34,8 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Rec
  */
 public class Java16Validator extends Java15Validator {
 
+    final Validator recordAsClassAndInterfaceIdentifierNotAllowed = new ReservedKeywordValidatorRecord();
+
     public Java16Validator() {
         super();
 
@@ -41,7 +44,7 @@ public class Java16Validator extends Java15Validator {
         {
             // Records released within Java 16 - https://openjdk.java.net/jeps/395
             remove(noRecordDeclaration);
-            add(recordAsTypeIdentifierNotAllowed);
+            add(recordAsClassAndInterfaceIdentifierNotAllowed);
             add(recordDeclarationValidator);
         }
     }
