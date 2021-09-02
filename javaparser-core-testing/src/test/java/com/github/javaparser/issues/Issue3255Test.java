@@ -54,7 +54,7 @@ public class Issue3255Test {
     public void recordIsAValidVariableNameWhenUsedInAClass() {
         JavaParser javaParser = new JavaParser();
         ParseResult<CompilationUnit> parseResult = javaParser.parse("class Test {" + EOL +
-                "    private void bad() {" + EOL +
+                "    private void goodInJava16() {" + EOL +
                 "        Object record;" + EOL +
                 "    }" + EOL +
                 "}");
