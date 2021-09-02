@@ -15,6 +15,9 @@ on:
     paths-ignore:
       - '**.md'
 
+  # Enable manual triggering (important for contributors to enable a check on their fork)
+  workflow_dispatch:
+
 jobs:
   maven_test:
     strategy:
