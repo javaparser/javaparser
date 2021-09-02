@@ -61,7 +61,7 @@ class Java15PreviewValidatorTest {
             void recordUsedAsFieldName() {
                 String s = "class X { int record; }";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 15) 'record' cannot be used as an identifier as it is a keyword.");
+                TestUtils.assertNoProblems(result);
             }
         }
 

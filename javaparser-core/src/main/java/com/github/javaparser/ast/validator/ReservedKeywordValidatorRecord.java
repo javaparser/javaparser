@@ -23,6 +23,7 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 
@@ -43,7 +44,7 @@ public class ReservedKeywordValidatorRecord extends VisitorValidator {
 
     @Override
     public void visit(Name n, ProblemReporter arg) {
-        if (n.getIdentifier().equals(keyword) && usedAsClassOrInterfaceName(n)) {
+        if (n.getIdentifier().equals(keyword) && validUsage(n)) {
             arg.report(n, error);
         }
         super.visit(n, arg);
@@ -51,17 +52,27 @@ public class ReservedKeywordValidatorRecord extends VisitorValidator {
 
     @Override
     public void visit(SimpleName n, ProblemReporter arg) {
-        if (n.getIdentifier().equals(keyword) && usedAsClassOrInterfaceName(n)) {
+        if (n.getIdentifier().equals(keyword) && validUsage(n)) {
             arg.report(n, error);
         }
         super.visit(n, arg);
     }
 
-    private boolean usedAsClassOrInterfaceName(Node n) {
-        if (!n.getParentNode().isPresent()) {
+    private boolean validUsage(Node node) {
+        if (!node.getParentNode().isPresent()) {
             return false;
         }
-        Node parent = n.getParentNode().get();
-        return (parent instanceof ClassOrInterfaceDeclaration);
+        Node parent = node.getParentNode().get();
+
+        if (parent instanceof ClassOrInterfaceDeclaration) {
+            return true;
+        }
+
+        if (!parent.getParentNode().isPresent()) {
+            return false;
+        }
+        Node grandParent = parent.getParentNode().get();
+
+        return (grandParent instanceof ClassOrInterfaceDeclaration);
     }
 }

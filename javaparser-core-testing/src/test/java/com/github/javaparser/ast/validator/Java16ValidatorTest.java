@@ -57,7 +57,7 @@ class Java16ValidatorTest {
     class Record {
 
         @Nested
-        class RecordAsIdentifierForbidden {
+        class RecordAsIdentifierSometimesForbidden {
             @Test
             void recordUsedAsClassName() {
                 String s = "public class record {}";
@@ -66,8 +66,15 @@ class Java16ValidatorTest {
             }
 
             @Test
-            void recordUsedAsFieldName() {
+            void recordUsedAsFieldNameInClass() {
                 String s = "class X { int record; }";
+                ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+                TestUtils.assertNoProblems(result);
+            }
+
+            @Test
+            void recordUsedAsFieldNameInInterface() {
+                String s = "interface X { int record; }";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
                 TestUtils.assertNoProblems(result);
             }
