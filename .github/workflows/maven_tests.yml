@@ -70,7 +70,7 @@ jobs:
       ### -P,--activate-profiles : Comma-delimited list of profiles to activate
       ### AlsoSlowTests : by default, only quick tests are run - the profile `AlsoSlowTests` runs the full test suite
       - name: Test with Maven (incl. slow tests)
-        run: mvn --errors clean test --activate-profiles AlsoSlowTests
+        run: ./mvnw -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B --errors clean test --activate-profiles AlsoSlowTests
 
 
       - name: CodeCov - JavaParser Core
