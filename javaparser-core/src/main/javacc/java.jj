@@ -4304,12 +4304,13 @@ Statement BlockStatement():
             modifier = Modifiers()
             recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
          |
+            LOOKAHEAD( Statement() )
+            ret = Statement()
+         |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
-         |
-            ret = Statement()
         )
         { return ret; }
     } catch (ParseException e) {
