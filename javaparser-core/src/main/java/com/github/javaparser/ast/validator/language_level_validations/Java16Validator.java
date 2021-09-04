@@ -21,9 +21,6 @@
 
 package com.github.javaparser.ast.validator.language_level_validations;
 
-import com.github.javaparser.ast.validator.ReservedKeywordValidatorRecord;
-import com.github.javaparser.ast.validator.Validator;
-
 /**
  * This validator validates according to Java 16 syntax rules.
  *
@@ -39,7 +36,7 @@ public class Java16Validator extends Java15Validator {
         {
             // Records released within Java 16 - https://openjdk.java.net/jeps/395
             remove(noRecordDeclaration);
-            add(recordAsClassAndInterfaceIdentifierNotAllowed);
+            add(recordAsTypeIdentifierNotAllowed);
             add(recordDeclarationValidator);
         }
     }

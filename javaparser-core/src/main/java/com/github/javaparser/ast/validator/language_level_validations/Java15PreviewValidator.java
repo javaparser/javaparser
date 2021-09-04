@@ -42,7 +42,7 @@ public class Java15PreviewValidator extends Java15Validator {
         {
             // Records - 2nd preview within Java 15 - https://openjdk.java.net/jeps/384
             remove(noRecordDeclaration);
-            add(recordAsClassAndInterfaceIdentifierNotAllowed);
+            add(recordAsTypeIdentifierNotAllowed);
             add(recordDeclarationValidator);
         }
     }

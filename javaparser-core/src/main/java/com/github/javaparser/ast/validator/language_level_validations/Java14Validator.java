@@ -46,7 +46,7 @@ public class Java14Validator extends Java13Validator {
      * </blockquote>
      * https://docs.oracle.com/javase/specs/jls/se15/preview/specs/records-jls.html#jls-3.8
      */
-    final Validator recordAsClassAndInterfaceIdentifierNotAllowed = new ReservedKeywordValidatorRecord();
+    final Validator recordAsTypeIdentifierNotAllowed = new ReservedKeywordValidatorRecord();
 
     final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
 

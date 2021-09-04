@@ -39,7 +39,7 @@ public class Java14PreviewValidator extends Java14Validator {
         {
             // first preview within Java 14 - https://openjdk.java.net/jeps/359
             remove(noRecordDeclaration);
-            add(recordAsClassAndInterfaceIdentifierNotAllowed);
+            add(recordAsTypeIdentifierNotAllowed);
             add(recordDeclarationValidator);
         }
 
