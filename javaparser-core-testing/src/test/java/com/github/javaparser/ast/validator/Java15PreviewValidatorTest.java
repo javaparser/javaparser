@@ -25,21 +25,17 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_15_PREVIEW;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 class Java15PreviewValidatorTest {
 
-    private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_16));
+    private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_15_PREVIEW));
 
     /**
      * Records are available within Java 14 (preview), Java 15 (2nd preview), and Java 16 (release).
