@@ -30,10 +30,12 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.YieldStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.YamlPrinter;
+import net.bytebuddy.implementation.MethodCall;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -119,6 +121,31 @@ class JavaParserTest {
         range = expression.getLevels().get(1).getRange();
         assertTrue(range.isPresent());
         assertEquals(new Range(new Position(1, 13), new Position(1, 17)), range.get());
+    }
+
+    @Test
+    void parseListOfAsExpression() {
+        String code = "List.of(1)";
+        MethodCallExpr expression = parseExpression(code);
+        IntegerLiteralExpr firstArgument = (IntegerLiteralExpr) expression.getArguments().get(0);
+        assertEquals(1, firstArgument.asNumber());
+    }
+
+    @Test
+    void parseLYieldIntegerExpression() {
+        String code = "yield 1;";
+        YieldStmt yieldStmt = (YieldStmt) parseStatement(code);
+        IntegerLiteralExpr expression = (IntegerLiteralExpr) yieldStmt.getExpression();
+        assertEquals(1, expression.asNumber());
+    }
+
+    @Test
+    void parseLYieldExpression() {
+        String code = "yield List.of(1);";
+        YieldStmt yieldStmt = (YieldStmt) parseStatement(code);
+        MethodCallExpr methodCallExpr = (MethodCallExpr) yieldStmt.getExpression();
+        IntegerLiteralExpr firstArgument = (IntegerLiteralExpr) methodCallExpr.getArguments().get(0);
+        assertEquals(1, firstArgument.asNumber());
     }
 
     @Test

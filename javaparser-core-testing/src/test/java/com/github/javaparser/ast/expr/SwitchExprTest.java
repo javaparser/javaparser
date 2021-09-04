@@ -116,4 +116,17 @@ class SwitchExprTest {
                 "        yield 0;\n" +
                 "};");
     }
+
+    @Test
+    void jep325Example7() {
+        parseStatement("List<Integer> result = switch (s) {\n" +
+                "    case \"Foo\": \n" +
+                "        yield List.of(1);\n" +
+                "    case \"Bar\":\n" +
+                "        yield List.of(2);\n" +
+                "    default:\n" +
+                "        System.out.println(\"Neither Foo nor Bar, hmmm...\");\n" +
+                "        yield Collections.emptyList();\n" +
+                "};");
+    }
 }
