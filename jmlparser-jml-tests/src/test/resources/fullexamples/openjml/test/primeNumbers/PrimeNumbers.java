@@ -23,7 +23,6 @@
           //@ maintaining status == 1;
           //@ maintaining (\forall int i, k; 0 <= i < count-1 && 2 <= k <= primeArray[i]/2; primeArray[i]%k != 0); 
           //@ decreases maxnumber - num; 
-          //@ split
           for (count = 2; count <=n && num < Integer.MAX_VALUE;)
           {    
               //@ maintaining 2 <= j <= num/2 + 1; 

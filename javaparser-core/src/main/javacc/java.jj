@@ -1567,10 +1567,18 @@ void jmlModifiers(NodeList<Modifier> modifiers):
 { JmlContainer c = new DefaultJmlContainer(); //TODO weigl get information on modifiers
 }
 {
-    JmlStart(c) (jmlModifiersInner(modifiers))* JmlEnd()
-  | jmlModifiersInner(modifiers)
-  //This seems odd, but is required for model methods/fields which are already wrapped in JML comment.
-  // but this is not a danger overall, as the modifiers are only lexed properly inside JML comments.
+  try {
+      JmlStart(c) (jmlModifiersInner(modifiers))* JmlEnd()
+    | jmlModifiersInner(modifiers)
+    //This seems odd, but is required for model methods/fields which are already wrapped in JML comment.
+    // but this is not a danger overall, as the modifiers are only lexed properly inside JML comments.
+  } catch (ParseException e) {
+       TokenRange range = recover(EOF, e);
+       Modifier m = new Modifier(range, Modifier.Keyword.JML_UNPARSABLE_MODIFIERS);
+       m.setParsed(UNPARSABLE);
+       add(modifiers, m);
+       return;
+  }
 }
 
 void jmlModifiersInner(NodeList<Modifier> modifiers):

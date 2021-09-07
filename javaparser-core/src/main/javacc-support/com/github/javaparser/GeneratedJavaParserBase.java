@@ -207,6 +207,30 @@ abstract class GeneratedJavaParserBase {
         return tokenRange;
     }
 
+    TokenRange recover(ParseException p, int... recoveryTokenTypes) {
+        Arrays.sort(recoveryTokenTypes);
+        JavaToken begin = null;
+        if (p.currentToken != null) {
+            begin = token();
+        }
+        Token t;
+        boolean forward;
+        do {
+            t = getNextToken();
+            forward = Arrays.binarySearch(recoveryTokenTypes, t.kind) < 0;
+        } while (forward && t.kind != EOF);
+
+        JavaToken end = token();
+
+        TokenRange tokenRange = null;
+        if (begin != null && end != null) {
+            tokenRange = range(begin, end);
+        }
+
+        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
+        return tokenRange;
+    }
+
     /* Called from within a catch block to skip forward to a known token,
         and report the occurred exception as a problem. */
     TokenRange recoverStatement(int recoveryTokenType, int lBraceType, int rBraceType, ParseException p) {

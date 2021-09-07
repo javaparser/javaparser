@@ -18,6 +18,7 @@ public class Amount{
     //@ ensures this.cents <= 100;
     //@ ensures this.euros > 0 ==> cents >= 0;
     //@ ensures this.euros < 0 ==> cents <= 0;
+
     //@ pure
     public Amount(int euros, int cents){
         this.euros = euros;
