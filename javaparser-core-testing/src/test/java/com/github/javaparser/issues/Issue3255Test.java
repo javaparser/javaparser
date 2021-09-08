@@ -6,6 +6,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
 
+import static com.github.javaparser.utils.TestParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue3255Test {
@@ -43,4 +44,25 @@ public class Issue3255Test {
         CompilationUnit compilationUnit = parseResult.getResult().get();
         System.out.println(compilationUnit);
     }
+
+    @Test
+    void recordIsAValidVariableNameWhenParsingAStatement() {
+        parseStatement("Object record;");
+    }
+
+    @Test
+    public void recordIsAValidVariableNameWhenUsedInAClass() {
+        JavaParser javaParser = new JavaParser();
+        ParseResult<CompilationUnit> parseResult = javaParser.parse("class Test {" + EOL +
+                "    private void goodInJava16() {" + EOL +
+                "        Object record;" + EOL +
+                "    }" + EOL +
+                "}");
+
+        assertEquals(0, parseResult.getProblems().size());
+
+        CompilationUnit compilationUnit = parseResult.getResult().get();
+        System.out.println(compilationUnit);
+    }
+
 }
