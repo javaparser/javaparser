@@ -6,7 +6,7 @@
     <parent>
         <artifactId>jmlparser-parent</artifactId>
         <groupId>org.key</groupId>
-        <version>3.22.2-SNAPSHOT</version>
+        <version>3.23.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>jmlparser-linting</artifactId>
@@ -16,12 +16,12 @@
         <dependency>
             <groupId>org.key</groupId>
             <artifactId>jmlparser-core</artifactId>
-            <version>3.22.2-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.key</groupId>
             <artifactId>jmlparser-symbol-solver-core</artifactId>
-            <version>3.22.2-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
