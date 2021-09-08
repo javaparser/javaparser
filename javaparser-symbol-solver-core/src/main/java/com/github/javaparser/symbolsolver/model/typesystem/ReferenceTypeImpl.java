@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.model.typesystem;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -50,7 +51,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 //      and to get the Object type declaration
 public class ReferenceTypeImpl extends ResolvedReferenceType {
 
-    private TypeSolver typeSolver;
+    private final TypeSolver typeSolver;
 
     public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
@@ -258,10 +259,10 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<ResolvedFieldDeclaration> getDeclaredFields() {
-        Set<ResolvedFieldDeclaration> allFields = new HashSet<>();
+        Set<ResolvedFieldDeclaration> allFields = new LinkedHashSet<>();
 
         if (getTypeDeclaration().isPresent()) {
-            allFields = new HashSet<>(getTypeDeclaration().get().getDeclaredFields());
+            allFields.addAll(getTypeDeclaration().get().getDeclaredFields());
         }
 
         return allFields;

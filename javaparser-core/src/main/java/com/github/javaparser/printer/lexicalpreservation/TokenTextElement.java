@@ -21,12 +21,12 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.Range;
-import com.github.javaparser.JavaToken.Kind;
-import com.github.javaparser.ast.Node;
-
 import java.util.Optional;
+
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.JavaToken.Kind;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.Node;
 
 class TokenTextElement extends TextElement {
     private final JavaToken token;
@@ -120,17 +120,22 @@ class TokenTextElement extends TextElement {
     public boolean isChildOfClass(Class<? extends Node> nodeClass) {
         return false;
     }
-    
+
     @Override
     public boolean isIdentifier() {
         return getToken().getCategory().isIdentifier();
     }
 
     @Override
+    public boolean isKeyword() {
+        return getToken().getCategory().isKeyword();
+    }
+
+    @Override
     public boolean isLiteral() {
         return getToken().getCategory().isLiteral();
     }
-    
+
     @Override
     public boolean isPrimitive() {
         return Kind.valueOf(getTokenKind()).isPrimitive();

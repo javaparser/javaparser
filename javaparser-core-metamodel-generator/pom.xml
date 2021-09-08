@@ -3,7 +3,7 @@
     <parent>
         <artifactId>jmlparser-parent</artifactId>
         <groupId>org.key</groupId>
-        <version>3.22.2-SNAPSHOT</version>
+        <version>3.23.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

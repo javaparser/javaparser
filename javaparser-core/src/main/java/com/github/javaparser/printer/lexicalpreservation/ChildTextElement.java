@@ -21,11 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
-
-import java.util.Optional;
 
 /**
  * Represent the position of a child node in the NodeText of its parent.
@@ -99,17 +99,22 @@ class ChildTextElement extends TextElement {
     public boolean isComment() {
         return child instanceof Comment;
     }
-    
+
     @Override
     public boolean isSeparator() {
         return false;
     }
-    
+
     @Override
     public boolean isIdentifier() {
         return false;
     }
-    
+
+    @Override
+    public boolean isKeyword() {
+        return false;
+    }
+
     @Override
     public boolean isPrimitive() {
         return false;

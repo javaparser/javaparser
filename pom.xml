@@ -17,7 +17,7 @@
     <groupId>org.key</groupId>
     <artifactId>jmlparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.22.2-SNAPSHOT</version>
+    <version>3.23.1-SNAPSHOT</version>
 
     <name>jmlparser-parent</name>
     <url>https://github.com/javaparser</url>
@@ -243,7 +243,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-plugin</artifactId>
-                    <version>1.11.2</version>
+                    <version>1.11.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -384,7 +384,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>3.11.2</version>
+                <version>3.12.4</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
