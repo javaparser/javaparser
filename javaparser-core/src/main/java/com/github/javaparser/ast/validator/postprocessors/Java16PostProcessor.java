@@ -19,25 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.validator.language_level_validations;
+package com.github.javaparser.ast.validator.postprocessors;
 
 /**
- * This validator validates according to Java 16 syntax rules.
- *
- * @see <a href="https://openjdk.java.net/projects/jdk/16/">https://openjdk.java.net/projects/jdk/16/</a>
+ * Processes the generic AST into a Java 16 AST and validates it.
  */
-public class Java16Validator extends Java15Validator {
-
-    public Java16Validator() {
-        super();
-
-        // Released Language Features
-        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
-        {
-            // Records released within Java 16 - https://openjdk.java.net/jeps/395
-            remove(noRecordDeclaration);
-            add(recordAsTypeIdentifierNotAllowed);
-            add(recordDeclarationValidator);
-        }
-    }
+public class Java16PostProcessor extends Java15PostProcessor {
 }

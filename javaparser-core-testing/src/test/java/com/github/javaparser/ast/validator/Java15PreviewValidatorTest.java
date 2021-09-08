@@ -25,21 +25,17 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_15_PREVIEW;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 class Java15PreviewValidatorTest {
 
-    private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_16));
+    private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_15_PREVIEW));
 
     /**
      * Records are available within Java 14 (preview), Java 15 (2nd preview), and Java 16 (release).
@@ -49,22 +45,45 @@ class Java15PreviewValidatorTest {
     class Record {
 
         @Nested
-        class RecordAsIdentifierForbidden {
+        class RecordAsTypeIdentifierForbidden {
             @Test
-            void recordUsedAsClassName() {
+            void recordUsedAsClassIdentifier() {
                 String s = "public class record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 14) 'record' cannot be used as an identifier as it is a keyword.");
+                TestUtils.assertProblems(result, "(line 1,col 14) 'record' is a restricted identifier and cannot be used for type declarations");
             }
 
             @Test
-            void recordUsedAsFieldName() {
-                String s = "class X { int record; }";
+            void recordUsedAsEnumIdentifier() {
+                String s = "public enum record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 15) 'record' cannot be used as an identifier as it is a keyword.");
+                TestUtils.assertProblems(result, "(line 1,col 13) 'record' is a restricted identifier and cannot be used for type declarations");
+            }
+
+            @Test
+            void recordUsedAsRecordIdentifier() {
+                String s = "public record record() {}";
+                ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+                TestUtils.assertProblems(result, "(line 1,col 15) 'record' is a restricted identifier and cannot be used for type declarations");
             }
         }
 
+        @Nested
+        class RecordUsedAsIdentifierAllowedAsFieldDeclarations {
+            @Test
+            void recordUsedAsFieldIdentifierInClass() {
+                String s = "class X { int record; }";
+                ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+                TestUtils.assertNoProblems(result);
+            }
+
+            @Test
+            void recordUsedAsFieldIdentifierInInterface() {
+                String s = "interface X { int record; }";
+                ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+                TestUtils.assertNoProblems(result);
+            }
+        }
 
         @Nested
         class RecordDeclarationPermitted {
