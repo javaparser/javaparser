@@ -15,6 +15,9 @@ on:
     paths-ignore:
       - '**.md'
 
+  # Enable manual triggering (important for contributors to enable a check on their fork)
+  workflow_dispatch:
+
 jobs:
   maven_test:
     strategy:
@@ -70,7 +73,8 @@ jobs:
       ### -P,--activate-profiles : Comma-delimited list of profiles to activate
       ### AlsoSlowTests : by default, only quick tests are run - the profile `AlsoSlowTests` runs the full test suite
       - name: Test with Maven (incl. slow tests)
-        run: mvn --errors clean test --activate-profiles AlsoSlowTests
+        shell: bash
+        run: ./mvnw -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B --errors clean test --activate-profiles AlsoSlowTests
 
 
       - name: CodeCov - JavaParser Core

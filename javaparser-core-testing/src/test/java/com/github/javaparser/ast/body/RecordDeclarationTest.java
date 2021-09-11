@@ -701,6 +701,15 @@ public class RecordDeclarationTest {
 
     }
 
+    @Test
+    void instanceFieldIsNotAllowedInRecord() {
+        String s = "record X { int record; }";
+
+        assertThrows(AssertionFailedError.class, () -> {
+            CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        });
+    }
+
     private void assertCompilationFails(String s) {
         assertThrows(AssertionFailedError.class, () -> {
             CompilationUnit cu = TestParser.parseCompilationUnit(s);
