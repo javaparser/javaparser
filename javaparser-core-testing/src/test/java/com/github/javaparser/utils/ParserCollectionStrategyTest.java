@@ -23,7 +23,6 @@ package com.github.javaparser.utils;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +32,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class ParserCollectionStrategyTest {
@@ -62,8 +60,12 @@ class ParserCollectionStrategyTest {
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         sourceRoots.forEach(System.out::println);
 
-        assertEquals(1, sourceRoots.size());
-        assertTrue(sourceRoots.get(0).getRoot().normalize().endsWith("without_module_info"));
+        assertThat(sourceRoots)
+                .map(SourceRoot::getRoot)
+                .extracting(Path::getFileName)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .containsExactly("without_module_info");
     }
 
     @Test
@@ -74,8 +76,12 @@ class ParserCollectionStrategyTest {
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         sourceRoots.forEach(System.out::println);
 
-        assertEquals(1, sourceRoots.size());
-        assertTrue(sourceRoots.get(0).getRoot().normalize().endsWith("with_module_info"));
+        assertThat(sourceRoots)
+                .map(SourceRoot::getRoot)
+                .extracting(Path::getFileName)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .containsExactly("with_module_info");
     }
 
     @Test
@@ -86,8 +92,12 @@ class ParserCollectionStrategyTest {
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         sourceRoots.forEach(System.out::println);
 
-        assertEquals(1, sourceRoots.size());
-        assertTrue(sourceRoots.get(0).getRoot().normalize().endsWith("with_module_info_in_root"));
+        assertThat(sourceRoots)
+                .map(SourceRoot::getRoot)
+                .extracting(Path::getFileName)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .containsExactly("with_module_info_in_root");
     }
 
     @Test
@@ -114,7 +124,12 @@ class ParserCollectionStrategyTest {
         Callback cb = new Callback();
 
         final List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        assertEquals(3, sourceRoots.size());
+        assertThat(sourceRoots)
+                .map(SourceRoot::getRoot)
+                .extracting(Path::getFileName)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .containsExactlyInAnyOrder("with_module_info_in_root", "without_module_info", "with_module_info");
 
         sourceRoots.forEach(sourceRoot -> {
             try {
@@ -123,8 +138,6 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
     @Test
@@ -135,7 +148,12 @@ class ParserCollectionStrategyTest {
         Callback cb = new Callback();
 
         final List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        assertEquals(1, sourceRoots.size());
+        assertThat(sourceRoots)
+                .map(SourceRoot::getRoot)
+                .extracting(Path::getFileName)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .containsExactlyInAnyOrder("without_module_info");
 
         sourceRoots.forEach(sourceRoot -> {
             try {
@@ -144,8 +162,6 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
     @Test
@@ -156,7 +172,12 @@ class ParserCollectionStrategyTest {
         Callback cb = new Callback();
 
         final List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        assertEquals(1, sourceRoots.size());
+        assertThat(sourceRoots)
+                .map(SourceRoot::getRoot)
+                .extracting(Path::getFileName)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .containsExactlyInAnyOrder("with_module_info");
 
         sourceRoots.forEach(sourceRoot -> {
             try {
@@ -165,8 +186,6 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
     @Test
@@ -186,8 +205,6 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
 
