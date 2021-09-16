@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_8;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
 /**
  * The configuration that is used by the parser.
@@ -175,7 +175,7 @@ public class ParserConfiguration {
         /**
          * The most used Java version.
          */
-        public static LanguageLevel POPULAR = JAVA_8;
+        public static LanguageLevel POPULAR = JAVA_11;
         /**
          * The latest Java version that is available.
          */
@@ -218,7 +218,7 @@ public class ParserConfiguration {
     private boolean preprocessUnicodeEscapes = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
-    private LanguageLevel languageLevel = JAVA_8;
+    private LanguageLevel languageLevel = POPULAR;
     private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
