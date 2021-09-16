@@ -65,6 +65,10 @@ public class ParserCollectionStrategy implements CollectionStrategy {
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    if (file.getFileName().toString().equals("module-info.java")) {
+                        // module-info.java is useless for finding the source root, since it can be placed within any directory.
+                        return CONTINUE;
+                    }
                     if (javaMatcher.matches(file)) {
                         current_root = getRoot(file).orElse(null);
                         if (current_root != null) {
