@@ -7,6 +7,9 @@ Next Release (Version 3.23.1)
 ### Deprecated
 ### Removed
 ### Fixed
+
+* `record` may be used as variable name in Java 16 (PR [#3362](https://github.com/javaparser/javaparser/pull/3362) by [@koppor](github.com/koppor/))
+
 ### Security
 
 
