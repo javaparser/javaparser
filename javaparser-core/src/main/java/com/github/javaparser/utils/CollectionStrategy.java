@@ -45,11 +45,11 @@ public interface CollectionStrategy {
 
     default Optional<Path> getRoot(Path file) {
         try {
-            // TODO: Consider this option -- trial option #1
-            if (file.getFileName().toString().equalsIgnoreCase("module-info.java")) {
-                // module-info.java is useless for finding the source root, since it can be placed within any directory.
-                return Optional.empty();
-            }
+//            // TODO: Consider this option -- trial option #1
+//            if (file.getFileName().toString().equalsIgnoreCase("module-info.java")) {
+//                // module-info.java is useless for finding the source root, since it can be placed within any directory.
+//                return Optional.empty();
+//            }
 
             final JavaParser javaParser = new JavaParser(getParserConfiguration());
             final ParseResult<CompilationUnit> parseResult = javaParser.parse(file);
