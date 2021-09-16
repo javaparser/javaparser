@@ -45,6 +45,12 @@ public interface CollectionStrategy {
 
     default Optional<Path> getRoot(Path file) {
         try {
+            // TODO: Consider this option
+//            if (file.getFileName().toString().equalsIgnoreCase("module-info.java")) {
+//                // module-info.java is useless for finding the source root, since it can be placed within any directory.
+//                return Optional.empty();
+//            }
+
             final JavaParser javaParser = new JavaParser(getParserConfiguration());
             final ParseResult<CompilationUnit> parseResult = javaParser.parse(file);
 
@@ -54,10 +60,6 @@ public interface CollectionStrategy {
                         final CompilationUnit compilationUnit = parseResult.getResult().get();
                         final Optional<CompilationUnit.Storage> storage = compilationUnit.getStorage();
                         if (storage.isPresent()) {
-                            if (storage.get().getFileName().equals("module-info.java")) {
-                                // module-info.java is useless for finding the source root, since it can be placed within any directory.
-                                return Optional.empty();
-                            }
                             return storage.map(CompilationUnit.Storage::getSourceRoot);
                         } else {
                             Log.info("Storage information not present -- an issue with providing a string rather than file reference?");

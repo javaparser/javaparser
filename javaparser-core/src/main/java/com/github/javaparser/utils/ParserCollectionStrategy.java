@@ -68,8 +68,16 @@ public class ParserCollectionStrategy implements CollectionStrategy {
                 PathMatcher javaMatcher = getPathMatcher("glob:**.java");
 
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (javaMatcher.matches(file)) {
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    // TODO: Consider this option
+//                    if(file.getFileName().toString().equals("module-info.java")) {
+//                        // module-info.java is useless for finding the source root, since it can be placed within any directory.
+//                        return CONTINUE;
+//                    }
+
+                    // TODO: Consider this option
+//                    if (javaMatcher.matches(file) && !file.getFileName().toString().equals("module-info.java")) {
+                    if (javaMatcher.matches(file) && !file.getFileName().toString().equals("module-info.java")) {
                         current_root = getRoot(file).orElse(null);
                         if (current_root != null) {
                             return SKIP_SIBLINGS;
