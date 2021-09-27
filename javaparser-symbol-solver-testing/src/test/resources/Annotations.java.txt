@@ -79,3 +79,4 @@ class CH {
 @Inherited
 public @interface InheritedAnnotation {
 }
+
