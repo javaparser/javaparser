@@ -630,7 +630,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         switch (node.getOperator()) {
             case MINUS:
             case PLUS:
-                return node.getExpression().accept(this, solveLambdas);
+                return ResolvedPrimitiveType.unp(node.getExpression().accept(this, solveLambdas));
             case LOGICAL_COMPLEMENT:
                 return ResolvedPrimitiveType.BOOLEAN;
             case POSTFIX_DECREMENT:
