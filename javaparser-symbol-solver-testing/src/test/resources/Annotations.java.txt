@@ -4,6 +4,10 @@ import java.lang.annotation.*;
 import java.beans.*;
 import org.junit.*;
 
+@Inherited
+public @interface InheritedAnnotation {
+}
+
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MyAnnotation {
