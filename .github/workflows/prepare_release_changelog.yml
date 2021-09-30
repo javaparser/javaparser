@@ -42,15 +42,15 @@ jobs:
 
       - name: Output variables
         run: |
-          echo $SHA_SHORT
-          echo $CHANGELOG
+          echo ${{ steps.vars.outputs.changelog }}
+          echo ${{ steps.vars.outputs.sha_short }}
 
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v_$SHA_SHORT  \
+          gh release create v_snapshot_${{ steps.vars.outputs.sha_short }}  \
             --prerelease \
-            --title "SNAPSHOT - $SHA_SHORT" \
+            --title "SNAPSHOT - ${{ steps.vars.outputs.sha_short }}" \
             --notes-file ./scripts/temp_changelog.md
 
