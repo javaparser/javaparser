@@ -15,11 +15,6 @@ jobs:
       changelog: ${{ steps.properties.outputs.changelog }}
     steps:
 
-      - name: Show GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.3.4
@@ -49,15 +44,29 @@ jobs:
 
       - name: Output variables
         run: |
-          echo ${{ steps.vars.outputs.changelog }}
-          echo ${{ steps.vars.outputs.sha_short }}
+          echo sha_short = ${{ steps.vars.outputs.sha_short }}
+          echo sha_long  = ${{ steps.vars.outputs.sha_long }}
+          echo changelog = ${{ steps.vars.outputs.changelog }}
 
-      - name: Create Release
+
+      # Remove old release drafts by using the curl request for the available releases with draft flag
+      - name: Remove Old Release Drafts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/{owner}/{repo}/releases \
+            --jq '.[] | select(.draft == true) | .id' \
+            | xargs -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
+
+
+      # Create new release draft - which is not publicly visible and requires manual acceptance
+      - name: Create Release Draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create v_snapshot_${{ steps.vars.outputs.sha_short }}  \
             --target ${{ steps.vars.outputs.sha_long }} \
+            --draft \
             --prerelease \
             --title "SNAPSHOT - ${{ steps.vars.outputs.sha_short }}" \
             --notes-file ./scripts/temp_changelog.md
