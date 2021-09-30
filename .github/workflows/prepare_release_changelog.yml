@@ -15,6 +15,11 @@ jobs:
       changelog: ${{ steps.properties.outputs.changelog }}
     steps:
 
+      - name: Show GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.3.4
@@ -34,9 +39,11 @@ jobs:
         run: |
           ./run_generate_changelog_by_milestone_title.sh "next release"
           CHANGELOG="$(<temp_changelog.md)"
+          SHA_LONG=$(git rev-parse HEAD)
           SHA_SHORT=$(git rev-parse --short HEAD)
 
           echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=sha_long::$SHA_LONG"
           echo "::set-output name=sha_short::$SHA_SHORT"
 
 
@@ -50,6 +57,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create v_snapshot_${{ steps.vars.outputs.sha_short }}  \
+            --target ${{ steps.vars.outputs.sha_long }} \
             --prerelease \
             --title "SNAPSHOT - ${{ steps.vars.outputs.sha_short }}" \
             --notes-file ./scripts/temp_changelog.md
