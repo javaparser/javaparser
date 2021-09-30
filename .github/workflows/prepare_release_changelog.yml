@@ -28,7 +28,7 @@ jobs:
 
       # Set environment variables
       - name: Export Properties
-        id: properties
+        id: vars
         shell: bash
         working-directory: ./scripts
         run: |
