@@ -32,6 +32,6 @@ jobs:
         shell: bash
         working-directory: ./scripts
         run: |
-          ./run_generate_changelog_by_milestone_title.sh \"next release\"
+          ./run_generate_changelog_by_milestone_title.sh "next release"
           CHANGELOG="$(<temp_changelog.md)"
           echo "::set-output name=changelog::$CHANGELOG"
