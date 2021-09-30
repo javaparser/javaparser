@@ -54,4 +54,3 @@ jobs:
             --title "SNAPSHOT - $SHA_SHORT" \
             --notes-file ./scripts/temp_changelog.md
 
-
