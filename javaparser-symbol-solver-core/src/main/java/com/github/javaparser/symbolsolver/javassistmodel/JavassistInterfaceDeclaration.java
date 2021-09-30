@@ -43,7 +43,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.NotFoundException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -208,15 +207,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        try {
-            /*
-            Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
-            Finally, return them in a Set.
-             */
-            return Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.internalTypes();
     }
 
     @Override

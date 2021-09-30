@@ -86,6 +86,24 @@ public class JavassistMethodDeclarationTest extends AbstractSymbolResolutionTest
         assertThat(param.describeType(), is("java.util.List<T>"));
     }
 
+    @Test
+    void testGetExceptionsFromMethodWithoutExceptions() {
+        JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("C");
+        JavassistMethodDeclaration method = findMethodWithName(classDecl, "genericMethodWithTypeParameter");
+
+        assertThat(method.getNumberOfSpecifiedExceptions(), is(0));
+    }
+
+    @Test
+    void testGetExceptionsFromMethodWithExceptions() {
+        JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("C");
+        JavassistMethodDeclaration method = findMethodWithName(classDecl, "methodWithExceptions");
+
+        assertThat(method.getNumberOfSpecifiedExceptions(), is(2));
+        assertThat(method.getSpecifiedException(0).describe(), is("java.lang.IllegalArgumentException"));
+        assertThat(method.getSpecifiedException(1).describe(), is("java.io.IOException"));
+    }
+
     private JavassistMethodDeclaration findMethodWithName(JavassistClassDeclaration classDecl, String name) {
         return classDecl.getDeclaredMethods().stream().filter(methodDecl -> methodDecl.getName().equals(name))
                 .map(m -> (JavassistMethodDeclaration) m).findAny().get();

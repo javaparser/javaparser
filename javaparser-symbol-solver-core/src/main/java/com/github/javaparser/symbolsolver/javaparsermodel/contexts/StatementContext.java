@@ -238,11 +238,15 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         } else if (parentOfWrappedNode instanceof LambdaExpr) {
             return solveSymbolInParentContext(name);
         } else if (parentOfWrappedNode instanceof NodeWithStatements) {
-            // If we choose to not solve adjacent statements instead attempt to solve via the parent.
-            // Further below is an explanation for why we may want to disable this visitation of adjacent statements
+            // If we choose to not solve adjacent statements abort the solution process here.
+            // In the calling context (the context that calls this) we will attempt to
+            // resolve all prior adjacent statements, and then the common parent as the fallback.
+            // Then the common parent will check all of its prior adjacent statements, etc.
+
+            // Further below is a more detailed explanation for why we may want to disable this visitation of adjacent statements
             // to prevent revisiting the same contexts over and over again.
             if (!iterateAdjacentStmts) {
-                return solveSymbolInParentContext(name);
+                return SymbolReference.unsolved(ResolvedValueDeclaration.class);
             }
 
             NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
