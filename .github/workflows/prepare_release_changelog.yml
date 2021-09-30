@@ -49,9 +49,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v-$SHA_SHORT  \
+          gh release create v_$SHA_SHORT  \
             --prerelease \
             --title "SNAPSHOT - $SHA_SHORT" \
-            --notes "$CHANGELOG"
+            --notes-file ./scripts/temp_changelog.md
 
 
