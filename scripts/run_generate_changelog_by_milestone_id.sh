@@ -46,7 +46,7 @@ set -x
  > $OUTPUT_FILE
 
 ## Run the changelog generator tool, to generate a changelog.
-java -jar $CHANGELOG_GENERATOR_JAR --spring.config.location="release-notes-config.yml" "$CHANGELOG_ID" $OUTPUT_FILE
+java -jar $CHANGELOG_GENERATOR_JAR --spring.config.location="release-notes-config-id.yml" "$CHANGELOG_ID" $OUTPUT_FILE
 set +x
 
 
@@ -58,7 +58,8 @@ echo "[JavaParser]: The changelog for milestone ID $CHANGELOG_ID (also stored wi
 echo "[JavaParser]"
 echo ""
 
-set -x
-cat $OUTPUT_FILE
-set +x
+
+## Get contents of the
+value=$(<$OUTPUT_FILE)
+echo "$value"
 
