@@ -34,27 +34,24 @@ jobs:
         run: |
           ./run_generate_changelog_by_milestone_title.sh "next release"
           CHANGELOG="$(<temp_changelog.md)"
+          SHA_SHORT=$(git rev-parse --short HEAD)
 
           echo "::set-output name=changelog::$CHANGELOG"
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "::set-output name=sha_short::$SHA_SHORT"
 
 
-  ##
-  snapshotRelease:
-    name: Snapshot Release for Commit
-    runs-on: ubuntu-latest
-    needs:
-      - generate_changelog
-    steps:
-      - name: Fetch Sources
-        uses: actions/checkout@v2.3.4
+      - name: Output variables
+        run: |
+          echo $SHA_SHORT
+          echo $CHANGELOG
+
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v${{ needs.build.outputs.version }} \
+          gh release create v-$SHA_SHORT  \
             --prerelease \
-            --title "SNAPSHOT - ${{ needs.generate_changelog.outputs.sha_short }}" \
-            --notes "${{ needs.generate_changelog.outputs.changelog }}"
+            --title "SNAPSHOT - $SHA_SHORT" \
+            --notes "$CHANGELOG"
 
 
