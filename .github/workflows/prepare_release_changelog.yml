@@ -11,8 +11,6 @@ jobs:
   generate_changelog:
     name: Generate Changelog
     runs-on: ubuntu-latest
-    outputs:
-      changelog: ${{ steps.properties.outputs.changelog }}
     steps:
 
       # Check out current repository
@@ -33,6 +31,7 @@ jobs:
         working-directory: ./scripts
         run: |
           ./run_generate_changelog_by_milestone_title.sh "next release"
+
           CHANGELOG="$(<temp_changelog.md)"
           SHA_LONG=$(git rev-parse HEAD)
           SHA_SHORT=$(git rev-parse --short HEAD)
@@ -46,7 +45,7 @@ jobs:
         run: |
           echo sha_short = ${{ steps.vars.outputs.sha_short }}
           echo sha_long  = ${{ steps.vars.outputs.sha_long }}
-          echo changelog = ${{ steps.vars.outputs.changelog }}
+          echo changelog = "${{ steps.vars.outputs.changelog }}"
 
 
       # Remove old release drafts by using the curl request for the available releases with draft flag
