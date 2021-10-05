@@ -25,20 +25,25 @@ jobs:
           java-version: 11
 
       # Set environment variables
-      - name: Export Properties
+      - name: Generate Changelog
         id: vars
         shell: bash
         working-directory: ./scripts
         run: |
-          ./run_generate_changelog_by_milestone_title.sh "next release 123"
+          ## By convention, the "next" milestone is named "next release"
+          ./run_generate_changelog_by_milestone_title.sh "next release"
 
-          CHANGELOG="$(<temp_changelog.md)"
           SHA_LONG=$(git rev-parse HEAD)
           SHA_SHORT=$(git rev-parse --short HEAD)
+          CHANGELOG="$(<temp_changelog.md)"
+          RELEASE_TITLE="SNAPSHOT - $SHA_SHORT"
+          RELEASE_TAG_NAME="v_snapshot_$SHA_SHORT"
 
-          echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=sha_long::$SHA_LONG"
           echo "::set-output name=sha_short::$SHA_SHORT"
+          echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=release_title::$RELEASE_TITLE"
+          echo "::set-output name=release_tag_name::$RELEASE_TAG_NAME"
 
 
       - name: Output variables
@@ -46,6 +51,8 @@ jobs:
           echo sha_short = ${{ steps.vars.outputs.sha_short }}
           echo sha_long  = ${{ steps.vars.outputs.sha_long }}
           echo changelog = "${{ steps.vars.outputs.changelog }}"
+          echo changelog = "${{ steps.vars.outputs.release_title }}"
+          echo changelog = "${{ steps.vars.outputs.release_tag_name }}"
 
 
       # Remove old release drafts by using the curl request for the available releases with draft flag
@@ -63,10 +70,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v_snapshot_${{ steps.vars.outputs.sha_short }}  \
+          gh release create ${{ steps.vars.outputs.release_tag_name }}  \
             --target ${{ steps.vars.outputs.sha_long }} \
             --draft \
             --prerelease \
-            --title "SNAPSHOT - ${{ steps.vars.outputs.sha_short }}" \
+            --title "${{ steps.vars.outputs.release_title }}" \
             --notes-file ./scripts/temp_changelog.md
 
