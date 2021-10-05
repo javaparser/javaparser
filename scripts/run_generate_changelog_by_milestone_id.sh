@@ -47,7 +47,16 @@ set -x
 
 ## Run the changelog generator tool, to generate a changelog.
 java -jar $CHANGELOG_GENERATOR_JAR --spring.config.location="release-notes-config-id.yml" "$CHANGELOG_ID" $OUTPUT_FILE
+CHANGELOG_GENERATOR_EXIT_CODE=$?
+#echo $CHANGELOG_GENERATOR_EXIT_CODE
 set +x
+
+## If the generator failed (e.g. due to an invalid milestone reference), exit this script.
+if [ $CHANGELOG_GENERATOR_EXIT_CODE -ne 0 ]; then
+  echo "[JavaParser-ERROR]: Generation of the changelog failed. Exiting." >&2
+  echo "[JavaParser-ERROR]: Exiting with code: $CHANGELOG_GENERATOR_EXIT_CODE" >&2
+  exit 3
+fi
 
 
 ## Also output the generated changelog to the console.
