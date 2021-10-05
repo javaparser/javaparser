@@ -4,7 +4,7 @@ on:
     branches: [ master ]
 
   ## (testing only) Trigger the workflow on any pull request
-  pull_request:
+  #pull_request:
 
 jobs:
 
