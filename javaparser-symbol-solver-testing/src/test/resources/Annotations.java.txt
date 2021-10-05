@@ -75,3 +75,8 @@ class CG {
 class CH {
     @Transient public String field;
 }
+
+@Inherited
+public @interface InheritedAnnotation {
+}
+

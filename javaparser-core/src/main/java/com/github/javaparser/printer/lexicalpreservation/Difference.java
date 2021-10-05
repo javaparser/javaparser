@@ -503,10 +503,10 @@ public class Difference {
                 int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
                 originalIndex += step;
                 originalIndex++;
-            } else if (originalElement.isIdentifier() && isArrayType(kept)) {
-                int step = getArrayLevel(kept);
+            } else if ((originalElement.isIdentifier() || originalElement.isKeyword()) && isArrayType(kept)) {
+                int tokenToSkip = getIndexToNextTokenElementInArrayType((TokenTextElement)originalElement, getArrayLevel(kept));
                 diffIndex++;
-                originalIndex += step*2; // there is a couple of brackets per level
+                originalIndex += tokenToSkip;
                 originalIndex++;
             } else if (originalElement.isIdentifier()) {
                 originalIndex++;
@@ -624,8 +624,8 @@ public class Difference {
         // because there is a token, first we need to increment the number of token to skip
         step++;
         // manage nested diamond operators by incrementing the level on LT token and decrementing on GT
-        JavaToken token = next.get();
-        Kind kind = Kind.valueOf(token.getKind());
+        JavaToken nextToken = next.get();
+        Kind kind = Kind.valueOf(nextToken.getKind());
         if (isDiamondOperator(kind)) {
             if (kind.GT.equals(kind))
                 nestedDiamondOperator--;
@@ -635,10 +635,35 @@ public class Difference {
         // manage the fact where the first token is not a diamond operator but a whitespace
         // and the end of the token sequence to skip
         // for example in this declaration List <String> a;
-        if (nestedDiamondOperator == 0 && !next.get().getCategory().isWhitespace())
+        if (nestedDiamondOperator == 0 && !nextToken.getCategory().isWhitespace())
             return step;
         // recursively analyze token to skip
-        return step += getIndexToNextTokenElement(new TokenTextElement(token), nestedDiamondOperator);
+        return step += getIndexToNextTokenElement(new TokenTextElement(nextToken), nestedDiamondOperator);
+    }
+    
+    /*
+     * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
+     */
+    private int getIndexToNextTokenElementInArrayType(TokenTextElement element, int arrayLevel) {
+        int step = 0; // number of token to skip
+        Optional<JavaToken> next = element.getToken().getNextToken();
+        if (!next.isPresent()) return step;
+        // because there is a token, first we need to increment the number of token to skip
+        step++;
+        // manage array Level by decrementing the level on right bracket token
+        JavaToken nextToken = next.get();
+        Kind kind = Kind.valueOf(nextToken.getKind());
+        if (isBracket(kind)) {
+            if (kind.RBRACKET.equals(kind))
+                arrayLevel--;
+        }
+        // manage the fact where the first token is not a diamond operator but a whitespace
+        // and the end of the token sequence to skip
+        // for example in this declaration int [] a;
+        if (arrayLevel == 0 && !nextToken.getCategory().isWhitespace())
+            return step;
+        // recursively analyze token to skip
+        return step += getIndexToNextTokenElementInArrayType(new TokenTextElement(nextToken), arrayLevel);
     }
 
     /*
@@ -646,6 +671,13 @@ public class Difference {
      */
     private boolean isDiamondOperator(Kind kind) {
         return kind.GT.equals(kind) || kind.LT.equals(kind);
+    }
+    
+    /*
+     * Returns true if the token is a bracket
+     */
+    private boolean isBracket(Kind kind) {
+        return kind.LBRACKET.equals(kind) || kind.RBRACKET.equals(kind);
     }
 
     private boolean openBraceWasOnSameLine() {
