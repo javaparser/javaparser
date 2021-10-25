@@ -3,6 +3,7 @@ public class TestStrings {
     
     //@ public normal_behavior
     //@   ensures \result == "ABC".equals(s);
+
     //@ pure
     public static boolean m1(String s) {
         if ("ABC".equals(s)) return true;

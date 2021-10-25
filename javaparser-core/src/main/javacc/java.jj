@@ -1385,6 +1385,7 @@ public CompilationUnit CompilationUnit():
 {
     PackageDeclaration packageDeclaration = null;
     NodeList<ImportDeclaration> imports = emptyNodeList();
+    NodeList<ImportDeclaration> im;
     ImportDeclaration in = null;
     NodeList<TypeDeclaration<?>> types = emptyNodeList();
     ModifierHolder modifier;
@@ -1396,7 +1397,8 @@ public CompilationUnit CompilationUnit():
         ( LOOKAHEAD(2)";" )*
         [ LOOKAHEAD(PackageDeclaration()) packageDeclaration = PackageDeclaration() ]
         (
-            in = ImportDeclaration() { imports = add(imports, in); }
+           LOOKAHEAD(3) im=JmlImportDeclarations() { for(ImportDeclaration p:im) imports=add(imports, p); }
+         | in = ImportDeclaration() { imports = add(imports, in); }
          |
             (
                 modifier = Modifiers()
@@ -1446,7 +1448,22 @@ PackageDeclaration PackageDeclaration():
     { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 
-
+NodeList<ImportDeclaration> JmlImportDeclarations():
+{
+  ImportDeclaration in;
+  NodeList<ImportDeclaration> imports =emptyNodeList();
+  JavaToken begin;
+  DefaultJmlContainer c = new DefaultJmlContainer();
+}
+{
+  JmlStart(c) {begin=token();}
+  (<MODEL> in=ImportDeclaration()
+  {add(imports, new JmlImportDeclaration(range(begin, in),in,c));})*
+  JmlEnd()
+  {
+    return imports;
+  }
+}
 /**
  * Import declaration types are not differentiated in the class hierarchy.
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-7.5
@@ -1564,7 +1581,8 @@ ModifierHolder Modifiers():
 }
 
 void jmlModifiers(NodeList<Modifier> modifiers):
-{ JmlContainer c = new DefaultJmlContainer(); //TODO weigl get information on modifiers
+{
+    JmlContainer c = new DefaultJmlContainer();
 }
 {
   try {
@@ -2222,7 +2240,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
      |
         //FIXME weigl expensive lookahead, required to distinguish, fields from contracts
         //maybe we should inline the rule below
-        LOOKAHEAD(10,  JmlStart() Modifiers()
+        LOOKAHEAD(100,  JmlStart() Modifiers()
                        ( <INVARIANT>  | <INITIALLY> | <REPRESENTS> | <REPRESENTS_REDUNDANTLY>
                        | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY> | JmlFieldDeclaration() | JmlMethodDeclaration()))
         ret = JmlClassOrInterfaceBodyDeclaration()
@@ -2287,14 +2305,8 @@ void JmlStart(JmlContainer jc):
   ( <JML_MULTI_START> {jc.setSingleLine(false);}
   | <JML_SINGLE_START> {jc.setSingleLine(true);}
   )
-  {jc.setTagsFromStart(token());}
+  { jc.setTagsFromStart(token()); }
 }
-
-
-/*void JmlStart():
-{}
-{ <JML_MULTI_START> | <JML_SINGLE_START> }
-*/
 
 void JmlEnd():
 {}
@@ -2401,7 +2413,7 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
     JmlContract c=null;
 }
 {
-    ( (<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>)
+    ( [<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>]
       {begin=token();}
       (clause=JmlContractClause() {clauses.add(clause);})+
       (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
@@ -4868,12 +4880,13 @@ Statement Statement():
 JmlStatements JmlStatements():
 { JmlStatements stmts = new JmlStatements(); JavaToken begin,end; JmlStatement s; }
 {
-  JmlStart(stmts) {begin=token();}
+  JmlStart(stmts) { begin=token(); }
   (s=JmlStatement() {stmts.getElements().add(s);})*
   JmlEnd()
-  { stmts.setTokenRange(range(begin,token()));
+  {
+    stmts.setTokenRange(range(begin,token()));
     return stmts;
-    }
+  }
 }
 
 JmlStatement JmlStatement():

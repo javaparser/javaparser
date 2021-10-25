@@ -29,6 +29,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
@@ -152,6 +153,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.UnaryExpr.class);
         add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
+        add(JmlImportDeclaration.class);
         add(JmlQuantifiedExpr.class);
         add(JmlBinaryInfixExpr.class);
         add(JmlLetExpr.class);
