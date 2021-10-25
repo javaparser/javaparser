@@ -335,6 +335,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (source.isNull()) {
             return;
         }
+        
+        if (target.isReferenceType()) {
+            ResolvedReferenceType formalTypeAsReference = target.asReferenceType();
+            if (formalTypeAsReference.isJavaLangObject()) {
+                return;
+            }
+        }
         throw new RuntimeException(source.describe() + " " + target.describe());
     }
 
