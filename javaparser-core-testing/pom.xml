@@ -2,7 +2,7 @@
     <parent>
         <artifactId>jmlparser-parent</artifactId>
         <groupId>org.key</groupId>
-        <version>3.23.1-SNAPSHOT</version>
+        <version>3.23.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -125,13 +125,13 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.20.2</version>
+            <version>3.21.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.1</version>
+            <version>4.9.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
