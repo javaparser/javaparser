@@ -363,6 +363,29 @@ TOKEN :
 | < EXPORTS: "exports" >
 | < PROVIDES: "provides" >
 | < TRANSITIVE: "transitive" >
+
+| < TRANSACTIONBEGIN: "#beginJavaCardTransaction" >
+| < TRANSACTIONCOMMIT: "#commitJavaCardTransaction" >
+| < TRANSACTIONFINISH: "#finishJavaCardTransaction" >
+| < TRANSACTIONABORT: "#abortJavaCardTransaction" >
+| < RETURNTYPE: "\\Return" >
+| < SEQ: "\\seq" >
+| < SET: "\\set" >
+| < LOOPSCOPE: "loop-scope" >
+| < MAP: "\\map" >
+| < MERGE_POINT: "merge_point" >
+| < METHODFRAME: "method-frame" >
+| < LOCSET: "\\locset">
+| < FREE: "\\free" >
+| < EXEC: "exec" >
+| < CONTINUETYPE: "\\Continue" >
+| < CCATCH: "ccatch" >
+| < BREAKTYPE: "\\Break" >
+| < BIGINT: "\\bigint">
+| < REAL: "\\real">
+| <MAP_FUNCTION:
+    "\\map_get" | "\\map_singleton" | "\\map_override" | "\\seq_2_map"
+    | "\\map_remove" | "\\map_update" | "\\in_domain" | "\\domain_implies_created" | "\\map_size" | "\\is_finite">
 }
 
 /* LITERALS */
@@ -764,6 +787,8 @@ MORE: { <ENTER_TEXT_BLOCK: "\"\"\"" >: IN_TEXT_BLOCK }
 TOKEN :
 {
   < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
+|
+  < JMLIDENTIFIER: "\\" <LETTER> (<PART_LETTER>)* >
 |
   < #LETTER: [
          "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
@@ -2823,6 +2848,12 @@ PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
         "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
      |
         "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
+     | "\\bigint"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BIGINT, annotations); }
+     | "\\real"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.REAL, annotations); }
+     | "\\locset"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LOCSET, annotations); }
+     | "\\seq"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SEQ, annotations); }
+     | "\\free"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FREE, annotations); }
+     | "\\map"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.MAP, annotations); }
     )
     { return ret; }
 }
@@ -3502,6 +3533,10 @@ Expression UnaryExpression():
         { ret = new UnaryExpr(range(begin, token()), ret, op); }
      |
         ret = UnaryExpressionNotPlusMinus()
+     |
+       result = ADTGetter()
+     |
+       result = GeneralEscapeExpression()
     )
     { return ret; }
 }
@@ -3900,6 +3935,12 @@ Expression Literal():
         ret = BooleanLiteral()
      |
         ret = NullLiteral()
+     |
+        ret = EmptySetLiteral()
+     |
+        ret = EmptySeqLiteral()
+     |
+        ret = EmptyMapLiteral()
     )
     { return ret; }
 }
@@ -4167,6 +4208,11 @@ Statement Statement():
             | ret = ThrowStatement()
             | ret = SynchronizedStatement()
             | ret = TryStatement()
+            | ret = TransactionStatement()
+            | ret = MergePointStatement()
+            | ret = LoopScope()
+            | ret = KeYCatchAllStatement()
+            | ret = ExecStatement()
         )
         { return ret; }
     } catch (ParseException e) {
@@ -5777,4 +5823,643 @@ MethodDeclaration MethodDeclarationParseStart():
     ret = MethodDeclaration(modifier)
     <EOF>
     { return ret; }
+}
+
+//region KeY additions
+
+Expression ADTGetter() :
+{
+
+    Expression result;
+    Expression expr;
+}
+{
+    (
+    "\\indexOf" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SeqIndexOf(expr,result);
+    }
+    |
+    "\\seq_length" "(" expr = Expression() ")"
+    {
+        result = new SeqLength(expr);
+    }
+    |
+    "\\seq_get" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SeqGet(expr, result);
+    }
+    )
+    {
+        checkConstruction(result);
+        setPrefixInfo(result);
+        return result;
+    }
+}
+
+
+Expression ADTConstructor() :
+{
+    Expression result;
+    Expression expr, expr2;
+    Token begin;
+}
+
+{
+    (
+    "\\singleton" {begin=token;} "(" expr = Expression() ")"
+    {
+        ParserUtil.checkValidSingletonReference(expr, begin);
+        result = new Singleton(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\set_union" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SetUnion(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\intersect" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new Intersect(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\set_minus" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SetMinus(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\all_fields" "(" expr = Expression() ")"
+    {
+        result = new AllFields(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\all_objects" "(" expr = Expression() ")"
+    {
+        result = new AllObjects(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_singleton" "(" expr = Expression() ")"
+    {
+        result = new SeqSingleton(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_concat" "(" expr = Expression() "," result = Expression() ")"
+    {
+        result = new SeqConcat(expr, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_sub" "(" expr = Expression() "," expr2 = Expression() "," result = Expression() ")"
+    {
+        result = new SeqSub(expr, expr2, result);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_reverse" "(" expr = Expression() ")"
+    {
+        result = new SeqReverse(expr);
+        setPrefixInfo(result);
+    }
+    |
+    "\\seq_put" "(" expr = Expression() "," expr2 = Expression() "," result = Expression() ")"
+    {
+        // desugaring
+        final Expression one = factory.createIntLiteral(1);
+        final Expression first = new SeqSub(expr, factory.createIntLiteral(0), factory.createMinus(expr2, one));
+        final Expression second = new SeqSingleton(result);
+        final Expression third = new SeqSub(expr, factory.createPlus(expr2,one), factory.createMinus(new SeqLength(expr),one));
+        result = new SeqConcat(first, new SeqConcat(second, third));
+        setPrefixInfo(result);
+    }
+    )
+    {
+      checkConstruction(result);
+      setPostfixInfo(result);
+      return result;
+  }
+}
+
+Expression GeneralEscapeExpression() :
+{
+   List<Expression> arguments = new ArrayList<Expression>();
+   Expression expr;
+   JavaToken begin;
+}
+{
+    <JMLIDENTIFIER> {begin=token();}
+    "("
+      (
+        expr = Expression() { arguments.add(expr); }
+        ( "," expr = Expression() { arguments.add(expr); } )*
+      )?  ")"
+
+    {
+      EscapeExpression result = EscapeExpression.getEscapeExpression(t.image, arguments);
+      setPrefixInfo(result);
+      return result;
+    }
+
+}
+
+
+Expression IndexRange() :
+    /*
+     * Introduced to handle postfix style sequence ranges as top-level expressions.
+     * XXX does not yet work since Expression may contain dots
+     */
+{
+    Expression result, end;
+}
+{
+    result = Expression()
+    [ ".." end = Expression()
+      {
+        result = new RangeExpression(result, end);
+      }
+    ]
+    {
+        checkConstruction(result);
+        setPostfixInfo(result);
+        return result;
+    }
+}
+
+
+
+EmptySetLiteral EmptySetLiteral() :
+{
+    EmptySetLiteral result;
+}
+{
+  "\\empty"
+  {
+      result = EmptySetLiteral.INSTANCE;
+      setPrefixInfo(result);
+      return result;
+  }
+}
+
+EmptySeqLiteral EmptySeqLiteral() :
+{
+    EmptySeqLiteral result;
+}
+{
+  "\\seq_empty"
+  {
+      result = EmptySeqLiteral.INSTANCE;
+      setPrefixInfo(result);
+      return result;
+  }
+}
+
+EmptyMapLiteral EmptyMapLiteral() :
+{
+    EmptyMapLiteral result;
+}
+{
+  "\\map_empty"
+  {
+      result = EmptyMapLiteral.INSTANCE;
+      setPrefixInfo(result);
+      return result;
+  }
+}
+
+
+Statement KeYCatchAllStatement() :
+{
+  Statement result;
+  UncollatedReferenceQualifier qn;
+  StatementBlock block;
+}
+{
+  "#catchAll" "(" qn = Name() ")" block = Block()
+  {
+      result = factory.createCatchAllStatement(qn.toVariableReference(), block);
+      checkConstruction(result);
+      setPostfixInfo(result);
+      return result;
+  }
+}
+
+
+MethodCallStatement MethodCallStatement() :
+{
+  MethodCallStatement result;
+  VariableReference resVar = null;
+  UncollatedReferenceQualifier qn;
+  StatementBlock block;
+  ExecutionContext ec;
+}
+{
+  <METHODFRAME>
+ (
+   "("
+   [
+
+     "result->" qn = Name() ","
+     {
+       resVar = qn.toVariableReference();
+     }
+   ]
+     ec = ExecutionContext()
+   ")"
+  )
+  ":"
+  block = Block()
+  {   result = factory.createMethodCallStatement(resVar, ec, block);
+      checkConstruction(result);
+      setPostfixInfo(result);
+      return result;
+  }
+}
+
+MethodBodyStatement MethodBodyStatement() :
+{
+  TypeReference bodySource;
+  Expression tmp;
+  VariableReference resVar = null;
+  UncollatedReferenceQualifier qn;
+  MethodReference methRef;
+  MethodBodyStatement result;
+}
+{
+
+
+        [LOOKAHEAD(Name() "=")
+          qn = Name() "="
+          {
+            resVar = qn.toVariableReference();
+          }
+        ]
+
+  tmp = Expression()
+
+  "@" bodySource = Type()
+
+  ";"
+
+  {
+    if (tmp instanceof MethodReference)
+    {
+        methRef = (MethodReference)tmp;
+    }
+    else
+    {
+        throw new ParseException("Expected a method reference.");
+    }
+    result = factory.createMethodBodyStatement(bodySource, resVar, methRef);
+    checkConstruction(result);
+    setPostfixInfo(result);
+    return result;
+  }
+
+}
+
+ExecutionContext ExecutionContext() :
+{
+  TypeReference classContext;
+  Expression runtimeInstance = null;
+  MethodSignature methodSignature;
+}
+{
+
+  "source="
+  methodSignature = MethodSignature() "@" classContext = Type()
+  [ ",this=" runtimeInstance = Expression() ]
+
+  { return new ExecutionContext
+        (classContext, methodSignature,
+        (ReferencePrefix)runtimeInstance);
+  }
+}
+
+
+MethodSignature MethodSignature() :
+{
+     UncollatedReferenceQualifier name;
+     TypeReference tr;
+     ASTList<TypeReference> paramTypes = new ASTArrayList<TypeReference>();
+}
+{
+     name = Name() "("
+        [ tr = Type() { paramTypes.add(tr); }
+         ( "," tr = Type() {
+                // check if more params are admissible (no more after a vararg) occurs in FormalParameter()
+                paramTypes.add(tr);
+           }
+         )*
+       ] ")"
+     {
+        return factory.createMethodSignature(name.getIdentifier(), paramTypes);
+     }
+}
+
+
+TransactionStatement TransactionStatement() :
+{
+  String name;
+}
+{
+  (  ( <TRANSACTIONBEGIN> { name = token.image; } )
+   | ( <TRANSACTIONCOMMIT> { name = token.image; } )
+   | ( <TRANSACTIONFINISH> { name = token.image; } )
+   | ( <TRANSACTIONABORT> { name = token.image; } ) ) ";"
+  {
+     int type = 0;
+     if(name.indexOf("#begin") != -1) {
+        type = TransactionStatement.BEGIN;
+     } else if(name.indexOf("#commit") != -1) {
+        type = TransactionStatement.COMMIT;
+     } else if(name.indexOf("#finish") != -1) {
+        type = TransactionStatement.FINISH;
+     } else if(name.indexOf("#abort") != -1) {
+        type = TransactionStatement.ABORT;
+     }
+     return new TransactionStatement(type);
+  }
+}
+
+LoopScopeBlock LoopScope() :
+{
+    LoopScopeBlock result;
+    Expression indexPV;
+    StatementBlock block;
+}
+{
+  "loop-scope"
+  {
+      result = factory.createLoopScopeBlock();
+      setPrefixInfo(result);
+  }
+  "(" indexPV = Expression() ")"
+  block = Block()
+  {
+      result.setIndexPV(indexPV);
+      result.setBody(block);
+      checkConstruction(result);
+      setPostfixInfo(result);
+      return result;
+  }
+}
+
+MergePointStatement MergePointStatement() :
+{
+    Expression expr = null;
+    MergePointStatement result;
+}
+{
+  "merge_point"
+  {
+      result = factory.createMergePointStatement();
+      setPrefixInfo(result);
+  }
+  "(" expr = Expression()
+    {
+        result.setIndexPV(expr);
+    }
+  ")"
+  ";"
+  {
+    checkConstruction(result);
+    setPostfixInfo(result);
+    return result;
+  }
+}
+
+
+Exec ExecStatement() :
+{
+    Exec result;
+    StatementBlock block;
+    ParameterDeclaration param;
+    ASTList<Branch> branches = new ASTArrayList<Branch>(1);
+    Ccatch cat;
+    Identifier id = null;
+}
+{
+    "exec"
+    {
+        result = factory.createExec();
+        setPrefixInfo(result);
+    }
+
+    block = Block()
+    {
+        result.setBody(block);
+    }
+
+    // TODO: Wildcard continues & breaks
+
+    [
+        LOOKAHEAD("ccatch" "("  "\\Return" ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Return" ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchReturnParameterDeclaration());
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    ]
+
+    (
+        LOOKAHEAD("ccatch" "("  "\\Return" param = Parameter() ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Return" param = Parameter() ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchReturnValParameterDeclaration(param));
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    )*
+
+    [
+        LOOKAHEAD("ccatch" "("  "\\Break" ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Break" ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchBreakParameterDeclaration());
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    ]
+
+    (
+        LOOKAHEAD("ccatch" "("  "\\Break" <IDENTIFIER> ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Break"
+        <IDENTIFIER>
+        {
+            id = factory.createIdentifier(token.image);
+            setPrefixInfo(id);
+            setPostfixInfo(id);
+        } ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchBreakLabelParameterDeclaration(id));
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    )*
+
+    [
+        LOOKAHEAD("ccatch" "("  "\\Break" "*" ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Break" "*" ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchBreakWildcardParameterDeclaration());
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    ]
+
+    [
+        LOOKAHEAD("ccatch" "("  "\\Continue" ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Continue" ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchContinueParameterDeclaration());
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    ]
+
+    (
+        LOOKAHEAD("ccatch" "("  "\\Continue" <IDENTIFIER> ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Continue"
+        <IDENTIFIER>
+        {
+            id = factory.createIdentifier(token.image);
+            setPrefixInfo(id);
+            setPostfixInfo(id);
+        } ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchContinueLabelParameterDeclaration(id));
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    )*
+
+    [
+        LOOKAHEAD("ccatch" "("  "\\Continue" "*" ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  "\\Continue" "*" ")"
+
+        block = Block()
+        {
+            cat.setNonStdParameterDeclaration(factory.createCcatchContinueWildcardParameterDeclaration());
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    ]
+
+    (
+        LOOKAHEAD("ccatch" "("  param = Parameter() ")")
+        "ccatch"
+        {
+            cat = factory.createCcatch();
+            setPrefixInfo(cat);
+        }
+
+        "("  param = Parameter() ")"
+
+        block = Block()
+        {
+            cat.setParameterDeclaration(param);
+            cat.setBody(block);
+            branches.add(cat);
+        }
+    )*
+    {
+        result.setBranchList(branches);
+        checkConstruction(result);
+        setPostfixInfo(result);
+        return result;
+    }
+}
+
+/**
+   For partial parsing ONLY. Allows this()/super() calls, as in
+   constructor bodies.
+ */
+ASTList<Statement> GeneralizedStatements() :
+{
+    ASTList<Statement>            result = new ASTArrayList<Statement>();
+    SpecialConstructorReference     scr = null;
+    Statement                       stat = null;
+}
+{
+    [ LOOKAHEAD(ExplicitConstructorInvocation())
+      scr = ExplicitConstructorInvocation()
+      { result.add(scr); }
+    ]
+    ( stat = BlockStatement()
+      { result.add(stat); }
+    )*
+  {
+      checkConstruction(result);
+
+      return result;
+  }
 }
