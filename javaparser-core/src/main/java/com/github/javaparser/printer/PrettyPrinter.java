@@ -22,6 +22,7 @@
 package com.github.javaparser.printer;
 
 import java.util.function.Function;
+import com.github.javaparser.ast.key.*;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;

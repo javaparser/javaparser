@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.key.*;
 
 /**
  * A visitor that returns nothing, and has a default implementation for all its visit
@@ -747,6 +748,110 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getThrownExceptions().forEach(p -> p.accept(this, arg));
         n.getTypeParameters().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeYCcatchBreak n, final A arg) {
+        n.getBlock().ifPresent(l -> l.accept(this, arg));
+        n.getLabel().ifPresent(l -> l.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeYCcatchContinue n, final A arg) {
+        n.getBlock().ifPresent(l -> l.accept(this, arg));
+        n.getLabel().ifPresent(l -> l.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeYCcatchParameter n, final A arg) {
+        n.getBlock().ifPresent(l -> l.accept(this, arg));
+        n.getParameter().ifPresent(l -> l.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeYCcatchReturn n, final A arg) {
+        n.getBlock().ifPresent(l -> l.accept(this, arg));
+        n.getParameter().ifPresent(l -> l.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyCatchAllStatement n, final A arg) {
+        n.getBlock().accept(this, arg);
+        n.getLabel().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyEscapeExpression n, final A arg) {
+        n.getArguments().forEach(p -> p.accept(this, arg));
+        n.getCallee().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyExecStatement n, final A arg) {
+        n.getBranches().forEach(p -> p.accept(this, arg));
+        n.getExecBlock().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyExecutionContext n, final A arg) {
+        n.getContext().accept(this, arg);
+        n.getInstance().accept(this, arg);
+        n.getSignature().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyLoopScopeBlock n, final A arg) {
+        n.getBlock().accept(this, arg);
+        n.getIndexPV().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMergePointStatement n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMethodBodyStatement n, final A arg) {
+        n.getExpr().accept(this, arg);
+        n.getName().accept(this, arg);
+        n.getSource().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMethodCallStatement n, final A arg) {
+        n.getBlock().accept(this, arg);
+        n.getContext().accept(this, arg);
+        n.getName().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMethodSignature n, final A arg) {
+        n.getName().accept(this, arg);
+        n.getParamTypes().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyRangeExpression n, final A arg) {
+        n.getUpper().accept(this, arg);
+        n.getLower().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyTransactionStatement n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

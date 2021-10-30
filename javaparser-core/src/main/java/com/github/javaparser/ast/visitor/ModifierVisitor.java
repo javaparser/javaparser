@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
+import com.github.javaparser.ast.key.*;
 
 /**
  * This visitor can be used to save time when some specific nodes needs
@@ -1326,6 +1327,187 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return null;
         n.setName(name);
         n.setType(type);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeYCcatchBreak n, final A arg) {
+        BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        Name label = n.getLabel().map(s -> (Name) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setBlock(block);
+        n.setLabel(label);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeYCcatchContinue n, final A arg) {
+        BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        Name label = n.getLabel().map(s -> (Name) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setBlock(block);
+        n.setLabel(label);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeYCcatchParameter n, final A arg) {
+        BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        Parameter parameter = n.getParameter().map(s -> (Parameter) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setBlock(block);
+        n.setParameter(parameter);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeYCcatchReturn n, final A arg) {
+        BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        Parameter parameter = n.getParameter().map(s -> (Parameter) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setBlock(block);
+        n.setParameter(parameter);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyCatchAllStatement n, final A arg) {
+        BlockStmt block = (BlockStmt) n.getBlock().accept(this, arg);
+        Name label = (Name) n.getLabel().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (block == null || label == null)
+            return null;
+        n.setBlock(block);
+        n.setLabel(label);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyEscapeExpression n, final A arg) {
+        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
+        Name callee = (Name) n.getCallee().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (callee == null)
+            return null;
+        n.setArguments(arguments);
+        n.setCallee(callee);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyExecStatement n, final A arg) {
+        NodeList<KeYCcatchBranch> branches = modifyList(n.getBranches(), arg);
+        BlockStmt execBlock = (BlockStmt) n.getExecBlock().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (execBlock == null)
+            return null;
+        n.setBranches(branches);
+        n.setExecBlock(execBlock);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyExecutionContext n, final A arg) {
+        Type context = (Type) n.getContext().accept(this, arg);
+        Expression instance = (Expression) n.getInstance().accept(this, arg);
+        KeyMethodSignature signature = (KeyMethodSignature) n.getSignature().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (context == null || instance == null || signature == null)
+            return null;
+        n.setContext(context);
+        n.setInstance(instance);
+        n.setSignature(signature);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyLoopScopeBlock n, final A arg) {
+        BlockStmt block = (BlockStmt) n.getBlock().accept(this, arg);
+        Expression indexPV = (Expression) n.getIndexPV().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (block == null || indexPV == null)
+            return null;
+        n.setBlock(block);
+        n.setIndexPV(indexPV);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMergePointStatement n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMethodBodyStatement n, final A arg) {
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Type source = (Type) n.getSource().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null || name == null || source == null)
+            return null;
+        n.setExpr(expr);
+        n.setName(name);
+        n.setSource(source);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMethodCallStatement n, final A arg) {
+        BlockStmt block = (BlockStmt) n.getBlock().accept(this, arg);
+        KeyExecutionContext context = (KeyExecutionContext) n.getContext().accept(this, arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (block == null || context == null || name == null)
+            return null;
+        n.setBlock(block);
+        n.setContext(context);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMethodSignature n, final A arg) {
+        Name name = (Name) n.getName().accept(this, arg);
+        NodeList<Type> paramTypes = modifyList(n.getParamTypes(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setParamTypes(paramTypes);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyRangeExpression n, final A arg) {
+        Expression end = (Expression) n.getUpper().accept(this, arg);
+        Expression start = (Expression) n.getLower().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (end == null || start == null)
+            return null;
+        n.setUpper(end);
+        n.setLower(start);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyTransactionStatement n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }

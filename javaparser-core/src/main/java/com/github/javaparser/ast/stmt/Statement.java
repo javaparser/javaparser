@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Generated;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
+import com.github.javaparser.ast.key.*;
 
 /**
  * A base class for all statements.
@@ -496,5 +497,110 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifYieldStmt(Consumer<YieldStmt> action) {
+    }
+
+    public boolean isKeyCatchAllStatement() {
+        return false;
+    }
+
+    public KeyCatchAllStatement asKeyCatchAllStatement() {
+        throw new IllegalStateException(f("%s is not KeyCatchAllStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyCatchAllStatement> toKeyCatchAllStatement() {
+        return Optional.empty();
+    }
+
+    public void ifKeyCatchAllStatement(Consumer<KeyCatchAllStatement> action) {
+    }
+
+    public boolean isKeyExecStatement() {
+        return false;
+    }
+
+    public KeyExecStatement asKeyExecStatement() {
+        throw new IllegalStateException(f("%s is not KeyExecStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyExecStatement> toKeyExecStatement() {
+        return Optional.empty();
+    }
+
+    public void ifKeyExecStatement(Consumer<KeyExecStatement> action) {
+    }
+
+    public boolean isKeyLoopScopeBlock() {
+        return false;
+    }
+
+    public KeyLoopScopeBlock asKeyLoopScopeBlock() {
+        throw new IllegalStateException(f("%s is not KeyLoopScopeBlock, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyLoopScopeBlock> toKeyLoopScopeBlock() {
+        return Optional.empty();
+    }
+
+    public void ifKeyLoopScopeBlock(Consumer<KeyLoopScopeBlock> action) {
+    }
+
+    public boolean isKeyMergePointStatement() {
+        return false;
+    }
+
+    public KeyMergePointStatement asKeyMergePointStatement() {
+        throw new IllegalStateException(f("%s is not KeyMergePointStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyMergePointStatement> toKeyMergePointStatement() {
+        return Optional.empty();
+    }
+
+    public void ifKeyMergePointStatement(Consumer<KeyMergePointStatement> action) {
+    }
+
+    public boolean isKeyMethodBodyStatement() {
+        return false;
+    }
+
+    public KeyMethodBodyStatement asKeyMethodBodyStatement() {
+        throw new IllegalStateException(f("%s is not KeyMethodBodyStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyMethodBodyStatement> toKeyMethodBodyStatement() {
+        return Optional.empty();
+    }
+
+    public void ifKeyMethodBodyStatement(Consumer<KeyMethodBodyStatement> action) {
+    }
+
+    public boolean isKeyMethodCallStatement() {
+        return false;
+    }
+
+    public KeyMethodCallStatement asKeyMethodCallStatement() {
+        throw new IllegalStateException(f("%s is not KeyMethodCallStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyMethodCallStatement> toKeyMethodCallStatement() {
+        return Optional.empty();
+    }
+
+    public void ifKeyMethodCallStatement(Consumer<KeyMethodCallStatement> action) {
+    }
+
+    public boolean isKeyTransactionStatement() {
+        return false;
+    }
+
+    public KeyTransactionStatement asKeyTransactionStatement() {
+        throw new IllegalStateException(f("%s is not KeyTransactionStatement, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyTransactionStatement> toKeyTransactionStatement() {
+        return Optional.empty();
+    }
+
+    public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {
     }
 }

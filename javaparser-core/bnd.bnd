@@ -10,6 +10,7 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.ast.body, \
     com.github.javaparser.ast.comments, \
     com.github.javaparser.ast.expr, \
+    com.github.javaparser.ast.key, \
     com.github.javaparser.ast.modules, \
     com.github.javaparser.ast.nodeTypes, \
     com.github.javaparser.ast.nodeTypes.modifiers, \

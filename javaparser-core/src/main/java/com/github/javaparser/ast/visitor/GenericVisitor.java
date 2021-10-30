@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.key.*;
 
 /**
  * A visitor that has a return value.
@@ -241,4 +242,34 @@ public interface GenericVisitor<R, A> {
     R visit(TextBlockLiteralExpr n, A arg);
 
     R visit(PatternExpr n, A arg);
+
+    R visit(KeYCcatchBreak n, A arg);
+
+    R visit(KeYCcatchContinue n, A arg);
+
+    R visit(KeYCcatchParameter n, A arg);
+
+    R visit(KeYCcatchReturn n, A arg);
+
+    R visit(KeyCatchAllStatement n, A arg);
+
+    R visit(KeyEscapeExpression n, A arg);
+
+    R visit(KeyExecStatement n, A arg);
+
+    R visit(KeyExecutionContext n, A arg);
+
+    R visit(KeyLoopScopeBlock n, A arg);
+
+    R visit(KeyMergePointStatement n, A arg);
+
+    R visit(KeyMethodBodyStatement n, A arg);
+
+    R visit(KeyMethodCallStatement n, A arg);
+
+    R visit(KeyMethodSignature n, A arg);
+
+    R visit(KeyRangeExpression n, A arg);
+
+    R visit(KeyTransactionStatement n, A arg);
 }

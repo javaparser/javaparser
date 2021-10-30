@@ -91,7 +91,14 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         INT("Integer", "I"),
         LONG("Long", "J"),
         FLOAT("Float", "F"),
-        DOUBLE("Double", "D");
+        DOUBLE("Double", "D"),
+        // KEY
+        KEY_REAL("Real", "_R"),
+        KEY_LOCSET("Locset", "_L"),
+        KEY_BIGINT("BigInt", "_BI"),
+        KEY_SEQ("SEQ", "_S"),
+        KEY_FREE("Free", "_F"),
+        KEY_MAP("Double", "_D");
 
         final String nameOfBoxedType;
 

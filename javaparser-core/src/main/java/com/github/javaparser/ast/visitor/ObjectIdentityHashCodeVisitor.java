@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.key.*;
 
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
@@ -452,6 +453,81 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     public Integer visit(final CompactConstructorDeclaration n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeYCcatchBreak n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeYCcatchContinue n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeYCcatchParameter n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeYCcatchReturn n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCatchAllStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyEscapeExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecutionContext n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyLoopScopeBlock n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMergePointStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodBodyStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodCallStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodSignature n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyRangeExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyTransactionStatement n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -30,6 +30,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import java.util.Optional;
+import com.github.javaparser.ast.key.*;
 
 public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 
@@ -1151,6 +1152,155 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchBreak n, final Visitable arg) {
+        final KeYCcatchBreak n2 = (KeYCcatchBreak) arg;
+        if (!nodeEquals(n.getBlock(), n2.getBlock()))
+            return false;
+        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchContinue n, final Visitable arg) {
+        final KeYCcatchContinue n2 = (KeYCcatchContinue) arg;
+        if (!nodeEquals(n.getBlock(), n2.getBlock()))
+            return false;
+        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchParameter n, final Visitable arg) {
+        final KeYCcatchParameter n2 = (KeYCcatchParameter) arg;
+        if (!nodeEquals(n.getBlock(), n2.getBlock()))
+            return false;
+        if (!nodeEquals(n.getParameter(), n2.getParameter()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchReturn n, final Visitable arg) {
+        final KeYCcatchReturn n2 = (KeYCcatchReturn) arg;
+        if (!nodeEquals(n.getBlock(), n2.getBlock()))
+            return false;
+        if (!nodeEquals(n.getParameter(), n2.getParameter()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyCatchAllStatement n, final Visitable arg) {
+        final KeyCatchAllStatement n2 = (KeyCatchAllStatement) arg;
+        if (!nodeEquals(n.getBlock(), n2.getBlock()))
+            return false;
+        if (!nodeEquals(n.getLabel(), n2.getLabel()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyEscapeExpression n, final Visitable arg) {
+        final KeyEscapeExpression n2 = (KeyEscapeExpression) arg;
+        if (!nodesEquals(n.getArguments(), n2.getArguments()))
+            return false;
+        if (!nodeEquals(n.getCallee(), n2.getCallee()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecStatement n, final Visitable arg) {
+        final KeyExecStatement n2 = (KeyExecStatement) arg;
+        if (!nodesEquals(n.getBranches(), n2.getBranches()))
+            return false;
+        if (!nodeEquals(n.getExecBlock(), n2.getExecBlock()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecutionContext n, final Visitable arg) {
+        final KeyExecutionContext n2 = (KeyExecutionContext) arg;
+        if (!nodeEquals(n.getContext(), n2.getContext()))
+            return false;
+        if (!nodeEquals(n.getInstance(), n2.getInstance()))
+            return false;
+        if (!nodeEquals(n.getSignature(), n2.getSignature()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyLoopScopeBlock n, final Visitable arg) {
+        final KeyLoopScopeBlock n2 = (KeyLoopScopeBlock) arg;
+        if (!nodeEquals(n.getBlock(), n2.getBlock()))
+            return false;
+        if (!nodeEquals(n.getIndexPV(), n2.getIndexPV()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMergePointStatement n, final Visitable arg) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMethodBodyStatement n, final Visitable arg) {
+        final KeyMethodBodyStatement n2 = (KeyMethodBodyStatement) arg;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getSource(), n2.getSource()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMethodCallStatement n, final Visitable arg) {
+        final KeyMethodCallStatement n2 = (KeyMethodCallStatement) arg;
+        if (!nodeEquals(n.getBlock(), n2.getBlock()))
+            return false;
+        if (!nodeEquals(n.getContext(), n2.getContext()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMethodSignature n, final Visitable arg) {
+        final KeyMethodSignature n2 = (KeyMethodSignature) arg;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getParamTypes(), n2.getParamTypes()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyRangeExpression n, final Visitable arg) {
+        final KeyRangeExpression n2 = (KeyRangeExpression) arg;
+        if (!nodeEquals(n.getUpper(), n2.getUpper()))
+            return false;
+        if (!nodeEquals(n.getLower(), n2.getLower()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyTransactionStatement n, final Visitable arg) {
+        final KeyTransactionStatement n2 = (KeyTransactionStatement) arg;
+        if (!objEquals(n.getType(), n2.getType()))
             return false;
         return true;
     }

@@ -26,6 +26,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -236,4 +237,34 @@ public interface VoidVisitor<A> {
     void visit(YieldStmt yieldStmt, A arg);
 
     void visit(PatternExpr n, A arg);
+
+    void visit(KeYCcatchBreak n, A arg);
+
+    void visit(KeYCcatchContinue n, A arg);
+
+    void visit(KeYCcatchParameter n, A arg);
+
+    void visit(KeYCcatchReturn n, A arg);
+
+    void visit(KeyCatchAllStatement n, A arg);
+
+    void visit(KeyEscapeExpression n, A arg);
+
+    void visit(KeyExecStatement n, A arg);
+
+    void visit(KeyExecutionContext n, A arg);
+
+    void visit(KeyLoopScopeBlock n, A arg);
+
+    void visit(KeyMergePointStatement n, A arg);
+
+    void visit(KeyMethodBodyStatement n, A arg);
+
+    void visit(KeyMethodCallStatement n, A arg);
+
+    void visit(KeyMethodSignature n, A arg);
+
+    void visit(KeyRangeExpression n, A arg);
+
+    void visit(KeyTransactionStatement n, A arg);
 }

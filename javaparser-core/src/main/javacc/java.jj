@@ -85,6 +85,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.key.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
@@ -2848,12 +2849,12 @@ PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
         "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
      |
         "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
-     | "\\bigint"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BIGINT, annotations); }
-     | "\\real"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.REAL, annotations); }
-     | "\\locset"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LOCSET, annotations); }
-     | "\\seq"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SEQ, annotations); }
-     | "\\free"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FREE, annotations); }
-     | "\\map"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.MAP, annotations); }
+     | "\\bigint"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_BIGINT, annotations); }
+     | "\\real"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_REAL, annotations); }
+     | "\\locset"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_LOCSET, annotations); }
+     | "\\seq"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_SEQ, annotations); }
+     | "\\free"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_FREE, annotations); }
+     | "\\map"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_MAP, annotations); }
     )
     { return ret; }
 }
@@ -3533,10 +3534,10 @@ Expression UnaryExpression():
         { ret = new UnaryExpr(range(begin, token()), ret, op); }
      |
         ret = UnaryExpressionNotPlusMinus()
+     //|
+     //  result = ADTGetter()
      |
-       result = ADTGetter()
-     |
-       result = GeneralEscapeExpression()
+       ret = KeyGeneralEscapeExpression()
     )
     { return ret; }
 }
@@ -3935,12 +3936,14 @@ Expression Literal():
         ret = BooleanLiteral()
      |
         ret = NullLiteral()
+    /*
      |
         ret = EmptySetLiteral()
      |
         ret = EmptySeqLiteral()
      |
         ret = EmptyMapLiteral()
+   */
     )
     { return ret; }
 }
@@ -4194,6 +4197,9 @@ Statement Statement():
             LOOKAHEAD(2) ret = LabeledStatement()
             | ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
+            | LOOKAHEAD(2) ret = KeyMethodCallStatement()
+            | LOOKAHEAD(KeyMethodBodyStatement()) ret = KeyMethodBodyStatement()
+
             | ret = Block()
             | ret = EmptyStatement()
             | ret = StatementExpression()
@@ -4208,11 +4214,12 @@ Statement Statement():
             | ret = ThrowStatement()
             | ret = SynchronizedStatement()
             | ret = TryStatement()
-            | ret = TransactionStatement()
-            | ret = MergePointStatement()
-            | ret = LoopScope()
-            | ret = KeYCatchAllStatement()
-            | ret = ExecStatement()
+            | ret = KeyTransactionStatement()
+            | ret = KeyMergePointStatement()
+            | ret = KeyLoopScope()
+            | ret = KeyCatchAllStatement()
+            | ret = KeyExecStatement()
+            | ret = KeyMethodCallStatement()
         )
         { return ret; }
     } catch (ParseException e) {
@@ -5826,10 +5833,10 @@ MethodDeclaration MethodDeclarationParseStart():
 }
 
 //region KeY additions
-
+/*
 Expression ADTGetter() :
 {
-
+    JavaToken begin;
     Expression result;
     Expression expr;
 }
@@ -5851,15 +5858,13 @@ Expression ADTGetter() :
     }
     )
     {
-        checkConstruction(result);
-        setPrefixInfo(result);
         return result;
     }
 }
 
-
 Expression ADTConstructor() :
 {
+    JavaToken begin;
     Expression result;
     Expression expr, expr2;
     Token begin;
@@ -5945,54 +5950,43 @@ Expression ADTConstructor() :
       return result;
   }
 }
-
-Expression GeneralEscapeExpression() :
+*/
+Expression KeyGeneralEscapeExpression() :
 {
-   List<Expression> arguments = new ArrayList<Expression>();
-   Expression expr;
    JavaToken begin;
+   NodeList<Expression> arguments = null;
 }
 {
-    <JMLIDENTIFIER> {begin=token();}
-    "("
-      (
-        expr = Expression() { arguments.add(expr); }
-        ( "," expr = Expression() { arguments.add(expr); } )*
-      )?  ")"
-
+    <JMLIDENTIFIER> { begin=token(); }
+    (
+        "("
+          { arguments = emptyNodeList(); }
+          [ arguments=ExpressionList() ]
+        ")"
+    )?
     {
-      EscapeExpression result = EscapeExpression.getEscapeExpression(t.image, arguments);
-      setPrefixInfo(result);
-      return result;
+      return new KeyEscapeExpression(range(begin, token()), begin, arguments);
     }
-
 }
 
-
-Expression IndexRange() :
+Expression KeyIndexRange() :
     /*
      * Introduced to handle postfix style sequence ranges as top-level expressions.
      * XXX does not yet work since Expression may contain dots
      */
 {
     Expression result, end;
+    JavaToken begin;
 }
 {
     result = Expression()
     [ ".." end = Expression()
-      {
-        result = new RangeExpression(result, end);
-      }
-    ]
-    {
-        checkConstruction(result);
-        setPostfixInfo(result);
-        return result;
-    }
+      { result = new KeyRangeExpression(range(result, token()), result, end); } ]
+    { return result; }
 }
 
 
-
+/*
 EmptySetLiteral EmptySetLiteral() :
 {
     EmptySetLiteral result;
@@ -6031,148 +6025,106 @@ EmptyMapLiteral EmptyMapLiteral() :
       return result;
   }
 }
+*/
 
-
-Statement KeYCatchAllStatement() :
+Statement KeyCatchAllStatement() :
 {
-  Statement result;
-  UncollatedReferenceQualifier qn;
-  StatementBlock block;
+  JavaToken begin;
+  Name qn;
+  BlockStmt block;
 }
 {
-  "#catchAll" "(" qn = Name() ")" block = Block()
+  "#catchAll" {begin=token();} "(" qn = Name() ")" block = Block()
   {
-      result = factory.createCatchAllStatement(qn.toVariableReference(), block);
-      checkConstruction(result);
-      setPostfixInfo(result);
-      return result;
+      return new KeyCatchAllStatement(range(begin,token()), qn,block);
   }
 }
 
 
-MethodCallStatement MethodCallStatement() :
+KeyMethodCallStatement KeyMethodCallStatement() :
 {
-  MethodCallStatement result;
-  VariableReference resVar = null;
-  UncollatedReferenceQualifier qn;
-  StatementBlock block;
-  ExecutionContext ec;
+  JavaToken begin;
+  Name qn = null;
+  BlockStmt block;
+  KeyExecutionContext ec;
 }
 {
-  <METHODFRAME>
- (
-   "("
-   [
-
-     "result->" qn = Name() ","
-     {
-       resVar = qn.toVariableReference();
-     }
-   ]
-     ec = ExecutionContext()
-   ")"
-  )
+    <METHODFRAME> {begin = token(); }
+    "("
+     [ "result->" qn = Name() ","]
+     ec = KeyExecutionContext()
+    ")"
   ":"
   block = Block()
-  {   result = factory.createMethodCallStatement(resVar, ec, block);
-      checkConstruction(result);
-      setPostfixInfo(result);
-      return result;
-  }
+  {   return new KeyMethodCallStatement(range(begin, token()), qn, ec, block); }
 }
 
-MethodBodyStatement MethodBodyStatement() :
+KeyMethodBodyStatement KeyMethodBodyStatement() :
 {
-  TypeReference bodySource;
-  Expression tmp;
-  VariableReference resVar = null;
-  UncollatedReferenceQualifier qn;
-  MethodReference methRef;
-  MethodBodyStatement result;
+  Type bodySource;
+  Expression expr;
+  Name qn = null;
 }
 {
-
-
-        [LOOKAHEAD(Name() "=")
-          qn = Name() "="
-          {
-            resVar = qn.toVariableReference();
-          }
-        ]
-
-  tmp = Expression()
-
-  "@" bodySource = Type()
-
-  ";"
-
+    [LOOKAHEAD(2)
+        qn = Name() "=" ]
+    expr = Expression()
+    "@" bodySource = Type(emptyNodeList())
+    ";"
   {
-    if (tmp instanceof MethodReference)
-    {
-        methRef = (MethodReference)tmp;
-    }
-    else
-    {
-        throw new ParseException("Expected a method reference.");
-    }
-    result = factory.createMethodBodyStatement(bodySource, resVar, methRef);
-    checkConstruction(result);
-    setPostfixInfo(result);
-    return result;
+    return new KeyMethodBodyStatement(range(qn!=null?qn:expr, token()), qn, expr, bodySource);
   }
-
 }
 
-ExecutionContext ExecutionContext() :
+KeyExecutionContext KeyExecutionContext() :
 {
-  TypeReference classContext;
+  JavaToken begin;
+  Type classContext;
   Expression runtimeInstance = null;
-  MethodSignature methodSignature;
+  KeyMethodSignature methodSignature;
 }
 {
+  "source" "=" {begin = token(); }
+  methodSignature = KeyMethodSignature() "@" classContext = Type(emptyNodeList())
+  [ "," "this" "=" runtimeInstance = Expression() ]
 
-  "source="
-  methodSignature = MethodSignature() "@" classContext = Type()
-  [ ",this=" runtimeInstance = Expression() ]
-
-  { return new ExecutionContext
-        (classContext, methodSignature,
-        (ReferencePrefix)runtimeInstance);
+  { return new KeyExecutionContext
+        (range(begin, token()), classContext, methodSignature, runtimeInstance);
   }
 }
 
-
-MethodSignature MethodSignature() :
+KeyMethodSignature KeyMethodSignature() :
 {
-     UncollatedReferenceQualifier name;
-     TypeReference tr;
-     ASTList<TypeReference> paramTypes = new ASTArrayList<TypeReference>();
+     Name name;
+     Type tr;
+     NodeList<Type> paramTypes = emptyNodeList();
 }
 {
      name = Name() "("
-        [ tr = Type() { paramTypes.add(tr); }
-         ( "," tr = Type() {
+        [ tr = Type(emptyNodeList()) { paramTypes.add(tr); }
+         ( "," tr = Type(emptyNodeList()) {
                 // check if more params are admissible (no more after a vararg) occurs in FormalParameter()
                 paramTypes.add(tr);
            }
          )*
        ] ")"
      {
-        return factory.createMethodSignature(name.getIdentifier(), paramTypes);
+        return new KeyMethodSignature(range(name, token()), name, paramTypes);
      }
 }
 
 
-TransactionStatement TransactionStatement() :
+KeyTransactionStatement KeyTransactionStatement() :
 {
-  String name;
+  JavaToken begin;
 }
 {
-  (  ( <TRANSACTIONBEGIN> { name = token.image; } )
-   | ( <TRANSACTIONCOMMIT> { name = token.image; } )
-   | ( <TRANSACTIONFINISH> { name = token.image; } )
-   | ( <TRANSACTIONABORT> { name = token.image; } ) ) ";"
-  {
+  ( <TRANSACTIONBEGIN>
+  | <TRANSACTIONCOMMIT>
+  | <TRANSACTIONFINISH>
+  | <TRANSACTIONABORT>
+  ) {begin=token();}
+  /*
      int type = 0;
      if(name.indexOf("#begin") != -1) {
         type = TransactionStatement.BEGIN;
@@ -6182,270 +6134,125 @@ TransactionStatement TransactionStatement() :
         type = TransactionStatement.FINISH;
      } else if(name.indexOf("#abort") != -1) {
         type = TransactionStatement.ABORT;
-     }
-     return new TransactionStatement(type);
-  }
+     }*/
+  ";"
+  { return new KeyTransactionStatement(range(begin, token()), begin); }
 }
 
-LoopScopeBlock LoopScope() :
+KeyLoopScopeBlock KeyLoopScope() :
 {
-    LoopScopeBlock result;
+    KeyLoopScopeBlock result;
     Expression indexPV;
-    StatementBlock block;
+    BlockStmt block;
+    JavaToken begin;
 }
 {
-  "loop-scope"
-  {
-      result = factory.createLoopScopeBlock();
-      setPrefixInfo(result);
-  }
+  "loop-scope" { begin = token(); }
   "(" indexPV = Expression() ")"
   block = Block()
-  {
-      result.setIndexPV(indexPV);
-      result.setBody(block);
-      checkConstruction(result);
-      setPostfixInfo(result);
-      return result;
-  }
+  { return new KeyLoopScopeBlock(range(begin, token()), indexPV, block); }
 }
 
-MergePointStatement MergePointStatement() :
+KeyMergePointStatement KeyMergePointStatement() :
 {
     Expression expr = null;
-    MergePointStatement result;
+    KeyMergePointStatement result;
+    JavaToken begin;
 }
 {
-  "merge_point"
-  {
-      result = factory.createMergePointStatement();
-      setPrefixInfo(result);
-  }
-  "(" expr = Expression()
-    {
-        result.setIndexPV(expr);
-    }
-  ")"
+  "merge_point"  { begin = token(); }
+  "(" expr = Expression() ")"
   ";"
-  {
-    checkConstruction(result);
-    setPostfixInfo(result);
-    return result;
-  }
+  { return KeyMergePointStatement(); }
 }
 
 
-Exec ExecStatement() :
+KeyExecStatement KeyExecStatement() :
 {
-    Exec result;
-    StatementBlock block;
-    ParameterDeclaration param;
-    ASTList<Branch> branches = new ASTArrayList<Branch>(1);
-    Ccatch cat;
-    Identifier id = null;
+    JavaToken begin, beginC;
+    BlockStmt block,execBlock;
+    Parameter param; Name name;
+    NodeList<KeYCcatchBranch> branches = new NodeList<KeYCcatchBranch>();
 }
 {
     "exec"
-    {
-        result = factory.createExec();
-        setPrefixInfo(result);
-    }
-
-    block = Block()
-    {
-        result.setBody(block);
-    }
-
-    // TODO: Wildcard continues & breaks
-
+    { begin = token(); }
+    execBlock = Block()
     [
-        LOOKAHEAD("ccatch" "("  "\\Return" ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Return" ")"
-
+        LOOKAHEAD(3)
+        "ccatch" {beginC=token();} "("  "\\Return" ")"
         block = Block()
         {
-            cat.setNonStdParameterDeclaration(factory.createCcatchReturnParameterDeclaration());
-            cat.setBody(block);
-            branches.add(cat);
+            branches.add(new KeYCcatchReturn(range(beginC, token()), block));
         }
     ]
-
     (
-        LOOKAHEAD("ccatch" "("  "\\Return" param = Parameter() ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Return" param = Parameter() ")"
-
+        LOOKAHEAD(3)
+        "ccatch" {beginC=token();} "("  "\\Return" param = Parameter() ")"
         block = Block()
-        {
-            cat.setNonStdParameterDeclaration(factory.createCcatchReturnValParameterDeclaration(param));
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchReturn(range(beginC, token()), param, block)); }
     )*
 
     [
-        LOOKAHEAD("ccatch" "("  "\\Break" ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Break" ")"
+        LOOKAHEAD(3)
+        "ccatch" {beginC=token();} "("  "\\Break" ")"
 
         block = Block()
-        {
-            cat.setNonStdParameterDeclaration(factory.createCcatchBreakParameterDeclaration());
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchBreak(range(beginC, token()), block)); }
     ]
-
     (
-        LOOKAHEAD("ccatch" "("  "\\Break" <IDENTIFIER> ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Break"
-        <IDENTIFIER>
-        {
-            id = factory.createIdentifier(token.image);
-            setPrefixInfo(id);
-            setPostfixInfo(id);
-        } ")"
-
+        LOOKAHEAD(4)
+        "ccatch" {beginC=token();} "("  "\\Break" name=Name() ")"
         block = Block()
-        {
-            cat.setNonStdParameterDeclaration(factory.createCcatchBreakLabelParameterDeclaration(id));
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchBreak(range(beginC, token()), name, block)); }
     )*
 
     [
-        LOOKAHEAD("ccatch" "("  "\\Break" "*" ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Break" "*" ")"
-
+        LOOKAHEAD(4)
+        "ccatch" {beginC=token();} "("  "\\Break" "*" ")"
         block = Block()
-        {
-            cat.setNonStdParameterDeclaration(factory.createCcatchBreakWildcardParameterDeclaration());
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchBreak(range(beginC, token()), "*", block)); }
     ]
 
     [
-        LOOKAHEAD("ccatch" "("  "\\Continue" ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Continue" ")"
+        LOOKAHEAD(4)
+        "ccatch"  {beginC=token();} "("  "\\Continue" ")"
 
         block = Block()
-        {
-            cat.setNonStdParameterDeclaration(factory.createCcatchContinueParameterDeclaration());
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchContinue(range(beginC, token()), block)); }
     ]
 
     (
-        LOOKAHEAD("ccatch" "("  "\\Continue" <IDENTIFIER> ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Continue"
-        <IDENTIFIER>
-        {
-            id = factory.createIdentifier(token.image);
-            setPrefixInfo(id);
-            setPostfixInfo(id);
-        } ")"
-
+        LOOKAHEAD(4)
+        "ccatch" {beginC=token();} "("  "\\Continue" name=Name() ")"
         block = Block()
-        {
-            cat.setNonStdParameterDeclaration(factory.createCcatchContinueLabelParameterDeclaration(id));
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchBreak(range(beginC, token()), name, block)); }
     )*
 
     [
-        LOOKAHEAD("ccatch" "("  "\\Continue" "*" ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  "\\Continue" "*" ")"
+        LOOKAHEAD(4)
+        "ccatch"  {beginC=token();} "("  "\\Continue" "*" ")"
 
         block = Block()
-        {
-            cat.setNonStdParameterDeclaration(factory.createCcatchContinueWildcardParameterDeclaration());
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchContinue(range(beginC, token()), "*", block)); }
     ]
 
     (
-        LOOKAHEAD("ccatch" "("  param = Parameter() ")")
-        "ccatch"
-        {
-            cat = factory.createCcatch();
-            setPrefixInfo(cat);
-        }
-
-        "("  param = Parameter() ")"
-
+        LOOKAHEAD(3)
+        "ccatch" {beginC=token();} "("  param = Parameter() ")"
         block = Block()
-        {
-            cat.setParameterDeclaration(param);
-            cat.setBody(block);
-            branches.add(cat);
-        }
+        {  branches.add(new KeYCcatchParameter(range(beginC, token()), param, block)); }
     )*
-    {
-        result.setBranchList(branches);
-        checkConstruction(result);
-        setPostfixInfo(result);
-        return result;
-    }
+    { return new KeyExecStatement(range(begin, token()), execBlock, branches); }
 }
 
 /**
    For partial parsing ONLY. Allows this()/super() calls, as in
    constructor bodies.
- */
-ASTList<Statement> GeneralizedStatements() :
+NodeList<Statement> KeyGeneralizedStatements() :
 {
-    ASTList<Statement>            result = new ASTArrayList<Statement>();
+    JavaToken begin;
+    NodeList<Statement>            result = new ASTArrayList<Statement>();
     SpecialConstructorReference     scr = null;
     Statement                       stat = null;
 }
@@ -6458,8 +6265,7 @@ ASTList<Statement> GeneralizedStatements() :
       { result.add(stat); }
     )*
   {
-      checkConstruction(result);
-
       return result;
   }
 }
+ */

@@ -1,0 +1,162 @@
+package com.github.javaparser.ast.key;
+
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.Optional;
+import java.util.function.Consumer;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.KeyMethodCallStatementMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.Generated;
+
+public class KeyMethodCallStatement extends Statement {
+
+    private Name name;
+
+    private KeyExecutionContext context;
+
+    private BlockStmt block;
+
+    @AllFieldsConstructor
+    public KeyMethodCallStatement(Name name, KeyExecutionContext context, BlockStmt block) {
+        this(null, name, context, block);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public KeyMethodCallStatement(TokenRange tokenRange, Name name, KeyExecutionContext context, BlockStmt block) {
+        super(tokenRange);
+        setName(name);
+        setContext(context);
+        setBlock(block);
+        customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Override
+    public boolean isKeyMethodCallStatement() {
+        return true;
+    }
+
+    @Override
+    public KeyMethodCallStatement asKeyMethodCallStatement() {
+        return this;
+    }
+
+    @Override
+    public Optional<KeyMethodCallStatement> toKeyMethodCallStatement() {
+        return Optional.of(this);
+    }
+
+    public void ifKeyMethodCallStatement(Consumer<KeyMethodCallStatement> action) {
+        action.accept(this);
+    }
+
+    public BlockStmt getBlock() {
+        return block;
+    }
+
+    public KeyMethodCallStatement setBlock(final BlockStmt block) {
+        assertNotNull(block);
+        if (block == this.block) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
+        if (this.block != null)
+            this.block.setParentNode(null);
+        this.block = block;
+        setAsParentNodeOf(block);
+        return this;
+    }
+
+    public KeyExecutionContext getContext() {
+        return context;
+    }
+
+    public KeyMethodCallStatement setContext(final KeyExecutionContext context) {
+        assertNotNull(context);
+        if (context == this.context) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.CONTEXT, this.context, context);
+        if (this.context != null)
+            this.context.setParentNode(null);
+        this.context = context;
+        setAsParentNodeOf(context);
+        return this;
+    }
+
+    public Name getName() {
+        return name;
+    }
+
+    public KeyMethodCallStatement setName(final Name name) {
+        assertNotNull(name);
+        if (name == this.name) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
+        return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (node == block) {
+            setBlock((BlockStmt) replacementNode);
+            return true;
+        }
+        if (node == context) {
+            setContext((KeyExecutionContext) replacementNode);
+            return true;
+        }
+        if (node == name) {
+            setName((Name) replacementNode);
+            return true;
+        }
+        return super.replace(node, replacementNode);
+    }
+
+    @Override
+    public KeyMethodCallStatement clone() {
+        return (KeyMethodCallStatement) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public KeyMethodCallStatementMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyMethodCallStatementMetaModel;
+    }
+}

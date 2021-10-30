@@ -33,6 +33,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import com.github.javaparser.ast.key.*;
 
 /**
  * A base class for all expressions.
@@ -871,5 +872,35 @@ public abstract class Expression extends Node {
         Expression scope = (Expression) ((NodeWithOptionalScope) this).getScope().get();
         NodeWithTypeArguments nwta = (NodeWithTypeArguments) this;
         return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
+    }
+
+    public boolean isKeyEscapeExpression() {
+        return false;
+    }
+
+    public KeyEscapeExpression asKeyEscapeExpression() {
+        throw new IllegalStateException(f("%s is not KeyEscapeExpression, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyEscapeExpression> toKeyEscapeExpression() {
+        return Optional.empty();
+    }
+
+    public void ifKeyEscapeExpression(Consumer<KeyEscapeExpression> action) {
+    }
+
+    public boolean isKeyRangeExpression() {
+        return false;
+    }
+
+    public KeyRangeExpression asKeyRangeExpression() {
+        throw new IllegalStateException(f("%s is not KeyRangeExpression, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyRangeExpression> toKeyRangeExpression() {
+        return Optional.empty();
+    }
+
+    public void ifKeyRangeExpression(Consumer<KeyRangeExpression> action) {
     }
 }

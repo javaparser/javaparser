@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.key.*;
 
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
@@ -540,6 +541,81 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final CompactConstructorDeclaration n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchBreak n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchContinue n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchParameter n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeYCcatchReturn n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyCatchAllStatement n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyEscapeExpression n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecStatement n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecutionContext n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyLoopScopeBlock n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyMergePointStatement n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyMethodBodyStatement n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyMethodCallStatement n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyMethodSignature n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyRangeExpression n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyTransactionStatement n, final Visitable arg) {
         return n == arg;
     }
 }

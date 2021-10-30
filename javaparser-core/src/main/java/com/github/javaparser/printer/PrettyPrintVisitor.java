@@ -88,6 +88,7 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleExportsDirective;
 import com.github.javaparser.ast.modules.ModuleOpensDirective;
@@ -837,6 +838,81 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getType().accept(this, arg);
         printer.print(" ");
         n.getName().accept(this, arg);
+    }
+
+    @Override
+    public void visit(KeYCcatchBreak n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeYCcatchContinue n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeYCcatchParameter n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeYCcatchReturn n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyCatchAllStatement n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyEscapeExpression n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyExecStatement n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyExecutionContext n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyLoopScopeBlock n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMergePointStatement n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMethodBodyStatement n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMethodCallStatement n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMethodSignature n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyRangeExpression n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyTransactionStatement n, Void arg) {
+
     }
 
     @Override
