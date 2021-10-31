@@ -12,7 +12,7 @@ pipeline {
 
     stages {
         stage('Clean') {
-            steps{
+            steps {
                 sh 'javac -version'
                 sh 'mvn -version'
                 sh 'mvn clean'
@@ -28,6 +28,7 @@ pipeline {
         stage('Tests: JUnit') {
             steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true install'
+            }
             post {
                 success {
                     junit '*/target/surefire-reports/**/*.xml'
