@@ -28,13 +28,13 @@ pipeline {
 
         stage('Compile') {
             steps { 
-                sh 'mvn $MAVEN_CLI_OPTS –o  compile'
+                sh 'mvn --offline $MAVEN_CLI_OPTS compile'
             }
         }
 
         stage('Tests: JUnit') {
             steps {
-                sh 'mvn $MAVEN_CLI_OPTS -o -Dmaven.test.failure.ignore=true install'
+                sh 'mvn --offline $MAVEN_CLI_OPTS -Dmaven.test.failure.ignore=true install'
             }
             post {
                 success {
