@@ -36,7 +36,7 @@ public class SchemaJavaBulkTest {
 
         if(!result.isSuccessful()) {
             for (Problem problem : result.getProblems()) {
-                //System.err.println(problem.getVerboseMessage());
+                System.err.println(problem.getVerboseMessage());
             }
             fail("Parsing failed of: " + input);
         } else {

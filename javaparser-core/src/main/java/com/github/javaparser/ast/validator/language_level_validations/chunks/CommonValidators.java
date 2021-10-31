@@ -26,6 +26,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.key.sv.KeyExpressionSV;
+import com.github.javaparser.ast.key.sv.KeyPassiveExpression;
 import com.github.javaparser.ast.validator.SimpleValidator;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.TreeVisitorValidator;
@@ -65,6 +66,7 @@ public class CommonValidators extends Validators {
                     }
                     if (target instanceof NameExpr
                             || target instanceof KeyExpressionSV
+                            || target instanceof KeyPassiveExpression
                             || target instanceof ArrayAccessExpr
                             || target instanceof FieldAccessExpr) {
                         return;

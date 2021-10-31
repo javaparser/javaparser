@@ -43,10 +43,12 @@ public class KeyMethodSignatureSV extends Node {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getText() {
         return text;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodSignatureSV setText(final String text) {
         assertNotNull(text);
         if (text == this.text) {
@@ -58,6 +60,7 @@ public class KeyMethodSignatureSV extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -65,6 +68,7 @@ public class KeyMethodSignatureSV extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -72,11 +76,13 @@ public class KeyMethodSignatureSV extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyMethodSignatureSV clone() {
         return (KeyMethodSignatureSV) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMethodSignatureSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMethodSignatureSVMetaModel;
     }

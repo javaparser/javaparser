@@ -73,28 +73,35 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyContextStatementBlock() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyContextStatementBlock asKeyContextStatementBlock() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyContextStatementBlock> toKeyContextStatementBlock() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyContextStatementBlock(Consumer<KeyContextStatementBlock> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<KeyExecCtxtSV> getContext() {
         return Optional.ofNullable(context);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyContextStatementBlock setContext(final KeyExecCtxtSV context) {
         if (context == this.context) {
             return this;
@@ -107,10 +114,12 @@ public class KeyContextStatementBlock extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<KeyExpressionSV> getExpression() {
         return Optional.ofNullable(expression);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyContextStatementBlock setExpression(final KeyExpressionSV expression) {
         if (expression == this.expression) {
             return this;
@@ -123,10 +132,12 @@ public class KeyContextStatementBlock extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<KeyMethodSignatureSV> getSignature() {
         return Optional.ofNullable(signature);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyContextStatementBlock setSignature(final KeyMethodSignatureSV signature) {
         if (signature == this.signature) {
             return this;
@@ -139,10 +150,12 @@ public class KeyContextStatementBlock extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyContextStatementBlock setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
@@ -156,10 +169,12 @@ public class KeyContextStatementBlock extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<KeyTypeSV> getTr() {
         return Optional.ofNullable(tr);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyContextStatementBlock setTr(final KeyTypeSV tr) {
         if (tr == this.tr) {
             return this;
@@ -172,23 +187,28 @@ public class KeyContextStatementBlock extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyContextStatementBlock removeContext() {
         return setContext((KeyExecCtxtSV) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyContextStatementBlock removeExpression() {
         return setExpression((KeyExpressionSV) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyContextStatementBlock removeSignature() {
         return setSignature((KeyMethodSignatureSV) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyContextStatementBlock removeTr() {
         return setTr((KeyTypeSV) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -226,6 +246,7 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -263,11 +284,13 @@ public class KeyContextStatementBlock extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyContextStatementBlock clone() {
         return (KeyContextStatementBlock) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyContextStatementBlockMetaModel getMetaModel() {
         return JavaParserMetaModel.keyContextStatementBlockMetaModel;
     }

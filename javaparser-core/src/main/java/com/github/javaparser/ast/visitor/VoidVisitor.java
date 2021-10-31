@@ -292,4 +292,8 @@ public interface VoidVisitor<A> {
     void visit(KeyStatementSV n, A arg);
 
     void visit(KeyTypeSV n, A arg);
+
+    void visit(KeyCcatchSV n, A arg);
+
+    void visit(KeyExecutionContextSV n, A arg);
 }

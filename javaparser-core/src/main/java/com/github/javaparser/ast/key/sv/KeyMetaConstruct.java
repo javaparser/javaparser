@@ -3,20 +3,19 @@ package com.github.javaparser.ast.key.sv;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.KeyMetaConstructMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyMetaConstructMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 
 public class KeyMetaConstruct extends Statement {
 
@@ -37,7 +36,10 @@ public class KeyMetaConstruct extends Statement {
         super(range);
         this.kind = kind;
         this.child = child;
-        this.schemas.addAll(Arrays.asList(schemas));
+        for (Node schema : schemas) {
+            if (schema != null)
+                this.schemas.add(schema);
+        }
     }
 
     public KeyMetaConstruct(TokenRange range, JavaToken kind, Node child, Node... schemas) {
@@ -57,28 +59,35 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyMetaConstruct() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyMetaConstruct asKeyMetaConstruct() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyMetaConstruct> toKeyMetaConstruct() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMetaConstruct(Consumer<KeyMetaConstruct> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Node getChild() {
         return child;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMetaConstruct setChild(final Node child) {
         assertNotNull(child);
         if (child == this.child) {
@@ -92,10 +101,12 @@ public class KeyMetaConstruct extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getKind() {
         return kind;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMetaConstruct setKind(final String kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
@@ -106,10 +117,12 @@ public class KeyMetaConstruct extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Node> getSchemas() {
         return schemas;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMetaConstruct setSchemas(final NodeList<Node> schemas) {
         assertNotNull(schemas);
         if (schemas == this.schemas) {
@@ -124,6 +137,7 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -137,6 +151,7 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -154,11 +169,13 @@ public class KeyMetaConstruct extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyMetaConstruct clone() {
         return (KeyMetaConstruct) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMetaConstructMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMetaConstructMetaModel;
     }
@@ -166,6 +183,7 @@ public class KeyMetaConstruct extends Statement {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public KeyMetaConstruct(TokenRange tokenRange, String kind, Node child, NodeList<Node> schemas) {
         super(tokenRange);
         setKind(kind);

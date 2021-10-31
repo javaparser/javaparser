@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A visitor that has a return value (R), and has a default implementation for all its visit
  * methods that visits their children in an unspecified order, and the first visit method
@@ -2444,8 +2445,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        {
-            result = n.getName().accept(this, arg);
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2694,6 +2695,28 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyCcatchSV n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyExecutionContextSV n, final A arg) {
+        R result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)

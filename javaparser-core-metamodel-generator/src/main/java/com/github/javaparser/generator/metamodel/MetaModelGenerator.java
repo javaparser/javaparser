@@ -193,6 +193,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.modules.ModuleUsesDirective.class);
 
         //KEY
+        add(KeyAbstractExecutionContext.class);
         add(KeyCatchAllStatement.class);
         add(KeYCcatchBranch.class);
         add(KeYCcatchBreak.class);
@@ -223,6 +224,8 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(KeyProgramVariableSV.class);
         add(KeyStatementSV.class);
         add(KeyTypeSV.class);
+        add(KeyCcatchSV.class);
+        add(KeyExecutionContextSV.class);
     }};
 
     public MetaModelGenerator(SourceRoot sourceRoot) {

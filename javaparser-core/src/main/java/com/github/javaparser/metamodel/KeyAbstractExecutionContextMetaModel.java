@@ -21,8 +21,9 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.key.KeyExecutionContext;
+import com.github.javaparser.ast.key.KeyAbstractExecutionContext;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,16 +35,15 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class KeyExecutionContextMetaModel extends KeyAbstractExecutionContextMetaModel {
+public class KeyAbstractExecutionContextMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    KeyExecutionContextMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeyExecutionContext.class, "KeyExecutionContext", "com.github.javaparser.ast.key", false, false);
+    KeyAbstractExecutionContextMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, KeyAbstractExecutionContext.class, "KeyAbstractExecutionContext", "com.github.javaparser.ast.key", true, false);
     }
 
-    public PropertyMetaModel contextPropertyMetaModel;
-
-    public PropertyMetaModel instancePropertyMetaModel;
-
-    public PropertyMetaModel signaturePropertyMetaModel;
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    protected KeyAbstractExecutionContextMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+        super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
+    }
 }

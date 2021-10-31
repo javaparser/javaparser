@@ -339,6 +339,8 @@ public final class JavaParserMetaModel {
         keyProgramVariableSVMetaModel.getConstructorParameters().add(keyProgramVariableSVMetaModel.textPropertyMetaModel);
         keyStatementSVMetaModel.getConstructorParameters().add(keyStatementSVMetaModel.textPropertyMetaModel);
         keyTypeSVMetaModel.getConstructorParameters().add(keyTypeSVMetaModel.namePropertyMetaModel);
+        keyCcatchSVMetaModel.getConstructorParameters().add(keyCcatchSVMetaModel.textPropertyMetaModel);
+        keyExecutionContextSVMetaModel.getConstructorParameters().add(keyExecutionContextSVMetaModel.textPropertyMetaModel);
     }
 
     public static List<BaseNodeMetaModel> getNodeMetaModels() {
@@ -401,12 +403,15 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(keYCcatchContinueMetaModel);
         nodeMetaModels.add(keYCcatchParameterMetaModel);
         nodeMetaModels.add(keYCcatchReturnMetaModel);
+        nodeMetaModels.add(keyAbstractExecutionContextMetaModel);
         nodeMetaModels.add(keyCatchAllStatementMetaModel);
+        nodeMetaModels.add(keyCcatchSVMetaModel);
         nodeMetaModels.add(keyContextStatementBlockMetaModel);
         nodeMetaModels.add(keyEscapeExpressionMetaModel);
         nodeMetaModels.add(keyExecCtxtSVMetaModel);
         nodeMetaModels.add(keyExecStatementMetaModel);
         nodeMetaModels.add(keyExecutionContextMetaModel);
+        nodeMetaModels.add(keyExecutionContextSVMetaModel);
         nodeMetaModels.add(keyExpressionSVMetaModel);
         nodeMetaModels.add(keyJumpLabelSVMetaModel);
         nodeMetaModels.add(keyLoopScopeBlockMetaModel);
@@ -963,9 +968,9 @@ public final class JavaParserMetaModel {
         keyMethodBodyStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMethodBodyStatementMetaModel.sourcePropertyMetaModel);
         keyMethodCallStatementMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keyMethodCallStatementMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), false, false, false, false);
         keyMethodCallStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMethodCallStatementMetaModel.blockPropertyMetaModel);
-        keyMethodCallStatementMetaModel.contextPropertyMetaModel = new PropertyMetaModel(keyMethodCallStatementMetaModel, "context", com.github.javaparser.ast.key.KeyExecutionContext.class, Optional.of(keyExecutionContextMetaModel), false, false, false, false);
+        keyMethodCallStatementMetaModel.contextPropertyMetaModel = new PropertyMetaModel(keyMethodCallStatementMetaModel, "context", com.github.javaparser.ast.key.KeyAbstractExecutionContext.class, Optional.of(keyAbstractExecutionContextMetaModel), false, false, false, false);
         keyMethodCallStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMethodCallStatementMetaModel.contextPropertyMetaModel);
-        keyMethodCallStatementMetaModel.namePropertyMetaModel = new PropertyMetaModel(keyMethodCallStatementMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
+        keyMethodCallStatementMetaModel.namePropertyMetaModel = new PropertyMetaModel(keyMethodCallStatementMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false);
         keyMethodCallStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMethodCallStatementMetaModel.namePropertyMetaModel);
         keyMethodSignatureMetaModel.namePropertyMetaModel = new PropertyMetaModel(keyMethodSignatureMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
         keyMethodSignatureMetaModel.getDeclaredPropertyMetaModels().add(keyMethodSignatureMetaModel.namePropertyMetaModel);
@@ -1017,6 +1022,10 @@ public final class JavaParserMetaModel {
         keyStatementSVMetaModel.getDeclaredPropertyMetaModels().add(keyStatementSVMetaModel.textPropertyMetaModel);
         keyTypeSVMetaModel.namePropertyMetaModel = new PropertyMetaModel(keyTypeSVMetaModel, "name", java.lang.String.class, Optional.empty(), false, false, false, false);
         keyTypeSVMetaModel.getDeclaredPropertyMetaModels().add(keyTypeSVMetaModel.namePropertyMetaModel);
+        keyCcatchSVMetaModel.textPropertyMetaModel = new PropertyMetaModel(keyCcatchSVMetaModel, "text", java.lang.String.class, Optional.empty(), false, false, false, false);
+        keyCcatchSVMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchSVMetaModel.textPropertyMetaModel);
+        keyExecutionContextSVMetaModel.textPropertyMetaModel = new PropertyMetaModel(keyExecutionContextSVMetaModel, "text", java.lang.String.class, Optional.empty(), false, false, false, false);
+        keyExecutionContextSVMetaModel.getDeclaredPropertyMetaModels().add(keyExecutionContextSVMetaModel.textPropertyMetaModel);
     }
 
     public static Optional<BaseNodeMetaModel> getNodeMetaModel(Class<?> c) {
@@ -1365,6 +1374,9 @@ public final class JavaParserMetaModel {
     public static final ModuleUsesDirectiveMetaModel moduleUsesDirectiveMetaModel = new ModuleUsesDirectiveMetaModel(Optional.of(moduleDirectiveMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final KeyAbstractExecutionContextMetaModel keyAbstractExecutionContextMetaModel = new KeyAbstractExecutionContextMetaModel(Optional.of(nodeMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final KeyCatchAllStatementMetaModel keyCatchAllStatementMetaModel = new KeyCatchAllStatementMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
@@ -1389,7 +1401,7 @@ public final class JavaParserMetaModel {
     public static final KeyExecStatementMetaModel keyExecStatementMetaModel = new KeyExecStatementMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final KeyExecutionContextMetaModel keyExecutionContextMetaModel = new KeyExecutionContextMetaModel(Optional.of(nodeMetaModel));
+    public static final KeyExecutionContextMetaModel keyExecutionContextMetaModel = new KeyExecutionContextMetaModel(Optional.of(keyAbstractExecutionContextMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final KeyLoopScopeBlockMetaModel keyLoopScopeBlockMetaModel = new KeyLoopScopeBlockMetaModel(Optional.of(statementMetaModel));
@@ -1447,6 +1459,12 @@ public final class JavaParserMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final KeyTypeSVMetaModel keyTypeSVMetaModel = new KeyTypeSVMetaModel(Optional.of(typeMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final KeyCcatchSVMetaModel keyCcatchSVMetaModel = new KeyCcatchSVMetaModel(Optional.of(keYCcatchBranchMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final KeyExecutionContextSVMetaModel keyExecutionContextSVMetaModel = new KeyExecutionContextSVMetaModel(Optional.of(keyAbstractExecutionContextMetaModel));
 
     static {
         initializeNodeMetaModels();

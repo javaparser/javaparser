@@ -16,12 +16,14 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyMethodCallStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 public class KeyMethodCallStatement extends Statement {
 
+    @OptionalProperty
     private Name name;
 
-    private KeyExecutionContext context;
+    private KeyAbstractExecutionContext context;
 
     private BlockStmt block;
 
@@ -34,7 +36,7 @@ public class KeyMethodCallStatement extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyMethodCallStatement(TokenRange tokenRange, Name name, KeyExecutionContext context, BlockStmt block) {
+    public KeyMethodCallStatement(TokenRange tokenRange, Name name, KeyAbstractExecutionContext context, BlockStmt block) {
         super(tokenRange);
         setName(name);
         setContext(context);
@@ -98,12 +100,12 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecutionContext getContext() {
+    public KeyAbstractExecutionContext getContext() {
         return context;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyMethodCallStatement setContext(final KeyExecutionContext context) {
+    public KeyMethodCallStatement setContext(final KeyAbstractExecutionContext context) {
         assertNotNull(context);
         if (context == this.context) {
             return this;
@@ -117,13 +119,12 @@ public class KeyMethodCallStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name getName() {
-        return name;
+    public Optional<Name> getName() {
+        return Optional.ofNullable(name);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodCallStatement setName(final Name name) {
-        assertNotNull(name);
         if (name == this.name) {
             return this;
         }
@@ -140,6 +141,12 @@ public class KeyMethodCallStatement extends Statement {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (name != null) {
+            if (node == name) {
+                removeName();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -153,12 +160,14 @@ public class KeyMethodCallStatement extends Statement {
             return true;
         }
         if (node == context) {
-            setContext((KeyExecutionContext) replacementNode);
+            setContext((KeyAbstractExecutionContext) replacementNode);
             return true;
         }
-        if (node == name) {
-            setName((Name) replacementNode);
-            return true;
+        if (name != null) {
+            if (node == name) {
+                setName((Name) replacementNode);
+                return true;
+            }
         }
         return super.replace(node, replacementNode);
     }
@@ -173,5 +182,9 @@ public class KeyMethodCallStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMethodCallStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMethodCallStatementMetaModel;
+    }
+
+    public KeyMethodCallStatement removeName() {
+        return setName((Name) null);
     }
 }

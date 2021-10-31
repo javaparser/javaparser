@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
  *
@@ -676,6 +677,16 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final KeyTypeSV n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyCcatchSV n, final Visitable arg) {
+        return n == arg;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecutionContextSV n, final Visitable arg) {
         return n == arg;
     }
 }

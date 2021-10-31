@@ -1276,7 +1276,7 @@
 {.. for(; #guard;) #s ...}
 {.. #unwind-loop(#innerLabel, #outerLabel, for(; #guard;) #s); ...}
 {.. for(#i; #e; #sel) {#s} ...}
-{.. #unwind-loop (for(#i; #e; #sel) // {#s}) ...}
+{.. #unwind-loop (for(#i; #e; #sel) {#s}) ...}
 {.. #v = #e; ...}
 {.. boolean #v = #e; ...}
 {.. while (#nse) #body ... }

@@ -17,6 +17,7 @@ import com.github.javaparser.metamodel.KeyCatchAllStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.key.sv.*;
+
 public class KeyCatchAllStatement extends Statement {
 
     private Name label;

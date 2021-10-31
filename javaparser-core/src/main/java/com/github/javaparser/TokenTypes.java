@@ -186,6 +186,9 @@ public class TokenTypes {
             case EXEC:
             case CONTINUETYPE:
             case CCATCH:
+            case MODEL:
+            case GHOST:
+            case CCAT:
             case BREAKTYPE:
             case BIGINT:
             case REAL:

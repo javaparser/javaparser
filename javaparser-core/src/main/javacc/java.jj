@@ -382,6 +382,7 @@ TOKEN :
 | < EXEC: "exec" >
 | < CONTINUETYPE: "\\Continue" >
 | < CCATCH: "ccatch" >
+| < CCAT: "ccat" >
 | < BREAKTYPE: "\\Break" >
 | < BIGINT: "\\bigint">
 | < REAL: "\\real">
@@ -422,6 +423,8 @@ TOKEN :
 | <STATIC_EVALUATE: "#static-evaluate" >
 | <CREATE_OBJECT: "#create-object" >
 | <LENGTHREF: "#length-reference" >
+| <GHOST: "ghost">
+| <MODEL: "model">
 }
 
 /* LITERALS */
@@ -1329,6 +1332,10 @@ ModifierHolder Modifiers():
             "transitive" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TRANSITIVE));  begin = orIfInvalid(begin, token()); }
          |
             "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, token()); }
+         |
+            "ghost" //TODO weigl
+         |
+            "model" //TODO weigl
          |
              ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
         )
@@ -5106,39 +5113,41 @@ TryStmt TryStatement():
     [ resources = ResourceSpecification() ]
     tryBlock = Block()
     (
-        LOOKAHEAD(2)
-        (
-            "catch" {catchBegin=token();}
-            "("
-            exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
-            exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
-            (
-                "|"
-                exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); }
-            )*
-            exceptId = VariableDeclaratorId() { paramEnd = token(); }
-            ")"
+      LOOKAHEAD(2)
+      ["catch"] {catchBegin=token();}
+      <SVIDENTIFIER>
+      { catchs = add(catchs, new KeyCatchClauseSV(range(catchBegin, token()), token().getText()));}
+    |
+      LOOKAHEAD(2)
+      (
+          "catch" {catchBegin=token();}
+          "("
+          exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
+          exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
+          (
+              "|"
+              exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); }
+          )*
+          exceptId = VariableDeclaratorId() { paramEnd = token(); }
+          ")"
 
-            catchBlock = Block()
-            {
-                if (exceptionTypes.size() > 1) {
-                    type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
-                } else {
-                    type = (Type)exceptionTypes.get(0);
-                }
-                Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
-                catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
-                exceptionTypes = emptyNodeList();
-            }
-        )*
-        [
-            "finally"
-            finallyBlock = Block()
-        ]
-     |
+          catchBlock = Block()
+          {
+              if (exceptionTypes.size() > 1) {
+                  type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
+              } else {
+                  type = (Type)exceptionTypes.get(0);
+              }
+              Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
+              catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
+              exceptionTypes = emptyNodeList();
+          }
+      )
+    )*
+    [
         "finally"
         finallyBlock = Block()
-    )
+    ]
     { return new TryStmt(range(begin, token()), resources, tryBlock, catchs, finallyBlock); }
 }
 
@@ -6125,17 +6134,24 @@ KeyMethodCallStatement KeyMethodCallStatement() :
   JavaToken begin;
   Name qn = null;
   BlockStmt block;
-  KeyExecutionContext ec;
+  KeyAbstractExecutionContext ec;
 }
 {
     <METHODFRAME> {begin = token(); }
     "("
-     [ "result->" qn = Name() ","]
-     ec = KeyExecutionContext()
+     [LOOKAHEAD(3) ["result->"] qn = Name() ","]
+     (ec=KeyExecutionContext() | ec=KeyExecutionContextSV())
     ")"
   ":"
   block = Block()
   {   return new KeyMethodCallStatement(range(begin, token()), qn, ec, block); }
+}
+
+KeyAbstractExecutionContext KeyExecutionContextSV():
+{}
+{
+  <SVIDENTIFIER>
+  {return new KeyExecutionContextSV(token().toTokenRange(), token().getText());}
 }
 
 KeyMethodBodyStatement KeyMethodBodyStatement() :
@@ -6155,7 +6171,7 @@ KeyMethodBodyStatement KeyMethodBodyStatement() :
   }
 }
 
-KeyExecutionContext KeyExecutionContext() :
+KeyAbstractExecutionContext KeyExecutionContext() :
 {
   JavaToken begin;
   Type classContext;
@@ -6251,6 +6267,7 @@ KeyExecStatement KeyExecStatement() :
     JavaToken begin, beginC;
     BlockStmt block,execBlock;
     Parameter param; Name name;
+    KeyCcatchSV cfsv;
     NodeList<KeYCcatchBranch> branches = new NodeList<KeYCcatchBranch>();
 }
 {
@@ -6258,44 +6275,42 @@ KeyExecStatement KeyExecStatement() :
     { begin = token(); }
     execBlock = Block()
     [
-        LOOKAHEAD(3)
-        "ccatch" {beginC=token();} "("  "\\Return" ")"
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Return" ")"
         block = Block()
         {
             branches.add(new KeYCcatchReturn(range(beginC, token()), block));
         }
     ]
     (
-        LOOKAHEAD(3)
-        "ccatch" {beginC=token();} "("  "\\Return" param = Parameter() ")"
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Return" param = Parameter() ")"
         block = Block()
         {  branches.add(new KeYCcatchReturn(range(beginC, token()), param, block)); }
     )*
-
     [
-        LOOKAHEAD(3)
-        "ccatch" {beginC=token();} "("  "\\Break" ")"
-
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" ")"
         block = Block()
         {  branches.add(new KeYCcatchBreak(range(beginC, token()), block)); }
     ]
     (
-        LOOKAHEAD(4)
-        "ccatch" {beginC=token();} "("  "\\Break" name=Name() ")"
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" name=Name() ")"
         block = Block()
         {  branches.add(new KeYCcatchBreak(range(beginC, token()), name, block)); }
     )*
 
     [
-        LOOKAHEAD(4)
-        "ccatch" {beginC=token();} "("  "\\Break" "*" ")"
+        LOOKAHEAD(5)
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" "*" ")"
         block = Block()
         {  branches.add(new KeYCcatchBreak(range(beginC, token()), "*", block)); }
     ]
 
     [
         LOOKAHEAD(4)
-        "ccatch"  {beginC=token();} "("  "\\Continue" ")"
+        ("ccatch"|"ccat")  {beginC=token();} "("  "\\Continue" ")"
 
         block = Block()
         {  branches.add(new KeYCcatchContinue(range(beginC, token()), block)); }
@@ -6303,25 +6318,25 @@ KeyExecStatement KeyExecStatement() :
 
     (
         LOOKAHEAD(4)
-        "ccatch" {beginC=token();} "("  "\\Continue" name=Name() ")"
+        ("ccatch"|"ccat") {beginC=token();} "("  "\\Continue" name=Name() ")"
         block = Block()
         {  branches.add(new KeYCcatchBreak(range(beginC, token()), name, block)); }
     )*
 
     [
         LOOKAHEAD(4)
-        "ccatch"  {beginC=token();} "("  "\\Continue" "*" ")"
+        ("ccatch"|"ccat")  {beginC=token();} "("  "\\Continue" "*" ")"
 
         block = Block()
         {  branches.add(new KeYCcatchContinue(range(beginC, token()), "*", block)); }
     ]
-
     (
         LOOKAHEAD(3)
-        "ccatch" {beginC=token();} "("  param = Parameter() ")"
+        ("ccatch"|"ccat") {beginC=token();} "("  param = Parameter() ")"
         block = Block()
         {  branches.add(new KeYCcatchParameter(range(beginC, token()), param, block)); }
     )*
+    ( ["ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
     { return new KeyExecStatement(range(begin, token()), execBlock, branches); }
 }
 
@@ -6454,12 +6469,13 @@ KeyMetaConstruct KeYMetaConstructStatement() :
     Expression methRef, consRef, activeAccess;
     KeyProgramVariableSV sv = null;
     KeyExecCtxtSV execsv = null;
-    KeyJumpLabelSV innerLabel, outerLabel;
+    KeyJumpLabelSV innerLabel=null, outerLabel=null;
     NodeList<Expression> loopInit;
 }
 {
         "#unwind-loop" {begin=token();} "("
-            innerLabel = JumpLabelSV() "," outerLabel = JumpLabelSV() ","
+            [ LOOKAHEAD(2) innerLabel = JumpLabelSV() ","]
+            [ LOOKAHEAD(2) outerLabel = JumpLabelSV() ","]
               (  loopStat = WhileStatement()
                | loopStat = ForStatement()
                | loopStat = DoStatement()
@@ -6683,4 +6699,12 @@ KeyMetaConstructExpression KeyLengthReferenceSV():
     {
         return new KeyMetaConstructExpression(range(begin, token()), "#length-reference", child);
     }    
+}
+
+KeyCcatchSV CcatchSV() :
+{
+}
+{
+    <SVIDENTIFIER>
+    { return new KeyCcatchSV(token().toTokenRange(), token().getText()); }
 }

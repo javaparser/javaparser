@@ -14,7 +14,7 @@ import com.github.javaparser.metamodel.KeyExecutionContextMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
-public class KeyExecutionContext extends Node {
+public class KeyExecutionContext extends KeyAbstractExecutionContext {
 
     private Type context;
 

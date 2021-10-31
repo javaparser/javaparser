@@ -514,7 +514,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final KeyMethodCallStatement n, final Void arg) {
-        return (n.getBlock().accept(this, arg)) * 31 + (n.getContext().accept(this, arg)) * 31 + (n.getName().accept(this, arg));
+        return (n.getBlock().accept(this, arg)) * 31 + (n.getContext().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -590,5 +590,15 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final KeyTypeSV n, final Void arg) {
         return (n.getName().hashCode()) * 31 + (n.getAnnotations().accept(this, arg));
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchSV n, final Void arg) {
+        return (n.getText().hashCode());
+    }
+
+    @Override
+    public Integer visit(final KeyExecutionContextSV n, final Void arg) {
+        return (n.getText().hashCode());
     }
 }

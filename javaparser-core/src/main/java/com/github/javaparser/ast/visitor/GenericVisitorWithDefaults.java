@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A visitor that has a return value (R), and has default methods that are used when a specific visit method is not
  * overridden.
@@ -683,6 +684,16 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final KeyTypeSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyCcatchSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExecutionContextSV n, final A arg) {
         return defaultAction(n, arg);
     }
 }

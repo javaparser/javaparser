@@ -297,4 +297,8 @@ public interface GenericVisitor<R, A> {
     R visit(KeyStatementSV n, A arg);
 
     R visit(KeyTypeSV n, A arg);
+
+    R visit(KeyCcatchSV n, A arg);
+
+    R visit(KeyExecutionContextSV n, A arg);
 }

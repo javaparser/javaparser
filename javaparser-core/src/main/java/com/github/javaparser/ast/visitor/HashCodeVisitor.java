@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
  * and the hash codes of all its child nodes (by visiting those too.)
@@ -521,7 +522,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final KeyMethodCallStatement n, final Void arg) {
-        return (n.getBlock().accept(this, arg)) * 31 + (n.getContext().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getBlock().accept(this, arg)) * 31 + (n.getContext().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -597,5 +598,15 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final KeyTypeSV n, final Void arg) {
         return (n.getName().hashCode()) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyExecutionContextSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }

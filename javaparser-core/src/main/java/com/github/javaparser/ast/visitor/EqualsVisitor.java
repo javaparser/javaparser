@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
  *
@@ -1721,6 +1722,26 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!objEquals(n.getName(), n2.getName()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyCcatchSV n, final Visitable arg) {
+        final KeyCcatchSV n2 = (KeyCcatchSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecutionContextSV n, final Visitable arg) {
+        final KeyExecutionContextSV n2 = (KeyExecutionContextSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;

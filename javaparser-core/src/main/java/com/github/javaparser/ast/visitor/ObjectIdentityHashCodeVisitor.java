@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
  * and the hash codes of all its child nodes (by visiting those too.)
@@ -588,6 +589,16 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final KeyTypeSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyCcatchSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecutionContextSV n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -38,6 +38,7 @@ import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * This visitor can be used to save time when some specific nodes needs
  * to be changed. To do that just extend this class and override the methods
@@ -1467,10 +1468,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final KeyMethodCallStatement n, final A arg) {
         BlockStmt block = (BlockStmt) n.getBlock().accept(this, arg);
-        KeyExecutionContext context = (KeyExecutionContext) n.getContext().accept(this, arg);
-        Name name = (Name) n.getName().accept(this, arg);
+        KeyAbstractExecutionContext context = (KeyAbstractExecutionContext) n.getContext().accept(this, arg);
+        Name name = n.getName().map(s -> (Name) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (block == null || context == null || name == null)
+        if (block == null || context == null)
             return null;
         n.setBlock(block);
         n.setContext(context);
@@ -1624,6 +1625,20 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setAnnotations(annotations);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyCcatchSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyExecutionContextSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }

@@ -32,6 +32,7 @@ import com.github.javaparser.ast.type.*;
 import java.util.Optional;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 
     private static final NoCommentEqualsVisitor SINGLETON = new NoCommentEqualsVisitor();
@@ -1417,6 +1418,22 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!objEquals(n.getName(), n2.getName()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyCcatchSV n, final Visitable arg) {
+        final KeyCcatchSV n2 = (KeyCcatchSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecutionContextSV n, final Visitable arg) {
+        final KeyExecutionContextSV n2 = (KeyExecutionContextSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
             return false;
         return true;
     }

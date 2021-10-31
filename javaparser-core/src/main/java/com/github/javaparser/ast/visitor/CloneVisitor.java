@@ -31,6 +31,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A visitor that clones (copies) a node and all its children.
  */
@@ -1425,7 +1426,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final KeyMethodCallStatement n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
-        KeyExecutionContext context = cloneNode(n.getContext(), arg);
+        KeyAbstractExecutionContext context = cloneNode(n.getContext(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         KeyMethodCallStatement r = new KeyMethodCallStatement(n.getTokenRange().orElse(null), name, context, block);
@@ -1595,6 +1596,26 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         KeyTypeSV r = new KeyTypeSV(n.getTokenRange().orElse(null), n.getName());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyCcatchSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyCcatchSV r = new KeyCcatchSV(n.getTokenRange().orElse(null), n.getText());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyExecutionContextSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyExecutionContextSV r = new KeyExecutionContextSV(n.getTokenRange().orElse(null), n.getText());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

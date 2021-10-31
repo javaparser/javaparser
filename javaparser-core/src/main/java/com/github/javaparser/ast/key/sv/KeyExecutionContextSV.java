@@ -2,72 +2,38 @@ package com.github.javaparser.ast.key.sv;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Optional;
-import java.util.function.Consumer;
+import com.github.javaparser.ast.key.KeyAbstractExecutionContext;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeyExecCtxtSVMetaModel;
+import com.github.javaparser.metamodel.KeyExecutionContextSVMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Generated;
 
-public class KeyExecCtxtSV extends Statement {
+/**
+ * @author Alexander Weigl
+ * @version 1 (10/31/21)
+ */
+public class KeyExecutionContextSV extends KeyAbstractExecutionContext {
 
     private String text;
 
     @AllFieldsConstructor
-    public KeyExecCtxtSV(String text) {
-        this.text = text;
+    public KeyExecutionContextSV(String text) {
+        this(null, text);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyExecCtxtSV(TokenRange tokenRange, String text) {
+    public KeyExecutionContextSV(TokenRange tokenRange, String text) {
         super(tokenRange);
         setText(text);
         customInitialization();
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyExecCtxtSV() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyExecCtxtSV asKeyExecCtxtSV() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyExecCtxtSV> toKeyExecCtxtSV() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyExecCtxtSV(Consumer<KeyExecCtxtSV> action) {
-        action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -76,7 +42,7 @@ public class KeyExecCtxtSV extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecCtxtSV setText(final String text) {
+    public KeyExecutionContextSV setText(final String text) {
         assertNotNull(text);
         if (text == this.text) {
             return this;
@@ -104,13 +70,25 @@ public class KeyExecCtxtSV extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeyExecCtxtSV clone() {
-        return (KeyExecCtxtSV) accept(new CloneVisitor(), null);
+    public KeyExecutionContextSV clone() {
+        return (KeyExecutionContextSV) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeyExecCtxtSVMetaModel getMetaModel() {
-        return JavaParserMetaModel.keyExecCtxtSVMetaModel;
+    public KeyExecutionContextSVMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyExecutionContextSVMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
     }
 }

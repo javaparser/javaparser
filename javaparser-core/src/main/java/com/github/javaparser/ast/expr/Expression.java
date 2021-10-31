@@ -35,6 +35,7 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
+
 /**
  * A base class for all expressions.
  *
@@ -912,63 +913,79 @@ public abstract class Expression extends Node {
     public void ifKeyRangeExpression(Consumer<KeyRangeExpression> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyExpressionSV() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyExpressionSV asKeyExpressionSV() {
         throw new IllegalStateException(f("%s is not KeyExpressionSV, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyExpressionSV> toKeyExpressionSV() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyExpressionSV(Consumer<KeyExpressionSV> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyMetaConstructExpression() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyMetaConstructExpression asKeyMetaConstructExpression() {
         throw new IllegalStateException(f("%s is not KeyMetaConstructExpression, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyMetaConstructExpression> toKeyMetaConstructExpression() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMetaConstructExpression(Consumer<KeyMetaConstructExpression> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyPassiveExpression() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyPassiveExpression asKeyPassiveExpression() {
         throw new IllegalStateException(f("%s is not KeyPassiveExpression, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyPassiveExpression> toKeyPassiveExpression() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyPassiveExpression(Consumer<KeyPassiveExpression> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyProgramVariableSV() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyProgramVariableSV asKeyProgramVariableSV() {
         throw new IllegalStateException(f("%s is not KeyProgramVariableSV, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyProgramVariableSV> toKeyProgramVariableSV() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyProgramVariableSV(Consumer<KeyProgramVariableSV> action) {
     }
 }

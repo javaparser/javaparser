@@ -47,28 +47,35 @@ public class KeyProgramVariableSV extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyProgramVariableSV() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyProgramVariableSV asKeyProgramVariableSV() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyProgramVariableSV> toKeyProgramVariableSV() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyProgramVariableSV(Consumer<KeyProgramVariableSV> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getText() {
         return text;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyProgramVariableSV setText(final String text) {
         assertNotNull(text);
         if (text == this.text) {
@@ -80,6 +87,7 @@ public class KeyProgramVariableSV extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -87,6 +95,7 @@ public class KeyProgramVariableSV extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -94,11 +103,13 @@ public class KeyProgramVariableSV extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyProgramVariableSV clone() {
         return (KeyProgramVariableSV) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyProgramVariableSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyProgramVariableSVMetaModel;
     }

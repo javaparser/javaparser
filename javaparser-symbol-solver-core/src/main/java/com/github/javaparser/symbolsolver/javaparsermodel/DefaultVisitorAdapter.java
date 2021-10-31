@@ -362,6 +362,16 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
+    public ResolvedType visit(KeyCcatchSV n, Boolean arg) {
+        return null;
+    }
+
+    @Override
+    public ResolvedType visit(KeyExecutionContextSV n, Boolean arg) {
+        return null;
+    }
+
+    @Override
     public ResolvedType visit(StringLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }

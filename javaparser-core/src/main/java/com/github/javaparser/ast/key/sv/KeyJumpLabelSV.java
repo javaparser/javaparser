@@ -48,10 +48,12 @@ public class KeyJumpLabelSV extends Node {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getText() {
         return text;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyJumpLabelSV setText(final String text) {
         assertNotNull(text);
         if (text == this.text) {
@@ -63,6 +65,7 @@ public class KeyJumpLabelSV extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -70,6 +73,7 @@ public class KeyJumpLabelSV extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -77,11 +81,13 @@ public class KeyJumpLabelSV extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyJumpLabelSV clone() {
         return (KeyJumpLabelSV) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyJumpLabelSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyJumpLabelSVMetaModel;
     }
