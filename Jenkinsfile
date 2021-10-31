@@ -14,20 +14,21 @@ pipeline {
         stage('Clean') {
             steps {
                 sh 'javac -version'
-                sh 'mvn -version'
+                sh 'mvn $MAVEN_CLI_OPTS -version'
+                sh 'mvn $MAVEN_CLI_OPTS dependency:go-offline'
                 sh 'mvn clean'
             }
         }
 
         stage('Compile') {
             steps { 
-                sh 'mvn compile'
+                sh 'mvn $MAVEN_CLI_OPTS –o  compile'
             }
         }
 
         stage('Tests: JUnit') {
             steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install'
+                sh 'mvn $MAVEN_CLI_OPTS -o -Dmaven.test.failure.ignore=true install'
             }
             post {
                 success {
