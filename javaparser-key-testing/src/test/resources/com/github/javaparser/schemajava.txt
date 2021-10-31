@@ -1,639 +1,1318 @@
-{ ..  { {#slist}} ... }
-{ ..  {#loc=false;} ... }
-{ ..  {#loc=false;}#s1 ... }
-{ ..  {#loc=true;}#s0 ... }
-{ ..  {#slist} ... }
-{ ..  {#slist2} ... }
-{ ..  {#slist2}return ; ... }
-{ ..  {} ... }
-{ ..  {loop-scope(#lhs) {#slist}} ... }
-{ ..  {return #se;#slist} ... }
-{ ..  {return ;#slist} ... }
-{ ..  {throw #e;#slist} ... }
-{ .. #abortJavaCardTransaction; ... }
-{ .. #arraypost ... }
-{ .. #beginJavaCardTransaction; ... }
-{ .. #commitJavaCardTransaction; ... }
-{ .. #e.#attribute--; ... }
-{ .. --#e.#attribute; ... }
-{ .. #e.#attribute++; ... }
-{ .. #e.#attribute=#e0; ... }
-{ .. #e[#e0]--; ... }
-{ .. --#e[#e0]; ... }
-{ .. #e[#e0]++; ... }
-{ .. #e0.#attribute%=#e; ... }
-{ .. #e0.#attribute&=#e; ... }
-{ .. #e0.#attribute*=#e; ... }
-{ .. #e0.#attribute/=#e; ... }
-{ .. #e0.#attribute^=#e; ... }
-{ .. #e0.#attribute|=#e; ... }
-{ .. #e0.#attribute+=#e; ... }
-{ .. #e0.#attribute<<=#e; ... }
-{ .. #e0.#attribute-=#e; ... }
-{ .. #e0.#attribute>>=#e; ... }
-{ .. #e0.#attribute>>>=#e; ... }
-{ .. #e0[#e]%=#e1; ... }
-{ .. #e0[#e]&=#e1; ... }
-{ .. #e0[#e]*=#e1; ... }
-{ .. #e0[#e]/=#e1; ... }
-{ .. #e0[#e]^=#e1; ... }
-{ .. #e0[#e]|=#e1; ... }
-{ .. #e0[#e]+=#e1; ... }
-{ .. #e0[#e]<<=#e1; ... }
-{ .. #e0[#e]-=#e1; ... }
-{ .. #e0[#e]>>=#e1; ... }
-{ .. #e0[#e]>>>=#e1; ... }
-{ .. #evaluate-arguments(#lhs=#nsmr;) ... }
-{ .. #evaluate-arguments(#lhs=#nsn;) ... }
-{ .. #evaluate-arguments(#nsmr) ... }
-{ .. #evaluate-arguments(#nsn) ... }
-{ .. #finishJavaCardTransaction; ... }
-{ .. #forloop ... }
-{ .. #for-to-while(#forloop) ... }
-{ .. #lb: {} ... }
-{ .. #lb: {return #se;#slist} ... }
-{ .. #lb: {throw #se;#slist} ... }
-{ .. #lb:#s ... }
-{ .. #lb:return #se; ... }
-{ .. #lb:throw #se; ... }
-{ .. #lhs%=#e; ... }
-{ .. #lhs&=#e; ... }
-{ .. #lhs*=#e; ... }
-{ .. #lhs/=#e; ... }
-{ .. #lhs^=#e; ... }
-{ .. #lhs|=#e; ... }
-{ .. #lhs+=#e; ... }
-{ .. #lhs<<=#e; ... }
-{ .. #lhs=!#nseBool; ... }
-{ .. #lhs=!#seBool; ... }
-{ .. #lhs=#arrayinitializer; ... }
-{ .. #lhs=#e!=#nse0; ... }
-{ .. #lhs=#e-#nse; ... }
-{ .. #lhs=#e%#nse; ... }
-{ .. #lhs=#e&#nse; ... }
-{ .. #lhs=#e*#nse; ... }
-{ .. #lhs=--#e.#attribute; ... }
-{ .. #lhs=#e/#nse; ... }
-{ .. #lhs=#e; ... }
-{ .. #lhs-=#e; ... }
-{ .. #lhs=#e^#nse; ... }
-{ .. #lhs=#e|#nse; ... }
-{ .. #lhs=#e+#nse; ... }
-{ .. #lhs=#e<#nse0; ... }
-{ .. #lhs=#e<<#nse; ... }
-{ .. #lhs=#e<=#nse0; ... }
-{ .. #lhs=#e==#nse0; ... }
-{ .. #lhs=#e>#nse0; ... }
-{ .. #lhs=#e>=#nse0; ... }
-{ .. #lhs=#e>>#nse; ... }
-{ .. #lhs=#e>>>#nse; ... }
-{ .. #lhs=#e0 ?#e1 :#e2; ... }
-{ .. #lhs=#exBool; ... }
-{ .. #lhs=#exBool0&&#nseBool1; ... }
-{ .. #lhs=#exBool0||#nseBool1; ... }
-{ .. #lhs=#mn(#elist); ... }
-{ .. #lhs=#n; ... }
-{ .. #lhs=#na; ... }
-{ .. #lhs=#nse ?#se1 :#se2; ... }
-{ .. #lhs=#nse-#se; ... }
-{ .. #lhs=#nse%#se; ... }
-{ .. #lhs=#nse&#se; ... }
-{ .. #lhs=#nse*#se; ... }
-{ .. #lhs=#nse.#mn(#elist); ... }
-{ .. #lhs=#nse/#se; ... }
-{ .. #lhs=-#nse; ... }
-{ .. #lhs=#nse^#se; ... }
-{ .. #lhs=#nse|#se; ... }
-{ .. #lhs=#nse+#se; ... }
-{ .. #lhs=#nse<<#se; ... }
-{ .. #lhs=#nse>>#se; ... }
-{ .. #lhs=#nse>>>#se; ... }
-{ .. #lhs=#nse0!=#se; ... }
-{ .. #lhs=#nse0<#se; ... }
-{ .. #lhs=#nse0<=#se; ... }
-{ .. #lhs=#nse0==#se; ... }
-{ .. #lhs=#nse0>#se; ... }
-{ .. #lhs=#nse0>=#se; ... }
-{ .. #lhs=#nseBool0&#exBool1; ... }
-{ .. #lhs=#nseBool0&&#seBool1; ... }
-{ .. #lhs=#nseBool0^#exBool1; ... }
-{ .. #lhs=#nseBool0|#exBool1; ... }
-{ .. #lhs=#nseBool0||#seBool1; ... }
-{ .. #lhs=#nsmr; ... }
-{ .. #lhs=#nsn; ... }
-{ .. #lhs=#se.#mn(#elist); ... }
-{ .. #lhs=#se.#mn(#selist); ... }
-{ .. #lhs=#se0 ?#se1 :#se2; ... }
-{ .. #lhs=#se0!=#se1; ... }
-{ .. #lhs=#se0<#se1; ... }
-{ .. #lhs=#se0<=#se1; ... }
-{ .. #lhs=#se0==#se1; ... }
-{ .. #lhs=#se0>#se1; ... }
-{ .. #lhs=#se0>=#se1; ... }
-{ .. #lhs=#seAny; ... }
-{ .. #lhs=#seBool0&#seBool1; ... }
-{ .. #lhs=#seBool0&&#seBool1; ... }
-{ .. #lhs=#seBool0^#seBool1; ... }
-{ .. #lhs=#seBool0|#seBool1; ... }
-{ .. #lhs=#seBool0||#seBool1; ... }
-{ .. #lhs=#seByte; ... }
-{ .. #lhs=#seByteShortInt; ... }
-{ .. #lhs=#seChar; ... }
-{ .. #lhs=#seLong; ... }
-{ .. #lhs=#seShort; ... }
-{ .. #lhs=#sv; ... }
-{ .. #lhs=#t.#mn(#elist); ... }
-{ .. #lhs=#v.#sv; ... }
-{ .. #lhs=(#e); ... }
-{ .. #lhs=(#npit)#nse; ... }
-{ .. #lhs=(#npit)#se; ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs%(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs&(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs-(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs*(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs/(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs^(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs|(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs+(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs<<(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs>>(#e)); ... }
-{ .. #lhs=(#typeof(#lhs))(#lhs>>>(#e)); ... }
-{ .. #lhs=(\bigint)#seAny; ... }
-{ .. #lhs=(boolean)#exBool; ... }
-{ .. #lhs=(byte)#nse; ... }
-{ .. #lhs=(byte)#seByte; ... }
-{ .. #lhs=(char)#seChar; ... }
-{ .. #lhs=(int)#nse; ... }
-{ .. #lhs=(int)#seByteShortInt; ... }
-{ .. #lhs=(int)#seChar; ... }
-{ .. #lhs=(long)#nse; ... }
-{ .. #lhs=(long)#seByteShortInt; ... }
-{ .. #lhs=(long)#seChar; ... }
-{ .. #lhs=(long)#seLong; ... }
-{ .. #lhs=(short)#nse; ... }
-{ .. #lhs=(short)#seByte; ... }
-{ .. #lhs=(short)#seShort; ... }
-{ .. #lhs=@(#sv); ... }
-{ .. #lhs=~#nse; ... }
-{ .. #lhs=+#e; ... }
-{ .. #lhs=false; ... }\] (post),#allmodal ( (modal operator))\[{ .. #lhs=true; ... }
-{ .. #lhs=super.#mn(#elist); ... }
-{ .. #lhs=true; ... }
-{ .. #lhs=true; ... }\] (post),#allmodal ( (modal operator))\[{ .. #lhs=false; ... }
-{ .. #lhs=true;return #se; ... }
-{ .. #lhs=true;return ; ... }
-{ .. #lhs=true;throw #se; ... }
-{ .. #lhs>>=#e; ... }
-{ .. #lhs>>>=#e; ... }
-{ .. #lhs0=#e.#attribute--; ... }
-{ .. #lhs0=#e.#attribute++; ... }
-{ .. #lhs0=#e[#e0]--; ... }
-{ .. #lhs0=--#e[#e0]; ... }
-{ .. #lhs0=#e[#e0]++; ... }
-{ .. #lhs0=#e0.#attribute%=#e; ... }
-{ .. #lhs0=#e0.#attribute&=#e; ... }
-{ .. #lhs0=#e0.#attribute*=#e; ... }
-{ .. #lhs0=#e0.#attribute/=#e; ... }
-{ .. #lhs0=#e0.#attribute^=#e; ... }
-{ .. #lhs0=#e0.#attribute|=#e; ... }
-{ .. #lhs0=#e0.#attribute+=#e; ... }
-{ .. #lhs0=#e0.#attribute<<=#e; ... }
-{ .. #lhs0=#e0.#attribute=#e; ... }
-{ .. #lhs0=#e0.#attribute-=#e; ... }
-{ .. #lhs0=#e0.#attribute>>=#e; ... }
-{ .. #lhs0=#e0.#attribute>>>=#e; ... }
-{ .. #lhs0=#e0[#e]%=#e1; ... }
-{ .. #lhs0=#e0[#e]&=#e1; ... }
-{ .. #lhs0=#e0[#e]*=#e1; ... }
-{ .. #lhs0=#e0[#e]/=#e1; ... }
-{ .. #lhs0=#e0[#e]^=#e1; ... }
-{ .. #lhs0=#e0[#e]|=#e1; ... }
-{ .. #lhs0=#e0[#e]+=#e1; ... }
-{ .. #lhs0=#e0[#e]<<=#e1; ... }
-{ .. #lhs0=#e0[#e]=#e1; ... }
-{ .. #lhs0=#e0[#e]-=#e1; ... }
-{ .. #lhs0=#e0[#e]>>=#e1; ... }
-{ .. #lhs0=#e0[#e]>>>=#e1; ... }
-{ .. #lhs0=#lhs1%=#e; ... }
-{ .. #lhs0=#lhs1&=#e; ... }
-{ .. #lhs0=#lhs1*=#e; ... }
-{ .. #lhs0=#lhs1/=#e; ... }
-{ .. #lhs0=#lhs1--; ... }
-{ .. #lhs0=--#lhs1; ... }
-{ .. #lhs0=#lhs1^=#e; ... }
-{ .. #lhs0=#lhs1|=#e; ... }
-{ .. #lhs0=#lhs1++; ... }
-{ .. #lhs0=#lhs1+=#e; ... }
-{ .. #lhs0=#lhs1<<=#e; ... }
-{ .. #lhs0=#lhs1=#e; ... }
-{ .. #lhs0=#lhs1-=#e; ... }
-{ .. #lhs0=#lhs1>>=#e; ... }
-{ .. #lhs0=#lhs1>>>=#e; ... }
-{ .. #lhs0=++#e.#attribute; ... }
-{ .. #lhs0=++#e[#e0]; ... }
-{ .. #lhs0=++#lhs1; ... }
-{ .. #lhs1--; ... }
-{ .. --#lhs1; ... }
-{ .. #lhs1++; ... }
-{ .. #lhs1=#e;#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))#lhs1-1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1-#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1%#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1&#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1*#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1/#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1^#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1|#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1+#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1+1); ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1+1);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1<<#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1>>#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1>>>#e);#lhs0=#lhs1; ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1-1); ... }
-{ .. #lhs1=(#typeof(#lhs1))(#lhs1-1);#lhs0=#lhs1; ... }
-{ .. #loc=#se/#seLong; ... }
-{ .. #loc=#se; ... }
-{ .. #loc=#se0%#se1; ... }
-{ .. #loc=#seAny-#seBigint; ... }
-{ .. #loc=#seAny%#seBigint; ... }
-{ .. #loc=#seAny*#seBigint; ... }
-{ .. #loc=#seAny/#seBigint; ... }
-{ .. #loc=#seAny+#seBigint; ... }
-{ .. #loc=#seBigint-#seAny; ... }
-{ .. #loc=#seBigint%#seAny; ... }
-{ .. #loc=#seBigint*#seAny; ... }
-{ .. #loc=#seBigint/#seAny; ... }
-{ .. #loc=-#seBigint; ... }
-{ .. #loc=#seBigint+#seAny; ... }
-{ .. #loc=#seCharByteShortInt-#seLong; ... }
-{ .. #loc=#seCharByteShortInt&#seLong; ... }
-{ .. #loc=#seCharByteShortInt*#seLong; ... }
-{ .. #loc=-#seCharByteShortInt; ... }
-{ .. #loc=#seCharByteShortInt^#seLong; ... }
-{ .. #loc=#seCharByteShortInt|#seLong; ... }
-{ .. #loc=#seCharByteShortInt+#seLong; ... }
-{ .. #loc=#seCharByteShortInt0-#seCharByteShortInt1; ... }
-{ .. #loc=#seCharByteShortInt0&#seCharByteShortInt1; ... }
-{ .. #loc=#seCharByteShortInt0*#seCharByteShortInt1; ... }
-{ .. #loc=#seCharByteShortInt0/#seCharByteShortInt1; ... }
-{ .. #loc=#seCharByteShortInt0^#seCharByteShortInt1; ... }
-{ .. #loc=#seCharByteShortInt0|#seCharByteShortInt1; ... }
-{ .. #loc=#seCharByteShortInt0+#seCharByteShortInt1; ... }
-{ .. #loc=#seCharByteShortInt0<<#se; ... }
-{ .. #loc=#seCharByteShortInt0>>#se; ... }
-{ .. #loc=#seCharByteShortInt0>>>#se; ... }
-{ .. #loc=#seLong-#seCharByteShortInt; ... }
-{ .. #loc=#seLong&#seCharByteShortInt; ... }
-{ .. #loc=#seLong*#seCharByteShortInt; ... }
-{ .. #loc=#seLong/#seCharByteShortInt; ... }
-{ .. #loc=-#seLong; ... }
-{ .. #loc=#seLong^#seCharByteShortInt; ... }
-{ .. #loc=#seLong|#seCharByteShortInt; ... }
-{ .. #loc=#seLong+#seCharByteShortInt; ... }
-{ .. #loc=#seLong0-#seLong1; ... }
-{ .. #loc=#seLong0&#seLong1; ... }
-{ .. #loc=#seLong0*#seLong1; ... }
-{ .. #loc=#seLong0^#seLong1; ... }
-{ .. #loc=#seLong0|#seLong1; ... }
-{ .. #loc=#seLong0+#seLong1; ... }
-{ .. #loc=#seLong0<<#se; ... }
-{ .. #loc=#seLong0>>#se; ... }
-{ .. #loc=#seLong0>>>#se; ... }
-{ .. #loc=(byte)#seBigint; ... }
-{ .. #loc=(byte)#seInt; ... }
-{ .. #loc=(byte)#seLong; ... }
-{ .. #loc=(byte)#seShort; ... }
-{ .. #loc=(char)#seBigint; ... }
-{ .. #loc=(char)#seByte; ... }
-{ .. #loc=(char)#seInt; ... }
-{ .. #loc=(char)#seLong; ... }
-{ .. #loc=(char)#seShort; ... }
-{ .. #loc=(int)#seBigint; ... }
-{ .. #loc=(int)#seLong; ... }
-{ .. #loc=(long)#seBigint; ... }
-{ .. #loc=(short)#seBigint; ... }
-{ .. #loc=(short)#seInt; ... }
-{ .. #loc=(short)#seLong; ... }
-{ .. #loc=@(#v.#sv); ... }
-{ .. #loc=~#se; ... }
-{ .. #loc=false; ... }
-{ .. #loc=false;#s1 ... }
-{ .. #loc=true;#s0 ... }
-{ .. #mb ... }
-{ .. #mn(#elist); ... }
-{ .. #multvardecl ... }
-{ .. #n ... }
-{ .. #nse.#mn(#elist); ... }
-{ .. #nsmr ... }
-{ .. #nsn ... }
-{ .. #nv.#attribute=#e; ... }
-{ .. #nv[#e]=#e0; ... }
-{ .. #s ... }
-{ .. #s ... }
-{ .. #s ... }
-{ .. #s ... }
-{ .. #s0 ... }
-{ .. #s0 ... }
-{ .. #s1 ... }
-{ .. #scr ... }
-{ .. #se.#mn(#elist); ... }
-{ .. #se.#mn(#selist); ... }
-{ .. #sv=#arr[#idx]; ... }
-{ .. #sv=#e; ... }
-{ .. #sv=#left-#right; ... }
-{ .. #sv=#left%#right; ... }
-{ .. #sv=#left&#right; ... }
-{ .. #sv=#left*#right; ... }
-{ .. #sv=#left/#right; ... }
-{ .. #sv=-#left; ... }
-{ .. #sv=#left^#right; ... }
-{ .. #sv=#left|#right; ... }
-{ .. #sv=#left+#right; ... }
-{ .. #sv=#left<<#right; ... }
-{ .. #sv=#left>>#right; ... }
-{ .. #sv=#left>>>#right; ... }
-{ .. #sv=#v1.#a; ... }
-{ .. #sv=(byte)#seShortIntLong; ... }
-{ .. #sv=(char)#seByteShortIntLong; ... }
-{ .. #sv=(int)#seLong; ... }
-{ .. #sv=(short)#seIntLong; ... }
-{ .. #sv=~#left; ... }
-{ .. #sw ... }
-{ .. #t #v0 = #vi; ... }
-{ .. #t #v0; ... }
-{ .. #t #v0;#v0=#vi; ... }
-{ .. #t.#mn(#elist); ... }
-{ .. #typeof(#a) #v0 = #v1.#a;@(#sv)=#v0; ... }
-{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#typeof(#lhs0) #v1 = #v[#v0];#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1);#lhs0=#v1; ... }
-{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#typeof(#lhs0) #v1 = #v[#v0];#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1);#lhs0=#v1; ... }
-{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1); ... }
-{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1);#lhs0=#v[#v0]; ... }
-{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1); ... }
-{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1);#lhs0=#v[#v0]; ... }
-{ .. #typeof(#e) #v = #e;#typeof(#lhs0) #v1 = #v.#attribute;#v.#attribute=(#typeof(#attribute))(#v.#attribute+1);#lhs0=#v1; ... }
-{ .. #typeof(#e) #v = #e;#typeof(#lhs0) #v1 = #v.#attribute;#v.#attribute=(#typeof(#attribute))(#v.#attribute-1);#lhs0=#v1; ... }
-{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute+1); ... }
-{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute+1);#lhs0=#v.#attribute; ... }
-{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute-1); ... }
-{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute-1);#lhs=#v.#attribute; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0-#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0%#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0&#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0*#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0/#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0^#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0|#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0+#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0<<#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0>>#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0>>>#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0!=#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0<#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0<=#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0==#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0>#v1; ... }
-{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0>=#v1; ... }
-{ .. #typeof(#e) #v0 = #e;@(#sv)=#v0; ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute-#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute%#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute&#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute*#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute/#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute^#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute|#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute+#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute<<#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute>>#e); ... }
-{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute>>>#e); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=#e1;#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]-#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]-#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]%#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]%#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]&#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]&#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]*#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]*#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]/#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]/#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]^#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]^#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]|#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]|#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]+#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]+#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]<<#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]<<#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>>#e1); ... }
-{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>>#e1);#lhs0=#v0[#v1]; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=#e;#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute-#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute%#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute&#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute*#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute/#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute^#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute|#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute+#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute<<#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute>>#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute>>>#e);#lhs0=#v0.#attribute; ... }
-{ .. #typeof(#lhs) #v0;init-array-creation(#arrayinitializer)#lhs=#v0; ... }
-{ .. #typeof(#lhs) #v0;method-call(#mn(#elist);)#lhs=#v0; ... }
-{ .. #typeof(#lhs) #v0;method-call(#se.#mn(#elist);)#lhs=#v0; ... }
-{ .. #typeof(#lhs) #v0;method-call(#se.#mn(#selist);)#lhs=#v0; ... }
-{ .. #typeof(#lhs) #v0;method-call(#t.#mn(#elist);)#lhs=#v0; ... }
-{ .. #typeof(#lhs) #v0;method-call(super.#mn(#elist);)#lhs=#v0; ... }
-{ .. #typeof(#lhs0) #v = #lhs1;#lhs1=(#typeof(#lhs1))(#lhs1+1);#lhs0=#v; ... }
-{ .. #typeof(#lhs0) #v = #lhs1;#lhs1=(#typeof(#lhs1))(#lhs1-1);#lhs0=#v; ... }
-{ .. #typeof(#na) #v0;init-array-creation(#na)#lhs=#v0; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v-#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v%#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v&#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v*#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v/#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v^#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v|#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v+#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v<<#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v>>#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=#v>>>#se; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=(#npit)#v; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=(byte)#v; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=(int)#v; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=(long)#v; ... }
-{ .. #typeof(#nse) #v = #nse;#lhs=(short)#v; ... }
-{ .. #typeof(#nse) #v0 = #nse;#lhs=#v0 ?#se1 :#se2; ... }
-{ .. #typeof(#nse) #v0 = #nse;#lhs=-#v0; ... }
-{ .. #typeof(#nse) #v0 = #nse;#lhs=~#v0; ... }
-{ .. #typeof(#nse) #v0 = #nse;#v=#v0 instanceof #t; ... }
-{ .. #typeof(#nse) #v0 = #nse;return #v0; ... }
-{ .. #typeof(#nse) #v0 = #nse;this[#v0]=#se0; ... }
-{ .. #typeof(#nse) #v0 = #nse;throw #v0; ... }
-{ .. #typeof(#nse) #v0;#v0=#nse;#lhs=#v0.#mn(#elist); ... }
-{ .. #typeof(#nse) #v0;#v0=#nse;#v0.#mn(#elist); ... }
-{ .. #typeof(#nse) #v1 = #nse;#lhs=~#v1; ... }
-{ .. #typeof(#nse) #v1 = #nse;#v.#a=#v1; ... }
-{ .. #typeof(#nse) #vNew = #nse;#v=#vNew.length; ... }
-{ .. #typeof(#nse) #vNew = #nse;#v=\seq_reverse(#vNew); ... }
-{ .. #typeof(#nse) #vNew = #nse;#v=\seq_singleton(#vNew); ... }
-{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0!=#se; ... }
-{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0<#se; ... }
-{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0<=#se; ... }
-{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0==#se; ... }
-{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0>#se; ... }
-{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0>=#se; ... }
-{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=#vLeftNew[#eRight]; ... }
-{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\indexOf(#vLeftNew,#eRight); ... }
-{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\intersect(#vLeftNew,#eRight); ... }
-{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\seq_concat(#vLeftNew,#eRight); ... }
-{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\seq_sub(#vLeftNew,#eMiddle,#eRight); ... }
-{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\set_minus(#vLeftNew,#eRight); ... }
-{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\set_union(#vLeftNew,#eRight); ... }
-{ .. #typeof(#nseMiddle) #vMiddleNew = #nseMiddle;#v=\seq_sub(#seLeft,#vMiddleNew,#eRight); ... }
-{ .. #typeof(#nsencr) #loc = #nsencr;synchronized(#loc) {#slist} ... }
-{ .. #typeof(#nseObj) #vObjNew = #nseObj;#v=\all_fields(#vObjNew); ... }
-{ .. #typeof(#nseObj) #vObjNew = #nseObj;#v=\singleton(#vObjNew.#a); ... }
-{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=#seLeft[#vRightNew]; ... }
-{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\indexOf(#seLeft,#vRightNew); ... }
-{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\intersect(#seLeft,#vRightNew); ... }
-{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\seq_concat(#seLeft,#vRightNew); ... }
-{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\seq_sub(#seLeft,#seMiddle,#vRightNew); ... }
-{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\set_minus(#seLeft,#vRightNew); ... }
-{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\set_union(#seLeft,#vRightNew); ... }
-{ .. #typeof(#nv) #v0 = #nv;#v=#v0.#attribute; ... }
-{ .. #typeof(#nv) #v0 = #nv;#v=#v0.#length; ... }
-{ .. #typeof(#nv) #v0 = #nv;#v=#v0[#e]; ... }
-{ .. #typeof(#nv) #v0 = #nv;#v0.#attribute=#e; ... }
-{ .. #typeof(#nv) #v0 = #nv;#v0[#e]=#e0; ... }
-{ .. #typeof(#se) #v0 = #se; {#slist2}return #v0; ... }
-{ .. #typeof(#se) #v0 = #se;throw #v0; ... }
-{ .. #typeof(#sv) #v0 = #arr[#idx];@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left-#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left%#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left&#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left*#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left/#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = -#left;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left^#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left|#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left+#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left<<#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left>>#right;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = #left>>>#right; ... }
-{ .. #typeof(#sv) #v0 = (byte)#seShortIntLong;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = (char)#seByteShortIntLong;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = (int)#seLong;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = (short)#seIntLong;@(#sv)=#v0; ... }
-{ .. #typeof(#sv) #v0 = ~#left;@(#sv)=#v0; ... }
-{ .. #typeof(#v) #ar1 = #v;#typeof(#nse) #v0 = #nse;#ar1[#v0]=#e; ... }
-{ .. #typeof(#v) #v0 = #v;#typeof(#nse) #v1 = #nse;#v0.#a=#v1; ... }
-{ .. #typeof(#v) #v0 = #v;#typeof(#se) #v2 = #se;#typeof(#nse) #v1 = #nse;#v0[#v2]=#v1; ... }
-{ .. #typeof(#v0) #ar1 = #v0;#typeof(#nse) #v1 = #nse;#v=#ar1[#v1]; ... }
-{ .. #typeof(#v0) #v0 = create-object(#n);constructor-call(#n)post-work(#v0) ... }
-{ .. #typeof(#v0) #v0 = create-object(#n);constructor-call(#n)post-work(#v0)#lhs=#v0; ... }
-{ .. #unwind-loop(do#swhile ( #e );  ) ... }
-{ .. #v.#a=#nse; ... }
-{ .. #v.#a=#se; ... }
-{ .. #v.#sv=#arr[#idx]; ... }
-{ .. #v.#sv=#e; ... }
-{ .. #v.#sv=#v1.#a; ... }
-{ .. #v[#nse]=#e; ... }
-{ .. #v[#se]=#nse; ... }
-{ .. #v[#se]=#se0; ... }
-{ .. #v=#nse instanceof #t; ... }
-{ .. #v=#nse.length; ... }
-{ .. #v=#nseLeft[#eRight]; ... }
-{ .. #v=#nv.#attribute; ... }
-{ .. #v=#nv.#length; ... }
-{ .. #v=#nv[#e]; ... }
-{ .. #v=#seLeft.toString()+#sstrRight; ... }
-{ .. #v=#seLeft[#nseRight]; ... }
-{ .. #v=#seLeft+#sstrRight; ... }
-{ .. #v=#slit; ... }
-{ .. #v=#sstr1+#sstr2; ... }
-{ .. #v=#sstrLeft+#seRight.toString(); ... }
-{ .. #v=#sstrLeft+#seRight; ... }
-{ .. #v=#v0[#nse]; ... }
-{ .. #v=#v0[#se]; ... }
-{ .. #v=\all_fields(#nseObj); ... }
-{ .. #v=\all_objects(#eObj.#a); ... }
-{ .. #v=\indexOf(#nseLeft,#eRight); ... }
-{ .. #v=\indexOf(#seLeft,#nseRight); ... }
-{ .. #v=\intersect(#nseLeft,#eRight); ... }
-{ .. #v=\intersect(#seLeft,#nseRight); ... }
-{ .. #v=\seq_concat(#nseLeft,#eRight); ... }
-{ .. #v=\seq_concat(#seLeft,#nseRight); ... }
-{ .. #v=\seq_reverse(#nse); ... }
-{ .. #v=\seq_singleton(#nse); ... }
-{ .. #v=\seq_sub(#nseLeft,#eMiddle,#eRight); ... }
-{ .. #v=\seq_sub(#seLeft,#nseMiddle,#eRight); ... }
-{ .. #v=\seq_sub(#seLeft,#seMiddle,#nseRight); ... }
-{ .. #v=\set_minus(#nseLeft,#eRight); ... }
-{ .. #v=\set_minus(#seLeft,#nseRight); ... }
-{ .. #v=\set_union(#nseLeft,#eRight); ... }
-{ .. #v=\set_union(#seLeft,#nseRight); ... }
-{ .. #v=\singleton(#nseObj.#a); ... }
-{ .. #v=\singleton(#seObj.#a); ... }
-{ .. #v0=#v.#a; ... }
-{ .. #v0=#v.#length; ... }
-{ .. #v0=@(#sv); ... }
-{ .. (#e.#attribute)=#e0; ... }
-{ .. (#lhs)=#e; ... }
-{ .. //@ merge_point (#lhs (program LeftHandSide)); ... }
-{ .. ; ... }
-{ .. @(#sv)=#se; ... }
-{ .. @(#v.#sv)=#se; ... }
-{ .. ++#e.#attribute; ... }
-{ .. ++#e[#e0]; ... }
-{ .. ++#lhs1; ... }
-{ .. array-post-declaration(#arraypost) ... }
-{ .. assert #e1 : #e2; ... }
-{ .. assert #e1; ... }
-{ .. boolean #v = #nseBool;#lhs=!#v; ... }
-{ .. boolean #v0 = #nseBool0;#lhs=#v0&&#seBool1; ... }
-{ .. boolean #v0 = #nseBool0;#lhs=#v0||#seBool1; ... }
-{ .. boolean #v0 = #nseBool0;boolean #v1 = #exBool1;#lhs=#v0&#v1; ... }
-{ .. boolean #v0 = #nseBool0;boolean #v1 = #exBool1;#lhs=#v0^#v1; ... }
-{ .. boolean #v0 = #nseBool0;boolean #v1 = #exBool1;#lhs=#v0|#v1; ... }
-{ .. do-break(#lb0:break ;  ) ... }
-{ .. expand-method-body(#mb) ... }
-{ .. final#t #v0 = #vi; ... }
-{ .. final#t #v0; ... }
-{ .. final#t #v0;#v0=#vi; ... }
-{ .. ghost#t #v0 = #vi; ... }
-{ .. ghost#t #v0; ... }
-{ .. ghost#t #v0;#v0=#vi; ... }
-{ .. loop-scope(#lhs) {#slist} ... }
-{ .. loop-scope(#lhs) {} ... }
-{ .. loop-scope(#lhs) {return #se;#slist} ... }
-{ .. loop-scope(#lhs) {return ;#slist} ... }
-{ .. loop-scope(#lhs) {throw #se;#slist} ... }
-{ .. method-call(#mn(#elist);) ... }
-{ .. method-call(#se.#mn(#elist);) ... }
-{ .. method-call(#se.#mn(#selist);) ... }
-{ .. method-call(#t.#mn(#elist);) ... }
-{ .. method-call(super.#mn(#elist);) ... }
-{ .. multiple-var-decl(#multvardecl) ... }
-{ .. return #nse; ... }
-{ .. return #se; ... }
-{ .. return ; ... }
-{ .. special-constructor-call(#scr) ... }
-{ .. super.#mn(#elist); ... }
-{ .. switch-to-if(#sw) ... }
-{ .. synchronized(#cr) {} ... }
-{ .. synchronized(#nsencr) {#slist} ... }
-{ .. synchronized(#se) {} ... }
-{ .. this[#nse]=#se0; ... }
-{ .. this[#se]=#se0; ... }
-{ .. throw #e; ... }
-{ .. throw #nse; ... }
-{ .. throw #se; ... }
-{ .. throw new java.lang.NullPointerException (); ... }
-{ .. throw null; ... }
-{ .. try {}#cs ... }
-{ .. try {return #se;#slist}#cs ... }
-{ .. try {return ;#slist}#cs ... }
+{.. #sv = #e; ...}
+{.. #typeof(#e) #v0 = #e; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #v.#sv = #e; ...}
+{.. #typeof(#e) #v0 = #e; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #arr[#idx]; ...}
+{.. #typeof(#sv) #v0 = #arr[#idx]; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #v.#sv = #arr[#idx]; ...}
+{.. #typeof(#sv) #v0 = #arr[#idx]; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #v1.#a; ...}
+{.. #typeof(#a) #v0 = #v1.#a; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #v.#sv = #v1.#a; ...}
+{.. #typeof(#a) #v0 = #v1.#a; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #lhs = #sv; ...}
+{.. #static-initialisation(#sv); #lhs = @(#sv); ...}
+{.. #lhs = #v.#sv; ...}
+{.. #static-initialisation(#sv); #lhs = @(#sv); ...}
+{.. #sv = #e; ...}
+{.. #typeof(#e) #v0 = #e; @(#sv) = #v0; ...}
+{.. #v.#sv = #e; ...}
+{.. #typeof(#e) #v0 = #e; @(#sv) = #v0; ...}
+{.. #sv = #arr[#idx]; ...}
+{.. #typeof(#sv) #v0 = #arr[#idx]; @(#sv) = #v0; ...}
+{.. #v.#sv = #arr[#idx]; ...}
+{.. #typeof(#sv) #v0 = #arr[#idx]; @(#sv) = #v0; ...}
+{.. #sv = #v1.#a; ...}
+{.. #typeof(#a) #v0 = #v1.#a; @(#sv) = #v0; ...}
+{.. #v.#sv = #v1.#a; ...}
+{.. #typeof(#a) #v0 = #v1.#a; @(#sv) = #v0; ...}
+{.. #lhs = #sv; ...}
+{.. #lhs = @(#sv); ...}
+{.. #lhs = #v.#sv; ...}
+{.. #lhs = @(#sv); ...}
+{.. #sv = #left * #right; ...}
+{.. #typeof(#sv) #v0 = #left * #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #left / #right; ...}
+{.. #typeof(#sv) #v0 = #left / #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #left % #right; ...}
+{.. #typeof(#sv) #v0 = #left % #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #left - #right; ...}
+{.. #typeof(#sv) #v0 = #left - #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #left + #right; ...}
+{.. #typeof(#sv) #v0 = #left + #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #left & #right; ...}
+{.. #typeof(#sv) #v0 = #left & #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv=#left | #right; ...}
+{.. #typeof(#sv) #v0 = #left | #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv=#left ^ #right; ...}
+{.. #typeof(#sv) #v0 = #left ^ #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv=#left >> #right; ...}
+{.. #typeof(#sv) #v0 = #left >> #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv=#left << #right; ...}
+{.. #typeof(#sv) #v0 = #left << #right; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv=#left >>> #right; ...}
+{.. #typeof(#sv) #v0 = #left >>> #right; ...}
+{.. #sv = - #left; ...}
+{.. #typeof(#sv) #v0 = - #left; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = ~ #left; ...}
+{.. #typeof(#sv) #v0 = ~ #left; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = (byte) #seShortIntLong; ...}
+{.. #typeof(#sv) #v0 = (byte) #seShortIntLong; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = (short) #seIntLong; ...}
+{.. #typeof(#sv) #v0 = (short) #seIntLong; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = (int) #seLong; ...}
+{.. #typeof(#sv) #v0 = (int) #seLong; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = (char) #seByteShortIntLong; ...}
+{.. #typeof(#sv) #v0 = (char) #seByteShortIntLong; #static-initialisation(#sv); @(#sv) = #v0; ...}
+{.. #sv = #left * #right; ...}
+{.. #typeof(#sv) #v0 = #left * #right; @(#sv) = #v0; ...}
+{.. #sv = #left / #right; ...}
+{.. #typeof(#sv) #v0 = #left / #right; @(#sv) = #v0; ...}
+{.. #sv = #left % #right; ...}
+{.. #typeof(#sv) #v0 = #left % #right; @(#sv) = #v0; ...}
+{.. #sv = #left - #right; ...}
+{.. #typeof(#sv) #v0 = #left - #right; @(#sv) = #v0; ...}
+{.. #sv = #left + #right; ...}
+{.. #typeof(#sv) #v0 = #left + #right; @(#sv) = #v0; ...}
+{.. #sv = #left & #right; ...}
+{.. #typeof(#sv) #v0 = #left & #right; @(#sv) = #v0; ...}
+{.. #sv=#left | #right; ...}
+{.. #typeof(#sv) #v0 = #left | #right; @(#sv) = #v0; ...}
+{.. #sv=#left ^ #right; ...}
+{.. #typeof(#sv) #v0 = #left ^ #right; @(#sv) = #v0; ...}
+{.. #sv=#left >> #right; ...}
+{.. #typeof(#sv) #v0 = #left >> #right; @(#sv) = #v0; ...}
+{.. #sv=#left << #right; ...}
+{.. #typeof(#sv) #v0 = #left << #right; @(#sv) = #v0; ...}
+{.. #sv=#left >>> #right; ...}
+{.. #typeof(#sv) #v0 = #left >>> #right; ...}
+{.. #sv = - #left; ...}
+{.. #typeof(#sv) #v0 = - #left; @(#sv) = #v0; ...}
+{.. #sv = ~ #left; ...}
+{.. #typeof(#sv) #v0 = ~ #left; @(#sv) = #v0; ...}
+{.. #sv = (byte) #seShortIntLong; ...}
+{.. #typeof(#sv) #v0 = (byte) #seShortIntLong; @(#sv) = #v0; ...}
+{.. #sv = (short) #seIntLong; ...}
+{.. #typeof(#sv) #v0 = (short) #seIntLong; @(#sv) = #v0; ...}
+{.. #sv = (int) #seLong; ...}
+{.. #typeof(#sv) #v0 = (int) #seLong; @(#sv) = #v0; ...}
+{.. #sv = (char) #seByteShortIntLong; ...}
+{.. #typeof(#sv) #v0 = (char) #seByteShortIntLong; @(#sv) = #v0; ...}
+{.. #v = \set_union(#nseLeft, #eRight); ...}
+{.. #typeof(#nseLeft) #vLeftNew=#nseLeft; #v = \set_union(#vLeftNew, #eRight); ...}
+{.. #v = \set_union(#seLeft, #nseRight); ...}
+{.. #typeof(#nseRight) #vRightNew=#nseRight; #v = \set_union(#seLeft, #vRightNew); ...}
+{.. #v = \intersect(#nseLeft, #eRight); ...}
+{.. #typeof(#nseLeft) #vLeftNew=#nseLeft; #v = \intersect(#vLeftNew, #eRight); ...}
+{.. #v = \intersect(#seLeft, #nseRight); ...}
+{.. #typeof(#nseRight) #vRightNew=#nseRight; #v = \intersect(#seLeft, #vRightNew); ...}
+{.. #v = \set_minus(#nseLeft, #eRight); ...}
+{.. #typeof(#nseLeft) #vLeftNew=#nseLeft; #v = \set_minus(#vLeftNew, #eRight); ...}
+{.. #v = \set_minus(#seLeft, #nseRight); ...}
+{.. #typeof(#nseRight) #vRightNew=#nseRight; #v = \set_minus(#seLeft, #vRightNew); ...}
+{.. #v = \singleton(#nseObj.#a); ...}
+{.. #typeof(#nseObj) #vObjNew=#nseObj; #v = \singleton(#vObjNew.#a); ...}
+{.. #v = \singleton(#seObj.#a); ...}
+{.. ...}
+{.. #v = \all_objects(#eObj.#a); ...}
+{.. ...}
+{.. #v = \all_fields(#nseObj); ...}
+{.. #typeof(#nseObj) #vObjNew=#nseObj; #v = \all_fields(#vObjNew); ...}
+{.. #v = \seq_concat(#nseLeft, #eRight); ...}
+{.. #typeof(#nseLeft) #vLeftNew=#nseLeft; #v = \seq_concat(#vLeftNew, #eRight); ...}
+{.. #v = \seq_concat(#seLeft, #nseRight); ...}
+{.. #typeof(#nseRight) #vRightNew=#nseRight; #v = \seq_concat(#seLeft, #vRightNew); ...}
+{.. #v = \seq_get(#nseLeft, #eRight); ...}
+{.. #typeof(#nseLeft) #vLeftNew=#nseLeft; #v = \seq_get(#vLeftNew, #eRight); ...}
+{.. #v = \seq_get(#seLeft, #nseRight); ...}
+{.. #typeof(#nseRight) #vRightNew=#nseRight; #v = \seq_get(#seLeft, #vRightNew); ...}
+{.. #v = \indexOf(#nseLeft, #eRight); ...}
+{.. #typeof(#nseLeft) #vLeftNew=#nseLeft; #v = \indexOf(#vLeftNew, #eRight); ...}
+{.. #v = \indexOf(#seLeft, #nseRight); ...}
+{.. #typeof(#nseRight) #vRightNew=#nseRight; #v = \indexOf(#seLeft, #vRightNew); ...}
+{.. #v = \seq_sub(#nseLeft, #eMiddle, #eRight); ...}
+{.. #typeof(#nseLeft) #vLeftNew=#nseLeft; #v = \seq_sub(#vLeftNew, #eMiddle, #eRight); ...}
+{.. #v = \seq_sub(#seLeft, #nseMiddle, #eRight); ...}
+{.. #typeof(#nseMiddle) #vMiddleNew=#nseMiddle; #v = \seq_sub(#seLeft, #vMiddleNew, #eRight); ...}
+{.. #v = \seq_sub(#seLeft, #seMiddle, #nseRight); ...}
+{.. #typeof(#nseRight) #vRightNew=#nseRight; #v = \seq_sub(#seLeft, #seMiddle, #vRightNew); ...}
+{.. #v = \seq_singleton(#nse); ...}
+{.. #typeof(#nse) #vNew=#nse; #v = \seq_singleton(#vNew); ...}
+{.. #v = \seq_length(#nse); ...}
+{.. #typeof(#nse) #vNew=#nse; #v = \seq_length(#vNew); ...}
+{.. #v = \seq_reverse(#nse); ...}
+{.. #typeof(#nse) #vNew=#nse; #v = \seq_reverse(#vNew); ...}
+{.. assert #nse1; ...}
+{.. #typeof(#nse1) #condition = #nse1; assert #condition; ...}
+{.. assert #nse1 : #e; ...}
+{.. #typeof(#nse1) #condition = #nse1; assert #condition : #e; ...}
+{.. assert #se1 : #nse2; ...}
+{.. #typeof(#nse2) #message = #nse2; assert #se1 : #message; ...}
+{.. assert #se1; ...}
+{.. ...}
+{.. throw new java.lang.AssertionError(); ...}
+{.. assert #se1 : #se2; ...}
+{.. ...}
+{.. throw new java.lang.AssertionError(#se2); ...}
+{.. assert #se1 : null; ...}
+{.. ...}
+{.. throw new java.lang.AssertionError((java.lang.Object)null); ...}
+{.. assert #se1 : #se2; ...}
+{.. ...}
+{.. throw new java.lang.AssertionError(#se2); ...}
+{.. assert #e1 : #e2; ...}
+{.. ...}
+{.. assert #e1; ...}
+{.. ...}
+{.. ...}
+{.. ...}
+{.. #lhs = (\bigint) #seAny; ...}
+{.. #lhs = #seAny; ...}
+{.. #loc=#seBigint + #seAny; ...}
+{.. ...}
+{.. #loc=#seAny + #seBigint; ...}
+{.. ...}
+{.. #loc = #seBigint * #seAny; ...}
+{.. ...}
+{.. #loc = #seAny * #seBigint; ...}
+{.. ...}
+{.. #loc=#seBigint / #seAny; ...}
+{.. ...}
+{.. #loc=#seAny / #seBigint; ...}
+{.. ...}
+{.. #loc=#seBigint % #seAny; ...}
+{.. ...}
+{.. #loc=#seAny % #seBigint; ...}
+{.. ...}
+{.. #loc=#seBigint / #seAny; ...}
+{.. ...}
+{.. #loc=#seAny / #seBigint; ...}
+{.. ...}
+{.. #loc=#seBigint % #seAny; ...}
+{.. ...}
+{.. #loc=#seAny % #seBigint; ...}
+{.. ...}
+{.. #loc=#seBigint / #seAny; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc=#seAny / #seBigint; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc=#seBigint % #seAny; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc=#seAny % #seBigint; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc = #seBigint - #seAny; ...}
+{.. ...}
+{.. #loc = #seAny - #seBigint; ...}
+{.. ...}
+{.. #loc = - #seBigint; ...}
+{.. ...}
+{.. #loc = (short) #seBigint; ...}
+{.. ...}
+{.. #loc = (int) #seBigint; ...}
+{.. ...}
+{.. #loc = (long) #seBigint; ...}
+{.. ...}
+{.. #loc = (char) #seBigint; ...}
+{.. ...}
+{.. #loc = (byte) #seBigint; ...}
+{.. ...}
+{.. exec { #slist } ...}
+{.. { #slist } ...}
+{.. exec { } ccat #cs ...}
+{.. ...}
+{.. exec { return; #slist } ccat ( \Return ) { #slist1 } ccat #cs ...}
+{.. { #slist1 } ...}
+{.. exec { return #se; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. { #t #v; #v = (#t) #se; #slist1 } ...}
+{.. exec { break; #slist } ccat ( \Break ) { #slist1 } ccat #cs ...}
+{.. { #slist1 } ...}
+{.. exec { break #lb; #slist } ccat ( \Break #lb ) { #slist1 } ccat #cs ...}
+{.. { #slist1 } ...}
+{.. exec { break #lb; #slist } ccat ( \Break * ) { #slist1 } ccat #cs ...}
+{.. { #slist1 } ...}
+{.. exec { continue; #slist } ccat ( \Continue ) { #slist1 } ccat #cs ...}
+{.. { #slist1 } ...}
+{.. exec { continue #lb; #slist } ccat ( \Continue #lb ) { #slist1 } ccat #cs ...}
+{.. { #slist1 } ...}
+{.. exec { continue #lb; #slist } ccat ( \Continue * ) { #slist1 } ccat #cs ...}
+{.. { #slist1 } ...}
+{.. exec { throw #se; #slist } ccat ( #t #v0 ) { #slist1 } ...}
+{.. if ( #se == null ) { exec { throw new java.lang.NullPointerException (); } ccat ( #t #v0 ) { #slist1 } } else if ( #se instanceof #t ) { #t #v0; #v0 = (#t) #se; #slist1 } else { throw #se; } ...}
+{.. exec { throw #se; #slist } ccat ( #t #v0 ) { #slist1 } ccat ( #t2 #v1 ) { #slist3 } ccat #cs ...}
+{.. if ( #se == null ) { exec { throw new java.lang.NullPointerException (); } ccat ( #t #v0 ) { #slist1 } ccat ( #t2 #v1 ) { #slist3 } ccat #cs } else if ( #se instanceof #t ) { #t #v0; #v0 = (#t) #se; #slist1 } else { exec { throw #se; } ccat ( #t2 #v1 ) { #slist3 } ccat #cs } ...}
+{.. exec { return; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return; #slist } ccat ( \Break ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return; #slist } ccat ( \Break #lb ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return; #slist } ccat ( \Break * ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return; #slist } ccat ( \Continue ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return; #slist } ccat ( \Continue #lb ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return; #slist } ccat ( \Continue * ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return; #slist } ccat ( #t #v0 ) { #slist1 } ccat #cs ...}
+{.. { return; } ...}
+{.. exec { return #se; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. exec { return #se; #slist } ccat #cs ...}
+{.. exec { return #se; #slist } ccat ( \Return ) { #slist1 } ccat #cs ...}
+{.. exec { return #se; } ccat #cs ...}
+{.. exec { return #se; #slist } ccat ( \Break ) { #slist1 } ccat #cs ...}
+{.. { return #se; } ...}
+{.. exec { return #se; #slist } ccat ( \Break #lb ) { #slist1 } ccat #cs ...}
+{.. { return #se; } ...}
+{.. exec { return #se; #slist } ccat ( \Break * ) { #slist1 } ccat #cs ...}
+{.. { return #se; } ...}
+{.. exec { return #se; #slist } ccat ( \Continue ) { #slist1 } ccat #cs ...}
+{.. { return #se; } ...}
+{.. exec { return #se; #slist } ccat ( \Continue #lb ) { #slist1 } ccat #cs ...}
+{.. { return #se; } ...}
+{.. exec { return #se; #slist } ccat ( \Continue * ) { #slist1 } ccat #cs ...}
+{.. { return #se; } ...}
+{.. exec { return #se; #slist } ccat ( #t #v0 ) { #slist1 } ccat #cs ...}
+{.. { return #se; } ...}
+{.. exec { break; #slist } ccat ( \Return ) { #slist1 } ccat #cs ...}
+{.. exec { break; } ccat #cs ...}
+{.. exec { break; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. exec { break; } ccat #cs ...}
+{.. exec { break; #slist } ccat ( \Break #lb ) { #slist1 } ccat #cs ...}
+{.. { break; } ...}
+{.. exec { break; #slist } ccat ( \Break * ) { #slist1 } ccat #cs ...}
+{.. { break; } ...}
+{.. exec { break; #slist } ccat ( \Continue ) { #slist1 } ccat #cs ...}
+{.. { break; } ...}
+{.. exec { break; #slist } ccat ( \Continue #lb ) { #slist1 } ccat #cs ...}
+{.. { break; } ...}
+{.. exec { break; #slist } ccat ( \Continue * ) { #slist1 } ccat #cs ...}
+{.. { break; } ...}
+{.. exec { break; #slist } ccat ( #t #v0 ) { #slist1 } ccat #cs ...}
+{.. { break; } ...}
+{.. exec { break #lb; #slist } ccat ( \Return ) { #slist1 } ccat #cs ...}
+{.. exec { break #lb; } ccat #cs ...}
+{.. exec { break #lb; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. exec { break #lb; } ccat #cs ...}
+{.. exec { break #lb; #slist } ccat ( \Break ) { #slist1 } ccat #cs ...}
+{.. exec { break #lb; } ccat #cs ...}
+{.. exec { break #lb; #slist } ccat ( \Break #lb1 ) { #slist1 } ccat #cs ...}
+{.. exec { break #lb; } ccat #cs ...}
+{.. exec { break #lb; #slist } ccat ( \Continue ) { #slist1 } ccat #cs ...}
+{.. { break #lb; } ...}
+{.. exec { break #lb; #slist } ccat ( \Continue #lb1 ) { #slist1 } ccat #cs ...}
+{.. { break #lb; } ...}
+{.. exec { break #lb; #slist } ccat ( \Continue * ) { #slist1 } ccat #cs ...}
+{.. { break #lb; } ...}
+{.. exec { break #lb; #slist } ccat ( #t #v ) { #slist1 } ccat #cs ...}
+{.. { break #lb; } ...}
+{.. exec { continue; #slist } ccat ( \Return ) { #slist1 } ccat #cs ...}
+{.. exec { continue; } ccat #cs ...}
+{.. exec { continue; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. exec { continue; } ccat #cs ...}
+{.. exec { continue; #slist } ccat ( \Break ) { #slist1 } ccat #cs ...}
+{.. exec { continue; } ccat #cs ...}
+{.. exec { continue; #slist } ccat ( \Break #lb ) { #slist1 } ccat #cs ...}
+{.. exec { continue; } ccat #cs ...}
+{.. exec { continue; #slist } ccat ( \Break * ) { #slist1 } ccat #cs ...}
+{.. exec { continue; } ccat #cs ...}
+{.. exec { continue; #slist } ccat ( #t #v0 ) { #slist1 } ccat #cs ...}
+{.. { continue; } ...}
+{.. exec { continue #lb; #slist } ccat ( \Return ) { #slist1 } ccat #cs ...}
+{.. exec { continue #lb; } ccat #cs ...}
+{.. exec { continue #lb; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. exec { continue #lb; } ccat #cs ...}
+{.. exec { continue #lb; #slist } ccat ( \Break ) { #slist1 } ccat #cs ...}
+{.. exec { continue #lb; } ccat #cs ...}
+{.. exec { continue #lb; #slist } ccat ( \Break #lb1 ) { #slist1 } ccat #cs ...}
+{.. exec { continue #lb; } ccat #cs ...}
+{.. exec { continue #lb; #slist } ccat ( \Break * ) { #slist1 } ccat #cs ...}
+{.. exec { continue #lb; } ccat #cs ...}
+{.. exec { continue #lb; #slist } ccat ( \Continue ) { #slist1 } ccat #cs ...}
+{.. exec { continue #lb; } ccat #cs ...}
+{.. exec { continue #lb; #slist } ccat ( \Continue #lb1 ) { #slist1 } ccat #cs ...}
+{.. exec { continue #lb; } ccat #cs ...}
+{.. exec { continue #lb; #slist } ccat ( #t #v ) { #slist1 } ccat #cs ...}
+{.. { continue #lb; } ...}
+{.. exec { throw #se; #slist } ccat ( \Return ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. exec { throw #se; #slist } ccat ( \Return #t #v ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. exec { throw #se; #slist } ccat ( \Break ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. exec { throw #se; #slist } ccat ( \Break #lb ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. exec { throw #se; #slist } ccat ( \Break * ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. exec { throw #se; #slist } ccat ( \Continue ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. exec { throw #se; #slist } ccat ( \Continue #lb ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. exec { throw #se; #slist } ccat ( \Continue * ) { #slist1 } ccat #cs ...}
+{.. exec { throw #se; } ccat #cs ...}
+{.. for(#loopInit; #guard; #forupdates) #s ...}
+{.. { #forInitUnfoldTransformer(#loopInit); for(; #guard; #forupdates) #s } ...}
+{.. #nsn ...}
+{.. #evaluate-arguments(#nsn); ...}
+{.. #lhs = #nsn; ...}
+{.. #evaluate-arguments(#lhs = #nsn); ...}
+{.. #n ...}
+{.. #typeof(#v0) #v0 = #create-object(#n); #constructor-call(#v0, #n); #post-work(#v0); ...}
+{.. #lhs = #n; ...}
+{.. #typeof(#v0) #v0 = #create-object(#n); #constructor-call(#v0, #n); #post-work(#v0); #lhs = #v0; ...}
+{.. ...}
+{.. ...}
+{.. ...}
+{.. ...}
+{.. #scr ...}
+{.. #special-constructor-call(#scr); ...}
+{.. #lhs = #na; ...}
+{.. #typeof(#na) #v0; #init-array-creation(#v0, #na); #lhs = #v0; ...}
+{.. #lhs = #arrayinitializer; ...}
+{.. #typeof(#lhs) #v0; #init-array-creation(#v0, #arrayinitializer); #lhs = #v0; ...}
+{.. #loc = #seCharByteShortInt0 * #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt * #seLong; ...}
+{.. ...}
+{.. #loc=#seLong * #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#seLong0 * #seLong1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 / #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#se / #seLong; ...}
+{.. ...}
+{.. #loc=#seLong / #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#se0 % #se1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 / #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#se / #seLong; ...}
+{.. ...}
+{.. #loc=#seLong / #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#se0 % #se1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 / #seCharByteShortInt1; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc=#se / #seLong; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc=#seLong / #seCharByteShortInt; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc=#se0 % #se1; ...}
+{.. ...}
+{.. throw new java.lang.ArithmeticException(); ...}
+{.. #loc = #seCharByteShortInt0 - #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt - #seLong; ...}
+{.. ...}
+{.. #loc=#seLong - #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#seLong0 - #seLong1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 + #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt + #seLong; ...}
+{.. ...}
+{.. #loc=#seLong + #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#seLong0 + #seLong1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 & #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt & #seLong; ...}
+{.. ...}
+{.. #loc=#seLong & #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#seLong0 & #seLong1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 | #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt | #seLong; ...}
+{.. ...}
+{.. #loc=#seLong | #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#seLong0 | #seLong1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 ^ #seCharByteShortInt1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt ^ #seLong; ...}
+{.. ...}
+{.. #loc=#seLong ^ #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc=#seLong0 ^ #seLong1; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 >> #se; ...}
+{.. ...}
+{.. #loc=#seLong0 >> #se; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 << #se; ...}
+{.. ...}
+{.. #loc=#seLong0 << #se; ...}
+{.. ...}
+{.. #loc=#seCharByteShortInt0 >>> #se; ...}
+{.. ...}
+{.. #loc=#seLong0 >>> #se; ...}
+{.. ...}
+{.. #loc = - #seCharByteShortInt; ...}
+{.. ...}
+{.. #loc = - #seLong; ...}
+{.. ...}
+{.. #loc = ~ #se; ...}
+{.. ...}
+{.. #loc = (byte) #seShort; ...}
+{.. ...}
+{.. #loc = (byte) #seInt; ...}
+{.. ...}
+{.. #loc = (byte) #seLong; ...}
+{.. ...}
+{.. #loc = (short) #seInt; ...}
+{.. ...}
+{.. #loc = (short) #seLong; ...}
+{.. ...}
+{.. #loc = (int) #seLong; ...}
+{.. ...}
+{.. #loc = (char) #seByte; ...}
+{.. ...}
+{.. #loc = (char) #seShort; ...}
+{.. ...}
+{.. #loc = (char) #seInt; ...}
+{.. ...}
+{.. #loc = (char) #seLong; ...}
+{.. ...}
+{.. #typeof(#nse) #v0 = #nse; #lhs = -#v0; ...}
+{.. #lhs = (byte) #seByte; ...}
+{.. #lhs = #seByte; ...}
+{.. #lhs = (short) #seByte; ...}
+{.. #lhs = #seByte; ...}
+{.. #lhs = (char) #seChar; ...}
+{.. #lhs = #seChar; ...}
+{.. #lhs = (short) #seShort; ...}
+{.. #lhs = #seShort; ...}
+{.. #lhs = (int) #seByteShortInt; ...}
+{.. #lhs = #seByteShortInt; ...}
+{.. #lhs = (long) #seByteShortInt; ...}
+{.. #lhs = #seByteShortInt; ...}
+{.. #lhs = (long) #seLong; ...}
+{.. #lhs = #seLong; ...}
+{.. #lhs = (int) #seChar; ...}
+{.. #lhs = #seChar; ...}
+{.. #lhs = (long) #seChar; ...}
+{.. #lhs = #seChar; ...}
+{ .. for (#ty #id : #e) #stm ... }
+{ .. { #typeof(#a) #a = #e; for(int #v0 = 0; #v0 < #length-reference(#a); #v0 ++) { #ty #id = #a[#v0]; #stm } } ... }
+{ .. for (#ty #id : #e) #stm ... }
+{ .. #enhancedfor-elim(for (#ty #id : #e) #stm); ... }
+{ .. for (#ty #id: #nse) #stm ... }
+{ .. #typeof(#nse) #v0 = #nse; for (#ty #id: #v0) #stm ... }
+{.. #lhs = #jcsystemType.#getTransient(#se)@#jcsystemType; ...}
+{.. ...}
+{.. #jcsystemType.#setTransient(#se, #se1)@#jcsystemType; ...}
+{.. ...}
+{.. #jcsystemType.#beginTransaction()@#jcsystemType; ...}
+{.. #beginJavaCardTransaction; ...}
+{.. #jcsystemType.#commitTransaction()@#jcsystemType; ...}
+{.. #commitJavaCardTransaction; ...}
+{.. #jcsystemType.#abortTransaction()@#jcsystemType; ...}
+{.. #abortJavaCardTransaction; ...}
+{.. #beginJavaCardTransaction; ...}
+{.. ...}
+{.. #beginJavaCardTransaction; ...}
+{.. ...}
+{.. #commitJavaCardTransaction; ...}
+{.. ...}
+{.. #commitJavaCardTransaction; ...}
+{.. ...}
+{.. #finishJavaCardTransaction; ...}
+{.. ...}
+{.. #finishJavaCardTransaction; ...}
+{.. ...}
+{.. #abortJavaCardTransaction; ...}
+{.. ...}
+{.. #abortJavaCardTransaction; ...}
+{.. ...}
+{.. return #nse; ...}
+{.. #typeof(#nse) #v0=#nse; return #v0; ...}
+{.. merge_point(#lhs); ...}
+{.. ...}
+{.. #loc = #se; ...}
+{.. ...}
+{.. ...}
+{.. ...}
+{.. this[#nse]=#se0; ...}
+{.. #typeof(#nse) #v0=#nse; this[#v0]=#se0; ...}
+{.. #t #v0; ...}
+{.. ...}
+{.. final #t #v0; ...}
+{.. ...}
+{.. ghost #t #v0; ...}
+{.. ...}
+{.. #t #v0 = #vi; ...}
+{.. #t #v0; #v0 = #vi; ...}
+{.. final #t #v0 = #vi; ...}
+{.. final #t #v0; #v0 = #vi; ...}
+{.. ghost #t #v0 = #vi; ...}
+{.. ghost #t #v0; #v0 = #vi; ...}
+{.. #multvardecl ...}
+{.. #resolve-multiple-var-decl(#multvardecl); ...}
+{.. #arraypost ...}
+{.. #array-post-declaration(#arraypost); ...}
+{.. throw null; ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. throw #nse; ...}
+{.. #typeof(#nse) #v0 = #nse; throw #v0; ...}
+{.. #lb: throw #se; ...}
+{.. throw #se; ...}
+{.. #lb: { throw #se; #slist } ...}
+{.. throw #se; ...}
+{.. try { throw #se; #slist } catch ( #t #v0 ) { #slist1 } ...}
+{.. if ( #se == null ) { try { throw new java.lang.NullPointerException (); } catch ( #t #v0 ) { #slist1 } } else if ( #se instanceof #t ) { #t #v0; #v0 = (#t) #se; #slist1 } else { throw #se; } ...}
+{.. try { throw #se; #slist } catch ( #t #v0 ) { #slist1 } catch ( #t2 #v1 ) { #slist3 } catch #cs ...}
+{.. if ( #se == null ) { try { throw new java.lang.NullPointerException (); } catch ( #t #v0 ) { #slist1 } catch ( #t2 #v1 ) { #slist3 } catch #cs } else if ( #se instanceof #t ) { #t #v0; #v0 = (#t) #se; #slist1 } else { try { throw #se; } catch ( #t2 #v1 ) { #slist3 } catch #cs } ...}
+{.. try { throw #se; #slist} catch ( #t #v0 ) { #slist1 } catch #cs finally { #slist2 } ...}
+{.. if ( #se == null ) { try { throw new java.lang.NullPointerException (); } catch ( #t #v0 ) { #slist1 } catch #cs finally { #slist2 } } else if ( #se instanceof #t ) { try { #t #v0; #v0 = (#t) #se; #slist1 } finally { #slist2 } } else { try { throw #se; } catch #cs finally { #slist2 } } ...}
+{.. try { throw #se; #slist } finally { #slist2 } ...}
+{.. if ( #se == null ) { { #slist2 } throw new java.lang.NullPointerException (); } else { #typeof(#se) #v0 = #se; { #slist2 } throw #v0; } ...}
+{.. try {} #cs ...}
+{.. ...}
+{.. try {} catch #cs finally { #slist2 } ...}
+{.. { #slist2 } ...}
+{.. try { break #lb; #slist } catch #cs ...}
+{.. break #lb; ...}
+{.. try { break #lb; #slist } catch #cs finally { #slist2 } ...}
+{.. { #slist2 } break #lb; ...}
+{.. try { break; #slist } catch #cs ...}
+{.. break; ...}
+{.. try { break; #slist } catch #cs finally { #slist2 } ...}
+{.. { #slist2 } break; ...}
+{.. try { continue #lb; #slist } catch #cs ...}
+{.. continue #lb; ...}
+{.. try { continue #lb; #slist } catch #cs finally { #slist2 } ...}
+{.. { #slist2 } continue #lb; ...}
+{.. try { continue; #slist } catch #cs ...}
+{.. continue; ...}
+{.. try { continue; #slist } catch #cs finally { #slist2 } ...}
+{.. { #slist2 } continue; ...}
+{.. try { return #se; #slist } catch #cs ...}
+{.. return #se; ...}
+{.. try { return #se; #slist } catch #cs finally { #slist2 } ...}
+{.. #typeof(#se) #v0 = #se; { #slist2 } return #v0; ...}
+{.. try { return; #slist } catch #cs ...}
+{.. return; ...}
+{.. try { return; #slist } catch #cs finally { #slist2 } ...}
+{.. { #slist2 } return; ...}
+{.. #lhs0 = ++#lhs1; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1+1); #lhs0 = #lhs1; ...}
+{.. #lhs0 = ++#e.#attribute; ...}
+{.. #typeof(#e) #v=#e; #v.#attribute = (#typeof(#attribute))(#v.#attribute+1); #lhs0=#v.#attribute; ...}
+{.. #lhs0 = ++#e[#e0]; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #v[#v0] = (#typeof(#e[#e0]))(#v[#v0]+1); #lhs0=#v[#v0]; ...}
+{.. ++#lhs1; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1+1); ...}
+{.. ++#e.#attribute; ...}
+{.. #typeof(#e) #v=#e; #v.#attribute = (#typeof(#attribute))(#v.#attribute+1); ...}
+{.. ++#e[#e0]; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1); ...}
+{.. --#lhs1; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1-1); ...}
+{.. --#e.#attribute; ...}
+{.. #typeof(#e) #v=#e; #v.#attribute = (#typeof(#attribute))(#v.#attribute-1); ...}
+{.. --#e[#e0]; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1); ...}
+{.. #lhs0 = --#lhs1; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1-1); #lhs0 = #lhs1; ...}
+{.. #lhs = --#e.#attribute; ...}
+{.. #typeof(#e) #v=#e; #v.#attribute = (#typeof(#attribute))(#v.#attribute-1); #lhs = #v.#attribute; ...}
+{.. #lhs0 = --#e[#e0]; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #v[#v0] = (#typeof(#e[#e0]))(#v[#v0]-1); #lhs0 = #v[#v0]; ...}
+{.. #lhs0 = #lhs1++; ...}
+{.. #typeof(#lhs0) #v = #lhs1; #lhs1 = (#typeof(#lhs1))(#lhs1+1); #lhs0 = #v; ...}
+{.. #lhs0 = #e.#attribute++; ...}
+{.. #typeof(#e) #v=#e; #typeof(#lhs0) #v1=#v.#attribute; #v.#attribute = (#typeof(#attribute))(#v.#attribute+1); #lhs0 = #v1; ...}
+{.. #lhs0 = #e[#e0]++; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #typeof(#lhs0) #v1=#v[#v0]; #v[#v0] = (#typeof(#e[#e0]))(#v[#v0]+1); #lhs0=#v1; ...}
+{.. #lhs1++; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1+1); ...}
+{.. #e.#attribute++; ...}
+{.. #typeof(#e) #v=#e; #v.#attribute = (#typeof(#attribute))(#v.#attribute+1); ...}
+{.. #e[#e0]++; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1); ...}
+{.. #lhs1--; ...}
+{.. #lhs1 = (#typeof(#lhs1))#lhs1-1; ...}
+{.. #e.#attribute--; ...}
+{.. #typeof(#e) #v=#e; #v.#attribute = (#typeof(#attribute))(#v.#attribute-1); ...}
+{.. #e[#e0]--; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1); ...}
+{.. #lhs0 = #lhs1--; ...}
+{.. #typeof(#lhs0) #v = #lhs1; #lhs1 = (#typeof(#lhs1))(#lhs1-1); #lhs0 = #v; ...}
+{.. #lhs0 = #e.#attribute--; ...}
+{.. #typeof(#e) #v=#e; #typeof(#lhs0) #v1=#v.#attribute; #v.#attribute = (#typeof(#attribute))(#v.#attribute-1); #lhs0 = #v1; ...}
+{.. #lhs0 = #e[#e0]--; ...}
+{.. #typeof(#e) #v=#e; #typeof(#e0) #v0=#e0; #typeof(#lhs0) #v1=#v[#v0]; #v[#v0] = (#typeof(#e[#e0]))(#v[#v0]-1); #lhs0 = #v1; ...}
+{.. #lhs = (boolean) #exBool; ...}
+{.. #lhs = #exBool; ...}
+{.. #lhs = (#npit) #nse; ...}
+{.. #typeof(#nse) #v = #nse; #lhs = (#npit) #v; ...}
+{.. #lhs = (#npit) #se; ...}
+{.. ...}
+{.. #lhs = (#npit) #se; ...}
+{.. ...}
+{.. throw new java.lang.ClassCastException(); ...}
+{.. #lhs = (#npit) #se; ...}
+{.. ...}
+{.. #lhs = (#npit) #se; ...}
+{.. ...}
+{.. #se.#mn(#selist); ...}
+{.. #method-call(#se.#mn(#selist)); ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. #se.#mn(#selist); ...}
+{.. #method-call(#se.#mn(#selist)); ...}
+{.. #se.#mn(#selist); ...}
+{.. #method-call(#se.#mn(#selist)); ...}
+{.. #lhs = #se.#mn(#selist); ...}
+{.. #typeof(#lhs) #v0; #method-call(#v0, #se.#mn(#selist)); #lhs = #v0; ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. #lhs = #se.#mn(#selist); ...}
+{.. #typeof(#lhs) #v0; #method-call(#v0, #se.#mn(#selist)); #lhs = #v0; ...}
+{.. #lhs = #se.#mn(#selist); ...}
+{.. #typeof(#lhs) #v0; #method-call(#v0, #se.#mn(#selist)); #lhs = #v0; ...}
+{.. #nsmr ...}
+{.. #evaluate-arguments(#nsmr); ...}
+{.. #nse.#mn(#elist); ...}
+{.. #typeof(#nse) #v0; #v0 = #nse; #v0.#mn(#elist); ...}
+{.. #method-call(#ex, super.#mn(#elist)); ...}
+{.. #typeof(#lhs) #v0; #method-call(#ex, #v0, super.#mn(#elist)); #lhs = #v0; ...}
+{.. #lhs = #nsmr; ...}
+{.. #evaluate-arguments(#lhs = #nsmr); ...}
+{.. #lhs = #nse.#mn(#elist); ...}
+{.. #typeof(#nse) #v0; #v0 = #nse; #lhs = #v0.#mn(#elist); ...}
+{.. method-frame(#ex):{} ...}
+{.. ...}
+{.. method-frame(#ex):{return; #slist} ...}
+{.. ...}
+{.. method-frame(#v0, #ex):{return #se; #slist} ...}
+{.. method-frame(#ex):{ #v0 = #se; } ...}
+{.. method-frame(#ex):{return #se; #slist} ...}
+{.. ...}
+{.. #mb ...}
+{.. #expand-method-body(#mb); ...}
+{.. {return; #slist} ...}
+{.. return; ...}
+{.. {return #se; #slist} ...}
+{.. return #se; ...}
+{.. #lb: return #se; ...}
+{.. return #se; ...}
+{.. #lb: { return #se; #slist } ...}
+{.. return #se; ...}
+{.. method-frame(#ex):{throw #se; #slist} ...}
+{.. throw #se; ...}
+{.. method-frame(#v0, #ex):{throw #se; #slist} ...}
+{.. throw #se; ...}
+{.. throw #se; ...}
+{.. #typeof(#se) #v0 = #se; throw #v0; ...}
+{.. {throw #e; #slist} ...}
+{.. throw #e; ...}
+{.. method-frame(#v0, #ex):{} ...}
+{.. ...}
+{.. if(#nse) #s0 ...}
+{.. boolean #boolv; #boolv = #nse; if(#boolv) #s0 ...}
+{.. if(#nse) #s0 else #s1 ...}
+{.. boolean #boolv; #boolv = #nse; if(#boolv) #s0 else{#s1} ...}
+{.. if(#se) #s0 ...}
+{.. #s0 ...}
+{.. ...}
+{.. if(#se) #s0 else #s1 ...}
+{.. #s0 ...}
+{.. #s1 ...}
+{.. if(#se) #s0 else #s1 ...}
+{.. #s0 ...}
+{.. #s1 ...}
+{.. if(#se) #s0 ...}
+{.. #s0 ...}
+{.. ...}
+{.. if(#se) #s0 else #s1 ...}
+{.. #s0 ...}
+{.. #s1 ...}
+{.. if(#se) #s0 ...}
+{.. #s0 ...}
+{.. ...}
+{.. if (#se) #s0 ...}
+{.. #s0 ...}
+{.. if (#se) #s0 else #s1 ...}
+{.. #s0 ...}
+{.. if (#se) #s0 ...}
+{.. ...}
+{.. if (#se) #s0 else #s1 ...}
+{.. #s1 ...}
+{.. #loc=true; if (#loc) #s0 ...}
+{.. #loc=true; #s0 ...}
+{.. #loc=false; if (#loc) #s0 ...}
+{.. #loc=false; ...}
+{.. #loc=true; if (#loc) #s0 else #s1 ...}
+{.. #loc=true; #s0 ...}
+{.. #loc=false; if (#loc) #s0 else #s1 ...}
+{.. #loc=false; #s1 ...}
+{.. { #loc=true; } if (#loc) #s0 ...}
+{.. { #loc=true; } #s0 ...}
+{.. { #loc=false; } if (#loc) #s0 ...}
+{.. { #loc=false; } ...}
+{.. { #loc=true;} if (#loc) #s0 else #s1 ...}
+{.. { #loc=true;} #s0 ...}
+{.. { #loc=false; } if (#loc) #s0 else #s1 ...}
+{.. { #loc=false; } #s1 ...}
+{.. #sw ...}
+{.. #switch-to-if(#sw) ...}
+{.. #lb0: break #lb1; ...}
+{.. #do-break(#lb0: break #lb1;); ...}
+{.. { break #lb1; #slist} ...}
+{.. break #lb1; ...}
+{.. #lb0: {break #lb1; #slist } ...}
+{.. #do-break(#lb0: break #lb1;); ...}
+{.. #lb:{} ...}
+{.. {} ...}
+{.. {} ...}
+{.. ...}
+{.. #lb: #s ...}
+{.. #s ...}
+{.. ; ...}
+{.. ...}
+{.. synchronized(#nsencr){ #slist } ...}
+{.. #typeof(#nsencr) #loc=#nsencr; synchronized(#loc){ #slist } ...}
+{.. synchronized(#se){} ...}
+{.. ...}
+{.. synchronized(#se){} ...}
+{.. ...}
+{.. synchronized(#se){} ...}
+{.. if(#se==null){throw new java.lang.NullPointerException();} ...}
+{.. synchronized(#cr){} ...}
+{.. ...}
+{.. #v = #nse instanceof #t; ...}
+{.. #lhs = #e0 ? #e1 : #e2; ...}
+{.. if(#e0) {#lhs = #e1;} else {#lhs = #e2;} ...}
+{.. #lhs = #nse ? #se1 : #se2; ...}
+{.. #typeof(#nse) #v0 = #nse; #lhs = #v0 ? #se1 : #se2; ...}
+{.. #lhs = #se0 ? #se1 : #se2; ...}
+{.. ...}
+{.. #lhs = #se0 == #se1; ...}
+{.. #lhs = false; ...}
+{.. #lhs = true; ...}
+{.. #lhs = #se0 == #se1; ...}
+{.. ...}
+{.. #lhs = #se0 != #se1; ...}
+{.. #lhs = true; ...}
+{.. #lhs = false; ...}
+{.. #lhs = #se0 != #se1; ...}
+{.. ...}
+{.. #lhs = #se0 < #se1; ...}
+{.. #lhs = true; ...}
+{.. #lhs = false; ...}
+{.. #lhs = #se0 < #se1; ...}
+{.. ...}
+{.. #lhs = #se0 <= #se1; ...}
+{.. #lhs = true; ...}
+{.. #lhs = false; ...}
+{.. #lhs = #se0 <= #se1; ...}
+{.. ...}
+{.. #lhs = #se0 > #se1; ...}
+{.. #lhs = true; ...}
+{.. #lhs = false; ...}
+{.. #lhs = #se0 > #se1; ...}
+{.. ...}
+{.. #lhs = #se0 >= #se1; ...}
+{.. #lhs = true; ...}
+{.. #lhs = false; ...}
+{.. #lhs = #se0 >= #se1; ...}
+{.. ...}
+{.. #lhs = (byte) #nse; ...}
+{.. #typeof(#nse) #v = #nse; #lhs = (byte) #v; ...}
+{.. #lhs = (short) #nse; ...}
+{.. #typeof(#nse) #v = #nse; #lhs = (short) #v; ...}
+{.. #lhs = (int) #nse; ...}
+{.. #typeof(#nse) #v = #nse; #lhs = (int) #v; ...}
+{.. #lhs = (long) #nse; ...}
+{.. #typeof(#nse) #v = #nse; #lhs = (long) #v; ...}
+{.. #e0.#attribute *= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute * #e); ...}
+{.. #e0[#e] *= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] * #e1); ...}
+{.. #lhs *= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs * (#e)); ...}
+{.. #e0.#attribute /= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute / #e); ...}
+{.. #e0[#e] /= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] / #e1); ...}
+{.. #lhs /= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs / (#e)); ...}
+{.. #e0.#attribute %= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute % #e); ...}
+{.. #e0[#e] %= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] % #e1); ...}
+{.. #lhs %= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs % (#e)); ...}
+{.. #e0.#attribute += #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute + #e); ...}
+{.. #e0[#e] += #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] + #e1); ...}
+{.. #lhs += #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs + (#e)); ...}
+{.. #e0.#attribute -= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute - #e); ...}
+{.. #e0[#e] -= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] - #e1); ...}
+{.. #lhs -= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs - (#e)); ...}
+{.. #e0.#attribute <<= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute << #e); ...}
+{.. #e0[#e] <<= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] << #e1); ...}
+{.. #lhs <<= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs << (#e)); ...}
+{.. #e0.#attribute >>= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute >> #e); ...}
+{.. #e0[#e] >>= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] >> #e1); ...}
+{.. #lhs >>= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs >> (#e)); ...}
+{.. #e0.#attribute >>>= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute >>> #e); ...}
+{.. #e0[#e] >>>= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] >>> #e1); ...}
+{.. #lhs >>>= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs >>> (#e)); ...}
+{.. #e0.#attribute &= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute & #e); ...}
+{.. #e0[#e] &= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] & #e1); ...}
+{.. #lhs &= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs & (#e)); ...}
+{.. #e0.#attribute |= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute | #e); ...}
+{.. #e0[#e] |= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] | #e1); ...}
+{.. #lhs |= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs | (#e)); ...}
+{.. #e0.#attribute ^= #e; ...}
+{.. #typeof(#e0) #v=#e0; #v.#attribute = (#typeof(#attribute))(#v.#attribute ^ #e); ...}
+{.. #e0[#e] ^= #e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1] = (#typeof(#e0[#e]))(#v0[#v1] ^ #e1); ...}
+{.. #lhs ^= #e; ...}
+{.. #lhs = (#typeof(#lhs))(#lhs ^ (#e)); ...}
+{.. #lhs0=#e0[#e]=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]=#e1; #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute=#e; #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1=#e; ...}
+{.. #lhs1=#e; #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]*=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] * #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute*=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute * #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1*=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 * #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]/=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] / #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute/=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute / #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1/=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 / #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]%=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] % #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute%=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute % #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1%=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 % #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]+=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] + #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute+=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute + #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1+=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 + #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]-=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] - #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute-=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute - #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1-=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 - #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]<<=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] << #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute<<=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute << #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1<<=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 << #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]>>=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] >> #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute>>=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute >> #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1>>=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 >> #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]>>>=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] >>> #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute>>>=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute >>> #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1>>>=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 >>> #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]&=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] & #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute&=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute & #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1&=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 & #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]|=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] | #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute|=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute | #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1|=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 | #e); #lhs0=#lhs1; ...}
+{.. #lhs0=#e0[#e]^=#e1; ...}
+{.. #typeof(#e0) #v0=#e0; #typeof(#e) #v1=#e; #v0[#v1]= (#typeof(#e0[#e]))(#v0[#v1] ^ #e1); #lhs0=#v0[#v1]; ...}
+{.. #lhs0=#e0.#attribute^=#e; ...}
+{.. #typeof(#e0) #v0=#e0; #v0.#attribute = (#typeof(#attribute))(#v0.#attribute ^ #e); #lhs0=#v0.#attribute; ...}
+{.. #lhs0=#lhs1^=#e; ...}
+{.. #lhs1 = (#typeof(#lhs1))(#lhs1 ^ #e); #lhs0=#lhs1; ...}
+{.. { { #slist } } ...}
+{.. { #slist } ...}
+{.. { while ( #e ) #s } ...}
+{.. while ( #e ) #s ...}
+{.. { for(#loopInit; #guard; #forupdates) #s } ...}
+{.. for(#loopInit; #guard; #forupdates) #s ...}
+{.. { for(; #guard; #forupdates) #s } ...}
+{.. for(; #guard; #forupdates) #s ...}
+{.. { for(#loopInit; #guard;) #s } ...}
+{.. for(#loopInit; #guard;) #s ...}
+{.. { for(; #guard;) #s } ...}
+{.. for(; #guard;) #s ...}
+{.. { do #s while (#e); } ...}
+{.. do #s while (#e); ...}
+{.. { { #slist } { #slist1 } } ...}
+{.. { #slist } { #slist1 } ...}
+{.. #lhs = (#e); ...}
+{.. #lhs = #e; ...}
+{.. (#e.#attribute) = #e0; ...}
+{.. #e.#attribute = #e0; ...}
+{.. (#lhs) = #e; ...}
+{.. #lhs = #e; ...}
+{.. #lhs=#nse * #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v * #se; ...}
+{.. #lhs=#e * #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 * #v1; ...}
+{.. #lhs=#nse / #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v / #se; ...}
+{.. #lhs=#e / #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 / #v1; ...}
+{.. #lhs=#nse % #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v % #se; ...}
+{.. #lhs=#e % #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 % #v1; ...}
+{.. #lhs=#nse + #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v + #se; ...}
+{.. #lhs=#e + #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 + #v1; ...}
+{.. #lhs=#nse & #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v & #se; ...}
+{.. #lhs=#e & #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 & #v1; ...}
+{.. #lhs=#nse | #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v | #se; ...}
+{.. #lhs=#e | #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 | #v1; ...}
+{.. #lhs=#nse ^ #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v ^ #se; ...}
+{.. #lhs=#e ^ #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 ^ #v1; ...}
+{.. #lhs=~#nse; ...}
+{.. #typeof(#nse) #v1=#nse; #lhs=~#v1 ; ...}
+{.. #lhs=#nse - #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v - #se; ...}
+{.. #lhs=#e - #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 - #v1; ...}
+{.. #lhs=#nse >> #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v >> #se; ...}
+{.. #lhs=#e >> #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 >> #v1; ...}
+{.. #lhs=#nse >>> #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v >>> #se; ...}
+{.. #lhs=#e >>> #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 >>> #v1; ...}
+{.. #lhs=#nse << #se; ...}
+{.. #typeof(#nse) #v=#nse; #lhs=#v << #se; ...}
+{.. #lhs=#e << #nse; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse) #v1=#nse; #lhs=#v0 << #v1; ...}
+{.. #lhs = #nse0 == #se; ...}
+{.. #typeof(#nse0) #v0 = #nse0; #lhs = #v0 == #se; ...}
+{.. #lhs = #e == #nse0; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse0) #v1 = #nse0; #lhs = #v0 == #v1; ...}
+{.. #lhs = #nse0 != #se; ...}
+{.. #typeof(#nse0) #v0 = #nse0; #lhs = #v0 != #se; ...}
+{.. #lhs = #e != #nse0; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse0) #v1 = #nse0; #lhs = #v0 != #v1; ...}
+{.. #lhs = #nse0 < #se; ...}
+{.. #typeof(#nse0) #v0 = #nse0; #lhs = #v0 < #se; ...}
+{.. #lhs = #e < #nse0; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse0) #v1 = #nse0; #lhs = #v0 < #v1; ...}
+{.. #lhs = #nse0 <= #se; ...}
+{.. #typeof(#nse0) #v0 = #nse0; #lhs = #v0 <= #se; ...}
+{.. #lhs = #e <= #nse0; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse0) #v1 = #nse0; #lhs = #v0 <= #v1; ...}
+{.. #lhs = #nse0 > #se; ...}
+{.. #typeof(#nse0) #v0 = #nse0; #lhs = #v0 > #se; ...}
+{.. #lhs = #e > #nse0; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse0) #v1 = #nse0; #lhs = #v0 > #v1; ...}
+{.. #lhs = #nse0 >= #se; ...}
+{.. #typeof(#nse0) #v0 = #nse0; #lhs = #v0 >= #se; ...}
+{.. #lhs = #e >= #nse0; ...}
+{.. #typeof(#e) #v0=#e; #typeof(#nse0) #v1 = #nse0; #lhs = #v0 >= #v1; ...}
+{.. #lhs=!#seBool; ...}
+{.. ...}
+{.. #lhs=!#nseBool; ...}
+{.. boolean #v=#nseBool; #lhs=!#v; ...}
+{.. #lhs=#exBool0 && #nseBool1; ...}
+{.. if (!#exBool0) #lhs=false; else #lhs=#nseBool1; ...}
+{.. #lhs=#nseBool0 && #seBool1; ...}
+{.. boolean #v0 = #nseBool0; #lhs = #v0 && #seBool1; ...}
+{.. #lhs=#seBool0 && #seBool1; ...}
+{.. ...}
+{.. #lhs=#nseBool0 & #exBool1; ...}
+{.. boolean #v0 = #nseBool0; boolean #v1 = #exBool1; #lhs= #v0 & #v1; ...}
+{.. #lhs=#seBool0 & #seBool1; ...}
+{.. ...}
+{.. #lhs=#exBool0 || #nseBool1; ...}
+{.. if (#exBool0) #lhs=true; else #lhs=#nseBool1; ...}
+{.. #lhs=#nseBool0 || #seBool1; ...}
+{.. boolean #v0 = #nseBool0; #lhs = #v0 || #seBool1; ...}
+{.. #lhs=#seBool0 || #seBool1; ...}
+{.. ...}
+{.. #lhs=#nseBool0 | #exBool1; ...}
+{.. boolean #v0 = #nseBool0; boolean #v1 = #exBool1; #lhs = #v0 | #v1; ...}
+{.. #lhs=#seBool0 | #seBool1; ...}
+{.. ...}
+{.. #lhs=#nseBool0 ^ #exBool1; ...}
+{.. boolean #v0 = #nseBool0; boolean #v1 = #exBool1; #lhs = #v0 ^ #v1; ...}
+{.. #lhs=#seBool0 ^ #seBool1; ...}
+{.. ...}
+{.. #v=#nv.#attribute; ...}
+{.. #v.#a=#nse; ...}
+{.. #typeof(#nse) #v1=#nse; #v.#a=#v1;...}
+{.. #v.#a=#nse; ...}
+{.. #typeof(#v) #v0=#v; #typeof(#nse) #v1=#nse; #v0.#a=#v1;...}
+{.. #v[#se]=#se0; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (write)."; ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. throw new java.lang.ArrayIndexOutOfBoundsException(); ...}
+{.. throw new java.lang.ArrayStoreException(); ...}
+{.. #v[#se]=#se0; ...}
+{.. ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. throw new java.lang.ArrayIndexOutOfBoundsException(); ...}
+{.. throw new java.lang.ArrayStoreException(); ...}
+{.. #v[#se]=#se0; ...}
+{.. ...}
+{.. #v[#se]=#se0; ...}
+{.. ...}
+{.. #v[#se]=#se0; ...}
+{.. ...}
+{.. #v[#se]=#se0; ...}
+{.. ...}
+{.. ...}
+{.. assert false : "Access permission check-point (write)."; ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. throw new java.lang.ArrayIndexOutOfBoundsException(); ...}
+{.. ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. throw new java.lang.ArrayIndexOutOfBoundsException(); ...}
+{.. ...}
+{.. ...}
+{.. ...}
+{.. ...}
+{.. #v = #v0[#se]; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (read)."; ...}
+{.. throw new java.lang.NullPointerException(); ...}
+{.. throw new java.lang.ArrayIndexOutOfBoundsException(); ...}
+{.. #v = #v0[#se]; ...}
+{.. ...}
+{.. #v = #v0[#se]; ...}
+{.. ...}
+{.. #v0 = #v.#a; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (read)."; ...}
+{.. #v0 = #v.#a; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (read)."; ...}
+{.. #v0 = #v.#length; ...}
+{.. ...}
+{.. #v0 = #v.#length; ...}
+{.. ...}
+{.. #v0 = #v.#a; ...}
+{.. ...}
+{.. #v0 = #v.#a; ...}
+{.. ...}
+{.. #v0 = #v.#length; ...}
+{.. ...}
+{.. #v0 = #v.#a; ...}
+{.. ...}
+{.. #v0 = #v.#a; ...}
+{.. ...}
+{.. #v0 = #v.#length; ...}
+{.. ...}
+{.. #v.#a=#se; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (write)."; ...}
+{.. #v.#a=#se; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (write)."; ...}
+{.. #v.#a=#se; ...}
+{.. ...}
+{.. #v.#a=#se; ...}
+{.. ...}
+{.. #v.#a=#se; ...}
+{.. ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. #s ...}
+{.. @(#sv) = #se; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (static write)."; ...}
+{.. @(#v.#sv) = #se; ...}
+{.. ...}
+{.. assert false : "Access permission check-point (static write)."; ...}
+{.. #v0 = @(#sv); ...}
+{.. ...}
+{.. assert false : "Access permission check-point (static read)."; ...}
+{.. #loc = @(#v.#sv); ...}
+{.. ...}
+{.. assert false : "Access permission check-point (static read)."; ...}
+{.. #se.#mn(#elist); ...}
+{.. #method-call(#v0, #se.#mn(#elist)); ...}
+{.. #lhs = #se.#mn(#elist); ...}
+{.. #typeof(#lhs) #v0; #method-call(#v0, #se.#mn(#elist)); #lhs = #v0; ...}
+{.. #t.#mn(#elist); ...}
+{.. #method-call(#t.#mn(#elist)); ...}
+{.. #lhs = #t.#mn(#elist); ...}
+{.. #typeof(#lhs) #v0; #method-call(#v0, #t.#mn(#elist)); #lhs = #v0; ...}
+{.. #typeof(#lhs) #v0; #method-call(#ex, #v0, #mn(#elist)); #lhs = #v0; ...}
+{.. #mn(#elist); ...}
+{.. #method-call(#mn(#elist)); ...}
+{.. #se.#mn(#elist); ...}
+{.. #static-initialisation(#se.#mn(#elist)); #method-call(#v0, #se.#mn(#elist)); ...}
+{.. #lhs = #se.#mn(#elist); ...}
+{.. #static-initialisation(#se.#mn(#elist)); #typeof(#lhs) #v0; #method-call(#v0, #se.#mn(#elist)); #lhs = #v0; ...}
+{.. #t.#mn(#elist); ...}
+{.. #static-initialisation(#t.#mn(#elist)); #method-call(#t.#mn(#elist)); ...}
+{.. #lhs = #t.#mn(#elist); ...}
+{.. #static-initialisation(#t.#mn(#elist)); #typeof(#lhs) #v0; #method-call(#v0, #t.#mn(#elist)); #lhs = #v0; ...}
+{.. #static-initialisation(#mn(#elist)); #typeof(#lhs) #v0; #method-call(#ex, #v0, #mn(#elist)); #lhs = #v0; ...}
+{.. #static-initialisation(#mn(#elist)); #method-call(#ex, #mn(#elist)); ...}
+{.. #method-call(#ex, #mn(#elist)); ...}
+{.. @(#t.#mn(#elist)); ...}
+{.. #method-call(#t.#mn(#elist)); ...}
+{.. #typeof(#lhs) #v0; #method-call(#ex, #v0, #mn(#elist)); #lhs = #v0; ...}
+{.. #lhs = @(#t.#mn(#elist)); ...}
+{.. #typeof(#lhs) #v0; #method-call(#v0, #t.#mn(#elist)); #lhs = #v0; ...}
+{.. while(#e) #s ...}
+{.. #unwind-loop (#innerLabel, #outerLabel, while(#e) #s); ...}
+{.. do #s while (#e); ...}
+{.. #unwind-loop (#innerLabel, #outerLabel, do #s while(#e);); ...}
+{.. #forloop ...}
+{.. #for-to-while(#innerLabel, #outerLabel, #forloop) ...}
+{.. ...}
+{.. for(#loopInit; #guard; #forupdates) #s ...}
+{.. #unpack(for(#loopInit; #guard; #forupdates) #s); ...}
+{.. for(; #guard; #forupdates) #s ...}
+{.. #unwind-loop(#innerLabel, #outerLabel, for(; #guard; #forupdates) #s); ...}
+{.. for(#loopInit; #guard;) #s ...}
+{.. #unwind-loop(#innerLabel, #outerLabel, for(#loopInit; #guard;) #s); ...}
+{.. for(; #guard;) #s ...}
+{.. #unwind-loop(#innerLabel, #outerLabel, for(; #guard;) #s); ...}
+{.. for(#i; #e; #sel) {#s} ...}
+{.. #unwind-loop (for(#i; #e; #sel) // {#s}) ...}
+{.. #v = #e; ...}
+{.. boolean #v = #e; ...}
+{.. while (#nse) #body ... }
+{ .. boolean #x; loop-scope(#x) { if (#nse) { #body continue; } else { break; } } ... }
+{.. while (#nse) #body ... }
+{ .. boolean #x; loop-scope(#x) { if (#nse) { #body continue; } else { break; } } ... }
+{.. while (#nse) #body ... }
+{.. boolean #x; loop-scope(#x) { if (#nse) { #body continue; } } ... }
+{.. #reattachLoopInvariant(while (#nse) #body); ... }
+{.. while (#nse) #body ... }
+{ .. boolean #x; loop-scope(#x) { if (#nse) { #body continue; } else { break; } } ... }
+{ .. boolean #x; loop-scope(#x) { if (#nse) { #body continue; } else { break; } } ... }
+{.. while (#nse) #body ... }
+{ .. boolean #x; loop-scope(#x) { if (#nse) { #body continue; } else { break; } } ... }
+{ .. boolean #x; loop-scope(#x) { if (#nse) { #body continue; } else { break; } } ... }
+{.. loop-scope(#lhs) { break; #slist } ...}
+{.. #lhs = true; ...}
+{.. loop-scope(#lhs) { continue; #slist } ...}
+{.. #lb: loop-scope(#lhs) { continue #lb; #slist } ...}
+{.. loop-scope(#lhs) { continue #lb; #slist } ...}
+{.. #lhs = true; continue #lb; ...}
+{.. #lb1: loop-scope(#lhs) { continue #lb; #slist } ...}
+{.. #lhs = true; continue #lb; ...}
+{.. loop-scope(#lhs) { break #lb; #slist } ...}
+{.. { #lhs = true; break #lb; } ...}
+{.. loop-scope(#lhs) { throw #se; #slist } ...}
+{.. #lhs = true; throw #se; ...}
+{.. loop-scope(#lhs) { return #se; #slist } ...}
+{.. #lhs = true; return #se; ...}
+{.. loop-scope(#lhs) { return; #slist } ...}
+{.. #lhs = true; return; ...}
+{.. { continue; #slist } ...}
+{.. continue; ...}
+{.. { break; #slist } ...}
+{.. break; ...}
+{.. { continue #lb; #slist } ...}
+{.. continue #lb; ...}
+{.. { break #lb; #slist } ...}
+{.. break #lb; ...}

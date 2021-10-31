@@ -28,6 +28,7 @@ public class SchemaJavaBulkTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/com/github/javaparser/schemajava.txt", delimiter = 'ä')
     public void testSchemaJava(String input) {
+        System.err.println(input);
         ParserConfiguration config = new ParserConfiguration();
         config.setPreprocessUnicodeEscapes(true);
         JavaParser parser = new JavaParser(config);
@@ -35,9 +36,9 @@ public class SchemaJavaBulkTest {
 
         if(!result.isSuccessful()) {
             for (Problem problem : result.getProblems()) {
-                System.err.println(problem);
+                //System.err.println(problem.getVerboseMessage());
             }
-            fail(result.toString());
+            fail("Parsing failed of: " + input);
         } else {
             result.getResult().ifPresent(it -> {
                 System.out.println(it.toString());
