@@ -45,28 +45,35 @@ public class KeyTransactionStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyTransactionStatement() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyTransactionStatement asKeyTransactionStatement() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyTransactionStatement> toKeyTransactionStatement() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TransactionType getType() {
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyTransactionStatement setType(final TransactionType type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -78,6 +85,7 @@ public class KeyTransactionStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -85,6 +93,7 @@ public class KeyTransactionStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -92,11 +101,13 @@ public class KeyTransactionStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyTransactionStatement clone() {
         return (KeyTransactionStatement) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyTransactionStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyTransactionStatementMetaModel;
     }
@@ -104,6 +115,7 @@ public class KeyTransactionStatement extends Statement {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public KeyTransactionStatement(TokenRange tokenRange, TransactionType type) {
         super(tokenRange);
         setType(type);

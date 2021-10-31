@@ -30,6 +30,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.generator.AbstractGenerator;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -208,6 +209,20 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(KeyMethodSignature.class);
         add(KeyRangeExpression.class);
         add(KeyTransactionStatement.class);
+
+        //KeY-Schema
+        add(KeyContextStatementBlock.class);
+        add(KeyExecCtxtSV.class);
+        add(KeyExpressionSV.class);
+        add(KeyJumpLabelSV.class);
+        add(KeyMetaConstruct.class);
+        add(KeyMetaConstructExpression.class);
+        add(KeyMetaConstructType.class);
+        add(KeyMethodSignatureSV.class);
+        add(KeyPassiveExpression.class);
+        add(KeyProgramVariableSV.class);
+        add(KeyStatementSV.class);
+        add(KeyTypeSV.class);
     }};
 
     public MetaModelGenerator(SourceRoot sourceRoot) {

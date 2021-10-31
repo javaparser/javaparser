@@ -86,6 +86,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
@@ -384,9 +385,43 @@ TOKEN :
 | < BREAKTYPE: "\\Break" >
 | < BIGINT: "\\bigint">
 | < REAL: "\\real">
-| <MAP_FUNCTION:
-    "\\map_get" | "\\map_singleton" | "\\map_override" | "\\seq_2_map"
-    | "\\map_remove" | "\\map_update" | "\\in_domain" | "\\domain_implies_created" | "\\map_size" | "\\is_finite">
+//| <MAP_FUNCTION: "\\map_get" | "\\map_singleton" | "\\map_override" | "\\seq_2_map"
+//    | "\\map_remove" | "\\map_update" | "\\in_domain" | "\\domain_implies_created" | "\\map_size" | "\\is_finite">
+| < CONTEXTSTART: ".." >
+| < TYPEOF: "#typeof" >
+| < SWITCHTOIF: "#switch-to-if" >
+| < UNPACK: "#unpack" >
+| < REATTACHLOOPINVARIANT: "#reattachLoopInvariant" >
+| < FORINITUNFOLDTRANSFORMER: "#forInitUnfoldTransformer" >
+| < LOOPSCOPEINVARIANTTRANSFORMER: "#loopScopeInvariantTransformer" >
+| < SETSV: "#set" >
+| < ISSTATIC: "#isstatic" >
+| < EVALARGS: "#evaluate-arguments" >
+| < REPLACEARGS: "#replace" >
+| <UNWINDLOOP: "#unwind-loop" >
+| <CATCHALL: "#catchAll" >
+| <BEGIN: "#begin" >
+| <COMMIT: "#commit" >
+| <FINISH: "#finish" >
+| <ABORT: "#abort" >
+| <UNWIND_LOOP_BOUNDED: "#unwind-loop-bounded" >
+| <FORTOWHILE: "#for-to-while" >
+| <DOBREAK: "#do-break" >
+| <METHODCALL: "#method-call" >
+| <EXPANDMETHODBODY: "#expand-method-body" >
+| <CONSTRUCTORCALL: "#constructor-call" >
+| <SPECIALCONSTRUCTORECALL: "#special-constructor-call" >
+| <POSTWORK: "#post-work" >
+| <STATICINITIALIZATION: "#static-initialisation" >
+| <RESOLVE_MULTIPLE_VAR_DECL: "#resolve-multiple-var-decl" >
+| <ARRAY_POST_DECL: "#array-post-declaration" >
+| <ARRAY_INIT_CREATION: "#init-array-creation" >
+| <ARRAY_INIT_CREATION_TRANSIENT: "#init-array-creation-transient" >
+| <ARRAY_INIT_CREATION_ASSIGNMENTS: "#init-array-assignments" >
+| <ENHANCEDFOR_ELIM: "#enhancedfor-elim" >
+| <STATIC_EVALUATE: "#static-evaluate" >
+| <CREATE_OBJECT: "#create-object" >
+| <LENGTHREF: "#length-reference" >
 }
 
 /* LITERALS */
@@ -791,6 +826,8 @@ TOKEN :
 |
   < JMLIDENTIFIER: "\\" <LETTER> (<PART_LETTER>)* >
 |
+  < SVIDENTIFIER:  "#" <LETTER> (<PART_LETTER>)* >
+|
   < #LETTER: [
          "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
          "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",
@@ -1022,6 +1059,9 @@ TOKEN :
 | < XOR: "^" >
 | < REM: "%" >
 | < LSHIFT: "<<" >
+
+| < SHARP: "#">
+
 // RSIGNEDSHIFT - see below
 // RUNSIGNEDSHIFT - see below
 
@@ -2388,7 +2428,7 @@ Name ReceiverParameterId():
 }
 {
     [ LOOKAHEAD(Name()) ret = Name() "."] "this"
-    { return new Name(tokenRange(), ret, token.image); }
+    { return new Name(tokenRange(), ret, token().getText()); }
 }
 
 /**
@@ -2591,6 +2631,10 @@ Type Type(NodeList<AnnotationExpr> annotations):
         ret = ReferenceType(annotations)
      |
         ret = PrimitiveType(annotations)
+     |
+        ret =TypeSV(annotations)
+     |
+        ret =TypeMC(annotations)
     )
     { return ret; }
 }
@@ -2894,12 +2938,12 @@ Name Name():
     Name ret;
 }
 {
-    Identifier() { ret = new Name(tokenRange(), null, token.image); }
+    Identifier() { ret = new Name(tokenRange(), null, token().getText()); }
     (
         LOOKAHEAD(2)
         "."
         Identifier()
-        { ret = new Name(range(ret, token()), ret, token.image); }
+        { ret = new Name(range(ret, token()), ret, token().getText()); }
     )*
     { return ret; }
 }
@@ -2914,7 +2958,7 @@ SimpleName SimpleName():
     SimpleName ret;
 }
 {
-    Identifier() { ret = new SimpleName(tokenRange(), token.image); }
+    Identifier() { ret = new SimpleName(tokenRange(), token().getText()); }
     { return ret; }
 }
 
@@ -2964,7 +3008,9 @@ String Identifier():
         <ENUM> | <STRICTFP> | <YIELD> | <RECORD> |
         // An actual plain old identifier
         <IDENTIFIER>
-    ) { ret = token.image; setTokenKind(IDENTIFIER);}
+        | //
+          <SVIDENTIFIER>
+    ) { ret = token().getText(); setTokenKind(IDENTIFIER);}
     { return ret; }
 }
 
@@ -3006,7 +3052,7 @@ Expression Expression():
          |
             "::"
             [typeArgs = TypeArguments()]
-            (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image); }
+            (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token().getText()); }
         )
     ]
 
@@ -3538,6 +3584,10 @@ Expression UnaryExpression():
      //  result = ADTGetter()
      |
        ret = KeyGeneralEscapeExpression()
+     |
+       ret = KeyCreateObjectSV()
+     |
+       ret = KeyLengthReferenceSV()       
     )
     { return ret; }
 }
@@ -3662,6 +3712,7 @@ Expression CastExpression():
     Expression ret;
     ReferenceType referenceType;
     PrimitiveType primitiveType;
+    Type type;
     JavaToken begin = INVALID;
     NodeList<AnnotationExpr> annotations;
     NodeList<ReferenceType> typesOfMultiCast = emptyNodeList();
@@ -3676,6 +3727,13 @@ Expression CastExpression():
         ")"
         ret = UnaryExpression()
         { ret = new CastExpr(range(begin, token()), primitiveType, ret); }
+     |
+        //Schema
+        (type=TypeSV(annotations) | type=TypeMC(annotations))
+        ")"
+        ret=UnaryExpression()
+        { ret = new CastExpr(range(begin, token()), type, ret); }
+
      |
         // ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus
         // ( ReferenceType {AdditionalBound} ) LambdaExpression
@@ -3756,6 +3814,7 @@ Expression PrimaryPrefix():
     NodeList<Parameter> params = emptyNodeList();
     boolean hasArgs = false;
     boolean isLambda = false;
+    Expression expr;
     Type type;
     JavaToken begin;
     Parameter p = null;
@@ -3785,7 +3844,7 @@ Expression PrimaryPrefix():
             [ typeArgs = TypeArguments() ]
             (Identifier() | "new")
             {
-                ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
+                ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token().getText());
             }
         )
     |
@@ -3825,8 +3884,18 @@ Expression PrimaryPrefix():
         (Identifier() | "new")
         {
             ret = new TypeExpr(range(type, type), type);
-            ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
+            ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token().getText());
         }
+     |
+     	<SVIDENTIFIER>
+     	{
+     	    ret = new KeyProgramVariableSV(range(token(),token()), token().getText());
+        }
+     |
+        "@" "(" {begin=token();} expr = Expression() ")"
+        {
+            ret=  new KeyPassiveExpression(range(begin, token()), expr);
+      	}
      |
         name = SimpleName() { begin=token(); }
         [ args = Arguments() { hasArgs=true; } ]
@@ -3921,21 +3990,30 @@ Expression Literal():
 }
 {
     (
-        <INTEGER_LITERAL> { ret = new IntegerLiteralExpr(tokenRange(), token.image); }
+        <INTEGER_LITERAL> { ret = new IntegerLiteralExpr(tokenRange(), token().getText()); }
      |
-        <LONG_LITERAL> { ret = new LongLiteralExpr(tokenRange(), token.image); }
+        <LONG_LITERAL> { ret = new LongLiteralExpr(tokenRange(), token().getText()); }
      |
-        <FLOATING_POINT_LITERAL> { ret = new DoubleLiteralExpr(tokenRange(), token.image); }
+        <FLOATING_POINT_LITERAL> { ret = new DoubleLiteralExpr(tokenRange(), token().getText()); }
      |
-        <CHARACTER_LITERAL> { ret = new CharLiteralExpr(tokenRange(), unquote(token.image)); }
+        <CHARACTER_LITERAL> { ret = new CharLiteralExpr(tokenRange(), unquote(token().getText())); }
      |
-        <STRING_LITERAL> { ret = new StringLiteralExpr(tokenRange(), unquote(token.image)); }
+        <STRING_LITERAL> { ret = new StringLiteralExpr(tokenRange(), unquote(token().getText())); }
      |
-        <TEXT_BLOCK_LITERAL> { ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image)); }
+        <TEXT_BLOCK_LITERAL> { ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token().getText())); }
      |
         ret = BooleanLiteral()
      |
         ret = NullLiteral()
+     |
+        <SVIDENTIFIER>
+        {
+       	    ret = new KeyExpressionSV(range(token(),token()), token().getText());
+        }
+     |
+         ret = KeyStaticEvaluate()
+     |
+         ret = IsStaticMC()
     /*
      |
         ret = EmptySetLiteral()
@@ -4199,10 +4277,11 @@ Statement Statement():
             | LOOKAHEAD(3) ret = YieldStatement()
             | LOOKAHEAD(2) ret = KeyMethodCallStatement()
             | LOOKAHEAD(KeyMethodBodyStatement()) ret = KeyMethodBodyStatement()
-
             | ret = Block()
             | ret = EmptyStatement()
-            | ret = StatementExpression()
+            | LOOKAHEAD(24) ret = StatementExpression()
+            | ret = KeYMetaConstructStatement()
+            | LOOKAHEAD(2) ret = StatementSV()
             | ret = SwitchStatement()
             | ret = IfStatement()
             | ret = WhileStatement()
@@ -6269,3 +6348,339 @@ NodeList<Statement> KeyGeneralizedStatements() :
   }
 }
  */
+
+
+KeyTypeSV TypeSV(NodeList<AnnotationExpr> annotations) :
+{
+    KeyTypeSV result;
+}
+{
+    <SVIDENTIFIER>
+	{
+	    return new KeyTypeSV(range(token(),token()), annotations,  token().getText());
+	}
+}
+
+
+KeyMetaConstructType TypeMC(NodeList<AnnotationExpr> annotations) :
+{
+    KeyMetaConstructType result;
+    Expression e; JavaToken begin;
+}
+{
+    <TYPEOF> {begin=token();} "(" e = Expression() ")"
+     {
+        result = new KeyMetaConstructType(range(begin, token()), annotations, "#typeof", e);
+        return result;
+     }
+}
+
+
+KeyMetaConstructExpression IsStaticMC() :
+{
+    Expression e; JavaToken begin;
+}
+{
+    <ISSTATIC> {begin=token();} "(" e = Expression() ")"
+    {
+        return new KeyMetaConstructExpression(range(begin, token()), begin, e);
+    }
+}
+
+KeyProgramVariableSV VariableSV() :
+{
+    KeyProgramVariableSV result;
+}
+{
+    <SVIDENTIFIER>
+	{
+	    return new KeyProgramVariableSV(token().toTokenRange(), token().getText());
+	}
+}
+
+
+KeyExpressionSV ExpressionSV() :
+{
+    KeyExpressionSV result;
+}
+{
+    <SVIDENTIFIER>
+	{
+        return new KeyExpressionSV(token().toTokenRange(), token().getText());
+    }
+}
+
+/*
+KeyCatchSV KeyCatchSV() :
+{
+}
+{
+    <SVIDENTIFIER>
+	{
+	    return new KeyCatchSV(token().getText());
+	}
+}
+
+KeyCcatchSV KeyCcatchSV() :
+{
+}
+{
+    <SVIDENTIFIER>
+    {
+        return new KeyCcatchSV(token().getText());
+    }
+}
+*/
+
+KeyStatementSV StatementSV() :
+{
+    KeyStatementSV result;
+}
+{
+    <SVIDENTIFIER> //TODO weigl remove SEMICOLON?
+	{
+	    return new KeyStatementSV(token().toTokenRange(), token().getText());
+	}
+}
+
+KeyMetaConstruct KeYMetaConstructStatement() :
+{
+    Statement loopStat;
+    JavaToken begin;
+    TryStmt tryStat;
+    CastExpr typeCast;
+    LabeledStmt labStat;
+    Statement stat;
+    Expression methRef, consRef, activeAccess;
+    KeyProgramVariableSV sv = null;
+    KeyExecCtxtSV execsv = null;
+    KeyJumpLabelSV innerLabel, outerLabel;
+    NodeList<Expression> loopInit;
+}
+{
+        "#unwind-loop" {begin=token();} "("
+            innerLabel = JumpLabelSV() "," outerLabel = JumpLabelSV() ","
+              (  loopStat = WhileStatement()
+               | loopStat = ForStatement()
+               | loopStat = DoStatement()
+              )
+        ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), "#unwind-loop", loopStat, innerLabel, outerLabel);
+        }
+ |
+        "#unwind-loop-bounded" {begin=token();} "("
+            innerLabel = JumpLabelSV() "," outerLabel = JumpLabelSV() ","
+            (  loopStat = WhileStatement()
+            | loopStat = ForStatement()
+            | loopStat = DoStatement()
+            )
+        ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), "#unwind-loop-bounded", loopStat, innerLabel, outerLabel);
+        }
+ |
+       <FORINITUNFOLDTRANSFORMER> {begin=token();} "(" ( loopInit=ForInit() ) ")" ";"
+       {
+           return new KeyMetaConstruct(range(begin, token()), begin, loopInit.get(0));
+       }
+ |
+        <LOOPSCOPEINVARIANTTRANSFORMER> {begin=token();} "(" ( loopStat=WhileStatement() ) ")" ";"
+        {
+           return new KeyMetaConstruct(range(begin, token()), begin, loopStat);
+        }
+ |
+        <UNPACK> {begin=token();} "(" loopStat=ForStatement() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, loopStat);
+        }
+  |
+        "#for-to-while" {begin=token();} "(" innerLabel = JumpLabelSV() "," outerLabel = JumpLabelSV() "," stat = Statement() ")"
+        {
+           return  new KeyMetaConstruct(range(begin, token()), begin, stat, innerLabel, outerLabel);
+        }
+  |
+        <SWITCHTOIF> {begin=token();} "(" stat = Statement() ")"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, stat);
+        }
+  |
+        "#do-break" {begin=token();} "(" labStat=LabeledStatement() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, labStat);
+        }
+  |
+        "#evaluate-arguments" {begin=token();} "(" methRef = Expression() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, methRef);
+        }
+  |
+        "#replace" {begin=token();} "(" stat = Statement() "," sv = VariableSV() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, stat, sv);
+        }
+  |
+        "#method-call" {begin=token();} "(" 
+            [  LOOKAHEAD(2) sv = VariableSV() ","] 
+            [  LOOKAHEAD(2) execsv = ExecutionContextSV() ","]
+            methRef = PrimaryExpression()
+        ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, methRef, sv, execsv);
+        }
+  |
+        "#expand-method-body" {begin=token();} "(" stat = Statement() ("," sv = VariableSV() )?  ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, stat, sv);
+        }
+  |
+        "#constructor-call" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, consRef, sv);
+        }
+  |
+        "#special-constructor-call" {begin=token();} "(" consRef = ExpressionSV() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, consRef);
+        }
+  |
+        "#post-work" {begin=token();} "(" consRef = ExpressionSV() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, consRef);
+        }
+  |
+        "#static-initialisation" {begin=token();} "(" activeAccess = PrimaryExpression() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, activeAccess);
+        }
+  |
+        "#resolve-multiple-var-decl" {begin=token();} "(" stat = Statement() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, stat);
+        }
+  |
+        "#array-post-declaration" {begin=token();} "(" stat = Statement() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, stat);
+        }
+  |
+        "#init-array-creation" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, consRef, sv);
+        }
+  |
+        "#init-array-creation-transient" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, consRef, sv);
+        }
+  |
+        "#init-array-assignments" {begin=token();} "(" sv = VariableSV() "," consRef = ExpressionSV() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, consRef, sv);
+        }
+  |
+        "#enhancedfor-elim" {begin=token();} "(" loopStat=ForStatement() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, loopStat);
+        }
+  |
+        <REATTACHLOOPINVARIANT> {begin=token();} "(" loopStat = WhileStatement() ")" ";"
+        {
+            return new KeyMetaConstruct(range(begin, token()), begin, loopStat);
+        }
+}
+
+
+KeyContextStatementBlock StartBlock() :
+{
+    BlockStmt result = null;
+    NodeList<Statement> sl = new NodeList<Statement>();
+    Statement stat;
+    KeyExecCtxtSV ec = null;
+    KeyTypeSV tr = null;
+    KeyMethodSignatureSV pm = null;
+    KeyExpressionSV sv = null;
+    JavaToken begin;
+}
+{
+   "{" {begin=token();}
+        ( LOOKAHEAD(2)
+           ( <DOT>
+             ( LOOKAHEAD(2)
+		         pm=MethodSignatureSV() "@" tr = TypeSV(emptyNodeList())  "(" (sv = ExpressionSV())? ")"
+		     |
+	             ec = ExecutionContextSV() )
+	       )?
+           <CONTEXTSTART>
+           (stat = BlockStatement() { sl.add(stat); } )*
+           <ELLIPSIS>
+       |
+         ( stat = BlockStatement() {sl.add(stat); } )*
+       )
+   "}"
+   {
+        if (pm!=null) {
+            return new KeyContextStatementBlock(range(begin, token()), sl, tr, pm, sv);
+        } else{
+            return new KeyContextStatementBlock(range(begin, token()), sl,ec);
+        }
+   }
+}
+
+KeyJumpLabelSV JumpLabelSV() : {}
+{
+    <SVIDENTIFIER>
+	{
+        return new KeyJumpLabelSV(token().toTokenRange(), token().getText());
+	}
+}
+
+
+KeyExecCtxtSV ExecutionContextSV() : {}
+{
+    <SVIDENTIFIER>
+	{
+        return new KeyExecCtxtSV(token().toTokenRange(), token().getText());
+    }
+}
+
+KeyMethodSignatureSV MethodSignatureSV() : {}
+{
+    <SVIDENTIFIER>
+    {
+        return new KeyMethodSignatureSV(token().toTokenRange(), token().getText());
+    }
+}
+
+KeyMetaConstructExpression KeyStaticEvaluate(): 
+{
+    JavaToken begin; Expression child;
+}
+{
+    "#static-evaluate" {begin=token();}  "(" child = InstanceOfExpression() ")"
+    {
+        return new KeyMetaConstructExpression(range(token(),token()), begin, child);
+    }
+}
+
+KeyMetaConstructExpression KeyCreateObjectSV():
+{
+    JavaToken begin; Expression child;
+}
+{
+    "#create-object"  {begin=token();} "(" child = ExpressionSV()  ")"
+    {
+        return new KeyMetaConstructExpression(range(begin, token()), "#create-object", child);
+    }
+}
+
+KeyMetaConstructExpression KeyLengthReferenceSV():
+{
+    JavaToken begin; Expression child;
+}
+{
+    "#length-reference"  {begin=token();} "(" child = ExpressionSV()  ")"
+    {
+        return new KeyMetaConstructExpression(range(begin, token()), "#length-reference", child);
+    }    
+}

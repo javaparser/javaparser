@@ -63,10 +63,12 @@ public class KeYCcatchContinue extends KeYCcatchBranch {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBlock() {
         return Optional.ofNullable(block);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeYCcatchContinue setBlock(final BlockStmt block) {
         if (block == this.block) {
             return this;
@@ -79,10 +81,12 @@ public class KeYCcatchContinue extends KeYCcatchBranch {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getLabel() {
         return Optional.ofNullable(label);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeYCcatchContinue setLabel(final Name label) {
         if (label == this.label) {
             return this;
@@ -95,15 +99,18 @@ public class KeYCcatchContinue extends KeYCcatchBranch {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeYCcatchContinue removeBlock() {
         return setBlock((BlockStmt) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeYCcatchContinue removeLabel() {
         return setLabel((Name) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -123,6 +130,7 @@ public class KeYCcatchContinue extends KeYCcatchBranch {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -142,11 +150,13 @@ public class KeYCcatchContinue extends KeYCcatchBranch {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeYCcatchContinue clone() {
         return (KeYCcatchContinue) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeYCcatchContinueMetaModel getMetaModel() {
         return JavaParserMetaModel.keYCcatchContinueMetaModel;
     }

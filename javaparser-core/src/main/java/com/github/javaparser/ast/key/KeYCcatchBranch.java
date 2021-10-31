@@ -25,6 +25,7 @@ public abstract class KeYCcatchBranch extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -32,6 +33,7 @@ public abstract class KeYCcatchBranch extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -39,11 +41,13 @@ public abstract class KeYCcatchBranch extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeYCcatchBranch clone() {
         return (KeYCcatchBranch) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeYCcatchBranchMetaModel getMetaModel() {
         return JavaParserMetaModel.keYCcatchBranchMetaModel;
     }

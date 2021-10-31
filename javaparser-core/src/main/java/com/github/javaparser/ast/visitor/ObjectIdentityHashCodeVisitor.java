@@ -30,7 +30,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
  * and the hash codes of all its child nodes (by visiting those too.)
@@ -528,6 +528,66 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final KeyTransactionStatement n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyContextStatementBlock n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExecCtxtSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyExpressionSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyJumpLabelSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstructExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstruct n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstructType n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyMethodSignatureSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyPassiveExpression n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyProgramVariableSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyStatementSV n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final KeyTypeSV n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -9,6 +9,7 @@
         <module>javaparser-core-serialization</module>
         <module>javaparser-symbol-solver-core</module>
         <module>javaparser-symbol-solver-testing</module>
+        <module>javaparser-key-testing</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>

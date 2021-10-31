@@ -30,7 +30,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
  * and the hash codes of all its child nodes (by visiting those too.)
@@ -531,11 +531,71 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final KeyRangeExpression n, final Void arg) {
-        return (n.getUpper().accept(this, arg)) * 31 + (n.getLower().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getLower().accept(this, arg)) * 31 + (n.getUpper().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final KeyTransactionStatement n, final Void arg) {
         return (n.getType().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyContextStatementBlock n, final Void arg) {
+        return (n.getContext().isPresent() ? n.getContext().get().accept(this, arg) : 0) * 31 + (n.getExpression().isPresent() ? n.getExpression().get().accept(this, arg) : 0) * 31 + (n.getSignature().isPresent() ? n.getSignature().get().accept(this, arg) : 0) * 31 + (n.getStatements().accept(this, arg)) * 31 + (n.getTr().isPresent() ? n.getTr().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyExecCtxtSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyExpressionSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyJumpLabelSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstructExpression n, final Void arg) {
+        return (n.getChild().accept(this, arg)) * 31 + (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstruct n, final Void arg) {
+        return (n.getChild().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getSchemas().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyMetaConstructType n, final Void arg) {
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyMethodSignatureSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyPassiveExpression n, final Void arg) {
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyProgramVariableSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyStatementSV n, final Void arg) {
+        return (n.getText().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final KeyTypeSV n, final Void arg) {
+        return (n.getName().hashCode()) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }

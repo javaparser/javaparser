@@ -29,7 +29,8 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import java.util.Optional;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A visitor that clones (copies) a node and all its children.
  */
@@ -1448,10 +1449,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final KeyRangeExpression n, final Object arg) {
-        Expression end = cloneNode(n.getUpper(), arg);
-        Expression start = cloneNode(n.getLower(), arg);
+        Expression lower = cloneNode(n.getLower(), arg);
+        Expression upper = cloneNode(n.getUpper(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyRangeExpression r = new KeyRangeExpression(n.getTokenRange().orElse(null), start, end);
+        KeyRangeExpression r = new KeyRangeExpression(n.getTokenRange().orElse(null), lower, upper);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1462,6 +1463,138 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final KeyTransactionStatement n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         KeyTransactionStatement r = new KeyTransactionStatement(n.getTokenRange().orElse(null), n.getType());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyContextStatementBlock n, final Object arg) {
+        KeyExecCtxtSV context = cloneNode(n.getContext(), arg);
+        KeyExpressionSV expression = cloneNode(n.getExpression(), arg);
+        KeyMethodSignatureSV signature = cloneNode(n.getSignature(), arg);
+        NodeList<Statement> statements = cloneList(n.getStatements(), arg);
+        KeyTypeSV tr = cloneNode(n.getTr(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyContextStatementBlock r = new KeyContextStatementBlock(n.getTokenRange().orElse(null), statements, context, tr, signature, expression);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyExecCtxtSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyExecCtxtSV r = new KeyExecCtxtSV(n.getTokenRange().orElse(null), n.getText());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyExpressionSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyExpressionSV r = new KeyExpressionSV(n.getTokenRange().orElse(null), n.getText());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyJumpLabelSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyJumpLabelSV r = new KeyJumpLabelSV(n.getTokenRange().orElse(null), n.getText());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyMetaConstructExpression n, final Object arg) {
+        Expression child = cloneNode(n.getChild(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyMetaConstructExpression r = new KeyMetaConstructExpression(n.getTokenRange().orElse(null), n.getText(), child);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyMetaConstruct n, final Object arg) {
+        Node child = cloneNode(n.getChild(), arg);
+        NodeList<Node> schemas = cloneList(n.getSchemas(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyMetaConstruct r = new KeyMetaConstruct(n.getTokenRange().orElse(null), n.getKind(), child, schemas);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyMetaConstructType n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyMetaConstructType r = new KeyMetaConstructType(n.getTokenRange().orElse(null), annotations, n.getKind(), expr);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyMethodSignatureSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyMethodSignatureSV r = new KeyMethodSignatureSV(n.getTokenRange().orElse(null), n.getText());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyPassiveExpression n, final Object arg) {
+        Expression expr = cloneNode(n.getExpr(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyPassiveExpression r = new KeyPassiveExpression(n.getTokenRange().orElse(null), expr);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyProgramVariableSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyProgramVariableSV r = new KeyProgramVariableSV(n.getTokenRange().orElse(null), n.getText());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyStatementSV n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyStatementSV r = new KeyStatementSV(n.getTokenRange().orElse(null), n.getText());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final KeyTypeSV n, final Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        KeyTypeSV r = new KeyTypeSV(n.getTokenRange().orElse(null), n.getName());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

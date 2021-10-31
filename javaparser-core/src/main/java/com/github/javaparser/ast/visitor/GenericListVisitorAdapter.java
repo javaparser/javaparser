@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A visitor that has a return value of {@link List List&lt;R&gt;}, and has a default implementation for all its visit
  * methods that visits their children in an unspecified order, and all visit methods
@@ -2509,12 +2509,12 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getUpper().accept(this, arg);
+            tmp = n.getLower().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
         {
-            tmp = n.getLower().accept(this, arg);
+            tmp = n.getUpper().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2530,6 +2530,210 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final KeyTransactionStatement n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyContextStatementBlock n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        if (n.getContext().isPresent()) {
+            tmp = n.getContext().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getExpression().isPresent()) {
+            tmp = n.getExpression().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getSignature().isPresent()) {
+            tmp = n.getSignature().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getStatements().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getTr().isPresent()) {
+            tmp = n.getTr().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyExecCtxtSV n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyExpressionSV n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyJumpLabelSV n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyMetaConstructExpression n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getChild().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyMetaConstruct n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getChild().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getSchemas().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyMetaConstructType n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getExpr().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyMethodSignatureSV n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyPassiveExpression n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getExpr().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyProgramVariableSV n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyStatementSV n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final KeyTypeSV n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getAnnotations().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)

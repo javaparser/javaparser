@@ -53,28 +53,35 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyLoopScopeBlock() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyLoopScopeBlock asKeyLoopScopeBlock() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyLoopScopeBlock> toKeyLoopScopeBlock() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyLoopScopeBlock(Consumer<KeyLoopScopeBlock> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBlock() {
         return block;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyLoopScopeBlock setBlock(final BlockStmt block) {
         assertNotNull(block);
         if (block == this.block) {
@@ -88,10 +95,12 @@ public class KeyLoopScopeBlock extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getIndexPV() {
         return indexPV;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyLoopScopeBlock setIndexPV(final Expression indexPV) {
         assertNotNull(indexPV);
         if (indexPV == this.indexPV) {
@@ -106,6 +115,7 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -113,6 +123,7 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -128,11 +139,13 @@ public class KeyLoopScopeBlock extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyLoopScopeBlock clone() {
         return (KeyLoopScopeBlock) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyLoopScopeBlockMetaModel getMetaModel() {
         return JavaParserMetaModel.keyLoopScopeBlockMetaModel;
     }

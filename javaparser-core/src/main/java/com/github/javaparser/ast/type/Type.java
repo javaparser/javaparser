@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.ast.key.sv.*;
 
 /**
  * Base class for types.
@@ -364,5 +365,35 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVarType(Consumer<VarType> action) {
+    }
+
+    public boolean isKeyMetaConstructType() {
+        return false;
+    }
+
+    public KeyMetaConstructType asKeyMetaConstructType() {
+        throw new IllegalStateException(f("%s is not KeyMetaConstructType, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyMetaConstructType> toKeyMetaConstructType() {
+        return Optional.empty();
+    }
+
+    public void ifKeyMetaConstructType(Consumer<KeyMetaConstructType> action) {
+    }
+
+    public boolean isKeyTypeSV() {
+        return false;
+    }
+
+    public KeyTypeSV asKeyTypeSV() {
+        throw new IllegalStateException(f("%s is not KeyTypeSV, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyTypeSV> toKeyTypeSV() {
+        return Optional.empty();
+    }
+
+    public void ifKeyTypeSV(Consumer<KeyTypeSV> action) {
     }
 }

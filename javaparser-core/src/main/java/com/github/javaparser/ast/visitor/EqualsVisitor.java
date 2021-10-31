@@ -32,7 +32,7 @@ import com.github.javaparser.ast.type.*;
 import java.util.List;
 import java.util.Optional;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
  *
@@ -1568,9 +1568,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final KeyRangeExpression n, final Visitable arg) {
         final KeyRangeExpression n2 = (KeyRangeExpression) arg;
-        if (!nodeEquals(n.getUpper(), n2.getUpper()))
-            return false;
         if (!nodeEquals(n.getLower(), n2.getLower()))
+            return false;
+        if (!nodeEquals(n.getUpper(), n2.getUpper()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
@@ -1581,6 +1581,146 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final KeyTransactionStatement n, final Visitable arg) {
         final KeyTransactionStatement n2 = (KeyTransactionStatement) arg;
         if (!objEquals(n.getType(), n2.getType()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyContextStatementBlock n, final Visitable arg) {
+        final KeyContextStatementBlock n2 = (KeyContextStatementBlock) arg;
+        if (!nodeEquals(n.getContext(), n2.getContext()))
+            return false;
+        if (!nodeEquals(n.getExpression(), n2.getExpression()))
+            return false;
+        if (!nodeEquals(n.getSignature(), n2.getSignature()))
+            return false;
+        if (!nodesEquals(n.getStatements(), n2.getStatements()))
+            return false;
+        if (!nodeEquals(n.getTr(), n2.getTr()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyExecCtxtSV n, final Visitable arg) {
+        final KeyExecCtxtSV n2 = (KeyExecCtxtSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyExpressionSV n, final Visitable arg) {
+        final KeyExpressionSV n2 = (KeyExpressionSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyJumpLabelSV n, final Visitable arg) {
+        final KeyJumpLabelSV n2 = (KeyJumpLabelSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMetaConstructExpression n, final Visitable arg) {
+        final KeyMetaConstructExpression n2 = (KeyMetaConstructExpression) arg;
+        if (!nodeEquals(n.getChild(), n2.getChild()))
+            return false;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMetaConstruct n, final Visitable arg) {
+        final KeyMetaConstruct n2 = (KeyMetaConstruct) arg;
+        if (!nodeEquals(n.getChild(), n2.getChild()))
+            return false;
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        if (!nodesEquals(n.getSchemas(), n2.getSchemas()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMetaConstructType n, final Visitable arg) {
+        final KeyMetaConstructType n2 = (KeyMetaConstructType) arg;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyMethodSignatureSV n, final Visitable arg) {
+        final KeyMethodSignatureSV n2 = (KeyMethodSignatureSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyPassiveExpression n, final Visitable arg) {
+        final KeyPassiveExpression n2 = (KeyPassiveExpression) arg;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyProgramVariableSV n, final Visitable arg) {
+        final KeyProgramVariableSV n2 = (KeyProgramVariableSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyStatementSV n, final Visitable arg) {
+        final KeyStatementSV n2 = (KeyStatementSV) arg;
+        if (!objEquals(n.getText(), n2.getText()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final KeyTypeSV n, final Visitable arg) {
+        final KeyTypeSV n2 = (KeyTypeSV) arg;
+        if (!objEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;

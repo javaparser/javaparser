@@ -116,7 +116,7 @@ import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * Outputs the AST as formatted Java source code.
  * This class is no longer acceptable to use because it is not sufficiently configurable and it is too tied to a specific implementation
@@ -912,6 +912,66 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(KeyTransactionStatement n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyContextStatementBlock n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyExecCtxtSV n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyExpressionSV n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyJumpLabelSV n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMetaConstructExpression n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMetaConstruct n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMetaConstructType n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyMethodSignatureSV n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyPassiveExpression n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyProgramVariableSV n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyStatementSV n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(KeyTypeSV n, Void arg) {
 
     }
 

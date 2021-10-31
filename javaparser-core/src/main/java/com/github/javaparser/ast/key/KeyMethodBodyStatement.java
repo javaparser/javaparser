@@ -56,28 +56,35 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyMethodBodyStatement() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyMethodBodyStatement asKeyMethodBodyStatement() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyMethodBodyStatement> toKeyMethodBodyStatement() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMethodBodyStatement(Consumer<KeyMethodBodyStatement> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpr() {
         return expr;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodBodyStatement setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
@@ -91,10 +98,12 @@ public class KeyMethodBodyStatement extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodBodyStatement setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -108,10 +117,12 @@ public class KeyMethodBodyStatement extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getSource() {
         return source;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodBodyStatement setSource(final Type source) {
         assertNotNull(source);
         if (source == this.source) {
@@ -126,6 +137,7 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -133,6 +145,7 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -152,11 +165,13 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyMethodBodyStatement clone() {
         return (KeyMethodBodyStatement) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMethodBodyStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMethodBodyStatementMetaModel;
     }

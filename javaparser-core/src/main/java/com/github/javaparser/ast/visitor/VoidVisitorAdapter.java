@@ -30,6 +30,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 
 /**
  * A visitor that returns nothing, and has a default implementation for all its visit
@@ -845,13 +846,85 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final KeyRangeExpression n, final A arg) {
-        n.getUpper().accept(this, arg);
         n.getLower().accept(this, arg);
+        n.getUpper().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     public void visit(final KeyTransactionStatement n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyContextStatementBlock n, final A arg) {
+        n.getContext().ifPresent(l -> l.accept(this, arg));
+        n.getExpression().ifPresent(l -> l.accept(this, arg));
+        n.getSignature().ifPresent(l -> l.accept(this, arg));
+        n.getStatements().forEach(p -> p.accept(this, arg));
+        n.getTr().ifPresent(l -> l.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyExecCtxtSV n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyExpressionSV n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyJumpLabelSV n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMetaConstructExpression n, final A arg) {
+        n.getChild().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMetaConstruct n, final A arg) {
+        n.getChild().accept(this, arg);
+        n.getSchemas().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMetaConstructType n, final A arg) {
+        n.getExpr().accept(this, arg);
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyMethodSignatureSV n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyPassiveExpression n, final A arg) {
+        n.getExpr().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyProgramVariableSV n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyStatementSV n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final KeyTypeSV n, final A arg) {
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

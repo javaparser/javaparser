@@ -41,7 +41,7 @@ public class KeyRangeExpressionMetaModel extends ExpressionMetaModel {
         super(superBaseNodeMetaModel, KeyRangeExpression.class, "KeyRangeExpression", "com.github.javaparser.ast.key", false, false);
     }
 
-    public PropertyMetaModel endPropertyMetaModel;
+    public PropertyMetaModel lowerPropertyMetaModel;
 
-    public PropertyMetaModel startPropertyMetaModel;
+    public PropertyMetaModel upperPropertyMetaModel;
 }

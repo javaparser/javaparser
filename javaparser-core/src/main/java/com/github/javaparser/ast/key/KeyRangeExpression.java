@@ -22,17 +22,17 @@ public class KeyRangeExpression extends Expression {
     private Expression upper;
 
     @AllFieldsConstructor
-    public KeyRangeExpression(Expression start, Expression upper) {
-        this(null, start, upper);
+    public KeyRangeExpression(Expression lower, Expression upper) {
+        this(null, lower, upper);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyRangeExpression(TokenRange tokenRange, Expression start, Expression upper) {
+    public KeyRangeExpression(TokenRange tokenRange, Expression lower, Expression upper) {
         super(tokenRange);
-        setLower(start);
+        setLower(lower);
         setUpper(upper);
         customInitialization();
     }
@@ -50,34 +50,41 @@ public class KeyRangeExpression extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyRangeExpression() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyRangeExpression asKeyRangeExpression() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyRangeExpression> toKeyRangeExpression() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyRangeExpression(Consumer<KeyRangeExpression> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getUpper() {
         return upper;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyRangeExpression setUpper(final Expression upper) {
         assertNotNull(upper);
         if (upper == this.upper) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.END, this.upper, upper);
+        notifyPropertyChange(ObservableProperty.UPPER, this.upper, upper);
         if (this.upper != null)
             this.upper.setParentNode(null);
         this.upper = upper;
@@ -85,16 +92,18 @@ public class KeyRangeExpression extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getLower() {
         return lower;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyRangeExpression setLower(final Expression lower) {
         assertNotNull(lower);
         if (lower == this.lower) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.START, this.lower, lower);
+        notifyPropertyChange(ObservableProperty.LOWER, this.lower, lower);
         if (this.lower != null)
             this.lower.setParentNode(null);
         this.lower = lower;
@@ -103,6 +112,7 @@ public class KeyRangeExpression extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -110,26 +120,29 @@ public class KeyRangeExpression extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (node == upper) {
-            setUpper((Expression) replacementNode);
-            return true;
-        }
         if (node == lower) {
             setLower((Expression) replacementNode);
+            return true;
+        }
+        if (node == upper) {
+            setUpper((Expression) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyRangeExpression clone() {
         return (KeyRangeExpression) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyRangeExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.keyRangeExpressionMetaModel;
     }

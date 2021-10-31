@@ -30,7 +30,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A visitor that has a return value (R), and has default methods that are used when a specific visit method is not
  * overridden.
@@ -623,6 +623,66 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final KeyTransactionStatement n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyContextStatementBlock n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExecCtxtSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyExpressionSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyJumpLabelSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMetaConstructExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMetaConstruct n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMetaConstructType n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyMethodSignatureSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyPassiveExpression n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyProgramVariableSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyStatementSV n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final KeyTypeSV n, final A arg) {
         return defaultAction(n, arg);
     }
 }

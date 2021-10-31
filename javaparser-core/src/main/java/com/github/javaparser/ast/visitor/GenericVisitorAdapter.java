@@ -30,7 +30,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A visitor that has a return value (R), and has a default implementation for all its visit
  * methods that visits their children in an unspecified order, and the first visit method
@@ -2482,12 +2482,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final KeyRangeExpression n, final A arg) {
         R result;
         {
-            result = n.getUpper().accept(this, arg);
+            result = n.getLower().accept(this, arg);
             if (result != null)
                 return result;
         }
         {
-            result = n.getLower().accept(this, arg);
+            result = n.getUpper().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2502,6 +2502,198 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final KeyTransactionStatement n, final A arg) {
         R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyContextStatementBlock n, final A arg) {
+        R result;
+        if (n.getContext().isPresent()) {
+            result = n.getContext().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getExpression().isPresent()) {
+            result = n.getExpression().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getSignature().isPresent()) {
+            result = n.getSignature().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getStatements().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getTr().isPresent()) {
+            result = n.getTr().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyExecCtxtSV n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyExpressionSV n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyJumpLabelSV n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyMetaConstructExpression n, final A arg) {
+        R result;
+        {
+            result = n.getChild().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyMetaConstruct n, final A arg) {
+        R result;
+        {
+            result = n.getChild().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getSchemas().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyMetaConstructType n, final A arg) {
+        R result;
+        {
+            result = n.getExpr().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyMethodSignatureSV n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyPassiveExpression n, final A arg) {
+        R result;
+        {
+            result = n.getExpr().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyProgramVariableSV n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyStatementSV n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final KeyTypeSV n, final A arg) {
+        R result;
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)

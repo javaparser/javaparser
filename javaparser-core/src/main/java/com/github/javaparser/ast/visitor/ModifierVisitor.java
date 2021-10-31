@@ -37,7 +37,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * This visitor can be used to save time when some specific nodes needs
  * to be changed. To do that just extend this class and override the methods
@@ -1494,13 +1494,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final KeyRangeExpression n, final A arg) {
-        Expression end = (Expression) n.getUpper().accept(this, arg);
-        Expression start = (Expression) n.getLower().accept(this, arg);
+        Expression lower = (Expression) n.getLower().accept(this, arg);
+        Expression upper = (Expression) n.getUpper().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (end == null || start == null)
+        if (lower == null || upper == null)
             return null;
-        n.setUpper(end);
-        n.setLower(start);
+        n.setLower(lower);
+        n.setUpper(upper);
         n.setComment(comment);
         return n;
     }
@@ -1508,6 +1508,122 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final KeyTransactionStatement n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyContextStatementBlock n, final A arg) {
+        KeyExecCtxtSV context = n.getContext().map(s -> (KeyExecCtxtSV) s.accept(this, arg)).orElse(null);
+        KeyExpressionSV expression = n.getExpression().map(s -> (KeyExpressionSV) s.accept(this, arg)).orElse(null);
+        KeyMethodSignatureSV signature = n.getSignature().map(s -> (KeyMethodSignatureSV) s.accept(this, arg)).orElse(null);
+        NodeList<Statement> statements = modifyList(n.getStatements(), arg);
+        KeyTypeSV tr = n.getTr().map(s -> (KeyTypeSV) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setContext(context);
+        n.setExpression(expression);
+        n.setSignature(signature);
+        n.setStatements(statements);
+        n.setTr(tr);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyExecCtxtSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyExpressionSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyJumpLabelSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMetaConstructExpression n, final A arg) {
+        Expression child = (Expression) n.getChild().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (child == null)
+            return null;
+        n.setChild(child);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMetaConstruct n, final A arg) {
+        Node child = (Node) n.getChild().accept(this, arg);
+        NodeList<Node> schemas = modifyList(n.getSchemas(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (child == null)
+            return null;
+        n.setChild(child);
+        n.setSchemas(schemas);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMetaConstructType n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setExpr(expr);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyMethodSignatureSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyPassiveExpression n, final A arg) {
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null)
+            return null;
+        n.setExpr(expr);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyProgramVariableSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyStatementSV n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final KeyTypeSV n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
     }

@@ -26,10 +26,11 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.key.*;
 
 /**
  * A visitor that has a return value.
@@ -272,4 +273,28 @@ public interface GenericVisitor<R, A> {
     R visit(KeyRangeExpression n, A arg);
 
     R visit(KeyTransactionStatement n, A arg);
+
+    R visit(KeyContextStatementBlock n, A arg);
+
+    R visit(KeyExecCtxtSV n, A arg);
+
+    R visit(KeyExpressionSV n, A arg);
+
+    R visit(KeyJumpLabelSV n, A arg);
+
+    R visit(KeyMetaConstructExpression n, A arg);
+
+    R visit(KeyMetaConstruct n, A arg);
+
+    R visit(KeyMetaConstructType n, A arg);
+
+    R visit(KeyMethodSignatureSV n, A arg);
+
+    R visit(KeyPassiveExpression n, A arg);
+
+    R visit(KeyProgramVariableSV n, A arg);
+
+    R visit(KeyStatementSV n, A arg);
+
+    R visit(KeyTypeSV n, A arg);
 }

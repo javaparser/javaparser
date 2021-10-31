@@ -1,0 +1,639 @@
+{ ..  { {#slist}} ... }
+{ ..  {#loc=false;} ... }
+{ ..  {#loc=false;}#s1 ... }
+{ ..  {#loc=true;}#s0 ... }
+{ ..  {#slist} ... }
+{ ..  {#slist2} ... }
+{ ..  {#slist2}return ; ... }
+{ ..  {} ... }
+{ ..  {loop-scope(#lhs) {#slist}} ... }
+{ ..  {return #se;#slist} ... }
+{ ..  {return ;#slist} ... }
+{ ..  {throw #e;#slist} ... }
+{ .. #abortJavaCardTransaction; ... }
+{ .. #arraypost ... }
+{ .. #beginJavaCardTransaction; ... }
+{ .. #commitJavaCardTransaction; ... }
+{ .. #e.#attribute--; ... }
+{ .. --#e.#attribute; ... }
+{ .. #e.#attribute++; ... }
+{ .. #e.#attribute=#e0; ... }
+{ .. #e[#e0]--; ... }
+{ .. --#e[#e0]; ... }
+{ .. #e[#e0]++; ... }
+{ .. #e0.#attribute%=#e; ... }
+{ .. #e0.#attribute&=#e; ... }
+{ .. #e0.#attribute*=#e; ... }
+{ .. #e0.#attribute/=#e; ... }
+{ .. #e0.#attribute^=#e; ... }
+{ .. #e0.#attribute|=#e; ... }
+{ .. #e0.#attribute+=#e; ... }
+{ .. #e0.#attribute<<=#e; ... }
+{ .. #e0.#attribute-=#e; ... }
+{ .. #e0.#attribute>>=#e; ... }
+{ .. #e0.#attribute>>>=#e; ... }
+{ .. #e0[#e]%=#e1; ... }
+{ .. #e0[#e]&=#e1; ... }
+{ .. #e0[#e]*=#e1; ... }
+{ .. #e0[#e]/=#e1; ... }
+{ .. #e0[#e]^=#e1; ... }
+{ .. #e0[#e]|=#e1; ... }
+{ .. #e0[#e]+=#e1; ... }
+{ .. #e0[#e]<<=#e1; ... }
+{ .. #e0[#e]-=#e1; ... }
+{ .. #e0[#e]>>=#e1; ... }
+{ .. #e0[#e]>>>=#e1; ... }
+{ .. #evaluate-arguments(#lhs=#nsmr;) ... }
+{ .. #evaluate-arguments(#lhs=#nsn;) ... }
+{ .. #evaluate-arguments(#nsmr) ... }
+{ .. #evaluate-arguments(#nsn) ... }
+{ .. #finishJavaCardTransaction; ... }
+{ .. #forloop ... }
+{ .. #for-to-while(#forloop) ... }
+{ .. #lb: {} ... }
+{ .. #lb: {return #se;#slist} ... }
+{ .. #lb: {throw #se;#slist} ... }
+{ .. #lb:#s ... }
+{ .. #lb:return #se; ... }
+{ .. #lb:throw #se; ... }
+{ .. #lhs%=#e; ... }
+{ .. #lhs&=#e; ... }
+{ .. #lhs*=#e; ... }
+{ .. #lhs/=#e; ... }
+{ .. #lhs^=#e; ... }
+{ .. #lhs|=#e; ... }
+{ .. #lhs+=#e; ... }
+{ .. #lhs<<=#e; ... }
+{ .. #lhs=!#nseBool; ... }
+{ .. #lhs=!#seBool; ... }
+{ .. #lhs=#arrayinitializer; ... }
+{ .. #lhs=#e!=#nse0; ... }
+{ .. #lhs=#e-#nse; ... }
+{ .. #lhs=#e%#nse; ... }
+{ .. #lhs=#e&#nse; ... }
+{ .. #lhs=#e*#nse; ... }
+{ .. #lhs=--#e.#attribute; ... }
+{ .. #lhs=#e/#nse; ... }
+{ .. #lhs=#e; ... }
+{ .. #lhs-=#e; ... }
+{ .. #lhs=#e^#nse; ... }
+{ .. #lhs=#e|#nse; ... }
+{ .. #lhs=#e+#nse; ... }
+{ .. #lhs=#e<#nse0; ... }
+{ .. #lhs=#e<<#nse; ... }
+{ .. #lhs=#e<=#nse0; ... }
+{ .. #lhs=#e==#nse0; ... }
+{ .. #lhs=#e>#nse0; ... }
+{ .. #lhs=#e>=#nse0; ... }
+{ .. #lhs=#e>>#nse; ... }
+{ .. #lhs=#e>>>#nse; ... }
+{ .. #lhs=#e0 ?#e1 :#e2; ... }
+{ .. #lhs=#exBool; ... }
+{ .. #lhs=#exBool0&&#nseBool1; ... }
+{ .. #lhs=#exBool0||#nseBool1; ... }
+{ .. #lhs=#mn(#elist); ... }
+{ .. #lhs=#n; ... }
+{ .. #lhs=#na; ... }
+{ .. #lhs=#nse ?#se1 :#se2; ... }
+{ .. #lhs=#nse-#se; ... }
+{ .. #lhs=#nse%#se; ... }
+{ .. #lhs=#nse&#se; ... }
+{ .. #lhs=#nse*#se; ... }
+{ .. #lhs=#nse.#mn(#elist); ... }
+{ .. #lhs=#nse/#se; ... }
+{ .. #lhs=-#nse; ... }
+{ .. #lhs=#nse^#se; ... }
+{ .. #lhs=#nse|#se; ... }
+{ .. #lhs=#nse+#se; ... }
+{ .. #lhs=#nse<<#se; ... }
+{ .. #lhs=#nse>>#se; ... }
+{ .. #lhs=#nse>>>#se; ... }
+{ .. #lhs=#nse0!=#se; ... }
+{ .. #lhs=#nse0<#se; ... }
+{ .. #lhs=#nse0<=#se; ... }
+{ .. #lhs=#nse0==#se; ... }
+{ .. #lhs=#nse0>#se; ... }
+{ .. #lhs=#nse0>=#se; ... }
+{ .. #lhs=#nseBool0&#exBool1; ... }
+{ .. #lhs=#nseBool0&&#seBool1; ... }
+{ .. #lhs=#nseBool0^#exBool1; ... }
+{ .. #lhs=#nseBool0|#exBool1; ... }
+{ .. #lhs=#nseBool0||#seBool1; ... }
+{ .. #lhs=#nsmr; ... }
+{ .. #lhs=#nsn; ... }
+{ .. #lhs=#se.#mn(#elist); ... }
+{ .. #lhs=#se.#mn(#selist); ... }
+{ .. #lhs=#se0 ?#se1 :#se2; ... }
+{ .. #lhs=#se0!=#se1; ... }
+{ .. #lhs=#se0<#se1; ... }
+{ .. #lhs=#se0<=#se1; ... }
+{ .. #lhs=#se0==#se1; ... }
+{ .. #lhs=#se0>#se1; ... }
+{ .. #lhs=#se0>=#se1; ... }
+{ .. #lhs=#seAny; ... }
+{ .. #lhs=#seBool0&#seBool1; ... }
+{ .. #lhs=#seBool0&&#seBool1; ... }
+{ .. #lhs=#seBool0^#seBool1; ... }
+{ .. #lhs=#seBool0|#seBool1; ... }
+{ .. #lhs=#seBool0||#seBool1; ... }
+{ .. #lhs=#seByte; ... }
+{ .. #lhs=#seByteShortInt; ... }
+{ .. #lhs=#seChar; ... }
+{ .. #lhs=#seLong; ... }
+{ .. #lhs=#seShort; ... }
+{ .. #lhs=#sv; ... }
+{ .. #lhs=#t.#mn(#elist); ... }
+{ .. #lhs=#v.#sv; ... }
+{ .. #lhs=(#e); ... }
+{ .. #lhs=(#npit)#nse; ... }
+{ .. #lhs=(#npit)#se; ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs%(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs&(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs-(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs*(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs/(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs^(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs|(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs+(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs<<(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs>>(#e)); ... }
+{ .. #lhs=(#typeof(#lhs))(#lhs>>>(#e)); ... }
+{ .. #lhs=(\bigint)#seAny; ... }
+{ .. #lhs=(boolean)#exBool; ... }
+{ .. #lhs=(byte)#nse; ... }
+{ .. #lhs=(byte)#seByte; ... }
+{ .. #lhs=(char)#seChar; ... }
+{ .. #lhs=(int)#nse; ... }
+{ .. #lhs=(int)#seByteShortInt; ... }
+{ .. #lhs=(int)#seChar; ... }
+{ .. #lhs=(long)#nse; ... }
+{ .. #lhs=(long)#seByteShortInt; ... }
+{ .. #lhs=(long)#seChar; ... }
+{ .. #lhs=(long)#seLong; ... }
+{ .. #lhs=(short)#nse; ... }
+{ .. #lhs=(short)#seByte; ... }
+{ .. #lhs=(short)#seShort; ... }
+{ .. #lhs=@(#sv); ... }
+{ .. #lhs=~#nse; ... }
+{ .. #lhs=+#e; ... }
+{ .. #lhs=false; ... }\] (post),#allmodal ( (modal operator))\[{ .. #lhs=true; ... }
+{ .. #lhs=super.#mn(#elist); ... }
+{ .. #lhs=true; ... }
+{ .. #lhs=true; ... }\] (post),#allmodal ( (modal operator))\[{ .. #lhs=false; ... }
+{ .. #lhs=true;return #se; ... }
+{ .. #lhs=true;return ; ... }
+{ .. #lhs=true;throw #se; ... }
+{ .. #lhs>>=#e; ... }
+{ .. #lhs>>>=#e; ... }
+{ .. #lhs0=#e.#attribute--; ... }
+{ .. #lhs0=#e.#attribute++; ... }
+{ .. #lhs0=#e[#e0]--; ... }
+{ .. #lhs0=--#e[#e0]; ... }
+{ .. #lhs0=#e[#e0]++; ... }
+{ .. #lhs0=#e0.#attribute%=#e; ... }
+{ .. #lhs0=#e0.#attribute&=#e; ... }
+{ .. #lhs0=#e0.#attribute*=#e; ... }
+{ .. #lhs0=#e0.#attribute/=#e; ... }
+{ .. #lhs0=#e0.#attribute^=#e; ... }
+{ .. #lhs0=#e0.#attribute|=#e; ... }
+{ .. #lhs0=#e0.#attribute+=#e; ... }
+{ .. #lhs0=#e0.#attribute<<=#e; ... }
+{ .. #lhs0=#e0.#attribute=#e; ... }
+{ .. #lhs0=#e0.#attribute-=#e; ... }
+{ .. #lhs0=#e0.#attribute>>=#e; ... }
+{ .. #lhs0=#e0.#attribute>>>=#e; ... }
+{ .. #lhs0=#e0[#e]%=#e1; ... }
+{ .. #lhs0=#e0[#e]&=#e1; ... }
+{ .. #lhs0=#e0[#e]*=#e1; ... }
+{ .. #lhs0=#e0[#e]/=#e1; ... }
+{ .. #lhs0=#e0[#e]^=#e1; ... }
+{ .. #lhs0=#e0[#e]|=#e1; ... }
+{ .. #lhs0=#e0[#e]+=#e1; ... }
+{ .. #lhs0=#e0[#e]<<=#e1; ... }
+{ .. #lhs0=#e0[#e]=#e1; ... }
+{ .. #lhs0=#e0[#e]-=#e1; ... }
+{ .. #lhs0=#e0[#e]>>=#e1; ... }
+{ .. #lhs0=#e0[#e]>>>=#e1; ... }
+{ .. #lhs0=#lhs1%=#e; ... }
+{ .. #lhs0=#lhs1&=#e; ... }
+{ .. #lhs0=#lhs1*=#e; ... }
+{ .. #lhs0=#lhs1/=#e; ... }
+{ .. #lhs0=#lhs1--; ... }
+{ .. #lhs0=--#lhs1; ... }
+{ .. #lhs0=#lhs1^=#e; ... }
+{ .. #lhs0=#lhs1|=#e; ... }
+{ .. #lhs0=#lhs1++; ... }
+{ .. #lhs0=#lhs1+=#e; ... }
+{ .. #lhs0=#lhs1<<=#e; ... }
+{ .. #lhs0=#lhs1=#e; ... }
+{ .. #lhs0=#lhs1-=#e; ... }
+{ .. #lhs0=#lhs1>>=#e; ... }
+{ .. #lhs0=#lhs1>>>=#e; ... }
+{ .. #lhs0=++#e.#attribute; ... }
+{ .. #lhs0=++#e[#e0]; ... }
+{ .. #lhs0=++#lhs1; ... }
+{ .. #lhs1--; ... }
+{ .. --#lhs1; ... }
+{ .. #lhs1++; ... }
+{ .. #lhs1=#e;#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))#lhs1-1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1-#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1%#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1&#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1*#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1/#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1^#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1|#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1+#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1+1); ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1+1);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1<<#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1>>#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1>>>#e);#lhs0=#lhs1; ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1-1); ... }
+{ .. #lhs1=(#typeof(#lhs1))(#lhs1-1);#lhs0=#lhs1; ... }
+{ .. #loc=#se/#seLong; ... }
+{ .. #loc=#se; ... }
+{ .. #loc=#se0%#se1; ... }
+{ .. #loc=#seAny-#seBigint; ... }
+{ .. #loc=#seAny%#seBigint; ... }
+{ .. #loc=#seAny*#seBigint; ... }
+{ .. #loc=#seAny/#seBigint; ... }
+{ .. #loc=#seAny+#seBigint; ... }
+{ .. #loc=#seBigint-#seAny; ... }
+{ .. #loc=#seBigint%#seAny; ... }
+{ .. #loc=#seBigint*#seAny; ... }
+{ .. #loc=#seBigint/#seAny; ... }
+{ .. #loc=-#seBigint; ... }
+{ .. #loc=#seBigint+#seAny; ... }
+{ .. #loc=#seCharByteShortInt-#seLong; ... }
+{ .. #loc=#seCharByteShortInt&#seLong; ... }
+{ .. #loc=#seCharByteShortInt*#seLong; ... }
+{ .. #loc=-#seCharByteShortInt; ... }
+{ .. #loc=#seCharByteShortInt^#seLong; ... }
+{ .. #loc=#seCharByteShortInt|#seLong; ... }
+{ .. #loc=#seCharByteShortInt+#seLong; ... }
+{ .. #loc=#seCharByteShortInt0-#seCharByteShortInt1; ... }
+{ .. #loc=#seCharByteShortInt0&#seCharByteShortInt1; ... }
+{ .. #loc=#seCharByteShortInt0*#seCharByteShortInt1; ... }
+{ .. #loc=#seCharByteShortInt0/#seCharByteShortInt1; ... }
+{ .. #loc=#seCharByteShortInt0^#seCharByteShortInt1; ... }
+{ .. #loc=#seCharByteShortInt0|#seCharByteShortInt1; ... }
+{ .. #loc=#seCharByteShortInt0+#seCharByteShortInt1; ... }
+{ .. #loc=#seCharByteShortInt0<<#se; ... }
+{ .. #loc=#seCharByteShortInt0>>#se; ... }
+{ .. #loc=#seCharByteShortInt0>>>#se; ... }
+{ .. #loc=#seLong-#seCharByteShortInt; ... }
+{ .. #loc=#seLong&#seCharByteShortInt; ... }
+{ .. #loc=#seLong*#seCharByteShortInt; ... }
+{ .. #loc=#seLong/#seCharByteShortInt; ... }
+{ .. #loc=-#seLong; ... }
+{ .. #loc=#seLong^#seCharByteShortInt; ... }
+{ .. #loc=#seLong|#seCharByteShortInt; ... }
+{ .. #loc=#seLong+#seCharByteShortInt; ... }
+{ .. #loc=#seLong0-#seLong1; ... }
+{ .. #loc=#seLong0&#seLong1; ... }
+{ .. #loc=#seLong0*#seLong1; ... }
+{ .. #loc=#seLong0^#seLong1; ... }
+{ .. #loc=#seLong0|#seLong1; ... }
+{ .. #loc=#seLong0+#seLong1; ... }
+{ .. #loc=#seLong0<<#se; ... }
+{ .. #loc=#seLong0>>#se; ... }
+{ .. #loc=#seLong0>>>#se; ... }
+{ .. #loc=(byte)#seBigint; ... }
+{ .. #loc=(byte)#seInt; ... }
+{ .. #loc=(byte)#seLong; ... }
+{ .. #loc=(byte)#seShort; ... }
+{ .. #loc=(char)#seBigint; ... }
+{ .. #loc=(char)#seByte; ... }
+{ .. #loc=(char)#seInt; ... }
+{ .. #loc=(char)#seLong; ... }
+{ .. #loc=(char)#seShort; ... }
+{ .. #loc=(int)#seBigint; ... }
+{ .. #loc=(int)#seLong; ... }
+{ .. #loc=(long)#seBigint; ... }
+{ .. #loc=(short)#seBigint; ... }
+{ .. #loc=(short)#seInt; ... }
+{ .. #loc=(short)#seLong; ... }
+{ .. #loc=@(#v.#sv); ... }
+{ .. #loc=~#se; ... }
+{ .. #loc=false; ... }
+{ .. #loc=false;#s1 ... }
+{ .. #loc=true;#s0 ... }
+{ .. #mb ... }
+{ .. #mn(#elist); ... }
+{ .. #multvardecl ... }
+{ .. #n ... }
+{ .. #nse.#mn(#elist); ... }
+{ .. #nsmr ... }
+{ .. #nsn ... }
+{ .. #nv.#attribute=#e; ... }
+{ .. #nv[#e]=#e0; ... }
+{ .. #s ... }
+{ .. #s ... }
+{ .. #s ... }
+{ .. #s ... }
+{ .. #s0 ... }
+{ .. #s0 ... }
+{ .. #s1 ... }
+{ .. #scr ... }
+{ .. #se.#mn(#elist); ... }
+{ .. #se.#mn(#selist); ... }
+{ .. #sv=#arr[#idx]; ... }
+{ .. #sv=#e; ... }
+{ .. #sv=#left-#right; ... }
+{ .. #sv=#left%#right; ... }
+{ .. #sv=#left&#right; ... }
+{ .. #sv=#left*#right; ... }
+{ .. #sv=#left/#right; ... }
+{ .. #sv=-#left; ... }
+{ .. #sv=#left^#right; ... }
+{ .. #sv=#left|#right; ... }
+{ .. #sv=#left+#right; ... }
+{ .. #sv=#left<<#right; ... }
+{ .. #sv=#left>>#right; ... }
+{ .. #sv=#left>>>#right; ... }
+{ .. #sv=#v1.#a; ... }
+{ .. #sv=(byte)#seShortIntLong; ... }
+{ .. #sv=(char)#seByteShortIntLong; ... }
+{ .. #sv=(int)#seLong; ... }
+{ .. #sv=(short)#seIntLong; ... }
+{ .. #sv=~#left; ... }
+{ .. #sw ... }
+{ .. #t #v0 = #vi; ... }
+{ .. #t #v0; ... }
+{ .. #t #v0;#v0=#vi; ... }
+{ .. #t.#mn(#elist); ... }
+{ .. #typeof(#a) #v0 = #v1.#a;@(#sv)=#v0; ... }
+{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#typeof(#lhs0) #v1 = #v[#v0];#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1);#lhs0=#v1; ... }
+{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#typeof(#lhs0) #v1 = #v[#v0];#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1);#lhs0=#v1; ... }
+{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1); ... }
+{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]+1);#lhs0=#v[#v0]; ... }
+{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1); ... }
+{ .. #typeof(#e) #v = #e;#typeof(#e0) #v0 = #e0;#v[#v0]=(#typeof(#e[#e0]))(#v[#v0]-1);#lhs0=#v[#v0]; ... }
+{ .. #typeof(#e) #v = #e;#typeof(#lhs0) #v1 = #v.#attribute;#v.#attribute=(#typeof(#attribute))(#v.#attribute+1);#lhs0=#v1; ... }
+{ .. #typeof(#e) #v = #e;#typeof(#lhs0) #v1 = #v.#attribute;#v.#attribute=(#typeof(#attribute))(#v.#attribute-1);#lhs0=#v1; ... }
+{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute+1); ... }
+{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute+1);#lhs0=#v.#attribute; ... }
+{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute-1); ... }
+{ .. #typeof(#e) #v = #e;#v.#attribute=(#typeof(#attribute))(#v.#attribute-1);#lhs=#v.#attribute; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0-#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0%#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0&#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0*#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0/#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0^#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0|#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0+#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0<<#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0>>#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse) #v1 = #nse;#lhs=#v0>>>#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0!=#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0<#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0<=#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0==#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0>#v1; ... }
+{ .. #typeof(#e) #v0 = #e;#typeof(#nse0) #v1 = #nse0;#lhs=#v0>=#v1; ... }
+{ .. #typeof(#e) #v0 = #e;@(#sv)=#v0; ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute-#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute%#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute&#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute*#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute/#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute^#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute|#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute+#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute<<#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute>>#e); ... }
+{ .. #typeof(#e0) #v = #e0;#v.#attribute=(#typeof(#attribute))(#v.#attribute>>>#e); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=#e1;#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]-#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]-#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]%#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]%#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]&#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]&#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]*#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]*#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]/#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]/#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]^#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]^#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]|#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]|#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]+#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]+#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]<<#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]<<#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>>#e1); ... }
+{ .. #typeof(#e0) #v0 = #e0;#typeof(#e) #v1 = #e;#v0[#v1]=(#typeof(#e0[#e]))(#v0[#v1]>>>#e1);#lhs0=#v0[#v1]; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=#e;#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute-#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute%#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute&#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute*#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute/#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute^#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute|#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute+#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute<<#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute>>#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#e0) #v0 = #e0;#v0.#attribute=(#typeof(#attribute))(#v0.#attribute>>>#e);#lhs0=#v0.#attribute; ... }
+{ .. #typeof(#lhs) #v0;init-array-creation(#arrayinitializer)#lhs=#v0; ... }
+{ .. #typeof(#lhs) #v0;method-call(#mn(#elist);)#lhs=#v0; ... }
+{ .. #typeof(#lhs) #v0;method-call(#se.#mn(#elist);)#lhs=#v0; ... }
+{ .. #typeof(#lhs) #v0;method-call(#se.#mn(#selist);)#lhs=#v0; ... }
+{ .. #typeof(#lhs) #v0;method-call(#t.#mn(#elist);)#lhs=#v0; ... }
+{ .. #typeof(#lhs) #v0;method-call(super.#mn(#elist);)#lhs=#v0; ... }
+{ .. #typeof(#lhs0) #v = #lhs1;#lhs1=(#typeof(#lhs1))(#lhs1+1);#lhs0=#v; ... }
+{ .. #typeof(#lhs0) #v = #lhs1;#lhs1=(#typeof(#lhs1))(#lhs1-1);#lhs0=#v; ... }
+{ .. #typeof(#na) #v0;init-array-creation(#na)#lhs=#v0; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v-#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v%#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v&#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v*#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v/#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v^#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v|#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v+#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v<<#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v>>#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=#v>>>#se; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=(#npit)#v; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=(byte)#v; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=(int)#v; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=(long)#v; ... }
+{ .. #typeof(#nse) #v = #nse;#lhs=(short)#v; ... }
+{ .. #typeof(#nse) #v0 = #nse;#lhs=#v0 ?#se1 :#se2; ... }
+{ .. #typeof(#nse) #v0 = #nse;#lhs=-#v0; ... }
+{ .. #typeof(#nse) #v0 = #nse;#lhs=~#v0; ... }
+{ .. #typeof(#nse) #v0 = #nse;#v=#v0 instanceof #t; ... }
+{ .. #typeof(#nse) #v0 = #nse;return #v0; ... }
+{ .. #typeof(#nse) #v0 = #nse;this[#v0]=#se0; ... }
+{ .. #typeof(#nse) #v0 = #nse;throw #v0; ... }
+{ .. #typeof(#nse) #v0;#v0=#nse;#lhs=#v0.#mn(#elist); ... }
+{ .. #typeof(#nse) #v0;#v0=#nse;#v0.#mn(#elist); ... }
+{ .. #typeof(#nse) #v1 = #nse;#lhs=~#v1; ... }
+{ .. #typeof(#nse) #v1 = #nse;#v.#a=#v1; ... }
+{ .. #typeof(#nse) #vNew = #nse;#v=#vNew.length; ... }
+{ .. #typeof(#nse) #vNew = #nse;#v=\seq_reverse(#vNew); ... }
+{ .. #typeof(#nse) #vNew = #nse;#v=\seq_singleton(#vNew); ... }
+{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0!=#se; ... }
+{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0<#se; ... }
+{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0<=#se; ... }
+{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0==#se; ... }
+{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0>#se; ... }
+{ .. #typeof(#nse0) #v0 = #nse0;#lhs=#v0>=#se; ... }
+{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=#vLeftNew[#eRight]; ... }
+{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\indexOf(#vLeftNew,#eRight); ... }
+{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\intersect(#vLeftNew,#eRight); ... }
+{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\seq_concat(#vLeftNew,#eRight); ... }
+{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\seq_sub(#vLeftNew,#eMiddle,#eRight); ... }
+{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\set_minus(#vLeftNew,#eRight); ... }
+{ .. #typeof(#nseLeft) #vLeftNew = #nseLeft;#v=\set_union(#vLeftNew,#eRight); ... }
+{ .. #typeof(#nseMiddle) #vMiddleNew = #nseMiddle;#v=\seq_sub(#seLeft,#vMiddleNew,#eRight); ... }
+{ .. #typeof(#nsencr) #loc = #nsencr;synchronized(#loc) {#slist} ... }
+{ .. #typeof(#nseObj) #vObjNew = #nseObj;#v=\all_fields(#vObjNew); ... }
+{ .. #typeof(#nseObj) #vObjNew = #nseObj;#v=\singleton(#vObjNew.#a); ... }
+{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=#seLeft[#vRightNew]; ... }
+{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\indexOf(#seLeft,#vRightNew); ... }
+{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\intersect(#seLeft,#vRightNew); ... }
+{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\seq_concat(#seLeft,#vRightNew); ... }
+{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\seq_sub(#seLeft,#seMiddle,#vRightNew); ... }
+{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\set_minus(#seLeft,#vRightNew); ... }
+{ .. #typeof(#nseRight) #vRightNew = #nseRight;#v=\set_union(#seLeft,#vRightNew); ... }
+{ .. #typeof(#nv) #v0 = #nv;#v=#v0.#attribute; ... }
+{ .. #typeof(#nv) #v0 = #nv;#v=#v0.#length; ... }
+{ .. #typeof(#nv) #v0 = #nv;#v=#v0[#e]; ... }
+{ .. #typeof(#nv) #v0 = #nv;#v0.#attribute=#e; ... }
+{ .. #typeof(#nv) #v0 = #nv;#v0[#e]=#e0; ... }
+{ .. #typeof(#se) #v0 = #se; {#slist2}return #v0; ... }
+{ .. #typeof(#se) #v0 = #se;throw #v0; ... }
+{ .. #typeof(#sv) #v0 = #arr[#idx];@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left-#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left%#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left&#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left*#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left/#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = -#left;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left^#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left|#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left+#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left<<#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left>>#right;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = #left>>>#right; ... }
+{ .. #typeof(#sv) #v0 = (byte)#seShortIntLong;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = (char)#seByteShortIntLong;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = (int)#seLong;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = (short)#seIntLong;@(#sv)=#v0; ... }
+{ .. #typeof(#sv) #v0 = ~#left;@(#sv)=#v0; ... }
+{ .. #typeof(#v) #ar1 = #v;#typeof(#nse) #v0 = #nse;#ar1[#v0]=#e; ... }
+{ .. #typeof(#v) #v0 = #v;#typeof(#nse) #v1 = #nse;#v0.#a=#v1; ... }
+{ .. #typeof(#v) #v0 = #v;#typeof(#se) #v2 = #se;#typeof(#nse) #v1 = #nse;#v0[#v2]=#v1; ... }
+{ .. #typeof(#v0) #ar1 = #v0;#typeof(#nse) #v1 = #nse;#v=#ar1[#v1]; ... }
+{ .. #typeof(#v0) #v0 = create-object(#n);constructor-call(#n)post-work(#v0) ... }
+{ .. #typeof(#v0) #v0 = create-object(#n);constructor-call(#n)post-work(#v0)#lhs=#v0; ... }
+{ .. #unwind-loop(do#swhile ( #e );  ) ... }
+{ .. #v.#a=#nse; ... }
+{ .. #v.#a=#se; ... }
+{ .. #v.#sv=#arr[#idx]; ... }
+{ .. #v.#sv=#e; ... }
+{ .. #v.#sv=#v1.#a; ... }
+{ .. #v[#nse]=#e; ... }
+{ .. #v[#se]=#nse; ... }
+{ .. #v[#se]=#se0; ... }
+{ .. #v=#nse instanceof #t; ... }
+{ .. #v=#nse.length; ... }
+{ .. #v=#nseLeft[#eRight]; ... }
+{ .. #v=#nv.#attribute; ... }
+{ .. #v=#nv.#length; ... }
+{ .. #v=#nv[#e]; ... }
+{ .. #v=#seLeft.toString()+#sstrRight; ... }
+{ .. #v=#seLeft[#nseRight]; ... }
+{ .. #v=#seLeft+#sstrRight; ... }
+{ .. #v=#slit; ... }
+{ .. #v=#sstr1+#sstr2; ... }
+{ .. #v=#sstrLeft+#seRight.toString(); ... }
+{ .. #v=#sstrLeft+#seRight; ... }
+{ .. #v=#v0[#nse]; ... }
+{ .. #v=#v0[#se]; ... }
+{ .. #v=\all_fields(#nseObj); ... }
+{ .. #v=\all_objects(#eObj.#a); ... }
+{ .. #v=\indexOf(#nseLeft,#eRight); ... }
+{ .. #v=\indexOf(#seLeft,#nseRight); ... }
+{ .. #v=\intersect(#nseLeft,#eRight); ... }
+{ .. #v=\intersect(#seLeft,#nseRight); ... }
+{ .. #v=\seq_concat(#nseLeft,#eRight); ... }
+{ .. #v=\seq_concat(#seLeft,#nseRight); ... }
+{ .. #v=\seq_reverse(#nse); ... }
+{ .. #v=\seq_singleton(#nse); ... }
+{ .. #v=\seq_sub(#nseLeft,#eMiddle,#eRight); ... }
+{ .. #v=\seq_sub(#seLeft,#nseMiddle,#eRight); ... }
+{ .. #v=\seq_sub(#seLeft,#seMiddle,#nseRight); ... }
+{ .. #v=\set_minus(#nseLeft,#eRight); ... }
+{ .. #v=\set_minus(#seLeft,#nseRight); ... }
+{ .. #v=\set_union(#nseLeft,#eRight); ... }
+{ .. #v=\set_union(#seLeft,#nseRight); ... }
+{ .. #v=\singleton(#nseObj.#a); ... }
+{ .. #v=\singleton(#seObj.#a); ... }
+{ .. #v0=#v.#a; ... }
+{ .. #v0=#v.#length; ... }
+{ .. #v0=@(#sv); ... }
+{ .. (#e.#attribute)=#e0; ... }
+{ .. (#lhs)=#e; ... }
+{ .. //@ merge_point (#lhs (program LeftHandSide)); ... }
+{ .. ; ... }
+{ .. @(#sv)=#se; ... }
+{ .. @(#v.#sv)=#se; ... }
+{ .. ++#e.#attribute; ... }
+{ .. ++#e[#e0]; ... }
+{ .. ++#lhs1; ... }
+{ .. array-post-declaration(#arraypost) ... }
+{ .. assert #e1 : #e2; ... }
+{ .. assert #e1; ... }
+{ .. boolean #v = #nseBool;#lhs=!#v; ... }
+{ .. boolean #v0 = #nseBool0;#lhs=#v0&&#seBool1; ... }
+{ .. boolean #v0 = #nseBool0;#lhs=#v0||#seBool1; ... }
+{ .. boolean #v0 = #nseBool0;boolean #v1 = #exBool1;#lhs=#v0&#v1; ... }
+{ .. boolean #v0 = #nseBool0;boolean #v1 = #exBool1;#lhs=#v0^#v1; ... }
+{ .. boolean #v0 = #nseBool0;boolean #v1 = #exBool1;#lhs=#v0|#v1; ... }
+{ .. do-break(#lb0:break ;  ) ... }
+{ .. expand-method-body(#mb) ... }
+{ .. final#t #v0 = #vi; ... }
+{ .. final#t #v0; ... }
+{ .. final#t #v0;#v0=#vi; ... }
+{ .. ghost#t #v0 = #vi; ... }
+{ .. ghost#t #v0; ... }
+{ .. ghost#t #v0;#v0=#vi; ... }
+{ .. loop-scope(#lhs) {#slist} ... }
+{ .. loop-scope(#lhs) {} ... }
+{ .. loop-scope(#lhs) {return #se;#slist} ... }
+{ .. loop-scope(#lhs) {return ;#slist} ... }
+{ .. loop-scope(#lhs) {throw #se;#slist} ... }
+{ .. method-call(#mn(#elist);) ... }
+{ .. method-call(#se.#mn(#elist);) ... }
+{ .. method-call(#se.#mn(#selist);) ... }
+{ .. method-call(#t.#mn(#elist);) ... }
+{ .. method-call(super.#mn(#elist);) ... }
+{ .. multiple-var-decl(#multvardecl) ... }
+{ .. return #nse; ... }
+{ .. return #se; ... }
+{ .. return ; ... }
+{ .. special-constructor-call(#scr) ... }
+{ .. super.#mn(#elist); ... }
+{ .. switch-to-if(#sw) ... }
+{ .. synchronized(#cr) {} ... }
+{ .. synchronized(#nsencr) {#slist} ... }
+{ .. synchronized(#se) {} ... }
+{ .. this[#nse]=#se0; ... }
+{ .. this[#se]=#se0; ... }
+{ .. throw #e; ... }
+{ .. throw #nse; ... }
+{ .. throw #se; ... }
+{ .. throw new java.lang.NullPointerException (); ... }
+{ .. throw null; ... }
+{ .. try {}#cs ... }
+{ .. try {return #se;#slist}#cs ... }
+{ .. try {return ;#slist}#cs ... }

@@ -51,10 +51,12 @@ public class KeyExecutionContext extends Node {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getContext() {
         return context;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyExecutionContext setContext(final Type context) {
         assertNotNull(context);
         if (context == this.context) {
@@ -68,10 +70,12 @@ public class KeyExecutionContext extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getInstance() {
         return instance;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyExecutionContext setInstance(final Expression instance) {
         assertNotNull(instance);
         if (instance == this.instance) {
@@ -85,10 +89,12 @@ public class KeyExecutionContext extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodSignature getSignature() {
         return signature;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyExecutionContext setSignature(final KeyMethodSignature signature) {
         assertNotNull(signature);
         if (signature == this.signature) {
@@ -103,6 +109,7 @@ public class KeyExecutionContext extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -110,6 +117,7 @@ public class KeyExecutionContext extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -129,11 +137,13 @@ public class KeyExecutionContext extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyExecutionContext clone() {
         return (KeyExecutionContext) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyExecutionContextMetaModel getMetaModel() {
         return JavaParserMetaModel.keyExecutionContextMetaModel;
     }

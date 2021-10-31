@@ -189,7 +189,42 @@ public class TokenTypes {
             case BREAKTYPE:
             case BIGINT:
             case REAL:
-            case MAP_FUNCTION:
+                //case MAP_FUNCTION:
+            case CONTEXTSTART:
+            case TYPEOF:
+            case SWITCHTOIF:
+            case UNPACK:
+            case REATTACHLOOPINVARIANT:
+            case FORINITUNFOLDTRANSFORMER:
+            case LOOPSCOPEINVARIANTTRANSFORMER:
+            case SETSV:
+            case ISSTATIC:
+            case EVALARGS:
+            case REPLACEARGS:
+            case UNWINDLOOP:
+            case CATCHALL:
+            case BEGIN:
+            case COMMIT:
+            case FINISH:
+            case ABORT:
+            case UNWIND_LOOP_BOUNDED:
+            case FORTOWHILE:
+            case DOBREAK:
+            case METHODCALL:
+            case EXPANDMETHODBODY:
+            case CONSTRUCTORCALL:
+            case SPECIALCONSTRUCTORECALL:
+            case POSTWORK:
+            case STATICINITIALIZATION:
+            case RESOLVE_MULTIPLE_VAR_DECL:
+            case ARRAY_POST_DECL:
+            case ARRAY_INIT_CREATION:
+            case ARRAY_INIT_CREATION_TRANSIENT:
+            case ARRAY_INIT_CREATION_ASSIGNMENTS:
+            case ENHANCEDFOR_ELIM:
+            case STATIC_EVALUATE:
+            case CREATE_OBJECT:
+            case LENGTHREF:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:
@@ -210,6 +245,7 @@ public class TokenTypes {
             case NULL:
                 return JavaToken.Category.LITERAL;
             case JMLIDENTIFIER:
+            case SVIDENTIFIER:
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
             case LPAREN:
@@ -275,7 +311,7 @@ public class TokenTypes {
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
             default:
-                throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?" );
+                throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
         }
     }
 }

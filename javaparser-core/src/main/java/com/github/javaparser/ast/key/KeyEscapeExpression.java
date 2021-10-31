@@ -58,28 +58,35 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyEscapeExpression() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyEscapeExpression asKeyEscapeExpression() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyEscapeExpression> toKeyEscapeExpression() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyEscapeExpression(Consumer<KeyEscapeExpression> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
         return arguments;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyEscapeExpression setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
@@ -93,10 +100,12 @@ public class KeyEscapeExpression extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getCallee() {
         return callee;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyEscapeExpression setCallee(final Name callee) {
         assertNotNull(callee);
         if (callee == this.callee) {
@@ -111,6 +120,7 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -124,6 +134,7 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -141,11 +152,13 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyEscapeExpression clone() {
         return (KeyEscapeExpression) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyEscapeExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.keyEscapeExpressionMetaModel;
     }

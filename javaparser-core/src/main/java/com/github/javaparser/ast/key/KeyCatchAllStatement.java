@@ -16,7 +16,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyCatchAllStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-
+import com.github.javaparser.ast.key.sv.*;
 public class KeyCatchAllStatement extends Statement {
 
     private Name label;
@@ -52,28 +52,35 @@ public class KeyCatchAllStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyCatchAllStatement() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyCatchAllStatement asKeyCatchAllStatement() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyCatchAllStatement> toKeyCatchAllStatement() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyCatchAllStatement(Consumer<KeyCatchAllStatement> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBlock() {
         return block;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyCatchAllStatement setBlock(final BlockStmt block) {
         assertNotNull(block);
         if (block == this.block) {
@@ -87,10 +94,12 @@ public class KeyCatchAllStatement extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getLabel() {
         return label;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyCatchAllStatement setLabel(final Name label) {
         assertNotNull(label);
         if (label == this.label) {
@@ -105,6 +114,7 @@ public class KeyCatchAllStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -112,6 +122,7 @@ public class KeyCatchAllStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -127,11 +138,13 @@ public class KeyCatchAllStatement extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyCatchAllStatement clone() {
         return (KeyCatchAllStatement) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyCatchAllStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyCatchAllStatementMetaModel;
     }

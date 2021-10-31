@@ -30,6 +30,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.sv.KeyContextStatementBlock;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -540,4 +541,12 @@ public final class JavaParser {
         return parse(METHOD_DECLARATION, provider(methodDeclaration));
     }
 
+    /**
+     * TODO
+     * @param block
+     * @return
+     */
+    public ParseResult<KeyContextStatementBlock> parseSchemaBlock(String block) {
+        return parse(GeneratedJavaParser::StartBlock, provider(block));
+    }
 }

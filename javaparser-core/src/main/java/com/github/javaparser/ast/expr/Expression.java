@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import com.github.javaparser.ast.key.*;
-
+import com.github.javaparser.ast.key.sv.*;
 /**
  * A base class for all expressions.
  *
@@ -874,33 +874,101 @@ public abstract class Expression extends Node {
         return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyEscapeExpression() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyEscapeExpression asKeyEscapeExpression() {
         throw new IllegalStateException(f("%s is not KeyEscapeExpression, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyEscapeExpression> toKeyEscapeExpression() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyEscapeExpression(Consumer<KeyEscapeExpression> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isKeyRangeExpression() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public KeyRangeExpression asKeyRangeExpression() {
         throw new IllegalStateException(f("%s is not KeyRangeExpression, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<KeyRangeExpression> toKeyRangeExpression() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyRangeExpression(Consumer<KeyRangeExpression> action) {
+    }
+
+    public boolean isKeyExpressionSV() {
+        return false;
+    }
+
+    public KeyExpressionSV asKeyExpressionSV() {
+        throw new IllegalStateException(f("%s is not KeyExpressionSV, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyExpressionSV> toKeyExpressionSV() {
+        return Optional.empty();
+    }
+
+    public void ifKeyExpressionSV(Consumer<KeyExpressionSV> action) {
+    }
+
+    public boolean isKeyMetaConstructExpression() {
+        return false;
+    }
+
+    public KeyMetaConstructExpression asKeyMetaConstructExpression() {
+        throw new IllegalStateException(f("%s is not KeyMetaConstructExpression, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyMetaConstructExpression> toKeyMetaConstructExpression() {
+        return Optional.empty();
+    }
+
+    public void ifKeyMetaConstructExpression(Consumer<KeyMetaConstructExpression> action) {
+    }
+
+    public boolean isKeyPassiveExpression() {
+        return false;
+    }
+
+    public KeyPassiveExpression asKeyPassiveExpression() {
+        throw new IllegalStateException(f("%s is not KeyPassiveExpression, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyPassiveExpression> toKeyPassiveExpression() {
+        return Optional.empty();
+    }
+
+    public void ifKeyPassiveExpression(Consumer<KeyPassiveExpression> action) {
+    }
+
+    public boolean isKeyProgramVariableSV() {
+        return false;
+    }
+
+    public KeyProgramVariableSV asKeyProgramVariableSV() {
+        throw new IllegalStateException(f("%s is not KeyProgramVariableSV, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<KeyProgramVariableSV> toKeyProgramVariableSV() {
+        return Optional.empty();
+    }
+
+    public void ifKeyProgramVariableSV(Consumer<KeyProgramVariableSV> action) {
     }
 }

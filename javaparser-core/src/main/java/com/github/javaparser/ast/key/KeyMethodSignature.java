@@ -49,10 +49,12 @@ public class KeyMethodSignature extends Node {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodSignature setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -66,10 +68,12 @@ public class KeyMethodSignature extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> getParamTypes() {
         return paramTypes;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodSignature setParamTypes(final NodeList<Type> paramTypes) {
         assertNotNull(paramTypes);
         if (paramTypes == this.paramTypes) {
@@ -84,6 +88,7 @@ public class KeyMethodSignature extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -97,6 +102,7 @@ public class KeyMethodSignature extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
@@ -114,11 +120,13 @@ public class KeyMethodSignature extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public KeyMethodSignature clone() {
         return (KeyMethodSignature) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMethodSignatureMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMethodSignatureMetaModel;
     }
