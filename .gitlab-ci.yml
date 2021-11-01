@@ -31,5 +31,3 @@ force-deploy:
   stage: deploy
   script:
     - mvn $MAVEN_CLI_OPTS -Dmaven.test.skip=true -s dev-files/settings.deploy.xml deploy
-  only:
-    - master
