@@ -818,13 +818,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final KeyMergePointStatement n, final A arg) {
+        n.getExpr().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     public void visit(final KeyMethodBodyStatement n, final A arg) {
         n.getExpr().accept(this, arg);
-        n.getName().accept(this, arg);
+        n.getName().ifPresent(l -> l.accept(this, arg));
         n.getSource().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

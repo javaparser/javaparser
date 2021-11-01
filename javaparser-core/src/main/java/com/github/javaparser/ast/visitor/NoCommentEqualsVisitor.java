@@ -1251,6 +1251,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
 
     @Override
     public Boolean visit(final KeyMergePointStatement n, final Visitable arg) {
+        final KeyMergePointStatement n2 = (KeyMergePointStatement) arg;
+        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+            return false;
         return true;
     }
 

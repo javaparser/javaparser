@@ -1445,7 +1445,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final KeyMergePointStatement n, final A arg) {
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null)
+            return null;
+        n.setExpr(expr);
         n.setComment(comment);
         return n;
     }
@@ -1453,10 +1457,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final KeyMethodBodyStatement n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
-        Name name = (Name) n.getName().accept(this, arg);
+        Name name = n.getName().map(s -> (Name) s.accept(this, arg)).orElse(null);
         Type source = (Type) n.getSource().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null || name == null || source == null)
+        if (expr == null || source == null)
             return null;
         n.setExpr(expr);
         n.setName(name);

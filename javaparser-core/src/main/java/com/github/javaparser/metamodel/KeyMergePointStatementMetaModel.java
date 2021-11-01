@@ -40,4 +40,6 @@ public class KeyMergePointStatementMetaModel extends StatementMetaModel {
     KeyMergePointStatementMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, KeyMergePointStatement.class, "KeyMergePointStatement", "com.github.javaparser.ast.key", false, false);
     }
+
+    public PropertyMetaModel exprPropertyMetaModel;
 }

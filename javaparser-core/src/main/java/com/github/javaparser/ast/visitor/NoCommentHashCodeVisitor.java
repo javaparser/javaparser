@@ -504,12 +504,12 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final KeyMergePointStatement n, final Void arg) {
-        return 0;
+        return (n.getExpr().accept(this, arg));
     }
 
     @Override
     public Integer visit(final KeyMethodBodyStatement n, final Void arg) {
-        return (n.getExpr().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getSource().accept(this, arg));
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getSource().accept(this, arg));
     }
 
     @Override

@@ -184,6 +184,7 @@ public class KeyMethodCallStatement extends Statement {
         return JavaParserMetaModel.keyMethodCallStatementMetaModel;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyMethodCallStatement removeName() {
         return setName((Name) null);
     }

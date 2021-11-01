@@ -2965,7 +2965,11 @@ SimpleName SimpleName():
     SimpleName ret;
 }
 {
-    Identifier() { ret = new SimpleName(tokenRange(), token().getText()); }
+    //(
+    //  <SVIDENTIFIER> { ret = new KeyProgramVariableSV(range(token(),token()), token().getText()); }
+    //|
+      Identifier() { ret = new SimpleName(tokenRange(), token().getText()); }
+    //)
     { return ret; }
 }
 
@@ -3894,11 +3898,6 @@ Expression PrimaryPrefix():
             ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token().getText());
         }
      |
-     	<SVIDENTIFIER>
-     	{
-     	    ret = new KeyProgramVariableSV(range(token(),token()), token().getText());
-        }
-     |
         "@" "(" {begin=token();} expr = Expression() ")"
         {
             ret=  new KeyPassiveExpression(range(begin, token()), expr);
@@ -4012,11 +4011,11 @@ Expression Literal():
         ret = BooleanLiteral()
      |
         ret = NullLiteral()
-     |
-        <SVIDENTIFIER>
-        {
-       	    ret = new KeyExpressionSV(range(token(),token()), token().getText());
-        }
+     //|
+        //<SVIDENTIFIER>
+        //{
+       	//    ret = new KeyExpressionSV(range(token(),token()), token().getText());
+        //}
      |
          ret = KeyStaticEvaluate()
      |
@@ -6161,7 +6160,7 @@ KeyMethodBodyStatement KeyMethodBodyStatement() :
   Name qn = null;
 }
 {
-    [LOOKAHEAD(2)
+    [LOOKAHEAD(20)
         qn = Name() "=" ]
     expr = Expression()
     "@" bodySource = Type(emptyNodeList())
@@ -6258,7 +6257,7 @@ KeyMergePointStatement KeyMergePointStatement() :
   "merge_point"  { begin = token(); }
   "(" expr = Expression() ")"
   ";"
-  { return KeyMergePointStatement(); }
+  { return new KeyMergePointStatement(range(begin, token()), expr); }
 }
 
 

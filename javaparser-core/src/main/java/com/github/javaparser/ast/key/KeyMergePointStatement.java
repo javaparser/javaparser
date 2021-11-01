@@ -2,6 +2,7 @@ package com.github.javaparser.ast.key;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -12,20 +13,25 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyMergePointStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 public class KeyMergePointStatement extends Statement {
 
+    private Expression expr;
+
     @AllFieldsConstructor
-    public KeyMergePointStatement() {
-        this(null);
+    public KeyMergePointStatement(Expression expr) {
+        this(null, expr);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyMergePointStatement(TokenRange tokenRange) {
+    public KeyMergePointStatement(TokenRange tokenRange, Expression expr) {
         super(tokenRange);
+        setExpr(expr);
         customInitialization();
     }
 
@@ -78,6 +84,10 @@ public class KeyMergePointStatement extends Statement {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expr) {
+            setExpr((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -91,5 +101,22 @@ public class KeyMergePointStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMergePointStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMergePointStatementMetaModel;
+    }
+
+    public Expression getExpr() {
+        return expr;
+    }
+
+    public KeyMergePointStatement setExpr(final Expression expr) {
+        assertNotNull(expr);
+        if (expr == this.expr) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
+        if (this.expr != null)
+            this.expr.setParentNode(null);
+        this.expr = expr;
+        setAsParentNodeOf(expr);
+        return this;
     }
 }

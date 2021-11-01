@@ -307,6 +307,7 @@ public final class JavaParserMetaModel {
         keyExecutionContextMetaModel.getConstructorParameters().add(keyExecutionContextMetaModel.instancePropertyMetaModel);
         keyLoopScopeBlockMetaModel.getConstructorParameters().add(keyLoopScopeBlockMetaModel.indexPVPropertyMetaModel);
         keyLoopScopeBlockMetaModel.getConstructorParameters().add(keyLoopScopeBlockMetaModel.blockPropertyMetaModel);
+        keyMergePointStatementMetaModel.getConstructorParameters().add(keyMergePointStatementMetaModel.exprPropertyMetaModel);
         keyMethodBodyStatementMetaModel.getConstructorParameters().add(keyMethodBodyStatementMetaModel.namePropertyMetaModel);
         keyMethodBodyStatementMetaModel.getConstructorParameters().add(keyMethodBodyStatementMetaModel.exprPropertyMetaModel);
         keyMethodBodyStatementMetaModel.getConstructorParameters().add(keyMethodBodyStatementMetaModel.sourcePropertyMetaModel);
@@ -960,9 +961,11 @@ public final class JavaParserMetaModel {
         keyLoopScopeBlockMetaModel.getDeclaredPropertyMetaModels().add(keyLoopScopeBlockMetaModel.blockPropertyMetaModel);
         keyLoopScopeBlockMetaModel.indexPVPropertyMetaModel = new PropertyMetaModel(keyLoopScopeBlockMetaModel, "indexPV", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         keyLoopScopeBlockMetaModel.getDeclaredPropertyMetaModels().add(keyLoopScopeBlockMetaModel.indexPVPropertyMetaModel);
+        keyMergePointStatementMetaModel.exprPropertyMetaModel = new PropertyMetaModel(keyMergePointStatementMetaModel, "expr", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
+        keyMergePointStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMergePointStatementMetaModel.exprPropertyMetaModel);
         keyMethodBodyStatementMetaModel.exprPropertyMetaModel = new PropertyMetaModel(keyMethodBodyStatementMetaModel, "expr", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         keyMethodBodyStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMethodBodyStatementMetaModel.exprPropertyMetaModel);
-        keyMethodBodyStatementMetaModel.namePropertyMetaModel = new PropertyMetaModel(keyMethodBodyStatementMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
+        keyMethodBodyStatementMetaModel.namePropertyMetaModel = new PropertyMetaModel(keyMethodBodyStatementMetaModel, "name", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false);
         keyMethodBodyStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMethodBodyStatementMetaModel.namePropertyMetaModel);
         keyMethodBodyStatementMetaModel.sourcePropertyMetaModel = new PropertyMetaModel(keyMethodBodyStatementMetaModel, "source", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false);
         keyMethodBodyStatementMetaModel.getDeclaredPropertyMetaModels().add(keyMethodBodyStatementMetaModel.sourcePropertyMetaModel);

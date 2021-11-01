@@ -17,9 +17,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyMethodBodyStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 public class KeyMethodBodyStatement extends Statement {
 
+    @OptionalProperty
     private Name name;
 
     private Expression expr;
@@ -99,13 +101,12 @@ public class KeyMethodBodyStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name getName() {
-        return name;
+    public Optional<Name> getName() {
+        return Optional.ofNullable(name);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMethodBodyStatement setName(final Name name) {
-        assertNotNull(name);
         if (name == this.name) {
             return this;
         }
@@ -141,6 +142,12 @@ public class KeyMethodBodyStatement extends Statement {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (name != null) {
+            if (node == name) {
+                removeName();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -153,9 +160,11 @@ public class KeyMethodBodyStatement extends Statement {
             setExpr((Expression) replacementNode);
             return true;
         }
-        if (node == name) {
-            setName((Name) replacementNode);
-            return true;
+        if (name != null) {
+            if (node == name) {
+                setName((Name) replacementNode);
+                return true;
+            }
         }
         if (node == source) {
             setSource((Type) replacementNode);
@@ -174,5 +183,10 @@ public class KeyMethodBodyStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMethodBodyStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMethodBodyStatementMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public KeyMethodBodyStatement removeName() {
+        return setName((Name) null);
     }
 }
