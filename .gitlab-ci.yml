@@ -22,6 +22,14 @@ test:
 deploy:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS deploy
+    - mvn $MAVEN_CLI_OPTS -s dev-files/settings.deploy.xml deploy
+  only:
+    - master
+
+force-deploy:
+  when: manual
+  stage: deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS -Dmaven.test.skip=true -s dev-files/settings.deploy.xml deploy
   only:
     - master

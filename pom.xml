@@ -97,7 +97,13 @@
             <url>https://github.com/maartenc</url>
             <id>maartenc</id>
         </developer>
+        <developer>
+            <name>Alexander Weigl</name>
+            <id>wadoon</id>
+            <url>https://github.com/wadoon</url>
+        </developer>
     </developers>
+
     <contributors>
         <contributor>
             <name>Sebastian Kürten</name>
@@ -169,13 +175,14 @@
         <!-- https://blog.sonatype.com/what-publishers-need-to-know-about-migrating-from-jcenter-/-bintray-to-the-central-repository -->
         <!-- New: Publishing directly to Sonatype OSSRH (OSS Repository Hosting), for release to Maven Central -->
         <!-- URLs available from: https://central.sonatype.org/pages/ossrh-guide.html#accessing-repositories -->
+
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>gitlab-maven</id>
+            <url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>gitlab-maven</id>
+            <url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
         </repository>
     </distributionManagement>
 
