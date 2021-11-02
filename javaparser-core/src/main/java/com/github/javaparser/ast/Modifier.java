@@ -101,8 +101,13 @@ public class Modifier extends Node {
         SYNCHRONIZED("synchronized"),
         NATIVE("native"),
         STRICTFP("strictfp"),
-        TRANSITIVE("transitive");
+        TRANSITIVE("transitive"),
 
+        //KEY
+        GHOST("ghost"),
+        MODEL("model"),
+        TWO_STATE("two_state"),
+        NO_STATE("no_state");
         private final String codeRepresentation;
 
         Keyword(String codeRepresentation) {

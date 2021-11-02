@@ -425,6 +425,8 @@ TOKEN :
 | <LENGTHREF: "#length-reference" >
 | <GHOST: "ghost">
 | <MODEL: "model">
+| <TWO_STATE: "two_state">
+| <NO_STATE: "no_state">
 }
 
 /* LITERALS */
@@ -830,6 +832,8 @@ TOKEN :
   < JMLIDENTIFIER: "\\" <LETTER> (<PART_LETTER>)* >
 |
   < SVIDENTIFIER:  "#" <LETTER> (<PART_LETTER>)* >
+|
+  < KEYIDENTIFIER:  "<" <LETTER> (<PART_LETTER>)* ">" >
 |
   < #LETTER: [
          "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
@@ -1333,9 +1337,13 @@ ModifierHolder Modifiers():
          |
             "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, token()); }
          |
-            "ghost" //TODO weigl
+            "ghost"   { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.GHOST));  begin = orIfInvalid(begin, token()); }
          |
-            "model" //TODO weigl
+            "model"   { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.MODEL));  begin = orIfInvalid(begin, token()); }
+         |
+            "no_state"   { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NO_STATE));  begin = orIfInvalid(begin, token()); }
+         |
+            "two_state"   { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TWO_STATE));  begin = orIfInvalid(begin, token()); }
          |
              ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
         )
@@ -3017,10 +3025,9 @@ String Identifier():
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
         <ENUM> | <STRICTFP> | <YIELD> | <RECORD> |
-        // An actual plain old identifier
-        <IDENTIFIER>
-        | //
-          <SVIDENTIFIER>
+        // overwritten by KeY/SV but still valid in Java
+        "model" | "ghost" | "two_state" | "no_state" | "source" | "merge_point" | "exec" | "ccatch" | "ccat"
+        <IDENTIFIER> | <SVIDENTIFIER> | <KEYIDENTIFIER>
     ) { ret = token().getText(); setTokenKind(IDENTIFIER);}
     { return ret; }
 }
