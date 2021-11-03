@@ -325,12 +325,12 @@ public class ParserConfiguration {
         });
     }
 
-    public boolean add(ParseResult.PostProcessor postProcessor) {
+    public boolean addPostProcessor(ParseResult.PostProcessor postProcessor) {
         return postProcessors.add(postProcessor);
     }
 
-    public boolean removeAll(Collection<?> c) {
-        return postProcessors.removeAll(c);
+    public boolean removePostProcessor(ParseResult.PostProcessor postProcessor) {
+        return postProcessors.remove(postProcessors);
     }
 
     public boolean isAttributeComments() {
