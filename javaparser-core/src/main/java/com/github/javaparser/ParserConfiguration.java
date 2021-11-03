@@ -34,10 +34,7 @@ import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
@@ -326,6 +323,14 @@ public class ParserConfiguration {
                 result.ifSuccessful(LexicalPreservingPrinter::setup);
             }
         });
+    }
+
+    public boolean add(ParseResult.PostProcessor postProcessor) {
+        return postProcessors.add(postProcessor);
+    }
+
+    public boolean removeAll(Collection<?> c) {
+        return postProcessors.removeAll(c);
     }
 
     public boolean isAttributeComments() {
