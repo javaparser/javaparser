@@ -1,5 +1,8 @@
 image: maven:latest
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
 variables:
   MAVEN_CLI_OPTS: "--batch-mode" # -s .m2/settings.xml
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
