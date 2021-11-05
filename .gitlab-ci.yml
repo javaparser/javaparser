@@ -37,4 +37,4 @@ force-deploy:
   when: manual
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS -Dmaven.test.skip=true -s dev-files/settings.deploy.xml deploy
+    - mvn $MAVEN_CLI_OPTS -P run-snapshot -Dmaven.test.skip=true -s dev-files/settings.deploy.xml deploy

@@ -417,6 +417,41 @@
         </profile>
         <profile>
             <!-- This profile is intended for use when preparing and deploying a release. -->
+            <id>run-snapshot</id>
+            <build>
+                <plugins>
+                    <!-- Source plugin - used to include source code within the release JAR -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Javadoc plugin - used to include javadoc within the release JAR -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- This profile is intended for use when preparing and deploying a release. -->
             <id>run-release</id>
             <build>
                 <plugins>
