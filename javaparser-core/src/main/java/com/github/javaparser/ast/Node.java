@@ -1177,6 +1177,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return node.getParentNode().isPresent() && (isPhantom(node.getParentNode().get()) || inPhantomNode(node.getParentNode().get(), levels - 1));
     }
 
+    /**
+     * This field is used by key to associated (JML) comments to this node.
+     */
     public Optional<NodeList<Comment>> getAssociatedSpecificationComments() {
         return Optional.ofNullable(associatedSpecificationComments);
     }
