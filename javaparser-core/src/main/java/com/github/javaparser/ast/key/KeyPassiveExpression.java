@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.key.sv;
+package com.github.javaparser.ast.key;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;

@@ -228,6 +228,8 @@ public class TokenTypes {
             case STATIC_EVALUATE:
             case CREATE_OBJECT:
             case LENGTHREF:
+            case KEYIDENTIFIER:
+            case SOURCE:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

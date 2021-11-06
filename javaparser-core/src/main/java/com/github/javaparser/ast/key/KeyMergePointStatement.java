@@ -103,10 +103,12 @@ public class KeyMergePointStatement extends Statement {
         return JavaParserMetaModel.keyMergePointStatementMetaModel;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpr() {
         return expr;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyMergePointStatement setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {

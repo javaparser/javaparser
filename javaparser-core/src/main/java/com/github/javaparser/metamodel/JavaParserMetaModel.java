@@ -497,6 +497,8 @@ public final class JavaParserMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.MetaModelGenerator")
     private static void initializePropertyMetaModels() {
+        nodeMetaModel.associatedSpecificationCommentsPropertyMetaModel = new PropertyMetaModel(nodeMetaModel, "associatedSpecificationComments", com.github.javaparser.ast.comments.Comment.class, Optional.of(commentMetaModel), true, false, true, false);
+        nodeMetaModel.getDeclaredPropertyMetaModels().add(nodeMetaModel.associatedSpecificationCommentsPropertyMetaModel);
         nodeMetaModel.commentPropertyMetaModel = new PropertyMetaModel(nodeMetaModel, "comment", com.github.javaparser.ast.comments.Comment.class, Optional.of(commentMetaModel), true, false, false, false);
         nodeMetaModel.getDeclaredPropertyMetaModels().add(nodeMetaModel.commentPropertyMetaModel);
         bodyDeclarationMetaModel.annotationsPropertyMetaModel = new PropertyMetaModel(bodyDeclarationMetaModel, "annotations", com.github.javaparser.ast.expr.AnnotationExpr.class, Optional.of(annotationExprMetaModel), false, false, true, false);
@@ -943,7 +945,7 @@ public final class JavaParserMetaModel {
         keYCcatchReturnMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchReturnMetaModel.blockPropertyMetaModel);
         keYCcatchReturnMetaModel.parameterPropertyMetaModel = new PropertyMetaModel(keYCcatchReturnMetaModel, "parameter", com.github.javaparser.ast.body.Parameter.class, Optional.of(parameterMetaModel), true, false, false, false);
         keYCcatchReturnMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchReturnMetaModel.parameterPropertyMetaModel);
-        keyEscapeExpressionMetaModel.argumentsPropertyMetaModel = new PropertyMetaModel(keyEscapeExpressionMetaModel, "arguments", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
+        keyEscapeExpressionMetaModel.argumentsPropertyMetaModel = new PropertyMetaModel(keyEscapeExpressionMetaModel, "arguments", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, true, false);
         keyEscapeExpressionMetaModel.getDeclaredPropertyMetaModels().add(keyEscapeExpressionMetaModel.argumentsPropertyMetaModel);
         keyEscapeExpressionMetaModel.calleePropertyMetaModel = new PropertyMetaModel(keyEscapeExpressionMetaModel, "callee", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
         keyEscapeExpressionMetaModel.getDeclaredPropertyMetaModels().add(keyEscapeExpressionMetaModel.calleePropertyMetaModel);
@@ -953,7 +955,7 @@ public final class JavaParserMetaModel {
         keyExecStatementMetaModel.getDeclaredPropertyMetaModels().add(keyExecStatementMetaModel.execBlockPropertyMetaModel);
         keyExecutionContextMetaModel.contextPropertyMetaModel = new PropertyMetaModel(keyExecutionContextMetaModel, "context", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false);
         keyExecutionContextMetaModel.getDeclaredPropertyMetaModels().add(keyExecutionContextMetaModel.contextPropertyMetaModel);
-        keyExecutionContextMetaModel.instancePropertyMetaModel = new PropertyMetaModel(keyExecutionContextMetaModel, "instance", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
+        keyExecutionContextMetaModel.instancePropertyMetaModel = new PropertyMetaModel(keyExecutionContextMetaModel, "instance", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
         keyExecutionContextMetaModel.getDeclaredPropertyMetaModels().add(keyExecutionContextMetaModel.instancePropertyMetaModel);
         keyExecutionContextMetaModel.signaturePropertyMetaModel = new PropertyMetaModel(keyExecutionContextMetaModel, "signature", com.github.javaparser.ast.key.KeyMethodSignature.class, Optional.of(keyMethodSignatureMetaModel), false, false, false, false);
         keyExecutionContextMetaModel.getDeclaredPropertyMetaModels().add(keyExecutionContextMetaModel.signaturePropertyMetaModel);

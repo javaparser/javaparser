@@ -13,6 +13,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyExecutionContextMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.OptionalProperty;
+import java.util.Optional;
 
 public class KeyExecutionContext extends KeyAbstractExecutionContext {
 
@@ -20,6 +22,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
 
     private KeyMethodSignature signature;
 
+    @OptionalProperty
     private Expression instance;
 
     @AllFieldsConstructor
@@ -71,13 +74,12 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getInstance() {
-        return instance;
+    public Optional<Expression> getInstance() {
+        return Optional.ofNullable(instance);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyExecutionContext setInstance(final Expression instance) {
-        assertNotNull(instance);
         if (instance == this.instance) {
             return this;
         }
@@ -113,6 +115,12 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (instance != null) {
+            if (node == instance) {
+                removeInstance();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -125,9 +133,11 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
             setContext((Type) replacementNode);
             return true;
         }
-        if (node == instance) {
-            setInstance((Expression) replacementNode);
-            return true;
+        if (instance != null) {
+            if (node == instance) {
+                setInstance((Expression) replacementNode);
+                return true;
+            }
         }
         if (node == signature) {
             setSignature((KeyMethodSignature) replacementNode);
@@ -146,5 +156,9 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyExecutionContextMetaModel getMetaModel() {
         return JavaParserMetaModel.keyExecutionContextMetaModel;
+    }
+
+    public KeyExecutionContext removeInstance() {
+        return setInstance((Expression) null);
     }
 }

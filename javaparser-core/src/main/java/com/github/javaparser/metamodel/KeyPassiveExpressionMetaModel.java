@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.key.sv.KeyPassiveExpression;
+import com.github.javaparser.ast.key.KeyPassiveExpression;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +38,7 @@ public class KeyPassiveExpressionMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeyPassiveExpressionMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeyPassiveExpression.class, "KeyPassiveExpression", "com.github.javaparser.ast.key.sv", false, false);
+        super(superBaseNodeMetaModel, KeyPassiveExpression.class, "KeyPassiveExpression", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel exprPropertyMetaModel;

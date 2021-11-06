@@ -173,6 +173,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @OptionalProperty
     private Comment comment;
 
+    /**
+     * for KeY, holds JML comments
+     */
+    @OptionalProperty
+    private NodeList<Comment> associatedSpecificationComments;
+
     @InternalProperty
     private ArrayList<AstObserver> observers = new ArrayList<>(0);
 
@@ -676,6 +682,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        if (associatedSpecificationComments != null) {
+            for (int i = 0; i < associatedSpecificationComments.size(); i++) {
+                if (associatedSpecificationComments.get(i) == node) {
+                    associatedSpecificationComments.remove(i);
+                    return true;
+                }
+            }
+        }
         if (comment != null) {
             if (node == comment) {
                 removeComment();
@@ -724,6 +738,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (associatedSpecificationComments != null) {
+            for (int i = 0; i < associatedSpecificationComments.size(); i++) {
+                if (associatedSpecificationComments.get(i) == node) {
+                    associatedSpecificationComments.set(i, (Comment) replacementNode);
+                    return true;
+                }
+            }
+        }
         if (comment != null) {
             if (node == comment) {
                 setComment((Comment) replacementNode);
@@ -1153,5 +1175,21 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     private boolean inPhantomNode(Node node, int levels) {
         return node.getParentNode().isPresent() && (isPhantom(node.getParentNode().get()) || inPhantomNode(node.getParentNode().get(), levels - 1));
+    }
+
+    public Optional<NodeList<Comment>> getAssociatedSpecificationComments() {
+        return Optional.ofNullable(associatedSpecificationComments);
+    }
+
+    public Node setAssociatedSpecificationComments(final NodeList<Comment> associatedSpecificationComments) {
+        if (associatedSpecificationComments == this.associatedSpecificationComments) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.ASSOCIATED_SPECIFICATION_COMMENTS, this.associatedSpecificationComments, associatedSpecificationComments);
+        if (this.associatedSpecificationComments != null)
+            this.associatedSpecificationComments.setParentNode(null);
+        this.associatedSpecificationComments = associatedSpecificationComments;
+        setAsParentNodeOf(associatedSpecificationComments);
+        return this;
     }
 }

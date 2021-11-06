@@ -46,6 +46,8 @@ options {
     JDK_VERSION = "1.8";
     STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
+    //DEBUG_LOOKAHEAD = true;
+    //DEBUG_PARSER = true;
 }
 
 
@@ -366,6 +368,7 @@ TOKEN :
 | < PROVIDES: "provides" >
 | < TRANSITIVE: "transitive" >
 
+| < SOURCE: "source">
 | < TRANSACTIONBEGIN: "#beginJavaCardTransaction" >
 | < TRANSACTIONCOMMIT: "#commitJavaCardTransaction" >
 | < TRANSACTIONFINISH: "#finishJavaCardTransaction" >
@@ -833,7 +836,7 @@ TOKEN :
 |
   < SVIDENTIFIER:  "#" <LETTER> (<PART_LETTER>)* >
 |
-  < KEYIDENTIFIER:  "<" <LETTER> (<PART_LETTER>)* ">" >
+  < KEYIDENTIFIER:  "$" <LETTER> (<PART_LETTER>)* >
 |
   < #LETTER: [
          "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",
@@ -3026,7 +3029,7 @@ String Identifier():
         // Make sure older Java versions parse
         <ENUM> | <STRICTFP> | <YIELD> | <RECORD> |
         // overwritten by KeY/SV but still valid in Java
-        "model" | "ghost" | "two_state" | "no_state" | "source" | "merge_point" | "exec" | "ccatch" | "ccat"
+        "model" | "ghost" | "two_state" | "no_state" | "source" | "merge_point" | "exec" | "ccatch" | "ccat" |
         <IDENTIFIER> | <SVIDENTIFIER> | <KEYIDENTIFIER>
     ) { ret = token().getText(); setTokenKind(IDENTIFIER);}
     { return ret; }
@@ -6189,8 +6192,7 @@ KeyAbstractExecutionContext KeyExecutionContext() :
   methodSignature = KeyMethodSignature() "@" classContext = Type(emptyNodeList())
   [ "," "this" "=" runtimeInstance = Expression() ]
 
-  { return new KeyExecutionContext
-        (range(begin, token()), classContext, methodSignature, runtimeInstance);
+  { return new KeyExecutionContext(range(begin, token()), classContext, methodSignature, runtimeInstance);
   }
 }
 
@@ -6630,9 +6632,9 @@ KeyContextStatementBlock StartBlock() :
            ( <DOT>
              ( LOOKAHEAD(2)
 		         pm=MethodSignatureSV() "@" tr = TypeSV(emptyNodeList())  "(" (sv = ExpressionSV())? ")"
-		     |
+		       |
 	             ec = ExecutionContextSV() )
-	       )?
+	         )?
            <CONTEXTSTART>
            (stat = BlockStatement() { sl.add(stat); } )*
            <ELLIPSIS>

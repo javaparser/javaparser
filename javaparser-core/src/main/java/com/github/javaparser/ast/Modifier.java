@@ -102,12 +102,12 @@ public class Modifier extends Node {
         NATIVE("native"),
         STRICTFP("strictfp"),
         TRANSITIVE("transitive"),
-
-        //KEY
+        // KEY
         GHOST("ghost"),
         MODEL("model"),
         TWO_STATE("two_state"),
         NO_STATE("no_state");
+
         private final String codeRepresentation;
 
         Keyword(String codeRepresentation) {

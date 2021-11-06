@@ -17,11 +17,13 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyEscapeExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 public class KeyEscapeExpression extends Expression {
 
     private Name callee;
 
+    @OptionalProperty
     private NodeList<Expression> arguments;
 
     @AllFieldsConstructor
@@ -82,13 +84,12 @@ public class KeyEscapeExpression extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getArguments() {
-        return arguments;
+    public Optional<NodeList<Expression>> getArguments() {
+        return Optional.ofNullable(arguments);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public KeyEscapeExpression setArguments(final NodeList<Expression> arguments) {
-        assertNotNull(arguments);
         if (arguments == this.arguments) {
             return this;
         }
@@ -124,10 +125,12 @@ public class KeyEscapeExpression extends Expression {
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < arguments.size(); i++) {
-            if (arguments.get(i) == node) {
-                arguments.remove(i);
-                return true;
+        if (arguments != null) {
+            for (int i = 0; i < arguments.size(); i++) {
+                if (arguments.get(i) == node) {
+                    arguments.remove(i);
+                    return true;
+                }
             }
         }
         return super.remove(node);
@@ -138,10 +141,12 @@ public class KeyEscapeExpression extends Expression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        for (int i = 0; i < arguments.size(); i++) {
-            if (arguments.get(i) == node) {
-                arguments.set(i, (Expression) replacementNode);
-                return true;
+        if (arguments != null) {
+            for (int i = 0; i < arguments.size(); i++) {
+                if (arguments.get(i) == node) {
+                    arguments.set(i, (Expression) replacementNode);
+                    return true;
+                }
             }
         }
         if (node == callee) {
