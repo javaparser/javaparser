@@ -21,10 +21,7 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -94,7 +91,7 @@ public final class JavaParser {
 
         ParserConfiguration.LanguageLevel languageLevel = configuration.getLanguageLevel();
         if (languageLevel != null) {
-            if(languageLevel.isYieldSupported()) {
+            if (languageLevel.isYieldSupported()) {
                 astParser.setYieldSupported();
             }
         }
@@ -106,9 +103,9 @@ public final class JavaParser {
      * It takes the source code from a Provider.
      * The start indicates what can be found in the source code (compilation unit, block, import...)
      *
-     * @param start refer to the constants in ParseStart to see what can be parsed.
+     * @param start    refer to the constants in ParseStart to see what can be parsed.
      * @param provider refer to Providers to see how you can read source. The provider will be closed after parsing.
-     * @param <N> the subclass of Node that is the result of parsing in the start.
+     * @param <N>      the subclass of Node that is the result of parsing in the start.
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
@@ -148,7 +145,7 @@ public final class JavaParser {
      * Parses the Java code contained in the {@link InputStream} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param in {@link InputStream} containing Java source code. It will be closed after parsing.
+     * @param in       {@link InputStream} containing Java source code. It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -173,7 +170,7 @@ public final class JavaParser {
      * Parses the Java code contained in a {@link File} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param file {@link File} containing Java source code. It will be closed after parsing.
+     * @param file     {@link File} containing Java source code. It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -206,10 +203,10 @@ public final class JavaParser {
      * Parses the Java code contained in a file and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param path path to a file containing Java source code
+     * @param path     path to a file containing Java source code
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      * @throws ParseProblemException if the source code has parser errors
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
@@ -227,7 +224,7 @@ public final class JavaParser {
      * @param path path to a file containing Java source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      */
     public ParseResult<CompilationUnit> parse(final Path path) throws IOException {
         ParseResult<CompilationUnit> result = parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
@@ -240,10 +237,10 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      *
      * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
-     * leading "/" is not allowed in pathToResource
+     *             leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      */
     public ParseResult<CompilationUnit> parseResource(final String path) throws IOException {
         return parse(COMPILATION_UNIT, resourceProvider(path, configuration.getCharacterEncoding()));
@@ -253,12 +250,12 @@ public final class JavaParser {
      * Parses the Java code contained in a resource and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
-     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
-     * leading "/" is not allowed in pathToResource
+     * @param path     path to a resource containing Java source code. As resource is accessed through a class loader, a
+     *                 leading "/" is not allowed in pathToResource
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
@@ -271,11 +268,11 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      *
      * @param classLoader the classLoader that is asked to load the resource
-     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
-     * leading "/" is not allowed in pathToResource
+     * @param path        path to a resource containing Java source code. As resource is accessed through a class loader, a
+     *                    leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
-     * @throws IOException the path could not be accessed
+     * @throws IOException           the path could not be accessed
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
@@ -543,10 +540,31 @@ public final class JavaParser {
 
     /**
      * TODO
+     *
      * @param block
      * @return
      */
     public ParseResult<KeyContextStatementBlock> parseSchemaBlock(String block) {
         return parse(GeneratedJavaParser::StartBlock, provider(block));
     }
+
+    /**
+     * TODO
+     *
+     * @param statements
+     * @return
+     */
+    public ParseResult<NodeList<Statement>> parseStatements(String statements) {
+        ParseStart<BlockStmt> start = GeneratedJavaParser::StatementsParseStart;
+        ParseResult<BlockStmt> result = parse(start, provider(statements));
+
+        NodeList<Statement> s = null;
+        if (result.getResult().isPresent()) {
+            s = result.getResult().get().getStatements();
+        }
+        return new ParseResult<>(s, result.getProblems(),
+                result.getCommentsCollection().orElse(null));
+    }
+
+
 }

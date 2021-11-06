@@ -5816,6 +5816,11 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
  */
 
 
+BlockStmt StatementsParseStart():
+{ NodeList<Statement> ret; }
+{ ret = Statements() <EOF> { return new BlockStmt(ret); } }
+
+
 BlockStmt BlockParseStart():
 { BlockStmt ret; }
 { ret = Block() <EOF> { return ret; } }
