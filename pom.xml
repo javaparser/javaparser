@@ -10,6 +10,7 @@
         <module>javaparser-symbol-solver-core</module>
         <module>javaparser-symbol-solver-testing</module>
         <module>javaparser-key-testing</module>
+        <module>javaparser-key-generator</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>
