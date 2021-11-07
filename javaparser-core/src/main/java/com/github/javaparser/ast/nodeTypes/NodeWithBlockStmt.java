@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -28,6 +27,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
  * A node with a body that is a BlockStmt.
  */
 public interface NodeWithBlockStmt<N extends Node> {
+
     BlockStmt getBody();
 
     N setBody(BlockStmt block);

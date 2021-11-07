@@ -15,20 +15,20 @@ import java.util.TreeSet;
  * @version 1 (11/7/21)
  */
 public class TypeRewriter extends ModifierVisitor<Void> {
-    private static Set<String> nodeTypes = new TreeSet<>();
+    public static final Set<String> NODE_TYPES = new TreeSet<>();
 
     static {
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
-            nodeTypes.add(nodeMetaModel.getTypeName());
+            NODE_TYPES.add(nodeMetaModel.getTypeName());
         }
-        nodeTypes.add("NodeList");
+        NODE_TYPES.add("NodeList");
     }
 
     @Override
     public Visitable visit(ClassOrInterfaceType type, Void arg) {
-        String n = type.asString();
+        String n = type.getNameAsString();
 
-        if (nodeTypes.contains(n)) {
+        if (NODE_TYPES.contains(n)) {
             var t = new ClassOrInterfaceType(null, new SimpleName("I" + n),
                     type.getTypeArguments().orElse(null), type.getAnnotations());
             return super.visit(t, arg);

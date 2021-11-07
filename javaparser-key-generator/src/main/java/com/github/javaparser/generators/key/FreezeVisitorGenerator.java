@@ -35,9 +35,9 @@ public class FreezeVisitorGenerator extends Generator {
     @Override
     public void generate() throws Exception {
         CompilationUnit cu = new CompilationUnit();
-        cu.setPackageDeclaration(CopyNodeGenerator.PACKAGE_VISITORS_NEW);
-        addImports(cu, CopyNodeGenerator.PACKAGE_NODE_OLD);
-        addImports(cu, CopyNodeGenerator.PACKAGE_NODE_NEW);
+        cu.setPackageDeclaration(Transformers.PACKAGE_VISITORS_NEW);
+        addImports(cu, Transformers.PACKAGE_NODE_OLD);
+        addImports(cu, Transformers.PACKAGE_NODE_NEW);
 
         var type = cu.addClass("FreezeVisitor");
         type.getImplementedTypes()
@@ -45,7 +45,7 @@ public class FreezeVisitorGenerator extends Generator {
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
             generateVisitMethodBody(type, nodeMetaModel);
         }
-        CopyNodeGenerator.write(cu,type.getFullyQualifiedName().get(), outputDirectory);
+        Transformers.write(cu,type.getFullyQualifiedName().get(), outputDirectory);
     }
 
     private void generateVisitMethodBody(ClassOrInterfaceDeclaration type, BaseNodeMetaModel nodeMetaModel) {

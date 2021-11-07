@@ -1,9 +1,9 @@
 package com.github.javaparser.generators.key;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.generator.Generator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -11,11 +11,9 @@ import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.github.javaparser.generators.key.Transformers.*;
 
 
 /**
@@ -23,12 +21,6 @@ import java.util.stream.Collectors;
  * @version 1 (11/7/21)
  */
 public class CopyNodeGenerator extends Generator {
-
-    public static final String PACKAGE_VISITORS_OLD = "com.github.javaparser.ast.visitor";
-    public static final String PACKAGE_VISITORS_NEW = "de.uka.ilkd.key.java.nast.visitor";
-
-    public static final String PACKAGE_NODE_OLD = "com.github.javaparser.ast";
-    public static final String PACKAGE_NODE_NEW = "de.uka.ilkd.key.java.nast";
 
 
     private final Path output;
@@ -57,58 +49,63 @@ public class CopyNodeGenerator extends Generator {
 
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         allFieldsAreFinal(nodeCoid);
+        removeObservable(nodeCu, nodeCoid);
         rewriteVisitorImports(nodeCu);
+        rewritePackage(nodeCu);
+        rewriteImplements(nodeCoid);
+
+        Transformers.rewriteConstructors(nodeCoid);
+
+        changeVisibility(nodeCoid, Modifier.Keyword.PRIVATE, name -> name.startsWith("set"));
+        changeVisibility(nodeCoid, Modifier.Keyword.PROTECTED, name ->
+                name.startsWith("setParentNode") || name.startsWith("setAsParentNodeOf"));
+        removeUnwantedMethods(nodeCoid, name ->
+                name.startsWith("add") || name.startsWith("remove")
+                        || name.startsWith("replace"));
+
+        removeUnwantedFields(nodeCoid, this::isUnwantedField);
         nodeCu.accept(new TypeRewriter(), null);
-
-        for (ConstructorDeclaration constructor : nodeCoid.getConstructors()) {
-            constructor.setName("I" + constructor.getNameAsString());
-        }
-
-        List<MethodDeclaration> unwantedMethods = getUnwantedMethods(nodeCoid.getMethods());
-        nodeCoid.getMembers().removeAll(unwantedMethods);
+        addImports(nodeCu);
         nodeCoid.setName("I" + nodeCoid.getNameAsString());
-        nodeCu.setPackageDeclaration(
-                nodeCu.getPackageDeclaration().get().getNameAsString()
-                        .replace(PACKAGE_NODE_OLD,PACKAGE_NODE_NEW));
+
         nodeCoid.getFullyQualifiedName().ifPresent(it -> write(nodeCu, it));
     }
 
-    public void write(CompilationUnit nodeCu, String fullyQualifiedName) {
-        write(nodeCu, fullyQualifiedName, output);
+    private boolean isUnwantedField(String s) {
+        switch (s) {
+            case "associatedSpecificationComments":
+            case "comment":
+            case "orphanComments":
+            case "observers":
+            case "parsed":
+                return true;
+            default:
+                return false;
+        }
     }
 
-    public static void write(CompilationUnit nodeCu, String fullyQualifiedName, Path output) {
-        String filepath = fullyQualifiedName.replace('.', '/') + ".java";
-        Path p = output.resolve(filepath);
-        try {
-            Files.createDirectories(p.getParent());
-            Files.writeString(p, nodeCu.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void removeObservable(CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
+        //nodeCu.getImports().removeIf(it -> it.getNameAsString().startsWith("Observable"));
+        //nodeCoid.getImplementedTypes().removeIf(it ->
+        //        it.getNameAsString().startsWith("Observable"));
+    }
+
+    public void write(CompilationUnit nodeCu, String fullyQualifiedName) {
+        Transformers.write(nodeCu, fullyQualifiedName, output);
     }
 
     private void allFieldsAreFinal(ClassOrInterfaceDeclaration nodeCoid) {
-        for (FieldDeclaration field : nodeCoid.getFields()) {
-            field.addModifier(Modifier.Keyword.FINAL);
-        }
+        //for (FieldDeclaration field : nodeCoid.getFields()) {
+        //    field.addModifier(Modifier.Keyword.FINAL);
+        //}
     }
 
-    public static void rewriteVisitorImports(CompilationUnit nodeCu) {
-        for (ImportDeclaration anImport : nodeCu.getImports()) {
-            final var nameAsString = anImport.getNameAsString();
-            if (nameAsString.startsWith(PACKAGE_VISITORS_OLD)) {
-                anImport.setName(nameAsString.replace(PACKAGE_VISITORS_OLD, PACKAGE_VISITORS_NEW));
+    public static void rewriteImplements(ClassOrInterfaceDeclaration nodeCoid) {
+        for (ClassOrInterfaceType implementedType : nodeCoid.getImplementedTypes()) {
+            var s = implementedType.getNameAsString();
+            if (s.startsWith("NodeWith") || "HasParentNode".equals(s)) {
+                implementedType.setName("I" + s);
             }
         }
-    }
-
-    private List<MethodDeclaration> getUnwantedMethods(List<MethodDeclaration> methods) {
-        return methods.stream().filter(it -> unwanted(it.getNameAsString())).collect(Collectors.toList());
-    }
-
-    private boolean unwanted(String name) {
-        return name.startsWith("set") || name.startsWith("add") || name.startsWith("remove")
-                || name.startsWith("replace");
     }
 }

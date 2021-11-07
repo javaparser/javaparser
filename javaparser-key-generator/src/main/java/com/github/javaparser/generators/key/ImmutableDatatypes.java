@@ -33,7 +33,8 @@ public class ImmutableDatatypes {
 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
 
-        final Path outputDirectory = Paths.get(args[0], "..", "target", "src-key");
+        final Path outputDirectory = Paths.get(args[0], "..",
+                "javaparser-key-generator", "target", "src-key");
 
         StaticJavaParser.setConfiguration(parserConfiguration);
 
@@ -47,8 +48,10 @@ public class ImmutableDatatypes {
 
     private void run(SourceRoot sourceRoot, SourceRoot generatedJavaCcSourceRoot, Path outputDirectory) throws Exception {
         Files.createDirectories(outputDirectory);
-        //new CopyNodeGenerator(sourceRoot, outputDirectory).generate();
-        //new CopyVisitorGenerator(sourceRoot, outputDirectory).generate();
+        new CopyNodeGenerator(sourceRoot, outputDirectory).generate();
+        new CopyVisitorGenerator(sourceRoot, outputDirectory).generate();
+        new CopyInterfacesGenerator(sourceRoot, outputDirectory).generate();
+        new CopyNodeListGenerator(sourceRoot, outputDirectory).generate();
         new FreezeVisitorGenerator(sourceRoot, outputDirectory).generate();
     }
 }

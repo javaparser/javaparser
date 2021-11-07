@@ -18,12 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import java.util.Optional;
 import java.util.function.Predicate;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.Observable;
 
@@ -38,7 +36,7 @@ public interface HasParentNode<T> extends Observable {
     default boolean hasParentNode() {
         return getParentNode().isPresent();
     }
-    
+
     /**
      * Returns the parent node, or {@code Optional.empty} if no parent is set.
      */
@@ -97,5 +95,4 @@ public interface HasParentNode<T> extends Observable {
     default boolean isDescendantOf(Node ancestor) {
         return findAncestor(Node.class, n -> n == ancestor).isPresent();
     }
-
 }
