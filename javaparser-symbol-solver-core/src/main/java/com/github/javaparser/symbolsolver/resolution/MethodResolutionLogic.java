@@ -127,14 +127,7 @@ public class MethodResolutionLogic {
                 //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
                 return false;
             }
-            if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
-                // If it is variadic and we are short of **exactly one** parameter, this is a match.
-                // Note that omitting the variadic parameter is treated as an empty array
-                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
-
-                // thus group the "empty" value into an empty array...
-                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
-            } else if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
+            if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
                 // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a valid type. (Maybe this is also done later..?)
                 for(int variadicArgumentIndex = countOfMethodParametersDeclared; variadicArgumentIndex < countOfNeedleArgumentsPassed; variadicArgumentIndex++) {
@@ -145,6 +138,14 @@ public class MethodResolutionLogic {
                         return false;
                     }
                 }
+                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+            }
+            if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
+                // If it is variadic and we are short of **exactly one** parameter, this is a match.
+                // Note that omitting the variadic parameter is treated as an empty array
+                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+
+                // thus group the "empty" value into an empty array...
                 needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
             } else if (countOfNeedleArgumentsPassed == countOfMethodParametersDeclared) {
                 ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
