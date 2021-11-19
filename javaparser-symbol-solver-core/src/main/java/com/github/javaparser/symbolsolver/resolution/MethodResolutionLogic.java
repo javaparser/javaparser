@@ -126,7 +126,8 @@ public class MethodResolutionLogic {
                 // Note that omitting the variadic parameter is treated as an empty array
                 //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
                 return false;
-            } else if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
+            }
+            if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
                 // If it is variadic and we are short of **exactly one** parameter, this is a match.
                 // Note that omitting the variadic parameter is treated as an empty array
                 //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
@@ -227,15 +228,16 @@ public class MethodResolutionLogic {
                                                           Map<String, ResolvedType> matchedParameters) {
         if (expected.isReferenceType() && actual.isReferenceType()) {
             return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
-        } else if (expected.isTypeVariable()) {
+        }
+        if (expected.isTypeVariable()) {
             matchedParameters.put(expected.asTypeParameter().getName(), actual);
             return true;
-        } else if (expected.isArray()) {
+        }
+        if (expected.isArray()) {
             matchedParameters.put(expected.asArrayType().getComponentType().toString(), actual);
             return true;
-        } else {
-            throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " " + actual.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " " + actual.getClass().getCanonicalName());
     }
 
     public static boolean isAssignableMatchTypeParameters(ResolvedReferenceType expected, ResolvedReferenceType actual,
@@ -285,7 +287,8 @@ public class MethodResolutionLogic {
             } else if (expectedParam.isReferenceType()) {
                 if (actualParam.isTypeVariable()) {
                     return matchTypeVariable(actualParam.asTypeVariable(), expectedParam, matchedParameters);
-                } else if (!expectedParam.equals(actualParam)) {
+                }
+                if (!expectedParam.equals(actualParam)) {
                     return false;
                 }
             } else if (expectedParam.isWildcard()) {
@@ -325,24 +328,26 @@ public class MethodResolutionLogic {
                 List<ResolvedTypeParameterDeclaration.Bound> bounds = tp.getBounds();
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();
-                } else if (bounds.size() == 1) {
-                    return bounds.get(0).getType();
-                } else {
-                    return new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver);
                 }
+                if (bounds.size() == 1) {
+                    return bounds.get(0).getType();
+                }
+                return new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver);
             }
             return type;
-        } else if (type.isPrimitive()) {
+        }
+        if (type.isPrimitive()) {
             return type;
-        } else if (type.isArray()) {
+        }
+        if (type.isArray()) {
             return new ResolvedArrayType(replaceTypeParam(type.asArrayType().getComponentType(), tp, typeSolver));
-        } else if (type.isReferenceType()) {
+        }
+        if (type.isReferenceType()) {
             ResolvedReferenceType result = type.asReferenceType();
             result = result.transformTypeParameters(typeParam -> replaceTypeParam(typeParam, tp, typeSolver)).asReferenceType();
             return result;
-        } else {
-            throw new UnsupportedOperationException("Replacing " + type + ", param " + tp + " with " + type.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException("Replacing " + type + ", param " + tp + " with " + type.getClass().getCanonicalName());
     }
 
     /**
@@ -620,11 +625,11 @@ public class MethodResolutionLogic {
 
         if (i < numberOfParams) {
             return method.getParam(i).getType();
-        } else if (method.hasVariadicParameter()) {
-            return method.getParam(numberOfParams - 1).getType();
-        } else {
-            return null;
         }
+        if (method.hasVariadicParameter()) {
+            return method.getParam(numberOfParams - 1).getType();
+        }
+        return null;
     }
 
     private static boolean isMoreSpecific(ResolvedMethodDeclaration methodA, ResolvedMethodDeclaration methodB,
@@ -645,7 +650,8 @@ public class MethodResolutionLogic {
         if (!aVariadic && aNumberOfParams == numberOfArgs && (bVariadic && (bNumberOfParams != numberOfArgs ||
                 !isLastArgArray))) {
             return true;
-        } else if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs ||
+        }
+        if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs ||
                 !isLastArgArray))) {
             return false;
         }
@@ -670,7 +676,8 @@ public class MethodResolutionLogic {
             // This should not happen but it also means that this signature is immediately disqualified.
             if (paramTypeA == null) {
                 return false;
-            } else if (paramTypeB == null) {
+            }
+            if (paramTypeB == null) {
                 return true;
             }
             // Widening primitive conversions have priority over boxing/unboxing conversions when finding the most
@@ -678,13 +685,14 @@ public class MethodResolutionLogic {
             // The method call will call foo(long), as it requires a widening primitive conversion from int to long
             // instead of a boxing conversion from int to Integer. See JLS §15.12.2.
             // This is what we check here.
-            else if (argType != null &&
+            if (argType != null &&
             		paramTypeA.isPrimitive() == argType.isPrimitive() &&
                     paramTypeB.isPrimitive() != argType.isPrimitive() &&
                     paramTypeA.isAssignableBy(argType)) {
 
                 return true;
-            } else if (argType != null &&
+            }
+            if (argType != null &&
             		paramTypeB.isPrimitive() == argType.isPrimitive() &&
                     paramTypeA.isPrimitive() != argType.isPrimitive() &&
                     paramTypeB.isAssignableBy(argType)) {
@@ -693,7 +701,8 @@ public class MethodResolutionLogic {
             // if paramA and paramB are not the last parameters
             // and the type of paramA or paramB (which are not more specific at this stage) is java.lang.Object
             // then we have to consider others parameters before concluding
-            } else if ((i < numberOfArgs - 1)
+            }
+            if ((i < numberOfArgs - 1)
                     && (isJavaLangObject(paramTypeB) || (isJavaLangObject(paramTypeA)))) {
                 // consider others parameters
                 // but eventually mark the method A as more specific if the methodB has an argument of type java.lang.Object
@@ -709,7 +718,8 @@ public class MethodResolutionLogic {
                 if (bAssignableFromA && !aAssignableFromB) {
                     // A's parameter is more specific
                     return true;
-                } else if (aAssignableFromB && !bAssignableFromA) {
+                }
+                if (aAssignableFromB && !bAssignableFromA) {
                     // B's parameter is more specific
                     return false;
                 }
@@ -719,7 +729,8 @@ public class MethodResolutionLogic {
         if (aVariadic && !bVariadic) {
             // if the last argument is an array then m1 is more specific
             return isLastArgArray;
-        } else if (!aVariadic && bVariadic) {
+        }
+        if (!aVariadic && bVariadic) {
             // if the last argument is an array and m1 is not variadic then
             // it is not more specific
             return !isLastArgArray;
@@ -819,9 +830,8 @@ public class MethodResolutionLogic {
         if (typeDeclaration instanceof MethodResolutionCapability) {
             return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes,
                     staticOnly);
-        } else {
-            throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
     private static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
@@ -877,6 +887,5 @@ public class MethodResolutionLogic {
             return;
         }
     }
-
 
 }
