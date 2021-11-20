@@ -98,11 +98,9 @@ public class MethodResolutionLogic {
 
         // The index of the final method parameter (on the method declaration).
         int countOfMethodParametersDeclared = methodDeclaration.getNumberOfParams();
-        int lastMethodParameterIndex = Math.max(0, countOfMethodParametersDeclared - 1);
 
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
-        int lastNeedleArgumentIndex = Math.max(0, countOfNeedleArgumentsPassed - 1);
 
         boolean methodIsDeclaredWithVariadicParameter = methodDeclaration.hasVariadicParameter();
 
@@ -112,6 +110,14 @@ public class MethodResolutionLogic {
         }
 
         if (methodIsDeclaredWithVariadicParameter) {
+
+            if(countOfNeedleArgumentsPassed <= (countOfMethodParametersDeclared - 2)) {
+                // If it is variadic, and the number of arguments are short by **two or more** -- this is not a match.
+                // Note that omitting the variadic parameter is treated as an empty array
+                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+                return false;
+            }
+            
             // If the method declaration we're considering has a variadic parameter,
             // attempt to convert the given list of arguments to fit this pattern
             // e.g. foo(String s, String... s2) {} --- consider the first argument, then group the remainder as an array
@@ -120,13 +126,7 @@ public class MethodResolutionLogic {
             for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
                 expectedVariadicParameterType = replaceTypeParam(expectedVariadicParameterType, tp, typeSolver);
             }
-
-            if(countOfNeedleArgumentsPassed <= (countOfMethodParametersDeclared - 2)) {
-                // If it is variadic, and the number of arguments are short by **two or more** -- this is not a match.
-                // Note that omitting the variadic parameter is treated as an empty array
-                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
-                return false;
-            }
+            
             if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
                 // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a valid type. (Maybe this is also done later..?)
@@ -138,35 +138,14 @@ public class MethodResolutionLogic {
                         return false;
                     }
                 }
-                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
             }
-            if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
-                // If it is variadic and we are short of **exactly one** parameter, this is a match.
-                // Note that omitting the variadic parameter is treated as an empty array
-                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
-
-                // thus group the "empty" value into an empty array...
-                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
-            } else if (countOfNeedleArgumentsPassed == countOfMethodParametersDeclared) {
-                ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
-                boolean finalArgumentIsArray = actualArgumentType.isArray() && expectedVariadicParameterType.isAssignableBy(actualArgumentType.asArrayType().getComponentType());
-                if(finalArgumentIsArray) {
-                    // Treat as an array of values -- in which case the expected parameter type is the common type of this array.
-                    // no need to do anything
-//                    expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
-                } else {
-                    // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
-                    needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
-                }
-            } else {
-                // Should be unreachable.
-            }
+            needleArgumentTypes = groupTrailingArgumentsIntoArray(methodDeclaration, needleArgumentTypes, expectedVariadicParameterType);
         }
 
 
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassedAfterGrouping = needleArgumentTypes.size();
-        int lastNeedleArgumentIndexAfterGrouping = Math.max(0, countOfNeedleArgumentsPassed - 1);
+        int lastNeedleArgumentIndexAfterGrouping = getLastParameterIndex(countOfNeedleArgumentsPassed);
 
         // If variadic parameters are possible then they will have been "grouped" into a single argument.
         // At this point, therefore, the number of arguments must be equal -- if they're not, then there is no match.
@@ -223,6 +202,53 @@ public class MethodResolutionLogic {
             }
         }
         return !withWildcardTolerance || needForWildCardTolerance;
+    }
+
+    /*
+     * Returns the last parameter index
+     */
+    private static int getLastParameterIndex(int countOfMethodParametersDeclared) {
+        return Math.max(0, countOfMethodParametersDeclared - 1);
+    }
+
+    private static List<ResolvedType> groupTrailingArgumentsIntoArray(ResolvedMethodDeclaration methodDeclaration,
+                                                                      List<ResolvedType> needleArgumentTypes,
+                                                                      ResolvedType expectedVariadicParameterType) {
+        // The index of the final method parameter (on the method declaration).
+        int countOfMethodParametersDeclared = methodDeclaration.getNumberOfParams();
+        int lastMethodParameterIndex = getLastParameterIndex(countOfMethodParametersDeclared);
+
+        // The index of the final argument passed (on the method usage).
+        int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
+        int lastNeedleArgumentIndex = getLastParameterIndex(countOfNeedleArgumentsPassed);
+        
+        if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
+            // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
+            // Here we are sure that all of these grouped "trailing" arguments have the required type
+            needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+        }
+        if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
+            // If it is variadic and we are short of **exactly one** parameter, this is a match.
+            // Note that omitting the variadic parameter is treated as an empty array
+            //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+
+            // thus group the "empty" value into an empty array...
+            needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+        } else if (countOfNeedleArgumentsPassed == countOfMethodParametersDeclared) {
+            ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
+            boolean finalArgumentIsArray = actualArgumentType.isArray() && expectedVariadicParameterType.isAssignableBy(actualArgumentType.asArrayType().getComponentType());
+            if(finalArgumentIsArray) {
+                // Treat as an array of values -- in which case the expected parameter type is the common type of this array.
+                // no need to do anything
+                // expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
+            } else {
+                // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
+                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+            }
+        } else {
+            // Should be unreachable.
+        }
+        return needleArgumentTypes;
     }
 
     public static boolean isAssignableMatchTypeParameters(ResolvedType expected, ResolvedType actual,
@@ -368,11 +394,11 @@ public class MethodResolutionLogic {
 
         // The index of the final method parameter (on the method declaration).
         int countOfMethodUsageArgumentsPassed = methodUsage.getNoParams();
-        int lastMethodUsageArgumentIndex = Math.max(0, countOfMethodUsageArgumentsPassed - 1);
+        int lastMethodUsageArgumentIndex = getLastParameterIndex(countOfMethodUsageArgumentsPassed);
 
         // The index of the final argument passed (on the method usage).
         int needleParameterCount = needleParameterTypes.size();
-        int lastNeedleParameterIndex = Math.max(0, needleParameterCount - 1);
+        int lastNeedleParameterIndex = getLastParameterIndex(needleParameterCount);
 
         // TODO: Does the method usage have a declaration at this point..?
         boolean methodIsDeclaredWithVariadicParameter = methodUsage.getDeclaration().hasVariadicParameter();
