@@ -162,7 +162,7 @@ SPECIAL_TOKEN : {
  */
 <JML_SINGLE_CONTRACT>
 SPECIAL_TOKEN : {
-  <JML_IGNORE_SINGLE_LINE_START : "\n" (" ")* "//@">
+  <JML_IGNORE_SINGLE_LINE_START : ("\n" (" ")*) "//@">
 }
 
 
@@ -457,7 +457,8 @@ TOKEN : {
 | <NESTED_CONTRACT_END : "|}">
 | <NESTED_CONTRACT_START : "{|">
 | <NEW_OBJECT : "new_objects">
-//| <NONNULLELEMENTS: "\\nonnullelements">
+//| <ESC_NONNULLELEMENTS: "\\nonnullelements">
+| <NONNULLELEMENTS: "nonnullelements">
 | <NON_NULL: "non_null">
 | <NORMAL_BEHAVIOR: "normal_behavior">
 | <NORMAL_BEHAVIOUR: "normal_behaviour">
@@ -1615,9 +1616,10 @@ void jmlModifiersInner(NodeList<Modifier> modifiers):
   | <SPEC_PACKAGE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PACKAGE));  begin = orIfInvalid(begin, token()); }
   | <SPEC_PROTECTED> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PROTECTED));  begin = orIfInvalid(begin, token()); }
   | <INSTANCE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_INSTANCE));  begin = orIfInvalid(begin, token()); }
-  | <NO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NO_STATE));  begin = orIfInvalid(begin, token()); }
-  | <TWO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.TWO_STATE));  begin = orIfInvalid(begin, token()); }
-  | <NON_NULL_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NON_NULL_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
+  | <NO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NO_STATE));  begin = orIfInvalid(begin, token()); }
+  | <TWO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_TWO_STATE));  begin = orIfInvalid(begin, token()); }
+  | <NON_NULL_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
+  | <NONNULLELEMENTS> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL_ELEMENTS));  begin = orIfInvalid(begin, token()); }
 }
 
 

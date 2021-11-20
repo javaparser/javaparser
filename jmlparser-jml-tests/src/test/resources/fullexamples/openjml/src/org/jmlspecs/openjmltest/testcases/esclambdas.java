@@ -537,7 +537,7 @@ public class esclambdas extends EscBase {
         main.addOptions("-method=mm"); // Part of test
 //        main.addOptions("-show");
         main.addOptions("-code-math=bigint","-spec-math=bigint");  // Part of test
-        //@ nullableByDefault
+        // @ nullableByDefault
         helpTCX("tt.TestJava","package tt; \n"
                 +"public class TestJava { \n"
                 +"      public Object ppp; \n"
@@ -559,7 +559,7 @@ public class esclambdas extends EscBase {
     public void testBindLambdaA() {
         main.addOptions("-method=mm");
         main.addOptions("-code-math=bigint","-spec-math=bigint");
-        //@ nullableByDefault
+        // @ nullableByDefault
         helpTCX("tt.TestJava","package tt; \n"
                 +"public class TestJava { \n"
                 +"      public Object ppp; \n"

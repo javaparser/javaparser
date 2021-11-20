@@ -379,6 +379,8 @@ public class TokenTypes {
             case TWO_STATE:
             case NON_NULL_BY_DEFAULT:
             case NO_STATE:
+            case LOOP_MODIFIES:
+            case NONNULLELEMENTS:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

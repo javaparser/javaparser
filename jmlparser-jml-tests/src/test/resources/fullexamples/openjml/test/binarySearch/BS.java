@@ -6,7 +6,7 @@ public class BS {
   int binarySearch(int[] values, int x) {
   //@ assert values != null && (\forall int i; 0 < i < values.length; values[i-1] <= values[i]);
   //@ assume !(\forall int i; 0 <= i < values.length; values[i] != x);
-  //@ reachable;
+  // @ reachable;
         try {
                 int y =  java.util.Arrays.binarySearch(values, x);
                 return y;

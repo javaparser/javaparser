@@ -143,7 +143,7 @@ public class ModifierValidator extends VisitorValidator {
         validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE,
                 JML_SPEC_PRIVATE, JML_GHOST, JML_SPEC_PACKAGE, JML_MODEL, JML_SPEC_PROTECTED, JML_SPEC_PUBLIC,
                 JML_STRICTLY_PURE, JML_NON_NULL, JML_NULLABLE, JML_NULLABLE_BY_DEFAULT,
-                JML_PURE, JML_INSTANCE, NO_STATE, TWO_STATE
+                JML_PURE, JML_INSTANCE, JML_NO_STATE, JML_TWO_STATE
         );
         super.visit(n, reporter);
     }
@@ -180,7 +180,8 @@ public class ModifierValidator extends VisitorValidator {
                 }
             }
         }
-        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL, JML_NULLABLE, JML_NON_NULL));
+        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL, JML_NULLABLE, JML_NON_NULL, JML_NULLABLE_BY_DEFAULT,
+                JML_NON_NULL_BY_DEFAULT, JML_NON_NULL_ELEMENTS));
         super.visit(n, reporter);
     }
 
@@ -220,7 +221,7 @@ public class ModifierValidator extends VisitorValidator {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         // JML
         validateAtMostOneOf(n, reporter, JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PUBLIC, JML_SPEC_PROTECTED);
-        validateAtMostOneOf(n, reporter, TWO_STATE, NO_STATE);
+        validateAtMostOneOf(n, reporter, JML_TWO_STATE, JML_NO_STATE);
         validateAtMostOneOf(n, reporter, JML_NULLABLE_BY_DEFAULT, JML_NON_NULL, JML_NULLABLE);
         validateAtMostOneOf(n, reporter, JML_PURE, JML_STRICTLY_PURE);
         // JML ends
@@ -276,7 +277,7 @@ public class ModifierValidator extends VisitorValidator {
     public void visit(ClassInvariantClause n, ProblemReporter reporter) {
         validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL,
                 JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PROTECTED, JML_SPEC_PUBLIC,
-                JML_INSTANCE, NO_STATE, TWO_STATE
+                JML_INSTANCE, JML_NO_STATE, JML_TWO_STATE
         );
         super.visit(n, reporter);
     }

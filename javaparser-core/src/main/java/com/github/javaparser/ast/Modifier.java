@@ -152,9 +152,10 @@ public class Modifier extends Node {
         JML_SPEC_PACKAGE("spec_package"),
         JML_SPEC_PROTECTED("spec_protected"),
         JML_SPEC_PRIVATE("spec_private"),
-        NO_STATE("no_state"),
-        TWO_STATE("two_state"),
-        NON_NULL_BY_DEFAULT("non_null_by_default"),
+        JML_NO_STATE("no_state"),
+        JML_TWO_STATE("two_state"),
+        JML_NON_NULL_BY_DEFAULT("non_null_by_default"),
+        JML_NON_NULL_ELEMENTS("nonnullelements"),
         JML_UNPARSABLE_MODIFIERS("<unparsable>");
         private final String codeRepresentation;
 

@@ -12,12 +12,12 @@ import java.util.Arrays;
 
 import org.jmlspecs.openjmltest.testcases.*;
 
-//@RunWith(JUnitPlatform.class)
-//@SelectPackages({"org.jmlspecs.openjmltest.testcases"})
+// @RunWith(JUnitPlatform.class)
+// @SelectPackages({"org.jmlspecs.openjmltest.testcases"})
 
 // This works but is not adaptable if tests are added in the testcases folder
-//@RunWith(Suite.class)
-//@SuiteClasses({ access.class, api.class, arith.class, assignable.class, binaries.class, bugs.class, compilationUnit.class, compiler.class, deprecation.class, esc.class, escaccessible.class,
+// @RunWith(Suite.class)
+// @SuiteClasses({ access.class, api.class, arith.class, assignable.class, binaries.class, bugs.class, compilationUnit.class, compiler.class, deprecation.class, esc.class, escaccessible.class,
 //                        escall2.class, escall3.class, escArithmeticModes.class, escArithmeticModes2.class, escbitvector.class, esccallable.class, esccode.class, escConstantFields.class,
 //                        escconstructor.class, escCounterexamples.class, escDemofiles.class, escenums.class, escfeatures.class, escfiles.class, escfilesTrace.class, escfunction.class, escgeneric.class,
 //                        escinclause.class, escinline.class, escJML.class, esclambdas.class, esclocation.class, escm.class, escnew.class, escnew2.class, escnew3.class, escnewassignable.class,
@@ -32,7 +32,7 @@ import org.jmlspecs.openjmltest.testcases.*;
 // The following runner works with the suite method to add all test case files
 // dynamically and explicitly sorts them
 @RunWith(org.junit.runners.AllTests.class)
-//@org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)
+// @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.Alphanumeric.class)
 @org.junit.jupiter.api.parallel.Execution(org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT)
 public class AllTests {
