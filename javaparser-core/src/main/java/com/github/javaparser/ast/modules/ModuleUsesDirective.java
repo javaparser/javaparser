@@ -74,14 +74,6 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleUsesDirective setType(final Name name) {
         assertNotNull(name);
@@ -147,8 +139,9 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == name) {
             setName((Name) replacementNode);
             return true;

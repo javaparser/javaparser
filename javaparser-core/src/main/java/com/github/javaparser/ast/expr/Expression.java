@@ -56,14 +56,6 @@ public abstract class Expression extends Node {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Expression clone() {
         return (Expression) accept(new CloneVisitor(), null);
@@ -73,14 +65,6 @@ public abstract class Expression extends Node {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

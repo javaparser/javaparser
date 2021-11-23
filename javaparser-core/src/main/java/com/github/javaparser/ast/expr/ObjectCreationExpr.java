@@ -239,8 +239,9 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (anonymousClassBody != null) {
             for (int i = 0; i < anonymousClassBody.size(); i++) {
                 if (anonymousClassBody.get(i) == node) {
@@ -292,8 +293,9 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (anonymousClassBody != null) {
             for (int i = 0; i < anonymousClassBody.size(); i++) {
                 if (anonymousClassBody.get(i) == node) {

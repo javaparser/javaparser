@@ -121,14 +121,6 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoStmt clone() {
         return (DoStmt) accept(new CloneVisitor(), null);
@@ -143,8 +135,9 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == body) {
             setBody((Statement) replacementNode);
             return true;

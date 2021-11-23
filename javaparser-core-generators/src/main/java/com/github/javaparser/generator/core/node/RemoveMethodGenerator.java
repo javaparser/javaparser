@@ -49,8 +49,8 @@ public class RemoveMethodGenerator extends NodeGenerator {
 
         final BlockStmt body = removeNodeMethod.getBody().get();
 
-        body.addStatement("if (node == null) return false;");
-
+        body.addStatement("if (node == null) { return false; }");
+        int numberPropertiesDeclared = 0;
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             if (!property.isNode()) {
                 continue;
@@ -69,14 +69,19 @@ public class RemoveMethodGenerator extends NodeGenerator {
                 check = f("if (%s != null) { %s }", property.getName(), check);
             }
             body.addStatement(check);
+            numberPropertiesDeclared++;
         }
         if (nodeMetaModel.getSuperNodeMetaModel().isPresent()) {
             body.addStatement("return super.remove(node);");
         } else {
             body.addStatement("return false;");
         }
-        
-        addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
+
+        if (!nodeMetaModel.isRootNode() && numberPropertiesDeclared == 0) {
+            removeMethodWithSameSignature(nodeCoid, removeNodeMethod);
+        } else {
+            addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
+        }
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
