@@ -60,20 +60,27 @@ comment:
   after_n_builds: 54
   
   
-## Flags defined elsewhere MUST also be defined here (required for GitHub PR checks information)
-flags:
-  javaparser-core:
-    paths:
-      - javaparser-core/src/main/java*
-      - javaparser-core-testing/src/test/java*
-      - javaparser-core-testing-bdd/src/test/java*
-    carryforward: false
-  javaparser-symbol-solver:
-    paths:
-    - javaparser-symbol-solver-core/src/main/java*
-    - javaparser-symbol-solver-testing/src/test/java*
-    carryforward: false
+# ## Flags defined elsewhere MUST also be defined here (required for GitHub PR checks information)
+# flags:
+#   javaparser-core:
+#     paths:
+#       - javaparser-core/src/main/java*
+#       - javaparser-core-testing/src/test/java*
+#       - javaparser-core-testing-bdd/src/test/java*
+#     carryforward: false
+#   javaparser-symbol-solver:
+#     paths:
+#     - javaparser-symbol-solver-core/src/main/java*
+#     - javaparser-symbol-solver-testing/src/test/java*
+#     carryforward: false
 
+
+## New section re: flags
+## No individual flags are added to YAML and flag names are automatically ingested from the Uploader
+## https://docs.codecov.com/docs/flags
+flag_management:
+  default_rules:
+    carryforward: false
 
 
 ignore: 
