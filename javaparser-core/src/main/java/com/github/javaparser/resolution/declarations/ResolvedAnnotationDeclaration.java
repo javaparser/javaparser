@@ -21,9 +21,9 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-
 import java.util.List;
+
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 
 /**
  * @author Federico Tomassetti
@@ -42,4 +42,6 @@ public interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDecl
     }
 
     List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers();
+    
+    boolean isInheritable();
 }

@@ -37,14 +37,14 @@ Just add the following to your maven configuration or tailor to your own depende
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>3.22.1</version>
+    <version>3.23.1</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.22.1'
+implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.23.1'
 ```
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver.
@@ -59,14 +59,14 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.22.1</version>
+    <version>3.23.1</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-core:3.22.1'
+implementation 'com.github.javaparser:javaparser-core:3.23.1'
 ```
 
 Since version 3.6.17 the AST can be serialized to JSON.
@@ -78,28 +78,37 @@ There is a separate module for this:
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core-serialization</artifactId>
-    <version>3.22.1</version>
+    <version>3.23.1</version>
 </dependency>
 ```
 
 **Gradle**:
 
 ```
-implementation 'com.github.javaparser:javaparser-core-serialization:3.22.1'
+implementation 'com.github.javaparser:javaparser-core-serialization:3.23.1'
 ```
 
 ## How To Compile Sources
 
-If you checked out the project from GitHub you can build the project with maven using:
+If you checked out the project's source code from GitHub, you can build the project with maven using:
+```
+mvnw clean install
+```
+
+If you want to generate the packaged jar files from the source files, you run the following maven command:
+```
+mvnw package
+```
+
+**NOTE** the jar files for the two modules can be found in:
+- `javaparser/javaparser-core/target/javaparser-core-\<version\>.jar`
+- `javaparser-symbol-solver-core/target/javaparser-symbol-solver-core-\<version\>.jar`
+
+If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source files;
+otherwise you will get many compilation complaints in the IDE. (`mvnw clean install` already does this for you.)
 
 ```
-mvn clean install
-```
-
-If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source files; otherwise you will get many compilation complaints in the IDE. (mvn clean install already does this for you.)
-
-```
-mvn javacc:javacc
+mvnw javacc:javacc
 ```
 
 If you modify the code of the AST nodes, specifically if you add or remove fields or node classes,

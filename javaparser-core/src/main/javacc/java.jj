@@ -629,6 +629,13 @@ TOKEN :
       (
           (~["'","\\","\n","\r"])
        |
+          // starts off with unicode backslash
+          ("\\u005" ["c", "C"]
+              // regular escape sequences
+              (["n","t","b","r","f","\\","'","\""]
+                  // escapes another unicode backslash
+                  | ("\\u005" ["c", "C"])))
+       |
           ( // TODO: Could these escape sequences be extracted out?
               "\\"
               (
@@ -2969,16 +2976,7 @@ Expression Expression():
             "->"
             lambdaBody = LambdaBody()
             {
-                if (ret instanceof CastExpr) {
-                    ret = generateLambda(ret, lambdaBody);
-                } else if (ret instanceof ConditionalExpr) {
-                    ConditionalExpr ce = (ConditionalExpr) ret;
-                    if(ce.getElseExpr() != null) {
-                        ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
-                    }
-                } else {
-                    ret = generateLambda(ret, lambdaBody);
-                }
+                ret = generateLambda(ret, lambdaBody);
             }
          |
             "::"
@@ -3051,7 +3049,7 @@ Expression ConditionalExpression():
         "?"
         left = Expression()
         ":"
-        right = ConditionalExpression()
+        right = Expression()
         // TODO: Examine further re: missing(?) {@code LambdaExpression} or whether it is permissive enough to include it.
         {
             ret = new ConditionalExpr(range(ret, token()), ret, left, right);

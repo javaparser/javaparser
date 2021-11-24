@@ -146,8 +146,9 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (extendedType != null) {
             if (node == extendedType) {
                 removeExtendedType();
@@ -196,8 +197,9 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (extendedType != null) {
             if (node == extendedType) {
                 setExtendedType((ReferenceType) replacementNode);

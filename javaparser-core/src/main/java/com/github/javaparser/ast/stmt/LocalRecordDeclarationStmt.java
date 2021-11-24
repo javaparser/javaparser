@@ -96,14 +96,6 @@ public class LocalRecordDeclarationStmt extends Statement {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LocalRecordDeclarationStmt clone() {
         return (LocalRecordDeclarationStmt) accept(new CloneVisitor(), null);
@@ -118,8 +110,9 @@ public class LocalRecordDeclarationStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == recordDeclaration) {
             setRecordDeclaration((RecordDeclaration) replacementNode);
             return true;

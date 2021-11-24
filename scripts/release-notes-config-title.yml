@@ -1,0 +1,38 @@
+changelog:
+  repository: "javaparser/javaparser"
+  milestone-reference: "TITLE"
+  bulletStyle: "* "
+  defaultTitlePrefix: "### "
+  wrapIssueLinkInBrackets: true
+  includeIssueOrPrPrefix: true
+  includePrAuthor: true
+  excludePullRequests: false
+  excludeIssues: true
+  includeWildcardSection: true
+  sections:
+    - title: "Highlights"
+      labels: [ "PR: Noteworthy", "PR: Security", "PR: Deprecated", "PR: Deprecation" ]
+      group: "highlights"
+    - title: "API or Behaviour Change"
+      labels: [ "API or Behaviour Change" ]
+      group: "api change"
+    - title: "Added"
+      labels: [ "PR: Added" ]
+    - title: "Changed"
+      labels: [ "PR: Changed" ]
+    - title: "Deprecated"
+      labels: [ "PR: Deprecated", "PR: Deprecation" ]
+    - title: "Removed"
+      labels: [ "PR: Removed" ]
+    - title: "Fixed"
+      labels: [ "PR: Fixed", "PR: Bugfix",  "PR: Fix", "fix", "bug", "regression" ]
+    - title: "Security"
+      labels: [ "PR: Security" ]
+    - title: "Developer Changes"
+      labels: [ "PR: Build", "PR: Development", "builds / releases", "dependencies" ]
+    - title: "Uncategorised"
+      labels: [ "*" ]
+  contributors:
+    thankYouMessage: "Thank You to all contributors who worked on this release!"
+    exclude:
+      names: [ "dependabot[bot]", "renovate[bot]" ]

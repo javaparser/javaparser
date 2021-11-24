@@ -576,4 +576,35 @@ class DefaultPrettyPrinterTest {
         assertTrue(indentation.getType() == IndentType.TABS);
         assertEquals("\t\t", indentation.getIndent());
     }
+    
+    @Test
+    public void testIssue3317() {
+
+        String code = "public class Test {\n" + 
+                "  protected void someMethod() {\n" + 
+                "    // Before\n" + 
+                "    System.out\n"+
+                "    // Middle Comment\n" + 
+                "    .println(\"\");\n" + 
+                "    // After\n" + 
+                "  }\n" +
+                "}";
+        
+        String expected = "public class Test {\n" + 
+                "\n" + 
+                "    protected void someMethod() {\n" + 
+                "        // Before\n" + 
+                "        System.out.// Middle Comment\n" + 
+                "        println(\"\");\n" + 
+                "        // After\n" + 
+                "    }\n" + 
+                "}\n";
+
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        
+        assertEqualsStringIgnoringEol(expected, cu.toString());
+
+    }
 }
