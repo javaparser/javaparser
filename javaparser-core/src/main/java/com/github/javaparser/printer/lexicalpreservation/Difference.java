@@ -1018,10 +1018,16 @@ public class Difference {
         return nodeTextIndex;
     }
 
+    /*
+     * Returns true if the current <code>Added</code> element is preceded by a <code>Removed</code> element.
+     */
     private boolean isAReplacement(int diffIndex) {
         return (diffIndex > 0) && diffElements.get(diffIndex) instanceof Added && diffElements.get(diffIndex - 1) instanceof Removed;
     }
 
+    /*
+     * Returns true if the current <code>Removed</code> element is followed by a <code>Added</code> element.
+     */
     private boolean isReplaced(int diffIndex) {
         return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
     }
