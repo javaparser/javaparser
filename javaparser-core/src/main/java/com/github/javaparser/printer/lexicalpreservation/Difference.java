@@ -86,22 +86,40 @@ public class Difference {
         this.indentation = LexicalPreservingPrinter.findIndentation(node);
     }
 
+    /*
+     * Returns the indentation used after the last line break
+     */
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
         List<TextElement> res = new LinkedList<>(indentation);
-        boolean afterNl = false;
-        for (TextElement e : prevElements) {
-            if (e.isNewline()) {
-                res.clear();
-                afterNl = true;
-            } else {
-                if (afterNl && e instanceof TokenTextElement && TokenTypes.isWhitespace(((TokenTextElement)e).getTokenKind())) {
-                    res.add(e);
-                } else {
-                    afterNl = false;
-                }
+        int index = lastIndexOfEol(prevElements);
+        if (index < 0) return res; // no EOL found
+        res.clear(); // initialize previous indentation
+        // search for consecutive space characters
+        for (int i = (index + 1); i < prevElements.size(); i++) {
+            TextElement elem = prevElements.get(i);
+            if (elem.isWhiteSpace()) {
+                res.add(elem);
+                continue;
             }
+            break;
         }
         return res;
+    }
+    
+    /*
+     * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement 
+     */
+    int lastIndexOfEol(List<TextElement> source) {
+        ListIterator listIterator = source.listIterator(source.size());
+        int lastIndex = source.size() -1;
+        while (listIterator.hasPrevious()) {
+            TextElement elem = (TextElement)listIterator.previous();
+            if (elem.isNewline()) {
+                return lastIndex;
+            }
+            lastIndex--;
+        }
+        return -1;
     }
 
     private List<TextElement> indentationBlock() {
@@ -863,10 +881,14 @@ public class Difference {
         return correspondanceBetweenNextOrderAndPreviousOrder;
     }
 
+    /*
+     * Returns true if the next element in the list is an added element of type CsmUnindent
+     */
     private boolean isFollowedByUnindent(List<DifferenceElement> diffElements, int diffIndex) {
-        return (diffIndex + 1) < diffElements.size()
-                && diffElements.get(diffIndex + 1).isAdded()
-                && diffElements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
+        int nextIndexValue = diffIndex + 1;
+        return (nextIndexValue) < diffElements.size()
+                && diffElements.get(nextIndexValue).isAdded()
+                && diffElements.get(nextIndexValue).getElement() instanceof CsmUnindent;
     }
 
     private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
@@ -989,10 +1011,16 @@ public class Difference {
         return nodeTextIndex;
     }
 
+    /*
+     * Returns true if the current <code>Added</code> element is preceded by a <code>Removed</code> element.
+     */
     private boolean isAReplacement(int diffIndex) {
         return (diffIndex > 0) && diffElements.get(diffIndex) instanceof Added && diffElements.get(diffIndex - 1) instanceof Removed;
     }
 
+    /*
+     * Returns true if the current <code>Removed</code> element is followed by a <code>Added</code> element.
+     */
     private boolean isReplaced(int diffIndex) {
         return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
     }
