@@ -228,14 +228,7 @@ public class Difference {
         if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
             DifferenceElement diffElement = diffElements.get(diffIndex);
             if (diffElement instanceof Kept) {
-                Kept kept = (Kept) diffElement;
-
-                if (kept.isWhiteSpaceOrComment() || kept.isIndent() || kept.isUnindent()) {
-                    diffIndex++;
-                } else {
-                    throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
-                            + nodeText + ". Difference: " + this);
-                }
+                diffIndex++;
             } else if (diffElement instanceof Added) {
                 Added addedElement = (Added) diffElement;
 
@@ -582,27 +575,27 @@ public class Difference {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
         }
     }
-    
-    
+
+
     /*
      * Returns the array level if the DifferenceElement is a CsmChild representing an ArrayType else 0
      */
     private int getArrayLevel(DifferenceElement element) {
         CsmElement csmElem = element.getElement();
-        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild && 
+        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild &&
                 ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType) {
             Node child = ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild();
             return ((ArrayType)child).getArrayLevel();
         }
         return 0;
     }
-    
+
     /*
      * Returns true if the DifferenceElement is a CsmChild representing an ArrayType
      */
     private boolean isArrayType(DifferenceElement element) {
         CsmElement csmElem = element.getElement();
-        return csmElem instanceof LexicalDifferenceCalculator.CsmChild && 
+        return csmElem instanceof LexicalDifferenceCalculator.CsmChild &&
                 ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType;
     }
 
@@ -658,7 +651,7 @@ public class Difference {
         // recursively analyze token to skip
         return step += getIndexToNextTokenElement(new TokenTextElement(nextToken), nestedDiamondOperator);
     }
-    
+
     /*
      * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
      */
@@ -690,7 +683,7 @@ public class Difference {
     private boolean isDiamondOperator(Kind kind) {
         return kind.GT.equals(kind) || kind.LT.equals(kind);
     }
-    
+
     /*
      * Returns true if the token is a bracket
      */
