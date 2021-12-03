@@ -1569,4 +1569,44 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertTransformedToString(expectedCode, cu);
     }
 
+    @Test
+    void testArrayPreservation_WithSingleBracketWithoutSpace() {
+
+        // Given
+        considerCode("class Test {\n" +
+                "  int[]foo;\n" +
+                "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                "  @Nullable\n" +
+                "  int[]foo;\n" +
+                "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+
+    @Test
+    void testArrayPreservation_WithMultipleBracketWithoutSpace() {
+
+        // Given
+        considerCode("class Test {\n" +
+                "  int[][]foo;\n" +
+                "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                "  @Nullable\n" +
+                "  int[][]foo;\n" +
+                "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+
 }
