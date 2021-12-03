@@ -1594,8 +1594,8 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // Given
         considerCode("class Test {\n" +
-                "  int[][]foo;\n" +
-                "}");
+                     "  int[][]foo;\n" +
+                     "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
@@ -1603,9 +1603,9 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // Assert
         String expectedCode =   "class Test {\n" +
-                "  @Nullable\n" +
-                "  int[][]foo;\n" +
-                "}";
+                                "  @Nullable\n" +
+                                "  int[][]foo;\n" +
+                                "}";
         assertTransformedToString(expectedCode, cu);
     }
 
