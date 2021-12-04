@@ -603,10 +603,9 @@ public class Difference {
      * Returns true if the DifferenceElement is a CsmChild with type arguments
      */
     private boolean isNodeWithTypeArguments(DifferenceElement element) {
-        CsmElement csmElem = element.getElement();
-        if (!CsmChild.class.isAssignableFrom(csmElem.getClass()))
+        if (!element.isChild())
             return false;
-        CsmChild child = (CsmChild) csmElem;
+        CsmChild child = (CsmChild) element.getElement();
         if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
             return false;
         Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments) child.getChild()).getTypeArguments();
