@@ -21,35 +21,72 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.visitor.ModifierVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.utils.TestUtils;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.InitializerDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.DoubleLiteralExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.LongLiteralExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.utils.TestUtils;
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     private NodeText getTextForNode(Node node) {
@@ -1607,6 +1644,90 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 "  int[][]foo;\n" +
                                 "}";
         assertTransformedToString(expectedCode, cu);
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_SingleType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object foo;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object foo;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_ArrayType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object[] foo;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object[] foo;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_MultipleVariablesDeclarationWithSameType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object[] foo, bar;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object[] foo, bar;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_MultipleVariablesDeclarationwithDifferentType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object foo[], bar;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object foo[], bar;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
     }
 
 }

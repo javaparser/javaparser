@@ -44,6 +44,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
@@ -514,6 +515,15 @@ public class Difference {
                 int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
                 originalIndex += step;
                 originalIndex++;
+            }  else if (originalElement.isIdentifier() && isTypeWithFullyQualifiedName(kept)) {
+                    diffIndex++;
+                    // skip all token related to node with the fully qualified name
+                    // for example:
+                    // java.lang.Object is represented in originalElement as a list of tokens "java", ".", "lang", ".", "Object".
+                    // So we have to skip 5 tokens.
+                    int step = getIndexToNextTokenElement((TokenTextElement) originalElement, kept);
+                    originalIndex += step;
+                    originalIndex++; // positioning on the next token
             } else if ((originalElement.isIdentifier() || originalElement.isKeyword()) && isArrayType(kept)) {
                 int tokenToSkip = getIndexToNextTokenElementInArrayType((TokenTextElement)originalElement, getArrayLevel(kept));
                 diffIndex++;
@@ -598,21 +608,58 @@ public class Difference {
         return csmElem instanceof LexicalDifferenceCalculator.CsmChild &&
                 ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType;
     }
+    
+    /*
+     * Returns true if the DifferenceElement is a CsmChild which represents a type with fully qualified name
+     */
+    private boolean isTypeWithFullyQualifiedName(DifferenceElement element) {
+        if (!element.isChild())
+            return false;
+        CsmChild child = (CsmChild) element.getElement();
+        if (!ClassOrInterfaceType.class.isAssignableFrom(child.getChild().getClass()))
+            return false;
+        return ((ClassOrInterfaceType) child.getChild()).getScope().isPresent();
+    }
 
     /*
      * Returns true if the DifferenceElement is a CsmChild with type arguments
      */
     private boolean isNodeWithTypeArguments(DifferenceElement element) {
-        CsmElement csmElem = element.getElement();
-        if (!CsmChild.class.isAssignableFrom(csmElem.getClass()))
+        if (!element.isChild())
             return false;
-        CsmChild child = (CsmChild) csmElem;
+        CsmChild child = (CsmChild) element.getElement();
         if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
             return false;
         Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments) child.getChild()).getTypeArguments();
         return typeArgs.isPresent() && typeArgs.get().size() > 0;
     }
 
+    /*
+     * Try to resolve the number of token to skip in the original list to match 
+     * a ClassOrInterfaceType with a list of tokens like "java", ".", "lang", ".", "Object"
+     */
+    private int getIndexToNextTokenElement(TokenTextElement element, DifferenceElement kept) {
+        int step = 0; // number of token to skip
+        if (!isTypeWithFullyQualifiedName(kept)) return 0; // verify if the DifferenceElement is a ClassOrInterfaceType with a fully qualified name
+        CsmChild child = (CsmChild) kept.getElement();
+        // split the type fully qualified node name to an array of tokens
+        String[] parts = ((ClassOrInterfaceType) child.getChild()).getNameWithScope().split("\\.");
+        JavaToken token = element.getToken();
+        for (String part : parts) {
+            if (part.equals(token.asString())) {
+                token = token.getNextToken().get(); // get 'dot' token
+                if (!token.asString().equals(".")) break;
+                token = token.getNextToken().get(); // get the next part
+                step += 2;
+                continue;
+            }
+            // there is no match so we don't have token to skip
+            step = 0;
+            break;
+        }
+        return step;
+    }
+    
     /*
      * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
      * This is due to the fact that types are considered as token in the originalElements list.
