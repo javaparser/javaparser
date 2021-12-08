@@ -23,11 +23,16 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
@@ -219,7 +224,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final DoStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getCondition().accept(this, arg);
-        n.getContracts().forEach(p -> p.accept(this, arg));
+        n.getContracts().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -292,7 +297,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final ForEachStmt n, final A arg) {
         n.getBody().accept(this, arg);
-        n.getContracts().forEach(p -> p.accept(this, arg));
+        n.getContracts().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getIterable().accept(this, arg);
         n.getVariable().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -302,7 +307,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final ForStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getCompare().ifPresent(l -> l.accept(this, arg));
-        n.getContracts().forEach(p -> p.accept(this, arg));
+        n.getContracts().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getInitialization().forEach(p -> p.accept(this, arg));
         n.getUpdate().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -603,7 +608,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final WhileStmt n, final A arg) {
         n.getBody().accept(this, arg);
         n.getCondition().accept(this, arg);
-        n.getContracts().forEach(p -> p.accept(this, arg));
+        n.getContracts().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -863,9 +868,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final ClassInvariantClause n, final A arg) {
+    public void visit(final JmlClassInvariantDeclaration n, final A arg) {
         n.getInvariant().accept(this, arg);
         n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -875,6 +881,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getMeasuredBy().ifPresent(l -> l.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getVariable().accept(this, arg);
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -883,6 +890,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getExpr().accept(this, arg);
         n.getId().accept(this, arg);
         n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -957,6 +965,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final JmlMethodDeclaration n, final A arg) {
         n.getContract().ifPresent(l -> l.accept(this, arg));
         n.getMethodDeclaration().accept(this, arg);
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -965,6 +974,48 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getLeft().accept(this, arg);
         n.getOperator().accept(this, arg);
         n.getRight().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlDocDeclaration n, final A arg) {
+        n.getJmlComments().forEach(p -> p.accept(this, arg));
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlDocStmt n, final A arg) {
+        n.getJmlComments().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlImportDeclaration n, final A arg) {
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlDoc n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlDocType n, final A arg) {
+        n.getJmlComments().forEach(p -> p.accept(this, arg));
+        n.getMembers().forEach(p -> p.accept(this, arg));
+        n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlFieldDeclaration n, final A arg) {
+        n.getDecl().accept(this, arg);
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

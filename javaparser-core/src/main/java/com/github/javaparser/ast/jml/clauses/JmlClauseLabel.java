@@ -158,6 +158,6 @@ public class JmlClauseLabel extends JmlClause {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClauseLabel removeLabel() {
-        return setLabel(null);
+        return setLabel((SimpleName) null);
     }
 }

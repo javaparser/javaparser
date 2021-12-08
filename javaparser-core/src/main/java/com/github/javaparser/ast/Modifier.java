@@ -21,6 +21,7 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -30,6 +31,8 @@ import com.github.javaparser.metamodel.ModifierMetaModel;
 import java.util.Arrays;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.metamodel.JmlDocModifierMetaModel;
 
 /**
  * A modifier, like private, public, or volatile.
@@ -157,6 +160,7 @@ public class Modifier extends Node {
         JML_NON_NULL_BY_DEFAULT("non_null_by_default"),
         JML_NON_NULL_ELEMENTS("nonnullelements"),
         JML_UNPARSABLE_MODIFIERS("<unparsable>");
+
         private final String codeRepresentation;
 
         Keyword(String codeRepresentation) {

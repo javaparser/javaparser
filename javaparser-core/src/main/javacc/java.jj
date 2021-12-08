@@ -79,14 +79,15 @@ PARSER_BEGIN(GeneratedJavaParser)
 package com.github.javaparser;
 
 import java.util.*;
-import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
@@ -152,6 +153,7 @@ PARSER_END(GeneratedJavaParser)
  ***************************************************************************/
 
 
+//region JML
 <JML_MULTI_CONTRACT>
 SPECIAL_TOKEN : {
   /*"\n" ([" ","\t","\f"])* */
@@ -209,129 +211,6 @@ SPECIAL_TOKEN :
   <WINDOWS_EOL : "\r\n">
 | <UNIX_EOL: "\n">
 | <OLD_MAC_EOL: "\r">
-}
-
-
-/*
- * GeneratedJavaParserTokenManager.java is generated,
- * based on the template within this TOKEN_MGR_DECLS block.
- */
-TOKEN_MGR_DECLS :
-{
-    private List<JavaToken> tokens = new ArrayList<JavaToken>();
-    private CommentsCollection commentsCollection = new CommentsCollection();
-    private JavaToken homeToken;
-    private Stack<Token> tokenWorkStack = new Stack<Token>();
-    private boolean storeTokens;
-    private boolean yieldSupported = false;
-
-    void reset() {
-        tokens = new ArrayList<JavaToken>();
-        commentsCollection = new CommentsCollection();
-        homeToken = null;
-    }
-
-    List<JavaToken> getTokens() {
-        if(storeTokens) {
-            return tokens;
-        }
-        return null;
-    }
-
-    CommentsCollection getCommentsCollection() {
-        return commentsCollection;
-    }
-
-    /* Get the very first token in the file */
-    JavaToken getHomeToken() {
-        return homeToken;
-    }
-
-    /* Makes the parser keep a list of tokens */
-    public void setStoreTokens(boolean storeTokens) {
-        this.storeTokens = storeTokens;
-    }
-
-    public void setYieldSupported() {
-        yieldSupported = true;
-    }
-
-    private void CommonTokenAction(Token token) {
-        // Use an intermediary stack to avoid recursion, see issue 1003
-        do {
-            tokenWorkStack.push(token);
-            token = token.specialToken;
-        } while (token != null);
-
-        // The stack is now filled with tokens in left-to-right order. Process them.
-        while(!tokenWorkStack.empty()) {
-            token = tokenWorkStack.pop();
-            token.javaToken = new JavaToken(token, tokens);
-
-            if(storeTokens) {
-                tokens.add(token.javaToken);
-            }
-
-            if (homeToken == null) {
-                homeToken = token.javaToken;
-            }
-
-            if(TokenTypes.isComment(token.kind)) {
-                Comment comment = createCommentFromToken(token);
-                commentsCollection.addComment(comment);
-            }
-        }
-    }
-}
-
-
-
-/** Jml comments */
-
-<JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
-SPECIAL_TOKEN : {
-  <SINGLE_LINE_COMMENT_IN_MULTI_JML: "//" (~["\n","\r"])*>
-}
-
-/**
- * A fancy construct
- */
-
-MORE : {
-  <JML_SINGLE_START0: "//" (~[" "])* "@">  //{ input_stream.backup(jjimageLen); }
-   : JML_SINGLE_CONTRACT_PRE
-  |
-  <SINGLE_LINE_COMMENT0: "//"> : SINGLE_LINE_COMMENT_STATE
-}
-
-<SINGLE_LINE_COMMENT_STATE> SPECIAL_TOKEN : { <SINGLE_LINE_COMMENT: (~["\n","\r"])*> : DEFAULT}
-<JML_SINGLE_CONTRACT_PRE> TOKEN: { <JML_SINGLE_START : ""> : JML_SINGLE_CONTRACT}
-//FIXME weigl space could be a problem
-
-/*TOKEN : {
-  <JML_SINGLE_START: "//" (~[" "])* "@"> : JML_SINGLE_CONTRACT
-}
-
-SPECIAL_TOKEN :
-{
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
-}*/
-
-TOKEN : {
-  //<JML_MULTI_START: "/*" (~[" "])* "@">  : JML_MULTI_CONTRACT
-  <JML_MULTI_START: "/*" (["-","+"]<IDENTIFIER>)* "@">  : JML_MULTI_CONTRACT
-}
-
-<JML_MULTI_CONTRACT>
-TOKEN :
-{
-  <JML_MULTI_END: "*/" > : DEFAULT
-}
-
-<JML_SINGLE_CONTRACT>
-TOKEN :
-{
-  <JML_SINGLE_END: "\n"> : DEFAULT
 }
 
 <JML_MULTI_CONTRACT,JML_SINGLE_CONTRACT>
@@ -550,14 +429,107 @@ TOKEN : {
 //| <INFINITE_UNION: "\\infinite_union">  //KeY extension, not official JML
 //| <INTERSECT: "\\intersect">  //KeY extension, not official JML
 }
+//endregion
+
+/*
+ * GeneratedJavaParserTokenManager.java is generated,
+ * based on the template within this TOKEN_MGR_DECLS block.
+ */
+TOKEN_MGR_DECLS :
+{
+    private List<JavaToken> tokens = new ArrayList<JavaToken>();
+    private CommentsCollection commentsCollection = new CommentsCollection();
+    private JavaToken homeToken;
+    private Stack<Token> tokenWorkStack = new Stack<Token>();
+    private boolean storeTokens;
+    private boolean yieldSupported = false;
+
+    void reset() {
+        tokens = new ArrayList<JavaToken>();
+        commentsCollection = new CommentsCollection();
+        homeToken = null;
+    }
+
+    List<JavaToken> getTokens() {
+        if(storeTokens) {
+            return tokens;
+        }
+        return null;
+    }
+
+    CommentsCollection getCommentsCollection() {
+        return commentsCollection;
+    }
+
+    /* Get the very first token in the file */
+    JavaToken getHomeToken() {
+        return homeToken;
+    }
+
+    /* Makes the parser keep a list of tokens */
+    public void setStoreTokens(boolean storeTokens) {
+        this.storeTokens = storeTokens;
+    }
+
+    public void setYieldSupported() {
+        yieldSupported = true;
+    }
+
+    private void CommonTokenAction(Token token) {
+        // Use an intermediary stack to avoid recursion, see issue 1003
+        do {
+            tokenWorkStack.push(token);
+            token = token.specialToken;
+        } while (token != null);
+
+        // The stack is now filled with tokens in left-to-right order. Process them.
+        while(!tokenWorkStack.empty()) {
+            token = tokenWorkStack.pop();
+            token.javaToken = new JavaToken(token, tokens);
+
+            if(storeTokens) {
+                tokens.add(token.javaToken);
+            }
+
+            if (homeToken == null) {
+                homeToken = token.javaToken;
+            }
+
+            if(TokenTypes.isComment(token.kind)) {
+                Comment comment = createCommentFromToken(token);
+                commentsCollection.addComment(comment);
+            }
+        }
+    }
+}
+
 
 /* COMMENTS */
+TOKEN :
+{
+  <JML_LINE_COMMENT: "//" (("+"|"-") <IDENTIFIER>)* "@" (~["\n","\r"])*>
+}
+
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
+}
+
 MORE :
 {
   <ENTER_JAVADOC_COMMENT: "/**" ~["/"]> { input_stream.backup(1); } : IN_JAVADOC_COMMENT
 |
+  <ENTER_JML_BLOCK_COMMENT: "/*" (("+"|"-") <IDENTIFIER> )* "@"> : IN_JML_BLOCK_COMMENT
+|
   <ENTER_MULTILINE_COMMENT: "/*"> : IN_MULTI_LINE_COMMENT
 }
+
+
+<IN_JML_BLOCK_COMMENT>
+TOKEN : {
+  <JML_BLOCK_COMMENT: "*/" > : DEFAULT
+}
+
 
 <IN_JAVADOC_COMMENT>
 SPECIAL_TOKEN :
@@ -571,7 +543,7 @@ SPECIAL_TOKEN :
   <MULTI_LINE_COMMENT: "*/" > : DEFAULT
 }
 
-<IN_JAVADOC_COMMENT, IN_MULTI_LINE_COMMENT>
+<IN_JAVADOC_COMMENT, IN_MULTI_LINE_COMMENT, IN_JML_BLOCK_COMMENT>
 MORE :
 {
   <COMMENT_CONTENT: ~[] >
@@ -1392,14 +1364,16 @@ public CompilationUnit CompilationUnit():
     ModifierHolder modifier;
     TypeDeclaration<?> typeDeclaration = null;
     ModuleDeclaration module = null;
+    JmlDocType doc;
 }
 {
     try {
         ( LOOKAHEAD(2)";" )*
         [ LOOKAHEAD(PackageDeclaration()) packageDeclaration = PackageDeclaration() ]
         (
-           LOOKAHEAD(3) im=JmlImportDeclarations() { for(ImportDeclaration p:im) imports=add(imports, p); }
-         | in = ImportDeclaration() { imports = add(imports, in); }
+            in = ImportDeclaration() { imports = add(imports, in); }
+         |
+            doc = JmlDocType() { types = add(types, doc); }
          |
             (
                 modifier = Modifiers()
@@ -1449,22 +1423,7 @@ PackageDeclaration PackageDeclaration():
     { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 
-NodeList<ImportDeclaration> JmlImportDeclarations():
-{
-  ImportDeclaration in;
-  NodeList<ImportDeclaration> imports =emptyNodeList();
-  JavaToken begin;
-  DefaultJmlContainer c = new DefaultJmlContainer();
-}
-{
-  JmlStart(c) {begin=token();}
-  (<MODEL> in=ImportDeclaration()
-  {add(imports, new JmlImportDeclaration(range(begin, in),in,c));})*
-  JmlEnd()
-  {
-    return imports;
-  }
-}
+
 /**
  * Import declaration types are not differentiated in the class hierarchy.
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-7.html#jls-7.5
@@ -1571,55 +1530,16 @@ ModifierHolder Modifiers():
          |
             "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, token()); }
          |
-            jmlModifiers(modifiers)
+            JmlDocModifier(modifiers)
          |
-             ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
+            jmlModifiersInner(modifiers)
+         |
+            ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
         )
     )*
     {
         return new ModifierHolder(begin, modifiers, annotations);
     }
-}
-
-void jmlModifiers(NodeList<Modifier> modifiers):
-{
-    JmlContainer c = new DefaultJmlContainer();
-}
-{
-  try {
-      JmlStart(c) (jmlModifiersInner(modifiers))* JmlEnd()
-    | jmlModifiersInner(modifiers)
-    //This seems odd, but is required for model methods/fields which are already wrapped in JML comment.
-    // but this is not a danger overall, as the modifiers are only lexed properly inside JML comments.
-  } catch (ParseException e) {
-       TokenRange range = recover(EOF, e);
-       Modifier m = new Modifier(range, Modifier.Keyword.JML_UNPARSABLE_MODIFIERS);
-       m.setParsed(UNPARSABLE);
-       add(modifiers, m);
-       return;
-  }
-}
-
-void jmlModifiersInner(NodeList<Modifier> modifiers):
-{ JavaToken begin = INVALID; }
-{
-    <PURE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_PURE));  begin = orIfInvalid(begin, token()); }
-  | <STRICTLY_PURE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_STRICTLY_PURE));  begin = orIfInvalid(begin, token()); }
-  | <MODEL> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_MODEL));  begin = orIfInvalid(begin, token()); }
-  | <GHOST> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_GHOST));  begin = orIfInvalid(begin, token()); }
-  | <HELPER> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_HELPER));  begin = orIfInvalid(begin, token()); }
-  | <NULLABLE_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NULLABLE_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
-  | <NON_NULL> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL));  begin = orIfInvalid(begin, token()); }
-  | <NULLABLE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NULLABLE));  begin = orIfInvalid(begin, token()); }
-  | <SPEC_PUBLIC> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PUBLIC));  begin = orIfInvalid(begin, token()); }
-  | <SPEC_PRIVATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PRIVATE));  begin = orIfInvalid(begin, token()); }
-  | <SPEC_PACKAGE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PACKAGE));  begin = orIfInvalid(begin, token()); }
-  | <SPEC_PROTECTED> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PROTECTED));  begin = orIfInvalid(begin, token()); }
-  | <INSTANCE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_INSTANCE));  begin = orIfInvalid(begin, token()); }
-  | <NO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NO_STATE));  begin = orIfInvalid(begin, token()); }
-  | <TWO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_TWO_STATE));  begin = orIfInvalid(begin, token()); }
-  | <NON_NULL_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
-  | <NONNULLELEMENTS> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL_ELEMENTS));  begin = orIfInvalid(begin, token()); }
 }
 
 
@@ -2042,6 +1962,8 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
 {
     "{"
     (
+        member = JmlDocMember() { ret.add(member); }
+     |
         member = ClassOrInterfaceBodyDeclaration() { ret.add(member); }
      |
         ";"
@@ -2069,6 +1991,8 @@ NodeList<BodyDeclaration<?>> RecordBody():
 {
     "{"
     (
+        member = JmlDocMember()  { ret.add(member); }
+     |
         member = RecordBodyDeclaration() { ret.add(member); }
      |
         ";"
@@ -2112,14 +2036,12 @@ BodyDeclaration<?> RecordBodyDeclaration():
 {
     ModifierHolder modifiers;
     BodyDeclaration<?> ret;
-    NodeList<JmlContracts> contracts = new NodeList<>();
 }
 {
     (
         LOOKAHEAD(2)
         ret = InitializerDeclaration()
      |
-        (LOOKAHEAD(3) contracts=JmlContracts())?
         // Just get all the modifiers out of the way. If you want to do
         // more checks, pass the modifiers down to the member
         modifiers = Modifiers()
@@ -2143,7 +2065,7 @@ BodyDeclaration<?> RecordBodyDeclaration():
             LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
             ret = FieldDeclaration(modifiers)
          |
-            ret = MethodDeclaration(modifiers, contracts)
+            ret = MethodDeclaration(modifiers)
         )
     )
     { return ret; }
@@ -2233,21 +2155,12 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 {
     ModifierHolder modifiers;
     BodyDeclaration<?> ret;
-    NodeList<JmlContracts> contracts=emptyNodeList();
 }
 {
     (
         LOOKAHEAD(2)
         ret = InitializerDeclaration()
      |
-        //FIXME weigl expensive lookahead, required to distinguish, fields from contracts
-        //maybe we should inline the rule below
-        LOOKAHEAD(100,  JmlStart() Modifiers()
-                       ( <INVARIANT>  | <INITIALLY> | <REPRESENTS> | <REPRESENTS_REDUNDANTLY>
-                       | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY> | JmlFieldDeclaration() | JmlMethodDeclaration()))
-        ret = JmlClassOrInterfaceBodyDeclaration()
-     |
-        (LOOKAHEAD(3) contracts=JmlContracts())?
         // Just get all the modifiers out of the way. If you want to do
         // more checks, pass the modifiers down to the member
         modifiers = Modifiers()
@@ -2269,186 +2182,11 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
             LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
             ret = FieldDeclaration(modifiers)
          |
-            ret = MethodDeclaration(modifiers, contracts)
+            ret = MethodDeclaration(modifiers)
         )
     )
     { return ret; }
 }
-
-JmlBodyDeclaration JmlClassOrInterfaceBodyDeclaration():
-{
-    JmlBodyDeclaration ret = new JmlBodyDeclaration();
-    JmlClassLevel element;
-    ModifierHolder modifiers;
-    JavaToken begin;
-}{
-    (
-      JmlStart(ret) {begin=token();}
-      (
-        modifiers = Modifiers()
-        ( element = JmlClassInvariant(modifiers)
-        | element = JmlClassInitially(modifiers)
-        | element = JmlClassAccessible(modifiers)
-        | element = JmlClassRepresents(modifiers)
-        | LOOKAHEAD(4) element = JmlFieldDeclaration(modifiers)
-        | element = JmlMethodDeclaration(modifiers)
-        )
-        {ret.getElements().add(element);}
-      )+
-      JmlEnd()
-    )
-    { ret.setTokenRange(range(begin, token()));
-      return ret;}
-}
-
-void JmlStart(JmlContainer jc):
-{}
-{
-  ( <JML_MULTI_START> {jc.setSingleLine(false);}
-  | <JML_SINGLE_START> {jc.setSingleLine(true);}
-  )
-  { jc.setTagsFromStart(token()); }
-}
-
-void JmlEnd():
-{}
-{ <JML_MULTI_END> | <JML_SINGLE_END> }
-
-JmlClassLevel JmlClassInvariant(ModifierHolder modifiers):
-{ Expression expr; Token inv; }
-{
-  inv=<INVARIANT> expr=Expression() ";"
-  { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
-    return new ClassInvariantClause(range(begin, token()), modifiers.modifiers, expr); }
-}
-
-JmlClassLevel JmlClassInitially(ModifierHolder modifiers):
-{ Expression expr; Token inv; }
-{
-  inv=<INITIALLY> expr=Expression() ";"
-  { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
-    //TODO weigl add initally ast
-    return new ClassInvariantClause(range(begin, token()), modifiers.modifiers, expr); }
-}
-
-JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
-{
-    JavaToken begin;
-    Expression var;
-    Expression expr, measuredBy = null;
-    NodeList<Expression> expressions = new NodeList<>();
-}
-{
-  (<ACCESSIBLE>|<ACCESSIBLE_REDUNDANTLY>)
-  {begin=token();}
-  [Heaps()] //TODO weigl: add to declaration
-  var=Expression() <COLON>
-  expressions=ExpressionList()
-  [<ESC_MEASURED_BY> measuredBy=Expression()]
-  ";"
-  {
-    return new JmlClassAccessibleDeclaration(range(begin, token()), modifiers.modifiers, var  , expressions, measuredBy);}
-}
-
-JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
-{
-     Token b;
-     Name id=null;
-     Expression expr;
-}
-{
-  b=<REPRESENTS>
-  (
-    id=Name() (<ASSIGN> | <SUCH_THAT>) expr=Expression()
-  | LOOKAHEAD(2) expr=Expression()
-  )
-  ";"
-  { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
-    return new JmlRepresentsDeclaration(range(begin, token()), modifiers.modifiers, id, expr);}
-}
-
-NodeList<JmlBoundVariable> JmlBoundedVariables():
-{ NodeList<JmlBoundVariable> variables = new NodeList<>();
-  Type partialType; SimpleName val; }
-{
-   partialType = Type(emptyNodeList())
-   val=SimpleName()
-   { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
-  ( ","
-    [ LOOKAHEAD( Type() SimpleName())
-      partialType = Type(emptyNodeList())
-    ]
-    val=SimpleName()
-    { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
-  )*
-  {return variables;}
-}
-
-JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
-{
-    FieldDeclaration decl;
-}
-{
-    decl=FieldDeclaration(modifier)
-    {
-        return new JmlFieldDeclaration(range(decl, decl), decl);
-    }
-}
-
-
-JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
-{
-    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
-    Type type;
-    SimpleName name;
-    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
-    ArrayBracketPair arrayBracketPair;
-    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
-    NodeList<ReferenceType> throws_ = emptyNodeList();
-    BlockStmt body = null;
-    NodeList<AnnotationExpr> annotations;
-    JavaToken begin = modifier.begin;
-    ReferenceType throwType;
-    NodeList<JmlClause> clauses = new NodeList<>();
-    JmlClause clause;
-    NodeList<JmlContract> subContracts = new NodeList<>();
-    JmlContract c=null;
-}
-{
-    ( [<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>]
-      {begin=token();}
-      (clause=JmlContractClause() {clauses.add(clause);})+
-      (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
-      {
-       c = new JmlContract(range(begin,token()), Behavior.MODEL, new NodeList<>(), clauses, subContracts);
-      }
-    )?
-    modifier=Modifiers()
-    [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
-    annotations = Annotations() { modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations)); }
-    type = ResultType(emptyNodeList()) { begin = orIfInvalid(begin, type); }
-    name = SimpleName()
-    parameters = Parameters()
-    ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-    [
-        "throws"
-        throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
-        ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )*
-    ]
-    (
-        body = Block()
-     |
-        ";"
-    )
-    {
-        type = juggleArrayType(type, arrayBracketPairs);
-        MethodDeclaration m = new  MethodDeclaration(range(begin, token()),
-            modifier.modifiers, modifier.annotations, typeParameters.list,
-            type, name, parameters.a, throws_, body, parameters.b);
-        return new JmlMethodDeclaration(range(m,m), m, c);
-    }
-}
-
 
 /**
  * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.3
@@ -2628,7 +2366,7 @@ ArrayInitializerExpr ArrayInitializer():
  *         {Annotation} UnannType [Identifier .] this
  * }</pre>
  */
-MethodDeclaration MethodDeclaration(ModifierHolder modifier, NodeList<JmlContracts> contracts):
+MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
     Type type;
@@ -2664,7 +2402,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier, NodeList<JmlContrac
     {
         type = juggleArrayType(type, arrayBracketPairs);
         return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations,
-        typeParameters.list, type, name, parameters.a, throws_, body, parameters.b, contracts);
+        typeParameters.list, type, name, parameters.a, throws_, body, parameters.b, new NodeList<>());
     }
 }
 
@@ -4845,32 +4583,24 @@ Statement Statement():
 {
     try {
         (
-              //TODO weigl fix is an expresive lookahead
-              //           to speed up this, we need to parse jml contracts and forward the to the
-              //           next suitable statement.
-              LOOKAHEAD(JmlLoopInvariants() SimpleName() ":")
-              ret = JmlLabeledLoopsStatement()
-            | LOOKAHEAD(2) ret = LabeledStatement()
-            | LOOKAHEAD(2) ret = JmlStatements()
+            LOOKAHEAD(2) ret = LabeledStatement()
             | ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
-            | LOOKAHEAD(3) ret = BlockWithContract()
-            | LOOKAHEAD(3)
-              (contracts=JmlLoopInvariants())?
-              ( ret = WhileStatement(contracts)
-              | ret = DoStatement(contracts)
-              | ret = ForStatement(contracts)
-              )
+            | ret = Block()
             | ret = EmptyStatement()
             | ret = StatementExpression()
             | ret = SwitchStatement()
             | ret = IfStatement()
+            | ret = WhileStatement()
+            | ret = DoStatement()
+            | ret = ForStatement()
             | ret = BreakStatement()
             | ret = ContinueStatement()
             | ret = ReturnStatement()
             | ret = ThrowStatement()
             | ret = SynchronizedStatement()
             | ret = TryStatement()
+            | ret = JmlDocStatements()
         )
         { return ret; }
     } catch (ParseException e) {
@@ -4879,34 +4609,20 @@ Statement Statement():
     }
 }
 
-JmlStatements JmlStatements():
-{ JmlStatements stmts = new JmlStatements(); JavaToken begin,end; JmlStatement s; }
-{
-  JmlStart(stmts) { begin=token(); }
-  (s=JmlStatement() {stmts.getElements().add(s);})*
-  JmlEnd()
-  {
-    stmts.setTokenRange(range(begin,token()));
-    return stmts;
-  }
-}
 
-JmlStatement JmlStatement():
-{ JavaToken begin; Expression expr,target; NodeList<Statement> stmts;}
+/*
+JmlDocStmt JmlDocUnit():
+{ List<JavaToken> seq = new LinkedList<>(); }
 {
-  ( (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
-    { begin = token(); }
-    expr=Expression()
-    ";"
-    { return new JmlStmtWithExpression(range(begin, token()), expr); }
-  | <GHOST>
-    stmts=Statements()     { begin = token(); }
-    { return new JmlGhostStatements(range(begin, token()), stmts); }
-  | <UNREACHABLE> ";"
-    { return new JmlUnreachableStmt(range(token(), token())); }
-  )
-
+  (<JML_BLOCK_COMMENT> | <JML_LINE_COMMENT>)
+  { seq.add(token()); }
+  (
+    (<JML_BLOCK_COMMENT> | <JML_LINE_COMMENT>)
+    { seq.add(token()); }
+  )*
+  {return  new JmlDocUnit(seq);}
 }
+*/
 
 
 /**
@@ -4931,7 +4647,7 @@ AssertStmt AssertStatement():
     { return new AssertStmt(range(begin, token()), check, msg);  }
 }
 
-LabeledStmt JmlLabeledLoopsStatement():
+/*LabeledStmt JmlLabeledLoopsStatement():
 {
     SimpleName label;
     Statement stmt;
@@ -4948,7 +4664,7 @@ LabeledStmt JmlLabeledLoopsStatement():
     )
     { return new LabeledStmt(range(begin, token()), label, stmt); }
 }
-
+*/
 
 /**
  * // TODO: Examine more closely.
@@ -5003,396 +4719,6 @@ BlockStmt Block():
         block.setParsed(UNPARSABLE);
         return block;
     }
-}
-
-Statement BlockWithContract():
-{
-    BlockStmt b;
-    NodeList<JmlContracts> c = emptyNodeList();
-    SimpleName label = null;
-    JavaToken begin =null;
-}
-{
-  (c=JmlContracts())?
-  (label=SimpleName() { begin=token(); } ":")?
-
-  b=Block()
-  {
-    b.setContracts(c);
-    if(label==null) return b;
-    else return new LabeledStmt(range(begin, token()), label, b);
-  }
-}
-
-JmlClause JmlLoopInvClause():
-{ NodeList<Expression> exprs; JavaToken begin;}
-{
-    ( <LOOP_INVARIANT>
-    | <LOOP_INVARIANT_FREE>
-    | <MAINTAINING>
-    | <LOOP_INVARIANT_REDUNDANTLY>
-    | <MAINTAINING_REDUNDANTLY>
-    )
-    {begin=token();}
-    ( Heaps() )? //TODO weigl add to clause
-    exprs=ExpressionList()
-    {return new JmlDefaultClause(range(begin, token()), begin, exprs);}
-}
-
-NodeList<JmlContracts> JmlLoopInvariants():
-{
-    NodeList<JmlContracts> containers = emptyNodeList();
-    NodeList<JmlClause> clauses = emptyNodeList();
-    JavaToken begin;
-    JmlClause clause;
-}
-{
-  (
-    {
-      JmlContracts contracts = new JmlContracts();
-      JmlContract contract = new JmlContract();
-      NodeList<JmlContract> elements = new NodeList<>(contract);
-      Behavior b;
-    }
-    JmlStart(contracts) {begin=token();}
-    (
-      //loop contract a key special thing
-      <LOOP_CONTRACT>
-      {contract.setLoopContract(true);}
-      (b=JmlBehavior() {contract.setBehavior(b);})?
-      (
-        clause=JmlContractClause() {contract.getClauses().add(clause);}
-      |
-        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
-      )*
-      //(<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
-    |
-      //This line is unfolded -- important for the fast lookahead
-      clause = JmlLoopInvClause() ";" {contract.getClauses().add(clause);}
-      (
-        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
-      )*
-    )
-    JmlEnd()
-    {contracts.getElements().add(contract); containers.add(contracts);}
-  )+
-  { return containers;}
-}
-
-
-JmlClause JmlLoopInvClauses():
-{
- JmlClause ret;
-}
-{
-  ( ret=JmlLoopInvClause()
-  | ret=JmlBreaksClause()
-  | ret=JmlContinuesClause()
-  | ret=JmlReturnsClause()
-  | ret=JmlDecreasesClause()
-  | ret=JmlDivergesClause()
-  | ret=JmlAssignableClause()
-  | ret=JmlMeasuredBy()
-  )
-  ";"
-  {return ret;}
-}
-
-
-NodeList<JmlContracts> JmlContracts():
-{
-    NodeList<JmlContracts> contracts = emptyNodeList();
-    NodeList<JmlContract> elements = emptyNodeList();
-    JmlContracts contract;
-    JavaToken begin, end;
-}
-{
-  ( LOOKAHEAD(5) //to dinstinguish from JmlModifier
-    {contract = new JmlContracts();}
-    JmlStart(contract) {begin=token();}
-    elements=JmlContractsInner()
-    JmlEnd() {end=token();}
-    {contract.setElements(elements); contracts.add(contract);
-     contract.setTokenRange(range(begin,end));
-    }
-  )+
-  { return contracts;}
-}
-
-NodeList<JmlContract> JmlContractsInner():
-{
-    JmlContract bc = null;
-    NodeList<JmlContract> contracts = emptyNodeList();
-}
-{
-  (<ALSO>)?
-  bc=JmlContract() {contracts.add(bc);}
-  (<ALSO> bc=JmlContract() {contracts.add(bc);})*
-  {return contracts;}
-}
-
-
-JmlContract JmlContract():
-{
-    JavaToken begin;
-    NodeList<JmlClause> clauses = new NodeList<>();
-    NodeList<JmlContract> subContracts = new NodeList<>();
-
-    Behavior b = Behavior.NONE;
-    JmlClause clause;
-    //ModifierHolder modifiers = new ModifierHolder();
-}
-{
-  (( "public"  {  }
-   | "private" {  }
-   | "package" {  }
-   | "protected" { }
-   ))? //TODO weigl
-  {begin=token();}
-  (b=JmlBehavior())?
-  (clause=JmlContractClause() {clauses.add(clause);})+
-  (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
-  {return new JmlContract(range(begin, token()), b, new NodeList<>(), clauses, subContracts);}
-}
-
-JmlClause JmlContractClause():
-{
- JmlClause ret;
-}
-{
-  ( ret=ForallClause()
-  | ret=JmlBreaksClause()
-  | ret=JmlContinuesClause()
-  | ret=JmlReturnsClause()
-  | ret=JmlRequiresClause()
-  | ret=JmlEnsuresClause()
-  | ret=JmlSignalsClause()
-  | ret=JmlSignalsOnlyClause()
-  | ret=JmlDivergesClause()
-  //| ret=determs()
-  | ret=JmlAssignableClause()
-  | ret=JmlAccessibleClause()
-  | ret=JmlMeasuredBy() )
-  ";"
-  {return ret;}
-}
-
-
-JmlClause JmlDecreasesClause():
-{
-    JavaToken begin;
-    Expression expr;
-}
-{
-  (<DECREASES> | <DECREASING> | <DECREASES_REDUNDANTLY> | <DECREASING_REDUNDANTLY> )
-  {begin=token();}
-  expr=Expression()
-  {return new JmlDefaultClause(range(begin,token()), begin, expr);}
-}
-
-
-Behavior JmlBehavior():
-{}
-{
-    (<BEHAVIOUR>|<BEHAVIOR>) {return Behavior.BEHAVIOR;}
-  | (<NORMAL_BEHAVIOR>|<NORMAL_BEHAVIOUR>) {return Behavior.NORMAL;}
-  | (<EXCEPTIONAL_BEHAVIOR>|<EXCEPTIONAL_BEHAVIOUR>) {return Behavior.EXCEPTIONAL;}
-  | (<ABRUPT_BEHAVIOR>|<ABRUPT_BEHAVIOUR>) {return Behavior.BREAK;}
-  | (<BREAK_BEHAVIOR>|<BREAK_BEHAVIOUR>) {return Behavior.BREAK;}
-  | (<CONTINUE_BEHAVIOR>|<CONTINUE_BEHAVIOUR>){return Behavior.CONTINUE;}
-  | (<RETURN_BEHAVIOR>|<RETURN_BEHAVIOUR>) {return Behavior.RETURN;}
-}
-
-JmlClause ForallClause():
-{
-    JavaToken begin;
-    NodeList<JmlBoundVariable> vars;
-}
-{
-  <FORALL> {begin=token();}
-  vars=JmlBoundedVariables()
-  {return new ForallClause(range(begin, token()), vars);}
-}
-
-JmlClause JmlBreaksClause():
-{
-    SimpleName label=null;
-    Expression expr;
-    JavaToken begin;
-}
-{
-  (<BREAKS> |<BREAKS_REDUNDANTLY>)  { begin = token();}
-  <LPAREN> (label=SimpleName())? <RPAREN>
-  expr=Expression()
-  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
-}
-
-JmlClause JmlContinuesClause():
-{
-    SimpleName label=null;
-    Expression expr;
-    JavaToken begin;
-}
-{
-  (<CONTINUES>|<CONTINUES_REDUNDANTLY>) { begin = token();}
-  <LPAREN> (label=SimpleName())? <RPAREN>
-  expr=Expression()
-  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
-}
-
-
-JmlClause JmlReturnsClause():
-{
-    Expression expr;
-    JavaToken begin;
-}
-{
-  <RETURNS> {begin = token();}
-  expr=Expression()
-  { return new JmlDefaultClause(range(begin, token()), begin, expr); }
-}
-
-SimpleName Heap():
-{
-    SimpleName name;
-}
-{
-  <LT> name=SimpleName() <GT>
-  { return name; }
-}
-
-NodeList<SimpleName> Heaps():
-{
-    NodeList<SimpleName> names = new NodeList<SimpleName>();
-    SimpleName name;
-}
-{
-  name=Heap() { names.add(name); }
-  { return names; }
-}
-
-/**
-*/
-JmlClause JmlAssignableClause():
-{
-    Expression e;
-    NodeList<SimpleName> heaps=new NodeList<>();
-    NodeList<Expression> exprs = new NodeList<>();
-    JavaToken begin;
-}
-{
-  ( <ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES>
-  | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY>
-  )
-  { begin = token();}
-  (heaps=Heaps())*
-  exprs=ExpressionList()
-  { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
-}
-
-JmlClause JmlAccessibleClause():
-{
-    NodeList<SimpleName> heaps=new NodeList<>();
-    Expression e=null;
-    NodeList<Expression> exprs = new NodeList<>();
-    JavaToken begin;
-}
-{
-  (<ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>)
-  { begin = token();}
-  (heaps=Heaps())*
-  exprs=ExpressionList()
-  (<ESC_MEASURED_BY> e=Expression())? //TODO weigl: add measured by expression, new ast class
-  { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
-}
-
-/**
-Measures_by
-*/
-JmlClause JmlMeasuredBy():
-{
-    Expression e;
-    JavaToken begin;
-}
-{
-  { begin = token();}
-  <MEASURED_BY> e=Expression()
-  { return new JmlDefaultClause(range(begin,token()), JmlClauseKind.MEASURED_BY, new NodeList<>(), new NodeList<>(e)); }
-}
-
-JmlClause JmlRequiresClause():
-{
-    NodeList<SimpleName> heaps=new NodeList<>();
-    Expression e;
-    JavaToken begin;
-}
-{
-  (<REQUIRES> |<REQUIRES_FREE>|<REQUIRES_REDUNDANTLY>)
-  { begin = token();}
-  (heaps=Heaps())? e=Expression()
-  { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
-}
-
-/**
-*/
-JmlClause JmlEnsuresClause():
-{
-    NodeList<SimpleName> heaps=new NodeList<>();
-    Expression e;
-    JavaToken begin;
-}
-{
-  (<ENSURES>|<ENSURES_FREE>|<ENSURES_REDUNDANTLY>)
-  {begin = token();}
-  (heaps=Heaps())? e=Expression()
-  { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
-}
-
-/**
-*/
-JmlClause JmlSignalsClause():
-{
-    SimpleName id=null;
-    Expression e;
-    Type type;
-    JavaToken begin;
-}
-{
-  { begin = token(); }
-  <SIGNALS> <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
-  { return new SignalsClause(range(begin, token()), type, id, e); }
-}
-
-
-/**
-signals_only  \nothing;
-singals_only  \everything;
-singals_only  \everything;
-*/
-JmlClause JmlSignalsOnlyClause():
-{
-  JavaToken begin;
-  Type type;
-  NodeList<Type> types = new NodeList<>();
-}
-{
-  {begin=token();}
-  <SIGNALS_ONLY> type=Type(emptyNodeList()) {types.add(type);}
-  (<COMMA> type=Type(emptyNodeList()) {types.add(type);})*
-  { return new SignalsOnlyClause(range(begin, token()), types); }
-}
-
-
-JmlClause JmlDivergesClause():
-{
-  JavaToken begin;
-  Expression e;
-}
-{
-  (<DIVERGES>|<DIVERGES_REDUNDANTLY> )
-  {begin=token();}
-  e=Expression()
-  { return new JmlDefaultClause(range(begin, token()), begin, e); }
 }
 
 /**
@@ -5771,7 +5097,7 @@ IfStmt IfStatement():
  *         while ( Expression ) StatementNoShortIf
  * }</pre>
  */
-WhileStmt WhileStatement(NodeList<JmlContracts> contracts):
+WhileStmt WhileStatement():
 {
     Expression condition;
     Statement body;
@@ -5783,7 +5109,7 @@ WhileStmt WhileStatement(NodeList<JmlContracts> contracts):
     condition = Expression()
     ")"
     body = Statement()
-    { return new WhileStmt(range(begin, token()),condition, body, contracts); }
+    { return new WhileStmt(range(begin, token()),condition, body); }
 }
 
 /**
@@ -5793,7 +5119,7 @@ WhileStmt WhileStatement(NodeList<JmlContracts> contracts):
  *         do Statement while ( Expression ) ;
  * }</pre>
  */
-DoStmt DoStatement(NodeList<JmlContracts> contracts):
+DoStmt DoStatement():
 {
     Expression condition;
     Statement body;
@@ -5807,7 +5133,7 @@ DoStmt DoStatement(NodeList<JmlContracts> contracts):
     condition = Expression()
     ")"
     ";"
-    { return new DoStmt(range(begin, token()),body, condition, contracts); }
+    { return new DoStmt(range(begin, token()),body, condition); }
 }
 
 /**
@@ -5821,7 +5147,7 @@ DoStmt DoStatement(NodeList<JmlContracts> contracts):
  *         EnhancedForStatementNoShortIf
  * }</pre>
  */
-Statement ForStatement(NodeList<JmlContracts> contracts ):
+Statement ForStatement():
 {
     VariableDeclarationExpr varExpr = null;
     Expression expr = null;
@@ -5854,9 +5180,9 @@ Statement ForStatement(NodeList<JmlContracts> contracts ):
 
     {
         if (varExpr != null) {
-            return new ForEachStmt(range(begin, token()),varExpr, expr, body, contracts);
+            return new ForEachStmt(range(begin, token()),varExpr, expr, body);
         }
-        return new ForStmt(range(begin, token()),init, expr, update, body, contracts);
+        return new ForStmt(range(begin, token()),init, expr, update, body);
     }
 }
 
@@ -6556,6 +5882,8 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 {
     "{"
     (
+        member = JmlDocMember()  { ret.add(member); }
+     |
         member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); }
      |
         ";"
@@ -6808,7 +6136,6 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
  * after they matched their desired input, which will lead to unexpected behaviour
  */
 
-
 BlockStmt BlockParseStart():
 { BlockStmt ret; }
 { ret = Block() <EOF> { return ret; } }
@@ -6914,12 +6241,709 @@ MethodDeclaration MethodDeclarationParseStart():
 {
     MethodDeclaration ret;
     ModifierHolder modifier;
-    NodeList<JmlContracts> contracts = new NodeList<>();
 }
 {
-    (contracts=JmlContracts())?
     modifier = Modifiers()
-    ret = MethodDeclaration(modifier, contracts)
+    ret = MethodDeclaration(modifier)
     <EOF>
     { return ret; }
 }
+
+
+//region JML Docs
+JmlDoc JmlDoc():
+{}
+{
+  (<JML_BLOCK_COMMENT> | <JML_LINE_COMMENT>)
+  { return new JmlDoc(token()); }
+}
+
+NodeList<JmlDoc> JmlDocs():
+{
+  NodeList<JmlDoc> seq = new NodeList<>();
+  JmlDoc doc;
+}
+{
+  doc=JmlDoc()
+  { seq.add(doc); }
+  (
+    doc=JmlDoc()
+    { seq.add(doc); }
+  )*
+  { return seq; }
+}
+
+JmlDocDeclaration JmlDocMember():
+{ NodeList<com.github.javaparser.ast.jml.doc.JmlDoc> seq = new NodeList<>(); }
+{
+  seq = JmlDocs()
+  { return new JmlDocDeclaration(seq); }
+}
+
+JmlDocStmt JmlDocStatements():
+{ NodeList<JmlDoc> seq = new NodeList<>(); }
+{
+  seq = JmlDocs()
+  { return  new JmlDocStmt(seq); }
+}
+
+void JmlDocModifier(NodeList<Modifier> modifiers):
+{ NodeList<JmlDoc> seq = new NodeList<>(); }
+{
+  seq = JmlDocs()
+  { JmlDocModifier d =  new JmlDocModifier(seq); modifiers.add(d); }
+}
+
+JmlDocType JmlDocType():
+{ NodeList<JmlDoc> seq = new NodeList<>(); }
+{
+  seq = JmlDocs()
+  { return  new JmlDocType(seq); }
+}
+//endregion
+
+//region JML rules
+NodeList<ImportDeclaration> JmlImportDeclarations():
+{
+  ImportDeclaration in;
+  NodeList<ImportDeclaration> imports =emptyNodeList();
+  JavaToken begin;
+  DefaultJmlContainer c = new DefaultJmlContainer();
+}
+{
+  //JmlStart(c) {begin=token();}
+  (<MODEL> {begin=token();} in=ImportDeclaration()
+  { /*add(imports, new JmlImportDeclaration(range(begin, in),in,c));*/})*
+  //JmlEnd()
+  {
+    return imports;
+  }
+}
+
+ArbitraryNodeContainer JmlMethodLevelStart():
+{
+    ArbitraryNodeContainer ret = new ArbitraryNodeContainer();
+    JmlStatements statements;
+    NodeList<Modifier> mods = new NodeList<>();
+    NodeList<JmlContracts> contracts = new NodeList<>();
+}
+{
+  ( contracts = JmlLoopInvariants() { ret.getChildren().addAll(contracts); }
+  | statements = JmlStatements()    { ret.getChildren().addAll(statements.getElements()); }
+  | jmlModifiersInner(mods)         { ret.getChildren().addAll(mods); mods.clear();}
+  )
+  <EOF>
+  { return ret; }
+}
+
+JmlStatements JmlStatements():
+{
+ NodeList<JmlStatement> statements = new NodeList<>();
+ JmlStatement first, last=null;
+}
+{
+  //JmlStart(stmts)
+  first=JmlStatement() {statements.add(first);}
+  ( last=JmlStatement() {statements.add(last);} )*
+  //JmlEnd()
+  {
+    return new JmlStatements(range(first,last!=null?last:first), statements);
+  }
+}
+
+JmlStatement JmlStatement():
+{ JavaToken begin; Expression expr,target; NodeList<Statement> stmts;}
+{
+  ( (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
+    { begin = token(); }
+    expr=Expression()
+    ";"
+    { return new JmlStmtWithExpression(range(begin, token()), expr); }
+  | <GHOST>
+    stmts=Statements()     { begin = token(); }
+    { return new JmlGhostStatements(range(begin, token()), stmts); }
+  | <UNREACHABLE> ";"
+    { return new JmlUnreachableStmt(range(token(), token())); }
+  )
+
+}
+
+JmlClause JmlLoopInvClause():
+{ NodeList<Expression> exprs; JavaToken begin;}
+{
+    ( <LOOP_INVARIANT>
+    | <LOOP_INVARIANT_FREE>
+    | <MAINTAINING>
+    | <LOOP_INVARIANT_REDUNDANTLY>
+    | <MAINTAINING_REDUNDANTLY>
+    )
+    {begin=token();}
+    ( JmlHeaps() )? //TODO weigl add to clause
+    exprs=ExpressionList()
+    {return new JmlDefaultClause(range(begin, token()), begin, exprs);}
+}
+
+NodeList<JmlContracts> JmlLoopInvariants():
+{
+    NodeList<JmlContracts> containers = emptyNodeList();
+    NodeList<JmlClause> clauses = emptyNodeList();
+    JavaToken begin;
+    JmlClause clause;
+}
+{
+  (
+    {
+      JmlContracts contracts = new JmlContracts();
+      JmlContract contract = new JmlContract();
+      NodeList<JmlContract> elements = new NodeList<>(contract);
+      Behavior b;
+    }
+    //JmlStart(contracts) {begin=token();}
+    (
+      //loop contract a key special thing
+      <LOOP_CONTRACT>
+      {contract.setLoopContract(true);}
+      (b=JmlBehavior() {contract.setBehavior(b);})?
+      (
+        clause=JmlContractClause() {contract.getClauses().add(clause);}
+      |
+        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
+      )*
+      //(<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+    |
+      //This line is unfolded -- important for the fast lookahead
+      clause = JmlLoopInvClause() ";" {contract.getClauses().add(clause);}
+      (
+        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
+      )*
+    )
+    //JmlEnd()
+    {contracts.getElements().add(contract); containers.add(contracts);}
+  )+
+  { return containers;}
+}
+
+JmlClause JmlLoopInvClauses():
+{
+ JmlClause ret;
+}
+{
+  ( ret=JmlLoopInvClause()
+  | ret=JmlBreaksClause()
+  | ret=JmlContinuesClause()
+  | ret=JmlReturnsClause()
+  | ret=JmlDecreasesClause()
+  | ret=JmlDivergesClause()
+  | ret=JmlAssignableClause()
+  | ret=JmlMeasuredBy()
+  )
+  ";"
+  {return ret;}
+}
+
+NodeList<JmlContracts> JmlContracts():
+{
+    NodeList<JmlContracts> contracts = emptyNodeList();
+    NodeList<JmlContract> elements = emptyNodeList();
+    JmlContracts contract;
+    JavaToken begin, end;
+}
+{
+  ( LOOKAHEAD(5) //to dinstinguish from JmlModifier
+    {contract = new JmlContracts();}
+    {begin=token();}
+    elements=JmlContractsInner()
+    {end=token();}
+    {contract.setElements(elements); contracts.add(contract);
+     contract.setTokenRange(range(begin,end));
+    }
+  )+
+  { return contracts;}
+}
+
+NodeList<JmlContract> JmlContractsInner():
+{
+    JmlContract bc = null;
+    NodeList<JmlContract> contracts = emptyNodeList();
+}
+{
+  (<ALSO>)?
+  bc=JmlContract() {contracts.add(bc);}
+  (<ALSO> bc=JmlContract() {contracts.add(bc);})*
+  {return contracts;}
+}
+
+JmlContract JmlContract():
+{
+    JavaToken begin;
+    NodeList<JmlClause> clauses = new NodeList<>();
+    NodeList<JmlContract> subContracts = new NodeList<>();
+
+    Behavior b = Behavior.NONE;
+    JmlClause clause;
+    //ModifierHolder modifiers = new ModifierHolder();
+}
+{
+  (( "public"  {  }
+   | "private" {  }
+   | "package" {  }
+   | "protected" { }
+   ))? //TODO weigl
+  {begin=token();}
+  (b=JmlBehavior())?
+  (clause=JmlContractClause() {clauses.add(clause);})+
+  (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+  {return new JmlContract(range(begin, token()), b, new NodeList<>(), clauses, subContracts);}
+}
+
+JmlClause JmlContractClause():
+{
+ JmlClause ret;
+}
+{
+  ( ret=ForallClause()
+  | ret=JmlBreaksClause()
+  | ret=JmlContinuesClause()
+  | ret=JmlReturnsClause()
+  | ret=JmlRequiresClause()
+  | ret=JmlEnsuresClause()
+  | ret=JmlSignalsClause()
+  | ret=JmlSignalsOnlyClause()
+  | ret=JmlDivergesClause()
+  //| ret=determs()
+  | ret=JmlAssignableClause()
+  | ret=JmlAccessibleClause()
+  | ret=JmlMeasuredBy() )
+  ";"
+  {return ret;}
+}
+
+JmlClause JmlDecreasesClause():
+{
+    JavaToken begin;
+    Expression expr;
+}
+{
+  (<DECREASES> | <DECREASING> | <DECREASES_REDUNDANTLY> | <DECREASING_REDUNDANTLY> )
+  {begin=token();}
+  expr=Expression()
+  {return new JmlDefaultClause(range(begin,token()), begin, expr);}
+}
+
+Behavior JmlBehavior():
+{}
+{
+    (<BEHAVIOUR>|<BEHAVIOR>) {return Behavior.BEHAVIOR;}
+  | (<NORMAL_BEHAVIOR>|<NORMAL_BEHAVIOUR>) {return Behavior.NORMAL;}
+  | (<EXCEPTIONAL_BEHAVIOR>|<EXCEPTIONAL_BEHAVIOUR>) {return Behavior.EXCEPTIONAL;}
+  | (<ABRUPT_BEHAVIOR>|<ABRUPT_BEHAVIOUR>) {return Behavior.BREAK;}
+  | (<BREAK_BEHAVIOR>|<BREAK_BEHAVIOUR>) {return Behavior.BREAK;}
+  | (<CONTINUE_BEHAVIOR>|<CONTINUE_BEHAVIOUR>){return Behavior.CONTINUE;}
+  | (<RETURN_BEHAVIOR>|<RETURN_BEHAVIOUR>) {return Behavior.RETURN;}
+}
+
+JmlClause ForallClause():
+{
+    JavaToken begin;
+    NodeList<JmlBoundVariable> vars;
+}
+{
+  <FORALL> {begin=token();}
+  vars=JmlBoundedVariables()
+  {return new ForallClause(range(begin, token()), vars);}
+}
+
+JmlClause JmlBreaksClause():
+{
+    SimpleName label=null;
+    Expression expr;
+    JavaToken begin;
+}
+{
+  (<BREAKS> |<BREAKS_REDUNDANTLY>)  { begin = token();}
+  <LPAREN> (label=SimpleName())? <RPAREN>
+  expr=Expression()
+  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
+}
+
+JmlClause JmlContinuesClause():
+{
+    SimpleName label=null;
+    Expression expr;
+    JavaToken begin;
+}
+{
+  (<CONTINUES>|<CONTINUES_REDUNDANTLY>) { begin = token();}
+  <LPAREN> (label=SimpleName())? <RPAREN>
+  expr=Expression()
+  { return new JmlClauseLabel(range(begin, token()), begin, label, expr); }
+}
+
+JmlClause JmlReturnsClause():
+{
+    Expression expr;
+    JavaToken begin;
+}
+{
+  <RETURNS> {begin = token();}
+  expr=Expression()
+  { return new JmlDefaultClause(range(begin, token()), begin, expr); }
+}
+
+SimpleName JmlHeap():
+{
+    SimpleName name;
+}
+{
+  <LT> name=SimpleName() <GT>
+  { return name; }
+}
+
+NodeList<SimpleName> JmlHeaps():
+{
+    NodeList<SimpleName> names = new NodeList<SimpleName>();
+    SimpleName name;
+}
+{
+  name=JmlHeap() { names.add(name); }
+  { return names; }
+}
+
+/**
+*/
+JmlClause JmlAssignableClause():
+{
+    Expression e;
+    NodeList<SimpleName> heaps=new NodeList<>();
+    NodeList<Expression> exprs = new NodeList<>();
+    JavaToken begin;
+}
+{
+  ( <ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES>
+  | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY>
+  )
+  { begin = token();}
+  (heaps=JmlHeaps())*
+  exprs=ExpressionList()
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
+}
+
+JmlClause JmlAccessibleClause():
+{
+    NodeList<SimpleName> heaps=new NodeList<>();
+    Expression e=null;
+    NodeList<Expression> exprs = new NodeList<>();
+    JavaToken begin;
+}
+{
+  (<ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>)
+  { begin = token();}
+  (heaps=JmlHeaps())*
+  exprs=ExpressionList()
+  (<ESC_MEASURED_BY> e=Expression())? //TODO weigl: add measured by expression, new ast class
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, exprs); }
+}
+
+/**
+Measures_by
+*/
+JmlClause JmlMeasuredBy():
+{
+    Expression e;
+    JavaToken begin;
+}
+{
+  { begin = token();}
+  <MEASURED_BY> e=Expression()
+  { return new JmlDefaultClause(range(begin,token()), JmlClauseKind.MEASURED_BY, new NodeList<>(), new NodeList<>(e)); }
+}
+
+JmlClause JmlRequiresClause():
+{
+    NodeList<SimpleName> heaps=new NodeList<>();
+    Expression e;
+    JavaToken begin;
+}
+{
+  (<REQUIRES> |<REQUIRES_FREE>|<REQUIRES_REDUNDANTLY>)
+  { begin = token();}
+  (heaps=JmlHeaps())? e=Expression()
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
+}
+
+/**
+*/
+JmlClause JmlEnsuresClause():
+{
+    NodeList<SimpleName> heaps=new NodeList<>();
+    Expression e;
+    JavaToken begin;
+}
+{
+  (<ENSURES>|<ENSURES_FREE>|<ENSURES_REDUNDANTLY>)
+  {begin = token();}
+  (heaps=JmlHeaps())? e=Expression()
+  { return new JmlDefaultClause(range(begin, token()), begin, heaps, e); }
+}
+
+/**
+*/
+JmlClause JmlSignalsClause():
+{
+    SimpleName id=null;
+    Expression e;
+    Type type;
+    JavaToken begin;
+}
+{
+  { begin = token(); }
+  <SIGNALS> <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
+  { return new SignalsClause(range(begin, token()), type, id, e); }
+}
+
+
+/**
+signals_only  \nothing;
+singals_only  \everything;
+singals_only  \everything;
+*/
+JmlClause JmlSignalsOnlyClause():
+{
+  JavaToken begin;
+  Type type;
+  NodeList<Type> types = new NodeList<>();
+}
+{
+  {begin=token();}
+  <SIGNALS_ONLY> type=Type(emptyNodeList()) {types.add(type);}
+  (<COMMA> type=Type(emptyNodeList()) {types.add(type);})*
+  { return new SignalsOnlyClause(range(begin, token()), types); }
+}
+
+JmlClause JmlDivergesClause():
+{
+  JavaToken begin;
+  Expression e;
+}
+{
+  (<DIVERGES>|<DIVERGES_REDUNDANTLY> )
+  {begin=token();}
+  e=Expression()
+  { return new JmlDefaultClause(range(begin, token()), begin, e); }
+}
+
+void jmlModifiers(NodeList<Modifier> modifiers):
+{
+    JmlContainer c = new DefaultJmlContainer();
+}
+{
+  try {
+      /*JmlStart(c) (jmlModifiersInner(modifiers))* JmlEnd()
+    | */ jmlModifiersInner(modifiers)
+    //This seems odd, but is required for model methods/fields which are already wrapped in JML comment.
+    // but this is not a danger overall, as the modifiers are only lexed properly inside JML comments.
+  } catch (ParseException e) {
+       TokenRange range = recover(EOF, e);
+       Modifier m = new Modifier(range, Modifier.Keyword.JML_UNPARSABLE_MODIFIERS);
+       m.setParsed(UNPARSABLE);
+       add(modifiers, m);
+       return;
+  }
+}
+
+void jmlModifiersInner(NodeList<Modifier> modifiers):
+{ JavaToken begin = INVALID; }
+{
+    <PURE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_PURE));  begin = orIfInvalid(begin, token()); }
+  | <STRICTLY_PURE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_STRICTLY_PURE));  begin = orIfInvalid(begin, token()); }
+  | <MODEL> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_MODEL));  begin = orIfInvalid(begin, token()); }
+  | <GHOST> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_GHOST));  begin = orIfInvalid(begin, token()); }
+  | <HELPER> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_HELPER));  begin = orIfInvalid(begin, token()); }
+  | <NULLABLE_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NULLABLE_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
+  | <NON_NULL> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL));  begin = orIfInvalid(begin, token()); }
+  | <NULLABLE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NULLABLE));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PUBLIC> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PUBLIC));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PRIVATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PRIVATE));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PACKAGE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PACKAGE));  begin = orIfInvalid(begin, token()); }
+  | <SPEC_PROTECTED> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_SPEC_PROTECTED));  begin = orIfInvalid(begin, token()); }
+  | <INSTANCE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_INSTANCE));  begin = orIfInvalid(begin, token()); }
+  | <NO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NO_STATE));  begin = orIfInvalid(begin, token()); }
+  | <TWO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_TWO_STATE));  begin = orIfInvalid(begin, token()); }
+  | <NON_NULL_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
+  | <NONNULLELEMENTS> { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.JML_NON_NULL_ELEMENTS));  begin = orIfInvalid(begin, token()); }
+}
+
+ArbitraryNodeContainer JmlClassLevelStart():
+{
+    NodeList<Node> ret = new NodeList<>();
+    JmlClassLevel element;
+    NodeList<JmlContracts> contracts;
+    ModifierHolder modifiers;
+    JavaToken begin;
+}{
+    (   LOOKAHEAD(10)
+        (
+            modifiers = Modifiers()
+            ( LOOKAHEAD(3) element = JmlClassInvariant(modifiers)
+            | element = JmlClassInitially(modifiers)
+            | element = JmlClassAccessible(modifiers)
+            | element = JmlClassRepresents(modifiers)
+            | LOOKAHEAD(4) element = JmlFieldDeclaration(modifiers)
+            | element = JmlMethodDeclaration(modifiers)
+            )
+            { ret.add(element); }
+        |
+            contracts = JmlContracts()
+            { ret.addAll(contracts); }
+        )
+    )*
+    (
+        modifiers = Modifiers()
+        {
+                ret.addAll(modifiers.modifiers);
+                ret.addAll(modifiers.annotations);
+        }
+    )
+    //<EOF>
+    {
+        return new ArbitraryNodeContainer(ret);
+    }
+}
+
+NodeList<JmlBoundVariable> JmlBoundedVariables():
+{ NodeList<JmlBoundVariable> variables = new NodeList<>();
+  Type partialType; SimpleName val; }
+{
+   partialType = Type(emptyNodeList())
+   val=SimpleName()
+   { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
+  ( ","
+    [ LOOKAHEAD( Type() SimpleName())
+      partialType = Type(emptyNodeList())
+    ]
+    val=SimpleName()
+    { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
+  )*
+  {return variables;}
+}
+
+JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
+{
+    FieldDeclaration decl;
+}
+{
+    decl=FieldDeclaration(modifier)
+    {
+        return new JmlFieldDeclaration(range(decl, decl), decl);
+    }
+}
+
+JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
+{
+    RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
+    Type type;
+    SimpleName name;
+    Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyNodeList(), null);
+    ArrayBracketPair arrayBracketPair;
+    List<ArrayBracketPair> arrayBracketPairs = new ArrayList<ArrayBracketPair>(0);
+    NodeList<ReferenceType> throws_ = emptyNodeList();
+    BlockStmt body = null;
+    NodeList<AnnotationExpr> annotations;
+    JavaToken begin = modifier.begin;
+    ReferenceType throwType;
+    NodeList<JmlClause> clauses = new NodeList<>();
+    JmlClause clause;
+    NodeList<JmlContract> subContracts = new NodeList<>();
+    JmlContract c=null;
+}
+{
+    ( [<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>]
+      {begin=token();}
+      (clause=JmlContractClause() {clauses.add(clause);})+
+      (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+      {
+       c = new JmlContract(range(begin,token()), Behavior.MODEL, new NodeList<>(), clauses, subContracts);
+      }
+    )?
+    modifier=Modifiers()
+    [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
+    annotations = Annotations() { modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations)); }
+    type = ResultType(emptyNodeList()) { begin = orIfInvalid(begin, type); }
+    name = SimpleName()
+    parameters = Parameters()
+    ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    [
+        "throws"
+        throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+        ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )*
+    ]
+    (
+        body = Block()
+     |
+        ";"
+    )
+    {
+        type = juggleArrayType(type, arrayBracketPairs);
+        MethodDeclaration m = new  MethodDeclaration(range(begin, token()),
+            modifier.modifiers, modifier.annotations, typeParameters.list,
+            type, name, parameters.a, throws_, body, parameters.b);
+        return new JmlMethodDeclaration(range(m,m), m, c);
+    }
+}
+
+JmlClassLevel JmlClassInvariant(ModifierHolder modifiers):
+{ Expression expr; Token inv; }
+{
+  inv=<INVARIANT> expr=Expression() ";"
+  { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
+return new JmlClassInvariantDeclaration(range(begin, token()), modifiers.modifiers, expr); }
+}
+
+JmlClassLevel JmlClassInitially(ModifierHolder modifiers):
+{ Expression expr; Token inv; }
+{
+  inv=<INITIALLY> expr=Expression() ";"
+  { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
+    //TODO weigl add initally ast
+    return new JmlClassInvariantDeclaration(range(begin, token()), modifiers.modifiers, expr); }
+}
+
+JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
+{
+    JavaToken begin;
+    Expression var;
+    Expression expr, measuredBy = null;
+    NodeList<Expression> expressions = new NodeList<>();
+}
+{
+  (<ACCESSIBLE>|<ACCESSIBLE_REDUNDANTLY>)
+  {begin=token();}
+  [JmlHeaps()] //TODO weigl: add to declaration
+  var=Expression() <COLON>
+  expressions=ExpressionList()
+  [<ESC_MEASURED_BY> measuredBy=Expression()]
+  ";"
+  {
+    return new JmlClassAccessibleDeclaration(range(begin, token()), modifiers.modifiers, var  , expressions, measuredBy);}
+}
+
+JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
+{
+     Token b;
+     Name id=null;
+     Expression expr;
+}
+{
+  b=<REPRESENTS>
+  (
+    id=Name() (<ASSIGN> | <SUCH_THAT>) expr=Expression()
+  | LOOKAHEAD(2) expr=Expression()
+  )
+  ";"
+  { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
+    return new JmlRepresentsDeclaration(range(begin, token()), modifiers.modifiers, id, expr);}
+}
+
+
+//endregion
+

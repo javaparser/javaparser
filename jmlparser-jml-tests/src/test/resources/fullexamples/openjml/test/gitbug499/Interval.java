@@ -55,7 +55,7 @@ public class Interval implements IntSet {
             } else {
                 ub = i-1;
             }
-        } else if (inclusive)
+        } else if (inclusive) {
             //@ assert i == ub && ub == Integer.MAX_VALUE;
             lb = i-1;
             ub = i-1;

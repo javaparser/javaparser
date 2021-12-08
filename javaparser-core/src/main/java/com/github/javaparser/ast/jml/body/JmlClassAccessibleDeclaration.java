@@ -1,29 +1,28 @@
 package com.github.javaparser.ast.jml.body;
 
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlClassAccessibleDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.metamodel.JmlClassAccessibleDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.function.Consumer;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlClassAccessibleDeclaration extends JmlClassLevel implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
+public class JmlClassAccessibleDeclaration extends JmlClassLevel<JmlClassAccessibleDeclaration> implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -158,12 +157,6 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
         return (JmlClassAccessibleDeclaration) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClassAccessibleDeclarationMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlClassAccessibleDeclarationMetaModel;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getExpressions() {
         return expressions;
@@ -222,6 +215,31 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel implements Node
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClassAccessibleDeclaration removeMeasuredBy() {
-        return setMeasuredBy(null);
+        return setMeasuredBy((Expression) null);
+    }
+
+    @Override
+    public boolean isJmlClassAccessibleDeclaration() {
+        return true;
+    }
+
+    @Override
+    public JmlClassAccessibleDeclaration asJmlClassAccessibleDeclaration() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlClassAccessibleDeclaration> toJmlClassAccessibleDeclaration() {
+        return Optional.of(this);
+    }
+
+    @Override
+    public void ifJmlClassAccessibleDeclaration(Consumer<JmlClassAccessibleDeclaration> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public JmlClassAccessibleDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClassAccessibleDeclarationMetaModel;
     }
 }

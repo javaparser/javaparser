@@ -182,6 +182,6 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SignalsClause removeName() {
-        return setName(null);
+        return setName((SimpleName) null);
     }
 }

@@ -111,7 +111,7 @@ public class FullExamplesTest {
         Stream<Path> files = Files.walk(dir.toPath());
         return files
                 .filter(it -> it.toString().endsWith(".java"))
-                .filter(it -> it.toString().contains("openjml"))
+                //.filter(it -> it.toString().contains("openjml"))
                 .filter(it -> !it.toString().contains("InformationFlow"))
                 .map(it -> {
                             String name = it.toString().substring(prefixLength);

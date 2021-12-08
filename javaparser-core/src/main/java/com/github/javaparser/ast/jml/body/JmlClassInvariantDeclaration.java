@@ -1,35 +1,39 @@
 package com.github.javaparser.ast.jml.body;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.jml.body.JmlClassLevel;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ClassInvariantClauseMetaModel;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.metamodel.JmlClassInvariantDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class ClassInvariantClause extends JmlClassLevel implements NodeWithModifiers<ClassInvariantClause> {
+public class JmlClassInvariantDeclaration extends JmlClassLevel<JmlClassInvariantDeclaration> implements NodeWithModifiers<JmlClassInvariantDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
     private Expression invariant;
 
-    public ClassInvariantClause() {
+    public JmlClassInvariantDeclaration() {
+        super(null);
     }
 
     @AllFieldsConstructor
-    public ClassInvariantClause(NodeList<Modifier> modifiers, Expression invariant) {
-        this.modifiers = modifiers;
-        this.invariant = invariant;
+    public JmlClassInvariantDeclaration(NodeList<Modifier> modifiers, Expression invariant) {
+        this(null, modifiers, invariant);
     }
 
     @Override
@@ -50,7 +54,7 @@ public class ClassInvariantClause extends JmlClassLevel implements NodeWithModif
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassInvariantClause setInvariant(final Expression invariant) {
+    public JmlClassInvariantDeclaration setInvariant(final Expression invariant) {
         assertNotNull(invariant);
         if (invariant == this.invariant) {
             return this;
@@ -97,15 +101,15 @@ public class ClassInvariantClause extends JmlClassLevel implements NodeWithModif
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ClassInvariantClause clone() {
-        return (ClassInvariantClause) accept(new CloneVisitor(), null);
+    public JmlClassInvariantDeclaration clone() {
+        return (JmlClassInvariantDeclaration) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ClassInvariantClause(TokenRange tokenRange, NodeList<Modifier> modifiers, Expression invariant) {
+    public JmlClassInvariantDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Expression invariant) {
         super(tokenRange);
         setModifiers(modifiers);
         setInvariant(invariant);
@@ -118,7 +122,7 @@ public class ClassInvariantClause extends JmlClassLevel implements NodeWithModif
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ClassInvariantClause setModifiers(final NodeList<Modifier> modifiers) {
+    public JmlClassInvariantDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -132,8 +136,26 @@ public class ClassInvariantClause extends JmlClassLevel implements NodeWithModif
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ClassInvariantClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.classInvariantClauseMetaModel;
+    public boolean isJmlClassInvariantDeclaration() {
+        return true;
+    }
+
+    @Override
+    public JmlClassInvariantDeclaration asJmlClassInvariantDeclaration() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlClassInvariantDeclaration> toJmlClassInvariantDeclaration() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassInvariantDeclaration> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public JmlClassInvariantDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClassInvariantDeclarationMetaModel;
     }
 }

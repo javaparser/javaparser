@@ -108,7 +108,6 @@ public class TokenTypes {
                 return JavaToken.Category.WHITESPACE_NO_EOL;
             case SINGLE_LINE_COMMENT:
             case JAVADOC_COMMENT:
-            case SINGLE_LINE_COMMENT_IN_MULTI_JML:
             case MULTI_LINE_COMMENT:
                 return JavaToken.Category.COMMENT;
             case ABSTRACT:
@@ -165,7 +164,9 @@ public class TokenTypes {
             case MODIFIES:
             case MONITORED:
             case MONITORS_FOR:
-            //case NONNULLELEMENTS:
+            case JML_BLOCK_COMMENT:
+            case JML_LINE_COMMENT:
+                //case NONNULLELEMENTS:
             case NON_NULL:
                 //case NOT_SPECIFIED:
             /*case ONLY_ACCESSED:
@@ -174,7 +175,7 @@ public class TokenTypes {
             case ONLY_CAPTURED:*/
             case OR:
             case PRODUCT:
-            //case REACH:
+                //case REACH:
             case READABLE:
             case LOOP_INVARIANT_FREE:
             //case REAL:
@@ -259,10 +260,6 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
-            case JML_SINGLE_START:
-            case JML_SINGLE_END:
-            case JML_MULTI_END:
-            case JML_MULTI_START:
             case INVARIANT:
             case ACCESSIBLE:
             case ENSURES:
@@ -415,8 +412,6 @@ public class TokenTypes {
             case ELLIPSIS:
             case AT:
             case DOUBLECOLON:
-            case JML_SINGLE_START0:
-            case SINGLE_LINE_COMMENT0:
                 return JavaToken.Category.SEPARATOR;
             case EQUIVALENCE:
             case UNKNOWN_OP:

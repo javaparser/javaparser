@@ -1015,7 +1015,7 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(CallableClause.class, sequence());
-        concreteSyntaxModelByClass.put(ClassInvariantClause.class, sequence());
+        concreteSyntaxModelByClass.put(JmlClassInvariantDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlBoundVariable.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());

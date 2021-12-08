@@ -15,12 +15,13 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author Alexander Weigl
  * @version 1 (4/5/21)
  */
-public class JmlMethodDeclaration extends JmlClassLevel {
+public class JmlMethodDeclaration extends JmlClassLevel<JmlMethodDeclaration> {
 
     private MethodDeclaration methodDeclaration;
 
@@ -116,12 +117,6 @@ public class JmlMethodDeclaration extends JmlClassLevel {
         return (JmlMethodDeclaration) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlMethodDeclarationMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlMethodDeclarationMetaModel;
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<JmlContract> getContract() {
         return Optional.ofNullable(contract);
@@ -142,6 +137,30 @@ public class JmlMethodDeclaration extends JmlClassLevel {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlMethodDeclaration removeContract() {
-        return setContract((JmlContract) null);
+        return setContract(null);
+    }
+
+    @Override
+    public boolean isJmlMethodDeclaration() {
+        return true;
+    }
+
+    @Override
+    public JmlMethodDeclaration asJmlMethodDeclaration() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlMethodDeclaration> toJmlMethodDeclaration() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlMethodDeclaration(Consumer<JmlMethodDeclaration> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public JmlMethodDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlMethodDeclarationMetaModel;
     }
 }

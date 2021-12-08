@@ -27,8 +27,13 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
@@ -345,7 +350,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             }
         }
         printer.print(")");
-        
+
         if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
             for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
@@ -971,7 +976,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ClassInvariantClause n, Void arg) {
+    public void visit(JmlClassInvariantDeclaration n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printModifiers(n.getModifiers());
         printer.print("invariant ");
@@ -1104,6 +1109,39 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getRight().accept(this, arg);
         printer.print(")");
     }
+
+    @Override
+    public void visit(JmlDocDeclaration n, Void arg) {
+        n.getJmlComments().forEach(it -> it.accept(this, arg));
+    }
+
+    @Override
+    public void visit(JmlDocStmt n, Void arg) {
+        n.getJmlComments().forEach(it -> it.accept(this, arg));
+    }
+
+    @Override
+    public void visit(JmlImportDeclaration n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlDoc n, Void arg) {
+        printer.print(n.getContent().asString());
+    }
+
+    @Override
+    public void visit(JmlDocType n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlFieldDeclaration n, Void arg) {
+        startJmlComment(false, new NodeList<>());
+        n.getDecl().accept(this, null);
+        endJmlComment(false);
+    }
+
 
     @Override
     public void visit(final CharLiteralExpr n, final Void arg) {
@@ -1814,7 +1852,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final WhileStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().accept(this, arg);
+        n.getContracts().ifPresent(it -> it.accept(this, arg));
         printComment(n.getComment(), arg);
         printer.print("while (");
         n.getCondition().accept(this, arg);
@@ -1834,7 +1872,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final DoStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().accept(this, arg);
+        n.getContracts().ifPresent(it -> it.accept(this, arg));
         printComment(n.getComment(), arg);
         printer.print("do ");
         n.getBody().accept(this, arg);
@@ -1846,7 +1884,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final ForEachStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().accept(this, arg);
+        n.getContracts().ifPresent(it -> it.accept(this, arg));
         printComment(n.getComment(), arg);
         printer.print("for (");
         n.getVariable().accept(this, arg);
@@ -1859,7 +1897,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final ForStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().accept(this, arg);
+        n.getContracts().ifPresent(it -> it.accept(this, arg));
         printComment(n.getComment(), arg);
         printer.print("for (");
         if (n.getInitialization() != null) {

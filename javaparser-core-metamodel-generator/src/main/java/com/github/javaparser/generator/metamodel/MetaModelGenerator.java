@@ -29,6 +29,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
@@ -153,6 +154,12 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.UnaryExpr.class);
         add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
+        add(JmlDoc.class);
+        add(JmlDocDeclaration.class);
+        add(JmlDocStmt.class);
+        add(JmlDocModifier.class);
+        add(JmlDocType.class);
+
         add(JmlImportDeclaration.class);
         add(JmlQuantifiedExpr.class);
         add(JmlBinaryInfixExpr.class);
@@ -198,6 +205,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlContracts.class);
         add(JmlClassLevel.class);
         add(JmlMethodDeclaration.class);
+        add(JmlFieldDeclaration.class);
         add(JmlClause.class);
         add(JmlBodyDeclaration.class);
         add(JmlStatements.class);
@@ -212,7 +220,7 @@ public class MetaModelGenerator extends AbstractGenerator {
 
         add(com.github.javaparser.ast.JmlBoundVariable.class);
 
-        add(ClassInvariantClause.class);
+        add(JmlClassInvariantDeclaration.class);
         add(JmlRepresentsDeclaration.class);
         add(JmlClassAccessibleDeclaration.class);
 

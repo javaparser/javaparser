@@ -28,8 +28,13 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
@@ -878,7 +883,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ClassInvariantClause n, Void arg) {
+    public void visit(JmlClassInvariantDeclaration n, Void arg) {
 
     }
 
@@ -929,6 +934,36 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlBinaryInfixExpr n, Void arg) {
+    }
+
+    @Override
+    public void visit(JmlDocDeclaration n, Void arg) {
+        n.getJmlComments().forEach(it -> it.accept(this, arg));
+    }
+
+    @Override
+    public void visit(JmlDocStmt n, Void arg) {
+        n.getJmlComments().forEach(it -> it.accept(this, arg));
+    }
+
+    @Override
+    public void visit(JmlImportDeclaration n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlDoc n, Void arg) {
+        printer.print(n.getContent().asString());
+    }
+
+    @Override
+    public void visit(JmlDocType n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlFieldDeclaration n, Void arg) {
+
     }
 
     @Override

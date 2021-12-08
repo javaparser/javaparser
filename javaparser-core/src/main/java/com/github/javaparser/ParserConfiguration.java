@@ -29,15 +29,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.ast.validator.language_level_validations.*;
 import com.github.javaparser.ast.validator.postprocessors.*;
+import com.github.javaparser.jml.JmlProcessor;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
@@ -47,6 +45,16 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+
+    private Set<String> jmlKeys = new TreeSet<>();
+
+    public Set<String> getJmlKeys() {
+        return jmlKeys;
+    }
+
+    public void setJmlKeys(Set<String> jmlKeys) {
+        this.jmlKeys = jmlKeys;
+    }
 
     public enum LanguageLevel {
         /**
@@ -186,7 +194,7 @@ public class ParserConfiguration {
         public static LanguageLevel BLEEDING_EDGE = JAVA_17_PREVIEW;
 
         final Validator validator;
-        final ParseResult.PostProcessor postProcessor;
+        final PostProcessor postProcessor;
 
         private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{
                 JAVA_13, JAVA_13_PREVIEW,
@@ -196,7 +204,7 @@ public class ParserConfiguration {
                 JAVA_17, JAVA_17_PREVIEW
         };
 
-        LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
+        LanguageLevel(Validator validator, PostProcessor postProcessor) {
             this.validator = validator;
             this.postProcessor = postProcessor;
         }
@@ -216,13 +224,14 @@ public class ParserConfiguration {
     private boolean ignoreAnnotationsWhenAttributingComments = false;
     private boolean lexicalPreservationEnabled = false;
     private boolean preprocessUnicodeEscapes = false;
+    private boolean preprocessJml = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
     private LanguageLevel languageLevel = POPULAR;
     private Charset characterEncoding = Providers.UTF8;
 
-    private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
-    private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
+    private final List<PreProcessor> preProcessors = new ArrayList<>();
+    private final List<PostProcessor> postProcessors = new ArrayList<>();
 
     public ParserConfiguration() {
 
@@ -326,6 +335,9 @@ public class ParserConfiguration {
                 result.ifSuccessful(LexicalPreservingPrinter::setup);
             }
         });
+
+        JmlProcessor jmlProcessor = new JmlProcessor();
+        postProcessors.add(jmlProcessor);
     }
 
     public boolean isAttributeComments() {
@@ -413,11 +425,11 @@ public class ParserConfiguration {
         return this;
     }
 
-    public List<Providers.PreProcessor> getPreProcessors() {
+    public List<PreProcessor> getPreProcessors() {
         return preProcessors;
     }
 
-    public List<ParseResult.PostProcessor> getPostProcessors() {
+    public List<PostProcessor> getPostProcessors() {
         return postProcessors;
     }
 
@@ -444,6 +456,16 @@ public class ParserConfiguration {
 
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
+    }
+
+
+    public ParserConfiguration setProcessJml(boolean jml) {
+        this.preprocessJml = jml;
+        return this;
+    }
+
+    public boolean isProcessJml() {
+        return this.preprocessJml;
     }
 
     public ParserConfiguration setDetectOriginalLineSeparator(boolean detectOriginalLineSeparator) {

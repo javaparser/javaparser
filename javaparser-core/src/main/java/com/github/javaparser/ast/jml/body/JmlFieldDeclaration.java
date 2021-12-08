@@ -6,33 +6,119 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.JmlFieldDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.ast.Generated;
+
 /**
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlFieldDeclaration extends JmlClassLevel {
+public class JmlFieldDeclaration extends JmlClassLevel<JmlFieldDeclaration> {
+
     private FieldDeclaration decl;
 
     public JmlFieldDeclaration() {
+        this(null);
     }
 
     @AllFieldsConstructor
     public JmlFieldDeclaration(FieldDeclaration decl) {
-        this.decl = decl;
+        this(null, decl);
     }
 
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlFieldDeclaration(TokenRange tokenRange, FieldDeclaration decl) {
         super(tokenRange);
+        setDecl(decl);
+        customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Override
+    public boolean isJmlFieldDeclaration() {
+        return true;
+    }
+
+    @Override
+    public JmlFieldDeclaration asJmlFieldDeclaration() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlFieldDeclaration> toJmlFieldDeclaration() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlFieldDeclaration(Consumer<JmlFieldDeclaration> action) {
+        action.accept(this);
+    }
+
+    public FieldDeclaration getDecl() {
+        return decl;
+    }
+
+    public JmlFieldDeclaration setDecl(final FieldDeclaration decl) {
+        assertNotNull(decl);
+        if (decl == this.decl) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.DECL, this.decl, decl);
+        if (this.decl != null)
+            this.decl.setParentNode(null);
         this.decl = decl;
+        setAsParentNodeOf(decl);
+        return this;
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return null;
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (node == decl) {
+            setDecl((FieldDeclaration) replacementNode);
+            return true;
+        }
+        return super.replace(node, replacementNode);
+    }
 
+    @Override
+    public JmlFieldDeclaration clone() {
+        return (JmlFieldDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public JmlFieldDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlFieldDeclarationMetaModel;
     }
 }

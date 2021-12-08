@@ -27,19 +27,26 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlClassLevel;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
 import com.github.javaparser.ast.jml.clauses.*;
@@ -1558,12 +1565,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final ClassInvariantClause n, final A arg) {
+    public Visitable visit(final JmlClassInvariantDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression invariant = (Expression) n.getInvariant().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (invariant == null)
             return null;
+        n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setInvariant(invariant);
         n.setComment(comment);
@@ -1572,6 +1581,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlClassAccessibleDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
         Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
@@ -1579,6 +1589,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (variable == null)
             return null;
+        n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setExpressions(expressions);
         n.setMeasuredBy(measuredBy);
@@ -1589,12 +1600,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlRepresentsDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression expr = (Expression) n.getExpr().accept(this, arg);
         Name id = (Name) n.getId().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expr == null || id == null)
             return null;
+        n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setExpr(expr);
         n.setId(id);
@@ -1674,11 +1687,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlMethodDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         JmlContract contract = n.getContract().map(s -> (JmlContract) s.accept(this, arg)).orElse(null);
         MethodDeclaration methodDeclaration = (MethodDeclaration) n.getMethodDeclaration().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (methodDeclaration == null)
             return null;
+        n.setAnnotations(annotations);
         n.setContract(contract);
         n.setMethodDeclaration(methodDeclaration);
         n.setComment(comment);
@@ -1696,6 +1711,78 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setLeft(left);
         n.setOperator(operator);
         n.setRight(right);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<JmlDoc> jmlComments = modifyList(n.getJmlComments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setJmlComments(jmlComments);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocStmt n, final A arg) {
+        NodeList<JmlDoc> jmlComments = modifyList(n.getJmlComments(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setJmlComments(jmlComments);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlImportDeclaration n, final A arg) {
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setJmlTags(jmlTags);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlDoc n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocType n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        NodeList<JmlDoc> jmlComments = modifyList(n.getJmlComments(), arg);
+        NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setModifiers(modifiers);
+        n.setJmlComments(jmlComments);
+        n.setMembers(members);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlFieldDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        FieldDeclaration decl = (FieldDeclaration) n.getDecl().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (decl == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setDecl(decl);
         n.setComment(comment);
         return n;
     }

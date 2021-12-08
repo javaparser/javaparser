@@ -22,6 +22,8 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlClassLevel;
@@ -29,11 +31,15 @@ import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import java.util.Optional;
 
 /**
@@ -901,7 +907,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final WhileStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression condition = cloneNode(n.getCondition(), arg);
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         WhileStmt r = new WhileStmt(n.getTokenRange().orElse(null), condition, body, contracts);
         r.setComment(comment);
@@ -925,7 +931,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final DoStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression condition = cloneNode(n.getCondition(), arg);
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         DoStmt r = new DoStmt(n.getTokenRange().orElse(null), body, condition, contracts);
         r.setComment(comment);
@@ -937,7 +943,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final ForEachStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts().orElse(null), arg);
         Expression iterable = cloneNode(n.getIterable(), arg);
         VariableDeclarationExpr variable = cloneNode(n.getVariable(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -952,7 +958,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final ForStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression compare = cloneNode(n.getCompare(), arg);
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts().orElse(null), arg);
         NodeList<Expression> initialization = cloneList(n.getInitialization(), arg);
         NodeList<Expression> update = cloneList(n.getUpdate(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -1494,11 +1500,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final ClassInvariantClause n, final Object arg) {
+    public Visitable visit(final JmlClassInvariantDeclaration n, final Object arg) {
         Expression invariant = cloneNode(n.getInvariant(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ClassInvariantClause r = new ClassInvariantClause(n.getTokenRange().orElse(null), modifiers, invariant);
+        JmlClassInvariantDeclaration r = new JmlClassInvariantDeclaration(n.getTokenRange().orElse(null), modifiers, invariant);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1511,6 +1518,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Expression measuredBy = cloneNode(n.getMeasuredBy(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         Expression variable = cloneNode(n.getVariable(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlClassAccessibleDeclaration r = new JmlClassAccessibleDeclaration(n.getTokenRange().orElse(null), modifiers, variable, expressions, measuredBy);
         r.setComment(comment);
@@ -1524,6 +1532,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Expression expr = cloneNode(n.getExpr(), arg);
         Name id = cloneNode(n.getId(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlRepresentsDeclaration r = new JmlRepresentsDeclaration(n.getTokenRange().orElse(null), modifiers, id, expr);
         r.setComment(comment);
@@ -1643,6 +1652,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final JmlMethodDeclaration n, final Object arg) {
         JmlContract contract = cloneNode(n.getContract(), arg);
         MethodDeclaration methodDeclaration = cloneNode(n.getMethodDeclaration(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlMethodDeclaration r = new JmlMethodDeclaration(n.getTokenRange().orElse(null), methodDeclaration, contract);
         r.setComment(comment);
@@ -1658,6 +1668,78 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Expression right = cloneNode(n.getRight(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlBinaryInfixExpr r = new JmlBinaryInfixExpr(n.getTokenRange().orElse(null), left, right, operator);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocDeclaration n, final Object arg) {
+        NodeList<JmlDoc> jmlComments = cloneList(n.getJmlComments(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlDocDeclaration r = new JmlDocDeclaration(n.getTokenRange().orElse(null), jmlComments);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocStmt n, final Object arg) {
+        NodeList<JmlDoc> jmlComments = cloneList(n.getJmlComments(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlDocStmt r = new JmlDocStmt(n.getTokenRange().orElse(null), jmlComments);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlImportDeclaration n, final Object arg) {
+        NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlImportDeclaration r = new JmlImportDeclaration(n.getTokenRange().orElse(null), name, n.isStatic(), n.isAsterisk());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlDoc n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlDoc r = new JmlDoc(n.getTokenRange().orElse(null), n.getContent());
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlDocType n, final Object arg) {
+        NodeList<JmlDoc> jmlComments = cloneList(n.getJmlComments(), arg);
+        NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlDocType r = new JmlDocType(n.getTokenRange().orElse(null), jmlComments);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlFieldDeclaration n, final Object arg) {
+        FieldDeclaration decl = cloneNode(n.getDecl(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlFieldDeclaration r = new JmlFieldDeclaration(n.getTokenRange().orElse(null), decl);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

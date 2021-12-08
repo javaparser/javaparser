@@ -11,12 +11,17 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlRepresentsDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * REPRESENTS
@@ -27,7 +32,7 @@ import com.github.javaparser.ast.Generated;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithModifiers<JmlRepresentsDeclaration> {
+public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclaration> implements NodeWithModifiers<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -37,9 +42,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithM
 
     @AllFieldsConstructor
     public JmlRepresentsDeclaration(NodeList<Modifier> modifiers, Name id, Expression expr) {
-        this.modifiers = modifiers;
-        this.id = id;
-        this.expr = expr;
+        this(null, modifiers, id, expr);
     }
 
     /**
@@ -166,7 +169,26 @@ public class JmlRepresentsDeclaration extends JmlClassLevel implements NodeWithM
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public boolean isJmlRepresentsDeclaration() {
+        return true;
+    }
+
+    @Override
+    public JmlRepresentsDeclaration asJmlRepresentsDeclaration() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlRepresentsDeclaration> toJmlRepresentsDeclaration() {
+        return Optional.of(this);
+    }
+
+    @Override
+    public void ifJmlRepresentsDeclaration(Consumer<JmlRepresentsDeclaration> action) {
+        action.accept(this);
+    }
+
+    @Override
     public JmlRepresentsDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlRepresentsDeclarationMetaModel;
     }

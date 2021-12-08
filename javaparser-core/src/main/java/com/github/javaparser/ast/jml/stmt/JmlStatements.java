@@ -28,7 +28,11 @@ public class JmlStatements extends Statement implements Jmlish, JmlContainer<Jml
     private NodeList<JmlStatement> elements;
 
     public JmlStatements() {
-        this(null);
+        this((TokenRange) null);
+    }
+
+    public JmlStatements(TokenRange tokenRange, NodeList<JmlStatement> elements) {
+        this(tokenRange, false, new NodeList<>(), elements);
     }
 
     public JmlStatements(TokenRange tokenRange) {

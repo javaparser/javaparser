@@ -34,8 +34,12 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ForEachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
+
+import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -47,6 +51,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> {
 
+    @OptionalProperty
     private NodeList<JmlContracts> contracts;
 
     private VariableDeclarationExpr variable;
@@ -188,10 +193,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < contracts.size(); i++) {
-            if (contracts.get(i) == node) {
-                contracts.remove(i);
-                return true;
+        if (contracts != null) {
+            for (int i = 0; i < contracts.size(); i++) {
+                if (contracts.get(i) == node) {
+                    contracts.remove(i);
+                    return true;
+                }
             }
         }
         return super.remove(node);
@@ -212,10 +219,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
             setBody((Statement) replacementNode);
             return true;
         }
-        for (int i = 0; i < contracts.size(); i++) {
-            if (contracts.get(i) == node) {
-                contracts.set(i, (JmlContracts) replacementNode);
-                return true;
+        if (contracts != null) {
+            for (int i = 0; i < contracts.size(); i++) {
+                if (contracts.get(i) == node) {
+                    contracts.set(i, (JmlContracts) replacementNode);
+                    return true;
+                }
             }
         }
         if (node == iterable) {
@@ -272,13 +281,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContracts> getContracts() {
-        return contracts;
+    public Optional<NodeList<JmlContracts>> getContracts() {
+        return Optional.ofNullable(contracts);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForEachStmt setContracts(final NodeList<JmlContracts> contracts) {
-        assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
         }

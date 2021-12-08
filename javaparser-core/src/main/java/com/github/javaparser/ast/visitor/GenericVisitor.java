@@ -26,10 +26,15 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.body.ClassInvariantClause;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
+import com.github.javaparser.ast.jml.body.JmlClassInvariantDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
@@ -289,7 +294,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlBoundVariable n, A arg);
 
-    R visit(ClassInvariantClause n, A arg);
+    R visit(JmlClassInvariantDeclaration n, A arg);
 
     R visit(JmlClassAccessibleDeclaration n, A arg);
 
@@ -310,4 +315,16 @@ public interface GenericVisitor<R, A> {
     R visit(JmlMethodDeclaration n, A arg);
 
     R visit(JmlBinaryInfixExpr n, A arg);
+
+    R visit(JmlDocDeclaration n, A arg);
+
+    R visit(JmlDocStmt n, A arg);
+
+    R visit(JmlImportDeclaration n, A arg);
+
+    R visit(JmlDoc n, A arg);
+
+    R visit(JmlDocType n, A arg);
+
+    R visit(JmlFieldDeclaration n, A arg);
 }

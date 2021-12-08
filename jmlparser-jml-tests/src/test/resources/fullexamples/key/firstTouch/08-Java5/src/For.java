@@ -14,7 +14,8 @@ class For implements Iterable {
       @ decreasing a.length - \index;
       @ assignable \strictly_nothing;
       @*/
-    for (int i: a) s+= i;
+    for (int i : a) s += i;
+    //@ ghost set s = 2;
     return s;
   }
 

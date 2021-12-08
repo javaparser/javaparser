@@ -26,7 +26,12 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
@@ -281,7 +286,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlBoundVariable n, A arg);
 
-    void visit(ClassInvariantClause n, A arg);
+    void visit(JmlClassInvariantDeclaration n, A arg);
 
     void visit(JmlClassAccessibleDeclaration n, A arg);
 
@@ -302,4 +307,16 @@ public interface VoidVisitor<A> {
     void visit(JmlMethodDeclaration n, A arg);
 
     void visit(JmlBinaryInfixExpr n, A arg);
+
+    void visit(JmlDocDeclaration n, A arg);
+
+    void visit(JmlDocStmt n, A arg);
+
+    void visit(JmlImportDeclaration n, A arg);
+
+    void visit(JmlDoc n, A arg);
+
+    void visit(JmlDocType n, A arg);
+
+    void visit(JmlFieldDeclaration n, A arg);
 }

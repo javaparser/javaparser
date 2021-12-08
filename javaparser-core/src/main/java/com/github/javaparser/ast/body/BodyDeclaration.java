@@ -27,15 +27,21 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BodyDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
+
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
 
@@ -374,7 +380,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifClassInvariantClause(Consumer<ClassInvariantClause> action) {
+    public void ifClassInvariantClause(Consumer<JmlClassInvariantDeclaration> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -432,5 +438,103 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBodyDeclaration(Consumer<JmlBodyDeclaration> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlDocDeclaration() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlDocDeclaration asJmlDocDeclaration() {
+        throw new IllegalStateException(f("%s is not JmlDocDeclaration, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlDocDeclaration> toJmlDocDeclaration() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlDocDeclaration(Consumer<JmlDocDeclaration> action) {
+    }
+
+    public Optional<JmlClassAccessibleDeclaration> toJmlClassAccessibleDeclaration() {
+        return Optional.empty();
+    }
+
+    public boolean isJmlClassInvariantDeclaration() {
+        return false;
+    }
+
+    public JmlClassInvariantDeclaration asJmlClassInvariantDeclaration() {
+        throw new IllegalStateException(f("%s is not JmlClassInvariantDeclaration, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlClassInvariantDeclaration> toJmlClassInvariantDeclaration() {
+        return Optional.empty();
+    }
+
+    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassInvariantDeclaration> action) {
+    }
+
+    public boolean isJmlClassLevel() {
+        return false;
+    }
+
+    public JmlClassLevel asJmlClassLevel() {
+        throw new IllegalStateException(f("%s is not JmlClassLevel, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlClassLevel> toJmlClassLevel() {
+        return Optional.empty();
+    }
+
+    public void ifJmlClassLevel(Consumer<JmlClassLevel> action) {
+    }
+
+    public boolean isJmlDocType() {
+        return false;
+    }
+
+    public JmlDocType asJmlDocType() {
+        throw new IllegalStateException(f("%s is not JmlDocType, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlDocType> toJmlDocType() {
+        return Optional.empty();
+    }
+
+    public void ifJmlDocType(Consumer<JmlDocType> action) {
+    }
+
+    public boolean isJmlFieldDeclaration() {
+        return false;
+    }
+
+    public JmlFieldDeclaration asJmlFieldDeclaration() {
+        throw new IllegalStateException(f("%s is not JmlFieldDeclaration, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlFieldDeclaration> toJmlFieldDeclaration() {
+        return Optional.empty();
+    }
+
+    public void ifJmlFieldDeclaration(Consumer<JmlFieldDeclaration> action) {
+    }
+
+    public boolean isJmlMethodDeclaration() {
+        return false;
+    }
+
+    public JmlMethodDeclaration asJmlMethodDeclaration() {
+        throw new IllegalStateException(f("%s is not JmlMethodDeclaration, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<JmlMethodDeclaration> toJmlMethodDeclaration() {
+        return Optional.empty();
+    }
+
+    public void ifJmlMethodDeclaration(Consumer<JmlMethodDeclaration> action) {
     }
 }

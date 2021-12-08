@@ -32,11 +32,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlQuantifiedExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -70,9 +68,9 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
         }
 
         public static JmlBinder valueOf(JavaToken binder) {
-            Optional<JmlBinder> b = Arrays.stream(values()).filter(it -> binder.getText().equals(it.symbol))
-                    .findFirst();
-            if (b.isPresent()) return b.get();
+            Optional<JmlBinder> b = Arrays.stream(values()).filter(it -> binder.getText().equals(it.symbol)).findFirst();
+            if (b.isPresent())
+                return b.get();
             else {
                 throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
             }

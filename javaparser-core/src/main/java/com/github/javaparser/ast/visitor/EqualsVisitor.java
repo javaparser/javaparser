@@ -26,15 +26,21 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -1387,11 +1393,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final ClassInvariantClause n, final Visitable arg) {
-        final ClassInvariantClause n2 = (ClassInvariantClause) arg;
+    public Boolean visit(final JmlClassInvariantDeclaration n, final Visitable arg) {
+        final JmlClassInvariantDeclaration n2 = (JmlClassInvariantDeclaration) arg;
         if (!nodeEquals(n.getInvariant(), n2.getInvariant()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
@@ -1407,6 +1415,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodeEquals(n.getVariable(), n2.getVariable()))
             return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1418,6 +1428,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getId(), n2.getId()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
@@ -1541,6 +1553,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodeEquals(n.getMethodDeclaration(), n2.getMethodDeclaration()))
             return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1552,6 +1566,72 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getOperator(), n2.getOperator()))
             return false;
         if (!nodeEquals(n.getRight(), n2.getRight()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlDocDeclaration n, final Visitable arg) {
+        final JmlDocDeclaration n2 = (JmlDocDeclaration) arg;
+        if (!nodesEquals(n.getJmlComments(), n2.getJmlComments()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlDocStmt n, final Visitable arg) {
+        final JmlDocStmt n2 = (JmlDocStmt) arg;
+        if (!nodesEquals(n.getJmlComments(), n2.getJmlComments()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlImportDeclaration n, final Visitable arg) {
+        final JmlImportDeclaration n2 = (JmlImportDeclaration) arg;
+        if (!objEquals(n.isAsterisk(), n2.isAsterisk()))
+            return false;
+        if (!objEquals(n.isStatic(), n2.isStatic()))
+            return false;
+        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlDoc n, final Visitable arg) {
+        final JmlDoc n2 = (JmlDoc) arg;
+        if (!objEquals(n.getContent(), n2.getContent()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlDocType n, final Visitable arg) {
+        final JmlDocType n2 = (JmlDocType) arg;
+        if (!nodesEquals(n.getJmlComments(), n2.getJmlComments()))
+            return false;
+        if (!nodesEquals(n.getMembers(), n2.getMembers()))
+            return false;
+        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        return nodeEquals(n.getComment(), n2.getComment());
+    }
+
+    @Override
+    public Boolean visit(final JmlFieldDeclaration n, final Visitable arg) {
+        final JmlFieldDeclaration n2 = (JmlFieldDeclaration) arg;
+        if (!nodeEquals(n.getDecl(), n2.getDecl()))
+            return false;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
