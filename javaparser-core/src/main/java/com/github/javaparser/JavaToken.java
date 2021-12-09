@@ -590,7 +590,7 @@ public class JavaToken {
         }
 
         public static Kind valueOf(int kind) {
-            switch (kind) {
+            switch(kind) {
                 case 326:
                     return CTRL_Z;
                 case 325:

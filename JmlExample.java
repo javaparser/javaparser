@@ -14,6 +14,7 @@ class T  {
         //@ unreachable;
     }
 
+    //@ ensures true;
     void b() {
         //@loop_invariant abc;
         while(i++!=0) i--;

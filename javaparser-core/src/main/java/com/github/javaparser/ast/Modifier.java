@@ -31,7 +31,6 @@ import com.github.javaparser.metamodel.ModifierMetaModel;
 import java.util.Arrays;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.metamodel.JmlDocModifierMetaModel;
 
 /**
@@ -258,5 +257,14 @@ public class Modifier extends Node {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModifierMetaModel getMetaModel() {
         return JavaParserMetaModel.modifierMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public Modifier(TokenRange tokenRange, NodeList<JmlDoc> jmlComments) {
+        super(tokenRange);
+        customInitialization();
     }
 }

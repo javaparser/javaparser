@@ -39,7 +39,6 @@ import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.Optional;
 
 /**
@@ -214,7 +213,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final ConstructorDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts().orElse(null), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
@@ -234,7 +233,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final MethodDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         Type type = cloneNode(n.getType(), arg);
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts().orElse(null), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
@@ -1727,7 +1726,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlDocType r = new JmlDocType(n.getTokenRange().orElse(null), jmlComments);
+        JmlDocType r = new JmlDocType(n.getTokenRange().orElse(null), modifiers, annotations, name, members, jmlComments);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

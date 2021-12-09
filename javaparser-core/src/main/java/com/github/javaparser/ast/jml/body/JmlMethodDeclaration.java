@@ -137,29 +137,35 @@ public class JmlMethodDeclaration extends JmlClassLevel<JmlMethodDeclaration> {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlMethodDeclaration removeContract() {
-        return setContract(null);
+        return setContract((JmlContract) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlMethodDeclaration() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlMethodDeclaration asJmlMethodDeclaration() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlMethodDeclaration> toJmlMethodDeclaration() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlMethodDeclaration(Consumer<JmlMethodDeclaration> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlMethodDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlMethodDeclarationMetaModel;
     }

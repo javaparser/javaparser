@@ -203,7 +203,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final ConstructorDeclaration n, final A arg) {
         n.getBody().accept(this, arg);
-        n.getContracts().forEach(p -> p.accept(this, arg));
+        n.getContracts().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));
@@ -389,7 +389,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final MethodDeclaration n, final A arg) {
         n.getBody().ifPresent(l -> l.accept(this, arg));
         n.getType().accept(this, arg);
-        n.getContracts().forEach(p -> p.accept(this, arg));
+        n.getContracts().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));

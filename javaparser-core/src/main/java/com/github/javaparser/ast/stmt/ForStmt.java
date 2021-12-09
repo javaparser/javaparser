@@ -70,7 +70,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWithContracts<ForStmt> {
 
-
     @OptionalProperty
     private NodeList<JmlContracts> contracts;
 
@@ -243,7 +242,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ForStmt removeCompare() {
-        return setCompare(null);
+        return setCompare((Expression) null);
     }
 
     @Override
@@ -320,13 +319,11 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<JmlContracts>> getContracts() {
         return Optional.ofNullable(contracts);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setContracts(final NodeList<JmlContracts> contracts) {
         if (contracts == this.contracts) {

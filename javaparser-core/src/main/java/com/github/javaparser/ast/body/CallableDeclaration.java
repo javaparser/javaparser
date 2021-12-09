@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.jml.NodeWithContracts;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -71,7 +72,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
  */
-public abstract class CallableDeclaration<T extends CallableDeclaration<?>> extends BodyDeclaration<T> implements NodeWithAccessModifiers<T>, NodeWithDeclaration, NodeWithSimpleName<T>, NodeWithParameters<T>, NodeWithThrownExceptions<T>, NodeWithTypeParameters<T>, NodeWithJavadoc<T>, NodeWithAbstractModifier<T>, NodeWithStaticModifier<T>, NodeWithFinalModifier<T>, NodeWithStrictfpModifier<T> {
+public abstract class CallableDeclaration<T extends CallableDeclaration<?>> extends BodyDeclaration<T> implements NodeWithAccessModifiers<T>, NodeWithDeclaration, NodeWithSimpleName<T>, NodeWithParameters<T>, NodeWithThrownExceptions<T>, NodeWithTypeParameters<T>, NodeWithJavadoc<T>, NodeWithAbstractModifier<T>, NodeWithStaticModifier<T>, NodeWithFinalModifier<T>, NodeWithStrictfpModifier<T>, NodeWithContracts<CallableDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -86,6 +87,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @OptionalProperty
     private ReceiverParameter receiverParameter;
 
+    @OptionalProperty
     private NodeList<JmlContracts> contracts = new NodeList<>();
 
     @AllFieldsConstructor
@@ -237,10 +239,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < contracts.size(); i++) {
-            if (contracts.get(i) == node) {
-                contracts.remove(i);
-                return true;
+        if (contracts != null) {
+            for (int i = 0; i < contracts.size(); i++) {
+                if (contracts.get(i) == node) {
+                    contracts.remove(i);
+                    return true;
+                }
             }
         }
         for (int i = 0; i < modifiers.size(); i++) {
@@ -377,10 +381,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        for (int i = 0; i < contracts.size(); i++) {
-            if (contracts.get(i) == node) {
-                contracts.set(i, (JmlContracts) replacementNode);
-                return true;
+        if (contracts != null) {
+            for (int i = 0; i < contracts.size(); i++) {
+                if (contracts.get(i) == node) {
+                    contracts.set(i, (JmlContracts) replacementNode);
+                    return true;
+                }
             }
         }
         for (int i = 0; i < modifiers.size(); i++) {
@@ -469,14 +475,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContracts> getContracts() {
-        return contracts;
+    public Optional<NodeList<JmlContracts>> getContracts() {
+        return Optional.ofNullable(contracts);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setContracts(final NodeList<JmlContracts> contracts) {
-        assertNotNull(contracts);
         if (contracts == this.contracts) {
             return (T) this;
         }

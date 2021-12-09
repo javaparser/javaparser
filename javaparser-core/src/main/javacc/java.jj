@@ -4578,7 +4578,6 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 Statement Statement():
 {
     Statement ret;
-    NodeList<JmlContracts> contracts = emptyNodeList();
 }
 {
     try {
@@ -6450,12 +6449,10 @@ NodeList<JmlContracts> JmlContracts():
 }
 {
   ( LOOKAHEAD(5) //to dinstinguish from JmlModifier
-    {contract = new JmlContracts();}
-    {begin=token();}
     elements=JmlContractsInner()
-    {end=token();}
-    {contract.setElements(elements); contracts.add(contract);
-     contract.setTokenRange(range(begin,end));
+    {
+       contract = new JmlContracts(range(elements.get(0),elements.get(elements.size()-1)), elements);
+       contracts.add(contract);
     }
   )+
   { return contracts;}
@@ -6475,7 +6472,7 @@ NodeList<JmlContract> JmlContractsInner():
 
 JmlContract JmlContract():
 {
-    JavaToken begin;
+    JavaToken begin = INVALID;
     NodeList<JmlClause> clauses = new NodeList<>();
     NodeList<JmlContract> subContracts = new NodeList<>();
 
@@ -6493,7 +6490,7 @@ JmlContract JmlContract():
   (b=JmlBehavior())?
   (clause=JmlContractClause() {clauses.add(clause);})+
   (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
-  {return new JmlContract(range(begin, token()), b, new NodeList<>(), clauses, subContracts);}
+  {return new JmlContract(range(orIfInvalid(begin==null?INVALID:begin,clauses.get(0)), token()), b, new NodeList<>(), clauses, subContracts);}
 }
 
 JmlClause JmlContractClause():
@@ -6781,15 +6778,15 @@ ArbitraryNodeContainer JmlClassLevelStart():
     ModifierHolder modifiers;
     JavaToken begin;
 }{
-    (   LOOKAHEAD(10)
-        (
+    (   LOOKAHEAD(100)
+        (   LOOKAHEAD(100)
             modifiers = Modifiers()
             ( LOOKAHEAD(3) element = JmlClassInvariant(modifiers)
-            | element = JmlClassInitially(modifiers)
-            | element = JmlClassAccessible(modifiers)
-            | element = JmlClassRepresents(modifiers)
+            | LOOKAHEAD(3) element = JmlClassInitially(modifiers)
+            | LOOKAHEAD(3) element = JmlClassAccessible(modifiers)
+            | LOOKAHEAD(3) element = JmlClassRepresents(modifiers)
             | LOOKAHEAD(4) element = JmlFieldDeclaration(modifiers)
-            | element = JmlMethodDeclaration(modifiers)
+            | LOOKAHEAD(100) element = JmlMethodDeclaration(modifiers)
             )
             { ret.add(element); }
         |
@@ -6857,7 +6854,8 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
     JmlContract c=null;
 }
 {
-    ( [<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>]
+    ( LOOKAHEAD(2)
+      [<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>]
       {begin=token();}
       (clause=JmlContractClause() {clauses.add(clause);})+
       (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?

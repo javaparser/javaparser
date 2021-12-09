@@ -166,7 +166,7 @@ public class TokenTypes {
             case MONITORS_FOR:
             case JML_BLOCK_COMMENT:
             case JML_LINE_COMMENT:
-                //case NONNULLELEMENTS:
+            //case NONNULLELEMENTS:
             case NON_NULL:
                 //case NOT_SPECIFIED:
             /*case ONLY_ACCESSED:
@@ -175,7 +175,7 @@ public class TokenTypes {
             case ONLY_CAPTURED:*/
             case OR:
             case PRODUCT:
-                //case REACH:
+            //case REACH:
             case READABLE:
             case LOOP_INVARIANT_FREE:
             //case REAL:

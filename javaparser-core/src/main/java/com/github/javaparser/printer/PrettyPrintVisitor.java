@@ -1274,7 +1274,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final MethodDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
 
-        n.getContracts().accept(this, arg);
+        n.getContracts().get().accept(this, arg);
 
         printComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);

@@ -8,12 +8,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.metamodel.JmlClassInvariantDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -136,25 +133,31 @@ public class JmlClassInvariantDeclaration extends JmlClassLevel<JmlClassInvarian
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlClassInvariantDeclaration() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClassInvariantDeclaration asJmlClassInvariantDeclaration() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClassInvariantDeclaration> toJmlClassInvariantDeclaration() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassInvariantDeclaration(Consumer<JmlClassInvariantDeclaration> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClassInvariantDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClassInvariantDeclarationMetaModel;
     }

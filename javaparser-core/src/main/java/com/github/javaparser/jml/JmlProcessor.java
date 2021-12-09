@@ -9,7 +9,6 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.CommentsCollection;
@@ -24,7 +23,8 @@ import com.github.javaparser.ast.jml.stmt.JmlStatement;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +45,15 @@ public class JmlProcessor implements ParseResult.PostProcessor {
         }
     }
 
-    private static class JmlReplaceVisitor extends VoidVisitorAdapter<Void> {
+    private static class JmlReplaceVisitor extends ModifierVisitor<Void> {
+        final ProblemReporter reporter;
         final JmlDocSanitizer sanitizer;
         final JavaParser javaParser;
         private final List<Problem> problems;
 
         private JmlReplaceVisitor(ParserConfiguration config, List<Problem> problems) {
             this.problems = problems;
+            this.reporter = new ProblemReporter(this.problems::add);
             javaParser = new JavaParser(config);
             sanitizer = new JmlDocSanitizer(config.getJmlKeys());
         }
@@ -70,22 +72,7 @@ public class JmlProcessor implements ParseResult.PostProcessor {
 
 
         @Override
-        public void visit(ClassOrInterfaceDeclaration n, Void arg) {
-            n.getExtendedTypes().forEach(p -> p.accept(this, arg));
-            n.getImplementedTypes().forEach(p -> p.accept(this, arg));
-            n.getTypeParameters().forEach(p -> p.accept(this, arg));
-            for (BodyDeclaration<?> bodyDeclaration : new ArrayList<>(n.getMembers())) {
-                bodyDeclaration.accept(this, arg);
-            }
-            n.getModifiers().forEach(p -> p.accept(this, arg));
-            n.getName().accept(this, arg);
-            n.getAnnotations().forEach(p -> p.accept(this, arg));
-            n.getComment().ifPresent(l -> l.accept(this, arg));
-        }
-
-
-        @Override
-        public void visit(JmlDocDeclaration n, Void arg) {
+        public JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
             ArbitraryNodeContainer t = parseJmlClasslevel(n.getJmlComments());
             if (t != null) {
                 TypeDeclaration<?> parent = (TypeDeclaration<?>) n.getParentNode().get();
@@ -102,22 +89,26 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                     } else if (child instanceof JmlContract) {
                         System.out.println("contract");
                         //TODO ((NodeWithModifiers<?>) next).
+                    } else if (child instanceof JmlContracts) {
+                        ((NodeWithContracts<?>) next).addContracts((JmlContracts) child);
                     }
                 }
             }
+            return n;
         }
 
 
         @Override
-        public void visit(BlockStmt n, Void arg) {
+        public BlockStmt visit(BlockStmt n, Void arg) {
             n.getContracts().forEach(p -> p.accept(this, arg));
-            for (int i = 0; i < n.getStatements().size(); i++) {
-                Statement s = n.getStatement(i);
+            for (int pos = 0; pos < n.getStatements().size(); pos++) {
+                Statement s = n.getStatement(pos);
                 if (s.isJmlDocStmt()) {
-                    i = handleJmlStatementLevel(n, (JmlDocStmt) s, i);
+                    pos = handleJmlStatementLevel(n, (JmlDocStmt) s, pos);
                 }
             }
             n.getComment().ifPresent(l -> l.accept(this, arg));
+            return n;
         }
 
         private int handleJmlStatementLevel(BlockStmt p, JmlDocStmt n, int pos) {
@@ -152,9 +143,10 @@ public class JmlProcessor implements ParseResult.PostProcessor {
         }
 
         @Override
-        public void visit(JmlDoc n, Void arg) {
-
+        public JmlDoc visit(JmlDoc n, Void arg) {
+            return n;
         }
+
     }
 
     private void process(CompilationUnit unit) {

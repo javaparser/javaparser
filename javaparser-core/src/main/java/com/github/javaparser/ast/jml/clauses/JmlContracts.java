@@ -37,6 +37,10 @@ public class JmlContracts extends Node implements Jmlish, JmlContainer<JmlContra
         this(false, new NodeList<>(), new NodeList<>());
     }
 
+    public JmlContracts(TokenRange range, NodeList<JmlContract> elements) {
+        this(range, true, new NodeList<>(), elements);
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

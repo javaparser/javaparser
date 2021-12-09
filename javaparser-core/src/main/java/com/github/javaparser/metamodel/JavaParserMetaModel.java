@@ -226,6 +226,10 @@ public final class JavaParserMetaModel {
         jmlDocDeclarationMetaModel.getConstructorParameters().add(jmlDocDeclarationMetaModel.jmlCommentsPropertyMetaModel);
         jmlDocStmtMetaModel.getConstructorParameters().add(jmlDocStmtMetaModel.jmlCommentsPropertyMetaModel);
         jmlDocModifierMetaModel.getConstructorParameters().add(jmlDocModifierMetaModel.jmlCommentsPropertyMetaModel);
+        jmlDocTypeMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.modifiersPropertyMetaModel);
+        jmlDocTypeMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
+        jmlDocTypeMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.namePropertyMetaModel);
+        jmlDocTypeMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.membersPropertyMetaModel);
         jmlDocTypeMetaModel.getConstructorParameters().add(jmlDocTypeMetaModel.jmlCommentsPropertyMetaModel);
         jmlImportDeclarationMetaModel.getConstructorParameters().add(jmlImportDeclarationMetaModel.namePropertyMetaModel);
         jmlImportDeclarationMetaModel.getConstructorParameters().add(jmlImportDeclarationMetaModel.isStaticPropertyMetaModel);
@@ -530,7 +534,7 @@ public final class JavaParserMetaModel {
         nodeMetaModel.getDeclaredPropertyMetaModels().add(nodeMetaModel.commentPropertyMetaModel);
         bodyDeclarationMetaModel.annotationsPropertyMetaModel = new PropertyMetaModel(bodyDeclarationMetaModel, "annotations", com.github.javaparser.ast.expr.AnnotationExpr.class, Optional.of(annotationExprMetaModel), false, false, true, false);
         bodyDeclarationMetaModel.getDeclaredPropertyMetaModels().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
-        callableDeclarationMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(callableDeclarationMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContracts.class, Optional.of(jmlContractsMetaModel), false, false, true, false);
+        callableDeclarationMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(callableDeclarationMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContracts.class, Optional.of(jmlContractsMetaModel), true, false, true, false);
         callableDeclarationMetaModel.getDeclaredPropertyMetaModels().add(callableDeclarationMetaModel.contractsPropertyMetaModel);
         callableDeclarationMetaModel.modifiersPropertyMetaModel = new PropertyMetaModel(callableDeclarationMetaModel, "modifiers", com.github.javaparser.ast.Modifier.class, Optional.of(modifierMetaModel), false, false, true, false);
         callableDeclarationMetaModel.getDeclaredPropertyMetaModels().add(callableDeclarationMetaModel.modifiersPropertyMetaModel);

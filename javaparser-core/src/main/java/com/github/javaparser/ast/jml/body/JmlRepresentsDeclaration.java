@@ -11,15 +11,12 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlRepresentsDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -169,26 +166,31 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlRepresentsDeclaration() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlRepresentsDeclaration asJmlRepresentsDeclaration() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlRepresentsDeclaration> toJmlRepresentsDeclaration() {
         return Optional.of(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlRepresentsDeclaration(Consumer<JmlRepresentsDeclaration> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlRepresentsDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlRepresentsDeclarationMetaModel;
     }

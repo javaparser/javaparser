@@ -49,8 +49,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt>,
-        NodeWithContracts<WhileStmt> {
+public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt>, NodeWithContracts<WhileStmt> {
 
     @OptionalProperty
     private NodeList<JmlContracts> contracts;
@@ -214,13 +213,11 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         return Optional.of(this);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<JmlContracts>> getContracts() {
         return Optional.ofNullable(contracts);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WhileStmt setContracts(final NodeList<JmlContracts> contracts) {
         if (contracts == this.contracts) {

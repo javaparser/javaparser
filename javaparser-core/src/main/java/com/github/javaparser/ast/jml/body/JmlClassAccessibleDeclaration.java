@@ -11,11 +11,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClassAccessibleDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.function.Consumer;
 
 /**
@@ -219,26 +216,31 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel<JmlClassAccessi
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlClassAccessibleDeclaration() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClassAccessibleDeclaration asJmlClassAccessibleDeclaration() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClassAccessibleDeclaration> toJmlClassAccessibleDeclaration() {
         return Optional.of(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassAccessibleDeclaration(Consumer<JmlClassAccessibleDeclaration> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClassAccessibleDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClassAccessibleDeclarationMetaModel;
     }
