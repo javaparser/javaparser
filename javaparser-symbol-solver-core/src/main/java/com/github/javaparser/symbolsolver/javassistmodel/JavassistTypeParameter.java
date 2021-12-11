@@ -28,6 +28,7 @@ import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -63,6 +64,11 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
         }
         // TODO check bounds
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getQualifiedName(), declaredOnType(), declaredOnMethod());
     }
 
     @Override
