@@ -104,6 +104,7 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlForallClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlForallClauseMetaModel;
     }

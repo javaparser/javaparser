@@ -20,4 +20,9 @@ public class JmlDocModifier implements Modifier.Keyword {
     public String asString() {
         return "[[JML modifiers]]";
     }
+
+    @Override
+    public String name() {
+        return asString();
+    }
 }

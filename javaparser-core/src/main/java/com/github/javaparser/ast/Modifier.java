@@ -121,7 +121,9 @@ public class Modifier extends Node {
     }
 
     public interface Keyword {
+
         String asString();
+
         String name();
     }
 
@@ -129,6 +131,7 @@ public class Modifier extends Node {
      * The Java modifier keywords.
      */
     public enum DefaultKeyword implements Keyword {
+
         DEFAULT("default"),
         PUBLIC("public"),
         PROTECTED("protected"),
@@ -230,7 +233,7 @@ public class Modifier extends Node {
      * Utility method that instantiaties "Modifier"s for the keywords,
      * and puts them in a NodeList.
      */
-    public static NodeList<Modifier> createModifierList(Modifier.DefaultKeyword... modifiers) {
+    public static NodeList<Modifier> createModifierList(Modifier.Keyword... modifiers) {
         return Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList());
     }
 

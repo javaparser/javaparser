@@ -6334,7 +6334,9 @@ void JmlDocModifier(NodeList<Modifier> modifiers):
 { NodeList<JmlDoc> seq = new NodeList<>(); }
 {
   seq = JmlDocs()
-  { JmlDocModifier d =  new JmlDocModifier(seq); modifiers.add(d); }
+  { JmlDocModifier d =  new JmlDocModifier(seq);
+    modifiers.add(new Modifier(range(seq.get(0), seq.get(seq.size() - 1)), d));
+ }
 }
 
 JmlDocType JmlDocType():

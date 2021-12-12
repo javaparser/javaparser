@@ -217,7 +217,7 @@ public class ModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier.DefaultKeyword... allowedModifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier.Keyword... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         // JML
         validateAtMostOneOf(n, reporter, JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PUBLIC, JML_SPEC_PROTECTED);
@@ -234,8 +234,8 @@ public class ModifierValidator extends VisitorValidator {
         }
         for (Modifier m : n.getModifiers()) {
             if (!arrayContains(allowedModifiers, m.getKeyword())) {
-                //reporter.report(n, "'%s' is not allowed at %s.", m.getKeyword().asString(), n.getClass().getSimpleName());
-                reporter.report(n, "'%s' is not allowed here.", m.getKeyword().asString());
+                reporter.report(n, "'%s' is not allowed at %s.", m.getKeyword().asString(), n.getClass().getSimpleName());
+                //reporter.report(n, "'%s' is not allowed here.", m.getKeyword().asString());
             }
         }
     }
