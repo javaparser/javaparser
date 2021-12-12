@@ -207,7 +207,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final ImportDeclaration n, final Void arg) {
-        return (n.isAsterisk() ? 1 : 0) * 31 + (n.isStatic() ? 1 : 0) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.isAsterisk() ? 1 : 0) * 31 + (n.isJmlModel() ? 1 : 0) * 31 + (n.isStatic() ? 1 : 0) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final InitializerDeclaration n, final Void arg) {
@@ -658,5 +658,10 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlFieldDeclaration n, final Void arg) {
         return (n.getDecl().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlOldClause n, final Void arg) {
+        return (n.getDeclarations().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }

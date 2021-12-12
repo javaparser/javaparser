@@ -65,14 +65,6 @@ public class VarType extends Type {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     public String asString() {
         return "var";
     }
@@ -87,14 +79,6 @@ public class VarType extends Type {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public VarTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.varTypeMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override

@@ -72,8 +72,9 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < variables.size(); i++) {
             if (variables.get(i) == node) {
                 variables.remove(i);
@@ -86,8 +87,9 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < variables.size(); i++) {
             if (variables.get(i) == node) {
                 variables.set(i, (JmlBoundVariable) replacementNode);

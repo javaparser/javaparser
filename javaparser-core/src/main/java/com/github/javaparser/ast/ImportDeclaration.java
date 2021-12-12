@@ -29,7 +29,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -76,12 +75,12 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk,boolean isJmlModel) {
+    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isJmlModel) {
         super(tokenRange);
         setName(name);
         setStatic(isStatic);
         setAsterisk(isAsterisk);
-        this.isJmlModel = isJmlModel;
+        setJmlModel(isJmlModel);
         customInitialization();
     }
 
@@ -157,14 +156,6 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ImportDeclaration clone() {
         return (ImportDeclaration) accept(new CloneVisitor(), null);
@@ -179,8 +170,9 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == name) {
             setName((Name) replacementNode);
             return true;
@@ -188,11 +180,22 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         return super.replace(node, replacementNode);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isJmlModel() {
         return isJmlModel;
     }
 
     public void setIsJmlModel(boolean b) {
         this.isJmlModel = b;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ImportDeclaration setJmlModel(final boolean isJmlModel) {
+        if (isJmlModel == this.isJmlModel) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_MODEL, this.isJmlModel, isJmlModel);
+        this.isJmlModel = isJmlModel;
+        return this;
     }
 }

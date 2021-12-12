@@ -319,4 +319,6 @@ public interface VoidVisitor<A> {
     void visit(JmlDocType n, A arg);
 
     void visit(JmlFieldDeclaration n, A arg);
+
+    void visit(JmlOldClause n, A arg);
 }

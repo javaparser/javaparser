@@ -86,11 +86,6 @@ public class OldClause extends JmlClause implements MethodContractable {
         return (OldClause) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public OldClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.oldClauseMetaModel;
-    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")

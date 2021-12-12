@@ -58,8 +58,9 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (name != null) {
             if (node == name) {
                 removeName();
@@ -72,8 +73,9 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == expr) {
             setExpr((Expression) replacementNode);
             return true;

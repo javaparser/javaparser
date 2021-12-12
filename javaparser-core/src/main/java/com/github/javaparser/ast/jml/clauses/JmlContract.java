@@ -133,8 +133,9 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < clauses.size(); i++) {
             if (clauses.get(i) == node) {
                 clauses.remove(i);
@@ -159,8 +160,9 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < clauses.size(); i++) {
             if (clauses.get(i) == node) {
                 clauses.set(i, (JmlClause) replacementNode);

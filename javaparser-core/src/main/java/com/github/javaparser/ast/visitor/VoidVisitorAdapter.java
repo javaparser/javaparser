@@ -1018,4 +1018,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
+
+    @Override
+    public void visit(final JmlOldClause n, final A arg) {
+        n.getDeclarations().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
 }

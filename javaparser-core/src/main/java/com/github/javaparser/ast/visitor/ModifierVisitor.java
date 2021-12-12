@@ -1784,4 +1784,15 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final JmlOldClause n, final A arg) {
+        VariableDeclarationExpr declarations = (VariableDeclarationExpr) n.getDeclarations().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (declarations == null)
+            return null;
+        n.setDeclarations(declarations);
+        n.setComment(comment);
+        return n;
+    }
 }

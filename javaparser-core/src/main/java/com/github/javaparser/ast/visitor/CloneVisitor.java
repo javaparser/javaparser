@@ -1068,7 +1068,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Node visit(final ImportDeclaration n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ImportDeclaration r = new ImportDeclaration(n.getTokenRange().orElse(null), name, n.isStatic(), n.isAsterisk());
+        ImportDeclaration r = new ImportDeclaration(n.getTokenRange().orElse(null), name, n.isStatic(), n.isAsterisk(), n.isJmlModel());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1739,6 +1739,17 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlFieldDeclaration r = new JmlFieldDeclaration(n.getTokenRange().orElse(null), decl);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlOldClause n, final Object arg) {
+        VariableDeclarationExpr declarations = cloneNode(n.getDeclarations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlOldClause r = new JmlOldClause(n.getTokenRange().orElse(null), declarations);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

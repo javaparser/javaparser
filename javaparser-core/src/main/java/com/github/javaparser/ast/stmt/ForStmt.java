@@ -209,8 +209,9 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (compare != null) {
             if (node == compare) {
                 removeCompare();
@@ -260,8 +261,9 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == body) {
             setBody((Statement) replacementNode);
             return true;

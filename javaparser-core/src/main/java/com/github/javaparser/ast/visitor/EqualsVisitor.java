@@ -1213,6 +1213,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final ImportDeclaration n2 = (ImportDeclaration) arg;
         if (!objEquals(n.isAsterisk(), n2.isAsterisk()))
             return false;
+        if (!objEquals(n.isJmlModel(), n2.isJmlModel()))
+            return false;
         if (!objEquals(n.isStatic(), n2.isStatic()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
@@ -1895,6 +1897,18 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getDecl(), n2.getDecl()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlOldClause n, final Visitable arg) {
+        final JmlOldClause n2 = (JmlOldClause) arg;
+        if (!nodeEquals(n.getDeclarations(), n2.getDeclarations()))
+            return false;
+        if (!objEquals(n.getKind(), n2.getKind()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;

@@ -10,8 +10,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlImportDeclarationMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -169,11 +167,5 @@ public class JmlImportDeclaration extends Node implements NodeWithName<JmlImport
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlImportDeclaration clone() {
         return (JmlImportDeclaration) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlImportDeclarationMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlImportDeclarationMetaModel;
     }
 }

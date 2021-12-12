@@ -1168,6 +1168,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         endJmlComment(false);
     }
 
+    @Override
+    public void visit(JmlOldClause n, Void arg) {
+
+    }
+
 
     @Override
     public void visit(final CharLiteralExpr n, final Void arg) {

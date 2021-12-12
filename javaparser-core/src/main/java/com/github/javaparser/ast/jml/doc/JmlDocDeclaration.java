@@ -86,8 +86,9 @@ public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < jmlComments.size(); i++) {
             if (jmlComments.get(i) == node) {
                 jmlComments.remove(i);
@@ -100,8 +101,9 @@ public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < jmlComments.size(); i++) {
             if (jmlComments.get(i) == node) {
                 jmlComments.set(i, (JmlDoc) replacementNode);

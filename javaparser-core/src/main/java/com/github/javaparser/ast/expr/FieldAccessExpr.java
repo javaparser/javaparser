@@ -184,8 +184,9 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (typeArguments != null) {
             for (int i = 0; i < typeArguments.size(); i++) {
                 if (typeArguments.get(i) == node) {
@@ -200,8 +201,9 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == name) {
             setName((SimpleName) replacementNode);
             return true;

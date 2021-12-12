@@ -35,6 +35,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
 import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
@@ -408,6 +409,16 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
 
     @Override
     public ResolvedType visit(JmlDoc n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlDocType n, Boolean arg) {
+        throw new UnsupportedOperationException(n.getClass().getCanonicalName());
+    }
+
+    @Override
+    public ResolvedType visit(JmlFieldDeclaration n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 

@@ -327,4 +327,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlDocType n, A arg);
 
     R visit(JmlFieldDeclaration n, A arg);
+
+    R visit(JmlOldClause n, A arg);
 }
