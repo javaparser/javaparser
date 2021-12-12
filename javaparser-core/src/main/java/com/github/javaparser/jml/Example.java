@@ -10,7 +10,6 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.IntSummaryStatistics;
-import java.util.OptionalDouble;
 import java.util.stream.IntStream;
 
 /**
@@ -40,7 +39,7 @@ public class Example {
         JavaParser jpb = new JavaParser(config);
 
 
-        IntStream timings = IntStream.rangeClosed(0, 1)
+        IntStream timings = IntStream.rangeClosed(0, 0)
                 .map(i -> {
                     long start = System.currentTimeMillis();
                     try {
@@ -56,21 +55,14 @@ public class Example {
         IntSummaryStatistics stat = timings.summaryStatistics();
         System.out.println(stat);
 
-    }
-}
- /*   ParseResult<CompilationUnit> result =
-            jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
+        ParseResult<CompilationUnit> result =
+                jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
 
         System.out.println(result);
-        result.getResult().
-
-    ifPresent(it ->
-
-    {
-        DefaultPrinterConfiguration c = new DefaultPrinterConfiguration();
-        DefaultPrettyPrinter v = new DefaultPrettyPrinter(c);
-        System.out.println(v.print(it));
-    });
+        result.getResult().ifPresent(it -> {
+            DefaultPrinterConfiguration c = new DefaultPrinterConfiguration();
+            DefaultPrettyPrinter v = new DefaultPrettyPrinter(c);
+            System.out.println(v.print(it));
+        });
+    }
 }
-}
-*/

@@ -6356,10 +6356,9 @@ NodeList<ImportDeclaration> JmlImportDeclarations():
   DefaultJmlContainer c = new DefaultJmlContainer();
 }
 {
-  //JmlStart(c) {begin=token();}
-  (<MODEL> {begin=token();} in=ImportDeclaration()
-  { /*add(imports, new JmlImportDeclaration(range(begin, in),in,c));*/})*
-  //JmlEnd()
+  ( <MODEL> {begin=token();} in=ImportDeclaration()
+    { in.setIsJmlModel(true); add(imports,in); }
+  )+
   {
     return imports;
   }
@@ -6870,7 +6869,47 @@ ArbitraryNodeContainer JmlClassLevelStart():
                 ret.addAll(modifiers.annotations);
         }
     )
-    //<EOF>
+    <EOF>
+    {
+        return new ArbitraryNodeContainer(ret);
+    }
+}
+
+ArbitraryNodeContainer JmlTypeLevelStart():
+{
+    NodeList<Node> ret = new NodeList<>();
+    NodeList<ImportDeclaration> imports = new NodeList<>();
+    ModifierHolder modifiers;
+}
+{
+    //TODO weigl add JML model classes
+    [ LOOKAHEAD(2)
+      imports=JmlImportDeclarations()
+      {ret.addAll(imports);}
+    ]
+    ( modifiers = Modifiers()
+        {ret.addAll(modifiers.modifiers); ret.addAll(modifiers.annotations); }
+    )
+    <EOF>
+    {
+        return new ArbitraryNodeContainer(ret);
+    }
+}
+
+
+ArbitraryNodeContainer JmlModifierLevelStart():
+{
+    NodeList<Node> ret = new NodeList<>();
+    ModifierHolder modifiers;
+}{
+    (
+        modifiers = Modifiers()
+        {
+                ret.addAll(modifiers.modifiers);
+                ret.addAll(modifiers.annotations);
+        }
+    )
+    <EOF>
     {
         return new ArbitraryNodeContainer(ret);
     }

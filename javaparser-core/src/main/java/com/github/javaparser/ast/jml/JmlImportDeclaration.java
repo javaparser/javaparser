@@ -17,6 +17,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (9/8/21)
  */
+@Deprecated
 public class JmlImportDeclaration extends Node implements NodeWithName<JmlImportDeclaration>, Jmlish, HasJmlTags<JmlImportDeclaration> {
 
     private Name name;

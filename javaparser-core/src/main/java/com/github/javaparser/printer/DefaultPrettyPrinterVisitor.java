@@ -62,6 +62,7 @@ import static java.util.stream.Collectors.joining;
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     protected final PrinterConfiguration configuration;
     protected final SourcePrinter printer;
+    private boolean inJmlComment;
 
     public DefaultPrettyPrinterVisitor(PrinterConfiguration configuration) {
         this(configuration, new SourcePrinter(configuration));
@@ -79,7 +80,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     protected void printModifiers(final NodeList<Modifier> modifiers) {
         if (modifiers.size() > 0) {
-            printer.print(modifiers.stream().map(Modifier::getKeyword).map(Modifier.Keyword::asString).collect(joining(" ")) + " ");
+            printer.print(modifiers.stream().map(Modifier::getKeyword)
+                    .map(it ->
+                            !inJmlComment && it.name().startsWith("JML_")
+                                    ? "/*@ " + it.asString() + " */"
+                                    : it.asString())
+                    .collect(joining(" ")) + " ");
         }
     }
 
@@ -835,10 +841,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlStmtWithExpression n, Void arg) {
-        printer.print(n.getKind().jmlSymbol());
-        printer.print(" ");
-        n.getExpression().accept(this, arg);
-        printer.print(";");
+        wrapInJmlIfNeeded(() -> {
+            printer.print(n.getKind().jmlSymbol());
+            printer.print(" ");
+            n.getExpression().accept(this, arg);
+            printer.print(";");
+        });
     }
 
     @Override
@@ -902,7 +910,20 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlUnreachableStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printer.println("unreachable;");
+        wrapInJmlIfNeeded(() -> {
+            printer.println("unreachable;");
+        });
+    }
+
+    void wrapInJmlIfNeeded(Runnable run) {
+        boolean b = inJmlComment;
+        if (!b) {
+            startJmlComment(true, new NodeList<>());
+        }
+        run.run();
+        if (!b) {
+            endJmlComment(true);
+        }
     }
 
     @Override
@@ -946,8 +967,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlRefiningStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printer.print("hence_by");
-        printer.println(";");
+        wrapInJmlIfNeeded(() -> {
+            printer.print("refining");
+        });
         //TODO weigl
     }
 
@@ -1035,6 +1057,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     private void endJmlComment(boolean singleLine) {
+        inJmlComment = false;
         if (singleLine)
             printer.print("");
         else
@@ -1042,6 +1065,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     private void startJmlComment(boolean singleLine, NodeList<SimpleName> jmlTags) {
+        inJmlComment = true;
         if (singleLine) {
             printer.print("//");
         } else {
@@ -1054,9 +1078,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlContracts n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        startJmlComment(n.isSingleLine(), n.getJmlTags());
+        startJmlComment(false, n.getJmlTags());
         printList(n.getElements(), "\nalso\n");
-        endJmlComment(n.isSingleLine());
+        endJmlComment(false);
     }
 
     @Override
@@ -1082,8 +1106,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlGhostStatements n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printer.print("ghost");
-        printList(n.getStatements(), "\n");
+        wrapInJmlIfNeeded(() -> {
+            printer.print("ghost");
+            printList(n.getStatements(), "\n");
+        });
     }
 
     @Override
@@ -2180,6 +2206,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(final ImportDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
+
+        if (n.isJmlModel()) {
+            startJmlComment(true, new NodeList<>());
+            printer.print(" model ");
+        }
+
         printer.print("import ");
         if (n.isStatic()) {
             printer.print("static ");
@@ -2189,6 +2221,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             printer.print(".*");
         }
         printer.println(";");
+
+        if (n.isJmlModel()) {
+            endJmlComment(true);
+        }
 
         printOrphanCommentsEnding(n);
     }

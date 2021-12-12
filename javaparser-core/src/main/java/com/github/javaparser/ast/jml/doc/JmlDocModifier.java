@@ -25,4 +25,8 @@ public class JmlDocModifier implements Modifier.Keyword {
     public String name() {
         return asString();
     }
+
+    public NodeList<JmlDoc> getJmlComments() {
+        return jmlComments;
+    }
 }

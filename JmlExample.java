@@ -1,6 +1,6 @@
 package java.util;
 import java.io.*;
-// @ import java.io.*;
+//@ model import java.io.*;
 
 class T  {
     /*@ public ghost int f = 0; */
@@ -14,7 +14,12 @@ class T  {
         //@ unreachable;
     }
 
-    //@ ensures true;
+    /*@
+        // example contract;
+        ensures true;
+        requires true;
+        assignable \nothing;
+    */
     void b() {
         //@loop_invariant abc;
         while(i++!=0) i--;

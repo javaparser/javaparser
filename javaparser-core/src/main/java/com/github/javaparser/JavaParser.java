@@ -564,4 +564,24 @@ public final class JavaParser {
         return parse(enableJml(
                 GeneratedJavaParser::JmlClassLevelStart), content);
     }
+
+
+    public ParseResult<ArbitraryNodeContainer> parseJmlTypeLevel(String content) {
+        return parseJmlTypeLevel(provider(content));
+    }
+
+    public ParseResult<ArbitraryNodeContainer> parseJmlTypeLevel(Provider content) {
+        return parse(enableJml(
+                GeneratedJavaParser::JmlTypeLevelStart), content);
+    }
+
+    public ParseResult<ArbitraryNodeContainer> parseJmlModifierLevel(String content) {
+        return parseJmlModifierLevel(provider(content));
+    }
+
+    public ParseResult<ArbitraryNodeContainer> parseJmlModifierLevel(Provider content) {
+        return parse(enableJml(
+                GeneratedJavaParser::JmlModifierLevelStart), content);
+    }
+
 }

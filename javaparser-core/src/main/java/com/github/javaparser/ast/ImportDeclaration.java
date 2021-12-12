@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -41,6 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * <br>{@code import static com.github.javaparser.JavaParser.parse;}
  *
  * <p>The name does not include the asterisk or the static keyword.</p>
+ *
  * @author Julio Vilmar Gesser
  */
 public class ImportDeclaration extends Node implements NodeWithName<ImportDeclaration> {
@@ -51,29 +53,40 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
 
     private boolean isAsterisk;
 
+    private boolean isJmlModel = false;
+
     private ImportDeclaration() {
-        this(null, new Name(), false, false);
+        this(new Name(), false, false);
     }
 
     public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk) {
-        this(null, parseName(name), isStatic, isAsterisk);
+        this(parseName(name), isStatic, isAsterisk);
+    }
+
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
+        this(name, isStatic, isAsterisk, false);
     }
 
     @AllFieldsConstructor
-    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
-        this(null, name, isStatic, isAsterisk);
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk, boolean isJmlModel) {
+        this(null, name, isStatic, isAsterisk, isJmlModel);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk) {
+    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk,boolean isJmlModel) {
         super(tokenRange);
         setName(name);
         setStatic(isStatic);
         setAsterisk(isAsterisk);
+        this.isJmlModel = isJmlModel;
         customInitialization();
+    }
+
+    public ImportDeclaration(TokenRange range, Name name, boolean isStatic, boolean isAsterisk) {
+        this(range, name, isStatic, isAsterisk, false);
     }
 
     @Override
@@ -173,5 +186,13 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    public boolean isJmlModel() {
+        return isJmlModel;
+    }
+
+    public void setIsJmlModel(boolean b) {
+        this.isJmlModel = b;
     }
 }

@@ -4,27 +4,25 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
 import com.github.javaparser.ast.jml.NodeWithContracts;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.jml.clauses.JmlContracts;
-import com.github.javaparser.ast.jml.doc.JmlDoc;
-import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
-import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.stmt.JmlStatement;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +68,18 @@ public class JmlProcessor implements ParseResult.PostProcessor {
             return r.getResult().orElse(null);
         }
 
+        private ArbitraryNodeContainer parseJmlTypeLevel(NodeList<JmlDoc> jmlDocs) {
+            ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlTypeLevel(sanitizer.asString(jmlDocs));
+            problems.addAll(r.getProblems());
+            return r.getResult().orElse(null);
+        }
+
+        private ArbitraryNodeContainer parseJmlModifierLevel(NodeList<JmlDoc> jmlDocs) {
+            ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlModifierLevel(sanitizer.asString(jmlDocs));
+            problems.addAll(r.getProblems());
+            return r.getResult().orElse(null);
+        }
+
 
         @Override
         public JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
@@ -87,16 +97,38 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                     } else if (child instanceof Modifier) {
                         ((NodeWithModifiers<?>) next).getModifiers().add((Modifier) child);
                     } else if (child instanceof JmlContract) {
-                        System.out.println("contract");
-                        //TODO ((NodeWithModifiers<?>) next).
+                        ((NodeWithContracts<?>) next).addContracts(new JmlContracts(false,
+                                new NodeList<>(), new NodeList<>((JmlContract) child)));
                     } else if (child instanceof JmlContracts) {
                         ((NodeWithContracts<?>) next).addContracts((JmlContracts) child);
+                    } else {
+                        reporter.report(child, "Not JML construct supported");
                     }
                 }
             }
             return n;
         }
 
+        @Override
+        public Visitable visit(JmlDocType n, Void arg) {
+            ArbitraryNodeContainer t = parseJmlTypeLevel(n.getJmlComments());
+            if (t != null) {
+                CompilationUnit parent = (CompilationUnit) n.getParentNode().get();
+                NodeList<TypeDeclaration<?>> members = parent.getTypes();
+                int pos = members.indexOf(n);
+                assert pos >= 0;
+                TypeDeclaration<?> next = members.get(pos + 1);
+                members.remove(pos);
+                for (Node child : t.getChildren()) {
+                    if (child instanceof ImportDeclaration) {
+                        parent.addImport((ImportDeclaration) child);
+                    } else {
+                        reporter.report(child, "Not JML construct supported");
+                    }
+                }
+            }
+            return n;
+        }
 
         @Override
         public BlockStmt visit(BlockStmt n, Void arg) {
@@ -114,7 +146,7 @@ public class JmlProcessor implements ParseResult.PostProcessor {
         private int handleJmlStatementLevel(BlockStmt p, JmlDocStmt n, int pos) {
             ArbitraryNodeContainer t = parseJmlMethodLevel(n.getJmlComments());
             if (t == null) {
-                //TODO Error handling
+                assert false;    //TODO Error handling
             }
 
             // remove this node from the AST
@@ -137,16 +169,43 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                     } else {
                         assert false : "ALERT!";
                     }
+                } else {
+                    reporter.report(child, "Not JML construct supported");
                 }
             }
             return insertPosition - 1;
         }
 
+
         @Override
-        public JmlDoc visit(JmlDoc n, Void arg) {
+        public Visitable visit(Modifier n, Void arg) {
+            if (n.getKeyword() instanceof JmlDocModifier) {
+                handleModifier(n);
+            } else {
+                //super.visit(n, arg);
+            }
             return n;
         }
 
+        private void handleModifier(Modifier n) {
+            JmlDocModifier doc = (JmlDocModifier) n.getKeyword();
+            if (n.getParentNode().isPresent()) {
+                NodeWithModifiers<?> parent = (NodeWithModifiers<?>) n.getParentNode().get();
+                n.remove();
+
+                ArbitraryNodeContainer t = parseJmlModifierLevel(doc.getJmlComments());
+                assert t != null;
+                for (Node child : t.getChildren()) {
+                    if (child instanceof Modifier) {
+                        parent.getModifiers().add((Modifier) child);
+                    } else if (child instanceof AnnotationExpr) {
+                        ((NodeWithAnnotations<?>) parent).addAnnotation((AnnotationExpr) child);
+                    } else {
+                        reporter.report(child, "JML not supported");
+                    }
+                }
+            }
+        }
     }
 
     private void process(CompilationUnit unit) {
