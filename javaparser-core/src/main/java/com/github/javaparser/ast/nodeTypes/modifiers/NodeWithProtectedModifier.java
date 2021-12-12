@@ -24,7 +24,7 @@ package com.github.javaparser.ast.nodeTypes.modifiers;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PROTECTED;
 
 /**
  * A node that can be protected.

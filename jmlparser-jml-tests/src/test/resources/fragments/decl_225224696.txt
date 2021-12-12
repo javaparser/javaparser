@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/recursion/Triangular.java@(line 1,col 1)
+normal_behavior
+	    requires n >= 0;
+	    ensures 2*\result == n*(n+1);
+	    measured_by n;

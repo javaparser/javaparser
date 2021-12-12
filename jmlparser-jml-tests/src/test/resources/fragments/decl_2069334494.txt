@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+invariant a.length > 0;
+         invariant isPow2(a.length);
+         accessible \inv: \singleton(a);
+
+         axiom evenSumLemma();

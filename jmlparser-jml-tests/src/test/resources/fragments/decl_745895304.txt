@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SemanticSlicing/LRS.java@(line 1,col 1)
+requires (\forall int i; 0 <= i && i < sa.a.length;
+                      0 <= sa.suffixes[i] && sa.suffixes[i] < sa.a.length);
+      requires (\forall int i; 0 < i && i < sa.a.length; sa.suffixes[i-1] != sa.suffixes[i]);
+            requires sa.a.length >= 2;
+
+      ensures (\forall int j; 0 <= j && j < l; sa.a[s+j] == sa.a[t+j]);
+      assignable s, t, l;

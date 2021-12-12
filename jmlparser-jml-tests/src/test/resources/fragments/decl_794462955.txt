@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/arith/euclidean/src/Gcd.java@(line 1,col 1)
+public normal_behavior
+          ensures (a != 0 || b != 0) ==>
+                  (a % \result == 0 && b % \result == 0 &&
+                   (\forall int x; x > 0 && a % x == 0 && b % x == 0;
+                                   \result % x == 0));

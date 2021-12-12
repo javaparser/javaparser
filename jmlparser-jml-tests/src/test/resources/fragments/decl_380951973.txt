@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/PayCardJunior.java@(line 1,col 1)
+private exceptional_behavior
+          requires amount <= 0 || checkSum(this.balance + amount) == 0;
+          assignable \nothing;
+          signals_only CardException;
+          signals (CardException ce) ce != null && (amount <= 0 || checkSum(this.balance + amount) == 0);
+        also private normal_behavior
+          requires amount > 0 && checkSum(this.balance + amount) == 1;
+          ensures balance == \old(balance) + amount;

@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/LogRecord.java@(line 1,col 1)
+public instance invariant
+            !empty ==> (balance >= 0 && transactionId >= 0);
+        public static invariant transactionCounter >= 0;

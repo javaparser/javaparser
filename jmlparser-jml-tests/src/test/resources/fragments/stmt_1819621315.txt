@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/arrayMax_java/ArrayMax.java@(line 1,col 1)
+loop_invariant
+	         i <= a.length
+	         &&
+	         (\forall int j; j >= 0 && j < i; max >= a[j])
+	         &&
+	         (\exists int j; j >= 0 && j < i; max == a[j]);
+	    modifies \nothing;
+	    decreases a.length - i;

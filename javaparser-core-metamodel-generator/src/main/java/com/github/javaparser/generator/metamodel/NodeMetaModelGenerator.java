@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
 import static com.github.javaparser.utils.Utils.decapitalize;

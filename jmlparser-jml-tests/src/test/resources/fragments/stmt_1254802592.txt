@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+maintaining (\forall int z; 0 <= z && z < n;
+                            k% pow2(z+1) != pow2(z)-1 );
+            maintaining 0 <= n && pow2(n) <= k+1;
+            decreasing k-n+1;
+            assignable \strictly_nothing;

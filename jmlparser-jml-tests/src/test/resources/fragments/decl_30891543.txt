@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escAssignableBug/AssignableBug.java@(line 1,col 1)
+ensures \result == ( p.x >= 0 && p.x < xSize );
+       pure helper

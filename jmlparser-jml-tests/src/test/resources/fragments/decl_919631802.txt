@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/10-SITA/SITA3.java@(line 1,col 1)
+public normal_behaviour
+       requires 0 <= l && l < r && 
+        r <= a1.length && r <= a2.length;
+       assignable \nothing;
+       ensures ( l <= \result && \result < r && 
+       a1[\result] ==  a2[\result])
+       | \result == r ;
+       ensures (\forall int j; l <= j && j < \result;
+        a1[j] !=  a2[j] );

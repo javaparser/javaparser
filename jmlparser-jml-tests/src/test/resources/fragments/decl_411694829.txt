@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/PayCard.java@(line 1,col 1)
+public normal_behavior
+      
+        requires LogRecord.transactionCounter >= 0;
+        ensures LogRecord.transactionCounter >= 0;
+        ensures this.balance == 0 && this.unsuccessfulOperations == 0 && log != null;
+        assignable this.unsuccessfulOperations, this.balance, this.log,
+        LogRecord.transactionCounter;

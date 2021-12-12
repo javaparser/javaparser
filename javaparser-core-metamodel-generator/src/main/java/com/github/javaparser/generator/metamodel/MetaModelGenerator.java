@@ -157,7 +157,6 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlDoc.class);
         add(JmlDocDeclaration.class);
         add(JmlDocStmt.class);
-        add(JmlDocModifier.class);
         add(JmlDocType.class);
 
         add(JmlImportDeclaration.class);
@@ -214,7 +213,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(SignalsOnlyClause.class);
         add(JmlClauseLabel.class);
         add(com.github.javaparser.ast.jml.clauses.OldClause.class);
-        add(com.github.javaparser.ast.jml.clauses.ForallClause.class);
+        add(JmlForallClause.class);
         add(CallableClause.class);
         add(com.github.javaparser.ast.jml.clauses.JmlContract.class);
 

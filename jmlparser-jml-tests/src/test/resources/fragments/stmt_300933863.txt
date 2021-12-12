@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SemanticSlicing/LRS.java@(line 1,col 1)
+maintaining (\forall int i; 0 <= i && i < sa.a.length;
+                      0 <= sa.suffixes[i] && sa.suffixes[i] < sa.a.length);
+                                                                        
+      maintaining (\forall int i; 0 < i && i < sa.a.length; sa.suffixes[i-1] != sa.suffixes[i]);
+            maintaining 0 <= l && l < sa.a.length;
+            maintaining 0 < x && x <= sa.a.length;
+            maintaining (\forall int j; 0 <= j && j <l; sa.a[s+j] == sa.a[t+j]);
+            decreasing sa.a.length-x;
+            assignable \strictly_nothing;

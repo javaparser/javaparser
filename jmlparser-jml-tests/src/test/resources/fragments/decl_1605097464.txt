@@ -1,0 +1,14 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_04_TreeReconstruct/src/Tree.java@(line 1,col 1)
+behaviour
+          requires \invariant_for(s);
+          requires d >= 0;
+          ensures  \invariant_for(s);
+          ensures s.p > \old(s.p);
+          ensures \result.heights.length == s.p - \old(s.p);
+          ensures (\forall int i; 0<=i && i<\result.heights.length; 
+                        (int)\result.heights[i] + d == s.a[\old(s.p)+i]);
+          ensures \fresh(\result);
+          measured_by s.max-d;
+          assignable s.p;
+          signals (TreeException) true;
+          signals_only TreeException;

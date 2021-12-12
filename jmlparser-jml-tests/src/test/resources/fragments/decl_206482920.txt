@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/Lemmas.java@(line 1,col 1)
+public normal_behaviour
+         requires sa.a != null;
+         requires 0 <= i && i < sa.a.length;
+         ensures sa.compare(i,i) == 0;
+      
+
+
+
+
+
+         strictly_pure helper

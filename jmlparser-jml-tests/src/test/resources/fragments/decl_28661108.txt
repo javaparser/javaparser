@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escAssignableBug/AssignableBug.java@(line 1,col 1)
+requires pp.position.x >= 0 && pp.position.x < xSize;
+       ensures piece == pp;
+       pure

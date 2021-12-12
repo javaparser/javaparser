@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/preconditionDetail2/TestC.java@(line 1,col 1)
+requires r >= 5;
+           {|
+           requires r >= 10;
+           requires r >= 20;
+         also
+           requires r >= 15;
+           requires r >= 25;
+           |}

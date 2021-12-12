@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/newBook/09.list_modelfield/List.java@(line 1,col 1)
+public instance model \seq theList;
+
+         public normal_behavior
+        requires size() < Integer.MAX_VALUE;
+        ensures theList == \seq_concat(\seq_singleton(elem),\old(theList));

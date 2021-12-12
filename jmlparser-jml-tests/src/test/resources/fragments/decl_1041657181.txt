@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/rise4fun/MaybeAddFixed.java@(line 1,col 1)
+requires a > 0;
+         requires b > 0;
+         ensures \result == a-b;

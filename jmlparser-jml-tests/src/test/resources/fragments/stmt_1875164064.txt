@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_seq/src/ArrayList.java@(line 1,col 1)
+set footprint = \set_union(\set_union(\all_fields(newArray), \all_fields(this)), \all_fields(this));
+
+      loop_invariant 0 <= i && i <= size 
+	     && (\forall int x; 0 <= x && x < i; newArray[x] == array[x]);
+	    assignable newArray[*];
+	    decreases size - i;

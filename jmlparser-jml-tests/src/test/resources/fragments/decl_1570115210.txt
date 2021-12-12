@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/GhostFrame.java@(line 1,col 1)
+ghost \locset footprint;
+
+       requires x > 0;
+       requires \disjoint(footprint,\singleton(x));
+       ensures x > 0;

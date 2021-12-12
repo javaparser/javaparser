@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list/src/List.java@(line 1,col 1)
+public normal_behaviour
+          accessible footprint;
+          ensures \result == (\exists int i; 0 <= i && i < size(); get(i) == o);

@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/symmArray_java/SymmArray.java@(line 1,col 1)
+public normal_behavior
+          requires
+            ar.length >= 10 &&
+            (\forall int i, j; i >= 0 && i < ar.length && j >= 0 && j < ar.length;
+                               ar[i][j] == ar[j][i]);
+          ensures
+            (\forall int i, j; i >= 0 && i < ar.length && j >= 0 && j < ar.length;
+                               ar[i][j] == ar[j][i]);

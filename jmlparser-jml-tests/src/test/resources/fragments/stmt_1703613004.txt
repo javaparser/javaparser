@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte10_03_LinkedList/src/Node.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= seq.length
+	                   && (jj == null && i == seq.length
+	                       || jj != null && jj.\inv && jj.seq == seq[i..seq.length])
+	                   && (\forall int x; 0 <= x && x < i; seq[x] != 0);
+	    assignable \strictly_nothing;
+	    decreases seq.length - i;

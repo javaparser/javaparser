@@ -357,7 +357,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
      * https://openjdk.java.net/jeps/359#Restrictions-on-records
      *
      * If wanting to find out if the keyword {@code final} is explicitly added to this parameter,
-     * you should use {@code node.hasModifier(Modifier.Keyword.FINAL)}
+     * you should use {@code node.hasModifier(Modifier.DefaultKeyword.FINAL)}
      *
      * @return always true -- Records are always implicitly final, therefore can never not be final.
      */

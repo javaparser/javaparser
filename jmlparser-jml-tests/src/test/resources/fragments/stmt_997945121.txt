@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/enums1/Test.java@(line 1,col 1)
+assume (\forall EEE ee; ee != null ==> (\exists \bigint i; 0<=i && i<ev.length; ev[i] == ee));                  
+             show ev, EEE._JMLvalues, ev[0], EEE._JMLvalues[0];
+             assert (\forall EEE ee; ee != null ==> (\exists \bigint i; 0<=i && i<ev.length; ev[i] == ee));

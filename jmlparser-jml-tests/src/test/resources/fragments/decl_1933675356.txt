@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escConstructor4/Parent.java@(line 1,col 1)
+ensures oo.equals(o);
+
+       pure

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+normal_behavior
+          requires \invariant_for(p) && p.a.length > 1;
+          ensures (\forall int i; 0 <= i && i < p.a.length;
+                    p.a[i] == (\sum int j; 0 <= j && j < i;
+                                  \old(p.a[i])));

@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_3_DLL/src/DoubleLinkedList.java@(line 1,col 1)
+normal_behavior
+        requires (Node)s[k] == x;
+        requires 0 < k < len-1;
+        ensures s == \old(\seq_concat(\seq_sub(s,0,k),\seq_sub(s,k+1,len))) && len == \old(len) - 1
+             && x.l == ((Node)s[k]).l && x.r == ((Node)s[k]) && x.l == (Node)s[k-1]
+             && x.r != null && (\forall int i; 0 <= i < len; x != (Node)s[i]);
+        assignable s, len, x.l.r, x.r.l;

@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug659/Sum.java@(line 1,col 1)
+requires 0 <= x < Integer.MAX_VALUE/2;
+       ensures \result == 2*x;

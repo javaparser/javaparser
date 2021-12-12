@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escBodySpecs/Test.java@(line 1,col 1)
+requires i < 100;
+         ensures \result == i;

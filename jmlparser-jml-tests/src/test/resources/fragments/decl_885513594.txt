@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/LogFile.java@(line 1,col 1)
+public normal_behavior 
+           requires balance >= 0;
+           requires LogRecord.transactionCounter >= 0;    
+           ensures \old(currentRecord) + 1 != logFileSize 
+                   ? currentRecord == \old(currentRecord) + 1 
+                   : currentRecord == 0;
+           ensures logArray[currentRecord].balance == balance;
+           ensures LogRecord.transactionCounter >= 0;
+           assignable currentRecord, 
+                      logArray[currentRecord == logFileSize-1 ? 0 : currentRecord + 1].*,
+                      LogRecord.transactionCounter;

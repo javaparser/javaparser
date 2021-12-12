@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/feasible/Feasible.java@(line 1,col 1)
+requires i >= 0;
+also feasible_behavior
+requires i == 12;

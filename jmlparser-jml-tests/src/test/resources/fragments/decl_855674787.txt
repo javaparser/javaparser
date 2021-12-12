@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug591/C.java@(line 1,col 1)
+public exceptional_behavior
+  requires isSorted(a);
+  requires next >= indices.length;
+  requires  (\exists int i; i>=0 && i<a.length; a[i] == v);
+  signals (ArrayIndexOutOfBoundsException) true;
+  assignable \nothing;

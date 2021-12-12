@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug529/T.java@(line 1,col 1)
+ensures \result == (a * c)/(0.06 * b);

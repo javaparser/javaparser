@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug623/Test.java@(line 1,col 1)
+public normal_behavior
+           requires i != Integer.MIN_VALUE;
+           ensures i == F.finverse( F.f( i ) );
+         model public static pure void testInverse(int i) { }

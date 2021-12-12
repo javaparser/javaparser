@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug574/AddLoop.java@(line 1,col 1)
+requires -1000000 < x & x < 1000000 & -1000000 < y & y < 1000000;
+         ensures \result == x + y;

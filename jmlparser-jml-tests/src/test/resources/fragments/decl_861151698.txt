@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug591/C.java@(line 1,col 1)
+public normal_behavior
+    requires isSorted(a);
+    ensures ((\exists int x; 0 <= x && x < a.length; a[x] == v) ?  \result >= 0 && \result < a.length && a[\result] == v : \result == -1);
+ 	  assignable \nothing;

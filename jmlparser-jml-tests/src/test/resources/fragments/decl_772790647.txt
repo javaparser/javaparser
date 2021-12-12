@@ -1,0 +1,16 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/SuffixArray.java@(line 1,col 1)
+normal_behavior
+        requires a != null;
+        requires 0 <= x && x < a.length;
+        requires 0 <= y && y < a.length;
+        ensures \result <  0 ==>
+                  (\exists int j; 0 <= j && j < a.length-y;
+                      ((j < a.length-x && a[x+j] < a[y+j] ) || j == a.length-x)
+                      && (\forall int k; 0 <= k && k < j; a[x+k] == a[y+k]));
+        ensures \result == 0 ==> x == y;
+        ensures \result >  0 ==>
+                  (\exists int j; 0 <= j && j < a.length-x;
+                      ((j < a.length-y && a[x+j] > a[y+j] ) || j == a.length-y)
+                      && (\forall int k; 0 <= k && k < j; a[x+k] == a[y+k]));
+        ensures \result == -compare(y,x);
+        accessible a, a[*];

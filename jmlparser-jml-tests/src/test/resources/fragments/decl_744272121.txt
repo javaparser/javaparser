@@ -1,0 +1,29 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/model_methods/src/Cell.java@(line 1,col 1)
+model_behavior
+        ensures \subset(\result, this.* );
+        ensures \subset(\singleton(this.val), \result);
+        accessible \nothing;
+        model \locset footprint() { return \singleton(this.val); }
+         
+
+
+
+
+
+
+         model_behavior
+        ensures \result ==> get()==x;
+        accessible footprint();
+        model two_state boolean post_set(int x) { return (get() == x); }
+         
+
+
+
+
+
+         ensures \result == val;
+        accessible footprint();
+         
+
+
+         strictly_pure

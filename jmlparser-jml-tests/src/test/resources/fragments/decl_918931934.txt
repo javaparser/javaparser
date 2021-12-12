@@ -1,0 +1,23 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/ListsWithIterators/src/IntIterator.java@(line 1,col 1)
+ghost \seq nodeseq;
+         ghost \seq seq;
+
+         public instance invariant nodeseq == list.nodeseq[0 .. nodeseq.length];
+         public instance invariant seq == list.seq[0 .. seq.length];
+
+         public instance invariant nodeseq.length <= list.nodeseq.length;
+         public instance invariant seq.length <= list.seq.length;
+         public instance invariant seq.length == nodeseq.length;
+
+         public instance invariant next != null ==> next == (IntNode)list.nodeseq[nodeseq.length];
+         public instance invariant next != null ==> next.data == (int)list.seq[seq.length];
+
+         public instance invariant seq.length == list.seq.length <==> next == null;
+
+         public normal_behavior
+        requires \invariant_for(list);
+        ensures \invariant_for(list);
+        ensures this.list == list;
+        ensures this.next == list.first;
+        ensures seq.length == 0;
+        assignable \nothing;

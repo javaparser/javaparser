@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/removeDups/RemoveDup.java@(line 1,col 1)
+loop_invariant 0<=k && k <= a.length && 0 <= p && p <= k &&
+               (\forall int i; (\forall int j;
+                   0<=i && i < j && j < p; result[i] != result[j])) &&
+               (\forall int i; 0<=i && i<k; 
+                   (\exists int j; 0<=j && j<p; result[j] == a[i]));
+            decreases a.length-k;
+            assignable result[*];

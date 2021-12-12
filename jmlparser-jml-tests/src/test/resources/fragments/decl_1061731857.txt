@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/valuetypes/Map.java@(line 1,col 1)
+ensures map.<K,V>empty().get(k) == null;
+         model public static <K,V> void newMapIsEmpty(K k) {}
+
+         ensures s.put(k,v).get(k) == v;
+         model public static <K,V> void putGet(map<K,V> s, K k, V v) {}
+
+         ensures k != kk ==> s.put(k,v).get(kk) == s.get(kk);
+         model public static <K,V> void putGet2(map<K,V> s, K k, V v, K kk) {}

@@ -1,0 +1,89 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permissions/threads/src/ThreadSpec.java@(line 1,col 1)
+model_behavior 
+          requires true;
+          ensures true;
+          accessible<heap> \nothing;                     
+          accessible<permissions> workingPermissions();
+          helper model boolean preStart(Object contextThread);    
+
+
+
+
+
+
+           model_behavior 
+          requires true;
+          ensures true;
+          accessible<heap> \nothing;                     
+          accessible<permissions> workingPermissions();
+          helper model boolean postJoin(Object contextThread);    
+
+
+
+
+
+
+           model_behavior 
+          requires true;
+          ensures true;
+          accessible<heap> workingPermissions();
+          accessible<permissions> workingPermissions();
+          helper model boolean initPost() { return true; }    
+
+
+
+
+
+
+           model_behavior 
+          requires true;
+          ensures true;
+          accessible<heap> \nothing;
+          accessible<permissions> \nothing;
+          helper model \locset workingPermissions();    
+
+
+
+
+
+
+           model_behavior 
+          requires true;
+          ensures \result ==> (\old(preStart(\dl_currentThread())) ==> preStart(this));
+          accessible<heap> \nothing;
+          accessible<heapAtPre> \nothing;
+          accessible<permissionsAtPre> workingPermissions();
+          accessible<permissions> workingPermissions();
+          helper model two_state boolean startTransfer();    
+
+
+
+
+
+
+
+
+           model_behavior 
+          requires true;
+          ensures \result ==> (\old(postJoin(this)) ==> postJoin(\dl_currentThread()));
+          accessible<heap> \nothing;
+          accessible<heapAtPre> \nothing;
+          accessible<permissionsAtPre> workingPermissions();
+          accessible<permissions> workingPermissions();
+          helper model two_state boolean joinTransfer();    
+
+
+
+
+
+
+
+
+
+             normal_behavior
+            requires this != \dl_currentThread();
+            requires true;
+            requires preStart(\dl_currentThread());
+            ensures startTransfer();
+            assignable<permissions> workingPermissions();
+            assignable<heap> \nothing;

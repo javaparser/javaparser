@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/tuple/Test2.java@(line 1,col 1)
+ghost int t = 1;
+ghost int v = 2;
+set (t,v) = (v+10,t+20);
+assert t == 12;
+assert v == 21;
+
+set (t,v) = t+10;
+assert t == 22;
+assert v == 22;

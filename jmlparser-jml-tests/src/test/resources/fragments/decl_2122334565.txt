@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_01_Swap/TwoWaySwap.java@(line 1,col 1)
+public normal_behavior
+        requires i >= 0 && i<a.length &&  j >= 0 && j<a.length;
+        ensures a[i] == \old(a[j]) && a[j] == \old(a[i]);
+        ensures seq == \dl_seqSwap(\old(seq), i, j);
+        assignable a[i], a[j];

@@ -2385,7 +2385,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final ForallClause n, final A arg) {
+    public R visit(final JmlForallClause n, final A arg) {
         R result;
         {
             result = n.getVariables().accept(this, arg);

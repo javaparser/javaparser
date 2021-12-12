@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/LogFile.java@(line 1,col 1)
+loop_invariant  pos<=counter && counter<=a.length &&
+	      pos<=idx && idx<a.length  && pos<a.length &&
+	      (\forall int x; x>=pos && x<counter; a[idx]>=a[x]);
+	      assignable idx, counter;
+	      decreases l - counter;

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug548rac/Test.java@(line 1,col 1)
+assert t.cget3(30) == 3;          
+             assert t.get2(20) == 2;          
+             assert t.get3(30) == 2;           
+             assert t.get2(2) == 2;
+             assert t.get3(3) == 3;

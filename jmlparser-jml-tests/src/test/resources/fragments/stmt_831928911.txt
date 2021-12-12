@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/ListsWithIterators/src/IntIterator.java@(line 1,col 1)
+set nodeseq = \seq_concat(nodeseq, \seq_singleton(next));
+             set seq = \seq_concat(seq, \seq_singleton(next.data));

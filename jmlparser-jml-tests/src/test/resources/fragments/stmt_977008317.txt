@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/SuffixArray.java@(line 1,col 1)
+maintaining data.length == a.length;
+            maintaining 0 <= k && k <= data.length;
+            maintaining (\forall int i; 0 <= i && i < a.length;
+                          (\exists int j; 0 <= j && j < a.length; data[j]==i));
+            maintaining (\forall int i; 0 < i && i < a.length;
+                                   i < k? compare(data[i],data[i-1]) > 0
+                                        : data[i] == \old(data[i]));
+            decreasing data.length - k;
+            assignable data[*];

@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug678/DoubleABS.java@(line 1,col 1)
+requires !num.isNaN() && num >= 0;
+         ensures \result == num;
+         ensures \result >= 0;
+
+         also
+
+         requires !num.isNaN() && num < 0;
+         ensures \result == -num; 
+         ensures \result >= 0;

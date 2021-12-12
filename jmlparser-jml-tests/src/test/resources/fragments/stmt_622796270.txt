@@ -1,0 +1,15 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis17_1_PairInsertionSort/src/PairInsertionSort.java@(line 1,col 1)
+loop_invariant right == \old(right) && \old(left) <= \old(right) && \old(left) < left && k < left;
+	        loop_invariant right == \old(right);
+	        loop_invariant \old(left) <= k && left <= \old(right) - 1 + (\old(right) - \old(left)) % 2 && k <= \old(right) - 2 + (\old(right) - \old(left)) % 2;
+	        loop_invariant (\forall int i; \old(left) - 1 <= i && i <= \old(right); a[\old(left) - 1] <= a[i]);
+	        loop_invariant a[\old(left) - 1] <= a2;
+	        loop_invariant a2 <= a1;
+	        loop_invariant (\forall int i; \old(left) - 1 <= i && i < k - 1; a[i] <= a[i + 1]);
+	        loop_invariant \old(left) <= k && k < left ==> a[k - 1] <= a[k + 1];
+	        loop_invariant (\forall int i; k + 1 <= i && i < left; a[i] <= a[i + 1]);
+	        loop_invariant (\forall int i; k <= i && i < left - 1; a2 <= a[i]);
+	        loop_invariant (\forall int i; k + 1 <= i && i <= left; a2 <= a[i]);
+	        loop_invariant (\forall int i; k + 2 <= i && i <= left; a2 < a[i]);
+	        assignable a[(\old(left)+1)..left-1], k;
+	        decreases k;

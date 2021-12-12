@@ -1,0 +1,28 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug500a/Heap.java@(line 1,col 1)
+private normal_behavior
+      requires elems != null && elems.length > 0;
+      requires 0 <= numElems <= elems.length;
+      requires (\forall int i; 0 <= i < numElems; elems[i] != null);
+    private model pure helper non_null JMLObjectBag computeQueue() {
+	JMLObjectBag bag = new JMLObjectBag();
+	for (int i= 0; i < numElems; i++)
+	    bag = bag.insert(elems[i]);
+	return bag;
+    }
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+         ensures elems.length > \old(elems.length)
+              && numElems == \old(numElems);
+        modifies queue;

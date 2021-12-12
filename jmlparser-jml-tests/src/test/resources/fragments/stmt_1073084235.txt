@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/geometry/Factory.java@(line 1,col 1)
+maintaining (\forall int k; k>0 && k<=j; 
+	                 l.list[l.end-k] == segments[j-k]) && j >= 0 &&
+	                 (\forall int i; l.list.length > i) && l.end >= 0 &&
+	                 j<=sz;
+	    decreases sz-j; 
+	    assignable j, l.list[l.end .. l.end+segments.length-1], 
+	               l.end;

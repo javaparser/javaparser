@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/arith/euclidean/src/Gcd.java@(line 1,col 1)
+loop_invariant small >= 0 && big >= small &&
+	      (big == 0 ==> _big == 0) &&
+	      (\forall int x; x > 0; (_big % x == 0 && _small % x == 0)
+	                             <==>
+	                             (big % x == 0 && small % x == 0));
+	    decreases small;
+	    assignable \nothing;

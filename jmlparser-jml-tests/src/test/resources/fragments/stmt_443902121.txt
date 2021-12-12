@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/factorial/FactorialFunction.java@(line 1,col 1)
+assert c <= n;
+                     assume fact*c <= Long.MAX_VALUE;

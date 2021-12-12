@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/simple/src/OldForParameters.java@(line 1,col 1)
+loop_invariant r + i == \old(i) && i >= 0;
+            assignable \strictly_nothing;
+            decreasing i;

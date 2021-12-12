@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug718x4/test4.java@(line 1,col 1)
+requires c >= 0;
+	 ensures c > 0 ==> \result == countDown(c-1);
+	 ensures c == 0 ==> \result == 0;

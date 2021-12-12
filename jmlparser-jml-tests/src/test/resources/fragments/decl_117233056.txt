@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/strongarm/interprocedural/A16.java@(line 1,col 1)
+requires true;
+         ensures this.FIELD==3;
+         ensures \result == a + b;
+         assignable this.FIELD;

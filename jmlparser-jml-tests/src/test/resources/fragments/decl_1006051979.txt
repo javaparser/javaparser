@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escLet/Test.java@(line 1,col 1)
+normal_behavior
+               requires a != null && a.length == 10;
+               requires (\forall int i; 0 <= i < 5; a[i+i] == 0);
+             pure

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/InternalExternal/src/DualPivotQuicksort_sort_internal.java@(line 1,col 1)
+ensures (a[e1] <= a[e2]);
+            ensures (\forall int i; 0 <= i && i < left; (\forall int j; left <= j && j < a.length; a[i] <= a[j])); 
+            ensures (\forall int i; 0 <= i && i <= right; (\forall int j; right < j && j < a.length; a[i] <= a[j]));
+            assignable a[e1], a[e2];
+            signals_only \nothing;

@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/function91/Function91.java@(line 1,col 1)
+public normal_behavior
+        requires true;
+        ensures ( (n > 100) ==> \result == n - 10 ) &&
+                ( (n <= 100) ==> \result == 91 );
+        assignable \nothing;
+        diverges true;

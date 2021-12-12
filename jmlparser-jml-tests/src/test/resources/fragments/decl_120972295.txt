@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug474/ModelFunctions.java@(line 1,col 1)
+public normal_behavior
+          assignable \nothing;
+          ensures true;
+        public function static model pure int chomp(int i);
+         
+
+
+
+
+
+         axiom \forall int i, j; 489 <= i && i < 526 && 0 <= j && j < 10; i == j ==> chomp(i) == chomp(j);

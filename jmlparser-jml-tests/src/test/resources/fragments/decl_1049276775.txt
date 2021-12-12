@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_04_TreeReconstruct/src/List.java@(line 1,col 1)
+pure

@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escMultipleModel/MultipleModel.java@(line 1,col 1)
+in _base;
+        public represents _base = value2;
+
+        public normal_behavior ensures value2 == i; pure

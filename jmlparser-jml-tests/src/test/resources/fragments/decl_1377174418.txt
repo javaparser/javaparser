@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug718x2/test2.java@(line 1,col 1)
+invariant binarr.length > 0 && binarr.length==31;
+     invariant binarr[0] ==1;
+     invariant binarr[0]==1 && \forall int j;0 <= j < binarr.length-2;binarr[j]==binarr[j+1]/2;
+     invariant \forall int j;0 <= j < binarr.length-1;binarr[j] <= binarr[j+1];

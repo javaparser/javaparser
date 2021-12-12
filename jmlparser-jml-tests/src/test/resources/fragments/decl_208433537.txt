@@ -1,0 +1,24 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/geometry/Factory.java@(line 1,col 1)
+public instance invariant routes != null;
+        public instance invariant (\forall int i; 0<=i && i<routes.length;  
+                 routes[i] != null && 
+                 (\exists int j; j>=0 && j<routeToSegments.concrete_map.length;
+                     routeToSegments.concrete_map[j][0] == routes[i] &&
+                     routeToSegments.concrete_map[j][1] instanceof Object[]));
+         
+
+
+
+
+
+
+
+         public instance invariant
+        (\forall int i; i>=0 && i<routeToSegments.concrete_map.length; 
+                        routeToSegments.concrete_map[i].length == 2) &&
+        \nonnullelements(routeToSegments.concrete_map) && 
+        (\forall int i,j; routeToSegments.concrete_map[j][0]==routeToSegments.concrete_map[i][0];
+                          i==j);
+          public instance invariant
+             (\forall List li ; li != null;
+                     (\forall int i; li.list.length > i) && li.end >= 0);

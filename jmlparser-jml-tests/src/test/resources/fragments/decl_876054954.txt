@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/BookExamples/03DynamicLogic/IncorrectLoopModifierSet.java@(line 1,col 1)
+public normal_behavior
+         requires i==0 && a==0;
+         ensures a==0;
+         diverges true;

@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/javacard/src/javacard/framework/CardRuntimeException.java@(line 1,col 1)
+public exceptional_behavior
+          requires \typeof(CardRuntimeException._systemInstance) == \type(CardRuntimeException);
+          requires CardRuntimeException._systemInstance != null;
+          requires CardRuntimeException._systemInstance.\inv;
+          assignable CardRuntimeException._systemInstance.footprint;
+          signals (CardRuntimeException cre)
+             cre == CardRuntimeException._systemInstance
+          && ((CardRuntimeException)cre).reason == reason
+          && \new_elems_fresh(CardRuntimeException._systemInstance.footprint);
+          signals_only CardRuntimeException;

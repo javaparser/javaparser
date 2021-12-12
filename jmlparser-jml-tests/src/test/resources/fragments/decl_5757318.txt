@@ -1,0 +1,17 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug500b/Heap.java@(line 1,col 1)
+in queue;
+
+         private ghost non_null JMLObjectBag ghostQueue; in queue;
+         private represents queue <- ghostQueue;
+
+         private invariant elems != null;
+        private invariant \typeof(elems) == \type(Comparable[]);
+        private invariant elems.length > 0;
+        private invariant 0 <= numElems && numElems <= elems.length;
+        private invariant
+          (\forall int i; 0 <= i && i < numElems; elems[i] != null);
+       
+        private invariant
+          (\forall int i; 0 <= i && i < numElems; 
+            (2*i+1 < numElems ==> elems[i].compareTo(elems[2*i+1]) <= 0)
+         && (2*i+2 < numElems ==> elems[i].compareTo(elems[2*i+2]) <= 0));

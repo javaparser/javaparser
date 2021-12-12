@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/LogFile.java@(line 1,col 1)
+public invariant logArray != null 
+                         && \nonnullelements(logArray)
+                         && logArray.length == logFileSize 
+                         && currentRecord < logFileSize
+                         && currentRecord >= 0
+                         && LogRecord.transactionCounter >= 0;
+          accessible \inv: this.*, this.logArray[*], 
+           LogRecord.transactionCounter, logFileSize;

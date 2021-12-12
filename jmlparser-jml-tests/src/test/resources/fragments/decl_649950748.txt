@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/comprehensions/src/Sum.java@(line 1,col 1)
+public normal_behaviour 
+        ensures result == (\bsum int i; 0; a.length; a[i]);

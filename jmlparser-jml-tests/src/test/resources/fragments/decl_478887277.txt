@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/Map/src/MapCaseStudy/AbstractMap.java@(line 1,col 1)
+normal_behaviour
+       ensures \result.length == entries.length + 1;
+       ensures (\forall int i; 0 <= i && i < entries.length; \result[i] == entries[i]);
+       ensures \result[entries.length].key == key;
+       ensures \result[entries.length].value == value;
+       ensures \fresh(\result, \result[entries.length]);
+       ensures !\in_domain(map, \result);
+       ensures !\in_domain(map, \result[entries.length]);
+       ensures \typeof(\result) == \type(MapEntry[]);

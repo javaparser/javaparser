@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/coincidence_count/CC.java@(line 1,col 1)
+loop_invariant 
+             0 <= i && i <= a.length && 0 <= j && j <= b.length &&
+             (i == a.length || (\forall int l; 0 <= l && l < j; b[l] < a[i])) &&
+             (j == b.length || (\forall int m; 0 <= m && m < i; a[m] < b[j])) &&
+             result == 
+              (\sum int k; 0<=k && k < i;
+                  (\exists int l; 0<=l && l<j; a[k]==b[l]) ? 1 : 0);
+           
+            decreases a.length+b.length - i - j;
+           
+            modifies \strictly_nothing;

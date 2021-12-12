@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escEnum/Test.java@(line 1,col 1)
+assert e == TestEnum.EE.AA | e == TestEnum.EE.BB;
+             assert TestEnum.EE.AA != TestEnum.EE.BB;
+             assert \distinct(TestEnum.EE.AA, TestEnum.EE.BB, null);

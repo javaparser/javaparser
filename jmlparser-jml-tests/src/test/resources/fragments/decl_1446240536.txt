@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug606/LongArith2.java@(line 1,col 1)
+public invariant Integer.MIN_VALUE <= lb && lb <= Integer.MAX_VALUE;
+         public invariant Integer.MIN_VALUE <= ub+1 && ub <= Integer.MAX_VALUE;
+
+         public normal_behavior
+           requires l <= ((long)u)+1;
+           assignable \nothing;
+           ensures lb == (long)l && ub == (long)u;

@@ -1,0 +1,26 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Disjoint.java@(line 1,col 1)
+ghost \locset rep;
+         ghost \locset rep1;
+         ghost \locset rep2;
+         ghost \locset rep3;
+         ghost \locset rep4;
+         ghost \locset rep5;
+         ghost \locset rep6;
+         ghost \locset rep7;
+         ghost \locset rep8;
+         ghost \locset rep9;
+         ghost \locset rep10;
+         ghost \locset rep11;
+         ghost \locset rep12;
+         ghost \locset rep13;
+         ghost \locset rep14;
+         ghost \locset rep15;
+         ghost \locset rep16;
+         ghost \locset rep17;
+         ghost \locset rep18;
+         ghost \locset rep19;
+         ghost \locset rep20;
+
+
+         requires    x == 0;
+        ensures     x == 0;

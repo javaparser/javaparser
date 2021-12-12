@@ -1,0 +1,66 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/Map/src/MapCaseStudy/AbstractMap.java@(line 1,col 1)
+public invariant entries.length == \map_size(map);
+     
+      public invariant !\in_domain(map,null);
+     
+      public invariant (\forall int i; 0 <= i && i < entries.length; \in_domain(map,entries[i].key));
+      public invariant (\forall int i; 0 <= i && i < entries.length;
+                           \map_get(map, entries[i].key) == entries[i].value);
+     
+      public invariant (\forall Object o; \in_domain(map,o);(
+            \exists int i; 0 <= i && i < entries.length; o == entries[i].key ));
+     
+      public invariant (\forall int i1; 0 <= i1 && i1 < entries.length;
+                           (\forall int i2; 0 <= i2 && i2 < entries.length && i2 != i1;
+                               ( entries[i1].key != entries[i2].key )));
+     
+      public invariant \typeof(entries) == \type(MapEntry[]);
+     
+      public invariant footprint ==
+           \set_union((\infinite_union int i; 0 <= i && i < entries.length;
+                               entries[i].*), this.*, entries.*);
+     
+      public invariant (\forall int i; 0 <= i && i < entries.length; entries[i].key != null);
+      public invariant (\forall int i; 0 <= i && i < entries.length; entries[i].value != null);
+      public invariant \domain_implies_created(map);
+     
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         normal_behaviour
+       requires target != entries;
+       requires target != null;
+       requires 0 <= numberCopies;
+       requires 0 <= targetIndex && targetIndex + numberCopies <= target.length;
+       requires 0 <= entriesIndex && entriesIndex + numberCopies <= entries.length;
+       requires \typeof(target) == \typeof(entries);
+       ensures (\forall int x; 0 <= x && x < numberCopies; 
+                     ( target[targetIndex + x] == entries[entriesIndex + x]));
+       ensures (\forall Object o; !\fresh(o));
+       assignable target[targetIndex..targetIndex + numberCopies - 1];

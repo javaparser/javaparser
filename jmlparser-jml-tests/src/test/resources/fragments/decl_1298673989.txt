@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/java5/src/Months.java@(line 1,col 1)
+public normal_behavior 
+          requires month != null;
+          ensures \result > 0 && \result <= 31;

@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/07-Cell/src/Cell.java@(line 1,col 1)
+model \locset footprint;
+        accessible footprint: footprint;
+        represents footprint = x;
+         
+
+
+
+
+         accessible \inv: \nothing;

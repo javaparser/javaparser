@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Simple/src/LoopContractExamples.java@(line 1,col 1)
+loop_invariant (0 <= i && i <= arr.length)
+                && (\forall int j; 0 <= j && j < i; arr[j] == \old(arr[j]) + 1)
+                && (\forall int j; i <= j && j < arr.length;
+                    arr[j] == \old(arr[j]));
+            assignable arr[i .. arr.length];
+            decreases arr.length - i;

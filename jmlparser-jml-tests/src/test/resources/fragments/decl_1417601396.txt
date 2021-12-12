@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+normal_behavior
+          ensures \result == (\exists int y; y*2 == x);
+          ensures \result != (\exists int y; y*2 == x+1);
+          accessible \nothing;
+       
+
+
+
+
+         strictly_pure helper

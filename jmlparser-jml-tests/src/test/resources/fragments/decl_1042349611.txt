@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug567/Amount.java@(line 1,col 1)
+requires cents >= -100;
+         requires cents <= 100;
+         requires euros > 0 ==> cents >= 0;
+         requires euros < 0 ==> cents <= 0;
+         ensures this.cents >= -100;
+         ensures this.cents <= 100;
+         ensures this.euros > 0 ==> cents >= 0;
+         ensures this.euros < 0 ==> cents <= 0;
+
+         pure

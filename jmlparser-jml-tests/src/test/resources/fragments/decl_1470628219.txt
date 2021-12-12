@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escrmloop2/Lemmas.java@(line 1,col 1)
+public normal_behaviour
+         requires \invariant_for(sa);
+         requires 0 <= i && i < j && j < sa.a.length;
+         ensures sa.compare(sa.suffixes[j], sa.suffixes[i]) > 0;
+         pure helper

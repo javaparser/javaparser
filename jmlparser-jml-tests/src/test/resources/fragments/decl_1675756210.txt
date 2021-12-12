@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug666/Recursive.java@(line 1,col 1)
+public normal_behavior
+          requires x <= 10 && y <= 15;
+          requires y >= 0 && x >= 1;
+          ensures \result == (y == 0 ? 1 : y == 1 ? x : x * mpow(x,y-1));
+        pure
+        model public static function helper long mpow(long x, long y);
+
+        public normal_behavior
+          requires x <= 10 && y <= 15;
+          requires y >= 0 && x >= 1;
+          ensures (\lbl R \result) == (long)(\lbl MP mpow(x,y));
+        pure

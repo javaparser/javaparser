@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_contracts/src/LabeledBlocksTest.java@(line 1,col 1)
+loop_contract normal_behavior
+            requires i <= 42;
+            ensures i == 42;

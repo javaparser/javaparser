@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/removeDups/RemoveDup.java@(line 1,col 1)
+public normal_behaviour
+          requires true;
+          ensures (\forall int i; 0<=i && i<a.length; 
+                    (\exists int j; 0<=j && j<\result.length; \result[j] == a[i]));
+          ensures (\forall int i; (\forall int j;
+                    0<=i && i < j && j<\result.length; \result[i] != \result[j]));
+          ensures \result.length <= a.length;

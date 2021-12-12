@@ -1,0 +1,19 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_3_DLL/src/DoubleLinkedList.java@(line 1,col 1)
+set s = \seq_singleton(nodes[0]);
+
+             loop_invariant 0 < i && i <= nodes.length
+                        && nodes != null
+                        && s != \seq_empty
+                        && 0 < nodes.length
+                        && nodes.length == \old(nodes.length)
+                        && s == (\seq_def int j; 0; i; nodes[j])
+                        && (\forall int j; 0 <= j && j < i; (Node)s[j] == nodes[j])
+                        && (\forall int j; 0 <= j < i; s[j] instanceof Node)
+                        && (\forall int j,k; 0 <= j < k && k < nodes.length; nodes[j] != nodes[k])
+                        && (\forall int j; 0 <= j && j < nodes.length; nodes[j] == \old(nodes[j]))
+                        && (\forall int j; 0 <= j && j < nodes.length; nodes[j] != null)
+                        && (\forall int j; 0 < j && j < i; nodes[j-1].r == nodes[j])
+                        && (\forall int j; 0 < j && j < i; nodes[j].l == nodes[j-1])
+                        && (\forall int j; 0 < j && j < i; ((Node)s[j-1]).r == (Node)s[j])
+                        && (\forall int j; 0 < j && j < i; ((Node)s[j]).l == (Node)s[j-1]);
+            decreases nodes.length - i;

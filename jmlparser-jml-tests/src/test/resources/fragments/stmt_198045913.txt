@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/primeNumbers/PrimeNumbers.java@(line 1,col 1)
+ghost int maxnumber = Integer.MAX_VALUE;
+
+               maintaining 2 <= count <= n + 1; 
+               maintaining primeArray[count-2] < num <= maxnumber;
+               maintaining status == 1;
+               maintaining (\forall int i, k; 0 <= i < count-1 && 2 <= k <= primeArray[i]/2; primeArray[i]%k != 0); 
+               decreases maxnumber - num;

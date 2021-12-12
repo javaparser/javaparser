@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/Map/src/MapCaseStudy/AbstractMap.java@(line 1,col 1)
+normal_behaviour
+       requires 0 <= index && index < entries.length;
+       ensures map == \map_update(\old(map), entries[index].key, value);
+       ensures \result == (\map_get(\old(map), entries[index].key));
+       ensures (\forall Object o; !\fresh(o));
+       assignable entries[index].value, map;

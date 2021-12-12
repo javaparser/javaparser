@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/rise4fun/CopyArray.java@(line 1,col 1)
+requires a.length == b.length;
+         requires 0 <= iBegin && iBegin < a.length && 0 <= iEnd && iEnd < a.length && iBegin <= iEnd;
+         ensures (\forall int i; iBegin <= i && i < iEnd; a[i] == b[i]);

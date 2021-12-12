@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/testGen/listAndArray/List2.java@(line 1,col 1)
+public normal_behaviour
+ ensures (i==0 ==> \result==this) &&
+ ((nxt==null || i<0) && i!=0 ==> \result==null) &&
+ (i>0 && nxt!=null ==> \result==nxt.get(i-1));

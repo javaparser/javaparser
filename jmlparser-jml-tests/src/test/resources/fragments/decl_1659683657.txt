@@ -1,0 +1,22 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/LogFile.java@(line 1,col 1)
+public invariant logArray != null 
+                         && \nonnullelements(logArray)
+                         && logArray.length == logFileSize 
+                         && currentRecord < logFileSize
+                         && currentRecord >= 0
+                         && LogRecord.transactionCounter >= 0;
+         
+
+
+
+
+
+
+
+         public accessible \inv: this.*, this.logArray[*], LogRecord.transactionCounter;
+
+
+         public normal_behavior
+          requires LogRecord.transactionCounter >= 0;
+          ensures (\forall int x; 0 <= x && x < logArray.length; \fresh(logArray[x]));
+          ensures currentRecord == 0;

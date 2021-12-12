@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+normal_behavior
+          requires 0 <= k;
+          ensures \result == pow2(min(k));
+          ensures 0 < \result && \result <= k+1;
+          measured_by k + 2;
+          accessible \nothing;

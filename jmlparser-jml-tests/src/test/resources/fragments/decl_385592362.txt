@@ -1,0 +1,14 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/LimitedIntContainer.java@(line 1,col 1)
+public model int value;
+        public model boolean regularState;
+         
+
+
+
+
+         public normal_behavior
+          ensures regularState ==> \result == value;
+         
+
+
+         pure

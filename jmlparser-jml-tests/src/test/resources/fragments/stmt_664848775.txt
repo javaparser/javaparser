@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/smt/casestudy/SumAndMax.java@(line 1,col 1)
+loop_invariant
+              0 <= k && k <= a.length
+              && (\forall int i; 0 <= i && i < k; a[i] <= max)
+              && (k == 0 ==> max == 0)          
+              && (k > 0 ==> (\exists int i; 0 <= i && i < k; max == a[i]))
+              && sum == (\bsum int i; 0; k; a[i])
+              && sum <= k * max;
+           
+             assignable sum, max;
+             decreases a.length - k;

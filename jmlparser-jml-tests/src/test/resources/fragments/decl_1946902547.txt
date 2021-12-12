@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escOld/Test.java@(line 1,col 1)
+public normal_behavior
+           requires k < 1000;
+           ensures \result == k + 100;
+         pure

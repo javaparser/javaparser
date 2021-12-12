@@ -133,7 +133,7 @@ public class TokenTypes {
             case DECREASES_REDUNDANTLY:
             case DECREASING_REDUNDANTLY:
             case DURATION_REDUNDANTLY:
-            case ELEMTYPE:
+            //case ELEMTYPE:
             case MODEL_BEHAVIOR:
             case MODEL_BEHAVIOUR:
             case ENSURES_REDUNDANTLY:
@@ -155,8 +155,9 @@ public class TokenTypes {
             case IN_REDUNDANTLY:
                 //case IS_INITIALIZED:
             case JAVA_MATH:
-                //case LBLNEG:
-                //case LBLPOS:
+            case LBLNEG:
+            case LBLPOS:
+            case LBL:
             case MAINTAINING_REDUNDANTLY:
             case MAPS:
             case MAPS_REDUNDANTLY:
@@ -166,7 +167,7 @@ public class TokenTypes {
             case MONITORS_FOR:
             case JML_BLOCK_COMMENT:
             case JML_LINE_COMMENT:
-            //case NONNULLELEMENTS:
+                //case NONNULLELEMENTS:
             case NON_NULL:
                 //case NOT_SPECIFIED:
             /*case ONLY_ACCESSED:
@@ -175,10 +176,10 @@ public class TokenTypes {
             case ONLY_CAPTURED:*/
             case OR:
             case PRODUCT:
-            //case REACH:
+                //case REACH:
             case READABLE:
             case LOOP_INVARIANT_FREE:
-            //case REAL:
+                //case REAL:
             case REFINING:
             case REQUIRES_REDUNDANTLY:
             case RETURN_BEHAVIOUR:
@@ -187,7 +188,7 @@ public class TokenTypes {
             case STATIC_INITIALIZER:
             case SUBTYPE:
             case TYPE:
-            //case TYPEOF:
+                //case TYPEOF:
             case UNINITIALIZED:
             case WRITABLE:
                 //case NEW_OBJECTS:

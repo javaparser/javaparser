@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/PayCardJunior.java@(line 1,col 1)
+public normal_behavior
+          requires LogRecord.transactionCounter >= 0; 
+          assignable LogRecord.transactionCounter;
+          ensures \result.limit == 1000;
+          ensures  LogRecord.transactionCounter >= 0;

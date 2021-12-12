@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/primeNumbers/PrimeNumbers.java@(line 1,col 1)
+assert status == 0 ==> (\exists int jj; 2 <= jj <= num/2; num%jj == 0);
+                   assert status != 0 ==> (\forall int jj; 2 <= jj <= num/2; num%jj != 0);

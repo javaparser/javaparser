@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escINF/INF.java@(line 1,col 1)
+private normal_behavior
+       ensures \fresh(\result);
+     pure helper

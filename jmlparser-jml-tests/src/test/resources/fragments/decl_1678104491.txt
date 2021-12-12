@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/LogRecord.java@(line 1,col 1)
+public normal_behavior
+          requires balance >= 0;
+          assignable empty, this.balance, transactionId, transactionCounter;
+          ensures this.balance == balance && 
+                  transactionId == \old(transactionCounter);

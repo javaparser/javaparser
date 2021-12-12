@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/PolishFlagSort/PolishFlagSort.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= j && j <= ar.length
+	                   &&
+	                   (\forall int i; 0 <= i && i < ar.length;
+	                   ar[i] == RED || ar[i] == WHITE)
+	                   &&
+	                   (\forall int I; 0 <= I && I < i; ar[I] == RED)
+	                   &&
+	                   (\forall int J; j <= J && J < ar.length;
+	                    ar[J] == WHITE);
+	    assignable ar[*];
+	    decreases j - i;

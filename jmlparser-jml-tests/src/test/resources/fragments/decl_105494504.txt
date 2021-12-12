@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/observer/src/ExampleSubject.java@(line 1,col 1)
+represents footprint = \locset( value );
+
+         public normal_behaviour
+          ensures \fresh(footprint);
+          ensures observers != null && \fresh(observers) && observers.length == 0;

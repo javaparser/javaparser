@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escInvariants1/Child.java@(line 1,col 1)
+public invariant value > 0;

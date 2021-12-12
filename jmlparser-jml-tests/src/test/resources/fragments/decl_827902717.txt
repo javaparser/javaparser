@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/rise4fun/AddLoop.java@(line 1,col 1)
+requires true;
+         ensures \result == x + y;
+         code_bigint_math

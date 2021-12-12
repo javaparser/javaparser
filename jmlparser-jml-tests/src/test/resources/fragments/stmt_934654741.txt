@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/testPP/A.java@(line 1,col 1)
+loop_invariant 0 <= j && j <= 10;
+         loop_decreases 10 - j;

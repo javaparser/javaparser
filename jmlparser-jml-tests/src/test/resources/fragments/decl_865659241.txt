@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/loopExercises/LoopExercises.java@(line 1,col 1)
+normal_behavior
+	    requires x >= 0;
+	    ensures \result == x*(x+1)/2;

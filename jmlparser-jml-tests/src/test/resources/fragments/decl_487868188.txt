@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/linkedListSimple/LinkedList.java@(line 1,col 1)
+model int index ;
+         represents index \such_that next == null || index < next.index ;
+
+         requires index == index;
+         ensures this != next;

@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/LogFile.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= logArray.length
+	       && (\forall int x; 0 <= x && x < i; logArray[x] != null && \fresh(logArray[x]));
+	    assignable logArray[*];
+	    decreases logArray.length - i;

@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Simple/src/BlockContractExamplesWithoutPreconditions.java@(line 1,col 1)
+return_behavior
+                returns \result == arr.length - idx + 1;
+                measured_by arr.length - idx;

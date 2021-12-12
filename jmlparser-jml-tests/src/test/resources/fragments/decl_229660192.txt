@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/buggyRandomNumbers/buggyRandomNumber.java@(line 1,col 1)
+public normal_behavior
+        requires range > 0;
+        requires repeat >= 0;
+        ensures (\forall int k; 0 <= k && k < \result.size() ; \result.get(k) >= 0 && \result.get(k) < range);
+        ensures repeat == \result.size();

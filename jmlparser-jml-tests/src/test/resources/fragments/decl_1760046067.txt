@@ -1,0 +1,17 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/strings/Case_Studies/src/StringSet.java@(line 1,col 1)
+public normal_behavior
+         requires s != null && s.hashCode() >= 0;
+         assignable \nothing;
+         ensures \result == 
+         s.equals(this.elements[s.hashCode() % this.size]);		
+        also
+        public normal_behavior
+         requires s != null && s.hashCode() < 0;
+         assignable \nothing;
+         ensures \result == 
+           s.equals(this.elements[-(s.hashCode() + 1) % this.size]);		
+        also		
+        public normal_behavior
+         requires s == null;
+         assignable \nothing;
+         ensures \result == false;

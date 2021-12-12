@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escInlineLoop/Test.java@(line 1,col 1)
+loop_invariant ii == \count;
+       loop_invariant (\forall int j; j>=0 && j<\count; arr[j] == j+1);
+       loop_modifies ii, arr[*];
+       inlined_loop;

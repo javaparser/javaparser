@@ -42,7 +42,7 @@ import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static java.util.Arrays.asList;
 
 
@@ -217,7 +217,7 @@ public class ModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier.Keyword... allowedModifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier.DefaultKeyword... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         // JML
         validateAtMostOneOf(n, reporter, JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PUBLIC, JML_SPEC_PROTECTED);
@@ -256,7 +256,7 @@ public class ModifierValidator extends VisitorValidator {
         return false;
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier.Keyword... modifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier.DefaultKeyword... modifiers) {
         List<Modifier.Keyword> foundModifiers = new ArrayList<>();
         for (Modifier.Keyword m : modifiers) {
             if (t.hasModifier(m)) {

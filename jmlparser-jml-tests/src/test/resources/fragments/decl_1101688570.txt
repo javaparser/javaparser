@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/Map/src/MapCaseStudy/AbstractMap.java@(line 1,col 1)
+normal_behavior
+       ensures \in_domain(map, key) ? 
+                    (\result >= 0 && \result < entries.length && entries[\result].key == key) : 
+                    (\result == -1);
+       ensures (\forall Object o; !\fresh(o));
+       accessible footprint;

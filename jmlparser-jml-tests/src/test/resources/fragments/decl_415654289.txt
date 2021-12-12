@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/observer/src/Subject.java@(line 1,col 1)
+public normal_behaviour
+          assignable (\infinite_union int x; 0 <= x && x < observers.length ? observers[x].* : \empty);
+          ensures (\forall int i; 0 <= i && i < observers.length; observers[i].upToDate && observers[i].\inv);

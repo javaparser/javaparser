@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/05-ReverseArray/src/ReverseArray.java@(line 1,col 1)
+public normal_behavior
+        requires p_a != null && p_a.length >= 0;
+        ensures (\forall int j; j >= 0 && j < \old(p_a.length); \result[j] == \old(p_a[p_a.length - (j+1)])) &&
+       \result.length == \old(p_a.length);
+        diverges true;

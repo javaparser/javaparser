@@ -29,6 +29,7 @@ import com.github.javaparser.ast.NodeList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 
 /**
@@ -96,7 +97,7 @@ public interface NodeWithModifiers<N extends Node> {
     /**
      * Creates a list of modifier nodes corresponding to the keywords passed, and set it.
      */
-    default N setModifiers(final Modifier.Keyword... modifiers) {
+    default N setModifiers(final Modifier.DefaultKeyword... modifiers) {
         return setModifiers(Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList()));
     }
 
@@ -106,13 +107,15 @@ public interface NodeWithModifiers<N extends Node> {
      */
     default AccessSpecifier getAccessSpecifier() {
         for (Modifier modifier : getModifiers()) {
-            switch (modifier.getKeyword()) {
-                case PUBLIC:
-                    return AccessSpecifier.PUBLIC;
-                case PROTECTED:
-                    return AccessSpecifier.PROTECTED;
-                case PRIVATE:
-                    return AccessSpecifier.PRIVATE;
+            if (modifier.getKeyword() instanceof Modifier.DefaultKeyword) {
+                switch ((Modifier.DefaultKeyword) modifier.getKeyword()) {
+                    case PUBLIC:
+                        return AccessSpecifier.PUBLIC;
+                    case PROTECTED:
+                        return AccessSpecifier.PROTECTED;
+                    case PRIVATE:
+                        return AccessSpecifier.PRIVATE;
+                }
             }
         }
         return AccessSpecifier.PACKAGE_PRIVATE;

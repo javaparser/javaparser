@@ -1,0 +1,16 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/factorial/Factorial.java@(line 1,col 1)
+requires n > 0 && n <= 20;
+        ensures 0 <= \result && \result <= Long.MAX_VALUE;
+        ensures \result == n * spec_factorial(n-1);
+     also
+        requires n == 0;
+        ensures \result == 1;
+     public static model function pure long spec_factorial(int n){ 
+        if (n == 0) {
+            return 1; 
+        } else {
+                assert n > 0 && n <= 20;
+                assume n * spec_factorial(n-1) <= Long.MAX_VALUE;
+            return n * spec_factorial(n-1);
+        }
+    }

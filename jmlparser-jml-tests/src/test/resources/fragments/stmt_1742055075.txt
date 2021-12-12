@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug605/LongArith.java@(line 1,col 1)
+assert lb == il+1;
+             assert lb > il;

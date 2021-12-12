@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/LogFile.java@(line 1,col 1)
+public normal_behavior
+           requires balance >= 0;
+           assignable currentRecord, logArray[*].transactionId, 
+                      logArray[*].balance, logArray[*].empty, 
+                      LogRecord.transactionCounter;
+           ensures \old(currentRecord) + 1 != logFileSize ? 
+               currentRecord == \old(currentRecord) + 1 : currentRecord == 0;
+           ensures logArray[currentRecord].balance == balance;

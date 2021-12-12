@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/quicksort/Quicksort.java@(line 1,col 1)
+public normal_behaviour
+         ensures \dl_seqPerm(\dl_array2seq(array), \old(\dl_array2seq(array)));
+         ensures (\forall int i; 0<=i && i<array.length-1; array[i] <= array[i+1]);
+         assignable array[*];

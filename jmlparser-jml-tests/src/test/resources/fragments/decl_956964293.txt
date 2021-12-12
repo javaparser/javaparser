@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/arith/CubicSum_src/CubicSum.java@(line 1,col 1)
+public normal_behavior
+       requires n >= 0;
+       ensures 4 * \result == n*n * (n+1)*(n+1);
+       diverges true;

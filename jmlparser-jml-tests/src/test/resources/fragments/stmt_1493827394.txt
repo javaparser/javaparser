@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/sfbug420X/StackImpl.java@(line 1,col 1)
+assert s.count() == 3;
+       assert s.count == 3;

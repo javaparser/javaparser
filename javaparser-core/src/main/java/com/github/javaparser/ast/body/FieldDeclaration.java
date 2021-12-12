@@ -179,7 +179,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
         final MethodDeclaration getter;
-        getter = parentClass.map(clazz -> clazz.addMethod("get" + fieldNameUpper, Modifier.Keyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, Modifier.Keyword.PUBLIC));
+        getter = parentClass.map(clazz -> clazz.addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -206,7 +206,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
         final MethodDeclaration setter;
-        setter = parentClass.map(clazz -> clazz.addMethod("set" + fieldNameUpper, Modifier.Keyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, Modifier.Keyword.PUBLIC));
+        setter = parentClass.map(clazz -> clazz.addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
         setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
@@ -216,19 +216,19 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     }
 
     public boolean isTransient() {
-        return hasModifier(Modifier.Keyword.TRANSIENT);
+        return hasModifier(Modifier.DefaultKeyword.TRANSIENT);
     }
 
     public boolean isVolatile() {
-        return hasModifier(Modifier.Keyword.VOLATILE);
+        return hasModifier(Modifier.DefaultKeyword.VOLATILE);
     }
 
     public FieldDeclaration setTransient(boolean set) {
-        return setModifier(Modifier.Keyword.TRANSIENT, set);
+        return setModifier(Modifier.DefaultKeyword.TRANSIENT, set);
     }
 
     public FieldDeclaration setVolatile(boolean set) {
-        return setModifier(Modifier.Keyword.VOLATILE, set);
+        return setModifier(Modifier.DefaultKeyword.VOLATILE, set);
     }
 
     @Override

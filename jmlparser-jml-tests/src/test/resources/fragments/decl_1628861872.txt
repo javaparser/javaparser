@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_ghost/src/List.java@(line 1,col 1)
+ghost instance \locset footprint;
+         accessible \inv: footprint;
+
+         normal_behaviour
+          assignable footprint;
+          ensures size() == \old(size()) + 1;
+          ensures get(size() - 1) == o;
+          ensures (\forall int i; 0 <= i && i < size() - 1; get(i) == \old(get(i)));
+          ensures \new_elems_fresh(footprint);

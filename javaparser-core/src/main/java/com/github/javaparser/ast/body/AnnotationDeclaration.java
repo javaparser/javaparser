@@ -135,7 +135,7 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     }
 
     @Override
-    public FieldDeclaration addField(Type type, String name, Modifier.Keyword... modifiers) {
+    public FieldDeclaration addField(Type type, String name, Modifier.DefaultKeyword... modifiers) {
         throw new IllegalStateException("Cannot add a field to an annotation declaration.");
     }
 }

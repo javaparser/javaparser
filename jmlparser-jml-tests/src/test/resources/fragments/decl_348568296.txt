@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/reverseArray/ReverseArray.java@(line 1,col 1)
+public normal_behavior
+        requires a!=null && a.length>=0;
+        ensures (\forall int j; j>=0 && j<a.length; a[j]==\old(a[a.length-(j+1)]));
+        diverges true;

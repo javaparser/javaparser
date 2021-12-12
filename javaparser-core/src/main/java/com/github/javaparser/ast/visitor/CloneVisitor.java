@@ -1336,8 +1336,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlLetExpr n, final Object arg) {
         Expression body = cloneNode(n.getBody(), arg);
+        VariableDeclarationExpr variables = cloneNode(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        return n;
+        JmlLetExpr r = new JmlLetExpr(n.getTokenRange().orElse(null), variables, body);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
     }
 
     @Override
@@ -1417,10 +1422,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final ForallClause n, final Object arg) {
+    public Visitable visit(final JmlForallClause n, final Object arg) {
         NodeList<JmlBoundVariable> variables = cloneList(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ForallClause r = new ForallClause(n.getTokenRange().orElse(null), variables);
+        JmlForallClause r = new JmlForallClause(n.getTokenRange().orElse(null), variables);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

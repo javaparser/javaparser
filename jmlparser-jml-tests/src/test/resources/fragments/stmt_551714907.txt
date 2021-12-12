@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/10-SITA/SITA3.java@(line 1,col 1)
+maintaining
+       0 <= m && m <= a1.length && k <= m && 0 <= k &&
+       (\forall int i;0<= i && i < k; 
+            a1[i] == a2[i]) && 
+        (\forall int j; k <= j && j < m; 
+          a1[j] != a2[j]) ;
+       
+        assignable a1[*],a2[*];
+        decreases a1.length - m;

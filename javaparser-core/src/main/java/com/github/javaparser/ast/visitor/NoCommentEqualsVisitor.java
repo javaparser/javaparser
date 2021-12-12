@@ -1201,6 +1201,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlLetExpr n2 = (JmlLetExpr) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
+        if (!nodeEquals(n.getVariables(), n2.getVariables()))
+            return false;
         return true;
     }
 
@@ -1265,8 +1267,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final ForallClause n, final Visitable arg) {
-        final ForallClause n2 = (ForallClause) arg;
+    public Boolean visit(final JmlForallClause n, final Visitable arg) {
+        final JmlForallClause n2 = (JmlForallClause) arg;
         if (!nodesEquals(n.getVariables(), n2.getVariables()))
             return false;
         if (!objEquals(n.getKind(), n2.getKind()))

@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug651/B.java@(line 1,col 1)
+in N;
+         public model int N;
+         private represents N = count;
+
+         public normal_behavior
+           modifies \everything;
+           ensures N == \old(N);

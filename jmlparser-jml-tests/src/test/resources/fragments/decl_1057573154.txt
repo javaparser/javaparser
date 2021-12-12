@@ -1,0 +1,14 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/PayCard.java@(line 1,col 1)
+public invariant log.\inv; 
+        public invariant balance >= 0; 
+        public invariant limit > 0;
+        public invariant unsuccessfulOperations >= 0; 
+        public invariant log != null;
+         
+
+
+
+
+
+
+        spec_public

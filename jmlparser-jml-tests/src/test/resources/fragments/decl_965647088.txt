@@ -1,0 +1,39 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permutedSum/src/Perm.java@(line 1,col 1)
+ghost \seq perm;                          
+      ghost int pIdx;
+      invariant 0 <= pIdx && pIdx <= a.length;
+      invariant perm.length == a.length;
+      invariant \dl_seqNPerm(perm);
+     
+      ghost \seq b;            
+      invariant b == (\seq_def int i; 0; a.length; a[i]);
+     
+      ghost \seq c;                      
+      invariant \dl_seqPerm(b,c);
+      invariant (\forall int i; 0 <= i && i < c.length;
+                    (int)c[i] == (int)b[(int)perm[i]]);
+      invariant (\forall int i; 0 <= i && i < c.length;
+                    c[i] == (int)c[i]);
+      invariant c.length == a.length;
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       normal_behavior
+      ensures \result == (pIdx < a.length);   
+
+         strictly_pure helper

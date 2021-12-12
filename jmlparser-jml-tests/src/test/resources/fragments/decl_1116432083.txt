@@ -1,0 +1,27 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/PayCard.java@(line 1,col 1)
+public invariant log.\inv;
+        public invariant balance == log.logArray[log.currentRecord].balance;
+        public invariant balance >= 0;
+        public invariant limit > 0;
+        public invariant available() >= 0;
+        public invariant unsuccessfulOperations >= 0;
+         
+
+
+
+
+
+
+
+         public represents value = balance;
+        public represents regularState = (unsuccessfulOperations <= 3);
+         
+
+
+
+
+         public normal_behavior
+          requires limit > 0;
+          requires LogRecord.transactionCounter >= 0;
+          assignable LogRecord.transactionCounter;
+          ensures LogRecord.transactionCounter >= 0;

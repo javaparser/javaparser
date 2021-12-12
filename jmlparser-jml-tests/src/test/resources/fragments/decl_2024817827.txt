@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte10_01_SumAndMax/src/SumAndMax.java@(line 1,col 1)
+normal_behaviour
+          requires (\forall int i; 0 <= i && i < a.length; 0 <= a[i]);
+          assignable sum, max;
+          ensures (\forall int i; 0 <= i && i < a.length; a[i] <= max);
+          ensures (a.length > 0
+                  ==> (\exists int i; 0 <= i && i < a.length; max == a[i]));
+          ensures sum == (\sum int i; 0 <= i && i < a.length; a[i]);
+          ensures sum <= a.length * max;

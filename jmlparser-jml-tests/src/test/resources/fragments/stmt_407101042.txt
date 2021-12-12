@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug444a/Relaxed.java@(line 1,col 1)
+maintaining 0 <= index && index <= pat.length;
+          maintaining 0 <= index - shift && index - shift <= a.length && 0 <= shift && shift <= 1;
+         maintaining  Relaxed.diffIndex(pat, a) > index ==>(\forall int i; 0 <= i && i < index; pat[i] == a[i]) ;
+         maintaining  Relaxed.diffIndex(pat, a) >  index ==> (\forall int j; Relaxed.diffIndex(pat, a) < j && j < index; pat[j] == a[j - 1]);
+         decreases pat.length - index - shift;

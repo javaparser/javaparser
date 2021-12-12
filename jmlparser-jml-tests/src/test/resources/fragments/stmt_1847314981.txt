@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_seq/src/SimplifiedLL.java@(line 1,col 1)
+loop_invariant
+	      0<=i && i <=n && result == (Node)nodeseq[i];
+	    decreases n-i;
+	    assignable \strictly_nothing;

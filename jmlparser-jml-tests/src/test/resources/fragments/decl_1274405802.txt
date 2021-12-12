@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte10_03_LinkedList/src/Node.java@(line 1,col 1)
+public normal_behaviour
+          ensures 0 <= \result;      
+          ensures \result < seq.length && seq[\result] == 0
+                  || \result == seq.length;
+          ensures (\forall int x; 0 <= x && x < \result; seq[x] != 0);

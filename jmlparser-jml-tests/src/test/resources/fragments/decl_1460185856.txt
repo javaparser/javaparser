@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug476/Foo.java@(line 1,col 1)
+static invariant TEN == 10;

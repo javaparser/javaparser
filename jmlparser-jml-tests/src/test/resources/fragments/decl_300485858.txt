@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/comprehensions/src/SegSum.java@(line 1,col 1)
+public normal_behaviour
+        requires 0 <= i && i<=j && j<a.length;
+        ensures result == (\sum int k; i <=k & k<j; a[k]);

@@ -33,7 +33,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permissions/lockspec/src/LockSpec.java@(line 1,col 1)
+public instance ghost LockSpec spec;
+
+       normal_behavior
+      requires spec.lockStatus(\dl_FALSE());
+      ensures spec.lockStatus(\dl_TRUE());
+      ensures spec.lockTransfer();
+      assignable<heap> \strictly_nothing;
+      assignable<permissions> spec.fpPerm();

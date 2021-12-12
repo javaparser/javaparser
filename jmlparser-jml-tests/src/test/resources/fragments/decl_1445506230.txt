@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escAssignableBug/AssignableBug.java@(line 1,col 1)
+public invariant piece.position.x >= 0 && piece.position.x < xSize;
+
+       normal_behavior
+       requires inRange(p);
+       assignable piece.position;

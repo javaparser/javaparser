@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/new_infinite_union_test/TestInfiniteUnion.java@(line 1,col 1)
+requires true;
+       ensures true;
+       assignable (\infinite_union int x; \nothing);

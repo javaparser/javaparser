@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permutedSum/src/Perm.java@(line 1,col 1)
+maintaining s == (\sum int i; 0 <= i && i < pIdx; (int)c[i]);
+          maintaining \invariant_for(this);
+          decreasing a.length - pIdx;
+          assignable pIdx;

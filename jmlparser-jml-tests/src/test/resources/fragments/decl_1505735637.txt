@@ -1,0 +1,17 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/javacard/src/javacard/framework/PIN.java@(line 1,col 1)
+public behavior
+          requires<savedHeap> javacard.framework.JCSystem.getTransactionDepth() == 1;
+          requires JCSystem.npe != null;
+          requires JCSystem.aioobe != null;
+          ensures \result <==> isValidated;
+          ensures \old(triesLeft) == 0 ==> (triesLeft == 0 && !isValidated);
+          ensures length != maxPINSize ==> !isValidated;
+          ensures isValidated ==> triesLeft == maxTries;
+          ensures (!isValidated && \old(triesLeft) > 0) ==> triesLeft == \old(triesLeft) - 1;
+          ensures \new_elems_fresh(triesRep) && \new_elems_fresh(validatedRep);
+          ensures<savedHeap> \new_elems_fresh(\backup(triesRep)) && \new_elems_fresh(\backup(validatedRep));
+          signals (NullPointerException e) pin == null && !isValidated && triesLeft == \old(triesLeft) - 1;
+          signals (ArrayIndexOutOfBoundsException e) (length < 0 || length > maxPINSize || offset < 0 || offset + length > pin.length)
+                            && !isValidated && triesLeft == \old(triesLeft) - 1;
+          signals_only NullPointerException, ArrayIndexOutOfBoundsException;
+          assignable<heap><savedHeap> triesRep, validatedRep;

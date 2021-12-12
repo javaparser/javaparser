@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_1_RelaxedPrefix/src/Relaxed.java@(line 1,col 1)
+requires 0 < pat.length && pat.length <= a.length;
+        ensures \result <= pat.length;
+        ensures \result >= 0 <==> (
+                   (\forall int j; 0 <= j < \result; pat[j] == a[j])
+                && (\forall int j; \result < j < pat.length; pat[j] == a[j-1])
+                );

@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Simple/src/LoopContractExamples.java@(line 1,col 1)
+loop_contract normal_behavior
+            requires arr != null && 0 <= idx && idx <= arr.length;
+            requires sum == (\sum int i; 0 <= i && i < idx; arr[i]);
+            ensures  sum == (\sum int i; 0 <= i && i < arr.length; arr[i]);
+            assignable \nothing;
+            decreases arr.length - idx;

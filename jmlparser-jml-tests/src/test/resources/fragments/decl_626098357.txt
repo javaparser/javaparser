@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/esc2DTranspose/TransposeMatrixOrig.java@(line 1,col 1)
+requires matrix.length > 0;
+            requires (\forall int k; 0 <= k && k < matrix.length; matrix[k] != null);
+            requires (\forall int k; 0 <= k && k < matrix.length; matrix[0].length == matrix[k].length);
+            ensures (\forall int i, j; i >= 0 && j >= 0 && i < matrix.length && j < matrix[0].length; matrix[i][j] == \result[j][i]);
+            ensures matrix.length == \result[0].length;
+            ensures matrix[0].length == \result.length;

@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/DynamicGhost.java@(line 1,col 1)
+public ghost \locset rep;
+             public invariant \subset(\locset(rep), rep);
+             private invariant rep == this.*;
+
+             accessible \inv: rep;
+
+             normal_behavior
+             ensures \new_elems_fresh(rep);
+             assignable rep;

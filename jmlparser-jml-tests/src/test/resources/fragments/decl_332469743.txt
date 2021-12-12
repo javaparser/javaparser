@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/primeNumbers/PrimeNumbers.java@(line 1,col 1)
+requires 1 <= n < Integer.MAX_VALUE;
+      assignable primeArray;
+      ensures primeArray != null;
+      ensures primeArray.length == n;
+      ensures (\forall int i, j; i >= 0 && i < primeArray.length && j >= 2 && j <= primeArray[i]/2; primeArray[i]%j != 0);

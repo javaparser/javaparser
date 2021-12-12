@@ -1,0 +1,14 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/foveoos11_02_TreeMax/TreeMax.java@(line 1,col 1)
+normal_behavior
+        ensures \result >= x;
+        ensures \result >= y;
+        ensures \result >= z;
+        ensures \result == x || \result == y || \result == z;
+       
+
+
+
+
+
+
+         strictly_pure helper

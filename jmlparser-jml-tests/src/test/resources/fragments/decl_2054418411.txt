@@ -1,0 +1,17 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/geometry/Factory.java@(line 1,col 1)
+public normal_behavior
+          requires routeStart <= routeEnd;
+          requires 0 <= routeStart;
+          requires 0 <= routeEnd;
+          requires routeEnd < routes.length;
+          requires routeStart < routes.length;
+          requires routeToSegments != null && routes != null;
+          requires \is_initialized(java.util.ArrayList) &&
+                   \is_initialized(java.util.LinkedList) &&
+                   \is_initialized(java.util.HashMap) &&
+                   \is_initialized(java.util.LinkedHashMap) &&
+                   \is_initialized(java.util.Map) &&
+                   \is_initialized(java.util.AbstractMap)  &&
+                   \is_initialized(java.util.AbstractSequentialList) &&
+                   \is_initialized(java.util.AbstractList) &&
+                   \is_initialized(java.util.List);

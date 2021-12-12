@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/preold/PreOld.java@(line 1,col 1)
+assert i - 1 == \old(x,b);
+             assert \old(y,b) == i + 1;
+             assert \old(y,a) == i + 2;

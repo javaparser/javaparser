@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/firstTest/FirstTest.java@(line 1,col 1)
+invariant a >= 0;
+
+      requires a < 0;

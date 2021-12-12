@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vacid0_01_SparseArray/src/MemoryAllocator.java@(line 1,col 1)
+normal_behaviour
+          requires 0 <= size;
+          ensures \fresh(\result);      
+          ensures \result.length == size;

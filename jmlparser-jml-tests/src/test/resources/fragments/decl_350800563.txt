@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/factorial/Factorial.java@(line 1,col 1)
+requires n >= 0 && n <= 19;
+            ensures \result == spec_factorial(n);

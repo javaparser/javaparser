@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/simple/src/MyClass.java@(line 1,col 1)
+model \locset footprint;
+         represents footprint = this.*;
+         accessible footprint: footprint;
+
+         invariant attr2 != 0;
+         accessible \inv: footprint;
+
+         normal_behavior
+        assignable \nothing;
+        ensures \fresh(footprint);

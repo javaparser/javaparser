@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/simple/src/MyClass.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= a.length && (\forall int x; 0 <= x && x < i; a[x] == \old(attr2));
+            assignable a[*];
+            decreases a.length - i;

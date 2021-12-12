@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/sfbug420a/Stack.java@(line 1,col 1)
+assignable count;
+      ensures \result ==> count() == \old(count()) + 1;
+      ensures \result ==> item==(top());
+      ensures (\forall int i; 1<=i && i<=\old(count()); itemAt(i)==\old(itemAt(i)));

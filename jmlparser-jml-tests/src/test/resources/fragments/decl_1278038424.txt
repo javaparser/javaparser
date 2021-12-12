@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug638/CONS.java@(line 1,col 1)
+public normal_behavior
+       requires y == 10;
+       requires x == 10;
+     also
+     public exceptional_behavior
+     requires size() != 10;

@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/testGen/pin/PinCard.java@(line 1,col 1)
+public normal_behavior
+         requires 0 <= counter_pin && counter_pin <= 3 && oldPin>=0 && newPin>=0;
+         assignable permission_session, counter_pin, pin;
+         ensures counter_pin==0 ==> \result==9840;
+         ensures (\old(pin) != oldPin || \old(counter_pin) == 0) ?
+                 (\old(pin) == pin && (\result==840 || \result==980)) : 
+                 (pin == newPin && \result==900);

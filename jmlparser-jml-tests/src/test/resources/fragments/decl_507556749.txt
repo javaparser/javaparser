@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/constructorException/Test.java@(line 1,col 1)
+invariant x == 4 && w == 0;
+
+       requires e != null;
+       signals (Exception) y == z;
+       signals_only RuntimeException;

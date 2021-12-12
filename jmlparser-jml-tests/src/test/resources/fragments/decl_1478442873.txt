@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug528/Maybe.java@(line 1,col 1)
+ensures \result == a - b;
+         {|
+           requires a == b;
+          also
+           requires a < b;
+         |}

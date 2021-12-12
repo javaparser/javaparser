@@ -918,7 +918,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ForallClause n, Void arg) {
+    public void visit(JmlForallClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print(n.getKind().jmlSymbol);
         printer.print(" ");

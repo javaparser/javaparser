@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/ListsWithIterators/src/MyInteger.java@(line 1,col 1)
+public normal_behavior
+        ensures \result != null;
+        ensures \result.val == val;
+        assignable \nothing;

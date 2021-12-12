@@ -1,0 +1,29 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte10_03_LinkedList/src/Node.java@(line 1,col 1)
+public ghost \seq seq;
+         public ghost \locset repr;
+
+
+         private invariant \subset(this.*, repr) && 1 <= seq.length && seq[0] == head;
+        private invariant next == null ==> seq.length == 1;
+        private invariant next != null ==> \subset(next.*, repr)
+                                           && \subset(next.repr, repr)
+                                           && \disjoint(this.*, next.repr)
+                                           && seq[1..seq.length] == next.seq
+                                           && \invariant_for(next);
+         
+
+
+
+
+
+
+
+
+         accessible \inv: repr \measured_by seq.length;
+
+
+         public normal_behaviour
+          requires tail == null || \invariant_for(tail);
+          ensures \invariant_for(\result);
+          ensures tail == null ==> \result.seq == \seq_singleton(x);
+          ensures tail != null ==> \result.seq == \seq_concat(\seq_singleton(x), tail.seq);

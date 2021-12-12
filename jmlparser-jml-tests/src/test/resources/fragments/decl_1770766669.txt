@@ -1,0 +1,20 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/symmArray_java/SymmArray.java@(line 1,col 1)
+public invariant
+          ar != null &&
+          (\forall int i; i >= 0 && i < ar.length;
+                          ar[i] != null && ar[i].length == ar.length) &&
+          (\forall int i, j; i >= 0 && i < ar.length && j >= 0 && j < ar.length && i != j;
+                             ar[i] != ar[j]);
+         
+
+
+
+
+
+
+
+         public normal_behavior
+          assignable \nothing;
+          ensures \result ==
+            (\forall int i, j; i >= 0 && i < ar.length && j >= 0 && j < ar.length;
+                               ar[i][j] == ar[j][i]);

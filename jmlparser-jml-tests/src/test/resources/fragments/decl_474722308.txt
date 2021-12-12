@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/model1/ModelClassExampleBug.java@(line 1,col 1)
+public model class MContents {
+    public boolean foo() { return true; }
+    }
+       
+
+
+
+
+         public static model class SMContents {
+    public boolean foo() { return true; }
+    }

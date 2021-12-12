@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list/src/ListIterator.java@(line 1,col 1)
+public model instance List list;
+         public model instance int pos;
+
+         accessible list: this.*;
+         accessible pos: this.*;
+         accessible \inv: this.*, list.footprint;
+
+
+         normal_behaviour
+          accessible this.*, list.footprint;
+          ensures \result == pos < list.size();

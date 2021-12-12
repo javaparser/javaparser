@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/racaddng/Add.java@(line 1,col 1)
+ensures \result == my_x;

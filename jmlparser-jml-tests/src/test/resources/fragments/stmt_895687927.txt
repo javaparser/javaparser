@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug631/TestA.java@(line 1,col 1)
+assert t[1].value == 1;          
+             assert t[0].value == 3;

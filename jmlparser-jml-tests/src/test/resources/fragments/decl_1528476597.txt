@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/newBook/09.list_modelfield/LinkedListNonEmpty.java@(line 1,col 1)
+private represents theList =
+            \seq_concat (\seq_singleton(head),
+                         tail==null? \seq_empty: tail.theList);

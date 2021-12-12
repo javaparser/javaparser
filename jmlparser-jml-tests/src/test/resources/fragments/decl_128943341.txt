@@ -1,0 +1,20 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/PayCardJunior.java@(line 1,col 1)
+public invariant balance < juniorLimit 
+                         && juniorLimit < limit; 
+         
+
+
+
+         public represents value = balance;
+        public represents regularState = (unsuccessfulOperations <= 3);
+         
+
+
+
+
+         public normal_behavior
+          requires LogRecord.transactionCounter >= 0;
+          requires cardLimit > juniorLimit;
+          assignable LogRecord.transactionCounter;
+          ensures this.limit == cardLimit;
+          ensures  LogRecord.transactionCounter >= 0;

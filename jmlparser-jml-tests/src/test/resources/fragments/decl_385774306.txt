@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/model_methods/src/Recell.java@(line 1,col 1)
+model \locset footprint() { return \set_union(\singleton(this.val), \singleton(this.oval)); }    
+
+         model two_state boolean post_set(int x) { return (get() == x &&  oval == \old(get())); }    
+
+         ensures get() == \old(oval); assignable footprint();

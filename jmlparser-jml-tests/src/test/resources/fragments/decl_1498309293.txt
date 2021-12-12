@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_seq/src/SimplifiedLL.java@(line 1,col 1)
+normal_behaviour
+        requires i > 0 && i < size;
+        ensures nodeseq == \old(\seq_concat(nodeseq[0..i], nodeseq[i+1..nodeseq.length]));

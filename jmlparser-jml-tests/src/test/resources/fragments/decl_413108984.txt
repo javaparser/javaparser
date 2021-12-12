@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/preold/PreOld.java@(line 1,col 1)
+public normal_behavior a:
+           requires b;
+           old int x = i + 1;
+         also public normal_behavior b:
+           requires !b;
+           old int x = i -1;

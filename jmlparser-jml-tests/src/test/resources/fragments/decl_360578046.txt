@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Test-10-2.java@(line 1,col 1)
+public normal_behavior
+	    requires i < 2147483617;
+	    ensures \result == \old(i)+30;

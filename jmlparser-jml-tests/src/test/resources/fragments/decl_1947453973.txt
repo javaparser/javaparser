@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/refining/TestRefines.java@(line 1,col 1)
+requires 0 <= i <= 100;
+         ensures \result >= 12;

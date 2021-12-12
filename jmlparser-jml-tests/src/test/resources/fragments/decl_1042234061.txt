@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escTrace6/trace.java@(line 1,col 1)
+requires true;
+         assignable k;
+         signals (Exception e) false;

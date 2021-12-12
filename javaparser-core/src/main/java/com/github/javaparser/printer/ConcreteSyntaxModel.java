@@ -986,7 +986,7 @@ public class ConcreteSyntaxModel {
         ));
 
         //region JML
-        concreteSyntaxModelByClass.put(ForallClause.class, sequence(
+        concreteSyntaxModelByClass.put(JmlForallClause.class, sequence(
                 token(GeneratedJavaParserConstants.FORALL),
                 space(),
                 child(ObservableProperty.VARIABLES),

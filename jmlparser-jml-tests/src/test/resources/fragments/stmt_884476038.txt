@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug591/C.java@(line 1,col 1)
+loop_invariant 0 <= l && l < r && r < a.length
+                     && (\forall int x; 0 <= x && x < l; a[x] < v)
+                     && (\forall int x; r < x && x < a.length; v < a[x]);
+      decreases r - l;

@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escShortCircuit/SC.java@(line 1,col 1)
+ensures a < 0 ==> \result == 2;
+      ensures b < 0 ==> \result == 2;
+      ensures a + b < 0 ==> \result == 2;
+      ensures a >= 0 && b >= 0 && a+b >= 10 ==> \result == 1;

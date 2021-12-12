@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug594/Test.java@(line 1,col 1)
+requires array != null;
+   	    assignable \nothing;
+   	    ensures ( 0 <= \result
+   	    		&& \result < array.length
+   	    		&& array[\result] == 5)
+   	    		| \result == array.length ;
+   	    ensures (\forall int j; 0 <= j && j < \result; array[j] != 5);

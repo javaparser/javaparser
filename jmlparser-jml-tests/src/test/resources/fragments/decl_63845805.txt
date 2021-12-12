@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escDiverges/escDiverges.java@(line 1,col 1)
+requires 0 <= the_input;
+      ensures \result == 0;
+    also
+      requires the_input < 0;
+      diverges true;
+      signals (IllegalArgumentException e) true;
+      signals_only IllegalArgumentException;

@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug470/ACD.java@(line 1,col 1)
+assert ptr_ != 0;

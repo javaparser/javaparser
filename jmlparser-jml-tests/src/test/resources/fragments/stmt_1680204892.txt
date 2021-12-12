@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/racbigint/bigint.java@(line 1,col 1)
+assert (\lbl TRUE bx != bxx);
+             ghost \bigint bix = bx;
+             assert (\lbl TRUE bix == bxx);
+             assert (\lbl TRUE ((\bigint)bx) == bxx);
+             assert (\lbl TRUE bx == (\bigint)bxx);

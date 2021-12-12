@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/PolishFlagSort/PolishFlagSort.java@(line 1,col 1)
+public normal_behavior
+           requires ar != null &&
+                    (\forall int i; 0 <= i && i < ar.length;
+                     ar[i] == RED || ar[i] == WHITE);
+           ensures (\forall int I, J; 0 <= I && I < J && J < ar.length;
+                    ar[I] <= ar[J]);
+           assignable ar[*];

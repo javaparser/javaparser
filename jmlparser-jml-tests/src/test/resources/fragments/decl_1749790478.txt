@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escTrace2/trace.java@(line 1,col 1)
+requires k < 0;
+         ensures \result == 0;
+         also
+         requires true;
+         requires k >= 0;
+         ensures \result != 0;

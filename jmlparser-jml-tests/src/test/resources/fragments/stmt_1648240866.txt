@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/rise4fun/FindFirstZero.java@(line 1,col 1)
+maintaining (\forall int i; 0 <= i && i < index; x[i] != 0);
+                 maintaining (0 <= index && index <= x.length);
+                 decreases x.length - index;

@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/model2/NonGenericModelClassExampleBug.java@(line 1,col 1)
+public static model class Contents {
+          public boolean foo() { return true; }
+      }

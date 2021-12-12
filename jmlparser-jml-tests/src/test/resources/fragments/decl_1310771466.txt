@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SmansEtAl/src/ArrayList.java@(line 1,col 1)
+normal_behavior
+        requires 0 <= i && i < size();
+        assignable \nothing; 
+        accessible footprint;
+        ensures \result == get(i);
+         
+
+
+
+
+
+        nullable

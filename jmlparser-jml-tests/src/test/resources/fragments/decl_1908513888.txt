@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_01_Swap/TwoWaySwap.java@(line 1,col 1)
+model \seq seq;
+         represents seq = \dl_array2seq(a);
+
+
+         public normal_behavior
+        ensures a == _a;
+        modifies a;

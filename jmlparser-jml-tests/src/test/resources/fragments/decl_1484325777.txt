@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug597/SITA3.java@(line 1,col 1)
+public normal_behaviour
+        ensures  
+          a[pos1]  == \old(a[pos2]) &&
+          a[pos2]  == \old(a[pos1]);

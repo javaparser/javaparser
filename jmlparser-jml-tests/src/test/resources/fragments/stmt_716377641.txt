@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug627a/Test.java@(line 1,col 1)
+show \old(i,LoopInit), \old(i,LoopBodyBegin);
+        assert \old(i,LoopInit) == 10;
+        assert \old(i,LoopBodyBegin) == \count + 10;

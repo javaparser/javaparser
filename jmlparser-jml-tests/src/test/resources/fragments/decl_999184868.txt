@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/preconditionDetail2/TestB.java@(line 1,col 1)
+also
+           requires q >= 0 &&  q >= 10 && q >= 20;
+         also
+           requires q >= 5 && q >= 15 && q >= 25;

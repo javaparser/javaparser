@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/simple/src/MyClass.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= a.length 
+                           && (\forall int x, y; 0 <= x && x < y && y < i; a[x] <= a[y])
+                           && (\forall int x, y; 0 <= x && x < i && i <= y && y < a.length; a[x] <= a[y]);
+            assignable a[*];

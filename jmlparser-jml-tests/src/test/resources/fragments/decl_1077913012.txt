@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/javacard/src/javacard/framework/PIN.java@(line 1,col 1)
+public normal_behavior
+          requires javacard.framework.JCSystem.getTransactionDepth() == 0;
+          ensures \old(isValidated) ==> (!isValidated && triesLeft == maxTries);
+          ensures !\old(isValidated) ==> (isValidated == \old(isValidated) && triesLeft == \old(triesLeft));
+          ensures \new_elems_fresh(triesRep) && \new_elems_fresh(validatedRep);
+          assignable triesRep, validatedRep;

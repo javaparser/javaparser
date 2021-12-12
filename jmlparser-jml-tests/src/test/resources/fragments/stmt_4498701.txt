@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/enums2/Test.java@(line 1,col 1)
+show EEE.AA.code, EEE.BB.code;
+             assert EEE.AA.code == 4;
+             assert EEE.BB.code == 8;
+             assert EEE.CC.code == 7;

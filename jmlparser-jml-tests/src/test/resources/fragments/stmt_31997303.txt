@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/newBook/09.list_modelfield/ArrayList.java@(line 1,col 1)
+maintaining 0 <= i && i <= a.length;
+            maintaining (\forall int j; i < j && j <= a.length; 
+                            tmp[j] == \old(a[j-1]));
+            decreasing i;
+            assignable tmp[*];

@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/LCP.java@(line 1,col 1)
+maintaining 0 <= l && l+x <= a.length
+                    && l+y <= a.length && x!=y;
+        maintaining (\forall int z; 0 <= z && z < l;
+                                 a[x+z] == a[y+z] );
+        decreasing a.length-l;
+        assignable \strictly_nothing;

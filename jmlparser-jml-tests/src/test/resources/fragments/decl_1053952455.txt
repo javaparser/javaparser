@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug548rac/Test.java@(line 1,col 1)
+model public pure int get2(int i) { return i; }
+
+         requires i == 1;
+         model public pure int cget(int i);
+
+         requires i == 3;
+         model public pure int cget3(int i) { return i; }

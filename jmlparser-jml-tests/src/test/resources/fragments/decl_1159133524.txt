@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/symmArray_java/SymmArray.java@(line 1,col 1)
+public normal_behavior
+          requires ar.length >= 10 && IsSymmetric();
+          ensures IsSymmetric();

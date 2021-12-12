@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escModelFields/EscModelFields.java@(line 1,col 1)
+ghost boolean b = (\lbl SAME this == other);

@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug575/TestJava.java@(line 1,col 1)
+requires a.length == 10;
+         assignable x, a[x];
+         ensures x == 3;

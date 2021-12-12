@@ -1,0 +1,18 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_03_TreeDel/Tree.java@(line 1,col 1)
+loop_invariant t.treeInv();
+               loop_invariant t.treeInvUntilLeft(p2);
+               loop_invariant p != null;
+	       loop_invariant p.treeInv();
+               loop_invariant p2 != null;
+               loop_invariant p2.treeInv();
+               loop_invariant tt == null || tt.treeInv();
+               loop_invariant p.left == tt;
+               loop_invariant p2.left == p;
+               loop_invariant t.leftSubTree(p2);
+               loop_invariant \subset(\singleton(p2.left), t.footprint());
+                                                                   
+                                                                                                  
+                                                                                                       
+               loop_invariant \disjoint(t.footprintUntilLeft(p2), p2.footprint());
+               decreasing tt == null ? 0 : (tt.height+1);
+               assignable \strictly_nothing;

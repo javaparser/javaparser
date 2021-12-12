@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug711/Loop.java@(line 1,col 1)
+loop_invariant i >= 0;
+             loop_writes i;

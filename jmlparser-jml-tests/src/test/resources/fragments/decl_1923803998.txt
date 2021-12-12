@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug681/Test.java@(line 1,col 1)
+requires System.out.outputText instanceof String;                                 
+       requires System.out.outputText.isEmpty();                                                       
+       ensures System.out.outputText == "foo";

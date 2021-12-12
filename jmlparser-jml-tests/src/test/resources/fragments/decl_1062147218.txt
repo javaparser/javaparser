@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/testGen/listAndArray/List2.java@(line 1,col 1)
+nullable

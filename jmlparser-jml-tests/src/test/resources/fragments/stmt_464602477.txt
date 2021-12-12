@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/rise4fun/Inverse.java@(line 1,col 1)
+maintaining 0 <= index && index <= x.length && x.length == y.length;
+             maintaining (\forall int i; 0 <= i && i < index; x[i] == y[x.length -1 - i]);
+             decreases x.length - index;

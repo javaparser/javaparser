@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/LogFile.java@(line 1,col 1)
+public normal_behavior
+        requires a!=null && a.length > 0 && a!=b && a.length==b.length && (\forall int x; 0<=x && x<a.length; a[x]==b[x]);
+        ensures (\forall int i; 0 <= i && i<a.length-1; a[i] >= a[i+1]);

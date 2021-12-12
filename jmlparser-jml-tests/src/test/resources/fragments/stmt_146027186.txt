@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/buggyRandomNumbers/buggyRandomNumber.java@(line 1,col 1)
+assert randomNumbers.get(randomNumbers.size()-1) == selected;
+          assert 0 <= randomNumbers.get(randomNumbers.size()-1);
+          assert randomNumbers.get(randomNumbers.size()-1) < range;

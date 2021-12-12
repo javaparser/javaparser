@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/examDB/core/ExamDataBaseImpl.java@(line 1,col 1)
+loop_invariant 
+                i>=0 && num>=0
+                && num==(\num_of int j;
+	                     0<=j && j<i; students[j]!=null
+                             && !students[j].backedOut 
+                             && grade==pointsToGrade(students[j].points, 
+	   		                             students[j].bonusPoints));
+	    assignable i, num;
+	    decreasing students.length-i;

@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list/src/ListIterator.java@(line 1,col 1)
+normal_behaviour
+          requires pos < list.size();
+          assignable this.*;
+          ensures \result == list.get(\old(pos));
+          ensures list == \old(list);
+          ensures pos == \old(pos) + 1;
+        also exceptional_behaviour
+          requires pos >= list.size();
+          assignable \nothing;
+          signals_only IndexOutOfBoundsException;

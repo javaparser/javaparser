@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gcdcalculator/AbsoluteValue.java@(line 1,col 1)
+requires num >= 0;
+      ensures \result == num;
+      ensures \result >= 0;
+
+      also
+
+      requires num < 0 && num > Integer.MIN_VALUE;
+      ensures \result == -num; 
+      ensures \result >= 0;

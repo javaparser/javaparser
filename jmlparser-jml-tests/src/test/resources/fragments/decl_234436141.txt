@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/simple/src/MyClass.java@(line 1,col 1)
+normal_behavior
+          requires attr2 != 358;
+          assignable footprint; 
+          ensures attr == 27;
+          diverges true;
+        also exceptional_behavior
+          requires attr2 == 358;
+          assignable \nothing;
+          signals_only RuntimeException;

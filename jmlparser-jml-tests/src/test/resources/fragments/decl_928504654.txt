@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug444a/Relaxed.java@(line 1,col 1)
+requires true;
+      ensures 0 <= \result && \result <= pat.length; 
+      ensures (\forall int i; 0 <= i && i < \result; pat[i] == a[i]);
+      ensures (pat.length > \result) && (a.length > \result) ==> pat[\result] != a[\result];

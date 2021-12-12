@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Modelfield.java@(line 1,col 1)
+model \locset footprint;
+       accessible footprint: \empty;
+
+       requires x > 0;
+       requires \disjoint(footprint,\singleton(x));
+       ensures x > 0;

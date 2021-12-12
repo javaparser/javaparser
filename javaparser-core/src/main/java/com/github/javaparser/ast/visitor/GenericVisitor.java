@@ -280,7 +280,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(CapturesClause n, A arg);
 
-    R visit(ForallClause n, A arg);
+    R visit(JmlForallClause n, A arg);
 
     R visit(JmlFunction n, A arg);
 

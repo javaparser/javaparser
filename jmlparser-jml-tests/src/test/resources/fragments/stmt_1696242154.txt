@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_1_RelaxedPrefix/src/Relaxed.java@(line 1,col 1)
+maintaining pat.length <= a.length;
+            maintaining 0 <= i && i <= pat.length;
+            maintaining 0 <= i-shift && i-shift <= a.length;
+            maintaining shift == 0 || shift == 1;
+            maintaining 0 <= k < i || k == pat.length;
+            maintaining shift == 1 <==> 0 <= k < pat.length;
+            maintaining shift == 0 <==> k == pat.length;
+            maintaining (\forall int j; 0 <= j < k && j < i; pat[j] == a[j]);
+            maintaining (\forall int j; k < j < i; pat[j] == a[j-1]);
+            decreasing pat.length-i;
+            assignable \strictly_nothing;

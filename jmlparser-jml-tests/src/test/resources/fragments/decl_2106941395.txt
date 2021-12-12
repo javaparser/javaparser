@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+normal_behavior
+          ensures \result == (\forall int x, y; even(x) == (even(y) == even(x+y)));
+          ensures \result;
+          accessible \nothing;
+       
+
+
+
+
+
+         strictly_pure helper

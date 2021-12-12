@@ -22,7 +22,7 @@
 package com.github.javaparser.builders;
 
 import static com.github.javaparser.StaticJavaParser.parseImport;
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

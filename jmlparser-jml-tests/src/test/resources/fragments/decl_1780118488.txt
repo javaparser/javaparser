@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escModelFields/EscModelFields.java@(line 1,col 1)
+in value;
+
+         public model int value;
+         private represents value = -rep;
+
+         public invariant value >= 0;
+
+         requires v >= 0;
+         modifies this.*;
+         ensures value == v;

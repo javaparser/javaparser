@@ -6,16 +6,13 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClauseMetaModel;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.metamodel.OptionalProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Arrays;
 import java.util.Optional;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -50,15 +47,6 @@ public abstract class JmlClause extends Node implements Jmlish {
     public JmlClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
-    }
-
-    @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return null;
-    }
-
-    @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
     }
 
     @Override

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug444a/Relaxed.java@(line 1,col 1)
+requires true;
+      ensures pat.length == 0 ==> \result == true;
+      ensures a.length == 0  && pat.length == 1 ==> \result == true; 
+      ensures a.length == 0  && pat.length > 1 ==> \result == false; 
+      ensures pat.length > 0 && a.length > 0 ==>  Relaxed.diffIndex(pat, a) == pat.length ==> \result == true;

@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/BookExamples/08ProofObligations/Fig8.1-A.java@(line 1,col 1)
+instance invariant i>0 && i<=42;

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/Lemmas.java@(line 1,col 1)
+loop_invariant
+	     sa.compare(sa.suffixes[m], sa.suffixes[i]) > 0 &&
+	     i+1 <= m && m <= j;
+	    decreases j - m;
+	    assignable \strictly_nothing;

@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vacid0_01_SparseArray/src/Harness.java@(line 1,col 1)
+normal_behaviour
+          ensures a.get(5) == 1 && b.get(7) == 2;
+          ensures a.get(0) == 0 && b.get(0) == 0;

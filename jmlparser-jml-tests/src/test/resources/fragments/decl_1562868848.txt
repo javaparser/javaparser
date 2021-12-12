@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/examDB/core/ExamDataBaseImpl.java@(line 1,col 1)
+private behavior
+         ensures (\exists int i; 
+                      0<=i && i<students.length && students[i]!=null
+                      && students[i].matrNr==matrNr && \result==i);
+         assignable \object_creation(ExamDataBaseException);
+         signals (ExamDataBaseException) 
+             !(\exists int i; 
+                   0<=i && i<students.length && students[i]!=null
+                   && students[i].matrNr==matrNr);
+         signals_only ExamDataBaseException;

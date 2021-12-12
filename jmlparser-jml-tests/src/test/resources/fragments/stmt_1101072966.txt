@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/factorial/FactorialFunction.java@(line 1,col 1)
+assert spec_factorial(0) == 1;
+
+maintaining c >= 1 && c <= n+1;
+maintaining fact > 0;
+maintaining fact <= Long.MAX_VALUE;
+maintaining spec_factorial(c - 1) == fact;
+decreases n - c;

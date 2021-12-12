@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Simple/src/BlockContractExamplesWithoutPreconditions.java@(line 1,col 1)
+ensures 0 <= from && from < numbers.length
+              && (\before(from) < 0 ==> from == 0)
+              && (\before(from) >= 0 ==> from == \before(from));
+            returns \result == 0
+              && (\before(from) >= numbers.length
+                  || numbers.length == 0);
+            signals_only \nothing;
+            assignable \nothing;

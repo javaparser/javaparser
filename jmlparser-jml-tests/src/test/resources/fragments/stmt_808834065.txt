@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escInlineLoop/Test.java@(line 1,col 1)
+assert Test.ii == st.count();
+
+       assert arr[0] == 1;
+       assert arr[4] == 5;
+       assert (\forall int j; j>=0 && j<arr.length; arr[j] == j+1);

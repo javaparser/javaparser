@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/model1/ModelClassExampleBugSub2.java@(line 1,col 1)
+public model class MIndexedContents extends ModelClassExampleBug<E>.MContents {
+          public boolean foo() { return false; }
+        }
+        
+        public static model class SMIndexedContents extends ModelClassExampleBug<E>.SMContents {         
+          public boolean foo() { return false; }
+        }

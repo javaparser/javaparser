@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/arith/euclidean/src/Gcd.java@(line 1,col 1)
+public normal_behavior
+          requires _small >= 0 && _big >= _small;
+          ensures _big != 0 ==>
+                  (_big % \result == 0 && _small % \result == 0 &&
+                   (\forall int x; x > 0 && _big % x == 0 && _small % x == 0;
+                                   \result % x == 0));
+        assignable \nothing;

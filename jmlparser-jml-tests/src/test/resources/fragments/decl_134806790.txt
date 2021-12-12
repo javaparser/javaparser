@@ -1,0 +1,29 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escrmloop/Lemmas.java@(line 1,col 1)
+public normal_behaviour
+         requires sa.a != null;
+         requires k > 0;
+         requires 0 <= a && a <= sa.a.length - k;
+         requires 0 <= b && b < sa.a.length;
+         requires 0 <= c && c <= sa.a.length - k;
+         requires sa.compare(a,b) >= 0;
+         requires sa.compare(b,c) > 0;
+         requires (\forall int t; a <= t && t < a+k; sa.a[t] == sa.a[c+t-a]);
+         ensures  (\forall int t; a <= t && t < a+k; sa.a[t] == sa.a[b+t-a]);
+         ensures  (\forall int t; b <= t && t < b+k; sa.a[t] == sa.a[c+t-b]);
+         ensures  b < sa.a.length - k;
+         pure helper
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+         skipesc

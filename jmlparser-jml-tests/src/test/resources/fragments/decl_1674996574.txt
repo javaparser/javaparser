@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SmansEtAl/src/Iterator.java@(line 1,col 1)
+normal_behavior
+        requires l.\inv && l.size() >= 0;
+        assignable \nothing;
+        ensures list() == l;
+        ensures \fresh(footprint);
+        ensures_redundantly l.footprint == \old(l.footprint);

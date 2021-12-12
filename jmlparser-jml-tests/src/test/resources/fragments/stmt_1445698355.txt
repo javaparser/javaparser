@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/comprehensions/src/SegSum.java@(line 1,col 1)
+loop_invariant i<=n && n<=j &&
+	       s == (\sum int k; i <=k & k<n; a[k]);
+	    assignable \nothing;
+	    decreases j-n;

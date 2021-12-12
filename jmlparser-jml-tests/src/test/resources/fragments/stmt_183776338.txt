@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug462b/Container.java@(line 1,col 1)
+assert user instanceof ContainerUser;          
+                 assert cont instanceof Container;              
+                 assert user.c.a == 127;                        
+                 assert user.c instanceof Container;

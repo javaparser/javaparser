@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escFunction/Test.java@(line 1,col 1)
+public normal_behavior
+        ensures \result == (i<0 ? ((long)i - Integer.MIN_VALUE - Integer.MIN_VALUE) : i) && 0 <= \result && \result <= 0xffff_ffffL;
+      pure helper function
+      model public static long cv2(int i);
+
+      public normal_behavior
+        ensures \result == cv2(i);
+      pure helper

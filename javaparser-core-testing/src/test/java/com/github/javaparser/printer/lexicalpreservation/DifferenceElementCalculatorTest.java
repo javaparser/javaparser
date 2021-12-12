@@ -49,7 +49,7 @@ import java.util.List;
 
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.TokenTypes.spaceTokenKind;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.printer.lexicalpreservation.DifferenceElement.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug458a/AllocatorTest.java@(line 1,col 1)
+assert b2 != null;
+       assert b2.length == 10;
+       assert b1 != b2;

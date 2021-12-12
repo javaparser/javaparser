@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/Map/src/MapCaseStudy/AbstractMap.java@(line 1,col 1)
+normal_behaviour
+       requires 0 <= index && index < entries.length;
+       ensures map == \map_remove(\old(map), \old(entries[index].key));
+       ensures \fresh(entries);
+       assignable footprint;

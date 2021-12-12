@@ -524,7 +524,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final ForallClause n, final Void arg) {
+    public Integer visit(final JmlForallClause n, final Void arg) {
         return (n.getVariables().accept(this, arg)) * 31 + (n.getKind().hashCode());
     }
 

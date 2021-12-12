@@ -178,12 +178,12 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
      * <p>
      * Calling this method on a foreach statement {@code forEachStmt} is equivalent to calling
      * {@code forEachStmt.getVariable().getModifiers().isNonEmpty() &&
-     * forEachStmt.getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL}.
+     * forEachStmt.getVariable().getModifiers().get(0).getKeyword() == Modifier.DefaultKeyword.FINAL}.
      *
      * @return {@code true} if this foreach statement's variable is {@code final}, and {@code false} otherwise.
      */
     public boolean hasFinalVariable() {
-        return getVariable().getModifiers().isNonEmpty() && getVariable().getModifiers().get(0).getKeyword() == Modifier.Keyword.FINAL;
+        return getVariable().getModifiers().isNonEmpty() && getVariable().getModifiers().get(0).getKeyword() == Modifier.DefaultKeyword.FINAL;
     }
 
     @Override

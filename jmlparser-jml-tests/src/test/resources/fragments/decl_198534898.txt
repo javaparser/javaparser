@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list/src/List.java@(line 1,col 1)
+public normal_behaviour 
+          requires l.\inv && \disjoint(footprint, l.footprint);
+          assignable footprint;
+          ensures \new_elems_fresh(\set_minus(footprint, l.footprint));

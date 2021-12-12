@@ -1,0 +1,17 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/ListsWithIterators/src/IntLinkedList.java@(line 1,col 1)
+ghost \seq nodeseq;   
+
+        
+        invariant footprint == \set_union(this.*,
+             (\infinite_union int i; 0<=i && i<size; ((IntNode)nodeseq[i]).*));
+       
+        invariant (\forall int i; 0<=i && i<size; 
+                ((IntNode)nodeseq[i]) != null                                                       
+             && ((IntNode)nodeseq[i]).data == (int)seq[i] 
+             && (\forall int j; 0<=j && j<size; (IntNode)nodeseq[i] == (IntNode)nodeseq[j] ==> i == j)
+             && ((IntNode)nodeseq[i]).next == (i==size-1 ? null : (IntNode)nodeseq[i+1]));
+       
+        invariant first == (size == 0 ? null : (IntNode)nodeseq[0]);
+        invariant last == (size == 0 ? null : (IntNode)nodeseq[size-1]);
+       
+        invariant size == seq.length && size == nodeseq.length;

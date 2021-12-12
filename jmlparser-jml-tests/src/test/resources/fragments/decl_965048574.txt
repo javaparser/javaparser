@@ -1,0 +1,19 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+normal_behavior
+          requires k >= 0;
+          ensures 0 <= \result && \result <= k;
+          ensures pow2(\result) <= k+1;
+          ensures k% pow2(\result+1) == pow2(\result)-1;
+          ensures (\forall int z; k% pow2(z+1) == pow2(z)-1; 
+                      z >= \result);
+          accessible \nothing;
+        
+
+
+
+
+
+
+
+
+         strictly_pure helper

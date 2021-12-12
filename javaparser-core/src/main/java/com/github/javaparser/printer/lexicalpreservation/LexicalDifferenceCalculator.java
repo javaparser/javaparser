@@ -347,7 +347,7 @@ class LexicalDifferenceCalculator {
     }
 
     public static int toToken(Modifier modifier) {
-        switch (modifier.getKeyword()) {
+        switch ((Modifier.DefaultKeyword) modifier.getKeyword()) {
             case PUBLIC:
                 return GeneratedJavaParserConstants.PUBLIC;
             case PRIVATE:

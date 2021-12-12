@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escDoubleArith/DoubleProblem.java@(line 1,col 1)
+assert 3.0 < 3.9;
+       assert 3.0 <= 4.0;
+       assert 3.02 > 3.01;
+       assert 3.02 != 3.01;
+       assert 3.02 == 3.02;

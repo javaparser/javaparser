@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug538/Test.java@(line 1,col 1)
+public invariant n > 0;
+
+         public behavior
+            ensures n == nn;
+         pure

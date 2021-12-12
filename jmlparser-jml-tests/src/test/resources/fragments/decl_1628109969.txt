@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/10-SITA/SITA3.java@(line 1,col 1)
+public normal_behaviour
+        requires  0<= pos1 && 0<= pos2 &&
+        pos1 < a.length && pos2 < a.length ;  
+        ensures  
+          a[pos1]  == \old(a[pos2]) &&
+          a[pos2]  == \old(a[pos1]);
+        assignable a[pos1], a[pos2];

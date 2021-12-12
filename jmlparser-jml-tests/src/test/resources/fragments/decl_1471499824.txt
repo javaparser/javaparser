@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/Map/src/MapCaseStudy/AbstractMap.java@(line 1,col 1)
+normal_behaviour
+       requires newEntries != null;
+       requires newEntries != entries;
+       requires entries.length > 0;
+       requires newEntries.length == entries.length - 1;
+       requires \typeof(newEntries) == \typeof(entries);
+       requires 0 <= index && index < entries.length;
+       ensures (\forall Object o; !\fresh(o));
+       ensures (\forall int i; 0 <= i && i < newEntries.length;
+                     newEntries[i] == ((i < index) ? entries[i] : entries[i + 1]));
+       assignable newEntries[*];

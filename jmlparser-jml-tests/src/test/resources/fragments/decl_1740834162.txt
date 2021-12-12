@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug604/AbsInterval.java@(line 1,col 1)
+in state;
+         public invariant Integer.MIN_VALUE <= lb && lb <= Integer.MAX_VALUE;
+         public invariant lb <= ub+1;
+         public invariant Integer.MIN_VALUE <= ub+1 && ub <= Integer.MAX_VALUE;
+
+         requires l <= ((long)u)+1;
+         assignable state;
+         ensures lb == (long)l && ub == (long)u;

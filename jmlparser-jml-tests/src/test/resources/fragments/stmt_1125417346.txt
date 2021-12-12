@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/esc2DTranspose/TransposeMatrixOrig.java@(line 1,col 1)
+maintaining (\forall int j; 0 <= j && j < d; matrix[c][j] == transpose[j][c]);
+                  maintaining (\forall int k; 0 < k && k < matrix.length; matrix[k].length == n);
+                  maintaining transpose.length == n;
+                  maintaining (\forall int k; 0 < k && k < transpose.length; transpose[k].length == m);
+           maintaining 0 <= d && d <= n;
+           decreases n - d;
+                  maintaining d < n ==> (transpose[d].length == m);
+           maintaining 0 <= c && c < m;

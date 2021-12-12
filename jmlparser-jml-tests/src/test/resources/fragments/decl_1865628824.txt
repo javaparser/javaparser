@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/quicksort/Quicksort.java@(line 1,col 1)
+public normal_behaviour
+         requires 0 <= from;
+         requires to < array.length;
+         requires from > 0 ==> (\forall int x; from<=x && x<=to; array[x] > array[from-1]);
+         requires to < array.length-1 ==> (\forall int x; from<=x && x<=to; array[x] <= array[to+1]);
+         ensures \dl_seqPerm(\dl_array2seq(array), \old(\dl_array2seq(array)));
+         ensures (\forall int i; from<=i && i<to; array[i] <= array[i+1]);
+         ensures from > 0 ==> (\forall int x; from<=x && x<=to; array[x] > array[from-1]);
+         ensures to < array.length-1 ==> (\forall int x; from<=x && x<=to; array[x] <= array[to+1]);
+         assignable array[from..to];
+         measured_by to - from + 1;

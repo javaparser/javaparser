@@ -31,7 +31,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;

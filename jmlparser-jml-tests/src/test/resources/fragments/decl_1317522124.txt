@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/sfbug402/Seq.java@(line 1,col 1)
+ensures 0 <= \result;
+         
+
+
+         non_null pure

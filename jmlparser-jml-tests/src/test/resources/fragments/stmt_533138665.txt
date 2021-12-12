@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/geometry/Factory.java@(line 1,col 1)
+maintaining i >= routeStart;
+	    decreases routeEnd-i+1; 
+	    assignable i;

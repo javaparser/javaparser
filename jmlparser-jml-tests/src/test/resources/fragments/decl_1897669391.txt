@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Simple/src/BlockContractExamples.java@(line 1,col 1)
+normal_behavior
+        ensures from < 0 ==> \result == (
+          \sum int i;
+             0 <= i && i < numbers.length;
+          numbers[i]
+        );
+        ensures from >= 0 ==> \result == (
+          \sum int i;
+             from <= i && i < numbers.length;
+          numbers[i]
+        );
+        assignable \nothing;

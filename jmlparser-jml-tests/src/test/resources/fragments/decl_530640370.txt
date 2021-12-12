@@ -1,0 +1,14 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug591/C.java@(line 1,col 1)
+public behavior
+  ensures \result == (\forall int x; (\forall int y; 0 <= x && x < y && y < a.length; a[x] <= a[y]));
+  assignable \nothing;
+  pure public static model boolean isSorted(int[] a);
+   
+
+
+
+
+
+     public normal_behavior
+  ensures next == 0 && this.indices == indices;
+  assignable \nothing;

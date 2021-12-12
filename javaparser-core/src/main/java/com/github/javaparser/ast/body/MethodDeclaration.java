@@ -252,27 +252,27 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     public boolean isNative() {
-        return hasModifier(Modifier.Keyword.NATIVE);
+        return hasModifier(Modifier.DefaultKeyword.NATIVE);
     }
 
     public boolean isSynchronized() {
-        return hasModifier(Modifier.Keyword.SYNCHRONIZED);
+        return hasModifier(Modifier.DefaultKeyword.SYNCHRONIZED);
     }
 
     public boolean isDefault() {
-        return hasModifier(Modifier.Keyword.DEFAULT);
+        return hasModifier(Modifier.DefaultKeyword.DEFAULT);
     }
 
     public MethodDeclaration setNative(boolean set) {
-        return setModifier(Modifier.Keyword.NATIVE, set);
+        return setModifier(Modifier.DefaultKeyword.NATIVE, set);
     }
 
     public MethodDeclaration setSynchronized(boolean set) {
-        return setModifier(Modifier.Keyword.SYNCHRONIZED, set);
+        return setModifier(Modifier.DefaultKeyword.SYNCHRONIZED, set);
     }
 
     public MethodDeclaration setDefault(boolean set) {
-        return setModifier(Modifier.Keyword.DEFAULT, set);
+        return setModifier(Modifier.DefaultKeyword.DEFAULT, set);
     }
 
     @Override

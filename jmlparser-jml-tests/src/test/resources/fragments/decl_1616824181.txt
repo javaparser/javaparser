@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug591/C.java@(line 1,col 1)
+public normal_behavior
+  requires isSorted(a) && a != indices;
+  requires next < indices.length;
+  ensures (\exists int i; i>=0 && i<a.length; a[i] == v) ? indices[\old(next)] == \result : (next == \old(next) && indices[next] == \old(indices[next]));  
+  ensures (\exists int i; i>=0 && i<a.length; a[i] == v) ? a[\result] == v  : \result == -1;
+  assignable indices[next], next;

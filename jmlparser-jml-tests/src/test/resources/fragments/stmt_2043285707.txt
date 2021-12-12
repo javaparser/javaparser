@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_01_Swap/TwoWaySwap.java@(line 1,col 1)
+loop_invariant
+	      i>=0 && j < a.length && j-i >= -1 &&
+	      (\forall int m; m>=0 && m<i; !a[m]) &&
+	      (\forall int m; m>j && m<a.length; a[m]) &&
+	      (\forall int m; m>=i && m <=j; a[m] == \old(a[m])) &&
+	      \dl_seqPerm(\old(seq), seq);
+	    assignable a[*];
+	    decreases j - i + 1;

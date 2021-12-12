@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/LogFile.java@(line 1,col 1)
+public normal_behavior
+        requires a.length > 0;
+        assignable a[*];
+        ensures (\forall int i; 0 <= i && i < a.length - 1; a[i] >= a[i + 1]);

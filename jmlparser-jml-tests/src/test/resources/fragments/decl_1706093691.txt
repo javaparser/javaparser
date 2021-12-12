@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/cost/PositiveArrayElements.java@(line 1,col 1)
+public normal_behavior
+         ensures \result.length==(\num_of int j; 0<=j && j<t.length; t[j]>0);
+         ensures (\forall int i; 0<=i && i<t.length && t[i]>0; 
+          (\exists int j; 0<=j && j<\result.length; \result[j]==t[i]));
+         ensures (\forall int i; 0<=i && i<\result.length; 
+          (\exists int j; 0<=j && j<t.length; \result[i]==t[j]));

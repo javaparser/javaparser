@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_3_DLL/src/DoubleLinkedList.java@(line 1,col 1)
+set s = \seq_concat(\seq_sub(s,0,k),\seq_concat(\seq_singleton(x),\seq_sub(s,k,len)));
+             set len = len + 1;

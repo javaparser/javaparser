@@ -1,0 +1,31 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/javacard/src/javacard/framework/PIN.java@(line 1,col 1)
+public instance model \locset validatedRep;
+         public instance model boolean isValidated;
+
+         public accessible isValidated : footprint;
+         public accessible validatedRep : footprint;
+
+         public instance model \locset triesRep;
+         public instance model byte triesLeft;
+
+         public accessible triesLeft : footprint;
+         public accessible triesRep : footprint;
+
+         public instance model \locset footprint;
+         public accessible \inv : footprint;
+         public accessible footprint : footprint;
+
+         public instance model byte maxTries;
+         public accessible maxTries : footprint;
+         public instance invariant maxTries > 0 && maxTries <= 127;
+
+         public instance model byte maxPINSize;
+         public accessible maxPINSize : footprint;
+         public instance invariant maxPINSize > 0 && maxPINSize <= 127;
+
+         public instance invariant triesLeft >= 0 && triesLeft <= maxTries;
+
+         public normal_behavior
+          requires true;
+          ensures \result == isValidated;
+          accessible footprint;

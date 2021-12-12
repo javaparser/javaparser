@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug445/PMax.java@(line 1,col 1)
+in objectState; 
+         also assignable maxSeen;
+        ensures maxSeen == Math.max(\old(maxSeen),x);

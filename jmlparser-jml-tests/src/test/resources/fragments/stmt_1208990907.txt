@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte10_03_LinkedList/src/Node.java@(line 1,col 1)
+set n.seq = \seq_concat(\seq_singleton(x), tail == null ? \seq_empty : tail.seq);
+          set n.repr = \set_union(\all_fields(n), tail == null ? \empty : (\set_union(\all_fields(tail), tail.repr)));

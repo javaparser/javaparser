@@ -21,7 +21,6 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -31,7 +30,6 @@ import com.github.javaparser.metamodel.ModifierMetaModel;
 import java.util.Arrays;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.JmlDocModifierMetaModel;
 
 /**
  * A modifier, like private, public, or volatile.
@@ -39,94 +37,98 @@ import com.github.javaparser.metamodel.JmlDocModifierMetaModel;
 public class Modifier extends Node {
 
     public static Modifier publicModifier() {
-        return new Modifier(Keyword.PUBLIC);
+        return new Modifier(DefaultKeyword.PUBLIC);
     }
 
     public static Modifier protectedModifier() {
-        return new Modifier(Keyword.PROTECTED);
+        return new Modifier(DefaultKeyword.PROTECTED);
     }
 
     public static Modifier privateModifier() {
-        return new Modifier(Keyword.PRIVATE);
+        return new Modifier(DefaultKeyword.PRIVATE);
     }
 
     public static Modifier abstractModifier() {
-        return new Modifier(Keyword.ABSTRACT);
+        return new Modifier(DefaultKeyword.ABSTRACT);
     }
 
     public static Modifier staticModifier() {
-        return new Modifier(Keyword.STATIC);
+        return new Modifier(DefaultKeyword.STATIC);
     }
 
     public static Modifier finalModifier() {
-        return new Modifier(Keyword.FINAL);
+        return new Modifier(DefaultKeyword.FINAL);
     }
 
     public static Modifier transientModifier() {
-        return new Modifier(Keyword.TRANSIENT);
+        return new Modifier(DefaultKeyword.TRANSIENT);
     }
 
     public static Modifier volatileModifier() {
-        return new Modifier(Keyword.VOLATILE);
+        return new Modifier(DefaultKeyword.VOLATILE);
     }
 
     public static Modifier synchronizedModifier() {
-        return new Modifier(Keyword.SYNCHRONIZED);
+        return new Modifier(DefaultKeyword.SYNCHRONIZED);
     }
 
     public static Modifier nativeModifier() {
-        return new Modifier(Keyword.NATIVE);
+        return new Modifier(DefaultKeyword.NATIVE);
     }
 
     public static Modifier strictfpModifier() {
-        return new Modifier(Keyword.STRICTFP);
+        return new Modifier(DefaultKeyword.STRICTFP);
     }
 
     public static Modifier transitiveModifier() {
-        return new Modifier(Keyword.TRANSITIVE);
+        return new Modifier(DefaultKeyword.TRANSITIVE);
     }
 
     public static Modifier jmlModelModifier() {
-        return new Modifier(Keyword.JML_MODEL);
+        return new Modifier(DefaultKeyword.JML_MODEL);
     }
 
     public static Modifier jmlGhostModifier() {
-        return new Modifier(Keyword.JML_GHOST);
+        return new Modifier(DefaultKeyword.JML_GHOST);
     }
 
     public static Modifier jmlSpecPublicModifier() {
-        return new Modifier(Keyword.JML_SPEC_PUBLIC);
+        return new Modifier(DefaultKeyword.JML_SPEC_PUBLIC);
     }
 
     public static Modifier jmlHelperModifier() {
-        return new Modifier(Keyword.JML_HELPER);
+        return new Modifier(DefaultKeyword.JML_HELPER);
     }
 
     public static Modifier jmlNullableModifier() {
-        return new Modifier(Keyword.JML_NULLABLE);
+        return new Modifier(DefaultKeyword.JML_NULLABLE);
     }
 
     public static Modifier jmlNonNullModifier() {
-        return new Modifier(Keyword.JML_NON_NULL);
+        return new Modifier(DefaultKeyword.JML_NON_NULL);
     }
 
     public static Modifier jmlSpecPackageModifier() {
-        return new Modifier(Keyword.JML_SPEC_PACKAGE);
+        return new Modifier(DefaultKeyword.JML_SPEC_PACKAGE);
     }
 
     public static Modifier jmlSpecProtectedModifier() {
-        return new Modifier(Keyword.JML_SPEC_PROTECTED);
+        return new Modifier(DefaultKeyword.JML_SPEC_PROTECTED);
     }
 
     public static Modifier jmlSpecPrivateModifier() {
-        return new Modifier(Keyword.JML_SPEC_PRIVATE);
+        return new Modifier(DefaultKeyword.JML_SPEC_PRIVATE);
+    }
+
+    public interface Keyword {
+        String asString();
+        String name();
     }
 
     /**
      * The Java modifier keywords.
      */
-    public enum Keyword {
-
+    public enum DefaultKeyword implements Keyword {
         DEFAULT("default"),
         PUBLIC("public"),
         PROTECTED("protected"),
@@ -162,13 +164,14 @@ public class Modifier extends Node {
 
         private final String codeRepresentation;
 
-        Keyword(String codeRepresentation) {
+        DefaultKeyword(String codeRepresentation) {
             this.codeRepresentation = codeRepresentation;
         }
 
         /**
          * @return the Java keyword represented by this enum constant.
          */
+        @Override
         public String asString() {
             return codeRepresentation;
         }
@@ -177,7 +180,7 @@ public class Modifier extends Node {
     private Keyword keyword;
 
     public Modifier() {
-        this(Keyword.PUBLIC);
+        this(DefaultKeyword.PUBLIC);
     }
 
     @AllFieldsConstructor
@@ -227,7 +230,7 @@ public class Modifier extends Node {
      * Utility method that instantiaties "Modifier"s for the keywords,
      * and puts them in a NodeList.
      */
-    public static NodeList<Modifier> createModifierList(Modifier.Keyword... modifiers) {
+    public static NodeList<Modifier> createModifierList(Modifier.DefaultKeyword... modifiers) {
         return Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList());
     }
 
@@ -263,7 +266,7 @@ public class Modifier extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Modifier(TokenRange tokenRange, NodeList<JmlDoc> jmlComments) {
+    public Modifier(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }

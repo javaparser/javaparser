@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/testGen/bubble/BubbleSort.java@(line 1,col 1)
+public normal_behavior
+         requires a!=null && a.length>1 && a.length<5;
+         requires a.length == b.length && 
+                  (\forall int i; 0<=i && i<a.length; b[i]==a[i]);
+         ensures a!=null ==> (\forall int i; 0<=i && i<a.length-1; 
+                               a[i]<=a[i+1]) &&
+                             equalsModOrdering(a, b);

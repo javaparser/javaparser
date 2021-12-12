@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escrmloop/Lemmas.java@(line 1,col 1)
+decreases j - m;
+loop_modifies \nothing;
+loop_invariant sa.compare(sa.suffixes[m], sa.suffixes[i]) > 0 && i+1 <= m && m <= j;

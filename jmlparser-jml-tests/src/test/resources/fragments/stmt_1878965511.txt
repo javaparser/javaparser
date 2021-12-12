@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Free/src/FreeConditions.java@(line 1,col 1)
+public normal_behavior
+            requires_free field == 41;
+            ensures field == 42;

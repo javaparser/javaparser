@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/BookExamples/05FormalSpecification/While-Example_JML/WhileDemo.java@(line 1,col 1)
+public normal_behavior
+        requires 
+          a!=null && a.length > 0;
+        ensures 
+             (\forall int i; 0 <= i && i<\old(a.length); 
+               m >= a[i]);
+        diverges false;

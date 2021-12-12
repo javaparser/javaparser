@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escMultipleModel/MultipleModel.java@(line 1,col 1)
+public normal_behavior ensures \result._base == this._base + i;

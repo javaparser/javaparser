@@ -1,0 +1,24 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/PayCard.java@(line 1,col 1)
+public normal_behavior
+            requires amount>0;
+            requires amount + balance < limit && isValid() == true;
+            ensures \result == true && amount == \old(amount);
+            ensures balance == amount + \old(balance);
+            ensures unsuccessfulOperations == \old(unsuccessfulOperations);
+            assignable balance, unsuccessfulOperations;
+       
+            also
+       
+        public normal_behavior
+            requires amount>0 ;
+            requires amount + balance >= limit || isValid() == false;
+            ensures \result == false && amount == \old(amount);
+            ensures unsuccessfulOperations == \old(unsuccessfulOperations) + 1; 
+            ensures balance == \old(balance);
+            assignable balance, unsuccessfulOperations;
+        	
+        also
+       
+        public exceptional_behavior
+            requires amount <= 0;
+            assignable \nothing;

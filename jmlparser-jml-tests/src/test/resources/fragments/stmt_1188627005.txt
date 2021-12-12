@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/rac1/Bug1.java@(line 1,col 1)
+ghost \TYPE t = \elemtype(\typeof(a));
+             assert (\lbl TY t) == \type(LinkedList<Boolean>);
+             assert (\lbl TY2 \typeof(k)) == \type(int);
+             set  t = (\lbl TY3 \elemtype(\typeof(k)));
+             set  t = (\lbl TY4 \elemtype(\typeof(o)));

@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/verifythis-2019-2/Challenge2A.java@(line 1,col 1)
+loop_invariant 0 <= x <= input.length;
+             loop_invariant 0 <= height <= x;
+             loop_invariant (\forall int i; 0 <= i < x; left[i] < i);
+             loop_invariant (\forall int i; 0 <= i < x; left[i] != -1 ==> input[left[i]] < input[i]);
+             loop_invariant (\forall int i; 0 <= i < x; (\forall int j; left[i] < j < i; input[j] >= input[i]));
+             loop_invariant (\forall int i; 0 <= i < height; 0 <= stack[i] < x);
+             loop_invariant x > 0 ==> height > 0;
+             loop_invariant height > 0 ==> stack[height-1] == x-1;                                                                      
+             loop_invariant (\forall int i; 1 <= i < height; (\forall int j; stack[i-1] < j < stack[i]; input[j] >= input[stack[i]]));
+             loop_invariant height > 0 ==> (\forall int j; 0 <= j < stack[0]; input[j] >= input[stack[0]]);
+             loop_decreases input.length - x;

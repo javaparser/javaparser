@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte10_02_Invert/src/Invert.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= a.length 
+              && (\forall int x; 0 <= x && x < i; b[a[x]] == x);
+            assignable b[*];
+            decreases a.length - i;

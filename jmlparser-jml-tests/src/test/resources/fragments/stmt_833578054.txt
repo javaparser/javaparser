@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/loopExercises/LoopExercises.java@(line 1,col 1)
+assert 2*result == (i-1)*i + 2*i;
+              assume i*(i+1) == (i-1)*i + 2*i;
+                 assert 2*result == i*(i+1);

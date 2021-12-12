@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/08-Java5/src/For.java@(line 1,col 1)
+requires \invariant_for(f);
+      diverges true;
+      ensures false;

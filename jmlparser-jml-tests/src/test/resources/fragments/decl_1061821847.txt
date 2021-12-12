@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug445/Pair.java@(line 1,col 1)
+public model_program { 
+          normal_behavior
+            ensures res != null && res instanceof ArrayList<S> 
+                 && res.size() == 2;
+          res.add(0,p.run(first));
+          res.add(1,p.run(second));
+          return res;
+        }

@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/coincidence_count/CC.java@(line 1,col 1)
+public normal_behaviour
+         requires (\forall int i,j; 0 <= i && i < j && j < a.length; 
+                        a[i] < a[j]);
+         requires (\forall int i,j; 0 <= i && i < j && j < b.length; 
+                        b[i] < b[j]);
+         ensures \result == 
+             (\sum int k; 0<=k && k < a.length;
+                 (\exists int l; 0<=l && l<b.length; a[k]==b[l]) ? 1 : 0);
+         modifies \strictly_nothing;

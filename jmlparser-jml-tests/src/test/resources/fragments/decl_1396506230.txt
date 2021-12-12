@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/inconsistent_represents/src/MyClass.java@(line 1,col 1)
+model int size;
+         represents size = size + 1;
+
+         model int evil;
+         represents evil \such_that false;
+
+         ensures \result == 0;

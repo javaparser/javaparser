@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list/src/List.java@(line 1,col 1)
+public normal_behaviour
+          requires 0 <= index && index < size(); 
+          accessible footprint;
+          ensures \result == get(index);
+       
+        also public exceptional_behaviour
+          requires index < 0 || size() <= index;
+          signals_only IndexOutOfBoundsException;

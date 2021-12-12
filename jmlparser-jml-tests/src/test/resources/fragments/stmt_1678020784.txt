@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/implicitIterationA/ImplicitIterationDemo.java@(line 1,col 1)
+loop_invariant allTrue==(\forall int j; 0<=j && j <\count; ss.values[j]);
+           loop_modifies allTrue;
+           inlined_loop;

@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/removeDups/RemoveDup.java@(line 1,col 1)
+public normal_behaviour
+          requires 0<=len && len <= a.length;
+          ensures \result <==> (\exists int i; 0<=i && i<len; a[i] == v);
+          assignable \strictly_nothing;

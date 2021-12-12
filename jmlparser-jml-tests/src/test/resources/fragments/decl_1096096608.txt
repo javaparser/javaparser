@@ -1,0 +1,29 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/PayCard.java@(line 1,col 1)
+public instance invariant log != null; 
+        public instance invariant log.logArray.length == log.logFileSize;
+        public instance invariant balance==log.logArray[log.currentRecord].balance;
+        public instance invariant log.currentRecord < log.logArray.length   
+                    && log.currentRecord >= 0 && \nonnullelements(log.logArray)
+                    && log.logFileSize == log.logArray.length;
+        public instance invariant balance >=0;
+        public instance invariant limit >0;
+        public instance invariant available() >= 0;
+        public instance invariant unsuccessfulOperations >=0;
+        public represents value = balance;
+        public represents regularState  = (unsuccessfulOperations <= 3);
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         spec_public

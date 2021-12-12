@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Disjoint.java@(line 1,col 1)
+requires    x == 0;
+        ensures     x == 0;
+        assignable  y;

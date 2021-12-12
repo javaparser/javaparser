@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/rise4fun/Smallest.java@(line 1,col 1)
+requires true;
+         ensures \result == -1 ==> a.length == 0;
+         ensures \result > -1 ==> (\forall int i; 0 <= i && i < a.length; a[\result] <= a[i]);

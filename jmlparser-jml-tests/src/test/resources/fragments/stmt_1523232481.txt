@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug623/Test.java@(line 1,col 1)
+assert ~i == -i -1;
+       assert ~0 == -1;
+       assert ~1 == -2;
+       assert ~-1 == 0;
+       assert ~Integer.MIN_VALUE == Integer.MAX_VALUE;
+       assert Integer.MIN_VALUE == ~Integer.MAX_VALUE;
+       assert ~~i == i;

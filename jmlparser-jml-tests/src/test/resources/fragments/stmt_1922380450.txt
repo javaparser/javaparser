@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug647/B.java@(line 1,col 1)
+assert bbbb.b != null;                  
+             assert bbbb != this;

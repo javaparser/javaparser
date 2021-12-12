@@ -1,0 +1,24 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/valuestringsBad/JMLStringTestBad.java@(line 1,col 1)
+model public static void conversionBad4(nullable String s, Object o) {
+           ghost string s4 = o;         
+        }
+
+         model public static void conversionBad4b(nullable String s, Object o) {
+           ghost string s4 = (string)o;         
+        }
+
+         model public static void conversionBad5(nullable String s, Object o) {
+           ghost string s5 = null;         
+        }
+
+         model public static void conversionBad6(string s1) {
+           ghost string s6 = (string)null;         
+        }
+
+         model public static void conversionBad7(string s1) {
+           ghost Object o1 = s1;         
+        }
+
+         model public static void conversionBad8(string s1) {
+           ghost Object o1 = (Object)s1;         
+        }

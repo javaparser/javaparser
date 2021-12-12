@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/testquant/Test.java@(line 1,col 1)
+loop_invariant 0 <= \count && \count <= a.length;
+          loop_invariant sum == (\sum int j; 0<=j && j<\count; a[j]);

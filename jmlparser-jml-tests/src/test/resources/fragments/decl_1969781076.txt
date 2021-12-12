@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug446/APMax.java@(line 1,col 1)
+in objectState; 
+         also
+          requires 0 <= i < a.length;
+          requires \nonnullelements(a);
+          assignable maxSeen;
+          ensures maxSeen == Math.max(\old(maxSeen),a[i]);

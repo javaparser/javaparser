@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/sv_rac_mod/sv_rac/DecimalException.java@(line 1,col 1)
+assignable \nothing;

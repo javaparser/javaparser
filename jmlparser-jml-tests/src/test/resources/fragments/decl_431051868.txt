@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Simple/src/LoopContractExamples.java@(line 1,col 1)
+normal_behavior
+        requires arr != null;
+        ensures (\forall int i; 0 <= i && i < arr.length;
+            arr[i] == \old(arr[i]) + 1);
+        assignable arr[*];

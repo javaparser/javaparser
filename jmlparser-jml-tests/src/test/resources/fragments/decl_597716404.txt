@@ -1,0 +1,28 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SmansEtAl/src/Stack.java@(line 1,col 1)
+accessible \inv: footprint;
+        invariant contents.\inv;
+        invariant \disjoint(contents, contents.footprint);
+         
+
+
+
+
+
+         model \locset footprint;
+        accessible footprint: footprint;
+        represents footprint = \set_union( \locset(contents), contents.footprint );
+         
+
+
+
+
+
+         normal_behavior
+        requires other.\inv;
+        requires \disjoint(footprint, other.footprint);
+        requires \typeof(other) == \type(Stack);
+        assignable footprint, other.footprint;
+        ensures other.\inv;
+                                                                               
+        ensures \disjoint(footprint, other.footprint);
+        ensures \new_elems_fresh(\set_union(footprint, other.footprint));

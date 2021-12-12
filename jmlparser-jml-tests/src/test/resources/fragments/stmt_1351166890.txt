@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/Simple/src/BlockContractExamples.java@(line 1,col 1)
+maintaining from <= i && i <= numbers.length
+                && result == (\sum int j;
+                    from <= j && j < i;
+                    numbers[j]);
+            decreasing numbers.length - i;
+            assignable \nothing;

@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/racbigint/bigint.java@(line 1,col 1)
+set prod = prod / 0;

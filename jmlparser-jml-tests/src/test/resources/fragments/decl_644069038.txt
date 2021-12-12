@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/simple/src/ParseLmtd.java@(line 1,col 1)
+model int mf;
+         represents mf = next.mf*c + f ;
+
+         normal_behavior
+          requires (\forall int x; x*c == 0);
+          ensures mf > \old(mf);

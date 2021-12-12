@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/SuffixArray.java@(line 1,col 1)
+normal_behavior
+        requires 0 < x && x < data.length;
+        ensures data[x]   == \old(data[x-1]);
+        ensures data[x-1] == \old(data[x]);
+        assignable data[x], data[x-1];

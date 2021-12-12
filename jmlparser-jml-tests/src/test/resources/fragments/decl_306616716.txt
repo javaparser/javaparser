@@ -1,0 +1,20 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/geometry/Factory.java@(line 1,col 1)
+public normal_behavior
+          requires \is_initialized(java.util.ArrayList) &&
+                   \is_initialized(java.util.LinkedList) &&
+                   \is_initialized(java.util.AbstractSequentialList) &&
+                   \is_initialized(java.util.AbstractList) &&
+                   \is_initialized(java.util.List) &&
+                   \is_initialized(java.util.Collection);
+          requires segments != null && l != null && segments.length >= 0;
+          {|
+              requires segments != l.list;
+              ensures (\forall int i; i>0 && i<=segments.length; 
+                       l.list[l.end-i] == 
+                       segments[segments.length-i]);
+              assignable l.end, 
+                         l.list[l.end .. l.end+segments.length-1];
+            also
+              assignable l.list;
+              ensures true;                            
+          |}

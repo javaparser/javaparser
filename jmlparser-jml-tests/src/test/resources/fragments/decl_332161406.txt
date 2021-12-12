@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug627/MyObjectArray.java@(line 1,col 1)
+public invariant addresses.length == 100;

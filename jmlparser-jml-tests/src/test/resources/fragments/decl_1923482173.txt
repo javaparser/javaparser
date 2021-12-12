@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escAssignableBug/AssignableBug.java@(line 1,col 1)
+normal_behavior
+        assignable position;
+        ensures position == p;

@@ -1,0 +1,14 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+public normal_behavior
+          requires right > left;
+          requires leftMost(left, right) >= 0;
+          requires right < a.length;
+          requires isPow2(right-left);
+          requires !even(right);
+          requires !even(left) || right-left==1;
+          ensures (\forall int k; 0 <= k && k < 2*(right-left);
+                   a[k+leftMost(left,right)] == (\sum int i; k-f(k)+1 <= i && i < k+1; \old(a[i+leftMost(left,right)])));
+                                                                                                                                
+          measured_by right - left + a.length + 3;
+          assignable (\infinite_union int k; leftMost(left,right) <= k
+                     && k <= right && !even(k); \singleton(a[k]));

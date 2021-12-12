@@ -24,7 +24,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.TokenTypes.spaceTokenKind;
 import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

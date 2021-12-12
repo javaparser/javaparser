@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/BookExamples/05FormalSpecification/While-Example_JML/WhileDemo.java@(line 1,col 1)
+loop_invariant  
+            (1<=i && i<=a.length) &&
+              (\forall int x; x>=0 && x<i; m >=a[x]);
+           
+            assignable m,i;
+	    decreases a.length-i;

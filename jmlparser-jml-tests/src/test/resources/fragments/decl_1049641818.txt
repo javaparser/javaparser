@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/nullableOld/NullableOld.java@(line 1,col 1)
+old nullable Object o = oo;
+         requires o != null;

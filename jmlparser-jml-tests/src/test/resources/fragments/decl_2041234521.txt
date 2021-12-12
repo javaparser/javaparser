@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/callstacks/CallStack.java@(line 1,col 1)
+requires pos(i);
+         ensures \result == i > 10;
+
+         pure

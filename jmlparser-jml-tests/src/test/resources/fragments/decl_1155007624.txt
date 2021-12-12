@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/model2/NonGenericModelClassExampleBugSub.java@(line 1,col 1)
+public static model class IndexedContents extends NonGenericModelClassExampleBug.Contents {
+          public boolean foo() { return false; }
+     }

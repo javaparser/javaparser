@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/BookExamples/03DynamicLogic/jmlAnnotatedExamples/KeepingContextIsUnsound.java@(line 1,col 1)
+loop_invariant true;
+	    assignable \nothing;

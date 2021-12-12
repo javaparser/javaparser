@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/LogFile.java@(line 1,col 1)
+public normal_behavior
+        requires LogRecord.transactionCounter >= 0;
+        ensures (\forall int x; 0 <= x && x < logArray.length; \fresh(logArray[x]));
+        ensures currentRecord == 0  && LogRecord.transactionCounter >= 0;
+        assignable LogRecord.transactionCounter;

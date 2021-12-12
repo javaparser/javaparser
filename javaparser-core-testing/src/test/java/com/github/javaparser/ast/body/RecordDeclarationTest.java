@@ -305,7 +305,7 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
-        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(recordDeclaration.hasModifier(Modifier.DefaultKeyword.FINAL));
         assertTrue(recordDeclaration.isFinal(), "Records are implicitly final.");
     }
 
@@ -319,7 +319,7 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findFirst(RecordDeclaration.class).get();
-        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(recordDeclaration.hasModifier(Modifier.DefaultKeyword.FINAL));
         assertTrue(recordDeclaration.isFinal(), "Records are implicitly final.");
     }
 
@@ -523,7 +523,7 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
-        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(recordDeclaration.hasModifier(Modifier.DefaultKeyword.STATIC));
         assertFalse(recordDeclaration.isStatic(), "Top level Records are NOT implicitly static.");
     }
 
@@ -542,7 +542,7 @@ public class RecordDeclarationTest {
         assertOneRecordDeclaration(cu);
 
         RecordDeclaration recordDeclaration = cu.findAll(RecordDeclaration.class).get(0);
-        assertFalse(recordDeclaration.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(recordDeclaration.hasModifier(Modifier.DefaultKeyword.STATIC));
         assertTrue(recordDeclaration.isStatic(), "Nested Records are implicitly static.");
 
     }

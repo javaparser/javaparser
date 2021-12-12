@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Dynamic2.java@(line 1,col 1)
+model \locset rep;
+       accessible rep: rep;
+
+       model \locset rep2;
+       accessible rep2: rep2;
+
+       requires x > 0 & y > 0;
+       requires \subset(\locset(x, y), rep);
+       requires \disjoint(rep, rep2);
+       ensures x > 0 & y > 0;

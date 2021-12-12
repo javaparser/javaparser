@@ -1,0 +1,16 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/LRS.java@(line 1,col 1)
+maintaining sa != null && \invariant_for(sa);
+            maintaining 0 <= s && s < sa.a.length;
+            maintaining 0 <= t && t < sa.a.length;
+            maintaining 0 <= l && l < sa.a.length;
+            maintaining s+l <= sa.a.length && t+l <= sa.a.length;
+            maintaining s != t || l == 0;
+            maintaining 0 < x && x <= sa.a.length;
+            maintaining (\forall int j; 0 <= j && j <l; sa.a[s+j] == sa.a[t+j]);
+            maintaining !(\exists int w; 0 < w && w < x
+                          && sa.suffixes[w-1] < sa.a.length-l
+                          && sa.suffixes[w]   < sa.a.length-l;
+                          (\forall int j; 0 <= j && j <= l;
+                           sa.a[sa.suffixes[w-1]+j] == sa.a[sa.suffixes[w]+j]));
+            decreasing sa.a.length-x;
+            assignable \strictly_nothing;

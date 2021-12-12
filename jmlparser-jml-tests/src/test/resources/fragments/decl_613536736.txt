@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug559/EntryList.java@(line 1,col 1)
+ensures (this.first == null && \result == 0) ||(this.rest == null && \result == 1)  ||
+        (\result == rest.size() + 1);
+        pure

@@ -1,0 +1,44 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Disjoint.java@(line 1,col 1)
+requires    \disjoint(rep, rep1);
+        requires    \disjoint(rep, rep2);
+        requires    \disjoint(rep, rep3);
+        requires    \disjoint(rep, rep4);
+        requires    \disjoint(rep, rep5);
+        requires    \disjoint(rep, rep6);
+        requires    \disjoint(rep, rep7);
+        requires    \disjoint(rep, rep8);
+        requires    \disjoint(rep, rep9);
+        requires    \disjoint(rep, rep10);
+        requires    \disjoint(rep, rep11);
+        requires    \disjoint(rep, rep12);
+        requires    \disjoint(rep, rep13);
+        requires    \disjoint(rep, rep14);
+        requires    \disjoint(rep, rep15);
+        requires    \disjoint(rep, rep16);
+        requires    \disjoint(rep, rep17);
+        requires    \disjoint(rep, rep18);
+        requires    \disjoint(rep, rep19);
+        requires    \disjoint(rep, rep20);
+        ensures     \disjoint(rep, rep1);
+        ensures     \disjoint(rep, rep2);
+        ensures     \disjoint(rep, rep3);
+        ensures     \disjoint(rep, rep4);
+        ensures     \disjoint(rep, rep5);
+        ensures     \disjoint(rep, rep6);
+        ensures     \disjoint(rep, rep7);
+        ensures     \disjoint(rep, rep8);
+        ensures     \disjoint(rep, rep9);
+        ensures     \disjoint(rep, rep10);
+        ensures     \disjoint(rep, rep11);
+        ensures     \disjoint(rep, rep12);
+        ensures     \disjoint(rep, rep13);
+        ensures     \disjoint(rep, rep14);
+        ensures     \disjoint(rep, rep15);
+        ensures     \disjoint(rep, rep16);
+        ensures     \disjoint(rep, rep17);
+        ensures     \disjoint(rep, rep18);
+        ensures     \disjoint(rep, rep19);
+        ensures     \disjoint(rep, rep20);
+        assignable  rep1, rep2, rep3, rep4, rep5, rep6, rep7, rep8, rep9, rep10,
+                    rep11, rep12, rep13, rep14, rep15, rep16, rep17, rep18,
+                    rep19, rep20;

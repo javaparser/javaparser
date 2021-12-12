@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/saddleback_search/Saddleback.java@(line 1,col 1)
+loop_invariant
+	      0 <= x && x <= array.length &&
+	     -1 <= y && y < array[0].length &&
+	      (\forall int j,i; 0<=i && i < array.length && 
+	                        0<=j && j < array[0].length ;
+	         (i < x || j > y) ==> array[i][j] != value);
+	   
+	    decreases array.length - x + y;
+	    modifies \nothing;

@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_04_TreeReconstruct/src/Tree.java@(line 1,col 1)
+normal_behavior
+        ensures left == l && right == r;
+        ensures heights == \dl_seqInc(\seq_concat(l.heights,r.heights));
+        ensures (\forall int i; 0<=i && i<heights.length; 
+                      (int)heights[i] == heights[i]);
+         
+
+
+
+
+
+         pure

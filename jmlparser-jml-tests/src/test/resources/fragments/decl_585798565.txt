@@ -1,0 +1,39 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/foveoos11_02_TreeMax/TreeMax.java@(line 1,col 1)
+invariant left == null <==> right == null;
+        invariant left != null ==> 
+                          (\invariant_for(left) && \invariant_for(right));
+         
+
+
+
+
+         ghost int height;
+        invariant height >= 0;
+        invariant left != null ==>
+                          height > left.height && height > right.height;
+         
+
+
+
+
+
+         ghost \set values;
+        invariant values == \dl_cup(\dl_single(value),
+                  (left==null)? \dl_emptySet()
+                              : \dl_cup(left.values,right.values));
+         
+
+
+
+
+
+         normal_behavior
+        ensures (\forall int z; \dl_contains(z,values); z <= \result);
+        ensures \dl_contains(\result,values);
+        measured_by height;
+      
+
+
+
+
+         strictly_pure

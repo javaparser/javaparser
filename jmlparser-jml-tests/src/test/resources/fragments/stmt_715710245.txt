@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_3_DLL/src/DoubleLinkedList.java@(line 1,col 1)
+set len = nodes.length;

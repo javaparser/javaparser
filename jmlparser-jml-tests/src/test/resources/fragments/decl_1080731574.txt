@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Disjoint.java@(line 1,col 1)
+requires    \disjoint(rep, rep1);
+        requires    \disjoint(rep, rep2);
+        requires    \disjoint(rep, rep3);
+        requires    \disjoint(rep, rep4);
+        requires    \disjoint(rep, rep5);
+        ensures     \disjoint(rep, rep1);
+        ensures     \disjoint(rep, rep2);
+        ensures     \disjoint(rep, rep3);
+        ensures     \disjoint(rep, rep4);
+        ensures     \disjoint(rep, rep5);
+        assignable  rep1, rep2, rep3, rep4, rep5;

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/removeDups/RemoveDup.java@(line 1,col 1)
+loop_invariant
+              0 <= i && i <= length &&
+              (\forall int j; 0<=j && j < i; result[j] == a[j]);
+            assignable result[*];
+            decreases length - i;

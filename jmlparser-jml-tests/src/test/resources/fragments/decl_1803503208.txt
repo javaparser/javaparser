@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug596c/TestCase.java@(line 1,col 1)
+requires b >= Math.max(0, (int)(-1.0 * a));

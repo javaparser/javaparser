@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/uniqueListBug2/UniqueListBug2.java@(line 1,col 1)
+ensures \result == (\exists int i; 0 <= i && i < length; value == values[i]);

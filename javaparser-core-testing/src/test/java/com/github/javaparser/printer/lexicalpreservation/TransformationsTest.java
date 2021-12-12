@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 

@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug542/Test542.java@(line 1,col 1)
+public model int countVals;
+      represents countVals = (\sum int i; 0<=i && i<vals.length; vals[i]);
+         
+
+
+
+
+        requires countVals > 0;

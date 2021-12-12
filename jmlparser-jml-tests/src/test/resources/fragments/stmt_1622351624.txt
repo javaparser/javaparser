@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/LogFile.java@(line 1,col 1)
+loop_invariant  0 <= pos && pos <= a.length 
+               && (\forall int x; x >= 0 && x < pos - 1; a[x] >= a[x + 1]) 
+               && (\forall int x; x >= 0 && x <= pos - 1; 
+                                  (\forall int y; y >= pos && y < a.length; a[x] >= a[y]));
+	    assignable a[*];
+	    decreases l - pos;

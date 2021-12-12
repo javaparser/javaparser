@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/integerSemantics/classes/Bigint.java@(line 1,col 1)
+ghost \bigint x;
+       ghost \bigint y;
+
+       ensures x > 0;
+       ensures y < 0;

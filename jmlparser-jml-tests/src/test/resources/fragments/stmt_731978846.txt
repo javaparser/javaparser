@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_ghost/src/ArrayList.java@(line 1,col 1)
+set footprint = \set_union(\all_fields(this), \all_fields(array));

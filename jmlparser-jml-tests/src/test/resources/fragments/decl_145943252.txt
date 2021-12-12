@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/javacard/src/javacard/framework/CardRuntimeException.java@(line 1,col 1)
+public instance invariant _reason.length == 1;
+         public instance invariant JCSystem.isTransient(_reason) == JCSystem.CLEAR_ON_RESET; 
+
+         public represents reason = _reason[0];
+         public represents footprint = \locset(_reason, _reason[0], _reason.\transient);
+
+         public normal_behavior
+          ensures \fresh(footprint);
+          ensures this.reason == reason;
+          assignable \nothing;

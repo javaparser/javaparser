@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug627/MyObjectArray.java@(line 1,col 1)
+maintaining i >= 0 && i <= 100;
+             loop_invariant (\forall int j; 0<=j && j<i; addresses[j] != null);
+             loop_invariant (\forall int j; 0<=j && j<i; \fresh(addresses[j],LoopInit));
+             loop_invariant (\forall int j; 0<=j && j<i; (\forall int k; 0<=k && k<j; addresses[j] != addresses[k]));
+             decreasing 100 - i;

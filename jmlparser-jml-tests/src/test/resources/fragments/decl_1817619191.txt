@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug698/ListTest.java@(line 1,col 1)
+requires getMylist().size() < Integer.MAX_VALUE;
+         ensures  \old(getMylist().size()) + 1 == getMylist().size()  ;

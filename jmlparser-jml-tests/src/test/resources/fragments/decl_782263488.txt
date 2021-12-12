@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/testGen/mid/Middle.java@(line 1,col 1)
+public normal_behavior
+         ensures \result==x || \result==y || \result==z;
+         ensures \result<=y && \result<=z || \result<=x && \result<=z ||
+                 \result<=x && \result<=y;
+         ensures \result>=y && \result>=z || \result>=x && \result>=z ||
+                 \result>=x && \result>=y;

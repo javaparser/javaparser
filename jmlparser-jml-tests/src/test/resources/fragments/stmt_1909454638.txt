@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis11_1_Maximum/Maximum.java@(line 1,col 1)
+loop_invariant 0 <= x && x <= y && y < array.length;
+            loop_invariant (\forall int j; 
+              0 <= j && j <= x || y <= j && j < array.length;
+              array[j] <= array[x] || array[j] <= array[y]);
+            decreases y - x;
+            assignable \strictly_nothing;

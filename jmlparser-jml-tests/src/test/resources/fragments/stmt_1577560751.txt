@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/loopExercises/LoopExercises.java@(line 1,col 1)
+loop_invariant 1 <= i && i <= x.length;
+       loop_invariant (\forall int j; 0 <= j && j < i; x[j] <= max);
+       decreasing x.length - i;

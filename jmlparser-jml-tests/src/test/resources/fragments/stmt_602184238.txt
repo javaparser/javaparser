@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/LogFile.java@(line 1,col 1)
+loop_invariant 0<=i && i <= logArray.length 
+                           && max!=null &&
+	      (\forall int j; 0 <= j && j<i; 
+	       max.balance >= logArray[j].balance);
+	    assignable max, i;
+	    decreases logArray.length - i;

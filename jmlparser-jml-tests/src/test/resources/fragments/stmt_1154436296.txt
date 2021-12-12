@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/ListsWithIterators/src/IntLinkedList.java@(line 1,col 1)
+loop_contract normal_behavior
+            requires \invariant_for(this);
+            ensures \invariant_for(this);
+            ensures \values.length <= seq.length;
+            ensures \values == seq[0 .. (\values.length - 1)];
+            ensures result == (\sum int i; 0 <= i && i < \values.length; (int)seq[i]);
+            decreases seq.length - \values.length;
+            assignable \nothing;

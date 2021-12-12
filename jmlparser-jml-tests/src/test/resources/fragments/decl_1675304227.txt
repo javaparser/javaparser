@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/sum/Examples.java@(line 1,col 1)
+public normal_behavior
+         requires (\forall int i,j; 0<=i && i<j && j<f.length; f[i]<f[j]);
+         requires (\forall int i,j; 0<=i && i<j && j<g.length; g[i]<g[j]);
+         requires f!=null && g!=null;
+         ensures \result==(\bsum int i; 0; f.length;
+                   (\bsum int j; 0; g.length; (f[i]==g[j]?1:0)));

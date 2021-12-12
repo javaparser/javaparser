@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_04_TreeReconstruct/src/List.java@(line 1,col 1)
+public invariant 0 <= p && p <= a.length;
+         public invariant a != null;
+         public invariant (\forall int i; 0<=i && i < a.length; max >= a[i]);
+         public invariant (\forall int i; 0<=i && i < a.length; a[i] >= 0);
+
+         accessible \inv : this.*, this.a[*];
+
+         pure

@@ -1,0 +1,34 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_seq/src/SimplifiedLL.java@(line 1,col 1)
+private ghost \seq nodeseq;   
+
+        
+        private invariant (\forall int i; 0<=i && i<size; 
+                ((Node)nodeseq[i]) != null                                                    
+             && (\forall int j; 0<=j && j<size; (Node)nodeseq[i] == (Node)nodeseq[j] ==> i == j)
+             && ((Node)nodeseq[i]).next == (i==size-1 ? null : (Node)nodeseq[i+1]));
+       
+        private invariant size > 0;
+        private invariant first == (Node)nodeseq[0];
+        private invariant size == nodeseq.length;
+         
+
+
+
+
+
+
+
+
+
+
+
+         normal_behaviour
+        requires n >= 0 && n < size && \invariant_for(this);
+        ensures \result == (Node)nodeseq[n];
+        assignable \strictly_nothing;
+        
+
+
+
+
+      helper

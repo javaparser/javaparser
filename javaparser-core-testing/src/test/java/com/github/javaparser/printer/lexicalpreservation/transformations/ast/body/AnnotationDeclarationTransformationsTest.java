@@ -29,8 +29,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

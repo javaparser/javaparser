@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/javacard/src/javacard/framework/CardRuntimeException.java@(line 1,col 1)
+public normal_behavior
+          ensures this.reason == reason;
+          ensures \new_elems_fresh(footprint);
+          assignable footprint;

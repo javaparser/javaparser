@@ -41,8 +41,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
@@ -220,7 +220,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void removingPublicModifierFromPublicStaticMethod() {
         MethodDeclaration it = consider("public static void a(){}");
-        it.removeModifier(Modifier.Keyword.PUBLIC);
+        it.removeModifier(Modifier.DefaultKeyword.PUBLIC);
         assertTransformedToString("static void a(){}", it);
     }
 

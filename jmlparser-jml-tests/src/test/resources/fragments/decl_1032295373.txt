@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escrmloop/LCP.java@(line 1,col 1)
+normal_behavior
+     requires 0 <= x && x < a.length;
+     requires 0 <= y && y < a.length;
+     requires x != y;
+   
+     ensures 0 <= \result;
+     ensures \result <= a.length-x && \result <= a.length-y;
+     ensures (\forall int i; x <= i && i < x+\result; a[i] == a[y+i-x] );
+     ensures \result == a.length-x || \result == a.length-y || a[x+\result] != a[y+\result];
+   
+     pure

@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/simple/src/MyClass.java@(line 1,col 1)
+normal_behavior
+          assignable footprint;
+          ensures \result == i + 27 && attr == \result;
+          ensures \new_elems_fresh(footprint);

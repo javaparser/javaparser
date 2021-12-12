@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug718x4/test4.java@(line 1,col 1)
+assert countDown(20) == 0;
+       assert countDown(42) == 0;
+       assert countDown(50) == 0;
+
+       assert (\forall int k; 0 <= k <= 50; countDown(k)==0);

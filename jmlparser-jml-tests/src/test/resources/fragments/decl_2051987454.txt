@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/testGen/coverage/CoverageTest.java@(line 1,col 1)
+public normal_behaviour
+   requires true;
+   ensures true;

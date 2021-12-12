@@ -1,0 +1,35 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/SuffixArray.java@(line 1,col 1)
+public invariant
+                  (\forall int i; 0 <= i && i < a.length;
+                  (\exists int j; 0 <= j && j < a.length; suffixes[j]==i));
+                                                         
+        public invariant
+                (\forall int i; 0 <= i && i < a.length;
+                         0 <= suffixes[i] && suffixes[i] < a.length);
+                                                                           
+        public invariant (\forall int i; 0 < i && i < a.length;
+                               suffixes[i-1] != suffixes[i]);
+                                                                         
+        public invariant (\forall int i; 0 < i && i < a.length;
+                               compare(suffixes[i],suffixes[i-1]) > 0);
+                                                          
+        public invariant a.length == suffixes.length;
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         normal_behavior
+        ensures this.a == a;

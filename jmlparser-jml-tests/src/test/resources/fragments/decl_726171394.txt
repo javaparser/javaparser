@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Dynamic2.java@(line 1,col 1)
+ensures \new_elems_fresh(rep2);
+       assignable rep2;

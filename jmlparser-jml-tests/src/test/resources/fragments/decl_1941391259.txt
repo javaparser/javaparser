@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug634/Test.java@(line 1,col 1)
+public normal_behavior
+           requires count2 == 120;
+           assignable NNNN2;
+           ensures NNNN2 == \old(NNNN2);

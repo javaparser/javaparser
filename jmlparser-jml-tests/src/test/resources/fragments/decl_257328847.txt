@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/arrayMax_java/ArrayMax.java@(line 1,col 1)
+public normal_behavior
+        requires a != null;
+        ensures (\forall int j; j >= 0 && j < a.length;
+                                \result >= a[j]);
+        ensures a.length > 0 ==>
+                (\exists int j; j >= 0 && j < a.length;
+                                \result == a[j]);

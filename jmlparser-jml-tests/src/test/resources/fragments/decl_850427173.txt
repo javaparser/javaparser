@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/loopExercises/LoopExercises.java@(line 1,col 1)
+normal_behavior
+	    requires 0 <= x <= Integer.MAX_VALUE/3;
+	    ensures 2*\result == x*(x+1);

@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/LRS.java@(line 1,col 1)
+normal_behavior
+        requires \invariant_for(sa);
+        requires sa.a.length >= 2;
+        ensures 0 <= s && s < sa.a.length;
+        ensures 0 <= t && t < sa.a.length;
+        ensures 0 <= l && l < sa.a.length;
+        ensures s+l <= sa.a.length && t+l <= sa.a.length;
+        ensures (\forall int j; 0 <= j && j < l; sa.a[s+j] == sa.a[t+j]);
+        ensures s != t || l == 0;
+        ensures !(\exists int i,k; 0 <= i && i < k && k < sa.a.length-l;
+                   (\forall int j; 0 <= j && j <= l; sa.a[k+j] == sa.a[i+j]));

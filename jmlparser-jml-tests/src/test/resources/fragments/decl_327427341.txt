@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug688/DayTime.java@(line 1,col 1)
+ensures \result == (a.hours*3600) + (a.minutes*60) + a.seconds;

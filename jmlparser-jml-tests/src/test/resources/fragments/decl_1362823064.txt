@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug533a/TestSum.java@(line 1,col 1)
+private static invariant (\sum int i; list.contains(i); i) >= 0;

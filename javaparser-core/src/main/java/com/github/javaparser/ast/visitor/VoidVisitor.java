@@ -272,7 +272,7 @@ public interface VoidVisitor<A> {
 
     void visit(CapturesClause n, A arg);
 
-    void visit(ForallClause n, A arg);
+    void visit(JmlForallClause n, A arg);
 
     void visit(JmlFunction n, A arg);
 

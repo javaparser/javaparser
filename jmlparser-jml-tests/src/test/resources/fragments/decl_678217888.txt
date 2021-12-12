@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escInvariants1/Child.java@(line 1,col 1)
+in value;
+       public model int value;
+       private represents value = my_value;
+
+       requires value_1 > 0;
+       ensures value == value_1;

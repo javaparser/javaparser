@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/javacard/src/javacard/framework/CardRuntimeException.java@(line 1,col 1)
+public model instance \locset footprint;
+         public model instance short reason;
+         public accessible \inv : footprint;
+         public accessible footprint : footprint;
+         public accessible reason : footprint;

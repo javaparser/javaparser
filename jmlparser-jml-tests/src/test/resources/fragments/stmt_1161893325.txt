@@ -1,0 +1,15 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/examDB/core/ExamDataBaseImpl.java@(line 1,col 1)
+loop_invariant 
+               (\forall int mnr; 
+                    (\exists int x; 
+                         0<=x && x<i && students[x]!=null 
+                         && students[x].matrNr==mnr) 
+                     <==> ((\exists int y; 
+                               0<=y && y<j && result[y]==mnr))) 
+               && (\forall int k,l; 
+                       0<=k && k<j && 0<=l && l<j && k!=l;
+                           result[k]!=result[l]) 
+               && i>=0 && j>=0
+               && j==(\num_of int k; 0<=k && k<i; students[k]!=null);
+	    assignable i, j, result[*];
+	    decreasing students.length-i;

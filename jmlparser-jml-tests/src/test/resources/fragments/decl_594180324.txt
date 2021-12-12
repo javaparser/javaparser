@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/examDB/core/ExamDataBaseImpl.java@(line 1,col 1)
+private normal_behavior
+         assignable students;
+         ensures (\forall int i; 0<=i && i<students.length; 
+                      students[i] == (i<\old(students.length) 
+                                      ? \old(students)[i] 
+                                      : null));
+         ensures students!=null && students.length > \old(students.length) && \fresh(students);

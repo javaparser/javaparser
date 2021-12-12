@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/strings/Case_Studies/src/StringSet.java@(line 1,col 1)
+public instance invariant this.size > 0;    
+         private instance invariant \typeof(elements) == \type(String[]);    
+
+         public instance invariant
+          this.elements != null && this.elements.length == this.size;

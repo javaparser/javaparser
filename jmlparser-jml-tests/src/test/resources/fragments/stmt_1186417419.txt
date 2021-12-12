@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escrmloop/LCP.java@(line 1,col 1)
+loop_modifies l; 
+           maintaining 0 <= l && l+x <= a.length && l+y <= a.length && x!=y;
+           maintaining (\forall int z; x <= z && z < x+l; a[z] == a[y+z-x] );
+           decreasing a.length-l;

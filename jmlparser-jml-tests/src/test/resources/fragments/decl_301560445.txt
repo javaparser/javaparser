@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug631/TestA.java@(line 1,col 1)
+requires t.length > 10;
+         requires t[0] != null;
+         requires t[0].length > 10;
+         requires t[0][0] != null;

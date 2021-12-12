@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/comprehensions/src/Sum.java@(line 1,col 1)
+loop_invariant 0<=n && n<=a.length &&
+	     s == (\sum int i; n <= i && i<a.length; a[i]);
+	    assignable \nothing;
+	    decreases n + 1;

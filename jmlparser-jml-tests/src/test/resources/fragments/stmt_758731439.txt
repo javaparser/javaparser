@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escDeterministic/escDeterministic.java@(line 1,col 1)
+assert a == b;

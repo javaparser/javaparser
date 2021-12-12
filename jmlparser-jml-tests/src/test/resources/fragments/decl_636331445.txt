@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/strongarm/examples/More.java@(line 1,col 1)
+requires true;
+         ensures \result == (eof && !usePrevious);

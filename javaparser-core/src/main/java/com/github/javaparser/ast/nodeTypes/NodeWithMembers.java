@@ -34,7 +34,7 @@ import java.util.Optional;
 
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.Keyword;
-import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
@@ -80,7 +80,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Class<?> typeClass, String name, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addField(Class<?> typeClass, String name, Modifier.DefaultKeyword... modifiers) {
         tryAddImportToParentCompilationUnit(typeClass);
         return addField(typeClass.getSimpleName(), name, modifiers);
     }
@@ -93,7 +93,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(String type, String name, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addField(String type, String name, Modifier.DefaultKeyword... modifiers) {
         return addField(parseType(type), name, modifiers);
     }
 
@@ -105,7 +105,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Type type, String name, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addField(Type type, String name, Modifier.DefaultKeyword... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         VariableDeclarator variable = new VariableDeclarator(type, name);
         fieldDeclaration.getVariables().add(variable);
@@ -123,7 +123,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(Class<?> typeClass, String name, Expression initializer, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(Class<?> typeClass, String name, Expression initializer, Modifier.DefaultKeyword... modifiers) {
         tryAddImportToParentCompilationUnit(typeClass);
         return addFieldWithInitializer(typeClass.getSimpleName(), name, initializer, modifiers);
     }
@@ -137,7 +137,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(String type, String name, Expression initializer, Modifier.DefaultKeyword... modifiers) {
         return addFieldWithInitializer(parseType(type), name, initializer, modifiers);
     }
 
@@ -150,7 +150,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers   the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldWithInitializer(Type type, String name, Expression initializer, Modifier.Keyword... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(Type type, String name, Expression initializer, Modifier.DefaultKeyword... modifiers) {
         FieldDeclaration declaration = addField(type, name, modifiers);
         declaration.getVariables().iterator().next().setInitializer(initializer);
         return declaration;
@@ -262,7 +262,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * Adds a methods with void return by default to this.
      *
      * @param methodName the method name
-     * @param modifiers  the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @param modifiers  the modifiers like {@link Modifier.DefaultKeyword#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
     default MethodDeclaration addMethod(String methodName, Keyword... modifiers) {
@@ -277,10 +277,10 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     /**
      * Adds a constructor to this node with members.
      *
-     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @param modifiers the modifiers like {@link Modifier.DefaultKeyword#PUBLIC}
      * @return the created constructor
      */
-    default ConstructorDeclaration addConstructor(Modifier.Keyword... modifiers) {
+    default ConstructorDeclaration addConstructor(Modifier.DefaultKeyword... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
         constructorDeclaration.setModifiers(createModifierList(modifiers));
         constructorDeclaration.setName(getName());

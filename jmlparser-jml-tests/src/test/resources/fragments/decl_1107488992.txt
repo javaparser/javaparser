@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug688/DayTime.java@(line 1,col 1)
+public invariant 0 <= seconds && seconds < 60;
+      public invariant 0 <= minutes && minutes < 60;
+      public invariant 0 <= hours && hours < 24; 
+
+
+         requires 0 <= hours && hours < 24;
+         requires 0 <= minutes && minutes < 60;
+         requires 0 <= seconds && seconds < 60;
+         ensures this.hours == hours;
+         ensures this.minutes == minutes;
+         ensures this.seconds == seconds;
+         pure

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug567/Amount.java@(line 1,col 1)
+public invariant cents >= -100;
+         public invariant cents <= 100;
+
+         public invariant euros > 0 ==> cents >= 0;
+         public invariant euros < 0 ==> cents <= 0;

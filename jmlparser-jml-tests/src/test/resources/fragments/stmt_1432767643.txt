@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/reverseArray/ReverseArray.java@(line 1,col 1)
+loop_invariant
+	      (\forall int j; j>=0 && j<i; \old(a[a.length-(j+1)])==a[j] && \old(a[j])==a[a.length-(j+1)])
+	      && (\forall int j; j>=i && j<length; \old(a[a.length-(j+1)])==a[a.length-(j+1)] && \old(a[j])==a[j])
+	      && (a.length % 2 != 0 ==> \old(a[a.length/2])==a[length])
+	      && i>=0 && i<=length;
+	    modifies a[*];

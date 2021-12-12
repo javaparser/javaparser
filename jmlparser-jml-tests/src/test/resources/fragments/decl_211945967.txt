@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug458/Allocator.java@(line 1,col 1)
+public normal_behavior
+	      requires size >= 0 && size < 128;
+	      assignable \nothing;
+	      ensures \fresh(\result);
+	      ensures \result.length == size;

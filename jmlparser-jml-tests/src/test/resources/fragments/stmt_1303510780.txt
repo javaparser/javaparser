@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_seq/src/SimplifiedLL.java@(line 1,col 1)
+set nodeseq = (\seq_concat(\seq_sub(nodeseq,0,i), \seq_sub(nodeseq,i+1,\seq_length(nodeseq))));

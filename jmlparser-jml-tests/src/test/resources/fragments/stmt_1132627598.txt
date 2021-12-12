@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/examDB/core/ExamDataBaseImpl.java@(line 1,col 1)
+loop_invariant 
+              (\forall int l; 
+                   0<=l && l<k;
+                       students[l]==oldStudents[l]) && k>=0;
+	    assignable k, students[0..oldStudents.length-1];
+	    decreasing oldStudents.length-k;

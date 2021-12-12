@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_01_Swap/TwoWaySwap.java@(line 1,col 1)
+public normal_behavior
+        ensures (\forall int k; 
+          (\forall int l; k>=0 && k < l && l<a.length; a[k] == a[l] || !a[k]));
+        ensures \dl_seqPerm(\old(seq), seq);
+        assignable a[*];

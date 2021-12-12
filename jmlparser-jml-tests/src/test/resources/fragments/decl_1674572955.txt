@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug455/ArrList.java@(line 1,col 1)
+public normal_behavior
+           accessible \everything;
+           requires a != null;
+           ensures theList != null;
+           ensures theList.size() == 1;
+           ensures theList.contains(a);
+         pure

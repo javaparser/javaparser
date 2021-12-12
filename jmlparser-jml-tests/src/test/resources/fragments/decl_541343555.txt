@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug719/Swap.java@(line 1,col 1)
+requires 0 <= i && i < arr.length 
+             && 0 <= j && j < arr.length;
+    requires \nonnullelements(arr);  
+    assignable arr[i], arr[j];
+    ensures \old(arr[i]) == arr[j] 
+	     && \old(arr[j]) == arr[i];
+    ensures arr.length == \old(arr.length);
+    ensures \nonnullelements(arr);

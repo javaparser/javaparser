@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug589/A.java@(line 1,col 1)
+public model int a;
+      represents = 1 * 2 + 3;

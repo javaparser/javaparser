@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug560/Test.java@(line 1,col 1)
+assignable k;
+        ensures k == 1;

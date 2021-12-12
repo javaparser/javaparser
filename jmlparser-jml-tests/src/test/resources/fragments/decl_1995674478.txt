@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug648/B.java@(line 1,col 1)
+private normal_behavior
+               ensures true;
+             pure

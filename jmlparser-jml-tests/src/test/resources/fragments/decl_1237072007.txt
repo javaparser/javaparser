@@ -1,0 +1,16 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/block_loop_contracts/ListsWithIterators/src/IntIterator.java@(line 1,col 1)
+public normal_behavior
+        requires next != null;
+        requires \invariant_for(list);
+        ensures \invariant_for(list);
+        ensures \result != null;
+        ensures \result.intValue() == \old(next).data;
+        ensures seq.length == \old(seq.length) + 1;
+        assignable next, nodeseq, seq;
+       
+        also
+       
+        public exceptional_behavior
+        requires next == null;
+        signals(NullPointerException) true;
+        assignable \nothing;

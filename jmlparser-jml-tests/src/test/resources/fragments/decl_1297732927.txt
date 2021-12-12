@@ -1,0 +1,20 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_seq/src/ArrayList.java@(line 1,col 1)
+private invariant array != null;
+        private invariant footprint == \set_union(array[*], this.*);
+        private invariant 0 <= size && size <= array.length;
+        private invariant (\forall int i; 0 <= i && i < size; array[i] != null);
+        private invariant \typeof(array) == \type(Object[]);
+        private invariant seq.length == size;
+        private invariant (\forall int i; 0 <= i && i < size; array[i] == seq[i]);
+         
+
+
+
+
+
+
+
+
+
+         public normal_behaviour
+          ensures seq == \seq_empty && \fresh(footprint);

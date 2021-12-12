@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/WeideEtAl_01_AddAndMultiply/src/AddAndMultiply.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= y && res == x + i; 
+	        assignable \nothing;
+	        decreases y - i;

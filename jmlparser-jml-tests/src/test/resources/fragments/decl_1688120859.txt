@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/sfbug420X/StackImpl.java@(line 1,col 1)
+also requires 1 <= i && i <= count();
+         ensures \result == internalStack[i-1];
+      pure

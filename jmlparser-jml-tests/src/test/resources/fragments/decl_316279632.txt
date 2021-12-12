@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/Test-10-2.java@(line 1,col 1)
+public normal_behavior
+	    ensures \result == \old(i);

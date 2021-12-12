@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/oldproblem/Test.java@(line 1,col 1)
+public normal_behavior
+           requires a.length > 100;
+           requires i>=0 && i < 5;
+           old int ii = 2*i;
+           {|
+             requires j >= 0 && j < 10;
+           also
+             requires j >= 0 && j < 10;
+           |}
+           old int iij = ii + j;
+           assignable a[ii];
+           ensures \result == iij;

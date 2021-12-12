@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug688/DayTime.java@(line 1,col 1)
+old int diff = secondCalulation(this) - secondCalulation(stop);
+         old int _final = (diff < 0) ? (-diff) : (diff);
+         ensures \result == _final;

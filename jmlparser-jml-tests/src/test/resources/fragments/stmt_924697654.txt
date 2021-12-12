@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/sum/Examples.java@(line 1,col 1)
+loop_invariant m>=0 && n>=0 && m<=f.length && n<=g.length &&
+	       ct ==(\bsum int i; 0; m;
+	               (\bsum int j; 0; n; (f[i]==g[j]?1:0))) &&
+	       (m==f.length || (\forall int j; j>=0 && j<n; g[j]<f[m])) &&
+	       (n==g.length || (\forall int i; i>=0 && i<m; f[i]<g[n]));
+	    assignable ct, n, m;
+	    decreasing f.length-m + g.length-n;

@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/LogRecord.java@(line 1,col 1)
+public invariant
+            !empty ==> (balance >= 0 && transactionId >= 0);
+        accessible \inv: this.empty, this.balance, transactionCounter, this.transactionId;

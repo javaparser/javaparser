@@ -1,0 +1,24 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug650c/B.java@(line 1,col 1)
+axiom (\forall Content c; (\forall Object o; c.P(o)));
+
+         immutable pure public static model class Content {
+            public normal_behavior
+              ensures true;
+            function helper
+            public boolean P(nullable Object key);
+
+        }
+       
+         
+
+
+
+
+
+
+
+
+
+         public model instance non_null Content content;
+
+         public invariant content.P(null);

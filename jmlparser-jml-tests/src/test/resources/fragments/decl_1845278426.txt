@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/09-Quicktour/paycard/LogFile.java@(line 1,col 1)
+public normal_behavior
+           requires (\forall int i; 0 <= i && i<logArray.length;
+                    logArray[i].\inv);
+           ensures (\forall int i; 0 <= i && i<logArray.length;
+                    logArray[i].balance <= \result.balance);
+           diverges true;

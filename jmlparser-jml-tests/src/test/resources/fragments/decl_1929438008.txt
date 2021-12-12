@@ -1,0 +1,24 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permissions/lockspec/src/LockSpec.java@(line 1,col 1)
+invariant this.lock != \dl_currentThread() && this.lock.spec == this && \dl_writePermission(\permission(this.lock)) && \dl_writePermission(\permission(this.lock.spec));
+        accessible<heap> \inv : this.lock, lock.spec;
+        accessible<permissions> \inv : this.lock, lock.spec;
+
+        model boolean lockState(boolean locked) {
+          return (\permission(this.val) == (locked ? \dl_slice1(\dl_owner2(\dl_currentThread(), lockRef())) : \dl_slice1(\dl_owner1(lockRef())))) ;
+        }    
+
+
+        model \locset fp() { return \singleton(this.val); }    
+        model \locset fpPerm() { return \singleton(this.val); }    
+        model \locset fpLock() { return \singleton(this.lock); }    
+        model two_state boolean lockTransfer() { return (\permission(this.val) == \dl_transferPermission(\dl_FALSE(), lockRef(), \dl_currentThread(), 0, \old(\permission(this.val)))); }    
+        model two_state boolean unlockTransfer() { return (\permission(this.val) == \dl_returnPermission(\dl_currentThread(), lockRef(), \old(\permission(this.val)))); }    
+
+        model Lock lockRef() { return this.lock; }    
+        model boolean lockStatus(boolean locked) { return (locked ? \dl_writePermission(\permission(this.val)) : !\dl_readPermission(\permission(this.val))); }    
+
+        normal_behavior
+        requires lockStatus(\dl_FALSE());
+        ensures lockStatus(\dl_FALSE());
+        assignable<heap> fp();
+        assignable<permissions> fpPerm();

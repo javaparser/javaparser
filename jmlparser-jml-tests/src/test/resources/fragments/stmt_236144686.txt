@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escLoopModifies/Test.java@(line 1,col 1)
+loop_invariant 5<=i && i<=8;

@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug463/Initializer.java@(line 1,col 1)
+public normal_behavior
+          requires a < 1000000; assignable a;                                         
+          ensures this.a == \old(this.a) + 1;
+          ensures \fresh(\result);
+          ensures \result.equals(\old(new Initializer(a)));

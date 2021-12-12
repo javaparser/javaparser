@@ -1,0 +1,11 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/sfbug420a/Stack.java@(line 1,col 1)
+public invariant count()>=0;
+	     
+
+
+
+          public instance model int count;
+
+          ensures \result == count;
+      pure
+      helper

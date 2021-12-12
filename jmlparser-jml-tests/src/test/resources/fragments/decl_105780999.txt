@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/Loop1.java@(line 1,col 1)
+public normal_behavior
+        requires x>=0;
+        assignable \nothing;                                                                    
+                                                                                                 
+        ensures this.x == x;

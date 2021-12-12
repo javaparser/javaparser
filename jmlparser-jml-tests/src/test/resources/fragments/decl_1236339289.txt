@@ -1,0 +1,14 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_03_TreeDel/Tree.java@(line 1,col 1)
+instance ghost int height;
+
+         invariant true;
+         accessible \inv : \nothing;
+
+         normal_behavior
+        requires t.treeInv();
+        ensures \result == null ==> \old(t.treeRep() == \seq_singleton(t));
+        ensures \result != null ==> (\result.treeInv() &&
+          (\exists Tree p;
+              \old(t.treeRep()) == \seq_concat(\seq_singleton(p), \result.treeRep())
+          ));
+        assignable t.footprint();

@@ -70,12 +70,12 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration, Ass
 
     @Override
     public boolean isStatic() {
-        return wrappedNode.hasModifier(Modifier.Keyword.STATIC);
+        return wrappedNode.hasModifier(Modifier.DefaultKeyword.STATIC);
     }
 
     @Override
     public boolean isVolatile() {
-        return wrappedNode.hasModifier(Modifier.Keyword.VOLATILE);
+        return wrappedNode.hasModifier(Modifier.DefaultKeyword.VOLATILE);
     }
 
     @Override

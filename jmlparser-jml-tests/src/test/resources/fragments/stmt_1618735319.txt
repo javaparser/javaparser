@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escDeterministic2/escDeterministic2.java@(line 1,col 1)
+set a = comp(10);
+       set c = 20;
+       set b = comp(10);
+       assert a == b;

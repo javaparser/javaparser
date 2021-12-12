@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug634/Test.java@(line 1,col 1)
+in NNNN2;
+         public model int NNNN;
+         private represents NNNN = count;
+         public model int NNNN2;
+         private represents NNNN2 = count2;
+         public model int NNNN3;
+         private represents NNNN3 \such_that NNNN3 == count3;
+
+
+         public normal_behavior
+           assignable \everything;
+           ensures NNNN == \old(NNNN);

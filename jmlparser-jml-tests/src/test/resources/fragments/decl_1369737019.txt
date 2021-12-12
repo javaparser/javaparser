@@ -1,0 +1,9 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug613/Test.java@(line 1,col 1)
+private invariant aa == 3;
+
+      public normal_behavior
+        requires i >= 0;
+      also public exceptional_behavior
+        requires i < 0;
+        signals_only RuntimeException;
+      pure

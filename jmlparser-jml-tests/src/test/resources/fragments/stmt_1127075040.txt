@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/cost/PositiveArrayElements.java@(line 1,col 1)
+loop_invariant count==(\num_of int j; 0<=j && j<i; t[j]>0) && 
+	      i<=t.length; 
+	    decreasing t.length-i;
+	    assignable i, count;

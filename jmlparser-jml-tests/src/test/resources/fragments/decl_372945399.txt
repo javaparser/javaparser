@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug669/A.java@(line 1,col 1)
+requires a >= 0 && a <= 10;
+       ensures \result == a + 1;
+       pure

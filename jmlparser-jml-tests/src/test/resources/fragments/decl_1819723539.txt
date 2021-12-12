@@ -1,0 +1,44 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_3_DLL/src/DoubleLinkedList.java@(line 1,col 1)
+ghost \seq s;                           
+         ghost int len;                                  
+
+         invariant head == null <==> s == \seq_empty;
+        invariant s == \seq_empty <==> len == 0;
+        invariant head != null ==> (Node)s[0] == head && 0 < len;
+        invariant s.length == len;
+        invariant (\forall int i; 0 <= i < len; s[i] != null);
+        invariant (\forall int i; 0 < i < len; ((Node)s[i]).l != null);
+        invariant (\forall int i; 0 <= i < len - 1; ((Node)s[i]).r != null);
+        invariant (\forall int i; 0 <= i < len; s[i] instanceof Node);
+                                 
+        invariant head != null ==> head.l == null;
+                           
+        invariant head != null ==> ((Node)s[len-1]).r == null;
+                                 
+        invariant (\forall int i; 0 < i < len; ((Node)s[i]).l == (Node)s[i-1]);
+        invariant (\forall int i; 0 <= i < len-1; ((Node)s[i]).r == (Node)s[i+1]);
+                      
+        invariant (\forall int i,j; 0 <= i < j && j < len; (Node)s[i] != (Node)s[j]);
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         normal_behavior
+        requires (\forall int i,j; 0 <= i < j && j < nodes.length; nodes[i] != nodes[j])
+              && (\forall int i; 0 <= i < nodes.length; nodes[i] != null);
+        ensures s == \dl_array2seq(\old(nodes));

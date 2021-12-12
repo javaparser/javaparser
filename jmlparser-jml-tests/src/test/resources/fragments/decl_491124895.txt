@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_ghost/src/ArrayList.java@(line 1,col 1)
+invariant footprint == \set_union(this.*, array.*);                                      
+
+         invariant array != null;
+         invariant 0 <= size && size <= array.length;
+         invariant \typeof(array) == \type(Object[]);
+
+         normal_behaviour
+          ensures size() == 0;
+          ensures \fresh(footprint);

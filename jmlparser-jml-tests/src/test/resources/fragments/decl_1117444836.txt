@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/primitives/Test.java@(line 1,col 1)
+ensures \result == zero;
+         helper function

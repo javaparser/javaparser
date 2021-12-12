@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_2_ParallelGcd/src/ParallelGcd.java@(line 1,col 1)
+loop_invariant 0 <= i
+		    && 0 < a && 0 < b
+		    && gcd(a, b) == gcd(aIn, bIn)
+		    && (b < a ==> (gcd(a, b) == gcd(a - b, b)))
+		    && (a < b ==> (gcd(a, b) == gcd(a, b - a)));
+		    assignable \nothing;
+		    decreases r.length - i;

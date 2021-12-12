@@ -39,8 +39,8 @@ import com.github.javaparser.utils.SourceRoot;
 import java.util.*;
 
 import static com.github.javaparser.StaticJavaParser.parseType;
-import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.FINAL;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.camelCaseToScreaming;

@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/05-ReverseArray/src/ReverseArray.java@(line 1,col 1)
+loop_invariant (\forall int j; j >= 0 && j < i; b[j] == p_a[p_a.length - (j+1)]) && i >= 0 && i <= p_a.length;
+            modifies b[*];

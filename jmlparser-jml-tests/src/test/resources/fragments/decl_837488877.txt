@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_ghost/src/ArrayList.java@(line 1,col 1)
+normal_behavior
+          assignable array, \singleton(footprint);
+          ensures \fresh(array);
+          ensures array.length > \old(array.length);
+          ensures (\forall int x; 0 <= x && x < size; array[x] == \old(array[x]));

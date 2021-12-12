@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escTraceBS/trace.java@(line 1,col 1)
+assert i == 4 && \not_modified(i);

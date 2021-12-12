@@ -324,7 +324,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
      * https://openjdk.java.net/jeps/359#Restrictions-on-records
      *
      * If wanting to find out if the keyword {@code final} has been explicitly added to this parameter,
-     * you should use {@code node.hasModifier(Modifier.Keyword.FINAL)}
+     * you should use {@code node.hasModifier(Modifier.DefaultKeyword.FINAL)}
      *
      * @return true if the node parameter is explicitly final (keyword attached) or implicitly final (e.g. parameters to a record)
      */

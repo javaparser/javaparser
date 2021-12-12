@@ -1,0 +1,32 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vstte12_04_TreeReconstruct/src/Tree.java@(line 1,col 1)
+final ghost \seq heights;
+
+         invariant left == null <==> right == null;
+
+         invariant (\forall int i; 0<=i && i<heights.length; 
+                      (int)heights[i] == heights[i]);
+         
+
+
+
+         invariant left != null ==>
+         (heights == \dl_seqInc(\seq_concat(left.heights,right.heights))); 
+         
+
+
+
+         invariant left == null ==>
+         heights == \seq_singleton(0);
+         
+
+
+
+         normal_behavior
+        ensures left == null && right == null;
+        ensures heights == \seq_singleton(0);
+         
+
+
+
+
+         pure

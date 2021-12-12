@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/uniqueListBug2/UniqueListBug2.java@(line 1,col 1)
+requires contains(value);
+	    ensures !contains(value);
+	    ensures \old(values)[\result] == value;
+	    ensures \result == \old(find(value));
+	    ensures length == \old(length) - 1;

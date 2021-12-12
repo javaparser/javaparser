@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/racRM1/PairInsertionSort.java@(line 1,col 1)
+loop_modifies a[*];
+		        decreases k;
+		        loop_invariant l <= k && k < r;
+		        loop_invariant (\forall int i; l <= i && i < k-1; a[i] <= a[i + 1]);

@@ -1,0 +1,10 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/observer/src/ExampleObserver.java@(line 1,col 1)
+represents subject = subj;
+         represents upToDate = (cache == subj.value());
+
+         public normal_behaviour
+          ensures subject == s;            
+         
+
+
+        pure

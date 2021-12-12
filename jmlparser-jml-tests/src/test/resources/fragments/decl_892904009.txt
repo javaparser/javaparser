@@ -1,0 +1,18 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_02_PrefixSum/PrefixSumRec.java@(line 1,col 1)
+normal_behavior
+          requires x > 0;
+          requires even(x);
+          ensures \result*2 == x;
+          ensures \result == x/2;
+          ensures \result < x;
+          accessible \nothing;
+       
+
+
+
+
+
+
+
+
+         strictly_pure helper

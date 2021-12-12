@@ -1,0 +1,26 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/verifyThis15_2_ParallelGcd/src/ParallelGcd.java@(line 1,col 1)
+public model_behavior
+	    requires 0 < a && 0 < b;
+	    ensures 0 < \result && (a % \result == 0) && (b % \result == 0)
+	    && !(\exists int i; 0 < i && i <= a && \result < i; (a % i == 0) && (b % i == 0))
+	    && (a == b ==> (\result == a))
+	    && (a < b ==> (\result == gcd(a, b - a)))
+	    && (b < a ==> (\result == gcd(a - b, b)));
+	    assignable \strictly_nothing;
+	    public static model two_state int gcd(int a, int b);
+	  
+
+
+
+
+
+
+
+
+
+
+      public behavior
+	    requires 0 < aIn && 0 < bIn;
+	    assignable \nothing;
+	    ensures 0 < \result && (\result == gcd(aIn, bIn));
+	    signals (Exception e) true;

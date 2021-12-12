@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/AccessChain4.java@(line 1,col 1)
+requires a != null && a.a != null && a.a.a != null && a.a.a.a != null;
+       requires a.a.a.a.x > 0;
+       ensures a.a.a.a.x > 0;

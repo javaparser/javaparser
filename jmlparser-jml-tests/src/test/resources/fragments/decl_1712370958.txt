@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/racaddng/Add.java@(line 1,col 1)
+requires the_x + the_y > 0;
+       ensures x() == the_x && y() == the_y;

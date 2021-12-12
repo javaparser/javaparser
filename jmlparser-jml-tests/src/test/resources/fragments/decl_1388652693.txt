@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/testGen/listAndArray/List.java@(line 1,col 1)
+public normal_behaviour
+   requires a.length>0 && l!=null;
+   ensures (\forall int i; 0<=i && i<a.length; a[i]==l.get(i));

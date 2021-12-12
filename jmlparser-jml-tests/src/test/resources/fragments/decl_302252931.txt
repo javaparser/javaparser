@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug502/User.java@(line 1,col 1)
+public invariant 0 <= age && age < 150;
+
+         ensures age == 0;

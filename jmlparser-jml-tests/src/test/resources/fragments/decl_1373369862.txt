@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permissions/threads/src/ThreadSpec.java@(line 1,col 1)
+public instance ghost boolean canJoin;
+
+             normal_behavior
+            ensures \dl_writePermission(\permission(this.canJoin));
+            ensures initPost();
+            assignable \nothing;
+            assignable<permissions> \nothing;    
+
+
+
+
+             helper

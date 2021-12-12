@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/visualdebugger/src/paycard/PayCard.java@(line 1,col 1)
+public normal_behavior
+         assignable LogRecord.transactionCounter;

@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug456/bufclient/ByteBufClient.java@(line 1,col 1)
+public normal_behavior
+	    requires b != null;
+	    requires b.limit >= 1;
+	    ensures \result == b.contents[0];

@@ -1,0 +1,15 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SmansEtAl/src/Iterator.java@(line 1,col 1)
+accessible \inv: footprint, list().footprint;
+        invariant list.\inv;
+        invariant 0 <= index && index <= list.size(); 
+        invariant \disjoint(this.*, list.footprint);
+         
+
+
+
+
+
+
+         model \locset footprint;
+        accessible footprint: footprint;
+        represents footprint = \locset(list, index);

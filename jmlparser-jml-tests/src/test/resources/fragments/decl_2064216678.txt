@@ -1,0 +1,6 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permutedSum/src/Perm.java@(line 1,col 1)
+normal_behavior
+      requires pIdx < a.length;
+      ensures \result == (int)c[\old(pIdx)];
+      ensures pIdx == \old(pIdx)+1;
+      assignable pIdx;

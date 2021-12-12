@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/observer/src/Subject.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= observers.length
+	                   && (\forall int x; 0 <= x && x < observers.length; observers[x].\inv)
+	                   && (\forall int x; 0 <= x && x < observers.length; observers[x].subject == this)
+	                   && (\forall int x; 0 <= x && x < i; observers[x].upToDate);
+	    assignable (\infinite_union int x; 0 <= x && x < observers.length ? observers[x].* : \empty);
+	    decreases observers.length - i;

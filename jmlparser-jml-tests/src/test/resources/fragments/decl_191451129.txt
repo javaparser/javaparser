@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/model_methods/src/Coll.java@(line 1,col 1)
+requires \invariant_for(c1) && \invariant_for(c2);
+         ensures true;

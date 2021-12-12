@@ -1,0 +1,3 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permissions/threads/src/Fib.java@(line 1,col 1)
+accessible<heap> \inv : \nothing;
+             accessible<permissions> \inv : \nothing;

@@ -1,0 +1,2 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/specificationInterfaceDemo/SpecificationInterfaceDemo.java@(line 1,col 1)
+assert zz == 0;

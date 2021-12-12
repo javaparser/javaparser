@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/rise4fun/BinarySearch.java@(line 1,col 1)
+requires (\forall int i, j; 0 <= i && i < j && j < arr.length; arr[i] <= arr[j]);
+         ensures \result == -1 ==> (\forall int i; 0 <= i && i < arr.length; arr[i] != key);
+         ensures 0 <= \result && \result < arr.length ==> arr[\result] == key;

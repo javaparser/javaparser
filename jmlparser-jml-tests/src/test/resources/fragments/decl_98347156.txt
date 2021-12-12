@@ -1,0 +1,13 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SmansEtAl/src/Iterator.java@(line 1,col 1)
+normal_behavior
+        requires hasNext();
+        assignable footprint;
+        ensures list() == \old(list());
+        ensures \new_elems_fresh(footprint);
+         
+
+
+
+
+
+        nullable

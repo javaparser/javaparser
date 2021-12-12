@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/firstTouch/10-SITA/SITA3.java@(line 1,col 1)
+public normal_behaviour
+        requires  a1.length == a2.length;
+        ensures  (\forall int i;0<= i && i < a1.length; 
+            a1[i] == a2[i] ==> 
+          (\forall int j;0<= j && j < i; a1[j] == a2[j]));
+        assignable a1[*],a2[*];

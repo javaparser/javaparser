@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/verifythis-2019-2/Challenge2A.java@(line 1,col 1)
+public normal_behavior
+         assigns \nothing;
+         ensures \result.length == input.length;
+         ensures \forall int i; 0 <= i < \result.length; \result[i] < i;                                
+         ensures \forall int i; 0 <= i < \result.length; \result[i] != -1 ==> input[\result[i]] < input[i];                        
+         ensures \forall int i; 0 <= i < \result.length; \forall int j; \result[i] < j < i; input[j] >= input[i];

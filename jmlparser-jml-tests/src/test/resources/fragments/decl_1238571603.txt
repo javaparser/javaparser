@@ -1,0 +1,8 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permissions/threads/src/ThreadSpec.java@(line 1,col 1)
+normal_behavior
+            requires this != \dl_currentThread();
+            requires \dl_readPermission(\permission(this.canJoin)); 
+            ensures postJoin(\dl_currentThread());
+            ensures joinTransfer();
+            assignable<permissions> workingPermissions();
+            assignable<heap> workingPermissions();

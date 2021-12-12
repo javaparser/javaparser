@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/performance-test/src.templates/DynamicGhost.java@(line 1,col 1)
+public ghost \locset rep;
+
+         public invariant \subset(\locset(rep), rep);
+         private invariant rep == this.*;
+
+         private invariant \disjoint(rep, c.rep);
+         private invariant \invariant_for(c);
+
+         normal_behavior
+         requires x > 0;
+         ensures x > 0;

@@ -1,0 +1,84 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/permissions/lockspec/src/LockSpec.java@(line 1,col 1)
+model_behavior
+      accessible<heap> fpLock();
+      accessible<permissions> fpPerm();
+      model boolean lockState(boolean locked);    
+
+
+
+
+       model_behavior
+      accessible<heap> fpLock();
+      accessible<permissions> \nothing;
+      model Lock lockRef();    
+
+
+
+
+       model_behavior
+      accessible<heap> \nothing;
+      accessible<permissions> fpPerm();
+      model boolean lockStatus(boolean locked);    
+
+
+
+
+       model_behavior
+      accessible<heap> fp();
+      accessible<permissions> \nothing;
+      model \locset fp();    
+
+
+
+
+       model_behavior
+      accessible<heap> fpLock();
+      accessible<permissions> \nothing;
+      model \locset fpLock();    
+
+
+
+
+       model_behavior
+      accessible<heap> \nothing;
+      accessible<permissions> fpPerm();
+      model \locset fpPerm();    
+
+
+
+
+       model_behavior
+      accessible<heapAtPre> \nothing;
+      accessible<heap> fpLock();
+      accessible<permissionsAtPre> fpPerm();
+      accessible<permissions> fpPerm();
+      model two_state boolean lockTransfer();    
+
+
+
+
+
+
+       model_behavior
+      accessible<heapAtPre> \nothing;
+      accessible<heap> fpLock();
+      accessible<permissionsAtPre> fpPerm();
+      accessible<permissions> fpPerm();
+      model two_state boolean unlockTransfer();    
+
+
+
+
+
+
+       model_behavior
+      requires \old(lockRef()) == lockRef();
+      requires \old(this.\inv);
+      requires lockRef() != \dl_currentThread();
+      ensures \result;
+      model two_state boolean lockConsistent() { return 
+        (((\old(lockState(\dl_FALSE())) && \old(lockStatus(\dl_FALSE())) && lockTransfer()) ==> (lockState(\dl_TRUE()) && lockStatus(\dl_TRUE())))
+         &&
+         ((\old(lockState(\dl_TRUE())) && \old(lockStatus(\dl_TRUE())) && unlockTransfer()) ==> (lockState(\dl_FALSE()) && lockStatus(\dl_FALSE())))
+        );
+      }

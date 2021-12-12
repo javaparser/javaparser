@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug705/MBBug.java@(line 1,col 1)
+requires n >= 0;
+         measured_by n;
+         ensures \result == 0;

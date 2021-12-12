@@ -1,0 +1,7 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/standard_key/java_dl/payCardJML/paycard/PayCardJunior.java@(line 1,col 1)
+public normal_behavior
+          requires amount>0;
+          ensures \old(balance) + amount < juniorLimit 
+                  ? amount == balance - \old(balance) 
+                  : (balance == \old(balance) 
+                     && unsuccessfulOperations == \old(unsuccessfulOperations) + 1);

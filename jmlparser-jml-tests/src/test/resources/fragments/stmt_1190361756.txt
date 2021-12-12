@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/list_ghost/src/ArrayList.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= size 
+	     && (\forall int x; 0 <= x && x < i; newArray[x] == array[x]);
+	    assignable newArray[*];
+	    decreases size - i;

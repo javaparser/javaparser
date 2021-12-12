@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug602/IntSet.java@(line 1,col 1)
+requires size() > 0;
+         assignable state;
+         ensures contains(\result);

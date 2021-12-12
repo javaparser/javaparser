@@ -1,0 +1,15 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/SmansEtAl/src/ArrayList.java@(line 1,col 1)
+accessible \inv: footprint;
+        invariant items != null;
+        invariant 0 <= count && count <= items.length;
+        invariant \typeof(items) == \type(Object[]);
+         
+
+
+
+
+
+
+         model \locset footprint;
+        accessible footprint: footprint;
+        represents footprint = \storeref(count, items, items[*]);

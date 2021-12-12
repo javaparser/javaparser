@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/testfiles/escTrace3/trace.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= 10;
+             loop_invariant i == j;
+             decreases 8-i;

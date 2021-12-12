@@ -1,0 +1,5 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/fm12_01_LRS/SuffixArray.java@(line 1,col 1)
+maintaining 0 <= i && i <= a.length;
+            maintaining (\forall int j; 0 <= j && j < i; suffixes[j] == j);
+            decreasing a.length-i;
+            assignable suffixes[*];

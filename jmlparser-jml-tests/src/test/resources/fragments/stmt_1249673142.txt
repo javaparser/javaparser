@@ -1,0 +1,4 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/key/heap/vacid0_01_SparseArray/src/MemoryAllocator.java@(line 1,col 1)
+loop_invariant 0 <= i && i <= size;
+	    assignable result[*];
+	    decreases size - i;

@@ -1,0 +1,12 @@
+// Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/Else/Else.java@(line 1,col 1)
+requires BB;
+       requires CC;
+       ensures \result == true;
+     also
+       requires DD;
+       requires EE;
+       ensures \result == true;
+     also
+       requires \else;
+       ensures \result == false;
+     pure
