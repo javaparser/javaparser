@@ -26,18 +26,17 @@ import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.utils.ExtractingVisitors;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.utils.TestUtils.getNodeStartingAtPosition;
 import static com.github.javaparser.utils.TestUtils.parseFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ExpectedTokensTest {
+class Issue3406Test {
 
     @Test
     void testCharEscapeSequences() {
-        CompilationUnit compilationUnit = parseFile("/com/github/javaparser/EscapeSequences.java");
+        CompilationUnit compilationUnit = parseFile("/com/github/javaparser/issue_samples/Issue3406.java.txt");
         List<CharLiteralExpr> chars = ExtractingVisitors.extractCharLiteralExprs(compilationUnit);
         assertEquals(23, chars.size());
 

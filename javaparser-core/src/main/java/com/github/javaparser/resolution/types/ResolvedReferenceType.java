@@ -474,31 +474,18 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                 ResolvedType otherParam = other.typeParametersValues().get(i);
                 if (!thisParam.equals(otherParam)) {
                     if (thisParam instanceof ResolvedWildcard) {
-                        ResolvedWildcard thisParamAsWildcard = (ResolvedWildcard) thisParam;
-                        if (thisParamAsWildcard.isSuper() && otherParam.isAssignableBy(thisParamAsWildcard.getBoundedType())) {
-                            // ok
-                        } else if (thisParamAsWildcard.isExtends() && thisParamAsWildcard.getBoundedType().isAssignableBy(otherParam)) {
-                            // ok
-                        } else if (!thisParamAsWildcard.isBounded()) {
-                            // ok
-                        } else {
+                        if (!isAssignableWildcard(thisParam.asWildcard(), otherParam)) {
                             return false;
                         }
                     } else {
-                        if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
-                            List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds()
-                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
-                                    .collect(Collectors.toList());
-                            List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds()
-                                    .stream().map(ResolvedTypeParameterDeclaration.Bound::getType)
-                                    .collect(Collectors.toList());
-                            return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
-                        } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
-                            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable)otherParam);
-                        } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
-                            return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
+                        if (otherParam.isWildcard()) {
+                            ResolvedWildcard otherParamAsWildcard = otherParam.asWildcard();
+                            // this should use otherParam instead of other I think, is otherParam computed wrong?
+                            if (otherParamAsWildcard.isExtends() && isAssignableWithBounds(other, thisParam)) {
+                                return true;
+                            }
                         }
-                        return false;
+                        return compareResolvedTypes(thisParam, otherParam);
                     }
                 }
             }
@@ -510,7 +497,50 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     //
     // Private methods
     //
-    
+
+    private boolean isAssignableWildcard(ResolvedWildcard thisParam, ResolvedType otherParam) {
+        if (thisParam.isSuper() && otherParam.isAssignableBy(thisParam.getBoundedType())) {
+            // ok  --- it would help to describe the case here with an example
+            return true;
+        } else if (thisParam.isExtends() && thisParam.getBoundedType().isAssignableBy(otherParam)) {
+            // ok  --- it would help to describe the case here with an example
+            return true;
+        } else if (!thisParam.isBounded()) {
+            // ok  --- it would help to describe the case here with an example
+            return true;
+        }
+        return false;
+    }
+
+    private boolean compareResolvedTypes(ResolvedType thisParam, ResolvedType otherParam) {
+        if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
+            List<ResolvedType> thisBounds = extractTypeParameterBounds(thisParam.asTypeVariable());
+            List<ResolvedType> otherBounds = extractTypeParameterBounds(otherParam.asTypeVariable());
+            return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
+        } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
+            return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable) otherParam);
+        } else if (thisParam instanceof ResolvedTypeVariable) {
+            return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
+        }
+        return false;
+    }
+
+    private boolean isAssignableWithBounds(ResolvedReferenceType other, ResolvedType thisParam) {
+        // for instance java.util.Collection === java.util.Collection
+        if (!getTypeDeclaration().equals(other.getTypeDeclaration())) {
+            return false;
+        }
+        // this param is a type T, bounded by Collection<? extends E>, but who is E?
+        if (thisParam.isTypeVariable()) {
+            List<ResolvedType> resolvedTypes = extractTypeParameterBounds(thisParam.asTypeVariable());
+            if (resolvedTypes.size() == 1) {
+                // found E, is E the same as other?
+                return other.equals(resolvedTypes.get(0));
+            }
+        }
+        return false;
+    }
+
     private boolean compareConsideringVariableTypeParameters(ResolvedType referenceType, ResolvedTypeVariable typeVariable) {
         // verify if the ResolvedTypeVariable has only one type variable and the bound is
         // not a reference type with a bound parameter 
@@ -525,6 +555,14 @@ public abstract class ResolvedReferenceType implements ResolvedType,
                     : boundType.isAssignableBy(referenceType);
         }
         return false;
+    }
+
+    private static List<ResolvedType> extractTypeParameterBounds(ResolvedTypeVariable resolvedTypeVariable) {
+        return resolvedTypeVariable.asTypeParameter()
+                .getBounds()
+                .stream()
+                .map(Bound::getType)
+                .collect(Collectors.toList());
     }
 
     private static List<ResolvedType> deriveParams(ResolvedReferenceTypeDeclaration typeDeclaration) {
