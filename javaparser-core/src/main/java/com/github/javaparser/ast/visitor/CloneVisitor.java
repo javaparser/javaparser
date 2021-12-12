@@ -1336,13 +1336,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlLetExpr n, final Object arg) {
         Expression body = cloneNode(n.getBody(), arg);
-        NodeList<Parameter> variables = cloneList(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlLetExpr r = new JmlLetExpr(n.getTokenRange().orElse(null), variables, body);
-        r.setComment(comment);
-        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
-        copyData(n, r);
-        return r;
+        return n;
     }
 
     @Override

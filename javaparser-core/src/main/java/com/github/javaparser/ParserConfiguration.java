@@ -26,7 +26,8 @@ import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.validator.*;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.*;
 import com.github.javaparser.ast.validator.postprocessors.*;
 import com.github.javaparser.jml.JmlProcessor;
@@ -213,7 +214,6 @@ public class ParserConfiguration {
             return Arrays.stream(yieldSupport).anyMatch(level -> level == this);
         }
     }
-
 
 
     // TODO: Add a configurable option e.g. setDesiredLineEnding(...) to replace/swap out existing line endings
@@ -425,14 +425,6 @@ public class ParserConfiguration {
         return this;
     }
 
-    public List<PreProcessor> getPreProcessors() {
-        return preProcessors;
-    }
-
-    public List<PostProcessor> getPostProcessors() {
-        return postProcessors;
-    }
-
     public ParserConfiguration setLanguageLevel(LanguageLevel languageLevel) {
         this.languageLevel = languageLevel;
         return this;
@@ -489,4 +481,33 @@ public class ParserConfiguration {
         return this;
     }
 
+    //region weigl
+    public ParserConfiguration addPostProcessor(PostProcessor postProcessor) {
+        postProcessors.add(postProcessor);
+        return this;
+    }
+
+    public ParserConfiguration addPostProcessor(int pos, PostProcessor postProcessor) {
+        postProcessors.add(pos, postProcessor);
+        return this;
+    }
+
+    public ParserConfiguration addPreProcessor(PreProcessor postProcessor) {
+        preProcessors.add(postProcessor);
+        return this;
+    }
+
+    public ParserConfiguration addPreProcessor(int pos, PreProcessor postProcessor) {
+        preProcessors.add(pos, postProcessor);
+        return this;
+    }
+
+    public List<PreProcessor> getPreProcessors() {
+        return preProcessors;
+    }
+
+    public List<PostProcessor> getPostProcessors() {
+        return postProcessors;
+    }
+    //endregion
 }

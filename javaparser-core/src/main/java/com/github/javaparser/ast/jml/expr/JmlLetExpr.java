@@ -1,33 +1,34 @@
 package com.github.javaparser.ast.jml.expr;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Jmlish;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlLetExprMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlLetExprMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
 public class JmlLetExpr extends Expression implements Jmlish {
-
-    @NonEmptyProperty
-    private NodeList<Parameter> variables;
-
+    private VariableDeclarationExpr variables;
     private Expression body;
 
     @AllFieldsConstructor
-    public JmlLetExpr(NodeList<Parameter> variables, Expression body) {
+    public JmlLetExpr(VariableDeclarationExpr variables, Expression body) {
         this.variables = variables;
         this.body = body;
     }
@@ -93,12 +94,12 @@ public class JmlLetExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> getVariables() {
+    public VariableDeclarationExpr getVariables() {
         return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLetExpr setVariables(final NodeList<Parameter> variables) {
+    public JmlLetExpr setVariables(final VariableDeclarationExpr variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -116,12 +117,6 @@ public class JmlLetExpr extends Expression implements Jmlish {
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.remove(i);
-                return true;
-            }
-        }
         return super.remove(node);
     }
 
@@ -134,11 +129,9 @@ public class JmlLetExpr extends Expression implements Jmlish {
             setBody((Expression) replacementNode);
             return true;
         }
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.set(i, (Parameter) replacementNode);
-                return true;
-            }
+        if (node == variables) {
+            setVariables((VariableDeclarationExpr) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }
@@ -159,7 +152,7 @@ public class JmlLetExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlLetExpr(TokenRange tokenRange, NodeList<Parameter> variables, Expression body) {
+    public JmlLetExpr(TokenRange tokenRange, VariableDeclarationExpr variables, Expression body) {
         super(tokenRange);
         setVariables(variables);
         setBody(body);

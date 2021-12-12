@@ -1422,12 +1422,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlLetExpr n, final A arg) {
         Expression body = (Expression) n.getBody().accept(this, arg);
-        NodeList<Parameter> variables = modifyList(n.getVariables(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (body == null || variables.isEmpty())
-            return null;
-        n.setBody(body);
-        n.setVariables(variables);
         n.setComment(comment);
         return n;
     }

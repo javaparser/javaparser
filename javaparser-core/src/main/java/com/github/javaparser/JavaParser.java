@@ -31,7 +31,6 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
-import com.github.javaparser.ast.jml.stmt.JmlStatements;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -543,7 +542,11 @@ public final class JavaParser {
     }
 
     public ParseResult<ArbitraryNodeContainer> parseJmlMethodLevel(String content) {
-        return parse(enableJml(GeneratedJavaParser::JmlMethodLevelStart), provider(content));
+        return parseJmlMethodLevel(provider(content));
+    }
+
+    public ParseResult<ArbitraryNodeContainer> parseJmlMethodLevel(Provider provider) {
+        return parse(enableJml(GeneratedJavaParser::JmlMethodLevelStart), provider);
     }
 
     private <T> ParseStart<T> enableJml(ParseStart<T> start) {
@@ -554,7 +557,11 @@ public final class JavaParser {
     }
 
     public ParseResult<ArbitraryNodeContainer> parseJmlClassLevel(String content) {
+        return parseJmlClassLevel(provider(content));
+    }
+
+    public ParseResult<ArbitraryNodeContainer> parseJmlClassLevel(Provider content) {
         return parse(enableJml(
-                GeneratedJavaParser::JmlClassLevelStart), provider(content));
+                GeneratedJavaParser::JmlClassLevelStart), content);
     }
 }

@@ -154,18 +154,18 @@ PARSER_END(GeneratedJavaParser)
 
 
 //region JML
+/**
 <JML_MULTI_CONTRACT>
 SPECIAL_TOKEN : {
   /*"\n" ([" ","\t","\f"])* */
-  <AT_AT_BEGINN: <AT>> //treat as whitespace
-}
-
-/**
- */
+//  <AT_AT_BEGINN: <AT>> //treat as whitespace
+//}
+/*
 <JML_SINGLE_CONTRACT>
 SPECIAL_TOKEN : {
   <JML_IGNORE_SINGLE_LINE_START : ("\n" (" ")*) "//@">
 }
+*/
 
 
 
@@ -286,6 +286,7 @@ TOKEN : {
 | <EXTRACT: "extract">
 | <FIELD: "field">
 | <FORALLQ: "\\forall">
+| <LET: "\\let">
 | <FORALL: "forall">
 | <FOR_EXAMPLE: "for_example">
 //| <FRESH: "\\fresh">
@@ -307,8 +308,9 @@ TOKEN : {
 | <IN_REDUNDANTLY: "in_redundantly">
 //| <IS_INITIALIZED: "\\is_initialized">
 | <JAVA_MATH: "\\java_math">
-//| <LBLNEG: "\\lblneg">
-//| <LBLPOS: "\\lblpos">
+| <LBLNEG: "\\lblneg">
+| <LBLPOS: "\\lblpos">
+| <LBL: "\\lbl">
 //| <LOCKSET: "\\lockset">
 | <LOOP_CONTRACT : "loop_contract">
 | <LOOP_INVARIANT: "loop_invariant">
@@ -341,6 +343,8 @@ TOKEN : {
 | <NON_NULL: "non_null">
 | <NORMAL_BEHAVIOR: "normal_behavior">
 | <NORMAL_BEHAVIOUR: "normal_behaviour">
+| <FEASIBLE_BEHAVIOR: "feasible_behavior">
+| <FEASIBLE_BEHAVIOUR: "feasible_behaviour">
 | <NORMAL_EXAMPLE: "normal_example">
 //| <NOTHING: "\\nothing">
 //| <NOT_ASSIGNED: "\\not_assigned">
@@ -377,6 +381,7 @@ TOKEN : {
 | <RETURNS: "returns">
 | <RETURNS_REDUNDANTLY: "returns_redundantly">
 | <RETURN_BEHAVIOR : "return_behavior">
+| <BACKARROW: "<-">
 | <RETURN_BEHAVIOUR : "return_behaviour">
 | <SAFE_MATH: "\\safe_math">
 //| <SAME: "\\same">
@@ -510,9 +515,16 @@ TOKEN :
   <JML_LINE_COMMENT: "//" (("+"|"-") <IDENTIFIER>)* "@" (~["\n","\r"])*>
 }
 
+<DEFAULT, JML_MULTI_CONTRACT, JML_SINGLE_CONTRACT>
 SPECIAL_TOKEN :
 {
   <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
+}
+
+<JML_MULTI_CONTRACT, JML_SINGLE_CONTRACT>
+MORE:
+{
+  <JML_ENTER_MULTILINE_COMMENT: "/*"> : IN_JML_MULTI_LINE_COMMENT
 }
 
 MORE :
@@ -543,7 +555,14 @@ SPECIAL_TOKEN :
   <MULTI_LINE_COMMENT: "*/" > : DEFAULT
 }
 
-<IN_JAVADOC_COMMENT, IN_MULTI_LINE_COMMENT, IN_JML_BLOCK_COMMENT>
+<IN_JML_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <JML_MULTI_LINE_COMMENT: "*/" > : JML_MULTI_CONTRACT
+}
+
+
+<IN_JAVADOC_COMMENT, IN_MULTI_LINE_COMMENT, IN_JML_BLOCK_COMMENT, IN_JML_MULTI_LINE_COMMENT>
 MORE :
 {
   <COMMENT_CONTENT: ~[] >
@@ -3658,18 +3677,25 @@ Expression InstanceOfExpression():
     ReferenceType type;
     NodeList<AnnotationExpr> annotations;
     PatternExpr pattern;
+    Expression expr; JavaToken op;
 }
 {
     ret = RelationalExpression()
     [
-        "instanceof"
         (
-            LOOKAHEAD(PatternExpression())
-            pattern = PatternExpression()
-            { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType(), pattern); }
-         |
-            type = AnnotatedReferenceType()
-            { ret = new InstanceOfExpr(range(ret, token()), ret, type, null); }
+            <SUBTYPE> {op=token();}
+            expr = Expression()
+            { ret = new JmlBinaryInfixExpr(range(ret, token()), ret, expr, op); }
+        |
+            "instanceof"
+            (
+                LOOKAHEAD(PatternExpression())
+                pattern = PatternExpression()
+                { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType(), pattern); }
+             |
+                type = AnnotatedReferenceType()
+                { ret = new InstanceOfExpr(range(ret, token()), ret, type, null); }
+            )
         )
     ]
     { return ret; }
@@ -4206,9 +4232,27 @@ Expression JmlPrimaryPrefix():
     JavaToken begin, quant;
     NodeList<JmlBoundVariable> vars;
     Type ret;
+    VariableDeclarationExpr decls;
+    SimpleName name;
 }
 {
-  (
+  (  LOOKAHEAD(2)
+     "(" {begin=token();}
+      ("\\lblneg"|"\\lblpos"|"\\lbl") {quant=token();}
+      name=SimpleName()
+      expr=Expression()
+      ")"
+      { return new JmlFunction(range(begin, token()), quant, name, expr);}
+  |
+      LOOKAHEAD(2)
+      "(" {begin=token();}
+       <LET> {quant=token();}
+       decls=VariableDeclarationExpression()
+       ";"
+       expr=Expression()
+       ")"
+       { return new JmlLetExpr(range(begin, token()), decls, expr);}
+  |
       "(" {begin=token();}
        (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX> | <JML_IDENTIFIER>)
        {quant=token();}
@@ -6330,9 +6374,20 @@ ArbitraryNodeContainer JmlMethodLevelStart():
   ( contracts = JmlLoopInvariants() { ret.getChildren().addAll(contracts); }
   | statements = JmlStatements()    { ret.getChildren().addAll(statements.getElements()); }
   | jmlModifiersInner(mods)         { ret.getChildren().addAll(mods); mods.clear();}
+  | contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
   )
   <EOF>
   { return ret; }
+}
+
+NodeList<JmlContracts> JmlRefiningContract():
+{
+    NodeList<JmlContracts> ret = new NodeList<>();
+}
+{
+    ["refining"]
+    ret=JmlContracts()
+    {return ret;}
 }
 
 JmlStatements JmlStatements():
@@ -6531,6 +6586,7 @@ Behavior JmlBehavior():
 {}
 {
     (<BEHAVIOUR>|<BEHAVIOR>) {return Behavior.BEHAVIOR;}
+  | (<FEASIBLE_BEHAVIOR>|<FEASIBLE_BEHAVIOUR>) {return Behavior.BEHAVIOR;}
   | (<NORMAL_BEHAVIOR>|<NORMAL_BEHAVIOUR>) {return Behavior.NORMAL;}
   | (<EXCEPTIONAL_BEHAVIOR>|<EXCEPTIONAL_BEHAVIOUR>) {return Behavior.EXCEPTIONAL;}
   | (<ABRUPT_BEHAVIOR>|<ABRUPT_BEHAVIOUR>) {return Behavior.BREAK;}
@@ -6693,8 +6749,8 @@ JmlClause JmlSignalsClause():
     JavaToken begin;
 }
 {
-  { begin = token(); }
-  <SIGNALS> <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
+  <SIGNALS>   { begin = token(); }
+  <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
   { return new SignalsClause(range(begin, token()), type, id, e); }
 }
 
@@ -6778,15 +6834,15 @@ ArbitraryNodeContainer JmlClassLevelStart():
     ModifierHolder modifiers;
     JavaToken begin;
 }{
-    (   LOOKAHEAD(100)
-        (   LOOKAHEAD(100)
+    (   LOOKAHEAD(2147483647)
+        (   LOOKAHEAD(2147483647)
             modifiers = Modifiers()
             ( LOOKAHEAD(3) element = JmlClassInvariant(modifiers)
             | LOOKAHEAD(3) element = JmlClassInitially(modifiers)
             | LOOKAHEAD(3) element = JmlClassAccessible(modifiers)
             | LOOKAHEAD(3) element = JmlClassRepresents(modifiers)
             | LOOKAHEAD(4) element = JmlFieldDeclaration(modifiers)
-            | LOOKAHEAD(100) element = JmlMethodDeclaration(modifiers)
+            | element = JmlMethodDeclaration(modifiers)
             )
             { ret.add(element); }
         |
@@ -6857,13 +6913,13 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
     ( LOOKAHEAD(2)
       [<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>]
       {begin=token();}
-      (clause=JmlContractClause() {clauses.add(clause);})+
+      (clause=JmlContractClause() { clauses.add(clause);  begin=orIfInvalid(begin==null?INVALID:begin, clause); })+
       (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
       {
        c = new JmlContract(range(begin,token()), Behavior.MODEL, new NodeList<>(), clauses, subContracts);
       }
     )?
-    modifier=Modifiers()
+    modifier=Modifiers() {begin = modifier.begin;}
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
     annotations = Annotations() { modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations)); }
     type = ResultType(emptyNodeList()) { begin = orIfInvalid(begin, type); }
@@ -6934,7 +6990,7 @@ JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
 {
   b=<REPRESENTS>
   (
-    id=Name() (<ASSIGN> | <SUCH_THAT>) expr=Expression()
+    id=Name() (<ASSIGN> | <SUCH_THAT> | "<-") expr=Expression()
   | LOOKAHEAD(2) expr=Expression()
   )
   ";"

@@ -29,6 +29,10 @@ public class JmlBinaryInfixExpr extends Expression {
 
     private SimpleName operator;
 
+    public JmlBinaryInfixExpr(Expression left, Expression right, JavaToken operator) {
+        this(null, left, right, nameFromToken(operator));
+    }
+
     @AllFieldsConstructor
     public JmlBinaryInfixExpr(Expression left, Expression right, SimpleName operator) {
         this(null, left, right, operator);

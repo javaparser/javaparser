@@ -1,21 +1,20 @@
 package com.github.javaparser.ast.jml.expr;
 
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Jmlish;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlFunctionMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlFunctionMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
 
 /**
  * @author Alexander Weigl
@@ -29,6 +28,11 @@ public class JmlFunction extends Expression implements Jmlish {
 
     @AllFieldsConstructor
     public JmlFunction(JmlName functionName, NodeList<Expression> arguments) {
+        this(null, functionName, arguments);
+    }
+
+    public JmlFunction(TokenRange range, JavaToken quant, Expression... arguments) {
+        this(range, new JmlName(quant.toTokenRange(), quant.getText()), new NodeList<>(arguments));
     }
 
     @Override

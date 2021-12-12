@@ -866,7 +866,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(JmlLetExpr n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print("(\\let ");
-        printList(n.getVariables(), ", ");
+        //printList(n.getVariables(), ", ");
         printer.print("; ");
         n.getBody().accept(this, arg);
         printer.print(")");

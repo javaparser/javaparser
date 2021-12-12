@@ -100,10 +100,8 @@ public class TokenTypes {
             case UNIX_EOL:
             case OLD_MAC_EOL:
                 return JavaToken.Category.EOL;
-            case JML_IGNORE_SINGLE_LINE_START:
             case EOF:
             case SPACE:
-            case AT_AT_BEGINN:
             case CTRL_Z:
                 return JavaToken.Category.WHITESPACE_NO_EOL;
             case SINGLE_LINE_COMMENT:
@@ -116,6 +114,8 @@ public class TokenTypes {
             case BIGINT:
             case BIGINT_MATH:
             case BREAK_BEHAVIOR:
+            case FEASIBLE_BEHAVIOR:
+            case FEASIBLE_BEHAVIOUR:
             case BREAK_BEHAVIOUR:
             case CALLABLE_REDUNDANTLY: //case BY:
             case DURATION:
@@ -333,6 +333,7 @@ public class TokenTypes {
             case RETURNS_REDUNDANTLY:
             case RETURNS:
             case RETURN_BEHAVIOR:
+            case LET:
                 //case SAME:
             case SET:
             case SAFE_MATH:
@@ -427,6 +428,7 @@ public class TokenTypes {
             case LE:
             case GE:
             case NE:
+            case BACKARROW:
             case SC_OR:
             case SC_AND:
             case INCR:

@@ -780,7 +780,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlLetExpr n, final A arg) {
         n.getBody().accept(this, arg);
-        n.getVariables().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

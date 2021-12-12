@@ -1460,8 +1460,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final JmlLetExpr n2 = (JmlLetExpr) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
-        if (!nodesEquals(n.getVariables(), n2.getVariables()))
-            return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
         return true;

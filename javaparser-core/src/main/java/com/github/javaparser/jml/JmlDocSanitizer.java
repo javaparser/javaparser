@@ -49,7 +49,21 @@ public class JmlDocSanitizer {
     }
 
     private void cleanAtSigns(StringBuilder s) {
-        //TODO weigl
+        for (int pos = 0; pos < s.length(); pos++) {
+            char cur = s.charAt(pos);
+            if (cur == '\n') {
+                ++pos;
+                for (; pos < s.length(); pos++) {
+                    if (!Character.isWhitespace(s.charAt(pos)))
+                        break;
+                }
+                for (; pos < s.length(); pos++) {
+                    if ('@' == s.charAt(pos)) {
+                        s.setCharAt(pos, ' ');
+                    }
+                }
+            }
+        }
     }
 
     private void cleanComments(StringBuilder s) {
@@ -73,6 +87,10 @@ public class JmlDocSanitizer {
         } else {
             end = s.indexOf("\n", pos + 2);
         }
+        if (end == -1) { // Comment is aborted by EOF rather than */ or \n
+            end = s.length();
+        }
+
         for (int i = pos; i < end; i++) {
             s.setCharAt(i, ' ');
         }

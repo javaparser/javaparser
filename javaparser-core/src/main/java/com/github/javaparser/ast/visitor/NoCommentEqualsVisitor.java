@@ -1201,8 +1201,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlLetExpr n2 = (JmlLetExpr) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
-        if (!nodesEquals(n.getVariables(), n2.getVariables()))
-            return false;
         return true;
     }
 

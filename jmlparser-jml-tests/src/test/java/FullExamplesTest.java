@@ -1,18 +1,30 @@
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
+import com.github.javaparser.ast.jml.doc.JmlDocStmt;
+import com.github.javaparser.ast.jml.doc.JmlDocType;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.jml.JmlDocSanitizer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +33,16 @@ import java.util.stream.Stream;
  * @version 1 (7/2/21)
  */
 public class FullExamplesTest {
-    private final JavaParser jpb = new JavaParser();
+    private final JavaParser jpb;
+    private final StoreJMLComments storeProcessor = new StoreJMLComments();
+    private final ParserConfiguration config;
+
+    {
+        config = new ParserConfiguration();
+        config.setStoreTokens(true);
+        jpb = new JavaParser(config);
+    }
+
     private static final File dir = new File("src/test/resources/fullexamples").getAbsoluteFile();
 
     Set<String> blocked = new HashSet<>();
@@ -129,10 +150,64 @@ public class FullExamplesTest {
             System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toUri(), line);
             it.getCause().ifPresent(c -> c.printStackTrace());
         });
+        storeProcessor.process(result, config);
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
     }
 
     private boolean isBlocked(Path it) {
         return blockedPaths.contains(it);
+    }
+
+
+}
+
+class StoreJMLComments implements ParseResult.PostProcessor {
+    private final JmlDocSanitizer sanitizer = new JmlDocSanitizer(new TreeSet<>());
+    private String origin;
+
+    @Override
+    public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+        if (result.getResult().isPresent()) {
+            final Node node = result.getResult().get();
+            if (node instanceof CompilationUnit) {
+                origin = ((CompilationUnit) node).getStorage()
+                        .map(it -> it.getPath().toFile().toString()).orElse("no path given");
+            } else {
+                origin = "n/a";
+            }
+            node.accept(new Visitor(), null);
+        }
+    }
+
+    private void write(String cat, NodeList<JmlDoc> comment) {
+        if (comment.isEmpty()) return;
+
+        Path f = Paths.get("src", "test", "resources", "fragments",
+                cat + "_" + Math.abs(comment.hashCode()) + ".txt");
+        String s = sanitizer.asString(comment);
+        String pos = comment.get(0).getRange().map(it -> it.begin.toString()).orElse("");
+        try (FileWriter fw = new FileWriter(f.toFile())) {
+            fw.write("// Origin: " + origin + "@" + pos + "\n");
+            fw.write(s.trim());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class Visitor extends VoidVisitorAdapter<Void> {
+        @Override
+        public void visit(JmlDocType n, Void arg) {
+            write("type", n.getJmlComments());
+        }
+
+        @Override
+        public void visit(JmlDocDeclaration n, Void arg) {
+            write("decl", n.getJmlComments());
+        }
+
+        @Override
+        public void visit(JmlDocStmt n, Void arg) {
+            write("stmt", n.getJmlComments());
+        }
     }
 }
