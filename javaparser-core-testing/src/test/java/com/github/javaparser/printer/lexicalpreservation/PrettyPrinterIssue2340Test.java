@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -40,7 +41,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
 
     @Test
@@ -49,7 +50,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
     
     @Test
@@ -58,7 +59,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
     
     @Test
@@ -67,7 +68,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
     
     @Test
@@ -76,7 +77,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def2);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
 
 }

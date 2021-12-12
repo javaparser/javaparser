@@ -72,7 +72,7 @@ class FieldDeclarationTest {
     	modifiers = field.getModifiers();
     	assertEquals(0, modifiers.size());
     	
-    	field.setModifiers(Keyword.PRIVATE, Keyword.SYNCHRONIZED);
+    	field.setModifiers(Modifier.DefaultKeyword.PRIVATE, Modifier.DefaultKeyword.SYNCHRONIZED);
     	modifiers = field.getModifiers();
     	assertTrue(modifiers.contains(Modifier.privateModifier()));
     	assertTrue(modifiers.contains(Modifier.synchronizedModifier()));

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
@@ -42,6 +43,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.INVARIANT;
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
@@ -1015,7 +1017,10 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(CallableClause.class, sequence());
-        concreteSyntaxModelByClass.put(JmlClassInvariantDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(JmlClassInvariantDeclaration.class, sequence(
+                child(MODIFIERS),
+                token(INVARIANT),
+                child(EXPRESSION)));
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlBoundVariable.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
@@ -1034,7 +1039,14 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlStatements.class, sequence());
         concreteSyntaxModelByClass.put(JmlStmtWithExpression.class, sequence());
         concreteSyntaxModelByClass.put(JmlUnreachableStmt.class, sequence());
-        concreteSyntaxModelByClass.put(OldClause.class, sequence());
+        concreteSyntaxModelByClass.put(JmlBinaryInfixExpr.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDocDeclaration.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDocModifier.class, sequence());
+        concreteSyntaxModelByClass.put(JmlOldClause.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDocType.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDoc.class, sequence());
+        concreteSyntaxModelByClass.put(JmlDocStmt.class, sequence());
+        concreteSyntaxModelByClass.put(JmlFieldDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(SignalsClause.class, sequence());
         concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(SignalsOnlyClause.class, sequence(
@@ -1048,7 +1060,8 @@ public class ConcreteSyntaxModel {
 
 
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
-                .filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType()))
+                .filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType())
+                        && !concreteSyntaxModelByClass.containsKey(c.getType()))
                 .map(nm -> nm.getType().getSimpleName())
                 .collect(Collectors.toList());
         if (unsupportedNodeClassNames.isEmpty()) {

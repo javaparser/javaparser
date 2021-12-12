@@ -21,6 +21,7 @@ package com.github.javaparser.printer.lexicalpreservation;
  * GNU Lesser General Public License for more details.
  */
 
+import com.github.javaparser.ast.Modifier;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.StaticJavaParser;
@@ -54,7 +55,7 @@ public class Issue1467Test {
         CompilationUnit cu = StaticJavaParser.parse(before);
         LexicalPreservingPrinter.setup(cu);
         // add method method declaration
-        MethodDeclaration decl = cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Keyword.PUBLIC);
+        MethodDeclaration decl = cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Modifier.DefaultKeyword.PUBLIC);
         // create body 
         BlockStmt body = new BlockStmt();
         NodeList<Statement> statements = new NodeList<>();

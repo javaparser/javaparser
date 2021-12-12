@@ -7049,7 +7049,7 @@ JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
 {
   b=<REPRESENTS>
   (
-    id=Name() (<ASSIGN> | <SUCH_THAT> | "<-") expr=Expression()
+    id=Name() (<ASSIGN> | <SUCH_THAT> | <BACKARROW>) expr=Expression()
   | LOOKAHEAD(2) expr=Expression()
   )
   ";"

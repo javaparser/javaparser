@@ -234,8 +234,8 @@ public class ModifierValidator extends VisitorValidator {
         }
         for (Modifier m : n.getModifiers()) {
             if (!arrayContains(allowedModifiers, m.getKeyword())) {
-                reporter.report(n, "'%s' is not allowed at %s.", m.getKeyword().asString(), n.getClass().getSimpleName());
-                //reporter.report(n, "'%s' is not allowed here.", m.getKeyword().asString());
+                //reporter.report(n, "'%s' is not allowed at %s.", m.getKeyword().asString(), n.getClass().getSimpleName());
+                reporter.report(n, "'%s' is not allowed here.", m.getKeyword().asString());
             }
         }
     }

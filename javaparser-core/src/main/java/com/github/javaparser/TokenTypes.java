@@ -133,7 +133,7 @@ public class TokenTypes {
             case DECREASES_REDUNDANTLY:
             case DECREASING_REDUNDANTLY:
             case DURATION_REDUNDANTLY:
-            //case ELEMTYPE:
+                //case ELEMTYPE:
             case MODEL_BEHAVIOR:
             case MODEL_BEHAVIOUR:
             case ENSURES_REDUNDANTLY:
@@ -463,8 +463,11 @@ public class TokenTypes {
                 return JavaToken.Category.OPERATOR;
             // The following are tokens that are only used internally by the lexer
             case ENTER_JAVADOC_COMMENT:
+            case JML_ENTER_MULTILINE_COMMENT:
             case ENTER_MULTILINE_COMMENT:
+            case ENTER_JML_BLOCK_COMMENT:
             case COMMENT_CONTENT:
+            case JML_MULTI_LINE_COMMENT:
             case HEX_DIGITS:
             case LETTER:
             case UNICODE_ESCAPE:

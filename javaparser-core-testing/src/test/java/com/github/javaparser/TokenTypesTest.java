@@ -57,8 +57,9 @@ public class TokenTypesTest {
         assertThrows(AssertionError.class, () -> {
             TokenTypes.getCategory(-1);
         });
-    
-}
+
+    }
+
     @TestFactory
     Stream<DynamicTest> everyTokenHasACategory0() throws IOException {
         final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
@@ -67,9 +68,8 @@ public class TokenTypesTest {
                         () -> {
                             try {
                                 TokenTypes.getCategory(it);
-                            } catch (IllegalArgumentException e) {
-    }
-                            return;
+                            } catch (IllegalArgumentException ignored) {
+                            }
                         }));
     }
 }
