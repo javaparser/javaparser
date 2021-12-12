@@ -568,7 +568,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlLabel n, final A arg) {
+    public void visit(final JmlLabelExpr n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -688,7 +688,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlGhostStatements n, final A arg) {
+    public void visit(final JmlGhostStatement n, final A arg) {
         defaultAction(n, arg);
     }
 

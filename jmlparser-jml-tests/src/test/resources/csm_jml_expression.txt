@@ -1,0 +1,9 @@
+(\forall int i; 0 <= i < a.length; a[i] > 0)
+(\exists int i; 0 <= i < a.length; a[i] > 0)
+(\lblpos X 1 + 1)
+(\lbl X 1 + 1)
+(\lblneg X 1 + 1)
+\typeof(array) == \type(Object[])
+(\min int x; false; 42) != 42
+a != null ==> (\forall int i; 0 <= i && i < a.length - 1; a[i] <= a[i + 1])
+\old(\seq_concat(\seq_sub(s, 0, k), \seq_concat(\seq_singleton(x), \seq_sub(s, k, len)))) && len == \old(len) + 1 && x == (Node) s[k]

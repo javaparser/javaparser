@@ -902,17 +902,17 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlLabel asJmlLabel() {
+    public JmlLabelExpr asJmlLabel() {
         throw new IllegalStateException(f("%s is not JmlLabel, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlLabel> toJmlLabel() {
+    public Optional<JmlLabelExpr> toJmlLabel() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlLabel(Consumer<JmlLabel> action) {
+    public void ifJmlLabel(Consumer<JmlLabelExpr> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -1058,5 +1058,24 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlBinaryInfixExpr(Consumer<JmlBinaryInfixExpr> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlLabelExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlLabelExpr asJmlLabelExpr() {
+        throw new IllegalStateException(f("%s is not JmlLabelExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlLabelExpr> toJmlLabelExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlLabelExpr(Consumer<JmlLabelExpr> action) {
     }
 }

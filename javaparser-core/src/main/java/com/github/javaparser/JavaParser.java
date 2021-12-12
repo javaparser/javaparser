@@ -584,4 +584,16 @@ public final class JavaParser {
                 GeneratedJavaParser::JmlModifierLevelStart), content);
     }
 
+
+    public <T extends Expression> ParseResult<T> parseJmlExpression(String content) {
+        return parseJmlExpression(provider(content));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Expression> ParseResult<T> parseJmlExpression(Provider content) {
+        return (ParseResult<T>) parse(enableJml(
+                GeneratedJavaParser::ExpressionParseStart), content);
+    }
+
+
 }

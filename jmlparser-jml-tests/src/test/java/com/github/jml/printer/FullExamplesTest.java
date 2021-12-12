@@ -1,3 +1,5 @@
+package com.github.jml.printer;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -24,7 +26,6 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -150,7 +151,7 @@ public class FullExamplesTest {
             System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toUri(), line);
             it.getCause().ifPresent(c -> c.printStackTrace());
         });
-        storeProcessor.process(result, config);
+        //storeProcessor.process(result, config);
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
     }
 

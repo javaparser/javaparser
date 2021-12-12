@@ -479,7 +479,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlLabel n, final Void arg) {
+    public Integer visit(final JmlLabelExpr n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getLabel().accept(this, arg));
     }
 
@@ -599,8 +599,8 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlGhostStatements n, final Void arg) {
-        return (n.getStatements().accept(this, arg));
+    public Integer visit(final JmlGhostStatement n, final Void arg) {
+        return (n.getStatement().accept(this, arg));
     }
 
     @Override

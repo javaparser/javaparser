@@ -1322,11 +1322,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlLabel n, final Object arg) {
+    public Visitable visit(final JmlLabelExpr n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         SimpleName label = cloneNode(n.getLabel(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlLabel r = new JmlLabel(n.getTokenRange().orElse(null), n.getKind(), label, expression);
+        JmlLabelExpr r = new JmlLabelExpr(n.getTokenRange().orElse(null), n.getKind(), label, expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1603,10 +1603,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlGhostStatements n, final Object arg) {
-        NodeList<Statement> statements = cloneList(n.getStatements(), arg);
+    public Visitable visit(final JmlGhostStatement n, final Object arg) {
+        Statement statement = cloneNode(n.getStatement(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlGhostStatements r = new JmlGhostStatements(n.getTokenRange().orElse(null), statements);
+        JmlGhostStatement r = new JmlGhostStatement(n.getTokenRange().orElse(null), statement);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

@@ -2237,7 +2237,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlLabel n, final A arg) {
+    public R visit(final JmlLabelExpr n, final A arg) {
         R result;
         {
             result = n.getExpression().accept(this, arg);
@@ -2704,10 +2704,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlGhostStatements n, final A arg) {
+    public R visit(final JmlGhostStatement n, final A arg) {
         R result;
         {
-            result = n.getStatements().accept(this, arg);
+            result = n.getStatement().accept(this, arg);
             if (result != null)
                 return result;
         }

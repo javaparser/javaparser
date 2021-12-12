@@ -30,7 +30,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.jml.doc.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.expr.*;
@@ -164,7 +163,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlBinaryInfixExpr.class);
         add(JmlLetExpr.class);
         add(JmlMultiCompareExpr.class);
-        add(JmlLabel.class);
+        add(JmlLabelExpr.class);
         add(JmlName.class);
         add(JmlFunction.class);
         add(JmlSetComprehension.class);
@@ -195,7 +194,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.stmt.YieldStmt.class);
 
         add(JmlStatement.class);
-        add(JmlGhostStatements.class);
+        add(JmlGhostStatement.class);
         add(JmlStmtWithExpression.class);
         add(JmlRefiningStmt.class);
         add(JmlUnreachableStmt.class);

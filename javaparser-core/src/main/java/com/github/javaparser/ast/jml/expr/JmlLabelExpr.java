@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.jml.expr;
 
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.expr.Expression;
@@ -7,6 +8,8 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
@@ -17,12 +20,13 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.JmlLabelExprMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlLabel extends Expression implements Jmlish {
+public class JmlLabelExpr extends Expression implements Jmlish {
 
     private Kind kind;
 
@@ -31,14 +35,21 @@ public class JmlLabel extends Expression implements Jmlish {
     private Expression expression;
 
     @AllFieldsConstructor
-    public JmlLabel(final Kind kind, SimpleName label, final Expression expression) {
-        // TODO
-        this(null);
+    public JmlLabelExpr(final Kind kind, SimpleName label, final Expression expression) {
+        this(null, kind, label, expression);
+    }
+
+    public JmlLabelExpr(TokenRange range, JavaToken quant, SimpleName name, Expression expr) {
+        this(range, token2Kind(quant), name, expr);
+    }
+
+    private static Kind token2Kind(JavaToken token) {
+        return Arrays.stream(Kind.values()).filter(it -> it.jmlSymbol().equals(token.getText())).findFirst().get();
     }
 
     public enum Kind implements JmlKeyword {
 
-        NONE("\\lbl"), POSITIVE("\\lblpos"), NEGATIVE("\\lblneg");
+        NEUTRAL("\\lbl"), POSITIVE("\\lblpos"), NEGATIVE("\\lblneg");
 
         private final String symbol;
 
@@ -77,19 +88,19 @@ public class JmlLabel extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlLabel asJmlLabel() {
+    public JmlLabelExpr asJmlLabel() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlLabel> toJmlLabel() {
+    public Optional<JmlLabelExpr> toJmlLabel() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlLabel(Consumer<JmlLabel> action) {
+    public void ifJmlLabel(Consumer<JmlLabelExpr> action) {
         action.accept(this);
     }
 
@@ -112,21 +123,15 @@ public class JmlLabel extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlLabel clone() {
-        return (JmlLabel) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlLabelMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlLabelMetaModel;
+    public JmlLabelExpr clone() {
+        return (JmlLabelExpr) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlLabel(TokenRange tokenRange) {
+    public JmlLabelExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -137,7 +142,7 @@ public class JmlLabel extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabel setExpression(final Expression expression) {
+    public JmlLabelExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -156,7 +161,7 @@ public class JmlLabel extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabel setKind(final Kind kind) {
+    public JmlLabelExpr setKind(final Kind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -169,7 +174,7 @@ public class JmlLabel extends Expression implements Jmlish {
     /**
      * This constructor is used by the parser and is considered private.
      */
-    public JmlLabel(TokenRange tokenRange, Kind kind, Expression expression) {
+    public JmlLabelExpr(TokenRange tokenRange, Kind kind, Expression expression) {
         super(tokenRange);
         setKind(kind);
         setExpression(expression);
@@ -182,7 +187,7 @@ public class JmlLabel extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabel setLabel(final SimpleName label) {
+    public JmlLabelExpr setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -199,11 +204,41 @@ public class JmlLabel extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlLabel(TokenRange tokenRange, Kind kind, SimpleName label, Expression expression) {
+    public JmlLabelExpr(TokenRange tokenRange, Kind kind, SimpleName label, Expression expression) {
         super(tokenRange);
         setKind(kind);
         setLabel(label);
         setExpression(expression);
         customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlLabelExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlLabelExpr asJmlLabelExpr() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlLabelExpr> toJmlLabelExpr() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlLabelExpr(Consumer<JmlLabelExpr> action) {
+        action.accept(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public JmlLabelExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlLabelExprMetaModel;
     }
 }

@@ -25,6 +25,7 @@ import com.github.javaparser.Token;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -48,7 +49,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     /**
      * 12.4.24.2 Generalized Quantifiers
      */
-    public enum JmlBinder {
+    public enum JmlBinder implements JmlKeyword {
 
         FORALL("\\forall"),
         EXISTS("\\exists"),
@@ -74,6 +75,11 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
             else {
                 throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
             }
+        }
+
+        @Override
+        public String jmlSymbol() {
+            return symbol;
         }
     }
 

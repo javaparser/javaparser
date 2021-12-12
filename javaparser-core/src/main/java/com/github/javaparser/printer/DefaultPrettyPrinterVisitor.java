@@ -850,11 +850,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlLabel n, Void arg) {
+    public void visit(JmlLabelExpr n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print("(");
         switch (n.getKind()) {
-            case NONE:
+            case NEUTRAL:
                 printer.print("\\lbl");
                 break;
             case POSITIVE:
@@ -1104,11 +1104,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlGhostStatements n, Void arg) {
+    public void visit(JmlGhostStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         wrapInJmlIfNeeded(() -> {
             printer.print("ghost");
-            printList(n.getStatements(), "\n");
+            n.getStatement().accept(this, arg);
+            printer.print("\n");
         });
     }
 

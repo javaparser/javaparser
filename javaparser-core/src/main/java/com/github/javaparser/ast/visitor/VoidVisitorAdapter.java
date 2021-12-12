@@ -771,7 +771,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlLabel n, final A arg) {
+    public void visit(final JmlLabelExpr n, final A arg) {
         n.getExpression().accept(this, arg);
         n.getLabel().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -932,8 +932,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlGhostStatements n, final A arg) {
-        n.getStatements().forEach(p -> p.accept(this, arg));
+    public void visit(final JmlGhostStatement n, final A arg) {
+        n.getStatement().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

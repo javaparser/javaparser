@@ -570,7 +570,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlLabel n, final A arg) {
+    public R visit(final JmlLabelExpr n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -690,7 +690,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlGhostStatements n, final A arg) {
+    public R visit(final JmlGhostStatement n, final A arg) {
         return defaultAction(n, arg);
     }
 

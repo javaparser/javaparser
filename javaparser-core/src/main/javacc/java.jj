@@ -4249,7 +4249,7 @@ Expression JmlPrimaryPrefix():
       name=SimpleName()
       expr=Expression()
       ")"
-      { return new JmlFunction(range(begin, token()), quant, new NameExpr(range(name,name), name), expr);}
+      { return new JmlLabelExpr(range(begin, token()), quant, name, expr);}
   |
       LOOKAHEAD(2)
       "(" {begin=token();}

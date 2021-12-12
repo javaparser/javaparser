@@ -254,7 +254,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlStmtWithExpression n, A arg);
 
-    void visit(JmlLabel n, A arg);
+    void visit(JmlLabelExpr n, A arg);
 
     void visit(JmlLetExpr n, A arg);
 
@@ -302,7 +302,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlSetComprehension n, A arg);
 
-    void visit(JmlGhostStatements n, A arg);
+    void visit(JmlGhostStatement n, A arg);
 
     void visit(JmlMethodDeclaration n, A arg);
 

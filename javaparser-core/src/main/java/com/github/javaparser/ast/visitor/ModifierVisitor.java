@@ -1407,7 +1407,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlLabel n, final A arg) {
+    public Visitable visit(final JmlLabelExpr n, final A arg) {
         Expression expression = (Expression) n.getExpression().accept(this, arg);
         SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1675,10 +1675,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlGhostStatements n, final A arg) {
-        NodeList<Statement> statements = modifyList(n.getStatements(), arg);
+    public Visitable visit(final JmlGhostStatement n, final A arg) {
+        Statement statement = (Statement) n.getStatement().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setStatements(statements);
+        if (statement == null)
+            return null;
+        n.setStatement(statement);
         n.setComment(comment);
         return n;
     }

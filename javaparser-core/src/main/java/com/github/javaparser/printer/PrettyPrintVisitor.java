@@ -801,7 +801,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
 
     @Override
-    public void visit(JmlLabel n, Void arg) {
+    public void visit(JmlLabelExpr n, Void arg) {
 
     }
 
@@ -923,7 +923,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlGhostStatements n, Void arg) {
+    public void visit(JmlGhostStatement n, Void arg) {
 
     }
 
