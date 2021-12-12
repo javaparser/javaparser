@@ -15,10 +15,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.code.style>official</kotlin.code.style>
-        <ktor.version>1.6.0</ktor.version>
-        <logback_version>1.2.3</logback_version>
+        <ktor.version>1.6.6</ktor.version>
+        <logback_version>1.2.7</logback_version>
         <kotlin.compiler.jvmTarget>8</kotlin.compiler.jvmTarget>
-        <kotlin.version>1.5.20</kotlin.version>
+        <kotlin.version>1.6.0</kotlin.version>
     </properties>
 
     <dependencies>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -63,7 +63,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
+            <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
