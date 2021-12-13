@@ -926,13 +926,10 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
     // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
     void erasure_type_variable() {
         List<ResolvedType> types = declaredTypes(
-                "class A<T extends Number> {}",
-                "class A<java.lang.Number> {}");
+                "class A<T extends Number> {}");
         ResolvedType rt = types.get(0);
-        ResolvedType rt2 = types.get(1);
         String expected =  "A<java.lang.Number>";
         assertEquals(expected, rt.erasure().describe());
-        assertEquals(rt2, rt.erasure());
     }
     
     @Test
