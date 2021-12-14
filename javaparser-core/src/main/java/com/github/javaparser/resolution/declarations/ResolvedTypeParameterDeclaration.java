@@ -22,10 +22,11 @@
 package com.github.javaparser.resolution.declarations;
 
 
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * Declaration of a type parameter.
@@ -92,6 +93,11 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
 
             @Override
             public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public ResolvedReferenceType object() {
                 throw new UnsupportedOperationException();
             }
         };
@@ -221,7 +227,26 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
         }
         throw new IllegalStateException();
     }
-
+    
+    /**
+     * Return true if the Type variable is bounded
+     */
+    default boolean isBounded() {
+        return !isUnbounded();
+    }
+    
+    /**
+     * Return true if the Type variable is unbounded
+     */
+    default boolean isUnbounded() {
+        return getBounds().isEmpty();
+    }
+    
+    /*
+     * Return an Object ResolvedType
+     */
+    ResolvedReferenceType object();
+    
     /**
      * A Bound on a Type Parameter.
      */

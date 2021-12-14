@@ -21,10 +21,10 @@
 
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.List;
 import java.util.Map;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * From JLS 4.4: A type variable is introduced by the declaration of a type parameter of a generic class,
@@ -125,5 +125,18 @@ public class ResolvedTypeVariable implements ResolvedType {
     @Override
     public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return typeParameters.contains(typeParameter);
+    }
+    
+    ///
+    /// Erasure
+    ///
+    // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+    //
+    @Override
+    public ResolvedType erasure() {
+        if (typeParameter.isBounded()) {
+            return typeParameter.getBounds().get(0).getType();
+        }
+        return typeParameter.object();
     }
 }

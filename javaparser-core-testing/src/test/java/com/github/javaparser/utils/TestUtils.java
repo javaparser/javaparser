@@ -25,7 +25,10 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Position;
 import com.github.javaparser.Problem;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -56,6 +59,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUtils {
@@ -273,7 +277,6 @@ public class TestUtils {
         assertEqualsStringIgnoringEol(expected, actual, message);
     }
 
-
     /**
      * Assert that "actual" equals "expected".
      * <br>First checks if the content is equal ignoring line separators.
@@ -335,6 +338,60 @@ public class TestUtils {
     public static void assertLineSeparator(String text, LineSeparator expectedLineSeparator) {
         LineSeparator actualLineSeparator = LineSeparator.detect(text);
         assertEquals(expectedLineSeparator, actualLineSeparator);
+    }
+
+    /**
+     * Does this node's token starting position match the line and col?
+     */
+    public static boolean startsAtPosition(Node node, int line, int col) {
+        Position begin = getNodeStartTokenPosition(node);
+        return begin.line == line && begin.column == col;
+    }
+
+    /**
+     * Quickly get token starting position of a given node
+     */
+    public static Position getNodeStartTokenPosition(Node node) {
+        return node.getTokenRange()
+                .orElseThrow(() -> new IllegalStateException(node + " is missing the token range"))
+                .toRange()
+                .orElseThrow(() -> new IllegalStateException(node + "'s token range is missing the range"))
+                .begin;
+    }
+
+    /**
+     * parse a file using a given parser relative to the classpath root
+     */
+    public static CompilationUnit parseFile(JavaParser parser, String filePath) {
+        try (InputStream in = TestUtils.class.getResourceAsStream(filePath)) {
+            ParseResult<CompilationUnit> parse = parser.parse(in);
+            List<Problem> problems = parse.getProblems();
+            if (!problems.isEmpty()) {
+                throw new IllegalStateException(problems.toString());
+            }
+            return parse.getResult()
+                    .orElseThrow(() -> new IllegalArgumentException("No result when attempting to parse " + filePath));
+            } catch (IOException ex) {
+            throw new IllegalStateException("Error while parsing " + filePath, ex);
+        }
+    }
+
+    /**
+     * parse a file relative to the classpath root
+     */
+    public static CompilationUnit parseFile(String filePath) {
+        return parseFile(new JavaParser(), filePath);
+    }
+
+    public static <N extends Node> N getNodeStartingAtPosition(List<N> chars, int line, int col) {
+        List<N> nodesAtPosition = chars.stream()
+                .filter(expr -> startsAtPosition(expr, line, col))
+                .collect(toList());
+
+        if (nodesAtPosition.size() != 1) {
+            throw new IllegalArgumentException("Expecting exactly one node to be positioned at " + line + "," + col + " but got " + nodesAtPosition);
+        }
+        return nodesAtPosition.get(0);
     }
 
     /**

@@ -28,10 +28,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.ast.validator.language_level_validations.*;
+import com.github.javaparser.ast.validator.postprocessors.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import com.github.javaparser.ast.validator.postprocessors.Java10PostProcessor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_8;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
 /**
  * The configuration that is used by the parser.
@@ -101,16 +101,16 @@ public class ParserConfiguration {
         /**
          * Java 11
          */
-        JAVA_11(new Java11Validator(), null),
+        JAVA_11(new Java11Validator(), new Java11PostProcessor()),
         /**
          * Java 11 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_11_PREVIEW(new Java11PreviewValidator(), null),
+        JAVA_11_PREVIEW(new Java11PreviewValidator(), new Java11PostProcessor()),
         /**
          * Java 12
          */
-        JAVA_12(new Java12Validator(), null),
+        JAVA_12(new Java12Validator(), new Java12PostProcessor()),
         /**
          * Java 12 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
@@ -118,11 +118,11 @@ public class ParserConfiguration {
          *     <li>Switch expressions are permitted, with a single label only and no yield.</li>
          * </ul>
          */
-        JAVA_12_PREVIEW(new Java12PreviewValidator(), null),
+        JAVA_12_PREVIEW(new Java12PreviewValidator(), new Java12PostProcessor()),
         /**
          * Java 13
          */
-        JAVA_13(new Java13Validator(), null),
+        JAVA_13(new Java13Validator(), new Java13PostProcessor()),
         /**
          * Java 13 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
@@ -130,43 +130,43 @@ public class ParserConfiguration {
          *     <li>Switch expressions are permitted, with a single label only.</li>
          * </ul>
          */
-        JAVA_13_PREVIEW(new Java13PreviewValidator(), null),
+        JAVA_13_PREVIEW(new Java13PreviewValidator(), new Java13PostProcessor()),
         /**
          * Java 14
          */
-        JAVA_14(new Java14Validator(), null),
+        JAVA_14(new Java14Validator(), new Java14PostProcessor()),
         /**
          * Java 14 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_14_PREVIEW(new Java14PreviewValidator(), null),
+        JAVA_14_PREVIEW(new Java14PreviewValidator(), new Java14PostProcessor()),
         /**
          * Java 15
          */
-        JAVA_15(new Java15Validator(), null),
+        JAVA_15(new Java15Validator(), new Java15PostProcessor()),
         /**
          * Java 15 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_15_PREVIEW(new Java15PreviewValidator(), null),
+        JAVA_15_PREVIEW(new Java15PreviewValidator(), new Java15PostProcessor()),
         /**
          * Java 16
          */
-        JAVA_16(new Java16Validator(), null),
+        JAVA_16(new Java16Validator(), new Java16PostProcessor()),
         /**
          * Java 16 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_16_PREVIEW(new Java16PreviewValidator(), null),
+        JAVA_16_PREVIEW(new Java16PreviewValidator(), new Java16PostProcessor()),
         /**
          * Java 16
          */
-        JAVA_17(new Java17Validator(), null),
+        JAVA_17(new Java17Validator(), new Java17PostProcessor()),
         /**
          * Java 16 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_17_PREVIEW(new Java17PreviewValidator(), null);
+        JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -175,7 +175,7 @@ public class ParserConfiguration {
         /**
          * The most used Java version.
          */
-        public static LanguageLevel POPULAR = JAVA_8;
+        public static LanguageLevel POPULAR = JAVA_11;
         /**
          * The latest Java version that is available.
          */
@@ -218,7 +218,7 @@ public class ParserConfiguration {
     private boolean preprocessUnicodeEscapes = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
-    private LanguageLevel languageLevel = JAVA_8;
+    private LanguageLevel languageLevel = POPULAR;
     private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();

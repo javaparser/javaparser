@@ -1,6 +1,6 @@
-Next Release (Version 3.22.2)
+Next Release (Version 3.23.2)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/185?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/187?closed=1)
 
 ### Added
 ### Changed
@@ -8,6 +8,146 @@ Next Release (Version 3.22.2)
 ### Removed
 ### Fixed
 ### Security
+
+
+Version 3.23.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/186?closed=1)
+
+### Fixed
+
+* `record` may be used as variable name in Java 16 (PR [#3362](https://github.com/javaparser/javaparser/pull/3362) by [@koppor](github.com/koppor/))
+
+### API or Behaviour Change
+
+* Java 11 is now the most used version (PR [#3301](https://github.com/javaparser/javaparser/pull/3301) by [@matozoid](https://github.com/matozoid))
+
+### Added
+
+* Manage `@Inherited` annotation to prepare the fix on the issue 1843 (PR [#3383](https://github.com/javaparser/javaparser/pull/3383) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Changed
+
+* Configurable caching system for type solvers (PR [#3343](https://github.com/javaparser/javaparser/pull/3343) by [@4everTheOne](https://github.com/4everTheOne))
+* Java 11 is now the most used version (PR [#3301](https://github.com/javaparser/javaparser/pull/3301) by [@matozoid](https://github.com/matozoid))
+
+### Fixed
+
+* Fix issue 3387 LexicalPreservingPrinter adds wrong indentation when adding new comments (PR [#3392](https://github.com/javaparser/javaparser/pull/3392) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 2360 Symbol Solver is missing promotion of byte, char, and short in unary expressions (PR [#3384](https://github.com/javaparser/javaparser/pull/3384) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix "record" as non-type identifier in Java 16 (PR [#3362](https://github.com/javaparser/javaparser/pull/3362) by [@koppor](https://github.com/koppor))
+* Fix issue 3358 LexicalPreservingPrinter error on ArrayType (PR [#3359](https://github.com/javaparser/javaparser/pull/3359) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* generate changelog for milestones - scripts included to do this by milestone id, milestone title, and a github action to add the output to a draft snapshot release (PR [#3391](https://github.com/javaparser/javaparser/pull/3391) by [@MysterAitch](https://github.com/MysterAitch))
+* Bump bnd-maven-plugin from 5.3.0 to 6.0.0 (PR [#3390](https://github.com/javaparser/javaparser/pull/3390) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency biz.aqute.bnd:bnd-maven-plugin to v6 (PR [#3389](https://github.com/javaparser/javaparser/pull/3389) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.squareup.okhttp3:okhttp to v4.9.2 (PR [#3388](https://github.com/javaparser/javaparser/pull/3388) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.google.guava:guava to v31.0.1-jre (PR [#3385](https://github.com/javaparser/javaparser/pull/3385) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.google.guava:guava to v31 (PR [#3381](https://github.com/javaparser/javaparser/pull/3381) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update junit5 monorepo to v5.8.1 (PR [#3380](https://github.com/javaparser/javaparser/pull/3380) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.assertj:assertj-core to v3.21.0 (PR [#3378](https://github.com/javaparser/javaparser/pull/3378) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-scm-plugin to v1.12.0 (PR [#3376](https://github.com/javaparser/javaparser/pull/3376) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v2.1.0 (PR [#3373](https://github.com/javaparser/javaparser/pull/3373) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update junit5 monorepo to v5.8.0 (PR [#3372](https://github.com/javaparser/javaparser/pull/3372) by [@renovate[bot]](https://github.com/apps/renovate))
+* remove accidentally-added pom release backup files, and added it to gitignore to prevent them being re-added (PR [#3370](https://github.com/javaparser/javaparser/pull/3370) by [@MysterAitch](https://github.com/MysterAitch))
+* chore(deps): update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.3.1 (PR [#3368](https://github.com/javaparser/javaparser/pull/3368) by [@renovate[bot]](https://github.com/apps/renovate))
+* Reduce mvn verbosity on GitHub actions (and switch to mvnw) (PR [#3363](https://github.com/javaparser/javaparser/pull/3363) by [@koppor](https://github.com/koppor))
+
+### Uncategorised
+
+* Prepare changelog for next version (PR [#3354](https://github.com/javaparser/javaparser/pull/3354) by [@MysterAitch](https://github.com/MysterAitch))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@koppor](https://github.com/koppor)
+* [@4everTheOne](https://github.com/4everTheOne)
+* [@matozoid](https://github.com/matozoid)
+
+
+Version 3.23.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/185?closed=1)
+
+### Added
+
+* Improving `toString` on CSM classes (PR [#3315](https://github.com/javaparser/javaparser/pull/3315) by [@jlerbsc](https://github.com/jlerbsc))
+* Add test case for issue #2210 Resolution of Method References (PR [#3310](https://github.com/javaparser/javaparser/pull/3310) by [@jlerbsc](https://github.com/jlerbsc))
+* Implemented method reference resolution on expressions (PR [#3307](https://github.com/javaparser/javaparser/pull/3307) by [@maartenc](https://github.com/maartenc))
+* Define if a field is volatile through the ResolvedFieldDeclaration interface - from issue #3240 (PR [#3276](https://github.com/javaparser/javaparser/pull/3276) by [@jlerbsc](https://github.com/jlerbsc))
+* Implemented logic for internalTypes in `JavaParserAnnotationDeclaration` and `JavassistAnnotationDeclaration` (PR [#3215](https://github.com/javaparser/javaparser/pull/3215) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Changed
+
+* Check if ancestor also for super class (PR [#3324](https://github.com/javaparser/javaparser/pull/3324) by [@ReallyLiri](https://github.com/ReallyLiri))
+* Remove useless  instanceof usage in Type (PR [#3311](https://github.com/javaparser/javaparser/pull/3311) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix Java 11+ AST postprocessing (PR [#3302](https://github.com/javaparser/javaparser/pull/3302) by [@matozoid](https://github.com/matozoid))
+* Move duplicate code to JavaParserTypeAdapter (PR [#3267](https://github.com/javaparser/javaparser/pull/3267) by [@maartenc](https://github.com/maartenc))
+* Improved performance when resolving types for big source files (PR [#3265](https://github.com/javaparser/javaparser/pull/3265) by [@maartenc](https://github.com/maartenc))
+* Optimizations for Node class (CPU time and Memory usage) (PR [#3233](https://github.com/javaparser/javaparser/pull/3233) by [@4everTheOne](https://github.com/4everTheOne))
+* Fix Javadoc comment * escaping problem. (PR [#3221](https://github.com/javaparser/javaparser/pull/3221) by [@matozoid](https://github.com/matozoid))
+* Remove broken link (PR [#2912](https://github.com/javaparser/javaparser/pull/2912) by [@mernst](https://github.com/mernst))
+
+### Fixed
+
+* Preserving field order when getting the fields declared from a ReferenceType (PR [#3342](https://github.com/javaparser/javaparser/pull/3342) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix String Index out of range in TextBlockLiteralExpr (PR [#3337](https://github.com/javaparser/javaparser/pull/3337) by [@134ARG](https://github.com/134ARG))
+* Fixed prettyprinting new switch-statements (and switch-expressions). (PR [#3335](https://github.com/javaparser/javaparser/pull/3335) by [@kozsik](https://github.com/kozsik))
+* Fix pretty printing of generic records (PR [#3334](https://github.com/javaparser/javaparser/pull/3334) by [@twistedsquare](https://github.com/twistedsquare))
+* Fix issue #3317 Comment in the middle of a multi-line single statement (PR [#3318](https://github.com/javaparser/javaparser/pull/3318) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 3296 LexicalPreservation bug for array brackets (PR [#3316](https://github.com/javaparser/javaparser/pull/3316) by [@jlerbsc](https://github.com/jlerbsc))
+* Fixes Issue #3308 -- stackoverflow when resolving the `FieldAccessExpr` of an `ArrayAccessExpr` (PR [#3312](https://github.com/javaparser/javaparser/pull/3312) by [@MysterAitch](https://github.com/MysterAitch))
+* Fix StackOverflow when resolving ClassOrInterfaceType of nested ObjectCreationExpr (PR [#3279](https://github.com/javaparser/javaparser/pull/3279) by [@maartenc](https://github.com/maartenc))
+* ResolvedMethods from javassist never had exceptions (PR [#3264](https://github.com/javaparser/javaparser/pull/3264) by [@maartenc](https://github.com/maartenc))
+* Issue 3064 conditional nested lambda (PR [#3238](https://github.com/javaparser/javaparser/pull/3238) by [@si-e](https://github.com/si-e))
+* Further optimization in resolving in StatementContext (PR [#3185](https://github.com/javaparser/javaparser/pull/3185) by [@Col-E](https://github.com/Col-E))
+* Improve type resolution for duplicate names (PR [#3012](https://github.com/javaparser/javaparser/pull/3012) by [@thejk](https://github.com/thejk))
+
+### Developer Changes
+
+* chore(deps): update dependency org.mockito:mockito-core to v3.12.4 (PR [#3350](https://github.com/javaparser/javaparser/pull/3350) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v3.12.3 (PR [#3349](https://github.com/javaparser/javaparser/pull/3349) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v2.0.3 (PR [#3348](https://github.com/javaparser/javaparser/pull/3348) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v3.12.2 (PR [#3347](https://github.com/javaparser/javaparser/pull/3347) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v3.12.1 (PR [#3345](https://github.com/javaparser/javaparser/pull/3345) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v3.12.0 (PR [#3344](https://github.com/javaparser/javaparser/pull/3344) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-scm-plugin to v1.11.3 (PR [#3339](https://github.com/javaparser/javaparser/pull/3339) by [@renovate[bot]](https://github.com/apps/renovate))
+* Bump codecov/codecov-action from 1.5.2 to 2.0.2 (PR [#3326](https://github.com/javaparser/javaparser/pull/3326) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency org.mockito:mockito-core to v3.11.2 (PR [#3305](https://github.com/javaparser/javaparser/pull/3305) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.assertj:assertj-core to v3.20.2 (PR [#3297](https://github.com/javaparser/javaparser/pull/3297) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.assertj:assertj-core to v3.20.0 (PR [#3295](https://github.com/javaparser/javaparser/pull/3295) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-dependency-plugin to v3.2.0 (PR [#3294](https://github.com/javaparser/javaparser/pull/3294) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v3.11.1 (PR [#3293](https://github.com/javaparser/javaparser/pull/3293) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v1.5.2 (PR [#3287](https://github.com/javaparser/javaparser/pull/3287) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v3.11.0 (PR [#3285](https://github.com/javaparser/javaparser/pull/3285) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/cache action to v2.1.6 (PR [#3280](https://github.com/javaparser/javaparser/pull/3280) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.3.0 (PR [#3270](https://github.com/javaparser/javaparser/pull/3270) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update junit5 monorepo to v5.7.2 (PR [#3262](https://github.com/javaparser/javaparser/pull/3262) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-gpg-plugin to v3 (PR [#3250](https://github.com/javaparser/javaparser/pull/3250) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@maartenc](https://github.com/maartenc)
+* [@kozsik](https://github.com/kozsik)
+* [@ReallyLiri](https://github.com/ReallyLiri)
+* [@mernst](https://github.com/mernst)
+* [@matozoid](https://github.com/matozoid)
+* [@Col-E](https://github.com/Col-E)
+* [@134ARG](https://github.com/134ARG)
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@si-e](https://github.com/si-e)
+* [@thejk](https://github.com/thejk)
+* [@twistedsquare](https://github.com/twistedsquare)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@4everTheOne](https://github.com/4everTheOne)
+
 
 
 Version 3.22.1

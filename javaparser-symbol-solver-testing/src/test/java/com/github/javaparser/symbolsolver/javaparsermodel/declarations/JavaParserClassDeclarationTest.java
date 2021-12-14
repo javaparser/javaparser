@@ -41,8 +41,11 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
@@ -52,7 +55,9 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclarati
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -65,6 +70,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 
 class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -96,6 +102,12 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
         ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()), ts);
         listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
+        
+        // init parser
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        // Setup parser
+        StaticJavaParser.setConfiguration(configuration);
     }
 
     ///
@@ -963,6 +975,35 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         // Assign "independent" -- Assign to a interface with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
         assertFalse(compilationUnit.canBeAssignedTo(serializableTypeDeclaration), "CompilationUnit should not be reported as assignable to Serializable");
+    }
+    
+    @Test
+    // issue #3436 getAncestors()/getAllAncestors() does not work if base class starts with the same name
+    public void getAncestors_with_child_name_is_part_of_ancestor_name() {
+        List<ResolvedType> types = declaredTypes(
+                "public class Foo extends FooBase {}",
+                "public class FooBase {}");
+        ResolvedType foo = types.get(0);
+        List<ResolvedReferenceType> ancestors = foo.asReferenceType().getTypeDeclaration().get().getAncestors();
+        assertTrue(ancestors.size() == 1);
+        assertEquals("FooBase", ancestors.get(0).getQualifiedName());
+    }
+    
+    private List<ResolvedType> declaredTypes(String... lines) {
+        CompilationUnit tree = treeOf(lines);
+        List<ResolvedType> results = Lists.newLinkedList();
+        for (ClassOrInterfaceDeclaration classTree : tree.findAll(ClassOrInterfaceDeclaration.class)) {
+            results.add(new ReferenceTypeImpl(classTree.resolve(), typeSolver));
+        }
+        return results;
+    }
+
+    private CompilationUnit treeOf(String... lines) {
+        StringBuilder builder = new StringBuilder();
+        for (String line : lines) {
+            builder.append(line).append(System.lineSeparator());
+        }
+        return StaticJavaParser.parse(builder.toString());
     }
 
 }

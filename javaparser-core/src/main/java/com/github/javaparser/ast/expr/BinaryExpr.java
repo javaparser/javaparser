@@ -201,14 +201,6 @@ public class BinaryExpr extends Expression {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BinaryExpr clone() {
         return (BinaryExpr) accept(new CloneVisitor(), null);
@@ -223,8 +215,9 @@ public class BinaryExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == left) {
             setLeft((Expression) replacementNode);
             return true;

@@ -338,10 +338,20 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         if (this.isJavaLangObject()) {
             return ancestors;
         }
+        
+        Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
+        if (!qualifiedName.isPresent()) {
+            return ancestors;
+        }
 
         try {
             // If a superclass is found, add it as an ancestor
-            getSuperClass().ifPresent(ancestors::add);
+            Optional<ResolvedReferenceType> superClass = getSuperClass();
+            if (superClass.isPresent()) {
+                if (isAncestor(superClass.get(), qualifiedName.get())) {
+                    ancestors.add(superClass.get());
+                }
+            }
         } catch (UnsolvedSymbolException e) {
             // in case we could not resolve the super class, we may still be able to resolve (some of) the
             // implemented interfaces and so we continue gracefully with an (incomplete) list of ancestors
@@ -356,18 +366,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
             try {
                 // If an implemented interface is found, add it as an ancestor
                 ResolvedReferenceType rrt = toReferenceType(implemented);
-                Optional<ResolvedReferenceTypeDeclaration> resolvedReferenceTypeDeclaration = rrt.getTypeDeclaration();
-                if (resolvedReferenceTypeDeclaration.isPresent()) {
-
-                    ResolvedTypeDeclaration rtd = resolvedReferenceTypeDeclaration.get().asType();
-                    Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
-                    if (qualifiedName.isPresent()) {
-
-                        // do not consider an inner or nested class as an ancestor
-                        if (!rtd.getQualifiedName().contains(qualifiedName.get())) {
-                            ancestors.add(rrt);
-                        }
-                    }
+                if (isAncestor(rrt, qualifiedName.get())) {
+                    ancestors.add(rrt);
                 }
             } catch (UnsolvedSymbolException e) {
                 // in case we could not resolve some implemented interface, we may still be able to resolve the
@@ -382,6 +382,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         }
 
         return ancestors;
+    }
+
+    private boolean isAncestor(ResolvedReferenceType candidateAncestor, String ownQualifiedName) {
+        Optional<ResolvedReferenceTypeDeclaration> resolvedReferenceTypeDeclaration = candidateAncestor.getTypeDeclaration();
+        if (resolvedReferenceTypeDeclaration.isPresent()) {
+            ResolvedTypeDeclaration rtd = resolvedReferenceTypeDeclaration.get().asType();
+            // do not consider an inner or nested class as an ancestor
+            return !rtd.hasInternalType(ownQualifiedName);
+        }
+        return false;
     }
 
     @Override

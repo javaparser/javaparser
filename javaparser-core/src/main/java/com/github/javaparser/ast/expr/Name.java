@@ -139,8 +139,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (qualifier != null) {
             if (node == qualifier) {
                 removeQualifier();
@@ -170,8 +171,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (qualifier != null) {
             if (node == qualifier) {
                 setQualifier((Name) replacementNode);

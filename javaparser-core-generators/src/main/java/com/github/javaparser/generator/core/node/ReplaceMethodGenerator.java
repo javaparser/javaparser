@@ -47,8 +47,9 @@ public class ReplaceMethodGenerator extends NodeGenerator {
 
         final BlockStmt body = replaceNodeMethod.getBody().get();
 
-        body.addStatement("if (node == null) return false;");
+        body.addStatement("if (node == null) { return false; }");
 
+        int numberPropertiesDeclared = 0;
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             if (!property.isNode()) {
                 continue;
@@ -63,14 +64,19 @@ public class ReplaceMethodGenerator extends NodeGenerator {
                 check = f("if (%s != null) { %s }", property.getName(), check);
             }
             body.addStatement(check);
+            numberPropertiesDeclared++;
         }
         if (nodeMetaModel.getSuperNodeMetaModel().isPresent()) {
             body.addStatement("return super.replace(node, replacementNode);");
         } else {
             body.addStatement("return false;");
         }
-        
-        addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
+
+        if (!nodeMetaModel.isRootNode() && numberPropertiesDeclared == 0) {
+            removeMethodWithSameSignature(nodeCoid, replaceNodeMethod);
+        } else {
+            addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
+        }
     }
 
     private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {
