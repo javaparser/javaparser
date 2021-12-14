@@ -328,6 +328,10 @@ public class TokenTypes {
             case MEASURED_BY:
             case MEASURED_BY_REDUNDANTLY:
             case MODEL:
+            case REP:
+            case PEER:
+            case IMMUTABLE:
+            case READ_ONLY:
             case MODIFIABLE:
             case MODIFIABLE_REDUNDANTLY:
             case MODIFIES_REDUNDANTLY:

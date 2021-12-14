@@ -163,7 +163,14 @@ public class Modifier extends Node {
         JML_TWO_STATE("two_state"),
         JML_NON_NULL_BY_DEFAULT("non_null_by_default"),
         JML_NON_NULL_ELEMENTS("nonnullelements"),
-        JML_UNPARSABLE_MODIFIERS("<unparsable>");
+        JML_UNPARSABLE_MODIFIERS("<unparsable>"),
+        JML_CODE_BIGINT_MATH("code_bigint_math"),
+        JML_CODE_JAVA_MATH("code_java_math"),
+        JML_CODE_SAFE_MATH("code_safe_math"),
+        JML_CODE("code"),
+        JML_OT_PEER("peer"),
+        JML_OT_REP("rep"),
+        JML_OT_READ_ONLY("read_only");
 
         private final String codeRepresentation;
 

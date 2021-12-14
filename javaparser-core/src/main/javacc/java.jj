@@ -249,6 +249,7 @@ TOKEN : {
 | <CODE_BIGINT_MATH: "code_bigint_math">
 | <CODE_JAVA_MATH: "code_java_math">
 | <CODE_SAFE_MATH: "code_safe_math">
+| <IMMUTABLE: "immutable">
 | <CONSTRAINT: "constraint">
 | <CONSTRAINT_REDUNDANTLY: "constraint_redundantly">
 | <CONSTRUCTOR: "constructor">
@@ -290,6 +291,9 @@ TOKEN : {
 | <FORALL: "forall">
 | <FOR_EXAMPLE: "for_example">
 //| <FRESH: "\\fresh">
+| <PEER: "peer">
+| <REP: "rep">
+| <READ_ONLY: "read_only">
 | <GHOST: "ghost">
 | <HELPER: "helper">
 | <HENCE_BY: "hence_by">
@@ -3245,7 +3249,7 @@ String Identifier():
        | <BREAK_BEHAVIOR> | <BREAK_BEHAVIOUR> | <CALLABLE> | <CALLABLE_REDUNDANTLY> | <CAPTURES>
        | <CAPTURES_REDUNDANTLY> | <CHOOSE> | <CHOOSE_IF> | <CODE> | <CODE_BIGINT_MATH>
        | <CODE_JAVA_MATH> | <CODE_SAFE_MATH> | <CONSTRAINT> | <CONSTRAINT_REDUNDANTLY>
-       | <CONSTRUCTOR> | <CONTINUES> | <CONTINUES_REDUNDANTLY>
+       | <CONSTRUCTOR> | <CONTINUES> | <CONTINUES_REDUNDANTLY> | <IMMUTABLE>
        | <CONTINUE_BEHAVIOR> | <CONTINUE_BEHAVIOUR> | <DECLASSIFIES > | <DECREASES>
        | <DECREASES_REDUNDANTLY> | <DECREASING> | <DECREASING_REDUNDANTLY> | <DETERMINES >
        | <DIVERGES> | <DIVERGES_REDUNDANTLY> | <DURATION_REDUNDANTLY> | <ENSURES>
@@ -3270,6 +3274,7 @@ String Identifier():
        | <UNINITIALIZED> | <UNREACHABLE> | <WHEN> | <WHEN_REDUNDANTLY> | <WORKING_SPACE>
        | <WORKING_SPACE_REDUNDANTLY> | <WRITABLE> //| <INVARIANT_FOR>
        | <RESULT> //| <SUBSET> | <INTERSECT> | <UNION> | <LOCSET> | <SINGLETON>
+       | <PEER> | <REP> | <READ_ONLY>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
     { return ret; }
 }
@@ -6423,7 +6428,7 @@ JmlStatement JmlStatement():
     { return new JmlStmtWithExpression(range(begin, token()), expr); }
   | <GHOST>
     stmt=BlockStatement()     { begin = token(); }
-    { return new JmlGhostStatements(range(begin, token()), new NodeList<>(stmt)); }
+    { return new JmlGhostStatement(range(begin, token()), stmt); }
   | <UNREACHABLE> ";"
     { return new JmlUnreachableStmt(range(token(), token())); }
   )
@@ -6552,6 +6557,25 @@ JmlContract JmlContract():
   (clause=JmlContractClause() {clauses.add(clause);})+
   (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
   {return new JmlContract(range(orIfInvalid(begin==null?INVALID:begin,clauses.get(0)), token()), b, new NodeList<>(), clauses, subContracts);}
+}
+
+JmlModelProgram JmlModelProgram():
+{
+ JavaToken begin;
+ ModifierHolder modifiers;
+ JmlContract contracts;
+ NodeList<Statement> statements;
+}
+{
+  modifiers=Modifiers()
+  <MODEL_PROGRAM>   { begin = orIfInvalid(modifiers.begin,token()); }
+  "{"
+      contracts=JmlContract()
+      statements=Statements()
+  "}"
+  {
+      return new JmlModelProgram(range(begin, token()), modifiers.modifiers, modifiers.annotations, contracts, statements);
+  }
 }
 
 JmlClause JmlContractClause():
@@ -6843,6 +6867,16 @@ void jmlModifiersInner(NodeList<Modifier> modifiers):
   | <TWO_STATE> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_TWO_STATE));  begin = orIfInvalid(begin, token()); }
   | <NON_NULL_BY_DEFAULT> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_NON_NULL_BY_DEFAULT));  begin = orIfInvalid(begin, token()); }
   | <NONNULLELEMENTS> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_NON_NULL_ELEMENTS));  begin = orIfInvalid(begin, token()); }
+  | <CODE_BIGINT_MATH> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_CODE_BIGINT_MATH));  begin = orIfInvalid(begin, token()); }
+  | <CODE_JAVA_MATH> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_CODE_JAVA_MATH));  begin = orIfInvalid(begin, token()); }
+  | <CODE_SAFE_MATH> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_CODE_SAFE_MATH));  begin = orIfInvalid(begin, token()); }
+  | <CODE> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_CODE));  begin = orIfInvalid(begin, token()); }
+  | <PEER> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_OT_PEER));  begin = orIfInvalid(begin, token()); }
+  | <REP> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_OT_REP));  begin = orIfInvalid(begin, token()); }
+  | <READ_ONLY> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_OT_READ_ONLY));  begin = orIfInvalid(begin, token()); }
+  | <IMMUTABLE> { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_NON_NULL_ELEMENTS));  begin = orIfInvalid(begin, token()); }
+
+
 }
 
 ArbitraryNodeContainer JmlClassLevelStart():
@@ -6858,6 +6892,7 @@ ArbitraryNodeContainer JmlClassLevelStart():
             modifiers = Modifiers()
             ( LOOKAHEAD(3) element = JmlClassInvariant(modifiers)
             | LOOKAHEAD(3) element = JmlClassInitially(modifiers)
+            | LOOKAHEAD(3) element = JmlClassAxiom(modifiers)
             | LOOKAHEAD(3) element = JmlClassAccessible(modifiers)
             | LOOKAHEAD(3) element = JmlClassRepresents(modifiers)
             | LOOKAHEAD(4) element = JmlFieldDeclaration(modifiers)
@@ -6930,9 +6965,10 @@ NodeList<JmlBoundVariable> JmlBoundedVariables():
    val=SimpleName()
    { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
   ( ","
-    [ LOOKAHEAD( Type() SimpleName())
-      partialType = Type(emptyNodeList())
-    ]
+    // TODO weigl This is a problem.
+    //[ LOOKAHEAD(Type() SimpleName() ("," | ";"))
+    //  partialType = Type(emptyNodeList())
+    //]
     val=SimpleName()
     { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
   )*
@@ -7003,6 +7039,15 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
         return new JmlMethodDeclaration(range(m,m), m, c);
     }
 }
+
+JmlClassLevel JmlClassAxiom(ModifierHolder modifiers):
+{ Expression expr; Token inv; }
+{
+  inv=<AXIOM> expr=Expression() ";"
+  { JavaToken begin = orIfInvalid(modifiers.begin, inv.javaToken);
+    return new JmlClassAxiomDeclaration(range(begin, token()), modifiers.modifiers, expr); }
+}
+
 
 JmlClassLevel JmlClassInvariant(ModifierHolder modifiers):
 { Expression expr; Token inv; }

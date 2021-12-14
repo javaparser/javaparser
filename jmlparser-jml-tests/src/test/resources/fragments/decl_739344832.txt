@@ -1,4 +1,5 @@
 // Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug677/CircleArea.java@(line 1,col 1)
 requires r > 0; 
-         requires 3*r*r <= Integer.MAX_VALUE;
-          org.jmlspecs.annotation.Options("-code-math=math")
+requires 3*r*r <= Integer.MAX_VALUE;
+
+@org.jmlspecs.annotation.Options("-code-math=math")

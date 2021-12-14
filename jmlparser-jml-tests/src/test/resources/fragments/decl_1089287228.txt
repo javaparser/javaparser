@@ -1,3 +1,3 @@
 // Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug643/Test.java@(line 1,col 1)
-requires i > 0;;
-      ensures true;
+requires i > 0;
+ensures true;
