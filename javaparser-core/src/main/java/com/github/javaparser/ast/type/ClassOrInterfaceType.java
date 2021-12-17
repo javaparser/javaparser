@@ -41,12 +41,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import java.util.Optional;
-import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
-
+import com.github.javaparser.resolution.types.ResolvedType;
 /**
  * A class or an interface type.
  * <br>{@code Object}
@@ -247,7 +242,7 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
      */
     @Override
     public String toDescriptor() {
-        return String.format("L%s;", resolve().getQualifiedName().replace(".", "/"));
+        return String.format("L%s;", resolve().asReferenceType().getQualifiedName().replace(".", "/"));
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -313,8 +308,8 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     }
 
     @Override
-    public ResolvedReferenceType resolve() {
-        return getSymbolResolver().toResolvedType(this, ResolvedReferenceType.class);
+    public ResolvedType resolve() {
+        return getSymbolResolver().toResolvedType(this, ResolvedType.class);
     }
 
     @Override
