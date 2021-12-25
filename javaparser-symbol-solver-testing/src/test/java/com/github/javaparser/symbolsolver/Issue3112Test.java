@@ -6,10 +6,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -34,7 +33,7 @@ public class Issue3112Test {
                 "}\n";
         CompilationUnit cu = StaticJavaParser.parse(str);
         List<ObjectCreationExpr> local = cu.findAll(ObjectCreationExpr.class);
-        local.forEach(lcl -> assertFalse(lcl.getType().resolve().getTypeDeclaration().get().isInterface()));
+        local.forEach(lcl -> assertFalse(lcl.getType().resolve().asReferenceType().getTypeDeclaration().get().isInterface()));
     }
 
     @Test
@@ -58,6 +57,6 @@ public class Issue3112Test {
                 "}\n";
         CompilationUnit cu = StaticJavaParser.parse(str);
         List<ObjectCreationExpr> local = cu.findAll(ObjectCreationExpr.class);
-        local.forEach(lcl -> assertFalse(lcl.getType().resolve().getTypeDeclaration().get().isInterface()));
+        local.forEach(lcl -> assertFalse(lcl.getType().resolve().asReferenceType().getTypeDeclaration().get().isInterface()));
     }
 }

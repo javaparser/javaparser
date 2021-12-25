@@ -21,9 +21,9 @@
 
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.Map;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * Array Type.
@@ -108,6 +108,15 @@ public class ResolvedArrayType implements ResolvedType {
         } else {
             return new ResolvedArrayType(baseTypeReplaced);
         }
+    }
+    
+    ///
+    /// Erasure
+    ///
+    // The erasure of an array type T[] is |T|[].
+    @Override
+    public ResolvedType erasure() {
+        return new ResolvedArrayType(baseType.erasure());
     }
 
 }
