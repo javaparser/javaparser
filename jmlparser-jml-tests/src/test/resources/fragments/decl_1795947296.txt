@@ -1,3 +1,3 @@
 // Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug572/Fact.java@(line 1,col 1)
-requires n >= 0
-     * ensures \result == (\product int i; 0 < i && i <= n; i)
+requires n >= 0;
+ensures \result == (\product int i; 0 < i && i <= n; i);

@@ -46,8 +46,7 @@ options {
     JDK_VERSION = "1.8";
     //STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
-    //DEBUG_PARSER = true;
-    //DEBUG_LOOKAHEAD = true;
+    //DEBUG_PARSER = true; DEBUG_LOOKAHEAD = true;
 }
 
 
@@ -6386,7 +6385,8 @@ ArbitraryNodeContainer JmlMethodLevelStart():
 {
   ( contracts = JmlLoopInvariants() { ret.getChildren().addAll(contracts); }
   | contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
-  | statements = JmlStatements()    { ret.getChildren().addAll(statements.getElements()); }
+  | //TODO weigl [SimpleName() ":"]
+    statements = JmlStatements()    { ret.getChildren().addAll(statements.getElements()); }
   | jmlModifiersInner(mods)         { ret.getChildren().addAll(mods); mods.clear();}
   )+
   <EOF>
@@ -6470,6 +6470,7 @@ NodeList<JmlContracts> JmlLoopInvariants():
       <LOOP_CONTRACT>
       {contract.setLoopContract(true);}
       (b=JmlBehavior() {contract.setBehavior(b);})?
+      [SimpleName() ":"]
       (
         clause=JmlContractClause() {contract.getClauses().add(clause);}
       |
@@ -6554,6 +6555,7 @@ JmlContract JmlContract():
    ))? //TODO weigl
   {begin=token();}
   (b=JmlBehavior())?
+  (LOOKAHEAD(3) SimpleName() ":")?
   (clause=JmlContractClause() {clauses.add(clause);})+
   (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
   {return new JmlContract(range(orIfInvalid(begin==null?INVALID:begin,clauses.get(0)), token()), b, new NodeList<>(), clauses, subContracts);}
@@ -6892,6 +6894,7 @@ ArbitraryNodeContainer JmlClassLevelStart():
             modifiers = Modifiers()
             ( LOOKAHEAD(3) element = JmlClassInvariant(modifiers)
             | LOOKAHEAD(3) element = JmlClassInitially(modifiers)
+            | LOOKAHEAD(3) element = JmlClassConstraint(modifiers)
             | LOOKAHEAD(3) element = JmlClassAxiom(modifiers)
             | LOOKAHEAD(3) element = JmlClassAccessible(modifiers)
             | LOOKAHEAD(3) element = JmlClassRepresents(modifiers)
@@ -7065,6 +7068,17 @@ JmlClassLevel JmlClassInitially(ModifierHolder modifiers):
     //TODO weigl add initally ast
     return new JmlClassInvariantDeclaration(range(begin, token()), modifiers.modifiers, expr); }
 }
+
+JmlClassLevel JmlClassConstraint(ModifierHolder modifiers):
+{ Expression expr; JavaToken begin; }
+{
+  (<CONSTRAINT>|<CONSTRAINT_REDUNDANTLY>) {begin=token();}
+  expr=Expression()
+  ";"
+  { //TODO weigl add constraint ast
+    return new JmlClassInvariantDeclaration(range(begin, token()), modifiers.modifiers, expr); }
+}
+
 
 JmlClassLevel  JmlClassAccessible(ModifierHolder modifiers):
 {
