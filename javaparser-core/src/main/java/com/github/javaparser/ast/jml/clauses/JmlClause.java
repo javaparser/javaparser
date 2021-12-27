@@ -6,10 +6,12 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClauseMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Arrays;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -22,13 +24,16 @@ public abstract class JmlClause extends Node implements Jmlish {
 
     private JmlClauseKind kind;
 
+    @OptionalProperty
+    private SimpleName name;
+
     public JmlClause() {
-        this((TokenRange) null);
+        this(null);
     }
 
     @AllFieldsConstructor
-    public JmlClause(final JmlClauseKind kind) {
-        this(null, kind);
+    public JmlClause(final JmlClauseKind kind, final SimpleName name) {
+        this(null, kind, name);
     }
 
     protected final void setKindByToken(JavaToken token) {
@@ -81,6 +86,15 @@ public abstract class JmlClause extends Node implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name) {
+        super(tokenRange);
+        setKind(kind);
+        customInitialization();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     public JmlClause(TokenRange tokenRange, JmlClauseKind kind) {
         super(tokenRange);
         setKind(kind);

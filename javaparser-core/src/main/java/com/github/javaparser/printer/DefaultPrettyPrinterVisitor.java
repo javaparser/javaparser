@@ -1171,6 +1171,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print(";");
     }
 
+    @Override
+    public void visit(JmlClassAxiomDeclaration n, Void arg) {
+
+    }
+
 
     @Override
     public void visit(final CharLiteralExpr n, final Void arg) {

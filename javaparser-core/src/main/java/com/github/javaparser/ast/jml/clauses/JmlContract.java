@@ -2,6 +2,7 @@ package com.github.javaparser.ast.jml.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.Behavior;
@@ -10,7 +11,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlContractMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -19,6 +22,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract> {
 
     private boolean isLoopContract;
+
+    private Type type = Type.METHOD;
+
+    @OptionalProperty
+    private SimpleName name;
 
     private Behavior behavior;
 
@@ -33,7 +41,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @AllFieldsConstructor
-    public JmlContract(boolean isLoopContract, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public JmlContract(Type type, boolean isLoopContract, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         this(null, isLoopContract, behavior, modifiers, clauses, subContracts);
     }
 
@@ -148,6 +156,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
                 return true;
             }
         }
+        if (name != null) {
+            if (node == name) {
+                removeName();
+                return true;
+            }
+        }
         for (int i = 0; i < subContracts.size(); i++) {
             if (subContracts.get(i) == node) {
                 subContracts.remove(i);
@@ -172,6 +186,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
+        }
+        if (name != null) {
+            if (node == name) {
+                setName((SimpleName) replacementNode);
                 return true;
             }
         }
@@ -223,5 +243,65 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         notifyPropertyChange(ObservableProperty.LOOP_CONTRACT, this.isLoopContract, isLoopContract);
         this.isLoopContract = isLoopContract;
         return this;
+    }
+
+    public enum Type {
+
+        METHOD, LOOP, BLOCK, STATEMENT, LAMBDA
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<SimpleName> getName() {
+        return Optional.ofNullable(name);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlContract setName(final SimpleName name) {
+        if (name == this.name) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type getType() {
+        return type;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlContract setType(final Type type) {
+        assertNotNull(type);
+        if (type == this.type) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        this.type = type;
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public JmlContract removeName() {
+        return setName(null);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlContract(TokenRange tokenRange, Type type, boolean isLoopContract, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+        super(tokenRange);
+        setType(type);
+        setLoopContract(isLoopContract);
+        setBehavior(behavior);
+        setName(name);
+        setModifiers(modifiers);
+        setClauses(clauses);
+        setSubContracts(subContracts);
+        customInitialization();
     }
 }

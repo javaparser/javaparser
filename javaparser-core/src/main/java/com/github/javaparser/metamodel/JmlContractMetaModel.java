@@ -49,5 +49,9 @@ public class JmlContractMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel modifiersPropertyMetaModel;
 
+    public PropertyMetaModel namePropertyMetaModel;
+
     public PropertyMetaModel subContractsPropertyMetaModel;
+
+    public PropertyMetaModel typePropertyMetaModel;
 }

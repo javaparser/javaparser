@@ -15,8 +15,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlDefaultClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -30,16 +30,16 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
     private NodeList<Expression> expression;
 
     @AllFieldsConstructor
-    public JmlDefaultClause(JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        this(null, kind, heaps, expression);
+    public JmlDefaultClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
+        this(null, name, kind, heaps, expression);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        super(tokenRange, kind);
+    public JmlDefaultClause(TokenRange tokenRange, SimpleName name, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
+        super(tokenRange, kind, name);
         setHeaps(heaps);
         setExpression(expression);
         customInitialization();
@@ -64,6 +64,17 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
 
     public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<Expression> exprs) {
         this(range, begin, new NodeList<>(), exprs);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
+        super(tokenRange, kind);
+        setHeaps(heaps);
+        setExpression(expression);
+        customInitialization();
     }
 
     @Override

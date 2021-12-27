@@ -1436,7 +1436,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
         if (!nodesEquals(n.getSubContracts(), n2.getSubContracts()))
+            return false;
+        if (!objEquals(n.getType(), n2.getType()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }

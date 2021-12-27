@@ -1158,7 +1158,11 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
-        return nodesEquals(n.getSubContracts(), n2.getSubContracts());
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodesEquals(n.getSubContracts(), n2.getSubContracts()))
+            return false;
+        return objEquals(n.getType(), n2.getType());
     }
 
     @Override

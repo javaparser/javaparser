@@ -77,28 +77,35 @@ public class JmlClassAxiomDeclaration extends JmlClassLevel<JmlClassAccessibleDe
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlClassAxiomDeclaration() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClassAxiomDeclaration asJmlClassAxiomDeclaration() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClassAxiomDeclaration> toJmlClassAxiomDeclaration() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassAxiomDeclaration(Consumer<JmlClassAxiomDeclaration> action) {
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpr() {
         return expr;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlClassAxiomDeclaration setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
@@ -113,6 +120,7 @@ public class JmlClassAxiomDeclaration extends JmlClassLevel<JmlClassAccessibleDe
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null) {
             return false;
@@ -127,6 +135,7 @@ public class JmlClassAxiomDeclaration extends JmlClassLevel<JmlClassAccessibleDe
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
@@ -145,11 +154,13 @@ public class JmlClassAxiomDeclaration extends JmlClassLevel<JmlClassAccessibleDe
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlClassAxiomDeclaration clone() {
         return (JmlClassAxiomDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClassAxiomDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClassAxiomDeclarationMetaModel;
     }

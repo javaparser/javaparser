@@ -892,6 +892,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final JmlContract n, final A arg) {
         n.getClauses().forEach(p -> p.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getName().ifPresent(l -> l.accept(this, arg));
         n.getSubContracts().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

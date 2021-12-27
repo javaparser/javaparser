@@ -1606,10 +1606,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final JmlContract n, final A arg) {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<JmlClause> clauses = modifyList(n.getClauses(), arg);
+        SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         NodeList<JmlContract> subContracts = modifyList(n.getSubContracts(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setModifiers(modifiers);
         n.setClauses(clauses);
+        n.setName(name);
         n.setSubContracts(subContracts);
         n.setComment(comment);
         return n;
