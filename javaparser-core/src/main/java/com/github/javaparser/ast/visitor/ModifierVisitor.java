@@ -1357,7 +1357,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final AccessibleClause n, final A arg) {
+    public Visitable visit(final JmlAccessibleClause n, final A arg) {
         NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
@@ -1451,7 +1451,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final SignalsClause n, final A arg) {
+    public Visitable visit(final JmlSignalsClause n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Type type = (Type) n.getType().accept(this, arg);
@@ -1466,7 +1466,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final SignalsOnlyClause n, final A arg) {
+    public Visitable visit(final JmlSignalsOnlyClause n, final A arg) {
         NodeList<Type> types = modifyList(n.getTypes(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setTypes(types);
@@ -1482,14 +1482,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final CallableClause n, final A arg) {
+    public Visitable visit(final JmlCallableClause n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
     }
 
     @Override
-    public Visitable visit(final CapturesClause n, final A arg) {
+    public Visitable visit(final JmlCapturesClause n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
         return n;
@@ -1534,19 +1534,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final OldClause n, final A arg) {
-        NodeList<VariableDeclarator> variables = modifyList(n.getVariables(), arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setVariables(variables);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
-    public Visitable visit(final JmlClauseIf n, final A arg) {
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setComment(comment);
-        return n;
+    public Visitable visit(JmlClauseIf n, A arg) {
+        return null;
     }
 
     @Override
@@ -1794,6 +1783,21 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         if (declarations == null)
             return null;
         n.setDeclarations(declarations);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlClassAxiomDeclaration n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        Expression expr = (Expression) n.getExpr().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expr == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setModifiers(modifiers);
+        n.setExpr(expr);
         n.setComment(comment);
         return n;
     }

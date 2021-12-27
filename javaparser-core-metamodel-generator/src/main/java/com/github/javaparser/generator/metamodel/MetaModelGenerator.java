@@ -208,13 +208,13 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlBodyDeclaration.class);
         add(JmlStatements.class);
         add(JmlDefaultClause.class);
-        add(SignalsClause.class);
-        add(SignalsOnlyClause.class);
+        add(JmlSignalsClause.class);
+        add(JmlSignalsOnlyClause.class);
         add(JmlClauseLabel.class);
         //add(com.github.javaparser.ast.jml.clauses.OldClause.class);
         add(JmlForallClause.class);
         add(JmlOldClause.class);
-        add(CallableClause.class);
+        add(JmlCallableClause.class);
         add(com.github.javaparser.ast.jml.clauses.JmlContract.class);
 
         add(com.github.javaparser.ast.JmlBoundVariable.class);

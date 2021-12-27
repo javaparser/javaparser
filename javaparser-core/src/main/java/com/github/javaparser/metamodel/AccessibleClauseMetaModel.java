@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.jml.clauses.AccessibleClause;
+import com.github.javaparser.ast.jml.clauses.JmlAccessibleClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +38,7 @@ public class AccessibleClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     AccessibleClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, AccessibleClause.class, "AccessibleClause", "com.github.javaparser.ast.jml.clauses", false, false);
+        super(superBaseNodeMetaModel, JmlAccessibleClause.class, "AccessibleClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
     public PropertyMetaModel exprsPropertyMetaModel;

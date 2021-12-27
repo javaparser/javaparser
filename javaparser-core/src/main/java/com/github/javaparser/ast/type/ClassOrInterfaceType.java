@@ -42,6 +42,7 @@ import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 /**
  * A class or an interface type.
  * <br>{@code Object}
@@ -247,7 +248,7 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ClassOrInterfaceType removeScope() {
-        return setScope((ClassOrInterfaceType) null);
+        return setScope(null);
     }
 
     @Override

@@ -8,8 +8,15 @@ import com.github.javaparser.ast.jml.JmlKeyword;
  * @version 1 (3/14/21)
  */
 public enum Behavior implements Jmlish, JmlKeyword {
-    NONE(""), BEHAVIOR("behavior"), NORMAL("normal_behavior"), EXCEPTIONAL("exceptional_behavior"),
-    MODEL("model_behavior"), BREAK("break_behavior"), CONTINUE("continue_behavior"), RETURN("return_behavior");
+    NONE(""),
+    BEHAVIOR("behavior"),
+    NORMAL("normal_behavior"),
+    ABRUPT("abrupt_behavior"),
+    EXCEPTIONAL("exceptional_behavior"),
+    MODEL("model_behavior"),
+    BREAK("break_behavior"),
+    CONTINUE("continue_behavior"),
+    RETURN("return_behavior");
 
     private final String symbol;
 

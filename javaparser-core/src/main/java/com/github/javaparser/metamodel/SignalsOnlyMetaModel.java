@@ -22,7 +22,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-import com.github.javaparser.ast.jml.clauses.SignalsOnlyClause;
+import com.github.javaparser.ast.jml.clauses.JmlSignalsOnlyClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -39,6 +39,6 @@ public class SignalsOnlyMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     SignalsOnlyMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, SignalsOnlyClause.class, "SignalsOnly", "com.github.javaparser.ast.clauses", false, false);
+        super(superBaseNodeMetaModel, JmlSignalsOnlyClause.class, "SignalsOnly", "com.github.javaparser.ast.clauses", false, false);
     }
 }

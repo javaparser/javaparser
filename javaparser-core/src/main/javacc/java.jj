@@ -6384,9 +6384,9 @@ ArbitraryNodeContainer JmlMethodLevelStart():
 }
 {
   ( contracts = JmlLoopInvariants() { ret.getChildren().addAll(contracts); }
-  | contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
   | //TODO weigl [SimpleName() ":"]
     statements = JmlStatements()    { ret.getChildren().addAll(statements.getElements()); }
+  | contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
   | jmlModifiersInner(mods)         { ret.getChildren().addAll(mods); mods.clear();}
   )+
   <EOF>
@@ -6466,11 +6466,10 @@ NodeList<JmlContracts> JmlLoopInvariants():
       Behavior b;
     }
     (
-      //loop contract a key special thing
       <LOOP_CONTRACT>
       {contract.setLoopContract(true);}
       (b=JmlBehavior() {contract.setBehavior(b);})?
-      [SimpleName() ":"]
+      [LOOKAHEAD(2) SimpleName() ":"]
       (
         clause=JmlContractClause() {contract.getClauses().add(clause);}
       |
@@ -6796,7 +6795,7 @@ JmlClause JmlSignalsClause():
 {
   <SIGNALS>   { begin = token(); }
   <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
-  { return new SignalsClause(range(begin, token()), type, id, e); }
+  { return new JmlSignalsClause(range(begin, token()), type, id, e); }
 }
 
 
@@ -6815,7 +6814,7 @@ JmlClause JmlSignalsOnlyClause():
   {begin=token();}
   <SIGNALS_ONLY> type=Type(emptyNodeList()) {types.add(type);}
   (<COMMA> type=Type(emptyNodeList()) {types.add(type);})*
-  { return new SignalsOnlyClause(range(begin, token()), types); }
+  { return new JmlSignalsOnlyClause(range(begin, token()), types); }
 }
 
 JmlClause JmlDivergesClause():

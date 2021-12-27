@@ -1,6 +1,6 @@
 // Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/buggyRandomNumbers/buggyRandomNumber.java@(line 1,col 1)
+maintaining randomNumbers.size() == counter-1;
+maintaining randomNumbers.size() <= repeat;
+maintaining 0 <= selected && selected < range;
+maintaining (\forall int i; 0 <= i && i < randomNumbers.size(); 0 <= randomNumbers.get(i) && randomNumbers.get(i) <range);
 decreases repeat - counter;
-           maintaining randomNumbers.size() == counter-1;
-           maintaining randomNumbers.size() <= repeat;   
-           maintaining 0 <= selected && selected < range; 
-           maintaining (\forall int i; 0 <= i && i < randomNumbers.size(); 0 <= randomNumbers.get(i) && randomNumbers.get(i) <range);

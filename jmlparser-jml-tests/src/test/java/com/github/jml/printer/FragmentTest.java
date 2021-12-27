@@ -72,6 +72,7 @@ public class FragmentTest {
                 || message.contains("show")
                 || message.contains("begin")
                 || message.contains("end")
+                || message.contains("loop_decreases")
                 || message.contains("check");
     }
 

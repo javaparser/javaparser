@@ -1,4 +1,4 @@
 // Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/escAbstractSpecs/Test.java@(line 1,col 1)
 public model_behavior
 ensures init;
-model public A();
+model public void A();

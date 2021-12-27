@@ -743,7 +743,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final AccessibleClause n, final A arg) {
+    public void visit(final JmlAccessibleClause n, final A arg) {
         n.getExprs().forEach(p -> p.accept(this, arg));
         n.getHeaps().forEach(p -> p.accept(this, arg));
         n.getMeasuredBy().ifPresent(l -> l.accept(this, arg));
@@ -797,7 +797,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final SignalsClause n, final A arg) {
+    public void visit(final JmlSignalsClause n, final A arg) {
         n.getExpr().accept(this, arg);
         n.getName().ifPresent(l -> l.accept(this, arg));
         n.getType().accept(this, arg);
@@ -805,7 +805,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final SignalsOnlyClause n, final A arg) {
+    public void visit(final JmlSignalsOnlyClause n, final A arg) {
         n.getTypes().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -816,12 +816,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final CallableClause n, final A arg) {
+    public void visit(final JmlCallableClause n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
-    public void visit(final CapturesClause n, final A arg) {
+    public void visit(final JmlCapturesClause n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -846,12 +846,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlRefiningStmt n, final A arg) {
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final OldClause n, final A arg) {
-        n.getVariables().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -1022,6 +1016,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlOldClause n, final A arg) {
         n.getDeclarations().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final JmlClassAxiomDeclaration n, final A arg) {
+        n.getExpr().accept(this, arg);
+        n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

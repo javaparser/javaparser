@@ -2188,7 +2188,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final AccessibleClause n, final A arg) {
+    public List<R> visit(final JmlAccessibleClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2332,7 +2332,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final SignalsClause n, final A arg) {
+    public List<R> visit(final JmlSignalsClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2359,7 +2359,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final SignalsOnlyClause n, final A arg) {
+    public List<R> visit(final JmlSignalsOnlyClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2388,7 +2388,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final CallableClause n, final A arg) {
+    public List<R> visit(final JmlCallableClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2400,7 +2400,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final CapturesClause n, final A arg) {
+    public List<R> visit(final JmlCapturesClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2471,23 +2471,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final JmlRefiningStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final OldClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getVariables().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)
@@ -3048,6 +3031,33 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> tmp;
         {
             tmp = n.getDeclarations().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final JmlClassAxiomDeclaration n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getExpr().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

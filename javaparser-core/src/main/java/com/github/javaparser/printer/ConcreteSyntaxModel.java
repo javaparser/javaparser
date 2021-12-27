@@ -1018,7 +1018,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(CallableClause.class, sequence(
+        concreteSyntaxModelByClass.put(JmlCallableClause.class, sequence(
                 child(MODIFIERS),
                 token(CALLABLE),
                 //space(),
@@ -1115,7 +1115,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlDoc.class, sequence());
         concreteSyntaxModelByClass.put(JmlDocStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlFieldDeclaration.class, sequence(child(DECL)));
-        concreteSyntaxModelByClass.put(SignalsClause.class, sequence(
+        concreteSyntaxModelByClass.put(JmlSignalsClause.class, sequence(
                 child(KIND),
                 token(LPAREN),
                 child(TYPE),
@@ -1125,7 +1125,7 @@ public class ConcreteSyntaxModel {
                 semicolon()
         ));
         concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence(child(CONTRACT), child(METHOD_DECLARATION)));
-        concreteSyntaxModelByClass.put(SignalsOnlyClause.class, sequence(
+        concreteSyntaxModelByClass.put(JmlSignalsOnlyClause.class, sequence(
                 token(SIGNALS_ONLY),
                 child(TYPES),
                 semicolon(),

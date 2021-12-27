@@ -7,17 +7,15 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.CapturesClauseMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class CapturesClause extends JmlClause {
+public class JmlCapturesClause extends JmlClause {
 
     @AllFieldsConstructor
-    public CapturesClause() {
+    public JmlCapturesClause() {
         super();
     }
 
@@ -25,7 +23,7 @@ public class CapturesClause extends JmlClause {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CapturesClause(TokenRange tokenRange) {
+    public JmlCapturesClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -48,8 +46,8 @@ public class CapturesClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public CapturesClause clone() {
-        return (CapturesClause) accept(new CloneVisitor(), null);
+    public JmlCapturesClause clone() {
+        return (JmlCapturesClause) accept(new CloneVisitor(), null);
     }
 
 

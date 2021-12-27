@@ -256,7 +256,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlQuantifiedExpr n, A arg);
 
-    R visit(AccessibleClause n, A arg);
+    R visit(JmlAccessibleClause n, A arg);
 
     R visit(JmlClauseLabel n, A arg);
 
@@ -270,15 +270,15 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlDefaultClause n, A arg);
 
-    R visit(SignalsClause n, A arg);
+    R visit(JmlSignalsClause n, A arg);
 
-    R visit(SignalsOnlyClause n, A arg);
+    R visit(JmlSignalsOnlyClause n, A arg);
 
     R visit(JmlUnreachableStmt n, A arg);
 
-    R visit(CallableClause n, A arg);
+    R visit(JmlCallableClause n, A arg);
 
-    R visit(CapturesClause n, A arg);
+    R visit(JmlCapturesClause n, A arg);
 
     R visit(JmlForallClause n, A arg);
 
@@ -287,8 +287,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlName n, A arg);
 
     R visit(JmlRefiningStmt n, A arg);
-
-    R visit(OldClause n, A arg);
 
     R visit(JmlClauseIf n, A arg);
 
@@ -329,4 +327,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlFieldDeclaration n, A arg);
 
     R visit(JmlOldClause n, A arg);
+
+    R visit(JmlClassAxiomDeclaration n, A arg);
 }

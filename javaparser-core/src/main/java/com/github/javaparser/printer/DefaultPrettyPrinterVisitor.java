@@ -807,7 +807,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(AccessibleClause n, Void arg) {
+    public void visit(JmlAccessibleClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printClause(n.getKind(), n.getHeaps(), n.getExprs());
     }
@@ -893,13 +893,13 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(SignalsClause n, Void arg) {
+    public void visit(JmlSignalsClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printClause(n.getKind(), n.getExpr());
     }
 
     @Override
-    public void visit(SignalsOnlyClause n, Void arg) {
+    public void visit(JmlSignalsOnlyClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print(n.getKind().jmlSymbol);
         printer.print(" ");
@@ -927,13 +927,13 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(CallableClause n, Void arg) {
+    public void visit(JmlCallableClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         //TODO weigl printClause(n.getKind(), n.getExpr());
     }
 
     @Override
-    public void visit(CapturesClause n, Void arg) {
+    public void visit(JmlCapturesClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         //TODO weigl
     }
@@ -973,14 +973,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         //TODO weigl
     }
 
-    @Override
-    public void visit(OldClause n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printer.print(n.getKind().jmlSymbol);
-        printer.print(" ");
-        printList(n.getVariables(), ", ");
-        printer.print(";");
-    }
+
 
     @Override
     public void visit(JmlClauseIf n, Void arg) {
@@ -1171,7 +1164,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlOldClause n, Void arg) {
-
+        printOrphanCommentsBeforeThisChildNode(n);
+        printer.print(n.getKind().jmlSymbol);
+        printer.print(" ");
+        printList(n.getDeclarations().getVariables(), ", ");
+        printer.print(";");
     }
 
 

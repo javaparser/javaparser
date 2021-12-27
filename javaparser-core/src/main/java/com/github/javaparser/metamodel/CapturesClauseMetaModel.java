@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.jml.clauses.CapturesClause;
+import com.github.javaparser.ast.jml.clauses.JmlCapturesClause;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,6 +38,6 @@ public class CapturesClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CapturesClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, CapturesClause.class, "CapturesClause", "com.github.javaparser.ast.jml.clauses", false, false);
+        super(superBaseNodeMetaModel, JmlCapturesClause.class, "CapturesClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 }

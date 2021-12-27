@@ -462,7 +462,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final AccessibleClause n, final Void arg) {
+    public Integer visit(final JmlAccessibleClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -497,12 +497,12 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final SignalsClause n, final Void arg) {
+    public Integer visit(final JmlSignalsClause n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final SignalsOnlyClause n, final Void arg) {
+    public Integer visit(final JmlSignalsOnlyClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -512,12 +512,12 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final CallableClause n, final Void arg) {
+    public Integer visit(final JmlCallableClause n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final CapturesClause n, final Void arg) {
+    public Integer visit(final JmlCapturesClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -538,11 +538,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlRefiningStmt n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final OldClause n, final Void arg) {
         return n.hashCode();
     }
 
@@ -652,6 +647,11 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlOldClause n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Override
+    public Integer visit(final JmlClassAxiomDeclaration n, final Void arg) {
         return n.hashCode();
     }
 }

@@ -785,7 +785,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(AccessibleClause n, Void arg) {
+    public void visit(JmlAccessibleClause n, Void arg) {
 
     }
 
@@ -821,12 +821,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(SignalsClause n, Void arg) {
+    public void visit(JmlSignalsClause n, Void arg) {
 
     }
 
     @Override
-    public void visit(SignalsOnlyClause n, Void arg) {
+    public void visit(JmlSignalsOnlyClause n, Void arg) {
 
     }
 
@@ -836,12 +836,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(CallableClause n, Void arg) {
+    public void visit(JmlCallableClause n, Void arg) {
 
     }
 
     @Override
-    public void visit(CapturesClause n, Void arg) {
+    public void visit(JmlCapturesClause n, Void arg) {
 
     }
 
@@ -864,11 +864,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlRefiningStmt n, Void arg) {
-
-    }
-
-    @Override
-    public void visit(OldClause n, Void arg) {
 
     }
 

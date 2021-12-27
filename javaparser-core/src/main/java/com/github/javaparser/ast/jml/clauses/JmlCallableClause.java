@@ -3,21 +3,21 @@ package com.github.javaparser.ast.jml.clauses;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.CallableClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlCallableClauseMetaModel;
+import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class CallableClause extends JmlClause {
+public class JmlCallableClause extends JmlClause {
 
     @AllFieldsConstructor
-    public CallableClause() {
+    public JmlCallableClause() {
         this(null);
         setKind(JmlClauseKind.CALLABLE);
     }
@@ -26,15 +26,15 @@ public class CallableClause extends JmlClause {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CallableClause(TokenRange tokenRange) {
+    public JmlCallableClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public CallableClause clone() {
-        return (CallableClause) accept(new CloneVisitor(), null);
+    public JmlCallableClause clone() {
+        return (JmlCallableClause) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CallableClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public CallableClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.callableClauseMetaModel;
+    public JmlCallableClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlCallableClauseMetaModel;
     }
 }

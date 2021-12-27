@@ -21,7 +21,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class AccessibleClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
+public class JmlAccessibleClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
 
     private NodeList<SimpleName> heaps;
 
@@ -30,11 +30,11 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     @OptionalProperty
     private Expression measuredBy;
 
-    public AccessibleClause() {
+    public JmlAccessibleClause() {
     }
 
     @AllFieldsConstructor
-    public AccessibleClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
+    public JmlAccessibleClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
         super();
         setHeaps(heaps);
         setExprs(exprs);
@@ -45,7 +45,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AccessibleClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
+    public JmlAccessibleClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
         super(tokenRange);
         setHeaps(heaps);
         setExprs(exprs);
@@ -107,8 +107,8 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public AccessibleClause clone() {
-        return (AccessibleClause) accept(new CloneVisitor(), null);
+    public JmlAccessibleClause clone() {
+        return (JmlAccessibleClause) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AccessibleClause(TokenRange tokenRange) {
+    public JmlAccessibleClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -138,7 +138,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AccessibleClause setExprs(final NodeList<Expression> exprs) {
+    public JmlAccessibleClause setExprs(final NodeList<Expression> exprs) {
         assertNotNull(exprs);
         if (exprs == this.exprs) {
             return this;
@@ -157,7 +157,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AccessibleClause setHeaps(final NodeList<SimpleName> heaps) {
+    public JmlAccessibleClause setHeaps(final NodeList<SimpleName> heaps) {
         assertNotNull(heaps);
         if (heaps == this.heaps) {
             return this;
@@ -176,7 +176,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public AccessibleClause setMeasuredBy(final Expression measuredBy) {
+    public JmlAccessibleClause setMeasuredBy(final Expression measuredBy) {
         if (measuredBy == this.measuredBy) {
             return this;
         }
@@ -189,7 +189,7 @@ public class AccessibleClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public AccessibleClause removeMeasuredBy() {
+    public JmlAccessibleClause removeMeasuredBy() {
         return setMeasuredBy(null);
     }
 }

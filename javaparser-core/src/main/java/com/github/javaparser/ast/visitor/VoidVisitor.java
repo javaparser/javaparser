@@ -248,7 +248,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlQuantifiedExpr jmlQuantifiedExpr, A arg);
 
-    void visit(AccessibleClause n, A arg);
+    void visit(JmlAccessibleClause n, A arg);
 
     void visit(JmlClauseLabel n, A arg);
 
@@ -262,15 +262,15 @@ public interface VoidVisitor<A> {
 
     void visit(JmlDefaultClause n, A arg);
 
-    void visit(SignalsClause n, A arg);
+    void visit(JmlSignalsClause n, A arg);
 
-    void visit(SignalsOnlyClause n, A arg);
+    void visit(JmlSignalsOnlyClause n, A arg);
 
     void visit(JmlUnreachableStmt n, A arg);
 
-    void visit(CallableClause n, A arg);
+    void visit(JmlCallableClause n, A arg);
 
-    void visit(CapturesClause n, A arg);
+    void visit(JmlCapturesClause n, A arg);
 
     void visit(JmlForallClause n, A arg);
 
@@ -279,8 +279,6 @@ public interface VoidVisitor<A> {
     void visit(JmlName n, A arg);
 
     void visit(JmlRefiningStmt n, A arg);
-
-    void visit(OldClause n, A arg);
 
     void visit(JmlClauseIf n, A arg);
 
@@ -321,4 +319,6 @@ public interface VoidVisitor<A> {
     void visit(JmlFieldDeclaration n, A arg);
 
     void visit(JmlOldClause n, A arg);
+
+    void visit(JmlClassAxiomDeclaration n, A arg);
 }

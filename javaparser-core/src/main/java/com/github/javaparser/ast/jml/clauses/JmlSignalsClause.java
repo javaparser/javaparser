@@ -13,15 +13,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.JmlSignalsClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.metamodel.SignalsClauseMetaModel;
 import java.util.Optional;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class SignalsClause extends JmlClause implements MethodContractable, BlockContractable {
+public class JmlSignalsClause extends JmlClause implements MethodContractable, BlockContractable {
 
     private Type type;
 
@@ -34,12 +34,12 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
         setKind(JmlClauseKind.SIGNALS);
     }
 
-    public SignalsClause() {
+    public JmlSignalsClause() {
         this(null, null, null);
     }
 
     @AllFieldsConstructor
-    public SignalsClause(Type type, SimpleName name, Expression expr) {
+    public JmlSignalsClause(Type type, SimpleName name, Expression expr) {
         this(null, type, name, expr);
     }
 
@@ -47,7 +47,7 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SignalsClause(TokenRange tokenRange, Type type, SimpleName name, Expression expr) {
+    public JmlSignalsClause(TokenRange tokenRange, Type type, SimpleName name, Expression expr) {
         super(tokenRange);
         setType(type);
         setName(name);
@@ -95,8 +95,8 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public SignalsClause clone() {
-        return (SignalsClause) accept(new CloneVisitor(), null);
+    public JmlSignalsClause clone() {
+        return (JmlSignalsClause) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SignalsClause(TokenRange tokenRange) {
+    public JmlSignalsClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -126,7 +126,7 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SignalsClause setExpr(final Expression expr) {
+    public JmlSignalsClause setExpr(final Expression expr) {
         assertNotNull(expr);
         if (expr == this.expr) {
             return this;
@@ -145,7 +145,7 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SignalsClause setName(final SimpleName name) {
+    public JmlSignalsClause setName(final SimpleName name) {
         if (name == this.name) {
             return this;
         }
@@ -163,7 +163,7 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SignalsClause setType(final Type type) {
+    public JmlSignalsClause setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -178,12 +178,12 @@ public class SignalsClause extends JmlClause implements MethodContractable, Bloc
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SignalsClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.signalsClauseMetaModel;
+    public JmlSignalsClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlSignalsClauseMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public SignalsClause removeName() {
-        return setName((SimpleName) null);
+    public JmlSignalsClause removeName() {
+        return setName(null);
     }
 }

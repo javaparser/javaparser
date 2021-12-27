@@ -553,7 +553,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final AccessibleClause n, final A arg) {
+    public void visit(final JmlAccessibleClause n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -588,12 +588,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final SignalsClause n, final A arg) {
+    public void visit(final JmlSignalsClause n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
-    public void visit(final SignalsOnlyClause n, final A arg) {
+    public void visit(final JmlSignalsOnlyClause n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -603,12 +603,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final CallableClause n, final A arg) {
+    public void visit(final JmlCallableClause n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
-    public void visit(final CapturesClause n, final A arg) {
+    public void visit(final JmlCapturesClause n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -629,11 +629,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlRefiningStmt n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final OldClause n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -744,6 +739,11 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlOldClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlClassAxiomDeclaration n, final A arg) {
         defaultAction(n, arg);
     }
 }

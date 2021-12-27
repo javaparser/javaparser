@@ -1,7 +1,7 @@
 // Origin: /home/weigl/work/javaparser/jmlparser-jml-tests/src/test/resources/fullexamples/openjml/test/gitbug718/Log.java@(line 1,col 1)
+loop_invariant log == \count;
+loop_invariant ii == (\old(ii)>>log);
+loop_invariant 1 <= ii;
+loop_invariant ii*(1<<log) <= \old(ii) < ii*(1<<(log+1));
+loop_writes ii, log;
 decreasing ii-1;
-         loop_invariant log == \count;
-	 loop_invariant ii == (\old(ii)>>log);
-	 loop_invariant 1 <= ii;
-	 loop_invariant ii*(1<<log) <= \old(ii) < ii*(1<<(log+1));
-         loop_writes ii, log;

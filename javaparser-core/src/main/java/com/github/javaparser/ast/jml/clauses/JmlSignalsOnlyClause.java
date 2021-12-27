@@ -12,13 +12,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.JmlSignalsOnlyClauseMetaModel;
 import com.github.javaparser.metamodel.SignalsOnlyClauseMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class SignalsOnlyClause extends JmlClause implements MethodContractable, BlockContractable {
+public class JmlSignalsOnlyClause extends JmlClause implements MethodContractable, BlockContractable {
 
     private NodeList<Type> types;
 
@@ -27,7 +28,7 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     }
 
     @AllFieldsConstructor
-    public SignalsOnlyClause(NodeList<Type> types) {
+    public JmlSignalsOnlyClause(NodeList<Type> types) {
         this(null, types);
     }
 
@@ -35,13 +36,13 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SignalsOnlyClause(TokenRange tokenRange, NodeList<Type> types) {
+    public JmlSignalsOnlyClause(TokenRange tokenRange, NodeList<Type> types) {
         super(tokenRange);
         setTypes(types);
         customInitialization();
     }
 
-    public SignalsOnlyClause() {
+    public JmlSignalsOnlyClause() {
     }
 
     @Override
@@ -93,15 +94,15 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public SignalsOnlyClause clone() {
-        return (SignalsOnlyClause) accept(new CloneVisitor(), null);
+    public JmlSignalsOnlyClause clone() {
+        return (JmlSignalsOnlyClause) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SignalsOnlyClause(TokenRange tokenRange) {
+    public JmlSignalsOnlyClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -112,7 +113,7 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SignalsOnlyClause setTypes(final NodeList<Type> types) {
+    public JmlSignalsOnlyClause setTypes(final NodeList<Type> types) {
         assertNotNull(types);
         if (types == this.types) {
             return this;
@@ -127,7 +128,7 @@ public class SignalsOnlyClause extends JmlClause implements MethodContractable, 
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SignalsOnlyClauseMetaModel getMetaModel() {
-        return JavaParserMetaModel.signalsOnlyClauseMetaModel;
+    public JmlSignalsOnlyClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlSignalsOnlyClauseMetaModel;
     }
 }
