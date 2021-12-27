@@ -12,10 +12,8 @@ import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.jml.JmlDocSanitizer;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,6 +31,7 @@ import java.util.stream.Stream;
  * @author Alexander Weigl
  * @version 1 (7/2/21)
  */
+@Disabled
 public class FullExamplesTest {
     private final JavaParser jpb;
     private final StoreJMLComments storeProcessor = new StoreJMLComments();
