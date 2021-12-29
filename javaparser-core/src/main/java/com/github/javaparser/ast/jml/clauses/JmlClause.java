@@ -14,7 +14,6 @@ import com.github.javaparser.metamodel.JmlClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Arrays;
 import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -22,31 +21,26 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public abstract class JmlClause extends Node implements Jmlish {
 
-    private JmlClauseKind kind;
-
     @OptionalProperty
     private SimpleName name;
 
     public JmlClause() {
-        this(null);
+        this((SimpleName) null);
     }
 
     @AllFieldsConstructor
-    public JmlClause(final JmlClauseKind kind, final SimpleName name) {
-        this(null, kind, name);
+    public JmlClause(final SimpleName name) {
+        this(null, name);
     }
 
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlClause(TokenRange tokenRange, SimpleName name) {
-        this(tokenRange, null, name);
-    }
-
-    protected final void setKindByToken(JavaToken token) {
-        Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values()).filter(it -> it.jmlSymbol.equals(token.getText())).findFirst();
-        if (k.isPresent()) {
-            kind = k.get();
-        } else {
-            throw new IllegalArgumentException("Could not find clause kind for: " + token.getText());
-        }
+        super(tokenRange);
+        setName(name);
+        customInitialization();
     }
 
     /**
@@ -70,41 +64,7 @@ public abstract class JmlClause extends Node implements Jmlish {
         return JavaParserMetaModel.jmlClauseMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseKind getKind() {
-        return kind;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClause setKind(final JmlClauseKind kind) {
-        assertNotNull(kind);
-        if (kind == this.kind) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);
-        this.kind = kind;
-        return this;
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name) {
-        super(tokenRange);
-        setKind(kind);
-        setName(name);
-        customInitialization();
-    }
-
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    public JmlClause(TokenRange tokenRange, JmlClauseKind kind) {
-        super(tokenRange);
-        setKind(kind);
-        customInitialization();
-    }
+    public abstract JmlClauseKind getKind();
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getName() {
@@ -126,7 +86,7 @@ public abstract class JmlClause extends Node implements Jmlish {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClause removeName() {
-        return setName(null);
+        return setName((SimpleName) null);
     }
 
     @Override

@@ -22,15 +22,14 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @version 1 (2/21/21)
  */
 public class JmlAccessibleClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
-
     private NodeList<SimpleName> heaps;
-
     private NodeList<Expression> exprs;
 
     @OptionalProperty
     private Expression measuredBy;
 
     public JmlAccessibleClause() {
+        this(new NodeList(), new NodeList<>(), null);
     }
 
     @AllFieldsConstructor
@@ -109,6 +108,11 @@ public class JmlAccessibleClause extends JmlClause implements MethodContractable
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlAccessibleClause clone() {
         return (JmlAccessibleClause) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.ACCESSIBLE;
     }
 
     @Override

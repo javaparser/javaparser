@@ -1,9 +1,12 @@
 package com.github.javaparser.ast.jml.clauses;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.jml.JmlKeyword;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Optional;
 
 public enum JmlClauseKind implements JmlKeyword {
     ENSURES(GeneratedJavaParserConstants.ENSURES),
@@ -111,4 +114,15 @@ public enum JmlClauseKind implements JmlKeyword {
             DIVERGES,
             DURATION
     );
+
+    public static JmlClauseKind getKindByToken(JavaToken token) {
+        Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values())
+                .filter(it -> it.jmlSymbol.equals(token.getText())).findFirst();
+        if (k.isPresent()) {
+            return k.get();
+        } else {
+            throw new IllegalArgumentException("Could not find clause kind for: " + token.getText());
+        }
+    }
+
 }

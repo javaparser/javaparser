@@ -23,10 +23,6 @@ public class JmlSignalsOnlyClause extends JmlClause implements MethodContractabl
 
     private NodeList<Type> types;
 
-    {
-        setKind(JmlClauseKind.SIGNALS_ONLY);
-    }
-
     @AllFieldsConstructor
     public JmlSignalsOnlyClause(NodeList<Type> types) {
         this(null, types);
@@ -130,5 +126,10 @@ public class JmlSignalsOnlyClause extends JmlClause implements MethodContractabl
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlSignalsOnlyClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlSignalsOnlyClauseMetaModel;
+    }
+
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.SIGNALS_ONLY;
     }
 }

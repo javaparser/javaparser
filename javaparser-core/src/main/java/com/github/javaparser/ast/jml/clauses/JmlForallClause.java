@@ -19,10 +19,6 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
 
     private NodeList<JmlBoundVariable> variables;
 
-    {
-        setKind(JmlClauseKind.FORALL);
-    }
-
     @AllFieldsConstructor
     public JmlForallClause(NodeList<JmlBoundVariable> variables) {
         this(null, variables);
@@ -109,5 +105,10 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlForallClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlForallClauseMetaModel;
+    }
+
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.FORALL;
     }
 }

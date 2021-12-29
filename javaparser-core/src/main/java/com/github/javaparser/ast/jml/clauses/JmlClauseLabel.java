@@ -5,6 +5,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -23,35 +24,40 @@ import java.util.Optional;
  */
 public class JmlClauseLabel extends JmlClause {
 
+    private JmlClauseKind kind;
+
     @OptionalProperty
     private SimpleName label;
 
     private Expression expr;
 
-    @AllFieldsConstructor
+    public JmlClauseLabel() {
+        this(JmlClauseKind.NONE, null, new BooleanLiteralExpr(true));
+    }
+
     public JmlClauseLabel(SimpleName label, Expression expr) {
-        this(null, label, expr);
-        setKind(JmlClauseKind.BREAKS);
+        this(JmlClauseKind.NONE, label, expr);
+    }
+
+    @AllFieldsConstructor
+    public JmlClauseLabel(JmlClauseKind kind, SimpleName label, Expression expr) {
+        this(null, kind, label, expr);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseLabel(TokenRange tokenRange, SimpleName label, Expression expr) {
+    public JmlClauseLabel(TokenRange tokenRange, JmlClauseKind kind, SimpleName label, Expression expr) {
         super(tokenRange);
+        setKind(kind);
         setLabel(label);
         setExpr(expr);
         customInitialization();
     }
 
-    public JmlClauseLabel() {
-        setKind(JmlClauseKind.BREAKS);
-    }
-
     public JmlClauseLabel(TokenRange range, JavaToken kind, SimpleName label, Expression expr) {
-        this(range, label, expr);
-        setKindByToken(kind);
+        this(range, JmlClauseKind.getKindByToken(kind), label, expr);
     }
 
     @Override
@@ -161,5 +167,22 @@ public class JmlClauseLabel extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClauseLabel removeLabel() {
         return setLabel((SimpleName) null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseKind getKind() {
+        return kind;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseLabel setKind(final JmlClauseKind kind) {
+        assertNotNull(kind);
+        if (kind == this.kind) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);
+        this.kind = kind;
+        return this;
     }
 }

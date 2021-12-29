@@ -44,4 +44,6 @@ public class JmlDefaultClauseMetaModel extends JmlClauseMetaModel {
     public PropertyMetaModel expressionPropertyMetaModel;
 
     public PropertyMetaModel heapsPropertyMetaModel;
+
+    public PropertyMetaModel kindPropertyMetaModel;
 }

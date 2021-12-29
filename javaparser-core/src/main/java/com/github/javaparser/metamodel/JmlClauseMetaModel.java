@@ -47,7 +47,5 @@ public class JmlClauseMetaModel extends NodeMetaModel {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 
-    public PropertyMetaModel kindPropertyMetaModel;
-
     public PropertyMetaModel namePropertyMetaModel;
 }

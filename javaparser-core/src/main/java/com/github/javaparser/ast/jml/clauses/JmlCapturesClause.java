@@ -50,6 +50,11 @@ public class JmlCapturesClause extends JmlClause {
         return (JmlCapturesClause) accept(new CloneVisitor(), null);
     }
 
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.CAPTURES;
+    }
+
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")

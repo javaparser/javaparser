@@ -19,7 +19,6 @@ public class JmlCallableClause extends JmlClause {
     @AllFieldsConstructor
     public JmlCallableClause() {
         this(null);
-        setKind(JmlClauseKind.CALLABLE);
     }
 
     /**
@@ -53,5 +52,10 @@ public class JmlCallableClause extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlCallableClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlCallableClauseMetaModel;
+    }
+
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.CALLABLE;
     }
 }

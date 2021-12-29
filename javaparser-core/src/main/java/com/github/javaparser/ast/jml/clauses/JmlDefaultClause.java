@@ -24,6 +24,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class JmlDefaultClause extends JmlClause implements MethodContractable, BlockContractable {
 
+    private JmlClauseKind kind;
+
     @OptionalProperty
     private NodeList<SimpleName> heaps;
 
@@ -31,7 +33,7 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
 
     @AllFieldsConstructor
     public JmlDefaultClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        this(null, name, kind, heaps, expression);
+        this(null, kind, name, heaps, expression);
     }
 
     /**
@@ -39,7 +41,7 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlDefaultClause(TokenRange tokenRange, SimpleName name, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        super(tokenRange, kind, name);
+        super(tokenRange, name);
         setHeaps(heaps);
         setExpression(expression);
         customInitialization();
@@ -48,18 +50,16 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
     public JmlDefaultClause() {
     }
 
-    public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<SimpleName> heaps, Expression expression) {
-        this(range, JmlClauseKind.NONE, heaps, new NodeList<>(expression));
-        setKindByToken(begin);
+    public JmlDefaultClause(TokenRange range, JavaToken kind, NodeList<SimpleName> heaps, Expression expression) {
+        this(range, JmlClauseKind.getKindByToken(kind), heaps, new NodeList<>(expression));
     }
 
     public JmlDefaultClause(TokenRange range, JavaToken begin, Expression expr) {
         this(range, begin, null, expr);
     }
 
-    public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
-        this(range, JmlClauseKind.NONE, heaps, exprs);
-        setKindByToken(begin);
+    public JmlDefaultClause(TokenRange range, JavaToken kind, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+        this(range, JmlClauseKind.getKindByToken(kind), heaps, exprs);
     }
 
     public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<Expression> exprs) {
@@ -71,7 +71,7 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        super(tokenRange, kind);
+        super(tokenRange);
         setHeaps(heaps);
         setExpression(expression);
         customInitialization();
@@ -193,14 +193,31 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
         return JavaParserMetaModel.jmlDefaultClauseMetaModel;
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseKind getKind() {
+        return kind;
+    }
+
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        super(tokenRange, kind, name);
+        super(tokenRange, name);
+        setKind(kind);
         setHeaps(heaps);
         setExpression(expression);
         customInitialization();
+    }
+
+    public JmlDefaultClause setKind(final JmlClauseKind kind) {
+        assertNotNull(kind);
+        if (kind == this.kind) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);
+        this.kind = kind;
+        return this;
     }
 }

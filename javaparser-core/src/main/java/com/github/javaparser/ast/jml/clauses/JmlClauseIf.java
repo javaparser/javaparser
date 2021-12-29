@@ -17,7 +17,6 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     @AllFieldsConstructor
     public JmlClauseIf() {
         this(null);
-        setKind(JmlClauseKind.WORKING_SPACE);
     }
 
     /**
@@ -49,6 +48,11 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlClauseIf clone() {
         return (JmlClauseIf) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.WORKING_SPACE;
     }
 
 

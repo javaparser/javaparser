@@ -27,10 +27,6 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
 
     private Expression expr;
 
-    {
-        setKind(JmlClauseKind.SIGNALS);
-    }
-
     public JmlSignalsClause() {
         this(null, null, null);
     }
@@ -149,6 +145,11 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlSignalsClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlSignalsClauseMetaModel;
+    }
+
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.SIGNALS;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")

@@ -286,7 +286,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlContract removeName() {
-        return setName(null);
+        return setName((SimpleName) null);
     }
 
     /**

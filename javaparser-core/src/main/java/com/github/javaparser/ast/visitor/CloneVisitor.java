@@ -1304,7 +1304,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         SimpleName label = cloneNode(n.getLabel(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlClauseLabel r = new JmlClauseLabel(n.getTokenRange().orElse(null), label, expr);
+        JmlClauseLabel r = new JmlClauseLabel(n.getTokenRange().orElse(null), n.getKind(), label, expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

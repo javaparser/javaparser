@@ -96,4 +96,9 @@ public class JmlOldClause extends JmlClause {
     public JmlOldClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlOldClauseMetaModel;
     }
+
+    @Override
+    public JmlClauseKind getKind() {
+        return JmlClauseKind.OLD;
+    }
 }

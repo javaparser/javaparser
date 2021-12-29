@@ -248,7 +248,7 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ClassOrInterfaceType removeScope() {
-        return setScope(null);
+        return setScope((ClassOrInterfaceType) null);
     }
 
     @Override
