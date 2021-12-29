@@ -48,4 +48,6 @@ public class JmlClauseMetaModel extends NodeMetaModel {
     }
 
     public PropertyMetaModel kindPropertyMetaModel;
+
+    public PropertyMetaModel namePropertyMetaModel;
 }

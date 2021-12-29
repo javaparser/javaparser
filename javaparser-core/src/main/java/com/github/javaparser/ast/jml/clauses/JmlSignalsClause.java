@@ -25,9 +25,6 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
 
     private Type type;
 
-    @OptionalProperty
-    private SimpleName name;
-
     private Expression expr;
 
     {
@@ -48,26 +45,10 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlSignalsClause(TokenRange tokenRange, Type type, SimpleName name, Expression expr) {
-        super(tokenRange);
+        super(tokenRange, name);
         setType(type);
-        setName(name);
         setExpr(expr);
         customInitialization();
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null) {
-            return false;
-        }
-        if (name != null) {
-            if (node == name) {
-                removeName();
-                return true;
-            }
-        }
-        return super.remove(node);
     }
 
     @Override
@@ -79,12 +60,6 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
         if (node == expr) {
             setExpr((Expression) replacementNode);
             return true;
-        }
-        if (name != null) {
-            if (node == name) {
-                setName((SimpleName) replacementNode);
-                return true;
-            }
         }
         if (node == type) {
             setType((Type) replacementNode);
@@ -139,20 +114,14 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getName() {
-        return Optional.ofNullable(name);
+        return Optional.ofNullable(null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlSignalsClause setName(final SimpleName name) {
-        if (name == this.name) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
-        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }

@@ -1092,6 +1092,15 @@ public class ConcreteSyntaxModel {
                 child(EXPRESSION),
                 semicolon()
         ));
+
+        concreteSyntaxModelByClass.put(JmlTypeExpr.class, sequence(child(TYPE)));
+
+        concreteSyntaxModelByClass.put(JmlClassAxiomDeclaration.class,
+                sequence(token(AXIOM),
+                        modifiers(),
+                        child(EXPR),
+                        semicolon()));
+
         concreteSyntaxModelByClass.put(JmlUnreachableStmt.class, sequence(token(UNREACHABLE), semicolon()));
         concreteSyntaxModelByClass.put(JmlBinaryInfixExpr.class, sequence(
                 token(LPAREN),

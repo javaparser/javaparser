@@ -59,7 +59,7 @@ import com.google.common.collect.ImmutableSet;
 
 class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
-    private TypeSolver typeResolver = new ReflectionTypeSolver(false);
+    private final TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
     @Test
     void testIsClass() {
@@ -500,7 +500,7 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAllInterfacesWithParametersWithDepthFirstTraversalOrder() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         List<ResolvedReferenceType> interfaces = constructorDeclaration.getAllInterfaces();
-        assertEquals(34, interfaces.size());
+        assertEquals(35, interfaces.size());
 
         ResolvedReferenceType interfaze;
         int i = 0;
@@ -713,6 +713,9 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.body.CallableDeclaration", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.body.CallableDeclaration.T").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.jml.NodeWithContracts", ancestor.getQualifiedName());
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());

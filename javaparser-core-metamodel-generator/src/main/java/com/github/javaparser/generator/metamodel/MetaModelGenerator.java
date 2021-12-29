@@ -160,6 +160,7 @@ public class MetaModelGenerator extends AbstractGenerator {
 
         //add(JmlImportDeclaration.class);
         add(JmlQuantifiedExpr.class);
+        add(JmlTypeExpr.class);
         add(JmlBinaryInfixExpr.class);
         add(JmlLetExpr.class);
         add(JmlMultiCompareExpr.class);

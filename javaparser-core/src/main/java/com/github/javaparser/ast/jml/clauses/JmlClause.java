@@ -36,6 +36,10 @@ public abstract class JmlClause extends Node implements Jmlish {
         this(null, kind, name);
     }
 
+    public JmlClause(TokenRange tokenRange, SimpleName name) {
+        this(tokenRange, null, name);
+    }
+
     protected final void setKindByToken(JavaToken token) {
         Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values()).filter(it -> it.jmlSymbol.equals(token.getText())).findFirst();
         if (k.isPresent()) {
@@ -89,6 +93,7 @@ public abstract class JmlClause extends Node implements Jmlish {
     public JmlClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name) {
         super(tokenRange);
         setKind(kind);
+        setName(name);
         customInitialization();
     }
 
@@ -99,5 +104,58 @@ public abstract class JmlClause extends Node implements Jmlish {
         super(tokenRange);
         setKind(kind);
         customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<SimpleName> getName() {
+        return Optional.ofNullable(name);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClause setName(final SimpleName name) {
+        if (name == this.name) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public JmlClause removeName() {
+        return setName(null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        if (name != null) {
+            if (node == name) {
+                removeName();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null) {
+            return false;
+        }
+        if (name != null) {
+            if (node == name) {
+                setName((SimpleName) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

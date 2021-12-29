@@ -43,7 +43,5 @@ public class JmlSignalsClauseMetaModel extends JmlClauseMetaModel {
 
     public PropertyMetaModel exprPropertyMetaModel;
 
-    public PropertyMetaModel namePropertyMetaModel;
-
     public PropertyMetaModel typePropertyMetaModel;
 }

@@ -1078,4 +1078,23 @@ public abstract class Expression extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlLabelExpr(Consumer<JmlLabelExpr> action) {
     }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlTypeExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlTypeExpr asJmlTypeExpr() {
+        throw new IllegalStateException(f("%s is not JmlTypeExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlTypeExpr> toJmlTypeExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlTypeExpr(Consumer<JmlTypeExpr> action) {
+    }
 }

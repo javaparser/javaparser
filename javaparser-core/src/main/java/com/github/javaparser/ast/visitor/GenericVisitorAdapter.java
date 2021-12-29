@@ -2114,6 +2114,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2199,6 +2204,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2214,13 +2224,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getName().isPresent()) {
-            result = n.getName().get().accept(this, arg);
+        {
+            result = n.getType().accept(this, arg);
             if (result != null)
                 return result;
         }
-        {
-            result = n.getType().accept(this, arg);
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2236,6 +2246,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getTypes().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2259,6 +2274,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final JmlCallableClause n, final A arg) {
         R result;
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2281,6 +2301,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getVariables().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2854,6 +2879,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2876,6 +2906,21 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlTypeExpr n, final A arg) {
+        R result;
+        {
+            result = n.getType().accept(this, arg);
             if (result != null)
                 return result;
         }

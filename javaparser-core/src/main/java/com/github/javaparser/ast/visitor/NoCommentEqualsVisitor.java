@@ -977,7 +977,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
             return false;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
@@ -1028,7 +1030,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
             return false;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
@@ -1036,11 +1040,11 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlSignalsClause n2 = (JmlSignalsClause) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
             return false;
-        if (!nodeEquals(n.getName(), n2.getName()))
-            return false;
         if (!nodeEquals(n.getType(), n2.getType()))
             return false;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
@@ -1048,7 +1052,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlSignalsOnlyClause n2 = (JmlSignalsOnlyClause) arg;
         if (!nodesEquals(n.getTypes(), n2.getTypes()))
             return false;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
@@ -1059,7 +1065,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final JmlCallableClause n, final Visitable arg) {
         final JmlCallableClause n2 = (JmlCallableClause) arg;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
@@ -1073,7 +1081,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlForallClause n2 = (JmlForallClause) arg;
         if (!nodesEquals(n.getVariables(), n2.getVariables()))
             return false;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
@@ -1326,7 +1336,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlOldClause n2 = (JmlOldClause) arg;
         if (!nodeEquals(n.getDeclarations(), n2.getDeclarations()))
             return false;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
@@ -1337,5 +1349,11 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
         return nodesEquals(n.getAnnotations(), n2.getAnnotations());
+    }
+
+    @Override
+    public Boolean visit(final JmlTypeExpr n, final Visitable arg) {
+        final JmlTypeExpr n2 = (JmlTypeExpr) arg;
+        return nodeEquals(n.getType(), n2.getType());
     }
 }

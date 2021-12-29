@@ -321,4 +321,6 @@ public interface VoidVisitor<A> {
     void visit(JmlOldClause n, A arg);
 
     void visit(JmlClassAxiomDeclaration n, A arg);
+
+    void visit(JmlTypeExpr n, A arg);
 }

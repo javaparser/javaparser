@@ -4276,7 +4276,7 @@ Expression JmlPrimaryPrefix():
       <TYPE> {begin=token();} "(" ret=ResultType(new NodeList<>()) ")"
       {
         return new MethodCallExpr(range(begin,token()), null, new NodeList<>(),
-                        new SimpleName("\\typeof"), new NodeList<>(/*TODO weigl: ret*/));
+                        new SimpleName("\\type"), new NodeList<>(new JmlTypeExpr(ret)));
       }
   )
 }

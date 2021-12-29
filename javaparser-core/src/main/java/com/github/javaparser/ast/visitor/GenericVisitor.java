@@ -329,4 +329,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlOldClause n, A arg);
 
     R visit(JmlClassAxiomDeclaration n, A arg);
+
+    R visit(JmlTypeExpr n, A arg);
 }

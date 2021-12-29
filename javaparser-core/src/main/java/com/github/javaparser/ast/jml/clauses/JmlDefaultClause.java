@@ -192,4 +192,15 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
     public JmlDefaultClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlDefaultClauseMetaModel;
     }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
+        super(tokenRange, kind, name);
+        setHeaps(heaps);
+        setExpression(expression);
+        customInitialization();
+    }
 }
