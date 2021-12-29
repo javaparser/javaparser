@@ -1,5 +1,7 @@
 import com.github.javaparser.JavaParser
 import com.github.javaparser.JavaParserBuild
+import com.github.javaparser.ParserConfiguration
+import com.github.javaparser.ast.Jmlish
 import com.github.javaparser.ast.Node
 import com.github.javaparser.ast.NodeList
 import com.github.javaparser.metamodel.NodeMetaModel
@@ -54,8 +56,10 @@ fun main() {
             post("parse") {
                 val params = call.receiveParameters()
                 val inputText = params["input"]?.toString() ?: "/* empty */"
-
-                val jpb = JavaParser()
+                val config = ParserConfiguration()
+                config.isProcessJml = true
+                config.jmlKeys.add("key")
+                val jpb = JavaParser(config)
 
                 val startTime = System.nanoTime()
                 val result = jpb.parse(StringReader(inputText))
@@ -94,16 +98,23 @@ fun main() {
                             }
                         }
 
-                        div("ast") {
+                        div {
                             h2 { +"AST" }
                             val cu = result.result.get()
-                            ul {
+                            ul("ast") {
                                 this.printNode(cu, "[0]")
                             }
                         }
                         div {
                             h2 { +"Original sources" }
-                            code { pre { +inputText } }
+                            textArea {
+                                name = "input"
+                                id = "input"
+                                rows = "100"
+                                cols = "120"
+                                +inputText
+                            }
+                            //code { pre { +inputText } }
                         }
                     }
                 }
@@ -113,10 +124,20 @@ fun main() {
 }
 
 private fun UL.printNode(n: Node, text: String = "") {
-    li {
+    val isJml = n is Jmlish
+    val clazz = if(isJml) "jmlish" else ""
+
+    li(clazz) {
         span("attrib-name") { +text }
         +": "
         span("type-name") { +n.metaModel.typeName }
+
+        n.range.ifPresent {
+            span("range") {
+                +"${it.begin.line}/${it.begin.column} - ${it.end.line}/${it.end.column}"
+            }
+        }
+
         ul {
             val metaModel: NodeMetaModel = n.metaModel
             val allPropertyMetaModels = metaModel.allPropertyMetaModels
@@ -174,6 +195,11 @@ const val STYLE = """
     font-family: monospace;
 }
 
+.code {
+    font-family: monospace;
+    white-space: pre;
+}
+
 .ast li {
     line-height: 180%;
 }
@@ -198,6 +224,19 @@ const val STYLE = """
     border-radius: 2px;
     padding: .1ex;
 } 
+
+.range {
+    background: #888; color:white;  
+    border-radius: 2px;
+    padding: .1ex;
+    margin-left:2em;
+}
+
+.jmlish {
+    background: rgba(100, 150,250, .3);
+    margin: 1em;
+}
+
 """
 
 open class DefaultPage : Template<HTML> {
@@ -206,7 +245,7 @@ open class DefaultPage : Template<HTML> {
     override fun HTML.apply() {
         head {
             title("JmlParser -- Playground")
-            style { unsafe{+STYLE} }
+            style { unsafe { +STYLE } }
 
             script { src = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js" }
             script { src = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/clike/clike.min.js" }

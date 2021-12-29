@@ -15,10 +15,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.code.style>official</kotlin.code.style>
-        <ktor.version>1.6.6</ktor.version>
-        <logback_version>1.2.7</logback_version>
+        <ktor.version>1.6.7</ktor.version>
+        <logback_version>1.2.9</logback_version>
         <kotlin.compiler.jvmTarget>8</kotlin.compiler.jvmTarget>
-        <kotlin.version>1.6.0</kotlin.version>
+        <kotlin.version>1.6.10</kotlin.version>
     </properties>
 
     <dependencies>
@@ -48,7 +48,6 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback_version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

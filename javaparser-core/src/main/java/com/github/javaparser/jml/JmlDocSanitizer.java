@@ -30,8 +30,9 @@ public class JmlDocSanitizer {
             final Optional<Range> range = tok.getRange();
             if (range.isPresent()) {
                 Position cur = range.get().begin;
-                if (last.line < cur.line) {
-                    for (int i = last.line; i < cur.line; i++) {
+                int curLine = cur.line;
+                if (last.line < curLine) {
+                    for (int i = last.line; i < curLine - 1; i++) {
                         s.append("\n");
                     }
                     for (int i = 0; i < cur.column; i++) {
