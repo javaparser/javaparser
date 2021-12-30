@@ -974,7 +974,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
 
-
     @Override
     public void visit(JmlClauseIf n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
@@ -2306,7 +2305,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     private void printClause(JmlClauseKind name, NodeList<SimpleName> heaps, NodeList<Expression> expr) {
-        printer.print(name.jmlSymbol);
+        if (name == null) printer.print("/*ERROR name not set*/");
+        else printer.print(name.jmlSymbol);
+
         printer.print(" ");
         printList(heaps, "", "", "", "<", ">");
         printList(expr, ", ");
