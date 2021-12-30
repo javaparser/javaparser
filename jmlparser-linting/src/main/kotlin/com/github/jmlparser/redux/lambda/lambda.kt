@@ -1,4 +1,4 @@
-package com.github.wadoon.jmlparser.redux.lambda
+package com.github.jmlparser.redux.lambda
 
 import com.github.javaparser.Position
 import com.github.javaparser.ast.Node

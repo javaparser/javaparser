@@ -1,11 +1,9 @@
-package com.github.wadoon.jmlparser.lint.rules;
+package com.github.jmlparser.lint.rules;
 
-import com.github.javaparser.ast.jml.stmt.JmlStatement;
-import com.github.javaparser.ast.jml.stmt.JmlStatements;
 import com.github.javaparser.ast.jml.stmt.JmlUnreachableStmt;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
-import com.github.wadoon.jmlparser.lint.LintRule;
+import com.github.jmlparser.lint.LintRule;
 
 /**
  * @author Alexander Weigl

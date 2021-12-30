@@ -1,4 +1,4 @@
-package com.github.wadoon.jmlparser.lint;
+package com.github.jmlparser.lint;
 
 /**
  * @author Alexander Weigl

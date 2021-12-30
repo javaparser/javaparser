@@ -1,0 +1,7 @@
+com.github.jmlparser.lint.rules.JmlNameClashWithJava
+com.github.jmlparser.lint.rules.AssignableValidator
+com.github.jmlparser.lint.rules.ContextSensitiveForbiddenFunctionsValidator
+com.github.jmlparser.lint.rules.JmlNameClashWithJava
+com.github.jmlparser.lint.rules.LocationSetValidator
+com.github.jmlparser.lint.rules.PurityValidator
+com.github.jmlparser.lint.rules.ReachableWarning

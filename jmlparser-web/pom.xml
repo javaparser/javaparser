@@ -34,6 +34,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.key</groupId>
+            <artifactId>jmlparser-linting</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-core</artifactId>
             <version>${ktor.version}</version>

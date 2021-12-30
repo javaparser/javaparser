@@ -1,7 +1,7 @@
-package com.github.wadoon.jmlparser.lint.rules;
+package com.github.jmlparser.lint.rules;
 
 import com.github.javaparser.ast.validator.VisitorValidator;
-import com.github.wadoon.jmlparser.lint.LintRule;
+import com.github.jmlparser.lint.LintRule;
 
 /**
  * @author Alexander Weigl

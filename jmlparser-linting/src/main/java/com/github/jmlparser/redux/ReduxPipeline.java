@@ -1,4 +1,4 @@
-package com.github.wadoon.jmlparser.redux;
+package com.github.jmlparser.redux;
 
 /**
  * @author Alexander Weigl

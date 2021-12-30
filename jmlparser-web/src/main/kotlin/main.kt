@@ -7,6 +7,8 @@ import com.github.javaparser.metamodel.NodeMetaModel
 import com.github.javaparser.metamodel.PropertyMetaModel
 import com.github.javaparser.printer.DefaultPrettyPrinter
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration
+import com.github.jmlparser.lint.JmlLintingConfig
+import com.github.jmlparser.lint.JmlLintingFacade
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
@@ -19,6 +21,7 @@ import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
 import kotlinx.html.*
 import java.io.StringReader
+import java.util.*
 import java.util.stream.Collectors
 
 const val version = "${JavaParserBuild.PROJECT_VERSION} (${JavaParserBuild.MAVEN_BUILD_TIMESTAMP})"
@@ -122,7 +125,7 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.renderPage(params: Pa
                     }
                 }
 
-                accordion("Parse Issues", isOpen = true) {
+                accordion("Parse Issues (${result.problems.size})", isOpen = result.problems.isNotEmpty()) {
                     if (!result.isSuccessful) {
                         code {
                             pre {
@@ -133,6 +136,26 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.renderPage(params: Pa
                         }
                     } else {
                         +"No issues detected"
+                    }
+                }
+
+                val problems =
+                    if (result.isSuccessful)
+                        JmlLintingFacade.lint(JmlLintingConfig(), Collections.singleton(result.result.get()))
+                    else
+                        Collections.emptyList()
+
+                accordion("Linting Issues (${problems.size})", isOpen = problems.isNotEmpty()) {
+                    if (result.isSuccessful) {
+                        code {
+                            pre {
+                                problems.forEach {
+                                    +it.toString()
+                                }
+                            }
+                        }
+                    } else {
+                        +"Linting issues skipped due to parsing errors."
                     }
                 }
 
@@ -235,7 +258,7 @@ open class DefaultPage : Template<HTML> {
                 div("container") {
                     div("columns") {
                         div("column col-5") { insert(body) }
-                        div("divider-vert") { attributes["data-content"] = "&mid;" }
+                        div("divider-vert") { /*attributes["data-content"] = "|"*/ }
                         div("column col-5") { insert(right) }
                     }
 
@@ -244,9 +267,14 @@ open class DefaultPage : Template<HTML> {
             }
             script {
                 unsafe {
-                    +("var editor = CodeMirror.fromTextArea(document.getElementById('input'), " +
-                            "{ lineNumbers: true, mode: \"text/x-java\", matchBrackets: true });" +
-                            "editor.setSize(\"100%\", \"90%\");\n")
+                    +"""
+                        var editor = CodeMirror.fromTextArea(document.getElementById('input'), 
+                            { lineNumbers: true, mode: "text/x-java", matchBrackets: true });
+                        editor.setSize("100%", "90%");
+                        function select(l1, c1, l2, c2) {
+                            editor.doc.setSelection({'line':l1-1, 'ch':c1-1}, {'line':l2-1, 'ch':c2}, {'scroll': true});
+                        }
+                     """
                 }
             }
         }
@@ -263,8 +291,15 @@ private fun UL.printNode(n: Node, text: String = "") {
         span("type-name") { +n.metaModel.typeName }
 
         n.range.ifPresent {
-            span("range") {
-                +"${it.begin.line}/${it.begin.column} - ${it.end.line}/${it.end.column}"
+            span("range label") {
+                a {
+                    val l1 = it.begin.line
+                    val c1 = it.begin.column
+                    val l2 = it.end.line
+                    val c2 = it.end.column
+                    onClick = "javascript:select($l1,$c1, $l2, $c2);"
+                    +"${l1}/${c1} - ${l2}/${c2}"
+                }
             }
         }
 
@@ -287,7 +322,7 @@ private fun UL.printNode(n: Node, text: String = "") {
                     span("type-name") { +attributeMetaModel.typeName }
                     +" = "
                     span("value") {
-                        attributeMetaModel.getValue(n)?.let { +it.toString() }
+                        attributeMetaModel.getValue(n)?.let { +it.toString() } ?: +"value is null"
                     }
                 }
             }
