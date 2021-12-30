@@ -75,24 +75,25 @@ jobs:
       - name: Test with Maven (incl. slow tests)
         shell: bash
         run: ./mvnw -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B --errors clean test --activate-profiles AlsoSlowTests
-
-
-      - name: CodeCov - JavaParser Core
-        uses: codecov/codecov-action@v2.1.0
-        timeout-minutes: 10
-        with:
-          files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
-          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
-          verbose: false # optional (default = false):
-          flags: javaparser-core,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-          env_vars: OS,JDK
-
-      - name: CodeCov - JavaParser Symbol Solver
-        uses: codecov/codecov-action@v2.1.0
-        timeout-minutes: 10
-        with:
-          file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
-          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
-          verbose: false # optional (default = false):
-          flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-          env_vars: OS,JDK
+#
+#
+#      - name: CodeCov - JavaParser Core
+#        uses: codecov/codecov-action@v2.1.0
+#        timeout-minutes: 10
+#        with:
+#          files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
+#          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
+#          verbose: false # optional (default = false):
+#          flags: javaparser-core,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
+#          env_vars: OS,JDK
+#
+#
+#      - name: CodeCov - JavaParser Symbol Solver
+#        uses: codecov/codecov-action@v2.1.0
+#        timeout-minutes: 10
+#        with:
+#          file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
+#          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
+#          verbose: false # optional (default = false):
+#          flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
+#          env_vars: OS,JDK
