@@ -1,0 +1,28 @@
+#+TODO: TODO REFERENCE POSTPONED DONE
+
+* Language Constructs
+** TODO Implement ghost labels
+
+  #+begin_src java
+    //@ lbl: {}
+
+    //@ lbl:
+    a = x;
+  #+end_src
+  
+  Ghost labels should be converted into JmlGhostLabelStmt, which
+  should behave (except for printing) like a LabeledStmts. 
+  
+  Maybe we could reuse the original Java AST class and add a flag.
+  
+** REFERENCE `begin` and `end` markers for marking of blocks.
+  This requires a special treatment and post-processor. 
+
+  #+begin_src java
+    //@ refine <contract>
+    //@ begin
+    int x = xxx;
+    //@ end
+  #+end_src
+
+** REFERENCE Lambda Expressions
