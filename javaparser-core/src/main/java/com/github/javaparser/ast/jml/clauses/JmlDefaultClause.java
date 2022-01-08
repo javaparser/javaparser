@@ -211,6 +211,7 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
         customInitialization();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlDefaultClause setKind(final JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
