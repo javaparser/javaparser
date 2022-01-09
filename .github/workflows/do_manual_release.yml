@@ -17,52 +17,69 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Validate release version input
-        id: validate_version_release_input
+      - name: Validate release version input is not empty
         run: |
-          ## Ensure not empty
-          [[ "${{ inputs.release_version }}" ]] || { echo "release_version input is empty" ; exit 10; }
-
-      - name: Validate next development/snapshot release version input
-        id: validate_next_development_snapshot_version_release_input
+          [[ "${{ github.event.inputs.release_version }}" != "" ]] || { echo "release_version input is empty" ; exit 10; }
+      - name: Validate next development/snapshot version not empty
         run: |
-          ## Ensure not empty
-          [[ "${{ inputs.next_development_snapshot_version }}" ]] || { echo "next_development_snapshot_version input is empty" ; exit 20; }
-          ## Ensure not default value
-          [[ "${{ inputs.next_development_snapshot_version }}"="-SNAPSHOT" ]] || { echo "next_development_snapshot_version input is the default value, must be specified" ; exit 21; }
-          ## Ensure does have `-SNAPSHOT` suffix
-          [[ "${{ inputs.next_development_snapshot_version }}"="*-SNAPSHOT" ]] || { echo "next_development_snapshot_version input must end with `-SNAPSHOT`" ; exit 22; }
+          [[ "${{ github.event.inputs.next_development_snapshot_version }}" != "" ]] || { echo "next_development_snapshot_version input is empty" ; exit 20; }
+      - name: Validate next development/snapshot version not default value
+        run: |
+          [[ "${{ github.event.inputs.next_development_snapshot_version }}"="-SNAPSHOT" ]] || { echo "next_development_snapshot_version input is the default value, must be specified" ; exit 21; }
+      - name: Validate next development/snapshot version does have `-SNAPSHOT` suffix
+        run: |
+          [[ "${{ github.event.inputs.next_development_snapshot_version }}"="*-SNAPSHOT" ]] || { echo "next_development_snapshot_version input must end with `-SNAPSHOT`" ; exit 22; }
   
 
   verify_all_secrets_defined:
     name: Verify that all required secrets are defined
     runs-on: ubuntu-latest
     env:
-      MAVEN_OSSRH_USERNAME: ${{ secrets.MAVEN_OSSRH_USERNAME }}
-      MAVEN_OSSRH_PASSWORD: ${{ secrets.MAVEN_OSSRH_PASSWORD }}
-      MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-      MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      IS_DEFINED__MAVEN_OSSRH_USERNAME: ${{ secrets.MAVEN_OSSRH_USERNAME != null }}
+      IS_DEFINED__MAVEN_OSSRH_PASSWORD: ${{ secrets.MAVEN_OSSRH_PASSWORD != null }}
+      IS_DEFINED__MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY != null }}
+      IS_DEFINED__MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE != null }}
 
+    ## Exit/fail if any of the required secrets are not defined.
     steps:
-      - if: env.MAVEN_OSSRH_USERNAME = null
+      - run: |
+          echo "IS_DEFINED__MAVEN_OSSRH_USERNAME: ${IS_DEFINED__MAVEN_OSSRH_USERNAME}";
+          echo "IS_DEFINED__MAVEN_OSSRH_PASSWORD: ${IS_DEFINED__MAVEN_OSSRH_PASSWORD}";
+          echo "IS_DEFINED__MAVEN_GPG_PRIVATE_KEY: ${IS_DEFINED__MAVEN_GPG_PRIVATE_KEY}";
+          echo "IS_DEFINED__MAVEN_GPG_PASSPHRASE: ${IS_DEFINED__MAVEN_GPG_PASSPHRASE}";
+
+      - name: Validate `MAVEN_OSSRH_USERNAME` is defined
         run: |
-          echo "missing required secret MAVEN_OSSRH_USERNAME"
-          exit 31;
-      - if: env.MAVEN_OSSRH_PASSWORD = null
+          if [ "${{env.IS_DEFINED__MAVEN_OSSRH_USERNAME}}" == 'false' ]; then
+            echo "ERROR: Missing required secret MAVEN_OSSRH_USERNAME";
+            exit 31;
+          fi
+      - name: Validate `MAVEN_OSSRH_PASSWORD` is defined
         run: |
-          echo "missing required secret MAVEN_OSSRH_PASSWORD"
-          exit 32;
-      - if: env.MAVEN_GPG_PRIVATE_KEY = null
+          if [ "${{env.IS_DEFINED__MAVEN_OSSRH_PASSWORD}}" == 'false' ]; then
+            echo "ERROR: Missing required secret MAVEN_OSSRH_PASSWORD";
+            exit 32;
+          fi
+      - name: Validate `MAVEN_GPG_PRIVATE_KEY` is defined
         run: |
-          echo "missing required secret MAVEN_GPG_PRIVATE_KEY"
-          exit 33;
-      - if: env.MAVEN_GPG_PASSPHRASE = null
+          if [ "${{env.IS_DEFINED__MAVEN_GPG_PRIVATE_KEY}}" == 'false' ]; then
+            echo "ERROR: Missing required secret MAVEN_GPG_PRIVATE_KEY";
+            exit 33;
+          fi
+      - name: Validate `MAVEN_GPG_PASSPHRASE` is defined
         run: |
-          echo "missing required secret MAVEN_GPG_PASSPHRASE"
-          exit 34;
+          if [ "${{env.IS_DEFINED__MAVEN_GPG_PASSPHRASE}}" == 'false' ]; then
+            echo "ERROR: Missing required secret MAVEN_GPG_PASSPHRASE";
+            exit 34;
+          fi
+
 
 
   prepare_and_perform_release:
+    ## Only attempt this step if the validation steps have completed
+    needs:
+      - validate_inputs
+      - verify_all_secrets_defined
     name: Prepare and perform a release to OSSRH
     runs-on: ubuntu-latest
     steps:
@@ -81,13 +98,12 @@ jobs:
           server-username: ${{ secrets.MAVEN_OSSRH_USERNAME }}
           server-password: ${{ secrets.MAVEN_OSSRH_PASSWORD }}
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase:  ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
-## TODO: Consider auto-patching the changelog here (currently must be done manually)
+      ## TODO: Consider auto-patching the changelog here (currently must be done manually)
 
       ## Prepare a release using the given release and next development/snapshot release versions
       - name: Prepare Release
-        id: vars
         shell: bash
         run: ./run_release_prepare_non-interactive.sh "${{ github.event.inputs.release_version }}" "${{ github.event.inputs.next_development_snapshot_version }}"
 
@@ -96,7 +112,6 @@ jobs:
 
       ## Perform the release (i.e., submit it to OSSRH)
       - name: Prepare Release (**requires** release:prepare in previous step)
-        id: vars
         shell: bash
         run: ./run_release_perform.sh
 
