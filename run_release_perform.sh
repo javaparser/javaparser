@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+## Exit script if any non-zero exit code (nb: some redundancy with checks below - may remove if exit code checks are thorough)
+set -e
+## Disallow references to non-existent environment variables
+set -u
+## Exit on invalid/bad pipes
+set -o pipefail
+
 #TODO --- Replace all mentions of Bintray
 
 echo "[JavaParser]"
@@ -32,6 +39,12 @@ echo "[JavaParser]"
 
 set -x
 
-./mvnw -e -Darguments="-DskipTests" release:perform
+./mvnw --errors --show-version \
+  -Darguments="-DskipTests" release:perform
+
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing release:perform"
+  exit 10;
+fi
 
 set +x

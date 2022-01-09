@@ -1,0 +1,108 @@
+name: Trigger a Manual Release
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release version (no spaces, no `v` prefix) - example: `3.24.0`'
+        required: true
+        default: ''
+      next_development_snapshot_version:
+        description: 'Next development/snapshot version (no spaces, no `v` prefix, must have `-SNAPSHOT` suffix) - example: `3.24.1-SNAPSHOT'
+        required: false
+        default: '-SNAPSHOT'
+
+jobs:
+  validate_inputs:
+    name: Validate inputs
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate release version input
+        id: validate_version_release_input
+        run: |
+          ## Ensure not empty
+          [[ "${{ inputs.release_version }}" ]] || { echo "release_version input is empty" ; exit 10; }
+
+      - name: Validate next development/snapshot release version input
+        id: validate_next_development_snapshot_version_release_input
+        run: |
+          ## Ensure not empty
+          [[ "${{ inputs.next_development_snapshot_version }}" ]] || { echo "next_development_snapshot_version input is empty" ; exit 20; }
+          ## Ensure not default value
+          [[ "${{ inputs.next_development_snapshot_version }}"="-SNAPSHOT" ]] || { echo "next_development_snapshot_version input is the default value, must be specified" ; exit 21; }
+          ## Ensure does have `-SNAPSHOT` suffix
+          [[ "${{ inputs.next_development_snapshot_version }}"="*-SNAPSHOT" ]] || { echo "next_development_snapshot_version input must end with `-SNAPSHOT`" ; exit 22; }
+  
+
+  verify_all_secrets_defined:
+    name: Verify that all required secrets are defined
+    runs-on: ubuntu-latest
+    env:
+      MAVEN_OSSRH_USERNAME: ${{ secrets.MAVEN_OSSRH_USERNAME }}
+      MAVEN_OSSRH_PASSWORD: ${{ secrets.MAVEN_OSSRH_PASSWORD }}
+      MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+      MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+    steps:
+      - if: env.MAVEN_OSSRH_USERNAME = null
+        run: |
+          echo "missing required secret MAVEN_OSSRH_USERNAME"
+          exit 31;
+      - if: env.MAVEN_OSSRH_PASSWORD = null
+        run: |
+          echo "missing required secret MAVEN_OSSRH_PASSWORD"
+          exit 32;
+      - if: env.MAVEN_GPG_PRIVATE_KEY = null
+        run: |
+          echo "missing required secret MAVEN_GPG_PRIVATE_KEY"
+          exit 33;
+      - if: env.MAVEN_GPG_PASSPHRASE = null
+        run: |
+          echo "missing required secret MAVEN_GPG_PASSPHRASE"
+          exit 34;
+
+
+  prepare_and_perform_release:
+    name: Prepare and perform a release to OSSRH
+    runs-on: ubuntu-latest
+    steps:
+
+      ## Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.4.0
+
+      ## Setup Java 11 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 11
+          server-id: maven # Value of the distributionManagement/repository/id field of the pom.xml
+          server-username: ${{ secrets.MAVEN_OSSRH_USERNAME }}
+          server-password: ${{ secrets.MAVEN_OSSRH_PASSWORD }}
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase:  ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+## TODO: Consider auto-patching the changelog here (currently must be done manually)
+
+      ## Prepare a release using the given release and next development/snapshot release versions
+      - name: Prepare Release
+        id: vars
+        shell: bash
+        run: ./run_release_prepare_non-interactive.sh "${{ github.event.inputs.release_version }}" "${{ github.event.inputs.next_development_snapshot_version }}"
+
+      ## TODO: Git push after release:prepare (currently defaults to not push)
+
+
+      ## Perform the release (i.e., submit it to OSSRH)
+      - name: Prepare Release (**requires** release:prepare in previous step)
+        id: vars
+        shell: bash
+        run: ./run_release_perform.sh
+
+
+
+## Note that separate action exists which is triggered by pushing a
+## tag name matching the release pattern, therefore is not required here
+
+## TODO: Consider triggering a notifications here
