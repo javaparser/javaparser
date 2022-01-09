@@ -82,6 +82,10 @@ jobs:
       - verify_all_secrets_defined
     name: Prepare and perform a release to OSSRH
     runs-on: ubuntu-latest
+    env:
+      ENV_MAVEN_OSSRH_USERNAME: ${{ secrets.MAVEN_OSSRH_USERNAME }}
+      ENV_MAVEN_OSSRH_PASSWORD: ${{ secrets.MAVEN_OSSRH_PASSWORD }}
+      ENV_MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
     steps:
 
       ## Check out current repository
@@ -94,20 +98,31 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-          server-id: maven # Value of the distributionManagement/repository/id field of the pom.xml
-          server-username: ${{ secrets.MAVEN_OSSRH_USERNAME }}
-          server-password: ${{ secrets.MAVEN_OSSRH_PASSWORD }}
+          cache: 'maven'
+          server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
+          server-username: ENV_MAVEN_OSSRH_USERNAME
+          server-password: ENV_MAVEN_OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          gpg-passphrase: ENV_MAVEN_GPG_PASSPHRASE
 
       ## TODO: Consider auto-patching the changelog here (currently must be done manually)
+
 
       ## Prepare a release using the given release and next development/snapshot release versions
       - name: Prepare Release
         shell: bash
         run: ./run_release_prepare_non-interactive.sh "${{ github.event.inputs.release_version }}" "${{ github.event.inputs.next_development_snapshot_version }}"
 
-      ## TODO: Git push after release:prepare (currently defaults to not push)
+
+      ## Perform the release (i.e., submit it to OSSRH)
+      - name: Push release tag and commits
+        shell: bash
+        run: |
+          ## Set username/email combination
+          ## https://github.community/t/github-actions-bot-email-address/17204/5
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git push --follow-tags
 
 
       ## Perform the release (i.e., submit it to OSSRH)
