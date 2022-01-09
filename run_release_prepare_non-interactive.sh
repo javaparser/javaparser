@@ -54,7 +54,6 @@ fi
 
 ## Do a non-interactive release, using values passed as script arguments
 ./mvnw -e --batch-mode -Darguments="-DskipTests" release:prepare \
-  -DdryRun=true \
   -Dtag="${git_tag}" \
   -DreleaseVersion="${release_version}" \
   -DdevelopmentVersion="${new_development_version}"
