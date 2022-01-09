@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Exit script if any non-zero exit code (nb: some redundancy with checks below)
+## Exit script if any non-zero exit code (nb: some redundancy with checks below - may remove if exit code checks are thorough)
 set -e
 ## Disallow references to non-existent environment variables
 set -u
@@ -62,10 +62,12 @@ set -x
 ## Ensure that we have the latest version of the code
 ## TODO: Consider removing this?
 git pull
+
 if [ "$?" -ne 0 ]; then
   echo "Error when performing clean"
   exit 101
 fi
+
 
 ## Start the release from a clean start
 ./mvnw -e clean
@@ -74,6 +76,7 @@ if [ "$?" -ne 0 ]; then
   echo "Error when performing clean"
   exit 102
 fi
+
 
 ## Do a non-interactive release, using values passed as script arguments
 ./mvnw -e --batch-mode -Darguments="-DskipTests" release:prepare \
@@ -85,6 +88,7 @@ if [ "$?" -ne 0 ]; then
   echo "Error when performing release:prepare"
   exit 103
 fi
+
 
 set +x
 

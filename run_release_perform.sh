@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Exit script if any non-zero exit code (nb: some redundancy with checks below)
+## Exit script if any non-zero exit code (nb: some redundancy with checks below - may remove if exit code checks are thorough)
 set -e
 ## Disallow references to non-existent environment variables
 set -u
@@ -40,6 +40,7 @@ echo "[JavaParser]"
 set -x
 
 ./mvnw -e -Darguments="-DskipTests" release:perform
+
 if [ "$?" -ne 0 ]; then
   echo "Error when performing release:perform"
   exit 10;
