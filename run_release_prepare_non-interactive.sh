@@ -40,7 +40,7 @@ fi
 
 ## Pass arguments into readable variable names
 release_version=$1
-next_development_snapshot_version=$1
+next_development_snapshot_version=$2
 
 ## Use a standard version for the git tag of each release:
 git_tag="javaparser-parent-${release_version}"
