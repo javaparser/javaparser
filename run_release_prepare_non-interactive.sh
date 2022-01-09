@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+## Exit script if any non-zero exit code (nb: some redundancy with checks below)
+set -e
+## Disallow references to non-existent environment variables
+set -u
+## Exit on invalid/bad pipes
+set -o pipefail
+
+
 echo "[JavaParser]"
 echo "[JavaParser]"
 echo "[JavaParser]: See also: http://github.com/javaparser/javaparser/wiki/Release-Process"

@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+## Exit script if any non-zero exit code (nb: some redundancy with checks below)
+set -e
+## Disallow references to non-existent environment variables
+set -u
+## Exit on invalid/bad pipes
+set -o pipefail
+
 #TODO --- Replace all mentions of Bintray
 
 echo "[JavaParser]"
