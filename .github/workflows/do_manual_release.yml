@@ -91,6 +91,8 @@ jobs:
       ## Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.4.0
+        with: 
+          token: ${{ secrets.RELEASE_PAT }}
 
       ## Setup Java 11 environment for the next steps
       - name: Setup Java
