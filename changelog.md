@@ -46,6 +46,7 @@ Version 3.24.0
 
 ### Developer Changes
 
+* Updated release script to be non-interactive, and added option to use a manually-triggered GitHub Action to build a release (PR [#3462](https://github.com/javaparser/javaparser/pull/3462) by [@MysterAitch](https://github.com/MysterAitch))
 * chore(deps): update dependency org.apache.maven.plugins:maven-jar-plugin to v3.2.1 (PR [#3459](https://github.com/javaparser/javaparser/pull/3459) by [@renovate[bot]](https://github.com/apps/renovate))
 * chore(deps): update dependency org.codehaus.mojo:build-helper-maven-plugin to v3.3.0 (PR [#3458](https://github.com/javaparser/javaparser/pull/3458) by [@renovate[bot]](https://github.com/apps/renovate))
 * chore(deps): update dependency org.assertj:assertj-core to v3.22.0 (PR [#3457](https://github.com/javaparser/javaparser/pull/3457) by [@renovate[bot]](https://github.com/apps/renovate))
