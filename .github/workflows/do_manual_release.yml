@@ -30,7 +30,7 @@ jobs:
         run: |
           [[ "${{ github.event.inputs.next_development_snapshot_version }}"="*-SNAPSHOT" ]] || { echo "next_development_snapshot_version input must end with `-SNAPSHOT`" ; exit 22; }
   
-
+  
   verify_all_secrets_defined:
     name: Verify that all required secrets are defined
     runs-on: ubuntu-latest
@@ -105,6 +105,17 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: ENV_MAVEN_GPG_PASSPHRASE
 
+
+      ## Setup git (required to perform commits during the release process)
+      - name: Setup git
+        shell: bash
+        run: |
+          ## Set username/email combination
+          ## https://github.community/t/github-actions-bot-email-address/17204/5
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      
+      
       ## TODO: Consider auto-patching the changelog here (currently must be done manually)
 
 
@@ -117,12 +128,7 @@ jobs:
       ## Perform the release (i.e., submit it to OSSRH)
       - name: Push release tag and commits
         shell: bash
-        run: |
-          ## Set username/email combination
-          ## https://github.community/t/github-actions-bot-email-address/17204/5
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git push --follow-tags
+        run: git push --follow-tags
 
 
       ## Perform the release (i.e., submit it to OSSRH)
