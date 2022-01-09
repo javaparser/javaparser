@@ -1,0 +1,68 @@
+name: Trigger a Manual Release
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release version (no spaces, no `v` prefix) - example: `3.24.0`'
+        required: true
+        default: ''
+      next_development_snapshot_version:
+        description: 'Next development/snapshot version (no spaces, no `v` prefix, must have `-SNAPSHOT` suffix) - example: `3.24.1-SNAPSHOT'
+        required: false
+        default: '-SNAPSHOT'
+
+jobs:
+  validate_inputs:
+    name: Confirm not using defaults
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate release version input
+        run: |
+          ## Ensure not empty
+          [[ "${{ inputs.release_version }}" ]] || { echo "release_version input is empty" ; exit 100; }
+
+      - name: Validate next development/snapshot release version input
+        run: |
+          ## Ensure not empty
+          [[ "${{ inputs.next_development_snapshot_version }}" ]] || { echo "next_development_snapshot_version input is empty" ; exit 200; }
+          ## Ensure not default value
+          [[ "${{ inputs.next_development_snapshot_version }}"="-SNAPSHOT" ]] || { echo "next_development_snapshot_version input is the default value, must be specified" ; exit 201; }
+          ## Ensure does have `-SNAPSHOT` suffix
+          [[ "${{ inputs.next_development_snapshot_version }}"="*-SNAPSHOT" ]] || { echo "next_development_snapshot_version input must end with `-SNAPSHOT`" ; exit 202; }
+  
+  
+
+  prepare_and_perform_release:
+    name: Prepare and perform a release to OSSRH
+    runs-on: ubuntu-latest
+    steps:
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.4.0
+
+      # Setup Java 11 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 11
+
+## TODO/FIXME: Setup Maven/GPG correctly with access to secrets/credentials
+
+      # Prepare a release using the given release and next development/snapshot release versions
+      - name: Prepare Release
+        id: vars
+        shell: bash
+        run: ./run_release_prepare_non-interactive.sh "${{ github.event.inputs.release_version }}" "${{ github.event.inputs.next_development_snapshot_version }}"
+
+
+      # Perform the release (i.e., submit it to OSSRH)
+      - name: Prepare Release (**requires** release:prepare in previous step)
+        id: vars
+        shell: bash
+        run: ./run_release_perform.sh
+
+
+## TODO: Consider triggering a notification
