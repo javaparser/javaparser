@@ -47,12 +47,22 @@ git pull
 ## Start the release from a clean start
 ./mvnw -e clean
 
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing clean"
+  exit 1
+fi
+
 ## Do a non-interactive release, using values passed as script arguments
 ./mvnw -e --batch-mode -Darguments="-DskipTests" release:prepare \
   -DdryRun=true \
   -Dtag="${git_tag}" \
   -DreleaseVersion="${release_version}" \
   -DdevelopmentVersion="${new_development_version}"
+
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing release:prepare"
+  exit 1
+fi
 
 set +x
 
