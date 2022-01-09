@@ -38,6 +38,17 @@ new_development_version=$1
 git_tag="javaparser-parent-${release_version}"
 
 
+echo "[JavaParser]"
+echo "[JavaParser] ================================================================"
+echo "[JavaParser]: PREPARING RELEASE"
+echo "[JavaParser]:            Release Version: ${release_version}"
+echo "[JavaParser]:            Release Git Tag: ${git_tag}"
+echo "[JavaParser]:      Next Snapshot Version: ${new_development_version} "
+echo "[JavaParser] ================================================================"
+echo "[JavaParser]"
+
+
+
 set -x
 
 ## Ensure that we have the latest version of the code
