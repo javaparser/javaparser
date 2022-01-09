@@ -1,13 +1,58 @@
-Next Release (Version 3.23.2)
+Next Release (Version 3.24.0)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/187?closed=1)
 
 ### Added
+
+* Add test cases for NoChange API (PR [#3431](https://github.com/javaparser/javaparser/pull/3431) by [@jlerbsc](https://github.com/jlerbsc))
+
 ### Changed
-### Deprecated
-### Removed
+
+* Minor refactoring on LexicalreservingPrinter especially in the class Difference (PR [#3424](https://github.com/javaparser/javaparser/pull/3424) by [@jlerbsc](https://github.com/jlerbsc))
+* Update the readme with `@pedrombmachado` 's suggestions (#3357), and also to switch from `mvn` to `mvnw` within some sample instructions (PR [#3420](https://github.com/javaparser/javaparser/pull/3420) by [@MysterAitch](https://github.com/MysterAitch))
+* Reducing deeply nested logic in MethodResolutionLogic (work in progress) (PR [#3411](https://github.com/javaparser/javaparser/pull/3411) by [@jlerbsc](https://github.com/jlerbsc))
+* Improved `RemoveMethodGenerator` and `ReplaceMethodGenerator` to only override super when needed. (PR [#3248](https://github.com/javaparser/javaparser/pull/3248) by [@4everTheOne](https://github.com/4everTheOne))
+* Reduced complexity for methods in JavaParserFacade (PR [#3204](https://github.com/javaparser/javaparser/pull/3204) by [@4everTheOne](https://github.com/4everTheOne))
+
 ### Fixed
-### Security
+
+* Add a missing hashCode() method (PR [#3432](https://github.com/javaparser/javaparser/pull/3432) by [@msridhar](https://github.com/msridhar))
+* Call orElse() instead of orElseGet() (PR [#3430](https://github.com/javaparser/javaparser/pull/3430) by [@msridhar](https://github.com/msridhar))
+* Issue #3419 - Fixed bug in `Difference.java`  (PR [#3428](https://github.com/javaparser/javaparser/pull/3428) by [@4everTheOne](https://github.com/4everTheOne))
+* Issue #3406 ParseProblemException when parsing char '\u005cn' (PR [#3407](https://github.com/javaparser/javaparser/pull/3407) by [@apixandru](https://github.com/apixandru))
+* Fix issue 3399 Failed to resolve methods that evaluate as argument (PR [#3401](https://github.com/javaparser/javaparser/pull/3401) by [@jlerbsc](https://github.com/jlerbsc))
+* fix resoure leak due to File.walk (PR [#3398](https://github.com/javaparser/javaparser/pull/3398) by [@lujiefsi](https://github.com/lujiefsi))
+* Fix issue 2259 Type resolution issue when type of formal parameter is Object (PR [#3397](https://github.com/javaparser/javaparser/pull/3397) by [@jlerbsc](https://github.com/jlerbsc))
+* Fixes an issue where JavaParserTypeSolver ignores the character encoding configuration. (PR [#3396](https://github.com/javaparser/javaparser/pull/3396) by [@crucoba](https://github.com/crucoba))
+* Issue 3272 resolve lambda exp type (PR [#3273](https://github.com/javaparser/javaparser/pull/3273) by [@si-e](https://github.com/si-e))
+* Issue 3200 this exp in anonymous class (PR [#3268](https://github.com/javaparser/javaparser/pull/3268) by [@si-e](https://github.com/si-e))
+
+### Developer Changes
+
+* chore(deps): update junit5 monorepo to v5.8.2 (PR [#3425](https://github.com/javaparser/javaparser/pull/3425) by [@renovate[bot]](https://github.com/apps/renovate))
+* Update / document `codecov.yml` (PR [#3418](https://github.com/javaparser/javaparser/pull/3418) by [@MysterAitch](https://github.com/MysterAitch))
+* chore(deps): update actions/cache action to v2.1.7 (PR [#3417](https://github.com/javaparser/javaparser/pull/3417) by [@renovate[bot]](https://github.com/apps/renovate))
+* Bump bnd-maven-plugin from 6.0.0 to 6.1.0 (PR [#3416](https://github.com/javaparser/javaparser/pull/3416) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency biz.aqute.bnd:bnd-maven-plugin to v6.1.0 (PR [#3414](https://github.com/javaparser/javaparser/pull/3414) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.squareup.okhttp3:okhttp to v4.9.3 (PR [#3413](https://github.com/javaparser/javaparser/pull/3413) by [@renovate[bot]](https://github.com/apps/renovate))
+* Reducing deeply nested logic in MethodResolutionLogic (PR [#3409](https://github.com/javaparser/javaparser/pull/3409) by [@jlerbsc](https://github.com/jlerbsc))
+* chore(deps): update actions/checkout action to v2.4.0 (PR [#3402](https://github.com/javaparser/javaparser/pull/3402) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v2.3.5 (PR [#3395](https://github.com/javaparser/javaparser/pull/3395) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v4 (PR [#3393](https://github.com/javaparser/javaparser/pull/3393) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@crucoba](https://github.com/crucoba)
+* [@msridhar](https://github.com/msridhar)
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@lujiefsi](https://github.com/lujiefsi)
+* [@apixandru](https://github.com/apixandru)
+* [@si-e](https://github.com/si-e)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@4everTheOne](https://github.com/4everTheOne)
+
 
 
 Version 3.23.1
