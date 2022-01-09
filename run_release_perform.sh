@@ -33,5 +33,9 @@ echo "[JavaParser]"
 set -x
 
 ./mvnw -e -Darguments="-DskipTests" release:perform
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing release:perform"
+  exit 10;
+fi
 
 set +x
