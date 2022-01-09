@@ -32,7 +32,7 @@ fi
 
 ## Pass arguments into readable variable names
 release_version=$1
-new_development_version=$1
+next_development_snapshot_version=$1
 
 ## Use a standard version for the git tag of each release:
 git_tag="javaparser-parent-${release_version}"
@@ -43,7 +43,7 @@ echo "[JavaParser] =============================================================
 echo "[JavaParser]: PREPARING RELEASE"
 echo "[JavaParser]:            Release Version: ${release_version}"
 echo "[JavaParser]:            Release Git Tag: ${git_tag}"
-echo "[JavaParser]:      Next Snapshot Version: ${new_development_version} "
+echo "[JavaParser]:      Next Snapshot Version: ${next_development_snapshot_version} "
 echo "[JavaParser] ================================================================"
 echo "[JavaParser]"
 
@@ -71,7 +71,7 @@ fi
 ./mvnw -e --batch-mode -Darguments="-DskipTests" release:prepare \
   -Dtag="${git_tag}" \
   -DreleaseVersion="${release_version}" \
-  -DdevelopmentVersion="${new_development_version}"
+  -DdevelopmentVersion="${next_development_snapshot_version}"
 
 if [ "$?" -ne 0 ]; then
   echo "Error when performing release:prepare"
