@@ -61,7 +61,7 @@ set -x
 
 
 ## Start the release from a clean start
-./mvnw -e clean
+./mvnw --errors --show-version clean
 
 if [ "$?" -ne 0 ]; then
   echo "Error when performing clean"
@@ -70,10 +70,12 @@ fi
 
 
 ## Do a non-interactive release, using values passed as script arguments
-./mvnw -e --batch-mode -Darguments="-DskipTests" release:prepare \
-  -Dtag="${git_tag}" \
-  -DreleaseVersion="${release_version}" \
-  -DdevelopmentVersion="${next_development_snapshot_version}"
+## Note: The flag `-Darguments` is used to pass arguments to submodules
+./mvnw --errors --show-version --batch-mode \
+  -Darguments="-DskipTests" release:prepare \
+    -Dtag="${git_tag}" \
+    -DreleaseVersion="${release_version}" \
+    -DdevelopmentVersion="${next_development_snapshot_version}"
 
 if [ "$?" -ne 0 ]; then
   echo "Error when performing release:prepare"

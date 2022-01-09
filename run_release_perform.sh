@@ -39,7 +39,8 @@ echo "[JavaParser]"
 
 set -x
 
-./mvnw -e -Darguments="-DskipTests" release:perform
+./mvnw --errors --show-version \
+  -Darguments="-DskipTests" release:perform
 
 if [ "$?" -ne 0 ]; then
   echo "Error when performing release:perform"
