@@ -59,15 +59,6 @@ echo "[JavaParser]"
 
 set -x
 
-## Ensure that we have the latest version of the code
-## TODO: Consider removing this?
-git pull
-
-if [ "$?" -ne 0 ]; then
-  echo "Error when performing clean"
-  exit 101
-fi
-
 
 ## Start the release from a clean start
 ./mvnw -e clean
