@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.jml.clauses.JmlContracts;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -34,8 +33,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -47,10 +49,15 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     private NodeList<Statement> statements;
 
+    @OptionalProperty
     private NodeList<JmlContracts> contracts = new NodeList<>();
 
     public BlockStmt() {
         this(null, new NodeList<>(), new NodeList<>());
+    }
+
+    public BlockStmt(NodeList<Statement> statements) {
+        this(null, statements, new NodeList<>());
     }
 
     @AllFieldsConstructor
