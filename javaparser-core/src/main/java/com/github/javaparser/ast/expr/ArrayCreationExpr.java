@@ -57,7 +57,7 @@ public class ArrayCreationExpr extends Expression {
     private ArrayInitializerExpr initializer;
 
     public ArrayCreationExpr() {
-        this(null, new ClassOrInterfaceType(), new NodeList<>(), new ArrayInitializerExpr());
+        this(null, new ClassOrInterfaceType(), new NodeList<>(new ArrayCreationLevel()), new ArrayInitializerExpr());
     }
 
     @AllFieldsConstructor
@@ -66,7 +66,7 @@ public class ArrayCreationExpr extends Expression {
     }
 
     public ArrayCreationExpr(Type elementType) {
-        this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
+        this(null, elementType, new NodeList<>(new ArrayCreationLevel()), new ArrayInitializerExpr());
     }
 
     /**
