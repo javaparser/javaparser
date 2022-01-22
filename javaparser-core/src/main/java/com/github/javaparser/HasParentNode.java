@@ -83,23 +83,6 @@ public interface HasParentNode<T> extends Observable {
         return findAncestor(predicate, type);
     }
     
-//    /**
-//     * Walks the parents of this node and returns the first node of type {@code type} that matches {@code predicate}, or
-//     * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
-//     * {@code NodeWith...} interface types.
-//     */
-//    default <N> Optional<N> findAncestor(Predicate<N> predicate, Class<N>... types) {
-//        Optional<Node> possibleParent = getParentNode();
-//        while (possibleParent.isPresent()) {
-//            Node parent = possibleParent.get();
-//            if (type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))) {
-//                return Optional.of(type.cast(parent));
-//            }
-//            possibleParent = parent.getParentNode();
-//        }
-//        return Optional.empty();
-//    }
-//    
     /**
      * Walks the parents of this node and returns the first node that matches one of types {@code types}, or
      * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
