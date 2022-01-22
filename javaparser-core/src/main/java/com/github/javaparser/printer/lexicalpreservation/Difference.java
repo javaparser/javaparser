@@ -25,15 +25,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
@@ -237,7 +229,8 @@ public class Difference {
                 originalIndex++;
                 diffIndex++;
             } else {
-                throw new UnsupportedOperationException(diffElement.getClass().getSimpleName());
+                // let's forget this element
+                diffIndex++;
             }
 
             isLeftOverElement = true;
