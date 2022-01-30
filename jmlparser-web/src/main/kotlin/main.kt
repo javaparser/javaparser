@@ -1,14 +1,13 @@
 import com.github.javaparser.JavaParser
 import com.github.javaparser.JavaParserBuild
 import com.github.javaparser.ParserConfiguration
+import com.github.javaparser.Problem
 import com.github.javaparser.ast.Jmlish
 import com.github.javaparser.ast.Node
 import com.github.javaparser.metamodel.NodeMetaModel
 import com.github.javaparser.metamodel.PropertyMetaModel
 import com.github.javaparser.printer.DefaultPrettyPrinter
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration
-import com.github.jmlparser.lint.JmlLintingConfig
-import com.github.jmlparser.lint.JmlLintingFacade
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
@@ -139,11 +138,11 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.renderPage(params: Pa
                     }
                 }
 
-                val problems =
-                    if (result.isSuccessful)
-                        JmlLintingFacade.lint(JmlLintingConfig(), Collections.singleton(result.result.get()))
+                val problems = Collections.emptyList<Problem>()
+                    /*if (result.isSuccessful)
+                        //JmlLintingFacade.lint(JmlLintingConfig(), Collections.singleton(result.result.get()))
                     else
-                        Collections.emptyList()
+                        Collections.emptyList()*/
 
                 accordion("Linting Issues (${problems.size})", isOpen = problems.isNotEmpty()) {
                     if (result.isSuccessful) {
