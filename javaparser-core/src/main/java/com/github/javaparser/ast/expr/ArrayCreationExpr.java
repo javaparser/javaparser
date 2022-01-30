@@ -57,7 +57,7 @@ public class ArrayCreationExpr extends Expression {
     private ArrayInitializerExpr initializer;
 
     public ArrayCreationExpr() {
-        this(null, new ClassOrInterfaceType(), new NodeList<>(), new ArrayInitializerExpr());
+        this(null, new ClassOrInterfaceType(), new NodeList<>(new ArrayCreationLevel()), new ArrayInitializerExpr());
     }
 
     @AllFieldsConstructor
@@ -66,7 +66,7 @@ public class ArrayCreationExpr extends Expression {
     }
 
     public ArrayCreationExpr(Type elementType) {
-        this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
+        this(null, elementType, new NodeList<>(new ArrayCreationLevel()), new ArrayInitializerExpr());
     }
 
     /**
@@ -148,9 +148,13 @@ public class ArrayCreationExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
-        if (this.levels != null)
+        if (this.levels != null) {
             this.levels.setParentNode(null);
+        }
         this.levels = levels;
+        if (this.levels.isEmpty()) {
+            this.levels = new NodeList<>(new ArrayCreationLevel());
+        }
         setAsParentNodeOf(levels);
         return this;
     }
@@ -204,7 +208,7 @@ public class ArrayCreationExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ArrayCreationExpr removeInitializer() {
-        return setInitializer((ArrayInitializerExpr) null);
+        return setInitializer(null);
     }
 
     @Override
