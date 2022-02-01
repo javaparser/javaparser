@@ -312,6 +312,10 @@ public class ParserConfiguration {
                                 new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
             }
         });
+
+        JmlProcessor jmlProcessor = new JmlProcessor();
+        postProcessors.add(jmlProcessor);
+
         postProcessors.add((result, configuration) -> {
             LanguageLevel languageLevel = getLanguageLevel();
             if (languageLevel != null) {
@@ -336,8 +340,6 @@ public class ParserConfiguration {
             }
         });
 
-        JmlProcessor jmlProcessor = new JmlProcessor();
-        postProcessors.add(jmlProcessor);
     }
 
     public boolean isAttributeComments() {

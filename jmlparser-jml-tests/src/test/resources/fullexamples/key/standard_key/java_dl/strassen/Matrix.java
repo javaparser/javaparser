@@ -28,8 +28,8 @@ final /* @ weigl: pure on classes? pure @*/ class Matrix {
 	this.c =c; this.d =d;
     }
 
-    //@ strictly_pure
     //@ measured_by size();
+    //@ strictly_pure
     public boolean equals(Matrix o) {
 	 if (size()==2) {
 	     if (o.size()==2) {

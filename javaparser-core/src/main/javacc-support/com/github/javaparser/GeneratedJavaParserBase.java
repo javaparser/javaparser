@@ -111,6 +111,21 @@ abstract class GeneratedJavaParserBase {
     /**
      * Return a TokenRange spanning from begin to end
      */
+    TokenRange range(NodeList<? extends Node> list) {
+        if (storeTokens && list.isNonEmpty()) {
+            final Optional<? extends Node> first = list.getFirst();
+            final Optional<? extends Node> last = list.getLast();
+            if (last.isPresent() && first.isPresent()) {
+                return range(first.get(), last.get());
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
     TokenRange range(Node begin, JavaToken end) {
         if (storeTokens) {
             return new TokenRange(begin.getTokenRange().get().getBegin(), end);

@@ -6336,14 +6336,14 @@ JmlDocDeclaration JmlDocMember():
 { NodeList<com.github.javaparser.ast.jml.doc.JmlDoc> seq = new NodeList<>(); }
 {
   seq = JmlDocs()
-  { return new JmlDocDeclaration(seq); }
+  { return new JmlDocDeclaration(range(seq), seq); }
 }
 
 JmlDocStmt JmlDocStatements():
 { NodeList<JmlDoc> seq = new NodeList<>(); }
 {
   seq = JmlDocs()
-  { return  new JmlDocStmt(seq); }
+  { return  new JmlDocStmt(range(seq), seq); }
 }
 
 void JmlDocModifier(NodeList<Modifier> modifiers):

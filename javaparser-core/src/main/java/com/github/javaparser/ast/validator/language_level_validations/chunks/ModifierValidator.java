@@ -30,6 +30,8 @@ import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlMethodDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
+import com.github.javaparser.ast.jml.doc.JmlDocModifier;
 import com.github.javaparser.ast.modules.ModuleRequiresDirective;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
@@ -233,7 +235,8 @@ public class ModifierValidator extends VisitorValidator {
             allowedModifiers = removeModifierFromArray(STRICTFP, allowedModifiers);
         }
         for (Modifier m : n.getModifiers()) {
-            if (!arrayContains(allowedModifiers, m.getKeyword())) {
+            boolean isJml = m.getKeyword() instanceof JmlDocModifier;
+            if (!arrayContains(allowedModifiers, m.getKeyword()) && !isJml) {
                 //reporter.report(n, "'%s' is not allowed at %s.", m.getKeyword().asString(), n.getClass().getSimpleName());
                 reporter.report(n, "'%s' is not allowed here.", m.getKeyword().asString());
             }

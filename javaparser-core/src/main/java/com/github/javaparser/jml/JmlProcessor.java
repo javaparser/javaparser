@@ -35,11 +35,14 @@ import java.util.Optional;
 public class JmlProcessor implements ParseResult.PostProcessor {
     @Override
     public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-
-        final Optional<? extends Node> r = result.getResult();
-        final Optional<CommentsCollection> comments = result.getCommentsCollection();
-        if (configuration.isProcessJml() && r.isPresent() && comments.isPresent()) {
-            r.get().accept(new JmlReplaceVisitor(configuration, result.getProblems()), null);
+        if (configuration.isProcessJml()) {
+            final Optional<? extends Node> r = result.getResult();
+            final Optional<CommentsCollection> comments = result.getCommentsCollection();
+            if (r.isPresent() && comments.isPresent()) {
+                r.get().accept(new JmlReplaceVisitor(configuration, result.getProblems()), null);
+            }
+            JmlWarnRemaingJmlDoc warn = new JmlWarnRemaingJmlDoc();
+            warn.process(result, configuration);
         }
     }
 
@@ -145,9 +148,7 @@ public class JmlProcessor implements ParseResult.PostProcessor {
 
         private int handleJmlStatementLevel(BlockStmt p, JmlDocStmt n, int pos) {
             ArbitraryNodeContainer t = parseJmlMethodLevel(n.getJmlComments());
-            if (t == null) {
-                assert false;    //TODO Error handling
-            }
+            assert t != null;    //TODO Error handling
 
             // remove this node from the AST
             n.remove();
@@ -181,10 +182,10 @@ public class JmlProcessor implements ParseResult.PostProcessor {
         public Visitable visit(Modifier n, Void arg) {
             if (n.getKeyword() instanceof JmlDocModifier) {
                 handleModifier(n);
+                return null;
             } else {
-                //super.visit(n, arg);
+                return super.visit(n, arg);
             }
-            return n;
         }
 
         private void handleModifier(Modifier n) {
@@ -256,6 +257,4 @@ public class JmlProcessor implements ParseResult.PostProcessor {
         node.getComment().ifPresent(it -> System.out.println(node.getClass() + " :: " + it.getContent()));
         node.getChildNodes().forEach(it -> process(it));
     }
-
-
 }

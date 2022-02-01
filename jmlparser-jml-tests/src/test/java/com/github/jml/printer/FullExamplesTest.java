@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,14 +31,13 @@ import java.util.stream.Stream;
  * @author Alexander Weigl
  * @version 1 (7/2/21)
  */
-@Disabled
 public class FullExamplesTest {
     private final JavaParser jpb;
-    private final StoreJMLComments storeProcessor = new StoreJMLComments();
-    private final ParserConfiguration config;
 
     {
-        config = new ParserConfiguration();
+        //private final StoreJMLComments storeProcessor = new StoreJMLComments()
+        ParserConfiguration config = new ParserConfiguration();
+        config.setProcessJml(true);
         config.setStoreTokens(true);
         jpb = new JavaParser(config);
     }
@@ -121,18 +121,26 @@ public class FullExamplesTest {
                 .collect(Collectors.toSet());
     }
 
-
     static int prefixLength = dir.toString().length();
 
     @TestFactory
-    public Stream<DynamicTest> createTests() throws IOException {
+    Stream<DynamicTest> createTestedJmlTests() throws IOException {
+        return createTests(it -> it.toString().contains("/tested/"));
+    }
+
+    @TestFactory
+    Stream<DynamicTest> createKeYTests() throws IOException {
+        return createTests(it -> it.toString().contains("/key/"));
+    }
+
+    Stream<DynamicTest> createTests(Predicate<Path> pred) throws IOException {
         //System.out.format("Folder: %s\n", dir);
         Assumptions.assumeTrue(dir.exists());
         Stream<Path> files = Files.walk(dir.toPath());
         return files
                 .filter(it -> it.toString().endsWith(".java"))
-                //.filter(it -> it.toString().contains("openjml"))
                 .filter(it -> !it.toString().contains("InformationFlow"))
+                .filter(pred)
                 .map(it -> {
                             String name = it.toString().substring(prefixLength);
                             return DynamicTest.dynamicTest(name, () -> testParse(it));
@@ -147,7 +155,7 @@ public class FullExamplesTest {
         result.getProblems().forEach(it -> {
             int line = it.getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1)).orElse(-1);
             System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toUri(), line);
-            it.getCause().ifPresent(c -> c.printStackTrace());
+            it.getCause().ifPresent(Throwable::printStackTrace);
         });
         //storeProcessor.process(result, config);
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
