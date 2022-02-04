@@ -92,14 +92,6 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return this;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
     public String asString() {
         return identifier;
     }
@@ -114,13 +106,5 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SimpleNameMetaModel getMetaModel() {
         return JavaParserMetaModel.simpleNameMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 }

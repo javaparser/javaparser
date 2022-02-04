@@ -338,7 +338,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         if (this.isJavaLangObject()) {
             return ancestors;
         }
-
+        
         Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
         if (!qualifiedName.isPresent()) {
             return ancestors;
@@ -389,7 +389,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration impleme
         if (resolvedReferenceTypeDeclaration.isPresent()) {
             ResolvedTypeDeclaration rtd = resolvedReferenceTypeDeclaration.get().asType();
             // do not consider an inner or nested class as an ancestor
-            return !rtd.getQualifiedName().contains(ownQualifiedName);
+            return !rtd.hasInternalType(ownQualifiedName);
         }
         return false;
     }

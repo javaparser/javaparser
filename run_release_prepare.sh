@@ -26,8 +26,19 @@ set -x
 
 git pull
 
-./mvnw -e clean
-./mvnw -e -Darguments="-DskipTests" release:prepare
+./mvnw --errors --show-version clean
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing clean"
+  exit 1
+fi
+
+./mvnw --errors --show-version --batch-mode \
+  -Darguments="-DskipTests" release:prepare
+
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing release:prepare"
+  exit 1
+fi
 
 set +x
 

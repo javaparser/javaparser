@@ -1,20 +1,22 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 
 public class WalkFindTest {
     @Test
@@ -29,6 +31,18 @@ public class WalkFindTest {
         CompilationUnit cu = parse("class X{int x;}");
         SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0).getName();
         assertEquals("int x;", x.findAncestor(FieldDeclaration.class).get().toString());
+    }
+    
+    @Test
+    void findParentFromTypes() {
+        CompilationUnit cu = parse("class X{Integer x;}");
+        VariableDeclarator vd = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0);
+        assertEquals(FieldDeclaration.class.getName(),
+                vd.findAncestor(new Class[] { CompilationUnit.class, ClassOrInterfaceDeclaration.class, FieldDeclaration.class }).get().getClass()
+                        .getName());
+        assertEquals(ClassOrInterfaceDeclaration.class.getName(),
+                vd.findAncestor(new Class[] { CompilationUnit.class, ClassOrInterfaceDeclaration.class }).get().getClass()
+                        .getName());
     }
 
     @Test

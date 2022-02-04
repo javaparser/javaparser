@@ -29,6 +29,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 /**
  * Generates the bnd.bnd file in javaparser-core.
@@ -45,20 +46,22 @@ public class BndGenerator extends Generator {
         Path root = sourceRoot.getRoot();
         Path projectRoot = root.getParent().getParent().getParent();
         String lineSeparator = System.getProperty("line.separator");
-        String packagesList = Files.walk(root)
-                .filter(Files::isRegularFile)
-                .map(path -> getPackageName(root, path))
-                .distinct()
-                .sorted()
-                .reduce(null, (packageList, packageName) ->
+        try (Stream<Path> stream = Files.walk(root)) {
+            String packagesList = stream
+                    .filter(Files::isRegularFile)
+                    .map(path -> getPackageName(root, path))
+                    .distinct()
+                    .sorted()
+                    .reduce(null, (packageList, packageName) ->
                         concatPackageName(packageName, packageList, lineSeparator));
-        Path output = projectRoot.resolve("bnd.bnd");
-        try(Writer writer = Files.newBufferedWriter(output)) {
-            Path templateFile = projectRoot.resolve("bnd.bnd.template");
-            String template = new String(Files.readAllBytes(templateFile), StandardCharsets.UTF_8);
-            writer.write(template.replace("{exportedPackages}", packagesList));
+            Path output = projectRoot.resolve("bnd.bnd");
+            try(Writer writer = Files.newBufferedWriter(output)) {
+                Path templateFile = projectRoot.resolve("bnd.bnd.template");
+                String template = new String(Files.readAllBytes(templateFile), StandardCharsets.UTF_8);
+                writer.write(template.replace("{exportedPackages}", packagesList));
+            }
+            Log.info("Written " + output);
         }
-        Log.info("Written " + output);
     }
 
     private String concatPackageName(String packageName, String packageList, String lineSeparator) {

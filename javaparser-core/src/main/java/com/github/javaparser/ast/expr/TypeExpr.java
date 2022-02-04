@@ -99,14 +99,6 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TypeExpr clone() {
         return (TypeExpr) accept(new CloneVisitor(), null);
@@ -121,8 +113,9 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == type) {
             setType((Type) replacementNode);
             return true;

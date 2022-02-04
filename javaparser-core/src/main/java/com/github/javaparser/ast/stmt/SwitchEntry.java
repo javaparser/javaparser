@@ -174,8 +174,9 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < labels.size(); i++) {
             if (labels.get(i) == node) {
                 labels.remove(i);
@@ -222,8 +223,9 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < labels.size(); i++) {
             if (labels.get(i) == node) {
                 labels.set(i, (Expression) replacementNode);

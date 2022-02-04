@@ -121,14 +121,6 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SynchronizedStmt clone() {
         return (SynchronizedStmt) accept(new CloneVisitor(), null);
@@ -143,8 +135,9 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == body) {
             setBody((BlockStmt) replacementNode);
             return true;
