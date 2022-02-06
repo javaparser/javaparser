@@ -665,8 +665,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
 
             // The type parameter referred here should be the java.util.stream.Stream.T
-            ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
-
+            ResolvedType result;
+            ResolvedMethodDeclaration cDeclaration = refMethod.getCorrespondingDeclaration();
+            if(pos >= cDeclaration.getNumberOfParams() && cDeclaration.getLastParam().getType().isArray()){
+                result = cDeclaration.getLastParam().getType();
+            }else{
+                result = cDeclaration.getParam(pos).getType();
+            }
+            
             if (solveLambdas) {
                 if (callExpr.hasScope()) {
                     Expression scope = callExpr.getScope().get();
