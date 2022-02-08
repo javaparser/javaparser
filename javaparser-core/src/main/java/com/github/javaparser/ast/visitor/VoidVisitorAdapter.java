@@ -121,7 +121,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final BlockStmt n, final A arg) {
-        n.getContracts().forEach(p -> p.accept(this, arg));
+        n.getContracts().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getStatements().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

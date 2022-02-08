@@ -869,7 +869,7 @@ public final class JavaParserMetaModel {
         assertStmtMetaModel.getDeclaredPropertyMetaModels().add(assertStmtMetaModel.checkPropertyMetaModel);
         assertStmtMetaModel.messagePropertyMetaModel = new PropertyMetaModel(assertStmtMetaModel, "message", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
         assertStmtMetaModel.getDeclaredPropertyMetaModels().add(assertStmtMetaModel.messagePropertyMetaModel);
-        blockStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(blockStmtMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContracts.class, Optional.of(jmlContractsMetaModel), false, false, true, false);
+        blockStmtMetaModel.contractsPropertyMetaModel = new PropertyMetaModel(blockStmtMetaModel, "contracts", com.github.javaparser.ast.jml.clauses.JmlContracts.class, Optional.of(jmlContractsMetaModel), true, false, true, false);
         blockStmtMetaModel.getDeclaredPropertyMetaModels().add(blockStmtMetaModel.contractsPropertyMetaModel);
         blockStmtMetaModel.statementsPropertyMetaModel = new PropertyMetaModel(blockStmtMetaModel, "statements", com.github.javaparser.ast.stmt.Statement.class, Optional.of(statementMetaModel), false, false, true, false);
         blockStmtMetaModel.getDeclaredPropertyMetaModels().add(blockStmtMetaModel.statementsPropertyMetaModel);

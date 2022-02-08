@@ -303,8 +303,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final BlockStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        {
-            tmp = n.getContracts().accept(this, arg);
+        if (n.getContracts().isPresent()) {
+            tmp = n.getContracts().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

@@ -800,7 +800,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final BlockStmt n, final Object arg) {
-        NodeList<JmlContracts> contracts = cloneList(n.getContracts(), arg);
+        NodeList<JmlContracts> contracts = cloneList(n.getContracts().orElse(null), arg);
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         BlockStmt r = new BlockStmt(n.getTokenRange().orElse(null), statements, contracts);

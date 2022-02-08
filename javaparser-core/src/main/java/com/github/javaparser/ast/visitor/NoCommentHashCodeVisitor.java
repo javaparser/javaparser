@@ -94,7 +94,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final BlockStmt n, final Void arg) {
-        return (n.getContracts().accept(this, arg)) * 31 + (n.getStatements().accept(this, arg));
+        return (n.getContracts().isPresent() ? n.getContracts().get().accept(this, arg) : 0) * 31 + (n.getStatements().accept(this, arg));
     }
 
     public Integer visit(final BooleanLiteralExpr n, final Void arg) {

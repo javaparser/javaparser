@@ -34,10 +34,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -117,10 +115,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < contracts.size(); i++) {
-            if (contracts.get(i) == node) {
-                contracts.remove(i);
-                return true;
+        if (contracts != null) {
+            for (int i = 0; i < contracts.size(); i++) {
+                if (contracts.get(i) == node) {
+                    contracts.remove(i);
+                    return true;
+                }
             }
         }
         for (int i = 0; i < statements.size(); i++) {
@@ -150,10 +150,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < contracts.size(); i++) {
-            if (contracts.get(i) == node) {
-                contracts.set(i, (JmlContracts) replacementNode);
-                return true;
+        if (contracts != null) {
+            for (int i = 0; i < contracts.size(); i++) {
+                if (contracts.get(i) == node) {
+                    contracts.set(i, (JmlContracts) replacementNode);
+                    return true;
+                }
             }
         }
         for (int i = 0; i < statements.size(); i++) {
@@ -190,13 +192,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContracts> getContracts() {
-        return contracts;
+    public Optional<NodeList<JmlContracts>> getContracts() {
+        return Optional.ofNullable(contracts);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt setContracts(final NodeList<JmlContracts> contracts) {
-        assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
         }
