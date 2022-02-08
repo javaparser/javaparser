@@ -374,7 +374,6 @@ public class TokenTypes {
             case ASSUME:
             case IN:
             case IMPLIES_THAT:
-            case JML_IDENTIFIER:
             case METHOD:
             case DETERMINES:
             case UNREACHABLE:
@@ -403,6 +402,8 @@ public class TokenTypes {
             case FALSE:
             case NULL:
                 return JavaToken.Category.LITERAL;
+            case SYNTH_IDENTIFIER:
+            case JML_IDENTIFIER:
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
             case LPAREN:
