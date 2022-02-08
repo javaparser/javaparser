@@ -1,4 +1,1 @@
-com/github/javaparser/RangeTest.java
-Cannot compare the positions of nodes if container node does not have a range.
-
-1 problems in 1 files
+0 problems in 0 files

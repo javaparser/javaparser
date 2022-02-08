@@ -135,7 +135,7 @@ public class JmlProcessor implements ParseResult.PostProcessor {
 
         @Override
         public BlockStmt visit(BlockStmt n, Void arg) {
-            n.getContracts().forEach(p -> p.accept(this, arg));
+            n.getContracts().ifPresent(it -> it.accept(this, arg));
             for (int pos = 0; pos < n.getStatements().size(); pos++) {
                 Statement s = n.getStatement(pos);
                 if (s.isJmlDocStmt()) {

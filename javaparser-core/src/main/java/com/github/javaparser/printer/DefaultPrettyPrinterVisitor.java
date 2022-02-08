@@ -1640,7 +1640,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final BlockStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().accept(this, arg);
+        n.getContracts().ifPresent(it -> it.accept(this, arg));
         printComment(n.getComment(), arg);
         printer.println("{");
         if (n.getStatements() != null) {
