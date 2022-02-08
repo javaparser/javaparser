@@ -466,22 +466,22 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final KeYCcatchBreak n, final Void arg) {
+    public Integer visit(final KeyCcatchBreak n, final Void arg) {
         return (n.getBlock().isPresent() ? n.getBlock().get().accept(this, arg) : 0) * 31 + (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getAssociatedSpecificationComments().isPresent() ? n.getAssociatedSpecificationComments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
-    public Integer visit(final KeYCcatchContinue n, final Void arg) {
+    public Integer visit(final KeyCcatchContinue n, final Void arg) {
         return (n.getBlock().isPresent() ? n.getBlock().get().accept(this, arg) : 0) * 31 + (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getAssociatedSpecificationComments().isPresent() ? n.getAssociatedSpecificationComments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
-    public Integer visit(final KeYCcatchParameter n, final Void arg) {
+    public Integer visit(final KeyCcatchParameter n, final Void arg) {
         return (n.getBlock().isPresent() ? n.getBlock().get().accept(this, arg) : 0) * 31 + (n.getParameter().isPresent() ? n.getParameter().get().accept(this, arg) : 0) * 31 + (n.getAssociatedSpecificationComments().isPresent() ? n.getAssociatedSpecificationComments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
-    public Integer visit(final KeYCcatchReturn n, final Void arg) {
+    public Integer visit(final KeyCcatchReturn n, final Void arg) {
         return (n.getBlock().isPresent() ? n.getBlock().get().accept(this, arg) : 0) * 31 + (n.getParameter().isPresent() ? n.getParameter().get().accept(this, arg) : 0) * 31 + (n.getAssociatedSpecificationComments().isPresent() ? n.getAssociatedSpecificationComments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 

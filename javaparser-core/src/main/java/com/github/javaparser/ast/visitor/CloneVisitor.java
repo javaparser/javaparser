@@ -30,7 +30,6 @@ import com.github.javaparser.ast.type.*;
 import java.util.Optional;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
-import com.github.javaparser.ast.key.sv.*;
 
 /**
  * A visitor that clones (copies) a node and all its children.
@@ -1391,12 +1390,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchBreak n, final Object arg) {
+    public Visitable visit(final KeyCcatchBreak n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
         Name label = cloneNode(n.getLabel(), arg);
         NodeList<Comment> associatedSpecificationComments = cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeYCcatchBreak r = new KeYCcatchBreak(n.getTokenRange().orElse(null), label, block);
+        KeyCcatchBreak r = new KeyCcatchBreak(n.getTokenRange().orElse(null), label, block);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1404,12 +1403,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchContinue n, final Object arg) {
+    public Visitable visit(final KeyCcatchContinue n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
         Name label = cloneNode(n.getLabel(), arg);
         NodeList<Comment> associatedSpecificationComments = cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeYCcatchContinue r = new KeYCcatchContinue(n.getTokenRange().orElse(null), label, block);
+        KeyCcatchContinue r = new KeyCcatchContinue(n.getTokenRange().orElse(null), label, block);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1417,12 +1416,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchParameter n, final Object arg) {
+    public Visitable visit(final KeyCcatchParameter n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
         Parameter parameter = cloneNode(n.getParameter(), arg);
         NodeList<Comment> associatedSpecificationComments = cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeYCcatchParameter r = new KeYCcatchParameter(n.getTokenRange().orElse(null), parameter, block);
+        KeyCcatchParameter r = new KeyCcatchParameter(n.getTokenRange().orElse(null), parameter, block);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1430,12 +1429,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchReturn n, final Object arg) {
+    public Visitable visit(final KeyCcatchReturn n, final Object arg) {
         BlockStmt block = cloneNode(n.getBlock(), arg);
         Parameter parameter = cloneNode(n.getParameter(), arg);
         NodeList<Comment> associatedSpecificationComments = cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeYCcatchReturn r = new KeYCcatchReturn(n.getTokenRange().orElse(null), parameter, block);
+        KeyCcatchReturn r = new KeyCcatchReturn(n.getTokenRange().orElse(null), parameter, block);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1470,7 +1469,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final KeyExecStatement n, final Object arg) {
-        NodeList<KeYCcatchBranch> branches = cloneList(n.getBranches(), arg);
+        NodeList<KeyCcatchBranch> branches = cloneList(n.getBranches(), arg);
         BlockStmt execBlock = cloneNode(n.getExecBlock(), arg);
         NodeList<Comment> associatedSpecificationComments = cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);

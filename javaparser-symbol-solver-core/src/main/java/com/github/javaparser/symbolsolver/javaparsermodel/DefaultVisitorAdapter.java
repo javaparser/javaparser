@@ -227,22 +227,22 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(KeYCcatchBreak n, Boolean arg) {
+    public ResolvedType visit(KeyCcatchBreak n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(KeYCcatchContinue n, Boolean arg) {
+    public ResolvedType visit(KeyCcatchContinue n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(KeYCcatchParameter n, Boolean arg) {
+    public ResolvedType visit(KeyCcatchParameter n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
     @Override
-    public ResolvedType visit(KeYCcatchReturn n, Boolean arg) {
+    public ResolvedType visit(KeyCcatchReturn n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 

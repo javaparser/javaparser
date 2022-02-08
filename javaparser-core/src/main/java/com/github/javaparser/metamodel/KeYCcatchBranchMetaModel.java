@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.key.KeYCcatchBranch;
+import com.github.javaparser.ast.key.KeyCcatchBranch;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 
@@ -39,7 +39,7 @@ public class KeYCcatchBranchMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeYCcatchBranchMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeYCcatchBranch.class, "KeYCcatchBranch", "com.github.javaparser.ast.key", true, false);
+        super(superBaseNodeMetaModel, KeyCcatchBranch.class, "KeYCcatchBranch", "com.github.javaparser.ast.key", true, false);
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")

@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.key.KeYCcatchContinue;
+import com.github.javaparser.ast.key.KeyCcatchContinue;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +38,7 @@ public class KeYCcatchContinueMetaModel extends KeYCcatchBranchMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeYCcatchContinueMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeYCcatchContinue.class, "KeYCcatchContinue", "com.github.javaparser.ast.key", false, false);
+        super(superBaseNodeMetaModel, KeyCcatchContinue.class, "KeYCcatchContinue", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel blockPropertyMetaModel;

@@ -4,7 +4,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.key.KeYCcatchBranch;
+import com.github.javaparser.ast.key.KeyCcatchBranch;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -17,7 +17,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (10/31/21)
  */
-public class KeyCcatchSV extends KeYCcatchBranch {
+public class KeyCcatchSV extends KeyCcatchBranch {
 
     private String text;
 

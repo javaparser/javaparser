@@ -21,10 +21,10 @@ public class KeyExecStatement extends Statement {
 
     private BlockStmt execBlock;
 
-    private NodeList<KeYCcatchBranch> branches;
+    private NodeList<KeyCcatchBranch> branches;
 
     @AllFieldsConstructor
-    public KeyExecStatement(BlockStmt execBlock, NodeList<KeYCcatchBranch> branches) {
+    public KeyExecStatement(BlockStmt execBlock, NodeList<KeyCcatchBranch> branches) {
         this(null, execBlock, branches);
     }
 
@@ -32,7 +32,7 @@ public class KeyExecStatement extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyExecStatement(TokenRange tokenRange, BlockStmt execBlock, NodeList<KeYCcatchBranch> branches) {
+    public KeyExecStatement(TokenRange tokenRange, BlockStmt execBlock, NodeList<KeyCcatchBranch> branches) {
         super(tokenRange);
         setExecBlock(execBlock);
         setBranches(branches);
@@ -76,12 +76,12 @@ public class KeyExecStatement extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<KeYCcatchBranch> getBranches() {
+    public NodeList<KeyCcatchBranch> getBranches() {
         return branches;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyExecStatement setBranches(final NodeList<KeYCcatchBranch> branches) {
+    public KeyExecStatement setBranches(final NodeList<KeyCcatchBranch> branches) {
         assertNotNull(branches);
         if (branches == this.branches) {
             return this;
@@ -134,7 +134,7 @@ public class KeyExecStatement extends Statement {
             return false;
         for (int i = 0; i < branches.size(); i++) {
             if (branches.get(i) == node) {
-                branches.set(i, (KeYCcatchBranch) replacementNode);
+                branches.set(i, (KeyCcatchBranch) replacementNode);
                 return true;
             }
         }

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.key.KeyCcatchBranch;
 
 /**
  * Warning: The content of this class is partially or completely generated - manual edits risk being overwritten.
@@ -949,7 +950,7 @@ public final class JavaParserMetaModel {
         keyEscapeExpressionMetaModel.getDeclaredPropertyMetaModels().add(keyEscapeExpressionMetaModel.argumentsPropertyMetaModel);
         keyEscapeExpressionMetaModel.calleePropertyMetaModel = new PropertyMetaModel(keyEscapeExpressionMetaModel, "callee", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
         keyEscapeExpressionMetaModel.getDeclaredPropertyMetaModels().add(keyEscapeExpressionMetaModel.calleePropertyMetaModel);
-        keyExecStatementMetaModel.branchesPropertyMetaModel = new PropertyMetaModel(keyExecStatementMetaModel, "branches", com.github.javaparser.ast.key.KeYCcatchBranch.class, Optional.of(keYCcatchBranchMetaModel), false, false, true, false);
+        keyExecStatementMetaModel.branchesPropertyMetaModel = new PropertyMetaModel(keyExecStatementMetaModel, "branches", KeyCcatchBranch.class, Optional.of(keYCcatchBranchMetaModel), false, false, true, false);
         keyExecStatementMetaModel.getDeclaredPropertyMetaModels().add(keyExecStatementMetaModel.branchesPropertyMetaModel);
         keyExecStatementMetaModel.execBlockPropertyMetaModel = new PropertyMetaModel(keyExecStatementMetaModel, "execBlock", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), false, false, false, false);
         keyExecStatementMetaModel.getDeclaredPropertyMetaModels().add(keyExecStatementMetaModel.execBlockPropertyMetaModel);

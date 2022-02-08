@@ -870,22 +870,22 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeYCcatchBreak n, Void arg) {
+    public void visit(KeyCcatchBreak n, Void arg) {
 
     }
 
     @Override
-    public void visit(KeYCcatchContinue n, Void arg) {
+    public void visit(KeyCcatchContinue n, Void arg) {
 
     }
 
     @Override
-    public void visit(KeYCcatchParameter n, Void arg) {
+    public void visit(KeyCcatchParameter n, Void arg) {
 
     }
 
     @Override
-    public void visit(KeYCcatchReturn n, Void arg) {
+    public void visit(KeyCcatchReturn n, Void arg) {
 
     }
 

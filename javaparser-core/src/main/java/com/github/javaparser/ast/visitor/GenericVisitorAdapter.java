@@ -2697,7 +2697,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeYCcatchBreak n, final A arg) {
+    public R visit(final KeyCcatchBreak n, final A arg) {
         R result;
         if (n.getBlock().isPresent()) {
             result = n.getBlock().get().accept(this, arg);
@@ -2723,7 +2723,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeYCcatchContinue n, final A arg) {
+    public R visit(final KeyCcatchContinue n, final A arg) {
         R result;
         if (n.getBlock().isPresent()) {
             result = n.getBlock().get().accept(this, arg);
@@ -2749,7 +2749,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeYCcatchParameter n, final A arg) {
+    public R visit(final KeyCcatchParameter n, final A arg) {
         R result;
         if (n.getBlock().isPresent()) {
             result = n.getBlock().get().accept(this, arg);
@@ -2775,7 +2775,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final KeYCcatchReturn n, final A arg) {
+    public R visit(final KeyCcatchReturn n, final A arg) {
         R result;
         if (n.getBlock().isPresent()) {
             result = n.getBlock().get().accept(this, arg);

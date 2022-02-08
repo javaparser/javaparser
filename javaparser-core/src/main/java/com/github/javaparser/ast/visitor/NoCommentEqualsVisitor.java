@@ -1353,8 +1353,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeYCcatchBreak n, final Visitable arg) {
-        final KeYCcatchBreak n2 = (KeYCcatchBreak) arg;
+    public Boolean visit(final KeyCcatchBreak n, final Visitable arg) {
+        final KeyCcatchBreak n2 = (KeyCcatchBreak) arg;
         if (!nodeEquals(n.getBlock(), n2.getBlock()))
             return false;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
@@ -1365,8 +1365,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeYCcatchContinue n, final Visitable arg) {
-        final KeYCcatchContinue n2 = (KeYCcatchContinue) arg;
+    public Boolean visit(final KeyCcatchContinue n, final Visitable arg) {
+        final KeyCcatchContinue n2 = (KeyCcatchContinue) arg;
         if (!nodeEquals(n.getBlock(), n2.getBlock()))
             return false;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
@@ -1377,8 +1377,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeYCcatchParameter n, final Visitable arg) {
-        final KeYCcatchParameter n2 = (KeYCcatchParameter) arg;
+    public Boolean visit(final KeyCcatchParameter n, final Visitable arg) {
+        final KeyCcatchParameter n2 = (KeyCcatchParameter) arg;
         if (!nodeEquals(n.getBlock(), n2.getBlock()))
             return false;
         if (!nodeEquals(n.getParameter(), n2.getParameter()))
@@ -1389,8 +1389,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final KeYCcatchReturn n, final Visitable arg) {
-        final KeYCcatchReturn n2 = (KeYCcatchReturn) arg;
+    public Boolean visit(final KeyCcatchReturn n, final Visitable arg) {
+        final KeyCcatchReturn n2 = (KeyCcatchReturn) arg;
         if (!nodeEquals(n.getBlock(), n2.getBlock()))
             return false;
         if (!nodeEquals(n.getParameter(), n2.getParameter()))

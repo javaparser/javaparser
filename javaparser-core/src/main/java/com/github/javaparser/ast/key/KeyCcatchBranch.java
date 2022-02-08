@@ -8,10 +8,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeYCcatchBranchMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
-public abstract class KeYCcatchBranch extends Node {
+public abstract class KeyCcatchBranch extends Node {
 
     @AllFieldsConstructor
-    public KeYCcatchBranch() {
+    public KeyCcatchBranch() {
         this(null);
     }
 
@@ -19,7 +19,7 @@ public abstract class KeYCcatchBranch extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeYCcatchBranch(TokenRange tokenRange) {
+    public KeyCcatchBranch(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -42,8 +42,8 @@ public abstract class KeYCcatchBranch extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeYCcatchBranch clone() {
-        return (KeYCcatchBranch) accept(new CloneVisitor(), null);
+    public KeyCcatchBranch clone() {
+        return (KeyCcatchBranch) accept(new CloneVisitor(), null);
     }
 
     @Override

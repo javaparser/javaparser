@@ -549,22 +549,22 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeYCcatchBreak n, final A arg) {
+    public void visit(final KeyCcatchBreak n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
-    public void visit(final KeYCcatchContinue n, final A arg) {
+    public void visit(final KeyCcatchContinue n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
-    public void visit(final KeYCcatchParameter n, final A arg) {
+    public void visit(final KeyCcatchParameter n, final A arg) {
         defaultAction(n, arg);
     }
 
     @Override
-    public void visit(final KeYCcatchReturn n, final A arg) {
+    public void visit(final KeyCcatchReturn n, final A arg) {
         defaultAction(n, arg);
     }
 

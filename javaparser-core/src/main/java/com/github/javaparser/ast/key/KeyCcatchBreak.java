@@ -2,7 +2,7 @@ package com.github.javaparser.ast.key;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -11,40 +11,44 @@ import java.util.Optional;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.KeYCcatchParameterMetaModel;
+import com.github.javaparser.metamodel.KeYCcatchBreakMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 
-public class KeYCcatchParameter extends KeYCcatchBranch {
+public class KeyCcatchBreak extends KeyCcatchBranch {
 
     @OptionalProperty
-    private Parameter parameter;
+    private Name label;
 
     @OptionalProperty
     private BlockStmt block;
 
     @AllFieldsConstructor
-    public KeYCcatchParameter(Parameter parameter, BlockStmt block) {
-        this(null, parameter, block);
+    public KeyCcatchBreak(Name label, BlockStmt block) {
+        this(null, label, block);
     }
 
-    public KeYCcatchParameter(TokenRange tokenRange, BlockStmt block) {
-        this(tokenRange, null, block);
+    public KeyCcatchBreak(TokenRange tokenRange, BlockStmt block) {
+        this(tokenRange, (Name) null, block);
     }
 
-    public KeYCcatchParameter(TokenRange tokenRange, Parameter parameter) {
-        this(tokenRange, parameter, null);
+    public KeyCcatchBreak(TokenRange tokenRange, Name label) {
+        this(tokenRange, label, null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeYCcatchParameter(TokenRange tokenRange, Parameter parameter, BlockStmt block) {
+    public KeyCcatchBreak(TokenRange tokenRange, Name label, BlockStmt block) {
         super(tokenRange);
-        setParameter(parameter);
+        setLabel(label);
         setBlock(block);
         customInitialization();
+    }
+
+    public KeyCcatchBreak(TokenRange range, String s, BlockStmt block) {
+        this(range, new Name(s), block);
     }
 
     @Override
@@ -65,7 +69,7 @@ public class KeYCcatchParameter extends KeYCcatchBranch {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeYCcatchParameter setBlock(final BlockStmt block) {
+    public KeyCcatchBreak setBlock(final BlockStmt block) {
         if (block == this.block) {
             return this;
         }
@@ -78,31 +82,31 @@ public class KeYCcatchParameter extends KeYCcatchBranch {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Parameter> getParameter() {
-        return Optional.ofNullable(parameter);
+    public Optional<Name> getLabel() {
+        return Optional.ofNullable(label);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeYCcatchParameter setParameter(final Parameter parameter) {
-        if (parameter == this.parameter) {
+    public KeyCcatchBreak setLabel(final Name label) {
+        if (label == this.label) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
-        if (this.parameter != null)
-            this.parameter.setParentNode(null);
-        this.parameter = parameter;
-        setAsParentNodeOf(parameter);
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        if (this.label != null)
+            this.label.setParentNode(null);
+        this.label = label;
+        setAsParentNodeOf(label);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public KeYCcatchParameter removeBlock() {
+    public KeyCcatchBreak removeBlock() {
         return setBlock((BlockStmt) null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public KeYCcatchParameter removeParameter() {
-        return setParameter((Parameter) null);
+    public KeyCcatchBreak removeLabel() {
+        return setLabel((Name) null);
     }
 
     @Override
@@ -116,9 +120,9 @@ public class KeYCcatchParameter extends KeYCcatchBranch {
                 return true;
             }
         }
-        if (parameter != null) {
-            if (node == parameter) {
-                removeParameter();
+        if (label != null) {
+            if (node == label) {
+                removeLabel();
                 return true;
             }
         }
@@ -136,9 +140,9 @@ public class KeYCcatchParameter extends KeYCcatchBranch {
                 return true;
             }
         }
-        if (parameter != null) {
-            if (node == parameter) {
-                setParameter((Parameter) replacementNode);
+        if (label != null) {
+            if (node == label) {
+                setLabel((Name) replacementNode);
                 return true;
             }
         }
@@ -147,13 +151,13 @@ public class KeYCcatchParameter extends KeYCcatchBranch {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public KeYCcatchParameter clone() {
-        return (KeYCcatchParameter) accept(new CloneVisitor(), null);
+    public KeyCcatchBreak clone() {
+        return (KeyCcatchBreak) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeYCcatchParameterMetaModel getMetaModel() {
-        return JavaParserMetaModel.keYCcatchParameterMetaModel;
+    public KeYCcatchBreakMetaModel getMetaModel() {
+        return JavaParserMetaModel.keYCcatchBreakMetaModel;
     }
 }

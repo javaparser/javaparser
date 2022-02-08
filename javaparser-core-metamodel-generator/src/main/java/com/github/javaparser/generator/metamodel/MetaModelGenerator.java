@@ -195,11 +195,11 @@ public class MetaModelGenerator extends AbstractGenerator {
         //KEY
         add(KeyAbstractExecutionContext.class);
         add(KeyCatchAllStatement.class);
-        add(KeYCcatchBranch.class);
-        add(KeYCcatchBreak.class);
-        add(KeYCcatchContinue.class);
-        add(KeYCcatchParameter.class);
-        add(KeYCcatchReturn.class);
+        add(KeyCcatchBranch.class);
+        add(KeyCcatchBreak.class);
+        add(KeyCcatchContinue.class);
+        add(KeyCcatchParameter.class);
+        add(KeyCcatchReturn.class);
         add(KeyEscapeExpression.class);
         add(KeyExecStatement.class);
         add(KeyExecutionContext.class);

@@ -239,13 +239,13 @@ public interface VoidVisitor<A> {
 
     void visit(PatternExpr n, A arg);
 
-    void visit(KeYCcatchBreak n, A arg);
+    void visit(KeyCcatchBreak n, A arg);
 
-    void visit(KeYCcatchContinue n, A arg);
+    void visit(KeyCcatchContinue n, A arg);
 
-    void visit(KeYCcatchParameter n, A arg);
+    void visit(KeyCcatchParameter n, A arg);
 
-    void visit(KeYCcatchReturn n, A arg);
+    void visit(KeyCcatchReturn n, A arg);
 
     void visit(KeyCatchAllStatement n, A arg);
 

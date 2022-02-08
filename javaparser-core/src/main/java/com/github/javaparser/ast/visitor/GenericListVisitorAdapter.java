@@ -2710,7 +2710,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final KeYCcatchBreak n, final A arg) {
+    public List<R> visit(final KeyCcatchBreak n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getBlock().isPresent()) {
@@ -2737,7 +2737,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final KeYCcatchContinue n, final A arg) {
+    public List<R> visit(final KeyCcatchContinue n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getBlock().isPresent()) {
@@ -2764,7 +2764,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final KeYCcatchParameter n, final A arg) {
+    public List<R> visit(final KeyCcatchParameter n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getBlock().isPresent()) {
@@ -2791,7 +2791,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final KeYCcatchReturn n, final A arg) {
+    public List<R> visit(final KeyCcatchReturn n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getBlock().isPresent()) {

@@ -852,7 +852,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeYCcatchBreak n, final A arg) {
+    public void visit(final KeyCcatchBreak n, final A arg) {
         n.getBlock().ifPresent(l -> l.accept(this, arg));
         n.getLabel().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -860,7 +860,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeYCcatchContinue n, final A arg) {
+    public void visit(final KeyCcatchContinue n, final A arg) {
         n.getBlock().ifPresent(l -> l.accept(this, arg));
         n.getLabel().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -868,7 +868,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeYCcatchParameter n, final A arg) {
+    public void visit(final KeyCcatchParameter n, final A arg) {
         n.getBlock().ifPresent(l -> l.accept(this, arg));
         n.getParameter().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -876,7 +876,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final KeYCcatchReturn n, final A arg) {
+    public void visit(final KeyCcatchReturn n, final A arg) {
         n.getBlock().ifPresent(l -> l.accept(this, arg));
         n.getParameter().ifPresent(l -> l.accept(this, arg));
         n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));

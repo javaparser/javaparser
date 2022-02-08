@@ -1531,7 +1531,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchBreak n, final A arg) {
+    public Visitable visit(final KeyCcatchBreak n, final A arg) {
         BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
         Name label = n.getLabel().map(s -> (Name) s.accept(this, arg)).orElse(null);
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
@@ -1544,7 +1544,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchContinue n, final A arg) {
+    public Visitable visit(final KeyCcatchContinue n, final A arg) {
         BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
         Name label = n.getLabel().map(s -> (Name) s.accept(this, arg)).orElse(null);
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
@@ -1557,7 +1557,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchParameter n, final A arg) {
+    public Visitable visit(final KeyCcatchParameter n, final A arg) {
         BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
         Parameter parameter = n.getParameter().map(s -> (Parameter) s.accept(this, arg)).orElse(null);
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
@@ -1570,7 +1570,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final KeYCcatchReturn n, final A arg) {
+    public Visitable visit(final KeyCcatchReturn n, final A arg) {
         BlockStmt block = n.getBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
         Parameter parameter = n.getParameter().map(s -> (Parameter) s.accept(this, arg)).orElse(null);
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
@@ -1614,7 +1614,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final KeyExecStatement n, final A arg) {
-        NodeList<KeYCcatchBranch> branches = modifyList(n.getBranches(), arg);
+        NodeList<KeyCcatchBranch> branches = modifyList(n.getBranches(), arg);
         BlockStmt execBlock = (BlockStmt) n.getExecBlock().accept(this, arg);
         NodeList<Comment> associatedSpecificationComments = modifyList(n.getAssociatedSpecificationComments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);

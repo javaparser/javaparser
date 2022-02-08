@@ -458,22 +458,22 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final KeYCcatchBreak n, final Void arg) {
+    public Integer visit(final KeyCcatchBreak n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final KeYCcatchContinue n, final Void arg) {
+    public Integer visit(final KeyCcatchContinue n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final KeYCcatchParameter n, final Void arg) {
+    public Integer visit(final KeyCcatchParameter n, final Void arg) {
         return n.hashCode();
     }
 
     @Override
-    public Integer visit(final KeYCcatchReturn n, final Void arg) {
+    public Integer visit(final KeyCcatchReturn n, final Void arg) {
         return n.hashCode();
     }
 

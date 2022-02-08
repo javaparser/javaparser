@@ -244,13 +244,13 @@ public interface GenericVisitor<R, A> {
 
     R visit(PatternExpr n, A arg);
 
-    R visit(KeYCcatchBreak n, A arg);
+    R visit(KeyCcatchBreak n, A arg);
 
-    R visit(KeYCcatchContinue n, A arg);
+    R visit(KeyCcatchContinue n, A arg);
 
-    R visit(KeYCcatchParameter n, A arg);
+    R visit(KeyCcatchParameter n, A arg);
 
-    R visit(KeYCcatchReturn n, A arg);
+    R visit(KeyCcatchReturn n, A arg);
 
     R visit(KeyCatchAllStatement n, A arg);
 

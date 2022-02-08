@@ -123,6 +123,7 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase {
     GeneratedJavaParserTokenManager getTokenSource() {
         return token_source;
     }
+}}
 }
 PARSER_END(GeneratedJavaParser)
 
@@ -6288,7 +6289,7 @@ KeyExecStatement KeyExecStatement() :
     BlockStmt block,execBlock;
     Parameter param; Name name;
     KeyCcatchSV cfsv;
-    NodeList<KeYCcatchBranch> branches = new NodeList<KeYCcatchBranch>();
+    NodeList<KeyCcatchBranch> branches = new NodeList<KeyCcatchBranch>();
 }
 {
     "exec"
@@ -6299,8 +6300,8 @@ KeyExecStatement KeyExecStatement() :
         ("ccatch"|"ccat") {beginC=token();} "("  "\\Return" ")"
         block = Block()
         {
-            branches.add(new KeYCcatchReturn(range(beginC, token()), block));
-        }
+    branches.add(new KeyCcatchReturn(range(beginC, token()), block));
+}
     ]
     (
         LOOKAHEAD(5)

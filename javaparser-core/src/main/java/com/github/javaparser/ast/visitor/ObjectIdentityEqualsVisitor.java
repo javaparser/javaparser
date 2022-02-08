@@ -546,22 +546,22 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final KeYCcatchBreak n, final Visitable arg) {
+    public Boolean visit(final KeyCcatchBreak n, final Visitable arg) {
         return n == arg;
     }
 
     @Override
-    public Boolean visit(final KeYCcatchContinue n, final Visitable arg) {
+    public Boolean visit(final KeyCcatchContinue n, final Visitable arg) {
         return n == arg;
     }
 
     @Override
-    public Boolean visit(final KeYCcatchParameter n, final Visitable arg) {
+    public Boolean visit(final KeyCcatchParameter n, final Visitable arg) {
         return n == arg;
     }
 
     @Override
-    public Boolean visit(final KeYCcatchReturn n, final Visitable arg) {
+    public Boolean visit(final KeyCcatchReturn n, final Visitable arg) {
         return n == arg;
     }
 

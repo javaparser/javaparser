@@ -1,34 +1,19 @@
 package com.github.javaparser.ast.key.sv;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ParserConfiguration.LanguageLevel;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.CURRENT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class SchemaJavaBulkTest {
-    @BeforeEach
-    void setToLatestJava() {
-        StaticJavaParser.getConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
-    }
-
-    @AfterEach
-    void resetJavaLevel() {
-        StaticJavaParser.getConfiguration().setLanguageLevel(LanguageLevel.CURRENT);
-    }
-
-
+class SchemaJavaBulkTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/com/github/javaparser/schemajava.txt", delimiter = 'ä')
-    public void testSchemaJava(String input) {
-        System.err.println(input);
+    void testSchemaJava(String input) {
+        //System.err.println(input);
         ParserConfiguration config = new ParserConfiguration();
         config.setPreprocessUnicodeEscapes(true);
         JavaParser parser = new JavaParser(config);
@@ -40,9 +25,7 @@ public class SchemaJavaBulkTest {
             }
             fail("Parsing failed of: " + input);
         } else {
-            result.getResult().ifPresent(it -> {
-                System.out.println(it.toString());
-            });
+            //result.getResult().ifPresent(System.out::println);
         }
     }
 }

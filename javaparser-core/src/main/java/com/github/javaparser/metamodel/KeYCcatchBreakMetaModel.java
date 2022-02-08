@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.key.KeYCcatchBreak;
+import com.github.javaparser.ast.key.KeyCcatchBreak;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +38,7 @@ public class KeYCcatchBreakMetaModel extends KeYCcatchBranchMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     KeYCcatchBreakMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, KeYCcatchBreak.class, "KeYCcatchBreak", "com.github.javaparser.ast.key", false, false);
+        super(superBaseNodeMetaModel, KeyCcatchBreak.class, "KeYCcatchBreak", "com.github.javaparser.ast.key", false, false);
     }
 
     public PropertyMetaModel blockPropertyMetaModel;

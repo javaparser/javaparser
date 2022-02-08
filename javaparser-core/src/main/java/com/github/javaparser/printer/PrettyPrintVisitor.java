@@ -772,7 +772,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeYCcatchBreak n, Void arg) {
+    public void visit(KeyCcatchBreak n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
@@ -787,7 +787,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeYCcatchContinue n, Void arg) {
+    public void visit(KeyCcatchContinue n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
@@ -802,7 +802,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeYCcatchParameter n, Void arg) {
+    public void visit(KeyCcatchParameter n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
@@ -818,7 +818,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(KeYCcatchReturn n, Void arg) {
+    public void visit(KeyCcatchReturn n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
@@ -865,7 +865,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printer.print("exec");
         n.getExecBlock().accept(this, arg);
-        for (KeYCcatchBranch branch : n.getBranches()) {
+        for (KeyCcatchBranch branch : n.getBranches()) {
             branch.accept(this, arg);
         }
     }
