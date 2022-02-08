@@ -75,6 +75,13 @@ jobs:
       - name: Test with Maven (incl. slow tests)
         shell: bash
         run: ./mvnw -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B --errors clean test --activate-profiles AlsoSlowTests
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: "*/target/surefire-reports/*.xml"
+
 #
 #
 #      - name: CodeCov - JavaParser Core

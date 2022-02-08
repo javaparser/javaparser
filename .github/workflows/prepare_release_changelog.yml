@@ -1,8 +1,10 @@
 name: Build Snapshot
 on:
-  push:
-    branches: [] #[ master ]
+  workflow_dispatch:
 
+#on:
+#  push:
+#    branches: [] #[ master ]
   ## (testing only) Trigger the workflow on any pull request
   #pull_request:
 

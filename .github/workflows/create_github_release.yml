@@ -1,9 +1,11 @@
+#on:
+#  push:
+#    # Sequence of patterns matched against refs/tags
+#    tags:
+#      #      - 'v[0-9]+.[0-9]+.[0-9]+' # Push events to matching pattern -- updated to use regex for a semantic versioning version number
+#      - 'javaparser-parent-[0-9].*' # Push events to matching pattern -- loosened pattern to be v followed by at least one number, then anything else after (this allows for e.g. "-DRAFT" and "-SNAPSHOT" as a suffix, and shorter version numbers such as "v2")
 on:
-  push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      #      - 'v[0-9]+.[0-9]+.[0-9]+' # Push events to matching pattern -- updated to use regex for a semantic versioning version number
-      - 'javaparser-parent-[0-9].*' # Push events to matching pattern -- loosened pattern to be v followed by at least one number, then anything else after (this allows for e.g. "-DRAFT" and "-SNAPSHOT" as a suffix, and shorter version numbers such as "v2")
+  workflow_dispatch:
 
 name: Create Release from semantic versioning tag push
 
