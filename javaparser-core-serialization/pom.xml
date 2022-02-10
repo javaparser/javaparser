@@ -51,6 +51,10 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.google.truth</groupId>
+			<artifactId>truth</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.key</groupId>
 			<artifactId>jmlparser-core</artifactId>
 			<version>${project.version}</version>

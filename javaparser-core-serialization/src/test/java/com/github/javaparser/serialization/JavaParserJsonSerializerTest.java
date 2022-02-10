@@ -22,26 +22,31 @@ package com.github.javaparser.serialization;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.google.common.truth.Truth;
+import org.junit.Assume;
 import org.junit.jupiter.api.Test;
 
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavaParserJsonSerializerTest {
     @Test
-    void test() {
+    void test() throws IOException {
         CompilationUnit cu = parse("class X{java.util.Y y;}");
+        String serialized = serialize(cu, true);
 
-        String serialized = serialize(cu, false);
-
-        assertEquals("{\"!\":\"com.github.javaparser.ast.CompilationUnit\",\"range\":{\"beginLine\":1,\"beginColumn\":1,\"endLine\":1,\"endColumn\":23},\"tokenRange\":{\"beginToken\":{\"kind\":207,\"text\":\"class\"},\"endToken\":{\"kind\":0,\"text\":\"\"}},\"imports\":[],\"types\":[{\"!\":\"com.github.javaparser.ast.body.ClassOrInterfaceDeclaration\",\"range\":{\"beginLine\":1,\"beginColumn\":1,\"endLine\":1,\"endColumn\":23},\"tokenRange\":{\"beginToken\":{\"kind\":207,\"text\":\"class\"},\"endToken\":{\"kind\":289,\"text\":\"}\"}},\"extendedTypes\":[],\"implementedTypes\":[],\"isInterface\":\"false\",\"typeParameters\":[],\"members\":[{\"!\":\"com.github.javaparser.ast.body.FieldDeclaration\",\"range\":{\"beginLine\":1,\"beginColumn\":9,\"endLine\":1,\"endColumn\":22},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"java\"},\"endToken\":{\"kind\":292,\"text\":\";\"}},\"modifiers\":[],\"variables\":[{\"!\":\"com.github.javaparser.ast.body.VariableDeclarator\",\"range\":{\"beginLine\":1,\"beginColumn\":21,\"endLine\":1,\"endColumn\":21},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"y\"},\"endToken\":{\"kind\":283,\"text\":\"y\"}},\"name\":{\"!\":\"com.github.javaparser.ast.expr.SimpleName\",\"range\":{\"beginLine\":1,\"beginColumn\":21,\"endLine\":1,\"endColumn\":21},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"y\"},\"endToken\":{\"kind\":283,\"text\":\"y\"}},\"identifier\":\"y\"},\"type\":{\"!\":\"com.github.javaparser.ast.type.ClassOrInterfaceType\",\"range\":{\"beginLine\":1,\"beginColumn\":9,\"endLine\":1,\"endColumn\":19},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"java\"},\"endToken\":{\"kind\":283,\"text\":\"Y\"}},\"name\":{\"!\":\"com.github.javaparser.ast.expr.SimpleName\",\"range\":{\"beginLine\":1,\"beginColumn\":19,\"endLine\":1,\"endColumn\":19},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"Y\"},\"endToken\":{\"kind\":283,\"text\":\"Y\"}},\"identifier\":\"Y\"},\"scope\":{\"!\":\"com.github.javaparser.ast.type.ClassOrInterfaceType\",\"range\":{\"beginLine\":1,\"beginColumn\":9,\"endLine\":1,\"endColumn\":17},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"java\"},\"endToken\":{\"kind\":283,\"text\":\"util\"}},\"name\":{\"!\":\"com.github.javaparser.ast.expr.SimpleName\",\"range\":{\"beginLine\":1,\"beginColumn\":14,\"endLine\":1,\"endColumn\":17},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"util\"},\"endToken\":{\"kind\":283,\"text\":\"util\"}},\"identifier\":\"util\"},\"scope\":{\"!\":\"com.github.javaparser.ast.type.ClassOrInterfaceType\",\"range\":{\"beginLine\":1,\"beginColumn\":9,\"endLine\":1,\"endColumn\":12},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"java\"},\"endToken\":{\"kind\":283,\"text\":\"java\"}},\"name\":{\"!\":\"com.github.javaparser.ast.expr.SimpleName\",\"range\":{\"beginLine\":1,\"beginColumn\":9,\"endLine\":1,\"endColumn\":12},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"java\"},\"endToken\":{\"kind\":283,\"text\":\"java\"}},\"identifier\":\"java\"},\"annotations\":[]},\"annotations\":[]},\"annotations\":[]}}],\"annotations\":[]}],\"modifiers\":[],\"name\":{\"!\":\"com.github.javaparser.ast.expr.SimpleName\",\"range\":{\"beginLine\":1,\"beginColumn\":7,\"endLine\":1,\"endColumn\":7},\"tokenRange\":{\"beginToken\":{\"kind\":283,\"text\":\"X\"},\"endToken\":{\"kind\":283,\"text\":\"X\"}},\"identifier\":\"X\"},\"annotations\":[]}]}", serialized);
+        InputStream is = getClass().getResourceAsStream("/example.json");
+        byte[] buffer = new byte[1024*1024];
+        int len = is.read(buffer);
+        Assume.assumeTrue(len > 0);
+        String expected = new String(buffer, 0, len);
+        Truth.assertThat(serialized).isEqualTo(expected);
     }
 
     static String serialize(Node node, boolean prettyPrint) {
