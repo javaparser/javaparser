@@ -27,8 +27,7 @@ public class JmlDocStmt extends Statement {
 
     @AllFieldsConstructor
     public JmlDocStmt(NodeList<JmlDoc> jmlComments) {
-        super(null);
-        this.jmlComments = jmlComments;
+        this(null, jmlComments);
     }
 
     @Override

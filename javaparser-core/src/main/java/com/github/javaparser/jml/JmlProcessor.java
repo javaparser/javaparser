@@ -23,6 +23,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,30 +60,33 @@ public class JmlProcessor implements ParseResult.PostProcessor {
             sanitizer = new JmlDocSanitizer(config.getJmlKeys());
         }
 
+        @Nullable
         private ArbitraryNodeContainer parseJmlMethodLevel(NodeList<JmlDoc> jmlDocs) {
             ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlMethodLevel(sanitizer.asString(jmlDocs));
             problems.addAll(r.getProblems());
             return r.getResult().orElse(null);
         }
 
+        @Nullable
         private ArbitraryNodeContainer parseJmlClasslevel(NodeList<JmlDoc> jmlDocs) {
             ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlClassLevel(sanitizer.asString(jmlDocs));
             problems.addAll(r.getProblems());
             return r.getResult().orElse(null);
         }
 
+        @Nullable
         private ArbitraryNodeContainer parseJmlTypeLevel(NodeList<JmlDoc> jmlDocs) {
             ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlTypeLevel(sanitizer.asString(jmlDocs));
             problems.addAll(r.getProblems());
             return r.getResult().orElse(null);
         }
 
+        @Nullable
         private ArbitraryNodeContainer parseJmlModifierLevel(NodeList<JmlDoc> jmlDocs) {
             ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlModifierLevel(sanitizer.asString(jmlDocs));
             problems.addAll(r.getProblems());
             return r.getResult().orElse(null);
         }
-
 
         @Override
         public JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
@@ -92,22 +96,42 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                 NodeList<BodyDeclaration<?>> members = parent.getMembers();
                 int pos = members.indexOf(n);
                 assert pos >= 0;
-                BodyDeclaration<?> next = members.get(pos + 1);
-                members.remove(pos);
-                for (Node child : t.getChildren()) {
-                    if (child instanceof BodyDeclaration<?>) {
-                        members.add(pos, (BodyDeclaration<?>) child);
-                    } else if (child instanceof Modifier) {
-                        ((NodeWithModifiers<?>) next).getModifiers().add((Modifier) child);
-                    } else if (child instanceof JmlContract) {
-                        ((NodeWithContracts<?>) next).addContracts(new JmlContracts(false,
-                                new NodeList<>(), new NodeList<>((JmlContract) child)));
-                    } else if (child instanceof JmlContracts) {
-                        ((NodeWithContracts<?>) next).addContracts((JmlContracts) child);
-                    } else {
-                        reporter.report(child, "Not JML construct supported");
+
+                if (pos + 1 >= members.size()) {
+                    //JML Documentation is last element, therefore it can only refer to upper element.
+                    for (Node child : t.getChildren()) {
+                        if (child instanceof BodyDeclaration<?>) {
+                            members.add(pos, (BodyDeclaration<?>) child);
+                        } else if (child instanceof Modifier) {
+                            reporter.report(child, "JML modifier does not refer to any construct.");
+                        } else if (child instanceof JmlContract) {
+                            reporter.report(child, "JML contract without a method found.");
+                        } else if (child instanceof JmlContracts) {
+                            reporter.report(child, "JML contract without a method found.");
+                        } else {
+                            reporter.report(child, "JML construct " + child.getClass().getSimpleName() + " not supported at this position.");
+                        }
+                    }
+                } else {
+                    BodyDeclaration<?> next = members.get(pos + 1);
+                    members.remove(pos);
+                    for (Node child : t.getChildren()) {
+                        if (child instanceof BodyDeclaration<?>) {
+                            members.add(pos, (BodyDeclaration<?>) child);
+                        } else if (child instanceof Modifier) {
+                            ((NodeWithModifiers<?>) next).getModifiers().add((Modifier) child);
+                        } else if (child instanceof JmlContract) {
+                            ((NodeWithContracts<?>) next).addContracts(new JmlContracts(false,
+                                    new NodeList<>(), new NodeList<>((JmlContract) child)));
+                        } else if (child instanceof JmlContracts) {
+                            ((NodeWithContracts<?>) next).addContracts((JmlContracts) child);
+                        } else {
+                            reporter.report(child, "JML construct " + child.getClass().getSimpleName() + " not supported at this position.");
+                        }
                     }
                 }
+
+                n.remove();
             }
             return n;
         }
@@ -140,6 +164,9 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                 Statement s = n.getStatement(pos);
                 if (s.isJmlDocStmt()) {
                     pos = handleJmlStatementLevel(n, (JmlDocStmt) s, pos);
+                    assert !s.getParentNode().isPresent();
+                }else{
+                    s.accept(this, arg);
                 }
             }
             n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -148,30 +175,56 @@ public class JmlProcessor implements ParseResult.PostProcessor {
 
         private int handleJmlStatementLevel(BlockStmt p, JmlDocStmt n, int pos) {
             ArbitraryNodeContainer t = parseJmlMethodLevel(n.getJmlComments());
-            assert t != null;    //TODO Error handling
+
+            if (t == null) {
+                reporter.report(n, "Could not handle the JML comment.");
+                return pos;
+            }
 
             // remove this node from the AST
             n.remove();
-            Statement nextStatement = pos < p.getStatements().size() ? p.getStatement(pos) : null;
+
+            // possible the next statement after the given comment
+            @Nullable Statement nextStatement = pos < p.getStatements().size() ? p.getStatement(pos) : null;
+
+            //ignore LabeledStatements
+            if (nextStatement != null) {
+                while (nextStatement.isLabeledStmt()) nextStatement = nextStatement.asLabeledStmt().getStatement();
+            }
+
+
+            // Positon to insert new statements
             int insertPosition = pos;
 
             for (Node child : t.getChildren()) {
                 if (child instanceof JmlStatement) {
                     p.getStatements().add(insertPosition++, (JmlStatement) child);
                 } else if (child instanceof Modifier) {
-                    if (nextStatement instanceof NodeWithModifiers<?>) {
-                        ((NodeWithModifiers<?>) nextStatement).getModifiers().add((Modifier) child);
+                    if (nextStatement == null) {
+                        reporter.report(child, "You passed a modifier but there is following " +
+                                "statement to carry it.");
                     } else {
-                        assert false : "ALERT!";
+                        try {
+                            ((NodeWithModifiers<?>) nextStatement).getModifiers().add((Modifier) child);
+                        } catch (ClassCastException e) {
+                            reporter.report(nextStatement, "You passed a JML modifier but the following " +
+                                    "statement is not able to carry modifiers. " + nextStatement.getMetaModel().getTypeName());
+                        }
                     }
                 } else if (child instanceof JmlContracts) {
-                    if (nextStatement instanceof NodeWithContracts<?>) {
-                        ((NodeWithContracts<?>) nextStatement).addContracts((JmlContracts) child);
+                    if (nextStatement == null) {
+                        reporter.report(child, "You passed a contract but there is following " +
+                                "statement to carry it.");
                     } else {
-                        assert false : "ALERT!";
+                        try {
+                            ((NodeWithContracts<?>) nextStatement).addContracts((JmlContracts) child);
+                        } catch (ClassCastException e) {
+                            reporter.report(nextStatement, "You passed a JML contract but the following " +
+                                    "statement is not able to carry contract. " + nextStatement.getMetaModel().getTypeName());
+                        }
                     }
                 } else {
-                    reporter.report(child, "Not JML construct supported");
+                    reporter.report(child, "Not JML " + child.getMetaModel().getTypeName() + " construct supported");
                 }
             }
             return insertPosition - 1;
@@ -207,54 +260,5 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                 }
             }
         }
-    }
-
-    private void process(CompilationUnit unit) {
-        List<Comment> directComments = getDirectComments(unit);
-        for (Comment directComment : directComments) {
-            System.out.println(directComment);
-        }
-    }
-
-    private void process(TypeDeclaration unit) {
-        List<Comment> directComments = getDirectComments(unit);
-        for (Comment directComment : directComments) {
-            System.out.println(directComment);
-        }
-    }
-
-    private void process(BlockStmt unit) {
-        List<Comment> directComments = getDirectComments(unit);
-        for (Comment directComment : directComments) {
-            System.out.println(directComment);
-        }
-    }
-
-    private List<Comment> getDirectComments(Node unit) {
-        final List<Comment> all = unit.getAllContainedComments();
-        List<Comment> seq = new ArrayList<>(all.size());
-
-        for (Comment c : all) {
-            if (c.getParentNode().get() == unit) {
-                seq.add(c);
-            }
-        }
-
-        return seq;
-    }
-
-    private void process(Node node) {
-        if (node instanceof CompilationUnit) {
-            process((CompilationUnit) node);
-        }
-        if (node instanceof TypeDeclaration<?>) {
-            process((TypeDeclaration<?>) node);
-        }
-        if (node instanceof BlockStmt) {
-            process((BlockStmt) node);
-        }
-
-        node.getComment().ifPresent(it -> System.out.println(node.getClass() + " :: " + it.getContent()));
-        node.getChildNodes().forEach(it -> process(it));
     }
 }

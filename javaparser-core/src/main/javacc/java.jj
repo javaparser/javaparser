@@ -6755,8 +6755,8 @@ JmlClause JmlMeasuredBy():
     JavaToken begin;
 }
 {
-  { begin = token();}
-  <MEASURED_BY> e=Expression()
+  <MEASURED_BY>   { begin = token();}
+  e=Expression()
   { return new JmlDefaultClause(range(begin,token()), JmlClauseKind.MEASURED_BY, new NodeList<>(), new NodeList<>(e)); }
 }
 

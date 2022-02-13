@@ -23,8 +23,7 @@ public class JmlDoc extends Node {
 
     @AllFieldsConstructor
     public JmlDoc(JavaToken content) {
-        super(content.toTokenRange());
-        this.content = content;
+        this(content.toTokenRange(), content);
     }
 
     @Override

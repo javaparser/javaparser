@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.jml.NodeWithContracts;
 import com.github.javaparser.ast.jml.clauses.JmlContracts;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -47,7 +48,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> {
+public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt>, NodeWithContracts<ForEachStmt> {
 
     @OptionalProperty
     private NodeList<JmlContracts> contracts;
