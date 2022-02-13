@@ -21,25 +21,44 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javassist.*;
-import javassist.bytecode.*;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import javassist.CtBehavior;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.Modifier;
+import javassist.bytecode.AccessFlag;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
+import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.SyntheticAttribute;
 
 /**
  * @author Federico Tomassetti
@@ -137,7 +156,8 @@ class JavassistUtils {
             return new ResolvedTypeVariable(typeParameterDeclaration);
         } else if (signatureType instanceof SignatureAttribute.ArrayType) {
             SignatureAttribute.ArrayType arrayType = (SignatureAttribute.ArrayType) signatureType;
-            return new ResolvedArrayType(signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable));
+            ResolvedType baseType = signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable);
+            return getArrayType(baseType, arrayType.getDimension());
         } else if (signatureType instanceof SignatureAttribute.BaseType) {
             SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType) signatureType;
             if (baseType.toString().equals("void")) {
@@ -148,6 +168,13 @@ class JavassistUtils {
         } else {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
+    }
+    /*
+     * Manage dimension of an array
+     */
+    private static ResolvedType getArrayType(ResolvedType resolvedType, int dimension) {
+        if (dimension > 0) return getArrayType(new ResolvedArrayType(resolvedType), --dimension);
+        return resolvedType;
     }
 
     private static String getTypeName(SignatureAttribute.ClassType classType) {
