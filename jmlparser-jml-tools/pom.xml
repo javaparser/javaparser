@@ -9,8 +9,8 @@
         <version>3.24.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>jmlparser-linting</artifactId>
-    <name>jmlparser-linting</name>
+    <artifactId>jmlparser-jml-tools</artifactId>
+    <name>jmlparser-jml-tools</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
