@@ -4638,11 +4638,14 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 Statement Statement():
 {
     Statement ret;
+    JmlDocStmt jml = null;
 }
 {
     try {
+        [ // precedence over LocalVariableDeclaration
+          LOOKAHEAD(1) jml = JmlDocStatements() ]
         (
-            LOOKAHEAD(2) ret = LabeledStatement()
+              LOOKAHEAD(2) ret = LabeledStatement()
             | ret = AssertStatement()
             | LOOKAHEAD(3) ret = YieldStatement()
             | ret = Block()
@@ -4659,9 +4662,13 @@ Statement Statement():
             | ret = ThrowStatement()
             | ret = SynchronizedStatement()
             | ret = TryStatement()
-            | ret = JmlDocStatements()
         )
-        { return ret; }
+        {
+          if(jml != null) {
+            return new BlockStmt(range(jml, ret), new NodeList<>(jml, ret));
+          }
+          return ret;
+        }
     } catch (ParseException e) {
         TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);
@@ -4819,9 +4826,12 @@ Statement BlockStatement():
     ClassOrInterfaceDeclaration typeDecl;
     RecordDeclaration recordDeclaration;
     ModifierHolder modifier;
+    JmlDocStmt jml = null;
 }
 {
     try {
+        [ // precedence over LocalVariableDeclaration
+          LOOKAHEAD(1) jml = JmlDocStatements() ]
         (
             LOOKAHEAD( Modifiers() ("class" | "interface") ) // TODO/FIXME: Is this a bug in the grammar? JLS specifies class or enum, not interface.
             modifier = Modifiers()
@@ -4839,7 +4849,12 @@ Statement BlockStatement():
          |
             ret = Statement()
         )
-        { return ret; }
+        {
+          if(jml != null) {
+            return new BlockStmt(range(jml, ret), new NodeList<>(jml, ret));
+          }
+          return ret;
+        }
     } catch (ParseException e) {
         TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);

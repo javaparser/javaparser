@@ -7,7 +7,6 @@ import com.github.javaparser.Problem;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
@@ -25,7 +24,6 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -164,8 +162,8 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                 Statement s = n.getStatement(pos);
                 if (s.isJmlDocStmt()) {
                     pos = handleJmlStatementLevel(n, (JmlDocStmt) s, pos);
-                    assert !s.getParentNode().isPresent();
-                }else{
+                    //assert !s.getParentNode().isPresent();
+                } else {
                     s.accept(this, arg);
                 }
             }
@@ -245,10 +243,9 @@ public class JmlProcessor implements ParseResult.PostProcessor {
             JmlDocModifier doc = (JmlDocModifier) n.getKeyword();
             if (n.getParentNode().isPresent()) {
                 NodeWithModifiers<?> parent = (NodeWithModifiers<?>) n.getParentNode().get();
-                n.remove();
-
                 ArbitraryNodeContainer t = parseJmlModifierLevel(doc.getJmlComments());
-                assert t != null;
+                if (t == null) return;
+                n.remove();
                 for (Node child : t.getChildren()) {
                     if (child instanceof Modifier) {
                         parent.getModifiers().add((Modifier) child);

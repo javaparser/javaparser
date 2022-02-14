@@ -32,7 +32,7 @@ public class JmlDocSanitizer {
                 Position cur = range.get().begin;
                 int curLine = cur.line;
                 if (last.line < curLine) {
-                    for (int i = last.line; i < curLine - 1; i++) {
+                    for (int i = last.line; i < curLine; i++) {
                         s.append("\n");
                     }
                     for (int i = 0; i < cur.column; i++) {
