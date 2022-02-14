@@ -35,7 +35,7 @@
 
         <dependency>
             <groupId>org.key</groupId>
-            <artifactId>jmlparser-linting</artifactId>
+            <artifactId>jmlparser-jml-tools</artifactId>
             <version>${project.version}</version>
         </dependency>
 
