@@ -4637,13 +4637,33 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
  */
 Statement Statement():
 {
-    Statement ret;
+    Statement ret = null;
     JmlDocStmt jml = null;
 }
 {
+    (
+        LOOKAHEAD(1) jml = JmlDocStatements()
+        [ret = StatementOrig()]
+      |
+        ret = StatementOrig()
+    )
+    {
+      if(jml != null && ret != null) {
+        return new BlockStmt(range(jml, ret), new NodeList<>(jml, ret));
+      }
+      if(jml != null && ret == null) {
+        return jml;
+      }
+      return ret;
+    }
+}
+
+Statement StatementOrig():
+{
+    Statement ret = null;
+}
+{
     try {
-        [ // precedence over LocalVariableDeclaration
-          LOOKAHEAD(1) jml = JmlDocStatements() ]
         (
               LOOKAHEAD(2) ret = LabeledStatement()
             | ret = AssertStatement()
@@ -4663,12 +4683,7 @@ Statement Statement():
             | ret = SynchronizedStatement()
             | ret = TryStatement()
         )
-        {
-          if(jml != null) {
-            return new BlockStmt(range(jml, ret), new NodeList<>(jml, ret));
-          }
-          return ret;
-        }
+        { return ret; }
     } catch (ParseException e) {
         TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);
@@ -4819,19 +4834,40 @@ BlockStmt Block():
  * }</pre>
  *
  */
+
 Statement BlockStatement():
+{
+    Statement ret = null;
+    JmlDocStmt jml = null;
+}
+{
+    (   // precedence over LocalVariableDeclaration
+        LOOKAHEAD(1) jml = JmlDocStatements()
+        [ret = BlockStatementOrig()]
+      |
+        ret = BlockStatementOrig()
+    )
+    {
+        if(jml != null && ret != null) {
+            return new BlockStmt(range(jml, ret), new NodeList<>(jml, ret));
+        }
+        if(jml != null && ret == null){
+            return jml;
+        }
+        return ret;
+    }
+}
+
+Statement BlockStatementOrig():
 {
     Statement ret;
     Expression expr;
     ClassOrInterfaceDeclaration typeDecl;
     RecordDeclaration recordDeclaration;
     ModifierHolder modifier;
-    JmlDocStmt jml = null;
 }
 {
     try {
-        [ // precedence over LocalVariableDeclaration
-          LOOKAHEAD(1) jml = JmlDocStatements() ]
         (
             LOOKAHEAD( Modifiers() ("class" | "interface") ) // TODO/FIXME: Is this a bug in the grammar? JLS specifies class or enum, not interface.
             modifier = Modifiers()
@@ -4849,12 +4885,7 @@ Statement BlockStatement():
          |
             ret = Statement()
         )
-        {
-          if(jml != null) {
-            return new BlockStmt(range(jml, ret), new NodeList<>(jml, ret));
-          }
-          return ret;
-        }
+        { return ret; }
     } catch (ParseException e) {
         TokenRange errorRange = recoverStatement(SEMICOLON, LBRACE, RBRACE, e);
         return new UnparsableStmt(errorRange);

@@ -22,30 +22,19 @@ public class JmlDocSanitizer {
 
     public String asString(NodeList<JmlDoc> jmlDocs) {
         if (jmlDocs.isEmpty()) return "";
-        StringBuilder s = new StringBuilder(1024);
-        Position last = new Position(0, 0);
+        StringConstructer s = new StringConstructer();
 
         for (JmlDoc jmlDoc : jmlDocs) {
             JavaToken tok = jmlDoc.getContent();
             final Optional<Range> range = tok.getRange();
             if (range.isPresent()) {
                 Position cur = range.get().begin;
-                int curLine = cur.line;
-                if (last.line < curLine) {
-                    for (int i = last.line; i < curLine; i++) {
-                        s.append("\n");
-                    }
-                    for (int i = 0; i < cur.column; i++) {
-                        s.append(" ");
-                    }
-                    last = cur;
-                }
+                s.expandTo(cur.line, cur.column);
             }
             s.append(jmlDoc.getContent().getText());
         }
-
-        cleanComments(s);
-        cleanAtSigns(s);
+        cleanComments(s.getBuffer());
+        cleanAtSigns(s.getBuffer());
         return s.toString();
     }
 
@@ -139,11 +128,9 @@ public class JmlDocSanitizer {
         }*/
     }
 
-
     private boolean isJavaCommentStart(StringBuilder s, int pos) {
         return s.charAt(pos) == '/' && (s.charAt(pos + 1) == '*' || s.charAt(pos + 1) == '/');
     }
-
 
     public boolean isActiveJmlSpec(String[] keys) {
         if (keys.length == 0) {
@@ -187,3 +174,49 @@ public class JmlDocSanitizer {
     }
 }
 
+class StringConstructer {
+    private final StringBuilder sb = new StringBuilder(1024);
+    //JavaCC starts with 1/1
+    private int curLine = 1;
+    private int curColumn = 1;
+
+    public StringConstructer append(String value) {
+        sb.ensureCapacity(sb.length() + value.length() + 1);
+        for (char c : value.toCharArray()) {
+            sb.append(c);
+            if(c=='\n'){
+                curColumn = 1; curLine++;
+            }else{
+                curColumn++;
+            }
+        }
+        return this;
+    }
+
+    public StringConstructer expandTo(int line, int column) {
+        if (curLine > line || (curLine == line && curColumn > column)) {
+            throw new IllegalArgumentException();
+        }
+
+        for (; curLine < line; curLine++) {
+            sb.append("\n");
+            curColumn = 1;
+        }
+
+        for (; curColumn < column; curColumn++) {
+            sb.append(" ");
+        }
+
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return sb.toString();
+    }
+
+
+    public StringBuilder getBuffer() {
+        return sb;
+    }
+}
