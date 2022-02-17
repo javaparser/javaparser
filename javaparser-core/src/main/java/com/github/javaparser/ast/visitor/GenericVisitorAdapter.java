@@ -2392,7 +2392,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlClassInvariantDeclaration n, final A arg) {
+    public R visit(final JmlClassExprDeclaration n, final A arg) {
         R result;
         {
             result = n.getInvariant().accept(this, arg);
@@ -2460,7 +2460,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
-            result = n.getId().accept(this, arg);
+            result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
         }

@@ -645,7 +645,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlClassInvariantDeclaration n, final A arg) {
+    public R visit(final JmlClassExprDeclaration n, final A arg) {
         return defaultAction(n, arg);
     }
 

@@ -7,6 +7,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -28,27 +29,29 @@ import java.util.function.Consumer;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclaration> implements NodeWithModifiers<JmlRepresentsDeclaration> {
+public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclaration>
+        implements NodeWithModifiers<JmlRepresentsDeclaration>,
+        NodeWithName<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
-    private Name id;
+    private Name name;
 
     private Expression expr;
 
     @AllFieldsConstructor
-    public JmlRepresentsDeclaration(NodeList<Modifier> modifiers, Name id, Expression expr) {
-        this(null, modifiers, id, expr);
+    public JmlRepresentsDeclaration(NodeList<Modifier> modifiers, Name name, Expression expr) {
+        this(null, modifiers, name, expr);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlRepresentsDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Name id, Expression expr) {
+    public JmlRepresentsDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Name name, Expression expr) {
         super(tokenRange);
         setModifiers(modifiers);
-        setId(id);
+        setName(name);
         setExpr(expr);
         customInitialization();
     }
@@ -104,21 +107,21 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name getId() {
-        return id;
+    public Name getName() {
+        return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRepresentsDeclaration setId(final Name id) {
-        assertNotNull(id);
-        if (id == this.id) {
+    public JmlRepresentsDeclaration setName(final Name name) {
+        assertNotNull(name);
+        if (name == this.name) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.ID, this.id, id);
-        if (this.id != null)
-            this.id.setParentNode(null);
-        this.id = id;
-        setAsParentNodeOf(id);
+        notifyPropertyChange(ObservableProperty.ID, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
         return this;
     }
 
@@ -147,8 +150,8 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
             setExpr((Expression) replacementNode);
             return true;
         }
-        if (node == id) {
-            setId((Name) replacementNode);
+        if (node == name) {
+            setName((Name) replacementNode);
             return true;
         }
         for (int i = 0; i < modifiers.size(); i++) {

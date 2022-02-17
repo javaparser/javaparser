@@ -50,6 +50,7 @@ import com.github.javaparser.metamodel.JmlNameMetaModel;
  * @author Julio Vilmar Gesser
  * @see SimpleName
  */
+@Deprecated
 public class JmlName extends Node implements NodeWithIdentifier<JmlName>, Jmlish {
 
     @NonEmptyProperty
@@ -150,7 +151,7 @@ public class JmlName extends Node implements NodeWithIdentifier<JmlName>, Jmlish
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlName removeQualifier() {
-        return setQualifier((JmlName) null);
+        return setQualifier(null);
     }
 
     @Override

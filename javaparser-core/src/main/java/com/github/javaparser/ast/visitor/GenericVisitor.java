@@ -28,7 +28,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.JmlImportDeclaration;
-import com.github.javaparser.ast.jml.body.JmlClassInvariantDeclaration;
+import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
@@ -292,7 +292,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlBoundVariable n, A arg);
 
-    R visit(JmlClassInvariantDeclaration n, A arg);
+    R visit(JmlClassExprDeclaration n, A arg);
 
     R visit(JmlClassAccessibleDeclaration n, A arg);
 

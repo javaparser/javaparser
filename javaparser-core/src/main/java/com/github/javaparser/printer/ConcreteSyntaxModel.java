@@ -1024,7 +1024,7 @@ public class ConcreteSyntaxModel {
                 //space(),
                 //child(EXPRESSION),
                 semicolon()));
-        concreteSyntaxModelByClass.put(JmlClassInvariantDeclaration.class, sequence(
+        concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class, sequence(
                 child(MODIFIERS),
                 token(INVARIANT),
                 space(),

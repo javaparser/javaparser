@@ -378,7 +378,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifClassInvariantClause(Consumer<JmlClassInvariantDeclaration> action) {
+    public void ifClassInvariantClause(Consumer<JmlClassExprDeclaration> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -468,17 +468,17 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassInvariantDeclaration asJmlClassInvariantDeclaration() {
+    public JmlClassExprDeclaration asJmlClassInvariantDeclaration() {
         throw new IllegalStateException(f("%s is not JmlClassInvariantDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassInvariantDeclaration> toJmlClassInvariantDeclaration() {
+    public Optional<JmlClassExprDeclaration> toJmlClassInvariantDeclaration() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassInvariantDeclaration> action) {
+    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassExprDeclaration> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

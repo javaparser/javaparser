@@ -1114,8 +1114,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final JmlClassInvariantDeclaration n, final Visitable arg) {
-        final JmlClassInvariantDeclaration n2 = (JmlClassInvariantDeclaration) arg;
+    public Boolean visit(final JmlClassExprDeclaration n, final Visitable arg) {
+        final JmlClassExprDeclaration n2 = (JmlClassExprDeclaration) arg;
         if (!nodeEquals(n.getInvariant(), n2.getInvariant()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
@@ -1142,7 +1142,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final JmlRepresentsDeclaration n2 = (JmlRepresentsDeclaration) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
             return false;
-        if (!nodeEquals(n.getId(), n2.getId()))
+        if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;

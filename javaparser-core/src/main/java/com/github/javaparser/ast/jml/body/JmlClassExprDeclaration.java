@@ -1,36 +1,46 @@
 package com.github.javaparser.ast.jml.body;
 
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlClassInvariantDeclarationMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.metamodel.JmlClassInvariantDeclarationMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClassInvariantDeclaration extends JmlClassLevel<JmlClassInvariantDeclaration> implements NodeWithModifiers<JmlClassInvariantDeclaration> {
-
+public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclaration> implements NodeWithModifiers<JmlClassExprDeclaration> {
+    @OptionalProperty
+    private SimpleName kind;
     private NodeList<Modifier> modifiers;
 
     private Expression invariant;
 
-    public JmlClassInvariantDeclaration() {
+    public JmlClassExprDeclaration() {
         super(null);
     }
 
     @AllFieldsConstructor
-    public JmlClassInvariantDeclaration(NodeList<Modifier> modifiers, Expression invariant) {
-        this(null, modifiers, invariant);
+    public JmlClassExprDeclaration(NodeList<Modifier> modifiers, SimpleName kind, Expression invariant) {
+        this(null, modifiers, kind, invariant);
+    }
+
+    public JmlClassExprDeclaration(TokenRange range, JavaToken begin, NodeList<Modifier> modifiers, Expression expr) {
+        this(range, modifiers, new SimpleName(new TokenRange(begin, begin), begin.getText()), expr);
     }
 
     @Override
@@ -51,7 +61,7 @@ public class JmlClassInvariantDeclaration extends JmlClassLevel<JmlClassInvarian
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassInvariantDeclaration setInvariant(final Expression invariant) {
+    public JmlClassExprDeclaration setInvariant(final Expression invariant) {
         assertNotNull(invariant);
         if (invariant == this.invariant) {
             return this;
@@ -100,15 +110,16 @@ public class JmlClassInvariantDeclaration extends JmlClassLevel<JmlClassInvarian
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlClassInvariantDeclaration clone() {
-        return (JmlClassInvariantDeclaration) accept(new CloneVisitor(), null);
+    public JmlClassExprDeclaration clone() {
+        return (JmlClassExprDeclaration) accept(new CloneVisitor(), null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClassInvariantDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Expression invariant) {
+    public JmlClassExprDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, SimpleName kind,
+                                   Expression invariant) {
         super(tokenRange);
         setModifiers(modifiers);
         setInvariant(invariant);
@@ -121,7 +132,7 @@ public class JmlClassInvariantDeclaration extends JmlClassLevel<JmlClassInvarian
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClassInvariantDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public JmlClassExprDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -142,19 +153,19 @@ public class JmlClassInvariantDeclaration extends JmlClassLevel<JmlClassInvarian
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassInvariantDeclaration asJmlClassInvariantDeclaration() {
+    public JmlClassExprDeclaration asJmlClassInvariantDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassInvariantDeclaration> toJmlClassInvariantDeclaration() {
+    public Optional<JmlClassExprDeclaration> toJmlClassInvariantDeclaration() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassInvariantDeclaration> action) {
+    public void ifJmlClassInvariantDeclaration(Consumer<JmlClassExprDeclaration> action) {
         action.accept(this);
     }
 

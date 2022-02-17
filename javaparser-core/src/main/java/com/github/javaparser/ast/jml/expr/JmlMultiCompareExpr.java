@@ -1,27 +1,37 @@
 package com.github.javaparser.ast.jml.expr;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlMultiCompareExprMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlMultiCompareExprMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
 public class JmlMultiCompareExpr extends Expression implements Jmlish {
+    @NonEmptyProperty
+    private NodeList<Expression> exprs;
+    private List<BinaryExpr.Operator> operators;
 
     @AllFieldsConstructor
     public JmlMultiCompareExpr() {
+    }
+
+    public JmlMultiCompareExpr(TokenRange range, NodeList<Expression> exprs, List<BinaryExpr.Operator> operators) {
     }
 
     @Override
@@ -84,5 +94,21 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     public JmlMultiCompareExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    public NodeList<Expression> getExprs() {
+        return exprs;
+    }
+
+    public void setExprs(NodeList<Expression> exprs) {
+        this.exprs = exprs;
+    }
+
+    public List<BinaryExpr.Operator> getOperators() {
+        return operators;
+    }
+
+    public void setOperators(List<BinaryExpr.Operator> operators) {
+        this.operators = operators;
     }
 }

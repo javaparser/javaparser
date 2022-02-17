@@ -1562,7 +1562,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlClassInvariantDeclaration n, final A arg) {
+    public Visitable visit(final JmlClassExprDeclaration n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression invariant = (Expression) n.getInvariant().accept(this, arg);
@@ -1600,14 +1600,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression expr = (Expression) n.getExpr().accept(this, arg);
-        Name id = (Name) n.getId().accept(this, arg);
+        Name id = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expr == null || id == null)
             return null;
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setExpr(expr);
-        n.setId(id);
+        n.setName(id);
         n.setComment(comment);
         return n;
     }

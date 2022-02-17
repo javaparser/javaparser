@@ -22,7 +22,9 @@ import com.github.javaparser.ast.Generated;
  * @author Alexander Weigl
  * @version 1 (12/13/21)
  */
-public class JmlClassAxiomDeclaration extends JmlClassLevel<JmlClassAccessibleDeclaration> implements NodeWithModifiers<JmlClassAxiomDeclaration> {
+@Deprecated
+public class JmlClassAxiomDeclaration extends JmlClassLevel<JmlClassAccessibleDeclaration>
+        implements NodeWithModifiers<JmlClassAxiomDeclaration> {
 
     NodeList<Modifier> modifiers;
 

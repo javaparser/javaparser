@@ -18,6 +18,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
+@Deprecated
 public class JmlFunction extends Expression implements Jmlish {
 
     private JmlName functionName;

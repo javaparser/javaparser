@@ -15,7 +15,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlDefaultClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -31,51 +33,47 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
 
     private NodeList<Expression> expression;
 
+    public JmlDefaultClause() {
+    }
+
     @AllFieldsConstructor
     public JmlDefaultClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
         this(null, kind, name, heaps, expression);
     }
 
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlDefaultClause(TokenRange tokenRange, SimpleName name, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        super(tokenRange, name);
-        setHeaps(heaps);
-        setExpression(expression);
-        customInitialization();
-    }
 
-    public JmlDefaultClause() {
+    public JmlDefaultClause(TokenRange range, JavaToken kind, SimpleName name, NodeList<SimpleName> heaps, Expression e) {
+        this(range, JmlClauseKind.getKindByToken(kind), name, heaps, new NodeList<>(e));
     }
 
     public JmlDefaultClause(TokenRange range, JavaToken kind, NodeList<SimpleName> heaps, Expression expression) {
-        this(range, JmlClauseKind.getKindByToken(kind), heaps, new NodeList<>(expression));
+        this(range, JmlClauseKind.getKindByToken(kind), null, heaps, new NodeList<>(expression));
     }
 
-    public JmlDefaultClause(TokenRange range, JavaToken begin, Expression expr) {
-        this(range, begin, null, expr);
+    public JmlDefaultClause(TokenRange range, JavaToken kind, Expression expr) {
+        this(range, kind, null, new NodeList<>(), expr);
     }
 
     public JmlDefaultClause(TokenRange range, JavaToken kind, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
-        this(range, JmlClauseKind.getKindByToken(kind), heaps, exprs);
+        this(range, JmlClauseKind.getKindByToken(kind), null, heaps, exprs);
     }
 
-    public JmlDefaultClause(TokenRange range, JavaToken begin, NodeList<Expression> exprs) {
-        this(range, begin, new NodeList<>(), exprs);
+    public JmlDefaultClause(TokenRange range, JavaToken kind, NodeList<Expression> exprs) {
+        this(range, kind, (SimpleName) null, exprs);
     }
 
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
-    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
-        super(tokenRange);
-        setHeaps(heaps);
-        setExpression(expression);
-        customInitialization();
+    public JmlDefaultClause(TokenRange range, JavaToken kind, SimpleName name, Expression expr) {
+        this(range, JmlClauseKind.getKindByToken(kind), name, null, new NodeList<>(expr));
     }
+
+    public JmlDefaultClause(TokenRange range, JavaToken kind, SimpleName name, NodeList<Expression> exprs) {
+        this(range, JmlClauseKind.getKindByToken(kind), name, null, exprs);
+    }
+
+    public JmlDefaultClause(TokenRange range, JavaToken kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+        this(range, JmlClauseKind.getKindByToken(kind), name, heaps, exprs);
+    }
+
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -206,6 +204,7 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
     public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
         super(tokenRange, name);
         setKind(kind);
+        setName(name);
         setHeaps(heaps);
         setExpression(expression);
         customInitialization();

@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.jml.body.JmlClassInvariantDeclaration;
+
+import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -38,7 +39,7 @@ public class JmlClassInvariantDeclarationMetaModel extends JmlClassLevelMetaMode
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlClassInvariantDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlClassInvariantDeclaration.class, "JmlClassInvariantDeclaration", "com.github.javaparser.ast.jml.body", false, false);
+        super(superBaseNodeMetaModel, JmlClassExprDeclaration.class, "JmlClassInvariantDeclaration", "com.github.javaparser.ast.jml.body", false, false);
     }
 
     public PropertyMetaModel invariantPropertyMetaModel;

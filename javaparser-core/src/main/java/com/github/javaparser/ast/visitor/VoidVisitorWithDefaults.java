@@ -643,7 +643,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlClassInvariantDeclaration n, final A arg) {
+    public void visit(final JmlClassExprDeclaration n, final A arg) {
         defaultAction(n, arg);
     }
 

@@ -1,6 +1,5 @@
 package com.github.javaparser.ast.jml.clauses;
 
-import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -12,7 +11,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.Arrays;
+
 import java.util.Optional;
 
 /**
@@ -86,7 +85,7 @@ public abstract class JmlClause extends Node implements Jmlish {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClause removeName() {
-        return setName((SimpleName) null);
+        return setName(null);
     }
 
     @Override

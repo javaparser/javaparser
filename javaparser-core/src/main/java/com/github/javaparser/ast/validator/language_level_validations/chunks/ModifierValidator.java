@@ -25,12 +25,11 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.jml.body.JmlClassInvariantDeclaration;
+import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.body.JmlClassAccessibleDeclaration;
 import com.github.javaparser.ast.jml.body.JmlMethodDeclaration;
 import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
-import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.doc.JmlDocModifier;
 import com.github.javaparser.ast.modules.ModuleRequiresDirective;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
@@ -277,7 +276,7 @@ public class ModifierValidator extends VisitorValidator {
 
     //region jml
     @Override
-    public void visit(JmlClassInvariantDeclaration n, ProblemReporter reporter) {
+    public void visit(JmlClassExprDeclaration n, ProblemReporter reporter) {
         validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL,
                 JML_SPEC_PRIVATE, JML_SPEC_PACKAGE, JML_SPEC_PROTECTED, JML_SPEC_PUBLIC,
                 JML_INSTANCE, JML_NO_STATE, JML_TWO_STATE
