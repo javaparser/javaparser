@@ -18,13 +18,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.ast.Node;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
 public class JmlMultiCompareExpr extends Expression implements Jmlish {
+
     @NonEmptyProperty
     private NodeList<Expression> exprs;
+
     private List<BinaryExpr.Operator> operators;
 
     @AllFieldsConstructor
@@ -96,19 +104,69 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
         customInitialization();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getExprs() {
         return exprs;
     }
 
-    public void setExprs(NodeList<Expression> exprs) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlMultiCompareExpr setExprs(final NodeList<Expression> exprs) {
+        assertNotNull(exprs);
+        if (exprs == this.exprs) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPRS, this.exprs, exprs);
+        if (this.exprs != null)
+            this.exprs.setParentNode(null);
         this.exprs = exprs;
+        setAsParentNodeOf(exprs);
+        return this;
     }
 
-    public List<BinaryExpr.Operator> getOperators() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Operator getOperators() {
         return operators;
     }
 
     public void setOperators(List<BinaryExpr.Operator> operators) {
         this.operators = operators;
+    }
+
+    public JmlMultiCompareExpr setOperators(final Operator operators) {
+        assertNotNull(operators);
+        if (operators == this.operators) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.OPERATORS, this.operators, operators);
+        this.operators = operators;
+        return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < exprs.size(); i++) {
+            if (exprs.get(i) == node) {
+                exprs.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < exprs.size(); i++) {
+            if (exprs.get(i) == node) {
+                exprs.set(i, (Expression) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

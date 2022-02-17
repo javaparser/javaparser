@@ -161,12 +161,6 @@ public class JmlName extends Node implements NodeWithIdentifier<JmlName>, Jmlish
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlNameMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlNameMetaModel;
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null) {

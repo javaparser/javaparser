@@ -29,9 +29,7 @@ import java.util.function.Consumer;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclaration>
-        implements NodeWithModifiers<JmlRepresentsDeclaration>,
-        NodeWithName<JmlRepresentsDeclaration> {
+public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclaration> implements NodeWithModifiers<JmlRepresentsDeclaration>, NodeWithName<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -117,7 +115,7 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
         if (name == this.name) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.ID, this.name, name);
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
         this.name = name;
@@ -150,15 +148,15 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
             setExpr((Expression) replacementNode);
             return true;
         }
-        if (node == name) {
-            setName((Name) replacementNode);
-            return true;
-        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.set(i, (Modifier) replacementNode);
                 return true;
             }
+        }
+        if (node == name) {
+            setName((Name) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }

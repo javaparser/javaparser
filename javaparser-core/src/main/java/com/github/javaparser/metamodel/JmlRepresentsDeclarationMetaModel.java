@@ -43,7 +43,7 @@ public class JmlRepresentsDeclarationMetaModel extends JmlClassLevelMetaModel {
 
     public PropertyMetaModel exprPropertyMetaModel;
 
-    public PropertyMetaModel idPropertyMetaModel;
-
     public PropertyMetaModel modifiersPropertyMetaModel;
+
+    public PropertyMetaModel namePropertyMetaModel;
 }

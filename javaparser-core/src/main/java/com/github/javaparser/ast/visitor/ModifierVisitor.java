@@ -1436,7 +1436,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlMultiCompareExpr n, final A arg) {
+        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (exprs.isEmpty())
+            return null;
+        n.setExprs(exprs);
         n.setComment(comment);
         return n;
     }
@@ -1566,12 +1570,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression invariant = (Expression) n.getInvariant().accept(this, arg);
+        SimpleName kind = n.getKind().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (invariant == null)
             return null;
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setInvariant(invariant);
+        n.setKind(kind);
         n.setComment(comment);
         return n;
     }
@@ -1600,14 +1606,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression expr = (Expression) n.getExpr().accept(this, arg);
-        Name id = (Name) n.getName().accept(this, arg);
+        Name name = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null || id == null)
+        if (expr == null || name == null)
             return null;
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setExpr(expr);
-        n.setName(id);
+        n.setName(name);
         n.setComment(comment);
         return n;
     }

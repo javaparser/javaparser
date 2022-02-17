@@ -15,9 +15,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlDefaultClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -40,7 +38,6 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
     public JmlDefaultClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
         this(null, kind, name, heaps, expression);
     }
-
 
     public JmlDefaultClause(TokenRange range, JavaToken kind, SimpleName name, NodeList<SimpleName> heaps, Expression e) {
         this(range, JmlClauseKind.getKindByToken(kind), name, heaps, new NodeList<>(e));
@@ -73,7 +70,6 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
     public JmlDefaultClause(TokenRange range, JavaToken kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
         this(range, JmlClauseKind.getKindByToken(kind), name, heaps, exprs);
     }
-
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -204,7 +200,6 @@ public class JmlDefaultClause extends JmlClause implements MethodContractable, B
     public JmlDefaultClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
         super(tokenRange, name);
         setKind(kind);
-        setName(name);
         setHeaps(heaps);
         setExpression(expression);
         customInitialization();

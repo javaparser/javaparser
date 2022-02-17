@@ -2184,6 +2184,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final JmlMultiCompareExpr n, final A arg) {
         R result;
+        {
+            result = n.getExprs().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
@@ -2399,6 +2404,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getKind().isPresent()) {
+            result = n.getKind().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getModifiers().accept(this, arg);
             if (result != null)
@@ -2460,12 +2470,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
-            result = n.getName().accept(this, arg);
+            result = n.getModifiers().accept(this, arg);
             if (result != null)
                 return result;
         }
         {
-            result = n.getModifiers().accept(this, arg);
+            result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
         }

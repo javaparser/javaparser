@@ -1270,6 +1270,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlMultiCompareExpr n, final Visitable arg) {
         final JmlMultiCompareExpr n2 = (JmlMultiCompareExpr) arg;
+        if (!nodesEquals(n.getExprs(), n2.getExprs()))
+            return false;
+        if (!objEquals(n.getOperators(), n2.getOperators()))
+            return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
 
@@ -1390,6 +1394,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final JmlClassExprDeclaration n2 = (JmlClassExprDeclaration) arg;
         if (!nodeEquals(n.getInvariant(), n2.getInvariant()))
             return false;
+        if (!nodeEquals(n.getKind(), n2.getKind()))
+            return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
@@ -1418,9 +1424,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final JmlRepresentsDeclaration n2 = (JmlRepresentsDeclaration) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
             return false;
-        if (!nodeEquals(n.getName(), n2.getName()))
-            return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;

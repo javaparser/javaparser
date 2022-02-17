@@ -1348,6 +1348,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlMultiCompareExpr n, final Object arg) {
+        NodeList<Expression> exprs = cloneList(n.getExprs(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlMultiCompareExpr r = new JmlMultiCompareExpr(n.getTokenRange().orElse(null));
         r.setComment(comment);
@@ -1495,10 +1496,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlClassExprDeclaration n, final Object arg) {
         Expression invariant = cloneNode(n.getInvariant(), arg);
+        SimpleName kind = cloneNode(n.getKind(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlClassExprDeclaration r = new JmlClassExprDeclaration(n.getTokenRange().orElse(null), modifiers, null, invariant);
+        JmlClassExprDeclaration r = new JmlClassExprDeclaration(n.getTokenRange().orElse(null), modifiers, kind, invariant);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1523,11 +1525,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlRepresentsDeclaration n, final Object arg) {
         Expression expr = cloneNode(n.getExpr(), arg);
-        Name id = cloneNode(n.getName(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        Name name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlRepresentsDeclaration r = new JmlRepresentsDeclaration(n.getTokenRange().orElse(null), modifiers, id, expr);
+        JmlRepresentsDeclaration r = new JmlRepresentsDeclaration(n.getTokenRange().orElse(null), modifiers, name, expr);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

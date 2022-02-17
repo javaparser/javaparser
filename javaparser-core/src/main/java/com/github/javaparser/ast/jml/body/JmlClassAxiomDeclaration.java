@@ -161,9 +161,4 @@ public class JmlClassAxiomDeclaration extends JmlClassLevel<JmlClassAccessibleDe
         return (JmlClassAxiomDeclaration) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClassAxiomDeclarationMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlClassAxiomDeclarationMetaModel;
-    }
 }

@@ -148,12 +148,6 @@ public class JmlFunction extends Expression implements Jmlish {
         return (JmlFunction) accept(new CloneVisitor(), null);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlFunctionMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlFunctionMetaModel;
-    }
-
     /**
      * This constructor is used by the parser and is considered private.
      */

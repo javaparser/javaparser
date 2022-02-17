@@ -3767,7 +3767,7 @@ Expression RelationalExpression():
 
     {
         if(ops.isEmpty()) return exprs.get(0);
-        if(ops.size() == 1) return new BinaryExpr(range(exprs.get(0), token()), exprs.get(0), exprs.get(1), ops.get(1));
+        if(ops.size() == 1) return new BinaryExpr(range(exprs.get(0), token()), exprs.get(0), exprs.get(1), ops.get(0));
         else return new JmlMultiCompareExpr(range(exprs), exprs, ops);
     }
 }
