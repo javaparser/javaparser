@@ -123,7 +123,6 @@ final class GeneratedJavaParser extends GeneratedJavaParserBase {
     GeneratedJavaParserTokenManager getTokenSource() {
         return token_source;
     }
-}}
 }
 PARSER_END(GeneratedJavaParser)
 
@@ -3036,7 +3035,7 @@ String Identifier():
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
         <ENUM> | <STRICTFP> | <YIELD> | <RECORD> |
-        // overwritten by KeY/SV but still valid in Java
+        // overwritten by Key/SV but still valid in Java
         "model" | "ghost" | "two_state" | "no_state" | "source" | "merge_point" | "exec" | "ccatch" | "ccat" |
         <IDENTIFIER> | <SVIDENTIFIER> | <KEYIDENTIFIER>
     ) { ret = token().getText(); setTokenKind(IDENTIFIER);}
@@ -4304,7 +4303,7 @@ Statement Statement():
             | ret = Block()
             | ret = EmptyStatement()
             | LOOKAHEAD(24) ret = StatementExpression()
-            | ret = KeYMetaConstructStatement()
+            | ret = KeyMetaConstructStatement()
             | LOOKAHEAD(2) ret = StatementSV()
             | ret = SwitchStatement()
             | ret = IfStatement()
@@ -5942,7 +5941,7 @@ MethodDeclaration MethodDeclarationParseStart():
     { return ret; }
 }
 
-//region KeY additions
+//region Key additions
 /*
 Expression ADTGetter() :
 {
@@ -6307,26 +6306,26 @@ KeyExecStatement KeyExecStatement() :
         LOOKAHEAD(5)
         ("ccatch"|"ccat") {beginC=token();} "("  "\\Return" param = Parameter() ")"
         block = Block()
-        {  branches.add(new KeYCcatchReturn(range(beginC, token()), param, block)); }
+        {  branches.add(new KeyCcatchReturn(range(beginC, token()), param, block)); }
     )*
     [
         LOOKAHEAD(5)
         ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" ")"
         block = Block()
-        {  branches.add(new KeYCcatchBreak(range(beginC, token()), block)); }
+        {  branches.add(new KeyCcatchBreak(range(beginC, token()), block)); }
     ]
     (
         LOOKAHEAD(5)
         ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" name=Name() ")"
         block = Block()
-        {  branches.add(new KeYCcatchBreak(range(beginC, token()), name, block)); }
+        {  branches.add(new KeyCcatchBreak(range(beginC, token()), name, block)); }
     )*
 
     [
         LOOKAHEAD(5)
         ("ccatch"|"ccat") {beginC=token();} "("  "\\Break" "*" ")"
         block = Block()
-        {  branches.add(new KeYCcatchBreak(range(beginC, token()), "*", block)); }
+        {  branches.add(new KeyCcatchBreak(range(beginC, token()), "*", block)); }
     ]
 
     [
@@ -6334,14 +6333,14 @@ KeyExecStatement KeyExecStatement() :
         ("ccatch"|"ccat")  {beginC=token();} "("  "\\Continue" ")"
 
         block = Block()
-        {  branches.add(new KeYCcatchContinue(range(beginC, token()), block)); }
+        {  branches.add(new KeyCcatchContinue(range(beginC, token()), block)); }
     ]
 
     (
         LOOKAHEAD(4)
         ("ccatch"|"ccat") {beginC=token();} "("  "\\Continue" name=Name() ")"
         block = Block()
-        {  branches.add(new KeYCcatchBreak(range(beginC, token()), name, block)); }
+        {  branches.add(new KeyCcatchBreak(range(beginC, token()), name, block)); }
     )*
 
     [
@@ -6349,13 +6348,13 @@ KeyExecStatement KeyExecStatement() :
         ("ccatch"|"ccat")  {beginC=token();} "("  "\\Continue" "*" ")"
 
         block = Block()
-        {  branches.add(new KeYCcatchContinue(range(beginC, token()), "*", block)); }
+        {  branches.add(new KeyCcatchContinue(range(beginC, token()), "*", block)); }
     ]
     (
         LOOKAHEAD(3)
         ("ccatch"|"ccat") {beginC=token();} "("  param = Parameter() ")"
         block = Block()
-        {  branches.add(new KeYCcatchParameter(range(beginC, token()), param, block)); }
+        {  branches.add(new KeyCcatchParameter(range(beginC, token()), param, block)); }
     )*
     ( ["ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
     { return new KeyExecStatement(range(begin, token()), execBlock, branches); }
@@ -6479,7 +6478,7 @@ KeyStatementSV StatementSV() :
 	}
 }
 
-KeyMetaConstruct KeYMetaConstructStatement() :
+KeyMetaConstruct KeyMetaConstructStatement() :
 {
     Statement loopStat;
     JavaToken begin;
