@@ -537,16 +537,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlFunction n, final Void arg) {
-        return (n.getArguments().accept(this, arg)) * 31 + (n.getFunctionName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlName n, final Void arg) {
-        return (n.getIdentifier().hashCode()) * 31 + (n.getQualifier().isPresent() ? n.getQualifier().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
     public Integer visit(final JmlRefiningStmt n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
@@ -563,7 +553,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlClassExprDeclaration n, final Void arg) {
-        return (n.getInvariant().accept(this, arg)) * 31 + (n.getKind().isPresent() ? n.getKind().get().accept(this, arg) : 0) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getInvariant().accept(this, arg)) * 31 + (n.getKind().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -658,11 +648,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlOldClause n, final Void arg) {
         return (n.getDeclarations().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlClassAxiomDeclaration n, final Void arg) {
-        return (n.getExpr().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override

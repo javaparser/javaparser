@@ -11,12 +11,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JmlClassInvariantDeclarationMetaModel;
+import com.github.javaparser.metamodel.JmlClassExprDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.JmlClassExprDeclarationMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -24,8 +23,10 @@ import com.github.javaparser.metamodel.JmlClassExprDeclarationMetaModel;
  */
 public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclaration> implements NodeWithModifiers<JmlClassExprDeclaration> {
 
-    @OptionalProperty
     private SimpleName kind;
+
+    @OptionalProperty
+    private SimpleName name;
 
     private NodeList<Modifier> modifiers;
 
@@ -36,7 +37,7 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
     }
 
     @AllFieldsConstructor
-    public JmlClassExprDeclaration(NodeList<Modifier> modifiers, SimpleName kind, Expression invariant) {
+    public JmlClassExprDeclaration(NodeList<Modifier> modifiers, SimpleName kind, SimpleName name, Expression invariant) {
         this(null, modifiers, kind, invariant);
     }
 
@@ -81,15 +82,15 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
         if (node == null) {
             return false;
         }
-        if (kind != null) {
-            if (node == kind) {
-                removeKind();
-                return true;
-            }
-        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
+                return true;
+            }
+        }
+        if (name != null) {
+            if (node == name) {
+                removeName();
                 return true;
             }
         }
@@ -106,15 +107,19 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
             setInvariant((Expression) replacementNode);
             return true;
         }
-        if (kind != null) {
-            if (node == kind) {
-                setKind((SimpleName) replacementNode);
-                return true;
-            }
+        if (node == kind) {
+            setKind((SimpleName) replacementNode);
+            return true;
         }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
+        }
+        if (name != null) {
+            if (node == name) {
+                setName((SimpleName) replacementNode);
                 return true;
             }
         }
@@ -183,29 +188,37 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlClassExprDeclaration() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClassExprDeclaration asJmlClassExprDeclaration() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClassExprDeclaration> toJmlClassExprDeclaration() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassExprDeclaration(Consumer<JmlClassExprDeclaration> action) {
         action.accept(this);
     }
 
-    public Optional<SimpleName> getKind() {
-        return Optional.ofNullable(kind);
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getKind() {
+        return kind;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlClassExprDeclaration setKind(final SimpleName kind) {
+        assertNotNull(kind);
         if (kind == this.kind) {
             return this;
         }
@@ -217,12 +230,46 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClassExprDeclaration removeKind() {
         return setKind(null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClassExprDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClassExprDeclarationMetaModel;
+    }
+
+    public Optional<SimpleName> getName() {
+        return Optional.ofNullable(name);
+    }
+
+    public JmlClassExprDeclaration setName(final SimpleName name) {
+        if (name == this.name) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
+        return this;
+    }
+
+    public JmlClassExprDeclaration removeName() {
+        return setName(null);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public JmlClassExprDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, SimpleName kind, SimpleName name, Expression invariant) {
+        super(tokenRange);
+        setModifiers(modifiers);
+        setKind(kind);
+        setName(name);
+        setInvariant(invariant);
+        customInitialization();
     }
 }

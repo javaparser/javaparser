@@ -966,23 +966,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
 
     @Override
-    public void visit(JmlFunction n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        n.getFunctionName().accept(this, arg);
-        printList(n.getArguments(), ", ", "(", ")", "", "");
-    }
-
-    @Override
-    public void visit(JmlName n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        if (n.getQualifier().isPresent()) {
-            n.getQualifier().get().accept(this, arg);
-            printer.print(".");
-        }
-        printer.print(n.getIdentifier());
-    }
-
-    @Override
     public void visit(JmlRefiningStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         wrapInJmlIfNeeded(() -> {
@@ -1188,16 +1171,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.print(n.getKind().jmlSymbol);
         printer.print(" ");
         printList(n.getDeclarations().getVariables(), ", ");
-        printer.print(";");
-    }
-
-    @Override
-    public void visit(JmlClassAxiomDeclaration n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        n.getModifiers().accept(this, arg);
-        printer.print("axiom");
-        printer.print(" ");
-        n.getExpr().accept(this, arg);
         printer.print(";");
     }
 

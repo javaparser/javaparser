@@ -883,20 +883,6 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlFunction asJmlFunction() {
-        throw new IllegalStateException(f("%s is not JmlFunction, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlFunction> toJmlFunction() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlFunction(Consumer<JmlFunction> action) {
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlLabel() {
         return false;
     }

@@ -1059,17 +1059,6 @@ public class ConcreteSyntaxModel {
                 token(RPAREN)
         ));
         concreteSyntaxModelByClass.put(JmlMultiCompareExpr.class, sequence());
-        concreteSyntaxModelByClass.put(JmlFunction.class, sequence(
-                attribute(FUNCTION_NAME),
-                token(LPAREN),
-                list(ARGUMENTS, token(COMMA)),
-                token(RPAREN)
-        ));
-        concreteSyntaxModelByClass.put(JmlName.class, sequence(
-                child(QUALIFIER),
-                token(DOT),
-                child(IDENTIFIER)
-        ));
         concreteSyntaxModelByClass.put(JmlQuantifiedExpr.class,
                 sequence(
                         token(LPAREN),
@@ -1095,9 +1084,10 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(JmlTypeExpr.class, sequence(child(TYPE)));
 
-        concreteSyntaxModelByClass.put(JmlClassAxiomDeclaration.class,
-                sequence(token(AXIOM),
-                        modifiers(),
+        concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class,
+                sequence(modifiers(),
+                        attribute(KIND),
+                        attribute(NAME),
                         child(EXPR),
                         semicolon()));
 

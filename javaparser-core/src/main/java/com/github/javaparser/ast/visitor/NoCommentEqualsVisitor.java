@@ -1082,22 +1082,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final JmlFunction n, final Visitable arg) {
-        final JmlFunction n2 = (JmlFunction) arg;
-        if (!nodesEquals(n.getArguments(), n2.getArguments()))
-            return false;
-        return nodeEquals(n.getFunctionName(), n2.getFunctionName());
-    }
-
-    @Override
-    public Boolean visit(final JmlName n, final Visitable arg) {
-        final JmlName n2 = (JmlName) arg;
-        if (!objEquals(n.getIdentifier(), n2.getIdentifier()))
-            return false;
-        return nodeEquals(n.getQualifier(), n2.getQualifier());
-    }
-
-    @Override
     public Boolean visit(final JmlRefiningStmt n, final Visitable arg) {
         return true;
     }
@@ -1124,6 +1108,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodeEquals(n.getKind(), n2.getKind()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         return nodesEquals(n.getAnnotations(), n2.getAnnotations());
     }
@@ -1334,16 +1320,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodeEquals(n.getDeclarations(), n2.getDeclarations()))
             return false;
         return nodeEquals(n.getName(), n2.getName());
-    }
-
-    @Override
-    public Boolean visit(final JmlClassAxiomDeclaration n, final Visitable arg) {
-        final JmlClassAxiomDeclaration n2 = (JmlClassAxiomDeclaration) arg;
-        if (!nodeEquals(n.getExpr(), n2.getExpr()))
-            return false;
-        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
-            return false;
-        return nodesEquals(n.getAnnotations(), n2.getAnnotations());
     }
 
     @Override

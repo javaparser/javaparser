@@ -1519,28 +1519,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlFunction n, final A arg) {
-        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
-        JmlName functionName = (JmlName) n.getFunctionName().accept(this, arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (functionName == null)
-            return null;
-        n.setArguments(arguments);
-        n.setFunctionName(functionName);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
-    public Visitable visit(final JmlName n, final A arg) {
-        JmlName qualifier = n.getQualifier().map(s -> (JmlName) s.accept(this, arg)).orElse(null);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setQualifier(qualifier);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final JmlRefiningStmt n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setComment(comment);
@@ -1570,14 +1548,16 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression invariant = (Expression) n.getInvariant().accept(this, arg);
-        SimpleName kind = n.getKind().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
+        SimpleName kind = (SimpleName) n.getKind().accept(this, arg);
+        SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (invariant == null)
+        if (invariant == null || kind == null)
             return null;
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setInvariant(invariant);
         n.setKind(kind);
+        n.setName(name);
         n.setComment(comment);
         return n;
     }
@@ -1803,21 +1783,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return null;
         n.setDeclarations(declarations);
         n.setName(name);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
-    public Visitable visit(final JmlClassAxiomDeclaration n, final A arg) {
-        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
-        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
-        Expression expr = (Expression) n.getExpr().accept(this, arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null)
-            return null;
-        n.setAnnotations(annotations);
-        n.setModifiers(modifiers);
-        n.setExpr(expr);
         n.setComment(comment);
         return n;
     }

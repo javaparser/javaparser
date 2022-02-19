@@ -563,31 +563,21 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassAxiomDeclaration asJmlClassAxiomDeclaration() {
-        throw new IllegalStateException(f("%s is not JmlClassAxiomDeclaration, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassAxiomDeclaration> toJmlClassAxiomDeclaration() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassAxiomDeclaration(Consumer<JmlClassAxiomDeclaration> action) {
-    }
-
     public boolean isJmlClassExprDeclaration() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClassExprDeclaration asJmlClassExprDeclaration() {
         throw new IllegalStateException(f("%s is not JmlClassExprDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClassExprDeclaration> toJmlClassExprDeclaration() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassExprDeclaration(Consumer<JmlClassExprDeclaration> action) {
     }
 }

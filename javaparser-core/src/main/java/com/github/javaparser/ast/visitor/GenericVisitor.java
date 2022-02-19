@@ -282,10 +282,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlForallClause n, A arg);
 
-    R visit(JmlFunction n, A arg);
-
-    R visit(JmlName n, A arg);
-
     R visit(JmlRefiningStmt n, A arg);
 
     R visit(JmlClauseIf n, A arg);
@@ -327,8 +323,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlFieldDeclaration n, A arg);
 
     R visit(JmlOldClause n, A arg);
-
-    R visit(JmlClassAxiomDeclaration n, A arg);
 
     R visit(JmlTypeExpr n, A arg);
 }

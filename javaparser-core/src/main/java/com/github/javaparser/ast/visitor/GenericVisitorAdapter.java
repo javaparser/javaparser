@@ -2322,41 +2322,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlFunction n, final A arg) {
-        R result;
-        {
-            result = n.getArguments().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getFunctionName().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlName n, final A arg) {
-        R result;
-        if (n.getQualifier().isPresent()) {
-            result = n.getQualifier().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            return result;
-        }
-        return null;
-    }
-
-    @Override
     public R visit(final JmlRefiningStmt n, final A arg) {
         R result;
         if (n.getComment().isPresent()) {
@@ -2404,13 +2369,18 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getKind().isPresent()) {
-            result = n.getKind().get().accept(this, arg);
+        {
+            result = n.getKind().accept(this, arg);
             if (result != null)
                 return result;
         }
         {
             result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2891,31 +2861,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         if (n.getName().isPresent()) {
             result = n.getName().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlClassAxiomDeclaration n, final A arg) {
-        R result;
-        {
-            result = n.getExpr().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getModifiers().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getAnnotations().accept(this, arg);
             if (result != null)
                 return result;
         }

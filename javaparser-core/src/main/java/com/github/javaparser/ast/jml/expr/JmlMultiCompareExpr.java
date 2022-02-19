@@ -1,12 +1,10 @@
 package com.github.javaparser.ast.jml.expr;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Jmlish;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -14,15 +12,11 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlMultiCompareExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl
@@ -30,16 +24,36 @@ import com.github.javaparser.ast.Node;
  */
 public class JmlMultiCompareExpr extends Expression implements Jmlish {
 
+    public JmlMultiCompareExpr(TokenRange range, NodeList<Expression> exprs, List<BinaryExpr.Operator> ops) {
+        this(range, exprs, new Operators(ops));
+    }
+
+    public static class Operators extends ArrayList<BinaryExpr.Operator> {
+
+        public Operators(List<BinaryExpr.Operator> ops) {
+            super(ops);
+        }
+    }
+
     @NonEmptyProperty
     private NodeList<Expression> exprs;
 
-    private List<BinaryExpr.Operator> operators;
+    private Operators operators;
 
     @AllFieldsConstructor
-    public JmlMultiCompareExpr() {
+    public JmlMultiCompareExpr(NodeList<Expression> exprs, Operators operators) {
+        this(null, exprs, operators);
     }
 
-    public JmlMultiCompareExpr(TokenRange range, NodeList<Expression> exprs, List<BinaryExpr.Operator> operators) {
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public JmlMultiCompareExpr(TokenRange tokenRange, NodeList<Expression> exprs, Operators operators) {
+        super(tokenRange);
+        setExprs(exprs);
+        setOperators(operators);
+        customInitialization();
     }
 
     @Override
@@ -124,15 +138,12 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Operator getOperators() {
+    public Operators getOperators() {
         return operators;
     }
 
-    public void setOperators(List<BinaryExpr.Operator> operators) {
-        this.operators = operators;
-    }
-
-    public JmlMultiCompareExpr setOperators(final Operator operators) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlMultiCompareExpr setOperators(final Operators operators) {
         assertNotNull(operators);
         if (operators == this.operators) {
             return this;
@@ -143,6 +154,7 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null) {
             return false;
@@ -157,6 +169,7 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;

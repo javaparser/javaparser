@@ -620,16 +620,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlFunction n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlName n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
     public R visit(final JmlRefiningStmt n, final A arg) {
         return defaultAction(n, arg);
     }
@@ -741,11 +731,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlOldClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlClassAxiomDeclaration n, final A arg) {
         return defaultAction(n, arg);
     }
 

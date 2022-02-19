@@ -1346,26 +1346,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JmlFunction n, final Visitable arg) {
-        final JmlFunction n2 = (JmlFunction) arg;
-        if (!nodesEquals(n.getArguments(), n2.getArguments()))
-            return false;
-        if (!nodeEquals(n.getFunctionName(), n2.getFunctionName()))
-            return false;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
-    public Boolean visit(final JmlName n, final Visitable arg) {
-        final JmlName n2 = (JmlName) arg;
-        if (!objEquals(n.getIdentifier(), n2.getIdentifier()))
-            return false;
-        if (!nodeEquals(n.getQualifier(), n2.getQualifier()))
-            return false;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
     public Boolean visit(final JmlRefiningStmt n, final Visitable arg) {
         final JmlRefiningStmt n2 = (JmlRefiningStmt) arg;
         return nodeEquals(n.getComment(), n2.getComment());
@@ -1397,6 +1377,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getKind(), n2.getKind()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
@@ -1645,18 +1627,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getDeclarations(), n2.getDeclarations()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
-            return false;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
-    public Boolean visit(final JmlClassAxiomDeclaration n, final Visitable arg) {
-        final JmlClassAxiomDeclaration n2 = (JmlClassAxiomDeclaration) arg;
-        if (!nodeEquals(n.getExpr(), n2.getExpr()))
-            return false;
-        if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
-            return false;
-        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }

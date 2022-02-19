@@ -274,10 +274,6 @@ public interface VoidVisitor<A> {
 
     void visit(JmlForallClause n, A arg);
 
-    void visit(JmlFunction n, A arg);
-
-    void visit(JmlName n, A arg);
-
     void visit(JmlRefiningStmt n, A arg);
 
     void visit(JmlClauseIf n, A arg);
@@ -319,8 +315,6 @@ public interface VoidVisitor<A> {
     void visit(JmlFieldDeclaration n, A arg);
 
     void visit(JmlOldClause n, A arg);
-
-    void visit(JmlClassAxiomDeclaration n, A arg);
 
     void visit(JmlTypeExpr n, A arg);
 }

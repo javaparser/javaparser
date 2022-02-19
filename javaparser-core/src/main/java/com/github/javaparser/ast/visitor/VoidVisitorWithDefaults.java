@@ -618,16 +618,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlFunction n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlName n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
     public void visit(final JmlRefiningStmt n, final A arg) {
         defaultAction(n, arg);
     }
@@ -739,11 +729,6 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlOldClause n, final A arg) {
-        defaultAction(n, arg);
-    }
-
-    @Override
-    public void visit(final JmlClassAxiomDeclaration n, final A arg) {
         defaultAction(n, arg);
     }
 
