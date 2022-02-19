@@ -215,7 +215,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.9.0</version>
+                    <version>3.10.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -285,7 +285,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.3.2</version>
                     <configuration>
                         <source>${java.version}</source>
                         <additionalOptions>
@@ -298,7 +298,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.10.0</version>
+                    <version>3.11.0</version>
                     <configuration>
                         <!-- TODO/FIXME: Is this still the way to disable doclint during release/site? -->
                         <additionalOptions>
