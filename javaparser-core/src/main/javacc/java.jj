@@ -6239,17 +6239,7 @@ KeyTransactionStatement KeyTransactionStatement() :
   | <TRANSACTIONFINISH>
   | <TRANSACTIONABORT>
   ) {begin=token();}
-  /*
-     int type = 0;
-     if(name.indexOf("#begin") != -1) {
-        type = TransactionStatement.BEGIN;
-     } else if(name.indexOf("#commit") != -1) {
-        type = TransactionStatement.COMMIT;
-     } else if(name.indexOf("#finish") != -1) {
-        type = TransactionStatement.FINISH;
-     } else if(name.indexOf("#abort") != -1) {
-        type = TransactionStatement.ABORT;
-     }*/
+
   ";"
   { return new KeyTransactionStatement(range(begin, token()), begin); }
 }
@@ -6356,7 +6346,7 @@ KeyExecStatement KeyExecStatement() :
         block = Block()
         {  branches.add(new KeyCcatchParameter(range(beginC, token()), param, block)); }
     )*
-    ( ["ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
+    ( ["ccatch"|"ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
     { return new KeyExecStatement(range(begin, token()), execBlock, branches); }
 }
 
@@ -6472,7 +6462,7 @@ KeyStatementSV StatementSV() :
     KeyStatementSV result;
 }
 {
-    <SVIDENTIFIER> //TODO weigl remove SEMICOLON?
+  <SVIDENTIFIER> //TODO weigl remove SEMICOLON?
 	{
 	    return new KeyStatementSV(token().toTokenRange(), token().getText());
 	}
