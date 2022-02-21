@@ -21,7 +21,7 @@ class DescriptorTest extends AbstractResolutionTest {
     void descriptorTest() {
         String code = 
                 "public class A {\n" +
-                "  A(int i, double d, Thread t) {return new Object();}\n" +
+                "  A(int i, double d, Thread t) {}\n" +
                 "  Object m(int i, double d, Thread t) {return new Object();}\n" +
                 "  void m(int i, double d, Thread t) {}\n" +
                 "  int[] m(int i, double d, Thread t) {return new int[] {};}\n" +
