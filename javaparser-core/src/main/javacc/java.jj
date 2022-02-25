@@ -4733,24 +4733,6 @@ AssertStmt AssertStatement():
     { return new AssertStmt(range(begin, token()), check, msg);  }
 }
 
-/*LabeledStmt JmlLabeledLoopsStatement():
-{
-    SimpleName label;
-    Statement stmt;
-    JavaToken begin;
-    NodeList<JmlContracts> contracts;
-}
-{
-    contracts=JmlLoopInvariants()
-    label = SimpleName() { begin=token(); }
-    ":"
-    ( stmt = WhileStatement(contracts)
-    | stmt = DoStatement(contracts)
-    | stmt = ForStatement(contracts)
-    )
-    { return new LabeledStmt(range(begin, token()), label, stmt); }
-}
-*/
 
 /**
  * // TODO: Examine more closely.
@@ -6434,9 +6416,9 @@ NodeList<ImportDeclaration> JmlImportDeclarations():
 ArbitraryNodeContainer JmlMethodLevelStart():
 {
     ArbitraryNodeContainer ret = new ArbitraryNodeContainer();
-    JmlStatements statements;
+    NodeList<JmlStatement> statements=null;
     NodeList<Modifier> mods = new NodeList<>();
-    NodeList<JmlContracts> contracts = new NodeList<>();
+    NodeList<JmlContract> contracts = new NodeList<>();
     JavaToken semi = null, end = null;
     SimpleName label;
 }
@@ -6447,7 +6429,7 @@ ArbitraryNodeContainer JmlMethodLevelStart():
     { ret.getChildren().add(new LabeledStmt(range(label,end), label,
                               new EmptyStmt(semi!=null ? range(semi,semi) : null))); }
   | statements=JmlStatements()
-      { ret.getChildren().addAll(statements.getElements()); }
+      { ret.getChildren().addAll(statements); }
   | contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
   | jmlModifiersInner(mods)         { ret.getChildren().addAll(mods); mods.clear();}
   )+
@@ -6455,9 +6437,9 @@ ArbitraryNodeContainer JmlMethodLevelStart():
   { return ret; }
 }
 
-NodeList<JmlContracts> JmlRefiningContract():
+NodeList<JmlContract> JmlRefiningContract():
 {
-    NodeList<JmlContracts> ret = new NodeList<>();
+    NodeList<JmlContract> ret = new NodeList<>();
 }
 {
     [<REFINING>]
@@ -6465,18 +6447,16 @@ NodeList<JmlContracts> JmlRefiningContract():
     {return ret;}
 }
 
-JmlStatements JmlStatements():
+NodeList<JmlStatement> JmlStatements():
 {
  NodeList<JmlStatement> statements = new NodeList<>();
  JmlStatement first, last=null;
 }
 {
-  //JmlStart(stmts)
   first=JmlStatement() {statements.add(first);}
   ( last=JmlStatement() {statements.add(last);} )*
-  //JmlEnd()
   {
-    return new JmlStatements(range(first,last!=null?last:first), statements);
+    return statements;
   }
 }
 
@@ -6517,9 +6497,33 @@ JmlClause JmlLoopInvClause():
     {return new JmlSimpleExprClause(range(begin, token()), begin, label, expr);}
 }
 
-NodeList<JmlContracts> JmlLoopInvariants():
+JmlContract JmlLoopContract():
 {
-    NodeList<JmlContracts> containers = emptyNodeList();
+  Behavior b = Behavior.NONE;
+  SimpleName name = null;
+  JavaToken begin;
+  JmlClause clause;
+  NodeList<JmlClause> clauses = new NodeList<>();
+}
+{
+	<LOOP_CONTRACT> { begin=token(); }
+	[ b=JmlBehavior() ]
+	[LOOKAHEAD(2) name=SimpleName() ":"]
+	(
+	    clause=JmlContractClause() {clauses.add(clause);}
+	  |
+	    clause=JmlLoopInvClauses() {clauses.add(clause);}
+	)*
+	{ return new JmlContract(range(begin, token()), new NodeList<>(),
+                              JmlContract.Type.LOOP, b, name, new NodeList<>(),
+                              clauses, new NodeList<>());
+    }
+}
+
+
+NodeList<JmlContract> JmlLoopInvariants():
+{
+    NodeList<JmlContract> contracts = new NodeList<>();
     NodeList<JmlClause> clauses = emptyNodeList();
     JavaToken begin;
     JmlClause clause;
@@ -6528,32 +6532,31 @@ NodeList<JmlContracts> JmlLoopInvariants():
 {
   (
     {
-      JmlContracts contracts = new JmlContracts();
-      JmlContract contract = new JmlContract();
-      NodeList<JmlContract> elements = new NodeList<>(contract);
-      Behavior b;
+      JmlContract contract;
     }
     (
-      <LOOP_CONTRACT>
-      {contract.setLoopContract(true);}
-      (b=JmlBehavior() {contract.setBehavior(b);})?
-      [LOOKAHEAD(2) name=SimpleName() ":" {contract.setName(name);}]
-      (
-        clause=JmlContractClause() {contract.getClauses().add(clause);}
-      |
-        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
-      )*
+      contract=JmlLoopContract()
     |
-      //This line is unfolded -- important for the fast lookahead
-      clause = JmlLoopInvClause() ";" {contract.getClauses().add(clause);}
-      (
-        clause=JmlLoopInvClauses() {contract.getClauses().add(clause);}
-      )*
+      contract = JmlInvContract()
     )
-    //JmlEnd()
-    {contracts.getElements().add(contract); containers.add(contracts);}
+    {contracts.add(contract);}
   )+
-  { return containers;}
+  { return contracts;}
+}
+
+JmlContract JmlInvContract():
+{
+  JavaToken begin;
+  JmlClause clause;
+  NodeList<JmlClause> clauses = new NodeList<>();
+}
+{
+  //This line is unfolded -- important for the fast lookahead
+  clause = JmlLoopInvClause() ";" { clauses.add(clause); }
+  (
+      clause=JmlLoopInvClauses() { clauses.add(clause); }
+  )*
+  { return new JmlContract(range(clause, token()), Behavior.NONE, new NodeList<>(), clauses, new NodeList<>()); }
 }
 
 JmlClause JmlLoopInvClauses():
@@ -6572,25 +6575,7 @@ JmlClause JmlLoopInvClauses():
   {return ret;}
 }
 
-NodeList<JmlContracts> JmlContracts():
-{
-    NodeList<JmlContracts> contracts = emptyNodeList();
-    NodeList<JmlContract> elements = emptyNodeList();
-    JmlContracts contract;
-    JavaToken begin, end;
-}
-{
-  ( LOOKAHEAD(5) //to dinstinguish from JmlModifier
-    elements=JmlContractsInner()
-    {
-       contract = new JmlContracts(range(elements.get(0),elements.get(elements.size()-1)), elements);
-       contracts.add(contract);
-    }
-  )+
-  { return contracts;}
-}
-
-NodeList<JmlContract> JmlContractsInner():
+NodeList<JmlContract> JmlContracts():
 {
     JmlContract bc = null;
     NodeList<JmlContract> contracts = emptyNodeList();
@@ -6622,7 +6607,7 @@ JmlContract JmlContract():
   (b=JmlBehavior())?
   (LOOKAHEAD(3) SimpleName() ":")?
   (clause=JmlContractClause() {clauses.add(clause);})+
-  (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+  (<NESTED_CONTRACT_START> subContracts=JmlContracts() <NESTED_CONTRACT_END>)?
   {return new JmlContract(range(orIfInvalid(begin==null?INVALID:begin,clauses.get(0)), token()), b, new NodeList<>(), clauses, subContracts);}
 }
 
@@ -6901,7 +6886,7 @@ ArbitraryNodeContainer JmlClassLevelStart():
 {
     NodeList<Node> ret = new NodeList<>();
     JmlClassLevel element;
-    NodeList<JmlContracts> contracts;
+    NodeList<JmlContract> contracts;
     ModifierHolder modifiers;
     JavaToken begin;
 }{
@@ -7025,7 +7010,7 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
       [<MODEL_BEHAVIOR> | <MODEL_BEHAVIOUR>]
       {begin=token();}
       (clause=JmlContractClause() { clauses.add(clause);  begin=orIfInvalid(begin==null?INVALID:begin, clause); })+
-      (<NESTED_CONTRACT_START> subContracts=JmlContractsInner() <NESTED_CONTRACT_END>)?
+      (<NESTED_CONTRACT_START> subContracts=JmlContracts() <NESTED_CONTRACT_END>)?
       {
        c = new JmlContract(range(begin,token()), Behavior.MODEL, new NodeList<>(), clauses, subContracts);
       }

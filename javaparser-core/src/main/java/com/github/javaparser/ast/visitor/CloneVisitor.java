@@ -1543,18 +1543,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlStatements n, final Object arg) {
-        NodeList<JmlStatement> elements = cloneList(n.getElements(), arg);
-        NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
-        Comment comment = cloneNode(n.getComment(), arg);
-        JmlStatements r = new JmlStatements(n.getTokenRange().orElse(null), n.isSingleLine(), jmlTags, elements);
-        r.setComment(comment);
-        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
-        copyData(n, r);
-        return r;
-    }
-
-    @Override
     public Visitable visit(final JmlSetComprehension n, final Object arg) {
         VariableDeclarator binding = cloneNode(n.getBinding(), arg);
         Expression predicate = cloneNode(n.getPredicate(), arg);

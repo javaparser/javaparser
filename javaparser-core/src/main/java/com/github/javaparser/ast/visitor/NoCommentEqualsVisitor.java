@@ -1171,16 +1171,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final JmlStatements n, final Visitable arg) {
-        final JmlStatements n2 = (JmlStatements) arg;
-        if (!nodesEquals(n.getElements(), n2.getElements()))
-            return false;
-        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
-            return false;
-        return objEquals(n.isSingleLine(), n2.isSingleLine());
-    }
-
-    @Override
     public Boolean visit(final JmlSetComprehension n, final Visitable arg) {
         final JmlSetComprehension n2 = (JmlSetComprehension) arg;
         if (!nodeEquals(n.getBinding(), n2.getBinding()))

@@ -1450,18 +1450,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JmlStatements n, final Visitable arg) {
-        final JmlStatements n2 = (JmlStatements) arg;
-        if (!nodesEquals(n.getElements(), n2.getElements()))
-            return false;
-        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
-            return false;
-        if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
-            return false;
-        return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
     public Boolean visit(final JmlSetComprehension n, final Visitable arg) {
         final JmlSetComprehension n2 = (JmlSetComprehension) arg;
         if (!nodeEquals(n.getBinding(), n2.getBinding()))

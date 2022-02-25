@@ -1072,14 +1072,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlStatements n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        startJmlComment(n.isSingleLine(), n.getJmlTags());
-        printList(n.getElements(), "\n");
-        endJmlComment();
-    }
-
-    @Override
     public void visit(JmlSetComprehension n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);

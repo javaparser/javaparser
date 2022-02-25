@@ -1631,17 +1631,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlStatements n, final A arg) {
-        NodeList<JmlStatement> elements = modifyList(n.getElements(), arg);
-        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setElements(elements);
-        n.setJmlTags(jmlTags);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final JmlSetComprehension n, final A arg) {
         VariableDeclarator binding = (VariableDeclarator) n.getBinding().accept(this, arg);
         Expression predicate = (Expression) n.getPredicate().accept(this, arg);

@@ -569,11 +569,6 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlStatements n, final Void arg) {
-        return (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0);
-    }
-
-    @Override
     public Integer visit(final JmlSetComprehension n, final Void arg) {
         return (n.getBinding().accept(this, arg)) * 31 + (n.getPredicate().accept(this, arg));
     }

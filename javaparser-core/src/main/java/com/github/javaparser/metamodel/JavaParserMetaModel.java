@@ -305,9 +305,6 @@ public final class JavaParserMetaModel {
         jmlBodyDeclarationMetaModel.getConstructorParameters().add(jmlBodyDeclarationMetaModel.singleLinePropertyMetaModel);
         jmlBodyDeclarationMetaModel.getConstructorParameters().add(jmlBodyDeclarationMetaModel.jmlTagsPropertyMetaModel);
         jmlBodyDeclarationMetaModel.getConstructorParameters().add(jmlBodyDeclarationMetaModel.elementsPropertyMetaModel);
-        jmlStatementsMetaModel.getConstructorParameters().add(jmlStatementsMetaModel.singleLinePropertyMetaModel);
-        jmlStatementsMetaModel.getConstructorParameters().add(jmlStatementsMetaModel.jmlTagsPropertyMetaModel);
-        jmlStatementsMetaModel.getConstructorParameters().add(jmlStatementsMetaModel.elementsPropertyMetaModel);
         jmlSimpleExprClauseMetaModel.getConstructorParameters().add(jmlSimpleExprClauseMetaModel.kindPropertyMetaModel);
         jmlSimpleExprClauseMetaModel.getConstructorParameters().add(jmlClauseMetaModel.namePropertyMetaModel);
         jmlSimpleExprClauseMetaModel.getConstructorParameters().add(jmlSimpleExprClauseMetaModel.heapsPropertyMetaModel);
@@ -459,7 +456,6 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(jmlSignalsOnlyClauseMetaModel);
         nodeMetaModels.add(jmlSimpleExprClauseMetaModel);
         nodeMetaModels.add(jmlStatementMetaModel);
-        nodeMetaModels.add(jmlStatementsMetaModel);
         nodeMetaModels.add(jmlStmtWithExpressionMetaModel);
         nodeMetaModels.add(jmlTypeExprMetaModel);
         nodeMetaModels.add(jmlUnreachableStmtMetaModel);
@@ -986,12 +982,6 @@ public final class JavaParserMetaModel {
         jmlBodyDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlBodyDeclarationMetaModel.jmlTagsPropertyMetaModel);
         jmlBodyDeclarationMetaModel.singleLinePropertyMetaModel = new PropertyMetaModel(jmlBodyDeclarationMetaModel, "singleLine", boolean.class, Optional.empty(), false, false, false, false);
         jmlBodyDeclarationMetaModel.getDeclaredPropertyMetaModels().add(jmlBodyDeclarationMetaModel.singleLinePropertyMetaModel);
-        jmlStatementsMetaModel.elementsPropertyMetaModel = new PropertyMetaModel(jmlStatementsMetaModel, "elements", com.github.javaparser.ast.jml.stmt.JmlStatement.class, Optional.of(jmlStatementMetaModel), false, false, true, false);
-        jmlStatementsMetaModel.getDeclaredPropertyMetaModels().add(jmlStatementsMetaModel.elementsPropertyMetaModel);
-        jmlStatementsMetaModel.jmlTagsPropertyMetaModel = new PropertyMetaModel(jmlStatementsMetaModel, "jmlTags", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, true, false);
-        jmlStatementsMetaModel.getDeclaredPropertyMetaModels().add(jmlStatementsMetaModel.jmlTagsPropertyMetaModel);
-        jmlStatementsMetaModel.singleLinePropertyMetaModel = new PropertyMetaModel(jmlStatementsMetaModel, "singleLine", boolean.class, Optional.empty(), false, false, false, false);
-        jmlStatementsMetaModel.getDeclaredPropertyMetaModels().add(jmlStatementsMetaModel.singleLinePropertyMetaModel);
         jmlSimpleExprClauseMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(jmlSimpleExprClauseMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         jmlSimpleExprClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlSimpleExprClauseMetaModel.expressionPropertyMetaModel);
         jmlSimpleExprClauseMetaModel.heapsPropertyMetaModel = new PropertyMetaModel(jmlSimpleExprClauseMetaModel, "heaps", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), true, false, true, false);
@@ -1468,9 +1458,6 @@ public final class JavaParserMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlBodyDeclarationMetaModel jmlBodyDeclarationMetaModel = new JmlBodyDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
-
-    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final JmlStatementsMetaModel jmlStatementsMetaModel = new JmlStatementsMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlSimpleExprClauseMetaModel jmlSimpleExprClauseMetaModel = new JmlSimpleExprClauseMetaModel(Optional.of(jmlClauseMetaModel));

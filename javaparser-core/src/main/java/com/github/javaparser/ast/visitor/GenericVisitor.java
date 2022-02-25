@@ -298,8 +298,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlBodyDeclaration n, A arg);
 
-    R visit(JmlStatements n, A arg);
-
     R visit(JmlSetComprehension n, A arg);
 
     R visit(JmlGhostStatement n, A arg);

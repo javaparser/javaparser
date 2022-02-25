@@ -892,11 +892,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlStatements n, Void arg) {
-
-    }
-
-    @Override
     public void visit(JmlSetComprehension n, Void arg) {
 
     }

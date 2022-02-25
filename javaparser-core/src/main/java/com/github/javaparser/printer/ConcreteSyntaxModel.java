@@ -1073,7 +1073,6 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlRefiningStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlRepresentsDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlSetComprehension.class, sequence());
-        concreteSyntaxModelByClass.put(JmlStatements.class, sequence());
         concreteSyntaxModelByClass.put(JmlStmtWithExpression.class, sequence(
                 child(KIND),
                 space(),
