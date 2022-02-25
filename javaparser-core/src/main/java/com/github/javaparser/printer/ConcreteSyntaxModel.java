@@ -998,7 +998,7 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
-        concreteSyntaxModelByClass.put(JmlDefaultClause.class, sequence(
+        concreteSyntaxModelByClass.put(JmlSimpleExprClause.class, sequence(
                 child(ObservableProperty.KIND),
                 child(HEAPS),
                 space(),

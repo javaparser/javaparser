@@ -2197,7 +2197,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlDefaultClause n, final A arg) {
+    public R visit(final JmlSimpleExprClause n, final A arg) {
         R result;
         {
             result = n.getExpression().accept(this, arg);
@@ -2876,6 +2876,31 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlMultiExprClause n, final A arg) {
+        R result;
+        {
+            result = n.getExpression().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getHeaps().isPresent()) {
+            result = n.getHeaps().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
             if (result != null)
                 return result;
         }

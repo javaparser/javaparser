@@ -1446,11 +1446,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlDefaultClause n, final A arg) {
-        NodeList<Expression> expression = modifyList(n.getExpression(), arg);
+    public Visitable visit(final JmlSimpleExprClause n, final A arg) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
+            return null;
         n.setExpression(expression);
         n.setHeaps(heaps);
         n.setName(name);
@@ -1794,6 +1796,19 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         if (type == null)
             return null;
         n.setType(type);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlMultiExprClause n, final A arg) {
+        NodeList<Expression> expression = modifyList(n.getExpression(), arg);
+        NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
+        SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setExpression(expression);
+        n.setHeaps(heaps);
+        n.setName(name);
         n.setComment(comment);
         return n;
     }

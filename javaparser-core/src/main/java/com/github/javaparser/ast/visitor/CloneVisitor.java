@@ -1358,12 +1358,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlDefaultClause n, final Object arg) {
-        NodeList<Expression> expression = cloneList(n.getExpression(), arg);
+    public Visitable visit(final JmlSimpleExprClause n, final Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
         NodeList<SimpleName> heaps = cloneList(n.getHeaps().orElse(null), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlDefaultClause r = new JmlDefaultClause(n.getTokenRange().orElse(null), n.getKind(), name, heaps, expression);
+        JmlSimpleExprClause r = new JmlSimpleExprClause(n.getTokenRange().orElse(null), n.getKind(), name, heaps, expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1737,6 +1737,19 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlTypeExpr r = new JmlTypeExpr(n.getTokenRange().orElse(null), type);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlMultiExprClause n, final Object arg) {
+        NodeList<Expression> expression = cloneList(n.getExpression(), arg);
+        NodeList<SimpleName> heaps = cloneList(n.getHeaps().orElse(null), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlMultiExprClause r = new JmlMultiExprClause(n.getTokenRange().orElse(null), n.getKind(), name, heaps, expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

@@ -241,10 +241,12 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
         return JavaParserMetaModel.jmlClassExprDeclarationMetaModel;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getName() {
         return Optional.ofNullable(name);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlClassExprDeclaration setName(final SimpleName name) {
         if (name == this.name) {
             return this;
@@ -257,6 +259,7 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClassExprDeclaration removeName() {
         return setName(null);
     }
@@ -264,6 +267,7 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlClassExprDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, SimpleName kind, SimpleName name, Expression invariant) {
         super(tokenRange);
         setModifiers(modifiers);

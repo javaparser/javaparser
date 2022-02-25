@@ -260,7 +260,7 @@ public interface VoidVisitor<A> {
 
     void visit(JmlMultiCompareExpr n, A arg);
 
-    void visit(JmlDefaultClause n, A arg);
+    void visit(JmlSimpleExprClause n, A arg);
 
     void visit(JmlSignalsClause n, A arg);
 
@@ -317,4 +317,6 @@ public interface VoidVisitor<A> {
     void visit(JmlOldClause n, A arg);
 
     void visit(JmlTypeExpr n, A arg);
+
+    void visit(JmlMultiExprClause n, A arg);
 }

@@ -816,7 +816,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlDefaultClause n, Void arg) {
+    public void visit(JmlSimpleExprClause n, Void arg) {
 
     }
 
@@ -958,6 +958,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlTypeExpr n, Void arg) {
         n.getType().accept(this, arg);
+    }
+
+    @Override
+    public void visit(JmlMultiExprClause n, Void arg) {
+
     }
 
     @Override

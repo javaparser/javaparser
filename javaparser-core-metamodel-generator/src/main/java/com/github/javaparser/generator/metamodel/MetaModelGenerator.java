@@ -205,7 +205,8 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlClause.class);
         add(JmlBodyDeclaration.class);
         add(JmlStatements.class);
-        add(JmlDefaultClause.class);
+        add(JmlSimpleExprClause.class);
+        add(JmlMultiExprClause.class);
         add(JmlSignalsClause.class);
         add(JmlSignalsOnlyClause.class);
         add(JmlClauseLabel.class);

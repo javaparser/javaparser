@@ -6499,7 +6499,7 @@ JmlStatement JmlStatement():
 
 JmlClause JmlLoopInvClause():
 {
-    NodeList<Expression> exprs;
+    Expression expr;
     JavaToken begin;
     SimpleName label = null;
 }
@@ -6513,8 +6513,8 @@ JmlClause JmlLoopInvClause():
     {begin=token();}
     ( JmlHeaps() )? //TODO weigl add to clause
 	[ LOOKAHEAD(2) label=SimpleName() ":"]
-    exprs=ExpressionList()
-    {return new JmlDefaultClause(range(begin, token()), begin, label, exprs);}
+    expr=Expression()
+    {return new JmlSimpleExprClause(range(begin, token()), begin, label, expr);}
 }
 
 NodeList<JmlContracts> JmlLoopInvariants():
@@ -6687,7 +6687,7 @@ JmlClause JmlDecreasesClause():
   {begin=token();}
   [ LOOKAHEAD(2) label=SimpleName() ":"]
   expr=Expression()
-  {return new JmlDefaultClause(range(begin,token()), begin, label, expr);}
+  {return new JmlSimpleExprClause(range(begin,token()), begin, label, expr);}
 }
 
 Behavior JmlBehavior():
@@ -6748,7 +6748,7 @@ JmlClause JmlReturnsClause():
 {
   <RETURNS> {begin = token();}
   expr=Expression()
-  { return new JmlDefaultClause(range(begin, token()), begin, expr); }
+  { return new JmlSimpleExprClause(range(begin, token()), begin, expr); }
 }
 
 SimpleName JmlHeap():
@@ -6786,11 +6786,11 @@ JmlClause JmlAccessibleClause():
   [ LOOKAHEAD(2) label=SimpleName() ":"]
   exprs=ExpressionList()
   (<ESC_MEASURED_BY> e=Expression())? //TODO weigl: add measured by expression, new ast class
-  { return new JmlDefaultClause(range(begin, token()), begin, label, heaps, exprs); }
+  { return new JmlMultiExprClause(range(begin, token()), begin, label, heaps, exprs); }
 }
 
 
-JmlDefaultClause JmlDefaultClause():
+JmlClause JmlDefaultClause():
 {
     NodeList<SimpleName> heaps = new NodeList<>();
     Expression e;
@@ -6808,7 +6808,7 @@ JmlDefaultClause JmlDefaultClause():
   (heaps=JmlHeaps())?
   [LOOKAHEAD(2) name = SimpleName() ":"]
   e=Expression()
-  { return new JmlDefaultClause(range(begin, token()), begin, name, heaps, e); }
+  { return new JmlSimpleExprClause(range(begin, token()), begin, name, heaps, e); }
 }
 
 /**

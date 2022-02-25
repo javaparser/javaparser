@@ -1027,9 +1027,9 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final JmlDefaultClause n, final Visitable arg) {
-        final JmlDefaultClause n2 = (JmlDefaultClause) arg;
-        if (!nodesEquals(n.getExpression(), n2.getExpression()))
+    public Boolean visit(final JmlSimpleExprClause n, final Visitable arg) {
+        final JmlSimpleExprClause n2 = (JmlSimpleExprClause) arg;
+        if (!nodeEquals(n.getExpression(), n2.getExpression()))
             return false;
         if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
             return false;
@@ -1326,5 +1326,17 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final JmlTypeExpr n, final Visitable arg) {
         final JmlTypeExpr n2 = (JmlTypeExpr) arg;
         return nodeEquals(n.getType(), n2.getType());
+    }
+
+    @Override
+    public Boolean visit(final JmlMultiExprClause n, final Visitable arg) {
+        final JmlMultiExprClause n2 = (JmlMultiExprClause) arg;
+        if (!nodesEquals(n.getExpression(), n2.getExpression()))
+            return false;
+        if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
+            return false;
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        return nodeEquals(n.getName(), n2.getName());
     }
 }

@@ -268,7 +268,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlMultiCompareExpr n, A arg);
 
-    R visit(JmlDefaultClause n, A arg);
+    R visit(JmlSimpleExprClause n, A arg);
 
     R visit(JmlSignalsClause n, A arg);
 
@@ -325,4 +325,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlOldClause n, A arg);
 
     R visit(JmlTypeExpr n, A arg);
+
+    R visit(JmlMultiExprClause n, A arg);
 }

@@ -311,10 +311,14 @@ public final class JavaParserMetaModel {
         jmlStatementsMetaModel.getConstructorParameters().add(jmlStatementsMetaModel.singleLinePropertyMetaModel);
         jmlStatementsMetaModel.getConstructorParameters().add(jmlStatementsMetaModel.jmlTagsPropertyMetaModel);
         jmlStatementsMetaModel.getConstructorParameters().add(jmlStatementsMetaModel.elementsPropertyMetaModel);
-        jmlDefaultClauseMetaModel.getConstructorParameters().add(jmlDefaultClauseMetaModel.kindPropertyMetaModel);
-        jmlDefaultClauseMetaModel.getConstructorParameters().add(jmlClauseMetaModel.namePropertyMetaModel);
-        jmlDefaultClauseMetaModel.getConstructorParameters().add(jmlDefaultClauseMetaModel.heapsPropertyMetaModel);
-        jmlDefaultClauseMetaModel.getConstructorParameters().add(jmlDefaultClauseMetaModel.expressionPropertyMetaModel);
+        jmlSimpleExprClauseMetaModel.getConstructorParameters().add(jmlSimpleExprClauseMetaModel.kindPropertyMetaModel);
+        jmlSimpleExprClauseMetaModel.getConstructorParameters().add(jmlClauseMetaModel.namePropertyMetaModel);
+        jmlSimpleExprClauseMetaModel.getConstructorParameters().add(jmlSimpleExprClauseMetaModel.heapsPropertyMetaModel);
+        jmlSimpleExprClauseMetaModel.getConstructorParameters().add(jmlSimpleExprClauseMetaModel.expressionPropertyMetaModel);
+        jmlMultiExprClauseMetaModel.getConstructorParameters().add(jmlMultiExprClauseMetaModel.kindPropertyMetaModel);
+        jmlMultiExprClauseMetaModel.getConstructorParameters().add(jmlClauseMetaModel.namePropertyMetaModel);
+        jmlMultiExprClauseMetaModel.getConstructorParameters().add(jmlMultiExprClauseMetaModel.heapsPropertyMetaModel);
+        jmlMultiExprClauseMetaModel.getConstructorParameters().add(jmlMultiExprClauseMetaModel.expressionPropertyMetaModel);
         jmlSignalsClauseMetaModel.getConstructorParameters().add(jmlSignalsClauseMetaModel.typePropertyMetaModel);
         jmlSignalsClauseMetaModel.getConstructorParameters().add(jmlClauseMetaModel.namePropertyMetaModel);
         jmlSignalsClauseMetaModel.getConstructorParameters().add(jmlSignalsClauseMetaModel.exprPropertyMetaModel);
@@ -438,7 +442,6 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(jmlClauseMetaModel);
         nodeMetaModels.add(jmlContractMetaModel);
         nodeMetaModels.add(jmlContractsMetaModel);
-        nodeMetaModels.add(jmlDefaultClauseMetaModel);
         nodeMetaModels.add(jmlDocDeclarationMetaModel);
         nodeMetaModels.add(jmlDocMetaModel);
         nodeMetaModels.add(jmlDocStmtMetaModel);
@@ -450,6 +453,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(jmlLetExprMetaModel);
         nodeMetaModels.add(jmlMethodDeclarationMetaModel);
         nodeMetaModels.add(jmlMultiCompareExprMetaModel);
+        nodeMetaModels.add(jmlMultiExprClauseMetaModel);
         nodeMetaModels.add(jmlOldClauseMetaModel);
         nodeMetaModels.add(jmlQuantifiedExprMetaModel);
         nodeMetaModels.add(jmlRefiningStmtMetaModel);
@@ -457,6 +461,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(jmlSetComprehensionMetaModel);
         nodeMetaModels.add(jmlSignalsClauseMetaModel);
         nodeMetaModels.add(jmlSignalsOnlyClauseMetaModel);
+        nodeMetaModels.add(jmlSimpleExprClauseMetaModel);
         nodeMetaModels.add(jmlStatementMetaModel);
         nodeMetaModels.add(jmlStatementsMetaModel);
         nodeMetaModels.add(jmlStmtWithExpressionMetaModel);
@@ -997,12 +1002,18 @@ public final class JavaParserMetaModel {
         jmlStatementsMetaModel.getDeclaredPropertyMetaModels().add(jmlStatementsMetaModel.jmlTagsPropertyMetaModel);
         jmlStatementsMetaModel.singleLinePropertyMetaModel = new PropertyMetaModel(jmlStatementsMetaModel, "singleLine", boolean.class, Optional.empty(), false, false, false, false);
         jmlStatementsMetaModel.getDeclaredPropertyMetaModels().add(jmlStatementsMetaModel.singleLinePropertyMetaModel);
-        jmlDefaultClauseMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(jmlDefaultClauseMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
-        jmlDefaultClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlDefaultClauseMetaModel.expressionPropertyMetaModel);
-        jmlDefaultClauseMetaModel.heapsPropertyMetaModel = new PropertyMetaModel(jmlDefaultClauseMetaModel, "heaps", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), true, false, true, false);
-        jmlDefaultClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlDefaultClauseMetaModel.heapsPropertyMetaModel);
-        jmlDefaultClauseMetaModel.kindPropertyMetaModel = new PropertyMetaModel(jmlDefaultClauseMetaModel, "kind", com.github.javaparser.ast.jml.clauses.JmlClauseKind.class, Optional.empty(), false, false, false, false);
-        jmlDefaultClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlDefaultClauseMetaModel.kindPropertyMetaModel);
+        jmlSimpleExprClauseMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(jmlSimpleExprClauseMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
+        jmlSimpleExprClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlSimpleExprClauseMetaModel.expressionPropertyMetaModel);
+        jmlSimpleExprClauseMetaModel.heapsPropertyMetaModel = new PropertyMetaModel(jmlSimpleExprClauseMetaModel, "heaps", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), true, false, true, false);
+        jmlSimpleExprClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlSimpleExprClauseMetaModel.heapsPropertyMetaModel);
+        jmlSimpleExprClauseMetaModel.kindPropertyMetaModel = new PropertyMetaModel(jmlSimpleExprClauseMetaModel, "kind", com.github.javaparser.ast.jml.clauses.JmlClauseKind.class, Optional.empty(), false, false, false, false);
+        jmlSimpleExprClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlSimpleExprClauseMetaModel.kindPropertyMetaModel);
+        jmlMultiExprClauseMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(jmlMultiExprClauseMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
+        jmlMultiExprClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlMultiExprClauseMetaModel.expressionPropertyMetaModel);
+        jmlMultiExprClauseMetaModel.heapsPropertyMetaModel = new PropertyMetaModel(jmlMultiExprClauseMetaModel, "heaps", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), true, false, true, false);
+        jmlMultiExprClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlMultiExprClauseMetaModel.heapsPropertyMetaModel);
+        jmlMultiExprClauseMetaModel.kindPropertyMetaModel = new PropertyMetaModel(jmlMultiExprClauseMetaModel, "kind", com.github.javaparser.ast.jml.clauses.JmlClauseKind.class, Optional.empty(), false, false, false, false);
+        jmlMultiExprClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlMultiExprClauseMetaModel.kindPropertyMetaModel);
         jmlSignalsClauseMetaModel.exprPropertyMetaModel = new PropertyMetaModel(jmlSignalsClauseMetaModel, "expr", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         jmlSignalsClauseMetaModel.getDeclaredPropertyMetaModels().add(jmlSignalsClauseMetaModel.exprPropertyMetaModel);
         jmlSignalsClauseMetaModel.typePropertyMetaModel = new PropertyMetaModel(jmlSignalsClauseMetaModel, "type", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false);
@@ -1475,7 +1486,10 @@ public final class JavaParserMetaModel {
     public static final JmlStatementsMetaModel jmlStatementsMetaModel = new JmlStatementsMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final JmlDefaultClauseMetaModel jmlDefaultClauseMetaModel = new JmlDefaultClauseMetaModel(Optional.of(jmlClauseMetaModel));
+    public static final JmlSimpleExprClauseMetaModel jmlSimpleExprClauseMetaModel = new JmlSimpleExprClauseMetaModel(Optional.of(jmlClauseMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final JmlMultiExprClauseMetaModel jmlMultiExprClauseMetaModel = new JmlMultiExprClauseMetaModel(Optional.of(jmlClauseMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final JmlSignalsClauseMetaModel jmlSignalsClauseMetaModel = new JmlSignalsClauseMetaModel(Optional.of(jmlClauseMetaModel));
