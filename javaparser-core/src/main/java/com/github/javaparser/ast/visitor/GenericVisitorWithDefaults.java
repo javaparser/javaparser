@@ -733,5 +733,4 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     public R visit(final JmlMultiExprClause n, final A arg) {
         return defaultAction(n, arg);
     }
-
 }

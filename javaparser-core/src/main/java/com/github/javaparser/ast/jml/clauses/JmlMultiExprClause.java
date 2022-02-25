@@ -29,10 +29,10 @@ public class JmlMultiExprClause extends JmlClause {
     @OptionalProperty
     private NodeList<SimpleName> heaps;
 
-    private NodeList<Expression> expression;
+    private NodeList<Expression> expressions;
 
     @AllFieldsConstructor
-    public JmlMultiExprClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
+    public JmlMultiExprClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
         // this(null, kind, name, heaps, expression);
     }
 
@@ -58,21 +58,21 @@ public class JmlMultiExprClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExpression() {
-        return expression;
+    public NodeList<Expression> getExpressions() {
+        return expressions;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiExprClause setExpression(final NodeList<Expression> expression) {
-        assertNotNull(expression);
-        if (expression == this.expression) {
+    public JmlMultiExprClause setExpressions(final NodeList<Expression> expressions) {
+        assertNotNull(expressions);
+        if (expressions == this.expressions) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null)
-            this.expression.setParentNode(null);
-        this.expression = expression;
-        setAsParentNodeOf(expression);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expressions, expressions);
+        if (this.expressions != null)
+            this.expressions.setParentNode(null);
+        this.expressions = expressions;
+        setAsParentNodeOf(expressions);
         return this;
     }
 
@@ -173,5 +173,22 @@ public class JmlMultiExprClause extends JmlClause {
         setHeaps(heaps);
         setExpression(expression);
         customInitialization();
+    }
+
+    public NodeList<Expression> getExpression() {
+        return expression;
+    }
+
+    public JmlMultiExprClause setExpression(final NodeList<Expression> expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
+        return this;
     }
 }

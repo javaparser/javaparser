@@ -641,5 +641,4 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final JmlMultiExprClause n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getHeaps().isPresent() ? n.getHeaps().get().accept(this, arg) : 0) * 31 + (n.getKind().hashCode()) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0);
     }
-
 }

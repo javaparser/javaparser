@@ -639,5 +639,4 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final JmlMultiExprClause n, final Void arg) {
         return n.hashCode();
     }
-
 }

@@ -1628,5 +1628,4 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
     }
-
 }

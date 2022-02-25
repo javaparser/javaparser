@@ -338,6 +338,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlContract(TokenRange tokenRange, NodeList<SimpleName> jmlTags, Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
         setJmlTags(jmlTags);

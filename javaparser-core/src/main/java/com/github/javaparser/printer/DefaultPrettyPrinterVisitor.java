@@ -1178,7 +1178,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             n.getName().get().accept(this, arg);
             printer.print(" ");
         }
-        printList(n.getExpression(), ", ");
+        printList(n.getExpressions(), ", ");
         printer.println(";");
     }
 

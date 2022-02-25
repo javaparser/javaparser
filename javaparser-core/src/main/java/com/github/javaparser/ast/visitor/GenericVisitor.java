@@ -323,5 +323,4 @@ public interface GenericVisitor<R, A> {
     R visit(JmlTypeExpr n, A arg);
 
     R visit(JmlMultiExprClause n, A arg);
-
 }

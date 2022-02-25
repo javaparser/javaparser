@@ -1006,7 +1006,14 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 newline()
         ));
-
+        concreteSyntaxModelByClass.put(JmlMultiExprClause.class, sequence(
+                child(ObservableProperty.KIND),
+                child(HEAPS),
+                space(),
+                child(EXPRESSION),
+                semicolon(),
+                newline()
+        ));
         concreteSyntaxModelByClass.put(JmlClauseLabel.class, sequence(
                 child(ObservableProperty.KIND),
                 token(LPAREN),
