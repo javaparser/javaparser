@@ -12,7 +12,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
 import com.github.javaparser.ast.jml.NodeWithContracts;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
-import com.github.javaparser.ast.jml.clauses.JmlContracts;
 import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.stmt.JmlStatement;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -104,8 +103,6 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                             reporter.report(child, "JML modifier does not refer to any construct.");
                         } else if (child instanceof JmlContract) {
                             reporter.report(child, "JML contract without a method found.");
-                        } else if (child instanceof JmlContracts) {
-                            reporter.report(child, "JML contract without a method found.");
                         } else {
                             reporter.report(child, "JML construct " + child.getClass().getSimpleName() + " not supported at this position.");
                         }
@@ -119,12 +116,10 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                         } else if (child instanceof Modifier) {
                             ((NodeWithModifiers<?>) next).getModifiers().add((Modifier) child);
                         } else if (child instanceof JmlContract) {
-                            ((NodeWithContracts<?>) next).addContracts(new JmlContracts(false,
-                                    new NodeList<>(), new NodeList<>((JmlContract) child)));
-                        } else if (child instanceof JmlContracts) {
-                            ((NodeWithContracts<?>) next).addContracts((JmlContracts) child);
+                            ((NodeWithContracts<?>) next).addContracts((JmlContract) child);
                         } else {
-                            reporter.report(child, "JML construct " + child.getClass().getSimpleName() + " not supported at this position.");
+                            reporter.report(child, "JML construct " + child.getClass().getSimpleName()
+                                    + " not supported at this position.");
                         }
                     }
                 }
@@ -209,13 +204,13 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                                     "statement is not able to carry modifiers. " + nextStatement.getMetaModel().getTypeName());
                         }
                     }
-                } else if (child instanceof JmlContracts) {
+                } else if (child instanceof JmlContract) {
                     if (nextStatement == null) {
                         reporter.report(child, "You passed a contract but there is following " +
                                 "statement to carry it.");
                     } else {
                         try {
-                            ((NodeWithContracts<?>) nextStatement).addContracts((JmlContracts) child);
+                            ((NodeWithContracts<?>) nextStatement).addContracts((JmlContract) child);
                         } catch (ClassCastException e) {
                             reporter.report(nextStatement, "You passed a JML contract but the following " +
                                     "statement is not able to carry contract. " + nextStatement.getMetaModel().getTypeName());

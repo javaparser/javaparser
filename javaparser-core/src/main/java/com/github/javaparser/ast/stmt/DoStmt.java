@@ -25,7 +25,8 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.jml.clauses.JmlContracts;
+import com.github.javaparser.ast.jml.NodeWithContracts;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
@@ -47,10 +48,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithCondition<DoStmt> {
+public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithCondition<DoStmt>, NodeWithContracts<DoStmt> {
 
     @OptionalProperty
-    private NodeList<JmlContracts> contracts;
+    private NodeList<JmlContract> contracts;
 
     private Statement body;
 
@@ -61,7 +62,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     }
 
     @AllFieldsConstructor
-    public DoStmt(final Statement body, final Expression condition, final NodeList<JmlContracts> contracts) {
+    public DoStmt(final Statement body, final Expression condition, final NodeList<JmlContract> contracts) {
         this(null, body, condition, contracts);
     }
 
@@ -77,7 +78,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public DoStmt(TokenRange tokenRange, Statement body, Expression condition, NodeList<JmlContracts> contracts) {
+    public DoStmt(TokenRange tokenRange, Statement body, Expression condition, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setBody(body);
         setCondition(condition);
@@ -181,7 +182,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         if (contracts != null) {
             for (int i = 0; i < contracts.size(); i++) {
                 if (contracts.get(i) == node) {
-                    contracts.set(i, (JmlContracts) replacementNode);
+                    contracts.set(i, (JmlContract) replacementNode);
                     return true;
                 }
             }
@@ -214,12 +215,12 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<JmlContracts>> getContracts() {
+    public Optional<NodeList<JmlContract>> getContracts() {
         return Optional.ofNullable(contracts);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public DoStmt setContracts(final NodeList<JmlContracts> contracts) {
+    public DoStmt setContracts(final NodeList<JmlContract> contracts) {
         if (contracts == this.contracts) {
             return this;
         }

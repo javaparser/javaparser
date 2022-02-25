@@ -1147,7 +1147,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         if (!nodesEquals(n.getClauses(), n2.getClauses()))
             return false;
-        if (!objEquals(n.isLoopContract(), n2.isLoopContract()))
+        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
             return false;
         if (!nodesEquals(n.getModifiers(), n2.getModifiers()))
             return false;
@@ -1168,16 +1168,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
             return false;
         return nodesEquals(n.getAnnotations(), n2.getAnnotations());
-    }
-
-    @Override
-    public Boolean visit(final JmlContracts n, final Visitable arg) {
-        final JmlContracts n2 = (JmlContracts) arg;
-        if (!nodesEquals(n.getElements(), n2.getElements()))
-            return false;
-        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
-            return false;
-        return objEquals(n.isSingleLine(), n2.isSingleLine());
     }
 
     @Override
@@ -1339,4 +1329,5 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         return nodeEquals(n.getName(), n2.getName());
     }
+
 }

@@ -7,7 +7,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
-import com.github.javaparser.ast.jml.clauses.JmlContracts;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.stmt.Statement;
@@ -27,7 +27,7 @@ public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelP
 
     private Modifier modifiers;
     @OptionalProperty
-    private NodeList<JmlContracts> contracts;
+    private NodeList<JmlContract> contracts;
     private NodeList<AnnotationExpr> annotations;
     private NodeList<Statement> statements;
 
@@ -58,12 +58,12 @@ public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelP
     }
 
     @Override
-    public Optional<NodeList<JmlContracts>> getContracts() {
+    public Optional<NodeList<JmlContract>> getContracts() {
         return Optional.of(contracts);
     }
 
     @Override
-    public JmlModelProgram setContracts(NodeList<JmlContracts> contracts) {
+    public JmlModelProgram setContracts(NodeList<JmlContract> contracts) {
         return null;
     }
 

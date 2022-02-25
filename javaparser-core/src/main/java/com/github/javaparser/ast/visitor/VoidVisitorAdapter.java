@@ -886,6 +886,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlContract n, final A arg) {
         n.getClauses().forEach(p -> p.accept(this, arg));
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().ifPresent(l -> l.accept(this, arg));
         n.getSubContracts().forEach(p -> p.accept(this, arg));
@@ -897,13 +898,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getElements().forEach(p -> p.accept(this, arg));
         n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
-        n.getComment().ifPresent(l -> l.accept(this, arg));
-    }
-
-    @Override
-    public void visit(final JmlContracts n, final A arg) {
-        n.getElements().forEach(p -> p.accept(this, arg));
-        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

@@ -568,17 +568,12 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlContract n, final Void arg) {
-        return (n.getBehavior().hashCode()) * 31 + (n.getClauses().accept(this, arg)) * 31 + (n.isLoopContract() ? 1 : 0) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getSubContracts().accept(this, arg)) * 31 + (n.getType().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getBehavior().hashCode()) * 31 + (n.getClauses().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getSubContracts().accept(this, arg)) * 31 + (n.getType().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     public Integer visit(final JmlBodyDeclaration n, final Void arg) {
         return (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlContracts n, final Void arg) {
-        return (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -659,4 +654,5 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final JmlMultiExprClause n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getHeaps().isPresent() ? n.getHeaps().get().accept(this, arg) : 0) * 31 + (n.getKind().hashCode()) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
+
 }

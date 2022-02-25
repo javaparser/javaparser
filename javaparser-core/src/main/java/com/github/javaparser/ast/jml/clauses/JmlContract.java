@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract> {
 
-    private boolean isLoopContract;
+    private NodeList<SimpleName> jmlTags;
 
     private Type type = Type.METHOD;
 
@@ -41,8 +41,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @AllFieldsConstructor
-    public JmlContract(Type type, boolean isLoopContract, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
-        this(null, isLoopContract, behavior, modifiers, clauses, subContracts);
+    public JmlContract(NodeList<SimpleName> jmlTags, Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+        this(null, behavior, modifiers, clauses, subContracts);
+    }
+
+    public JmlContract(Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+        this(null, behavior, modifiers, clauses, subContracts);
     }
 
     public JmlContract(TokenRange tokenRange) {
@@ -150,6 +154,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
                 return true;
             }
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
@@ -180,6 +190,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         for (int i = 0; i < clauses.size(); i++) {
             if (clauses.get(i) == node) {
                 clauses.set(i, (JmlClause) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
                 return true;
             }
         }
@@ -232,16 +248,30 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isLoopContract() {
-        return isLoopContract;
+        return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlContract setLoopContract(final boolean isLoopContract) {
-        if (isLoopContract == this.isLoopContract) {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlContract setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.LOOP_CONTRACT, this.isLoopContract, isLoopContract);
-        this.isLoopContract = isLoopContract;
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
         return this;
     }
 
@@ -286,7 +316,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlContract removeName() {
-        return setName((SimpleName) null);
+        return setName(null);
     }
 
     /**
@@ -297,6 +327,21 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         super(tokenRange);
         setType(type);
         setLoopContract(isLoopContract);
+        setBehavior(behavior);
+        setName(name);
+        setModifiers(modifiers);
+        setClauses(clauses);
+        setSubContracts(subContracts);
+        customInitialization();
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public JmlContract(TokenRange tokenRange, NodeList<SimpleName> jmlTags, Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+        super(tokenRange);
+        setJmlTags(jmlTags);
+        setType(type);
         setBehavior(behavior);
         setName(name);
         setModifiers(modifiers);

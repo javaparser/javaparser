@@ -1035,7 +1035,6 @@ public class ConcreteSyntaxModel {
                 sequence(child(TYPE), space(), child(NAME)));
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlContract.class, sequence());
-        concreteSyntaxModelByClass.put(JmlContracts.class, sequence());
         concreteSyntaxModelByClass.put(JmlGhostStatement.class, sequence(
 
         ));

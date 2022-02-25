@@ -2,8 +2,7 @@ package com.github.javaparser.ast.jml;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.jml.clauses.JmlContracts;
-import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 
 import java.util.Optional;
 
@@ -13,12 +12,12 @@ import java.util.Optional;
  */
 public interface NodeWithContracts<T> {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    Optional<NodeList<JmlContracts>> getContracts();
+    Optional<NodeList<JmlContract>> getContracts();
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    T setContracts(NodeList<JmlContracts> contracts);
+    T setContracts(NodeList<JmlContract> contracts);
 
-    default void addContracts(JmlContracts contracts) {
+    default void addContracts(JmlContract contracts) {
         if (getContracts().isPresent()) {
             getContracts().get().add(contracts);
         } else {

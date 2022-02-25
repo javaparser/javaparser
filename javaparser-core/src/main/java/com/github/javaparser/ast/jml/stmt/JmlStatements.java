@@ -19,6 +19,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (3/18/21)
  */
+@Deprecated
 public class JmlStatements extends Statement implements Jmlish, JmlContainer<JmlStatements, JmlStatement> {
 
     private boolean singleLine;
@@ -28,7 +29,7 @@ public class JmlStatements extends Statement implements Jmlish, JmlContainer<Jml
     private NodeList<JmlStatement> elements;
 
     public JmlStatements() {
-        this((TokenRange) null);
+        this(null);
     }
 
     public JmlStatements(TokenRange tokenRange, NodeList<JmlStatement> elements) {

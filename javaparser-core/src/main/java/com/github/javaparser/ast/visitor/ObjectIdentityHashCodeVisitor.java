@@ -567,11 +567,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final JmlContracts n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
     public Integer visit(final JmlStatements n, final Void arg) {
         return n.hashCode();
     }
@@ -649,4 +644,5 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final JmlMultiExprClause n, final Void arg) {
         return n.hashCode();
     }
+
 }

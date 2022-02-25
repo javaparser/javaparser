@@ -45,7 +45,7 @@ public class JmlContractMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel clausesPropertyMetaModel;
 
-    public PropertyMetaModel isLoopContractPropertyMetaModel;
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
 
     public PropertyMetaModel modifiersPropertyMetaModel;
 

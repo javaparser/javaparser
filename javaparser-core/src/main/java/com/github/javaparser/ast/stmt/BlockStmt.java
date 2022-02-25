@@ -26,7 +26,7 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.jml.NodeWithContracts;
-import com.github.javaparser.ast.jml.clauses.JmlContracts;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -49,7 +49,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     private NodeList<Statement> statements;
 
     @OptionalProperty
-    private NodeList<JmlContracts> contracts = new NodeList<>();
+    private NodeList<JmlContract> contracts = new NodeList<>();
 
     public BlockStmt() {
         this(null, new NodeList<>(), new NodeList<>());
@@ -60,7 +60,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     }
 
     @AllFieldsConstructor
-    public BlockStmt(final NodeList<Statement> statements, final NodeList<JmlContracts> contracts) {
+    public BlockStmt(final NodeList<Statement> statements, final NodeList<JmlContract> contracts) {
         this(null, statements, contracts);
     }
 
@@ -72,7 +72,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements, NodeList<JmlContracts> contracts) {
+    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setStatements(statements);
         setContracts(contracts);
@@ -154,7 +154,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (contracts != null) {
             for (int i = 0; i < contracts.size(); i++) {
                 if (contracts.get(i) == node) {
-                    contracts.set(i, (JmlContracts) replacementNode);
+                    contracts.set(i, (JmlContract) replacementNode);
                     return true;
                 }
             }
@@ -193,12 +193,12 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<JmlContracts>> getContracts() {
+    public Optional<NodeList<JmlContract>> getContracts() {
         return Optional.ofNullable(contracts);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt setContracts(final NodeList<JmlContracts> contracts) {
+    public BlockStmt setContracts(final NodeList<JmlContract> contracts) {
         if (contracts == this.contracts) {
             return this;
         }
