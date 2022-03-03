@@ -62,6 +62,7 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.expr.DoubleLiteralExpr;
 import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.EnumExpression;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.InstanceOfExpr;
@@ -2002,4 +2003,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if(expr)
             printer.unindent();
     }
+    @Override
+	public void visit(EnumExpression n, Void arg) {
+		printOrphanCommentsBeforeThisChildNode(n);
+		printComment(n.getComment(), arg);
+
+		printer.print(n.getValue().toString());
+
+	}
 }

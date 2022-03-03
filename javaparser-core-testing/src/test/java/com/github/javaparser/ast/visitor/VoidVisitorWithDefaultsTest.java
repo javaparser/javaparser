@@ -58,7 +58,13 @@ class VoidVisitorWithDefaultsTest {
 
         argument = new Object();
         visitor = spy(
-            new VoidVisitorWithDefaults<Object>() {}
+            new VoidVisitorWithDefaults<Object>() {
+
+				@Override
+				public void visit(EnumExpression n, Object arg) {
+					// TODO Auto-generated method stub
+					
+				}}
         );
     }
 

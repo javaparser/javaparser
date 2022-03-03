@@ -1154,4 +1154,12 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         return true;
     }
+
+	@Override
+	public Boolean visit(EnumExpression n, Visitable arg) {
+		 final StringLiteralExpr n2 = (StringLiteralExpr) arg;
+	        if (!objEquals(n.getValue(), n2.getValue()))
+	            return false;
+	        return true;
+	}
 }

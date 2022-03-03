@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
+import com.github.javaparser.ast.expr.EnumExpression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.LiteralStringValueExpr;
 import com.github.javaparser.ast.expr.LongLiteralExpr;
@@ -45,4 +46,10 @@ public class NoUnderscoresInIntegerLiteralsValidator extends VisitorValidator {
             arg.report(n, "Underscores in literal values are not supported.");
         }
     }
+    @Override
+	public void visit(EnumExpression n, ProblemReporter arg) {
+        if (n.getValue().toString().contains("_")) {
+            arg.report(n, "Underscores in literal values are not supported.");
+        }
+	}
 }

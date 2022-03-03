@@ -1287,4 +1287,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         copyData(n, r);
         return r;
     }
+    @Override
+	public Visitable visit(EnumExpression n, Object arg) {
+		Comment comment = cloneNode(n.getComment(), arg);
+		EnumExpression r = new EnumExpression(n.getValue());
+		r.setComment(comment);
+		n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+		copyData(n, r);
+		return r;
+	}
 }

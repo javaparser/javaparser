@@ -542,4 +542,8 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     public Boolean visit(final CompactConstructorDeclaration n, final Visitable arg) {
         return n == arg;
     }
+    @Override
+	public Boolean visit(EnumExpression n, Visitable arg) {
+		return n == arg;
+	}
 }

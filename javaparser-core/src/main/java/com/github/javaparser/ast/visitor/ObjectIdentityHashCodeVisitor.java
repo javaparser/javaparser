@@ -454,4 +454,8 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final CompactConstructorDeclaration n, final Void arg) {
         return n.hashCode();
     }
+	@Override
+	public Integer visit(EnumExpression n, Void arg) {
+		return n.hashCode();
+	}
 }

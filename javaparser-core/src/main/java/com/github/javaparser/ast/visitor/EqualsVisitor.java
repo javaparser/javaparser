@@ -1405,4 +1405,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         return true;
     }
+	@Override
+	public Boolean visit(EnumExpression n, Visitable arg) {
+		final StringLiteralExpr n2 = (StringLiteralExpr) arg;
+		if (!objEquals(n.getValue(), n2.getValue()))
+			return false;
+		if (!nodeEquals(n.getComment(), n2.getComment()))
+			return false;
+		return true;
+	}
 }

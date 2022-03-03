@@ -50,7 +50,7 @@ public interface VoidVisitor<A> {
     void visit(ArrayCreationLevel n, A arg);
 
     void visit(ArrayInitializerExpr n, A arg);
-
+    void visit(EnumExpression n, A arg);
     void visit(ArrayType n, A arg);
 
     void visit(AssertStmt n, A arg);

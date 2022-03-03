@@ -320,7 +320,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final IntegerLiteralExpr n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
-
+    @Override
+    public void visit(final EnumExpression n, final A arg) {
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
     @Override
     public void visit(final JavadocComment n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
