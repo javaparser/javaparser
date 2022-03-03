@@ -961,7 +961,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(KeyMetaConstructExpression n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
+
         printer.print(n.getText());
+        printer.print("");
+        n.getChild().accept(this, arg);
+        printer.print(")");
     }
 
     @Override
@@ -971,6 +975,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.println(n.getKind());
         printer.println("(");
         n.getChild().accept(this, arg);
+        printPrePostFixOptionalList(n.getSchemas(), arg, ", ", ", ", "");
         printer.println(")");
     }
 

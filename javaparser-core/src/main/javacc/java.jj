@@ -44,7 +44,7 @@ options {
     ERROR_REPORTING = true;
     JAVA_TEMPLATE_TYPE = "modern"; // FIXME: Warning: Bad option name "JAVA_TEMPLATE_TYPE".  Option setting will be ignored.
     JDK_VERSION = "1.8";
-    STATIC = false;
+    //STATIC = false;
     TOKEN_EXTENDS = "TokenBase";
     //DEBUG_LOOKAHEAD = true;
     //DEBUG_PARSER = true;
@@ -3608,8 +3608,6 @@ Expression UnaryExpression():
         { ret = new UnaryExpr(range(begin, token()), ret, op); }
      |
         ret = UnaryExpressionNotPlusMinus()
-     //|
-     //  result = ADTGetter()
      |
        ret = KeyGeneralEscapeExpression()
      |
@@ -3757,6 +3755,7 @@ Expression CastExpression():
         { ret = new CastExpr(range(begin, token()), primitiveType, ret); }
      |
         //Schema
+        LOOKAHEAD(1) // "(#a) expr;"
         (type=TypeSV(annotations) | type=TypeMC(annotations))
         ")"
         ret=UnaryExpression()
@@ -5128,37 +5127,34 @@ TryStmt TryStatement():
     "try" { begin=token(); }
     [ resources = ResourceSpecification() ]
     tryBlock = Block()
-    (
-      LOOKAHEAD(2)
+    ( LOOKAHEAD(3)
       ["catch"] {catchBegin=token();}
       <SVIDENTIFIER>
       { catchs = add(catchs, new KeyCatchClauseSV(range(catchBegin, token()), token().getText()));}
     |
       LOOKAHEAD(2)
+      "catch" {catchBegin=token();}
+      "("
+      exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
+      exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
       (
-          "catch" {catchBegin=token();}
-          "("
-          exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
-          exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
-          (
-              "|"
-              exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); }
-          )*
-          exceptId = VariableDeclaratorId() { paramEnd = token(); }
-          ")"
+          "|"
+          exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); }
+      )*
+      exceptId = VariableDeclaratorId() { paramEnd = token(); }
+      ")"
 
-          catchBlock = Block()
-          {
-              if (exceptionTypes.size() > 1) {
-                  type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
-              } else {
-                  type = (Type)exceptionTypes.get(0);
-              }
-              Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
-              catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
-              exceptionTypes = emptyNodeList();
+      catchBlock = Block()
+      {
+          if (exceptionTypes.size() > 1) {
+              type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
+          } else {
+              type = (Type)exceptionTypes.get(0);
           }
-      )
+          Parameter catchType = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
+          catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
+          exceptionTypes = emptyNodeList();
+      }
     )*
     [
         "finally"
@@ -6346,34 +6342,9 @@ KeyExecStatement KeyExecStatement() :
         block = Block()
         {  branches.add(new KeyCcatchParameter(range(beginC, token()), param, block)); }
     )*
-    ( ["ccatch"|"ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
+    ( LOOKAHEAD(3) ["ccatch"|"ccat"] cfsv=CcatchSV() { branches.add(cfsv); } )*
     { return new KeyExecStatement(range(begin, token()), execBlock, branches); }
 }
-
-/**
-   For partial parsing ONLY. Allows this()/super() calls, as in
-   constructor bodies.
-NodeList<Statement> KeyGeneralizedStatements() :
-{
-    JavaToken begin;
-    NodeList<Statement>            result = new ASTArrayList<Statement>();
-    SpecialConstructorReference     scr = null;
-    Statement                       stat = null;
-}
-{
-    [ LOOKAHEAD(ExplicitConstructorInvocation())
-      scr = ExplicitConstructorInvocation()
-      { result.add(scr); }
-    ]
-    ( stat = BlockStatement()
-      { result.add(stat); }
-    )*
-  {
-      return result;
-  }
-}
- */
-
 
 KeyTypeSV TypeSV(NodeList<AnnotationExpr> annotations) :
 {
