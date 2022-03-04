@@ -49,7 +49,7 @@ public class TokenTypesTest {
         int switchEntries = tokenTypesCu.findAll(SwitchEntry.class).size() - 1;
 
         // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
-        assertEquals(tokenCount-1, switchEntries);
+        assertEquals(tokenCount, switchEntries);
     }
 
     @TestFactory

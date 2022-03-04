@@ -159,6 +159,7 @@ public class KeyCcatchBreak extends KeyCcatchBranch {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyCcatchBreakMetaModel getMetaModel() {
         return JavaParserMetaModel.keyCcatchBreakMetaModel;
     }

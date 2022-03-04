@@ -32,6 +32,7 @@ public abstract class KeyCcatchBranch extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyCcatchBranchMetaModel getMetaModel() {
         return JavaParserMetaModel.keyCcatchBranchMetaModel;
     }

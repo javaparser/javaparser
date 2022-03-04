@@ -71,6 +71,7 @@ public class KeyCcatchSV extends KeyCcatchBranch {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyCcatchSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyCcatchSVMetaModel;
     }

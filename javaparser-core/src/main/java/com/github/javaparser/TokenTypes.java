@@ -232,6 +232,7 @@ public class TokenTypes {
             case LENGTHREF:
             case KEYIDENTIFIER:
             case SOURCE:
+            case RESULTARROW:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:
