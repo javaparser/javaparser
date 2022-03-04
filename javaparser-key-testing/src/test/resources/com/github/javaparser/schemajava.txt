@@ -553,14 +553,14 @@
 {.. ...}
 {.. final #t #v0; ...}
 {.. ...}
-{.. ghost #t #v0; ...}
+# {.. ghost #t #v0; ...}
 {.. ...}
 {.. #t #v0 = #vi; ...}
 {.. #t #v0; #v0 = #vi; ...}
 {.. final #t #v0 = #vi; ...}
 {.. final #t #v0; #v0 = #vi; ...}
-{.. ghost #t #v0 = #vi; ...}
-{.. ghost #t #v0; #v0 = #vi; ...}
+# {.. ghost #t #v0 = #vi; ...}
+# {.. ghost #t #v0; #v0 = #vi; ...}
 {.. #multvardecl ...}
 {.. #resolve-multiple-var-decl(#multvardecl); ...}
 {.. #arraypost ...}
