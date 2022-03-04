@@ -80,8 +80,6 @@ public class Kept implements DifferenceElement {
 
     public boolean isToken() { return element instanceof CsmToken; }
 
-    public boolean isChild() { return element instanceof LexicalDifferenceCalculator.CsmChild; }
-
     public boolean isPrimitiveType() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;

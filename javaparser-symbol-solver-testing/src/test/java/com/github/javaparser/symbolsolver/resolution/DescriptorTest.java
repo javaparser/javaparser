@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.ParserConfiguration;
@@ -20,6 +21,7 @@ class DescriptorTest extends AbstractResolutionTest {
     void descriptorTest() {
         String code = 
                 "public class A {\n" +
+                "  A(int i, double d, Thread t) {}\n" +
                 "  Object m(int i, double d, Thread t) {return new Object();}\n" +
                 "  void m(int i, double d, Thread t) {}\n" +
                 "  int[] m(int i, double d, Thread t) {return new int[] {};}\n" +
@@ -30,6 +32,10 @@ class DescriptorTest extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
         CompilationUnit cu = parse(code);
+
+        List<ConstructorDeclaration> constructor = cu.findAll(ConstructorDeclaration.class);
+        assertEquals("(IDLjava/lang/Thread;)V", constructor.get(0).toDescriptor());
+
         List<MethodDeclaration> methods = cu.findAll(MethodDeclaration.class);
         // exemple provided in https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3
         assertEquals("(IDLjava/lang/Thread;)Ljava/lang/Object;", methods.get(0).toDescriptor());

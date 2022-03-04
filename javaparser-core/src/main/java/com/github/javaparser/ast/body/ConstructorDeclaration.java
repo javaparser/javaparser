@@ -179,6 +179,18 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         return sb.toString();
     }
 
+    /*
+     * Returns the constructor descriptor
+     */
+    public String toDescriptor() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('(');
+        for (int i = 0; i < getParameters().size(); i++) {
+            sb.append(getParameter(i).getType().toDescriptor());
+        }
+        return sb.append(")V").toString();
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConstructorDeclaration clone() {
