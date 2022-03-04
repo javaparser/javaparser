@@ -57,7 +57,7 @@ class ParseResultTest {
         assertThat(result.getProblems().size()).isEqualTo(1);
 
         Problem problem = result.getProblem(0);
-        assertThat(problem.getMessage()).isEqualTo("Parse error. Found \"{\", expected one of  \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"provides\" \"record\" \"requires\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"with\" \"yield\" <IDENTIFIER>");
+        assertThat(problem.getMessage()).isEqualTo("Parse error. Found \"{\", expected one of  \"ccat\" \"ccatch\" \"enum\" \"exec\" \"exports\" \"ghost\" \"merge_point\" \"model\" \"module\" \"no_state\" \"open\" \"opens\" \"provides\" \"record\" \"requires\" \"source\" \"strictfp\" \"to\" \"transitive\" \"two_state\" \"uses\" \"with\" \"yield\" <IDENTIFIER> <KEYIDENTIFIER> <SVIDENTIFIER>");
 
         assertThat(result.toString()).startsWith("Parsing failed:" + SYSTEM_EOL + "(line 1,col 1) Parse error.");
     }

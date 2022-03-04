@@ -100,8 +100,9 @@ public class ArrayInitializerExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < values.size(); i++) {
             if (values.get(i) == node) {
                 values.remove(i);
@@ -126,8 +127,9 @@ public class ArrayInitializerExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < values.size(); i++) {
             if (values.get(i) == node) {
                 values.set(i, (Expression) replacementNode);

@@ -101,7 +101,12 @@ public class Modifier extends Node {
         SYNCHRONIZED("synchronized"),
         NATIVE("native"),
         STRICTFP("strictfp"),
-        TRANSITIVE("transitive");
+        TRANSITIVE("transitive"),
+        // KEY
+        GHOST("ghost"),
+        MODEL("model"),
+        TWO_STATE("two_state"),
+        NO_STATE("no_state");
 
         private final String codeRepresentation;
 
@@ -172,22 +177,6 @@ public class Modifier extends Node {
      */
     public static NodeList<Modifier> createModifierList(Modifier.Keyword... modifiers) {
         return Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList());
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override

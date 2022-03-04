@@ -25,15 +25,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
@@ -44,6 +36,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
@@ -86,22 +79,40 @@ public class Difference {
         this.indentation = LexicalPreservingPrinter.findIndentation(node);
     }
 
+    /*
+     * Returns the indentation used after the last line break
+     */
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
         List<TextElement> res = new LinkedList<>(indentation);
-        boolean afterNl = false;
-        for (TextElement e : prevElements) {
-            if (e.isNewline()) {
-                res.clear();
-                afterNl = true;
-            } else {
-                if (afterNl && e instanceof TokenTextElement && TokenTypes.isWhitespace(((TokenTextElement)e).getTokenKind())) {
-                    res.add(e);
-                } else {
-                    afterNl = false;
-                }
+        int index = lastIndexOfEol(prevElements);
+        if (index < 0) return res; // no EOL found
+        res.clear(); // initialize previous indentation
+        // search for consecutive space characters
+        for (int i = (index + 1); i < prevElements.size(); i++) {
+            TextElement elem = prevElements.get(i);
+            if (elem.isWhiteSpace()) {
+                res.add(elem);
+                continue;
             }
+            break;
         }
         return res;
+    }
+    
+    /*
+     * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement 
+     */
+    int lastIndexOfEol(List<TextElement> source) {
+        ListIterator listIterator = source.listIterator(source.size());
+        int lastIndex = source.size() -1;
+        while (listIterator.hasPrevious()) {
+            TextElement elem = (TextElement)listIterator.previous();
+            if (elem.isNewline()) {
+                return lastIndex;
+            }
+            lastIndex--;
+        }
+        return -1;
     }
 
     private List<TextElement> indentationBlock() {
@@ -210,14 +221,7 @@ public class Difference {
         if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
             DifferenceElement diffElement = diffElements.get(diffIndex);
             if (diffElement instanceof Kept) {
-                Kept kept = (Kept) diffElement;
-
-                if (kept.isWhiteSpaceOrComment() || kept.isIndent() || kept.isUnindent()) {
-                    diffIndex++;
-                } else {
-                    throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
-                            + nodeText + ". Difference: " + this);
-                }
+                diffIndex++;
             } else if (diffElement instanceof Added) {
                 Added addedElement = (Added) diffElement;
 
@@ -225,7 +229,8 @@ public class Difference {
                 originalIndex++;
                 diffIndex++;
             } else {
-                throw new UnsupportedOperationException(diffElement.getClass().getSimpleName());
+                // let's forget this element
+                diffIndex++;
             }
 
             isLeftOverElement = true;
@@ -503,6 +508,15 @@ public class Difference {
                 int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
                 originalIndex += step;
                 originalIndex++;
+            }  else if (originalElement.isIdentifier() && isTypeWithFullyQualifiedName(kept)) {
+                    diffIndex++;
+                    // skip all token related to node with the fully qualified name
+                    // for example:
+                    // java.lang.Object is represented in originalElement as a list of tokens "java", ".", "lang", ".", "Object".
+                    // So we have to skip 5 tokens.
+                    int step = getIndexToNextTokenElement((TokenTextElement) originalElement, kept);
+                    originalIndex += step;
+                    originalIndex++; // positioning on the next token
             } else if ((originalElement.isIdentifier() || originalElement.isKeyword()) && isArrayType(kept)) {
                 int tokenToSkip = getIndexToNextTokenElementInArrayType((TokenTextElement)originalElement, getArrayLevel(kept));
                 diffIndex++;
@@ -564,44 +578,81 @@ public class Difference {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
         }
     }
-    
-    
+
+
     /*
      * Returns the array level if the DifferenceElement is a CsmChild representing an ArrayType else 0
      */
     private int getArrayLevel(DifferenceElement element) {
         CsmElement csmElem = element.getElement();
-        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild && 
+        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild &&
                 ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType) {
             Node child = ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild();
             return ((ArrayType)child).getArrayLevel();
         }
         return 0;
     }
-    
+
     /*
      * Returns true if the DifferenceElement is a CsmChild representing an ArrayType
      */
     private boolean isArrayType(DifferenceElement element) {
         CsmElement csmElem = element.getElement();
-        return csmElem instanceof LexicalDifferenceCalculator.CsmChild && 
+        return csmElem instanceof LexicalDifferenceCalculator.CsmChild &&
                 ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType;
+    }
+    
+    /*
+     * Returns true if the DifferenceElement is a CsmChild which represents a type with fully qualified name
+     */
+    private boolean isTypeWithFullyQualifiedName(DifferenceElement element) {
+        if (!element.isChild())
+            return false;
+        CsmChild child = (CsmChild) element.getElement();
+        if (!ClassOrInterfaceType.class.isAssignableFrom(child.getChild().getClass()))
+            return false;
+        return ((ClassOrInterfaceType) child.getChild()).getScope().isPresent();
     }
 
     /*
      * Returns true if the DifferenceElement is a CsmChild with type arguments
      */
     private boolean isNodeWithTypeArguments(DifferenceElement element) {
-        CsmElement csmElem = element.getElement();
-        if (!CsmChild.class.isAssignableFrom(csmElem.getClass()))
+        if (!element.isChild())
             return false;
-        CsmChild child = (CsmChild) csmElem;
+        CsmChild child = (CsmChild) element.getElement();
         if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
             return false;
         Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments) child.getChild()).getTypeArguments();
         return typeArgs.isPresent() && typeArgs.get().size() > 0;
     }
 
+    /*
+     * Try to resolve the number of token to skip in the original list to match 
+     * a ClassOrInterfaceType with a list of tokens like "java", ".", "lang", ".", "Object"
+     */
+    private int getIndexToNextTokenElement(TokenTextElement element, DifferenceElement kept) {
+        int step = 0; // number of token to skip
+        if (!isTypeWithFullyQualifiedName(kept)) return 0; // verify if the DifferenceElement is a ClassOrInterfaceType with a fully qualified name
+        CsmChild child = (CsmChild) kept.getElement();
+        // split the type fully qualified node name to an array of tokens
+        String[] parts = ((ClassOrInterfaceType) child.getChild()).getNameWithScope().split("\\.");
+        JavaToken token = element.getToken();
+        for (String part : parts) {
+            if (part.equals(token.asString())) {
+                token = token.getNextToken().get(); // get 'dot' token
+                if (!token.asString().equals(".")) break;
+                token = token.getNextToken().get(); // get the next part
+                step += 2;
+                continue;
+            }
+            // there is no match so we don't have token to skip
+            step = 0;
+            break;
+        }
+        return step;
+    }
+    
     /*
      * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
      * This is due to the fact that types are considered as token in the originalElements list.
@@ -640,7 +691,7 @@ public class Difference {
         // recursively analyze token to skip
         return step += getIndexToNextTokenElement(new TokenTextElement(nextToken), nestedDiamondOperator);
     }
-    
+
     /*
      * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
      */
@@ -672,7 +723,7 @@ public class Difference {
     private boolean isDiamondOperator(Kind kind) {
         return kind.GT.equals(kind) || kind.LT.equals(kind);
     }
-    
+
     /*
      * Returns true if the token is a bracket
      */
@@ -870,10 +921,14 @@ public class Difference {
         return correspondanceBetweenNextOrderAndPreviousOrder;
     }
 
+    /*
+     * Returns true if the next element in the list is an added element of type CsmUnindent
+     */
     private boolean isFollowedByUnindent(List<DifferenceElement> diffElements, int diffIndex) {
-        return (diffIndex + 1) < diffElements.size()
-                && diffElements.get(diffIndex + 1).isAdded()
-                && diffElements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
+        int nextIndexValue = diffIndex + 1;
+        return (nextIndexValue) < diffElements.size()
+                && diffElements.get(nextIndexValue).isAdded()
+                && diffElements.get(nextIndexValue).getElement() instanceof CsmUnindent;
     }
 
     private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
@@ -996,10 +1051,16 @@ public class Difference {
         return nodeTextIndex;
     }
 
+    /*
+     * Returns true if the current <code>Added</code> element is preceded by a <code>Removed</code> element.
+     */
     private boolean isAReplacement(int diffIndex) {
         return (diffIndex > 0) && diffElements.get(diffIndex) instanceof Added && diffElements.get(diffIndex - 1) instanceof Removed;
     }
 
+    /*
+     * Returns true if the current <code>Removed</code> element is followed by a <code>Added</code> element.
+     */
     private boolean isReplaced(int diffIndex) {
         return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
     }

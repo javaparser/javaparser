@@ -179,12 +179,16 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         return sb.toString();
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
+    /*
+     * Returns the constructor descriptor
+     */
+    public String toDescriptor() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('(');
+        for (int i = 0; i < getParameters().size(); i++) {
+            sb.append(getParameter(i).getType().toDescriptor());
+        }
+        return sb.append(")V").toString();
     }
 
     @Override
@@ -202,8 +206,9 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == body) {
             setBody((BlockStmt) replacementNode);
             return true;

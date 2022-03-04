@@ -26,6 +26,8 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
@@ -980,6 +982,38 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 newline()
         ));
+
+        //TODO weigl maybe one day someone will complete this, but currently we do not need
+        // the support of concrete syntax model.
+        concreteSyntaxModelByClass.put(KeyCcatchBreak.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchContinue.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchParameter.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchReturn.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCatchAllStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyCcatchSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyContextStatementBlock.class, sequence());
+        concreteSyntaxModelByClass.put(KeyEscapeExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyExecCtxtSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyExecStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyExecutionContext.class, sequence());
+        concreteSyntaxModelByClass.put(KeyExecutionContextSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyExpressionSV.class, sequence());
+        concreteSyntaxModelByClass.put(KeyJumpLabelSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyLoopScopeBlock.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMergePointStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMetaConstructExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMetaConstruct.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMetaConstructType.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodBodyStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodCallStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodSignature.class, sequence());
+        concreteSyntaxModelByClass.put(KeyMethodSignatureSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyPassiveExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyProgramVariableSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyRangeExpression.class, sequence());
+        concreteSyntaxModelByClass.put(KeyStatementSV.class, attribute(TEXT));
+        concreteSyntaxModelByClass.put(KeyTransactionStatement.class, sequence());
+        concreteSyntaxModelByClass.put(KeyTypeSV.class, attribute(TEXT));
 
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType()))

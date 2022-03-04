@@ -22,10 +22,8 @@ package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -38,6 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.ast.key.sv.*;
 
 /**
  * Base class for types.
@@ -117,8 +116,9 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.remove(i);
@@ -145,8 +145,9 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.set(i, (AnnotationExpr) replacementNode);
@@ -366,5 +367,43 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVarType(Consumer<VarType> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyMetaConstructType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyMetaConstructType asKeyMetaConstructType() {
+        throw new IllegalStateException(f("%s is not KeyMetaConstructType, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyMetaConstructType> toKeyMetaConstructType() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyMetaConstructType(Consumer<KeyMetaConstructType> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyTypeSV() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyTypeSV asKeyTypeSV() {
+        throw new IllegalStateException(f("%s is not KeyTypeSV, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyTypeSV> toKeyTypeSV() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyTypeSV(Consumer<KeyTypeSV> action) {
     }
 }

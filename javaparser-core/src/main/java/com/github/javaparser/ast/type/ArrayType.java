@@ -22,12 +22,10 @@ package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -234,14 +232,6 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     public String asString() {
         return componentType.asString() + "[]";
     }
@@ -269,8 +259,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == componentType) {
             setComponentType((Type) replacementNode);
             return true;
@@ -301,7 +292,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public Optional<ArrayType> toArrayType() {
         return Optional.of(this);
     }
-    
+
     /**
      * Finds the element type, meaning: the type without ArrayTypes around it.
      * <p>
@@ -311,7 +302,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public Type getElementType() {
         return this.getComponentType().getElementType();
     }
-    
+
     /**
      * returns the array level that is 0 for non array type.
      */

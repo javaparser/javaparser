@@ -147,7 +147,9 @@ public class ModifierValidator extends VisitorValidator {
                         validateModifiers(n, reporter, interfaceWithNothingSpecial);
                     }
                 } else {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED,
+                            NATIVE, STRICTFP,
+                            MODEL, GHOST);
                 }
             }
         }

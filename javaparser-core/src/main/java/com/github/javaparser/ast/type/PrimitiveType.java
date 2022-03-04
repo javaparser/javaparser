@@ -91,7 +91,14 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         INT("Integer", "I"),
         LONG("Long", "J"),
         FLOAT("Float", "F"),
-        DOUBLE("Double", "D");
+        DOUBLE("Double", "D"),
+        // KEY
+        KEY_REAL("Real", "_R"),
+        KEY_LOCSET("Locset", "_L"),
+        KEY_BIGINT("BigInt", "_BI"),
+        KEY_SEQ("SEQ", "_S"),
+        KEY_FREE("Free", "_F"),
+        KEY_MAP("Double", "_D");
 
         final String nameOfBoxedType;
 
@@ -195,14 +202,6 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PrimitiveType clone() {
         return (PrimitiveType) accept(new CloneVisitor(), null);
@@ -212,14 +211,6 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public PrimitiveTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.primitiveTypeMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override

@@ -190,7 +190,7 @@ public class JavaParserTypeSolver implements TypeSolver {
 
             // JavaParser only allow one parse at time.
             synchronized (javaParser) {
-                Optional<CompilationUnit> compilationUnit = javaParser.parse(COMPILATION_UNIT, provider(srcFile))
+                Optional<CompilationUnit> compilationUnit = javaParser.parse(COMPILATION_UNIT, provider(srcFile, javaParser.getParserConfiguration().getCharacterEncoding()))
                         .getResult()
                         .map(cu -> cu.setStorage(srcFile));
                 parsedFiles.put(srcFile.toAbsolutePath(), compilationUnit);

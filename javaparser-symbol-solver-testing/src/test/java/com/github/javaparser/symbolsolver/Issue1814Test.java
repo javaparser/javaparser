@@ -98,7 +98,7 @@ class Issue1814Test extends AbstractResolutionTest {
             assertTrue(parseResult.getResult().isPresent());
             List<ClassOrInterfaceType> referenceTypes = parseResult.getResult().get().findAll(ClassOrInterfaceType.class);
             assertTrue(referenceTypes.size() > 0);
-            final List<ResolvedMethodDeclaration> methods = referenceTypes.get(0).resolve().getAllMethodsVisibleToInheritors();
+            final List<ResolvedMethodDeclaration> methods = referenceTypes.get(0).resolve().asReferenceType().getAllMethodsVisibleToInheritors();
             assertEquals(1, methods.size());
         });
 

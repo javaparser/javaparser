@@ -142,7 +142,7 @@ class JavaParserTest {
 
         Problem problem = result.getProblem(0);
         assertEquals(range(1, 9, 1, 17), problem.getLocation().get().toRange().get());
-        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"record\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
+        assertEquals("Parse error. Found <EOF>, expected one of  \"#typeof\" \";\" \"<\" \"@\" \"\\\\bigint\" \"\\\\free\" \"\\\\locset\" \"\\\\map\" \"\\\\real\" \"\\\\seq\" \"abstract\" \"boolean\" \"byte\" \"ccat\" \"ccatch\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exec\" \"exports\" \"final\" \"float\" \"ghost\" \"int\" \"interface\" \"long\" \"merge_point\" \"model\" \"module\" \"native\" \"no_state\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"record\" \"requires\" \"short\" \"source\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"two_state\" \"uses\" \"void\" \"volatile\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER> <KEYIDENTIFIER> <SVIDENTIFIER>", problem.getMessage());
         assertInstanceOf(ParseException.class, problem.getCause().get());
     }
 

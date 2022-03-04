@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -43,8 +45,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.PatternSym
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -147,42 +147,47 @@ public class JavaParserFactory {
     public static SymbolDeclarator getSymbolDeclarator(Node node, TypeSolver typeSolver) {
         if (node instanceof FieldDeclaration) {
             return new FieldSymbolDeclarator((FieldDeclaration) node, typeSolver);
-        } else if (node instanceof Parameter) {
+        }
+        if (node instanceof Parameter) {
             return new ParameterSymbolDeclarator((Parameter) node, typeSolver);
-        } else if (node instanceof PatternExpr) {
+        }
+        if (node instanceof PatternExpr) {
             return new PatternSymbolDeclarator((PatternExpr) node, typeSolver);
-        } else if (node instanceof ExpressionStmt) {
+        }
+        if (node instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) node;
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
-                return new VariableSymbolDeclarator((VariableDeclarationExpr) (expressionStmt.getExpression()), typeSolver);
-            } else {
-                return new NoSymbolDeclarator<>(expressionStmt, typeSolver);
+                return new VariableSymbolDeclarator((VariableDeclarationExpr) (expressionStmt.getExpression()),
+                        typeSolver);
             }
-        } else if (node instanceof ForEachStmt) {
+            return new NoSymbolDeclarator<>(expressionStmt, typeSolver);
+        }
+        if (node instanceof ForEachStmt) {
             ForEachStmt foreachStmt = (ForEachStmt) node;
             return new VariableSymbolDeclarator(foreachStmt.getVariable(), typeSolver);
-        } else {
-            return new NoSymbolDeclarator<>(node, typeSolver);
         }
+        return new NoSymbolDeclarator<>(node, typeSolver);
     }
 
     public static ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             if (((ClassOrInterfaceDeclaration) node).isInterface()) {
                 return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-            } else {
-                return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
             }
-        } else if (node instanceof TypeParameter) {
-            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
-        } else if (node instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
-        } else if (node instanceof AnnotationDeclaration) {
-            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
-        } else if (node instanceof EnumConstantDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
-        } else {
-            throw new IllegalArgumentException(node.getClass().getCanonicalName());
+            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
         }
+        if (node instanceof TypeParameter) {
+            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
+        }
+        if (node instanceof EnumDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
+        }
+        if (node instanceof AnnotationDeclaration) {
+            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
+        }
+        if (node instanceof EnumConstantDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
+        }
+        throw new IllegalArgumentException(node.getClass().getCanonicalName());
     }
 }

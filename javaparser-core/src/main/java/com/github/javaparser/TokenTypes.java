@@ -43,9 +43,9 @@ public class TokenTypes {
 
     /**
      * @deprecated Use {@link #isWhitespaceButNotEndOfLine(int)} which more explicitly reflects that this also includes
-     *  other whitespace e.g. {@code EOF} and {@code CTRL_Z} and a large number of other characters.
-     *  See the grammar for details of exactly which characters are included as a "space" (.
-     *  <pre>{@code
+     * other whitespace e.g. {@code EOF} and {@code CTRL_Z} and a large number of other characters.
+     * See the grammar for details of exactly which characters are included as a "space" (.
+     * <pre>{@code
      *   <SPACE: [" ", "\t", "\f", "\u0085", "\u00A0", "\u1680", "\u180e", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005",
      *       "\u2006", "\u2007", "\u2008", "\u2009", "\u200a", "\u200b", "\u200c", "\u200d", "\u2028", "\u2029", "\u202f", "\u205f", "\u2060", "\u3000", "\ufeff"]>
      *  }</pre>
@@ -170,6 +170,69 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
+            case TRANSACTIONBEGIN:
+            case TRANSACTIONCOMMIT:
+            case TRANSACTIONFINISH:
+            case TRANSACTIONABORT:
+            case RETURNTYPE:
+            case SEQ:
+            case SET:
+            case LOOPSCOPE:
+            case MAP:
+            case MERGE_POINT:
+            case METHODFRAME:
+            case NO_STATE:
+            case TWO_STATE:
+            case SHARP:
+            case LOCSET:
+            case FREE:
+            case EXEC:
+            case CONTINUETYPE:
+            case CCATCH:
+            case MODEL:
+            case GHOST:
+            case CCAT:
+            case BREAKTYPE:
+            case BIGINT:
+            case REAL:
+            case CONTEXTSTART:
+            case TYPEOF:
+            case SWITCHTOIF:
+            case UNPACK:
+            case REATTACHLOOPINVARIANT:
+            case FORINITUNFOLDTRANSFORMER:
+            case LOOPSCOPEINVARIANTTRANSFORMER:
+            case SETSV:
+            case ISSTATIC:
+            case EVALARGS:
+            case REPLACEARGS:
+            case UNWINDLOOP:
+            case CATCHALL:
+            case BEGIN:
+            case COMMIT:
+            case FINISH:
+            case ABORT:
+            case UNWIND_LOOP_BOUNDED:
+            case FORTOWHILE:
+            case DOBREAK:
+            case METHODCALL:
+            case EXPANDMETHODBODY:
+            case CONSTRUCTORCALL:
+            case SPECIALCONSTRUCTORECALL:
+            case POSTWORK:
+            case STATICINITIALIZATION:
+            case RESOLVE_MULTIPLE_VAR_DECL:
+            case ARRAY_POST_DECL:
+            case ARRAY_INIT_CREATION:
+            case ARRAY_INIT_CREATION_TRANSIENT:
+            case ARRAY_INIT_CREATION_ASSIGNMENTS:
+            case ENHANCEDFOR_ELIM:
+            case STATIC_EVALUATE:
+            case CREATE_OBJECT:
+            case LENGTHREF:
+            case KEYIDENTIFIER:
+            case SOURCE:
+            case RESULTARROW:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:
@@ -189,6 +252,8 @@ public class TokenTypes {
             case FALSE:
             case NULL:
                 return JavaToken.Category.LITERAL;
+            case JMLIDENTIFIER:
+            case SVIDENTIFIER:
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
             case LPAREN:
@@ -253,6 +318,7 @@ public class TokenTypes {
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
+                throw new IllegalArgumentException("Token " + kind + " without type");
             default:
                 throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
         }

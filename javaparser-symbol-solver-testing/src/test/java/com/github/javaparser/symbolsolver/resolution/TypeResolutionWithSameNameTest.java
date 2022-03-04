@@ -63,7 +63,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         // Attempt to resolve `DuplicateTypeName` from `class ExtendingType extends **DuplicateTypeName**`
         assumeTrue(extendingTypeClass.getExtendedTypes().size() > 0);
         ClassOrInterfaceType extendedType = extendingTypeClass.getExtendedTypes(0);
-        ResolvedReferenceType resolvedExtendedType = extendedType.resolve();
+        ResolvedReferenceType resolvedExtendedType = extendedType.resolve().asReferenceType();
 
         // Verify qualified name matches the non-nested class in the same package.
         // Note verbose assertions show both the "correct" expected value, and the erroneous value to be avoided.
@@ -93,7 +93,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         // Attempt to resolve `DuplicateTypeName` from `class ImplementingType implements **DuplicateTypeName**`
         assumeTrue(implementingTypeClass.getImplementedTypes().size() > 0);
         ClassOrInterfaceType implementedType = implementingTypeClass.getImplementedTypes(0);
-        ResolvedReferenceType resolvedImplementedType = implementedType.resolve();
+        ResolvedReferenceType resolvedImplementedType = implementedType.resolve().asReferenceType();
 
         // Verify qualified name matches the non-nested class in the same package.
         // Note verbose assertions show both the "correct" expected value, and the erroneous value to be avoided.
