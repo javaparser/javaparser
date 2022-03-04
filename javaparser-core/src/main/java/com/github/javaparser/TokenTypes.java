@@ -181,6 +181,9 @@ public class TokenTypes {
             case MAP:
             case MERGE_POINT:
             case METHODFRAME:
+            case NO_STATE:
+            case TWO_STATE:
+            case SHARP:
             case LOCSET:
             case FREE:
             case EXEC:
@@ -192,7 +195,6 @@ public class TokenTypes {
             case BREAKTYPE:
             case BIGINT:
             case REAL:
-                //case MAP_FUNCTION:
             case CONTEXTSTART:
             case TYPEOF:
             case SWITCHTOIF:
@@ -315,6 +317,7 @@ public class TokenTypes {
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
+                throw new IllegalArgumentException("Token " + kind + " without type");
             default:
                 throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
         }
