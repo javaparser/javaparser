@@ -123,8 +123,9 @@ public class KeyEscapeExpression extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (arguments != null) {
             for (int i = 0; i < arguments.size(); i++) {
                 if (arguments.get(i) == node) {
@@ -139,8 +140,9 @@ public class KeyEscapeExpression extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (arguments != null) {
             for (int i = 0; i < arguments.size(); i++) {
                 if (arguments.get(i) == node) {

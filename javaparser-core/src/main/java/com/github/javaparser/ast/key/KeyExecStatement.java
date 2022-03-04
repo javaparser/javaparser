@@ -116,8 +116,9 @@ public class KeyExecStatement extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < branches.size(); i++) {
             if (branches.get(i) == node) {
                 branches.remove(i);
@@ -130,8 +131,9 @@ public class KeyExecStatement extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < branches.size(); i++) {
             if (branches.get(i) == node) {
                 branches.set(i, (KeyCcatchBranch) replacementNode);

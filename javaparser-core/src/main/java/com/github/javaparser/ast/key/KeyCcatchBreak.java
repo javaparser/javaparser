@@ -14,6 +14,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeYCcatchBreakMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.metamodel.KeyCcatchBreakMetaModel;
 
 public class KeyCcatchBreak extends KeyCcatchBranch {
 
@@ -112,8 +113,9 @@ public class KeyCcatchBreak extends KeyCcatchBranch {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (block != null) {
             if (node == block) {
                 removeBlock();
@@ -132,8 +134,9 @@ public class KeyCcatchBreak extends KeyCcatchBranch {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (block != null) {
             if (node == block) {
                 setBlock((BlockStmt) replacementNode);
@@ -156,8 +159,7 @@ public class KeyCcatchBreak extends KeyCcatchBranch {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public KeYCcatchBreakMetaModel getMetaModel() {
-        return JavaParserMetaModel.keYCcatchBreakMetaModel;
+    public KeyCcatchBreakMetaModel getMetaModel() {
+        return JavaParserMetaModel.keyCcatchBreakMetaModel;
     }
 }

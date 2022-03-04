@@ -291,14 +291,14 @@ public final class JavaParserMetaModel {
         moduleUsesDirectiveMetaModel.getConstructorParameters().add(moduleUsesDirectiveMetaModel.namePropertyMetaModel);
         keyCatchAllStatementMetaModel.getConstructorParameters().add(keyCatchAllStatementMetaModel.labelPropertyMetaModel);
         keyCatchAllStatementMetaModel.getConstructorParameters().add(keyCatchAllStatementMetaModel.blockPropertyMetaModel);
-        keYCcatchBreakMetaModel.getConstructorParameters().add(keYCcatchBreakMetaModel.labelPropertyMetaModel);
-        keYCcatchBreakMetaModel.getConstructorParameters().add(keYCcatchBreakMetaModel.blockPropertyMetaModel);
-        keYCcatchContinueMetaModel.getConstructorParameters().add(keYCcatchContinueMetaModel.labelPropertyMetaModel);
-        keYCcatchContinueMetaModel.getConstructorParameters().add(keYCcatchContinueMetaModel.blockPropertyMetaModel);
-        keYCcatchParameterMetaModel.getConstructorParameters().add(keYCcatchParameterMetaModel.parameterPropertyMetaModel);
-        keYCcatchParameterMetaModel.getConstructorParameters().add(keYCcatchParameterMetaModel.blockPropertyMetaModel);
-        keYCcatchReturnMetaModel.getConstructorParameters().add(keYCcatchReturnMetaModel.parameterPropertyMetaModel);
-        keYCcatchReturnMetaModel.getConstructorParameters().add(keYCcatchReturnMetaModel.blockPropertyMetaModel);
+        keyCcatchBreakMetaModel.getConstructorParameters().add(keyCcatchBreakMetaModel.labelPropertyMetaModel);
+        keyCcatchBreakMetaModel.getConstructorParameters().add(keyCcatchBreakMetaModel.blockPropertyMetaModel);
+        keyCcatchContinueMetaModel.getConstructorParameters().add(keyCcatchContinueMetaModel.labelPropertyMetaModel);
+        keyCcatchContinueMetaModel.getConstructorParameters().add(keyCcatchContinueMetaModel.blockPropertyMetaModel);
+        keyCcatchParameterMetaModel.getConstructorParameters().add(keyCcatchParameterMetaModel.parameterPropertyMetaModel);
+        keyCcatchParameterMetaModel.getConstructorParameters().add(keyCcatchParameterMetaModel.blockPropertyMetaModel);
+        keyCcatchReturnMetaModel.getConstructorParameters().add(keyCcatchReturnMetaModel.parameterPropertyMetaModel);
+        keyCcatchReturnMetaModel.getConstructorParameters().add(keyCcatchReturnMetaModel.blockPropertyMetaModel);
         keyEscapeExpressionMetaModel.getConstructorParameters().add(keyEscapeExpressionMetaModel.calleePropertyMetaModel);
         keyEscapeExpressionMetaModel.getConstructorParameters().add(keyEscapeExpressionMetaModel.argumentsPropertyMetaModel);
         keyExecStatementMetaModel.getConstructorParameters().add(keyExecStatementMetaModel.execBlockPropertyMetaModel);
@@ -400,13 +400,13 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(integerLiteralExprMetaModel);
         nodeMetaModels.add(intersectionTypeMetaModel);
         nodeMetaModels.add(javadocCommentMetaModel);
-        nodeMetaModels.add(keYCcatchBranchMetaModel);
-        nodeMetaModels.add(keYCcatchBreakMetaModel);
-        nodeMetaModels.add(keYCcatchContinueMetaModel);
-        nodeMetaModels.add(keYCcatchParameterMetaModel);
-        nodeMetaModels.add(keYCcatchReturnMetaModel);
         nodeMetaModels.add(keyAbstractExecutionContextMetaModel);
         nodeMetaModels.add(keyCatchAllStatementMetaModel);
+        nodeMetaModels.add(keyCcatchBranchMetaModel);
+        nodeMetaModels.add(keyCcatchBreakMetaModel);
+        nodeMetaModels.add(keyCcatchContinueMetaModel);
+        nodeMetaModels.add(keyCcatchParameterMetaModel);
+        nodeMetaModels.add(keyCcatchReturnMetaModel);
         nodeMetaModels.add(keyCcatchSVMetaModel);
         nodeMetaModels.add(keyContextStatementBlockMetaModel);
         nodeMetaModels.add(keyEscapeExpressionMetaModel);
@@ -930,27 +930,27 @@ public final class JavaParserMetaModel {
         keyCatchAllStatementMetaModel.getDeclaredPropertyMetaModels().add(keyCatchAllStatementMetaModel.blockPropertyMetaModel);
         keyCatchAllStatementMetaModel.labelPropertyMetaModel = new PropertyMetaModel(keyCatchAllStatementMetaModel, "label", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
         keyCatchAllStatementMetaModel.getDeclaredPropertyMetaModels().add(keyCatchAllStatementMetaModel.labelPropertyMetaModel);
-        keYCcatchBreakMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keYCcatchBreakMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
-        keYCcatchBreakMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchBreakMetaModel.blockPropertyMetaModel);
-        keYCcatchBreakMetaModel.labelPropertyMetaModel = new PropertyMetaModel(keYCcatchBreakMetaModel, "label", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false);
-        keYCcatchBreakMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchBreakMetaModel.labelPropertyMetaModel);
-        keYCcatchContinueMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keYCcatchContinueMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
-        keYCcatchContinueMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchContinueMetaModel.blockPropertyMetaModel);
-        keYCcatchContinueMetaModel.labelPropertyMetaModel = new PropertyMetaModel(keYCcatchContinueMetaModel, "label", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false);
-        keYCcatchContinueMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchContinueMetaModel.labelPropertyMetaModel);
-        keYCcatchParameterMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keYCcatchParameterMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
-        keYCcatchParameterMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchParameterMetaModel.blockPropertyMetaModel);
-        keYCcatchParameterMetaModel.parameterPropertyMetaModel = new PropertyMetaModel(keYCcatchParameterMetaModel, "parameter", com.github.javaparser.ast.body.Parameter.class, Optional.of(parameterMetaModel), true, false, false, false);
-        keYCcatchParameterMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchParameterMetaModel.parameterPropertyMetaModel);
-        keYCcatchReturnMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keYCcatchReturnMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
-        keYCcatchReturnMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchReturnMetaModel.blockPropertyMetaModel);
-        keYCcatchReturnMetaModel.parameterPropertyMetaModel = new PropertyMetaModel(keYCcatchReturnMetaModel, "parameter", com.github.javaparser.ast.body.Parameter.class, Optional.of(parameterMetaModel), true, false, false, false);
-        keYCcatchReturnMetaModel.getDeclaredPropertyMetaModels().add(keYCcatchReturnMetaModel.parameterPropertyMetaModel);
+        keyCcatchBreakMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keyCcatchBreakMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
+        keyCcatchBreakMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchBreakMetaModel.blockPropertyMetaModel);
+        keyCcatchBreakMetaModel.labelPropertyMetaModel = new PropertyMetaModel(keyCcatchBreakMetaModel, "label", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false);
+        keyCcatchBreakMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchBreakMetaModel.labelPropertyMetaModel);
+        keyCcatchContinueMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keyCcatchContinueMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
+        keyCcatchContinueMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchContinueMetaModel.blockPropertyMetaModel);
+        keyCcatchContinueMetaModel.labelPropertyMetaModel = new PropertyMetaModel(keyCcatchContinueMetaModel, "label", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false);
+        keyCcatchContinueMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchContinueMetaModel.labelPropertyMetaModel);
+        keyCcatchParameterMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keyCcatchParameterMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
+        keyCcatchParameterMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchParameterMetaModel.blockPropertyMetaModel);
+        keyCcatchParameterMetaModel.parameterPropertyMetaModel = new PropertyMetaModel(keyCcatchParameterMetaModel, "parameter", com.github.javaparser.ast.body.Parameter.class, Optional.of(parameterMetaModel), true, false, false, false);
+        keyCcatchParameterMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchParameterMetaModel.parameterPropertyMetaModel);
+        keyCcatchReturnMetaModel.blockPropertyMetaModel = new PropertyMetaModel(keyCcatchReturnMetaModel, "block", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false);
+        keyCcatchReturnMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchReturnMetaModel.blockPropertyMetaModel);
+        keyCcatchReturnMetaModel.parameterPropertyMetaModel = new PropertyMetaModel(keyCcatchReturnMetaModel, "parameter", com.github.javaparser.ast.body.Parameter.class, Optional.of(parameterMetaModel), true, false, false, false);
+        keyCcatchReturnMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchReturnMetaModel.parameterPropertyMetaModel);
         keyEscapeExpressionMetaModel.argumentsPropertyMetaModel = new PropertyMetaModel(keyEscapeExpressionMetaModel, "arguments", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, true, false);
         keyEscapeExpressionMetaModel.getDeclaredPropertyMetaModels().add(keyEscapeExpressionMetaModel.argumentsPropertyMetaModel);
         keyEscapeExpressionMetaModel.calleePropertyMetaModel = new PropertyMetaModel(keyEscapeExpressionMetaModel, "callee", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), false, false, false, false);
         keyEscapeExpressionMetaModel.getDeclaredPropertyMetaModels().add(keyEscapeExpressionMetaModel.calleePropertyMetaModel);
-        keyExecStatementMetaModel.branchesPropertyMetaModel = new PropertyMetaModel(keyExecStatementMetaModel, "branches", KeyCcatchBranch.class, Optional.of(keYCcatchBranchMetaModel), false, false, true, false);
+        keyExecStatementMetaModel.branchesPropertyMetaModel = new PropertyMetaModel(keyExecStatementMetaModel, "branches", com.github.javaparser.ast.key.KeyCcatchBranch.class, Optional.of(keyCcatchBranchMetaModel), false, false, true, false);
         keyExecStatementMetaModel.getDeclaredPropertyMetaModels().add(keyExecStatementMetaModel.branchesPropertyMetaModel);
         keyExecStatementMetaModel.execBlockPropertyMetaModel = new PropertyMetaModel(keyExecStatementMetaModel, "execBlock", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), false, false, false, false);
         keyExecStatementMetaModel.getDeclaredPropertyMetaModels().add(keyExecStatementMetaModel.execBlockPropertyMetaModel);
@@ -1386,19 +1386,19 @@ public final class JavaParserMetaModel {
     public static final KeyCatchAllStatementMetaModel keyCatchAllStatementMetaModel = new KeyCatchAllStatementMetaModel(Optional.of(statementMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final KeYCcatchBranchMetaModel keYCcatchBranchMetaModel = new KeYCcatchBranchMetaModel(Optional.of(nodeMetaModel));
+    public static final KeyCcatchBranchMetaModel keyCcatchBranchMetaModel = new KeyCcatchBranchMetaModel(Optional.of(nodeMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final KeYCcatchBreakMetaModel keYCcatchBreakMetaModel = new KeYCcatchBreakMetaModel(Optional.of(keYCcatchBranchMetaModel));
+    public static final KeyCcatchBreakMetaModel keyCcatchBreakMetaModel = new KeyCcatchBreakMetaModel(Optional.of(keyCcatchBranchMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final KeYCcatchContinueMetaModel keYCcatchContinueMetaModel = new KeYCcatchContinueMetaModel(Optional.of(keYCcatchBranchMetaModel));
+    public static final KeyCcatchContinueMetaModel keyCcatchContinueMetaModel = new KeyCcatchContinueMetaModel(Optional.of(keyCcatchBranchMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final KeYCcatchParameterMetaModel keYCcatchParameterMetaModel = new KeYCcatchParameterMetaModel(Optional.of(keYCcatchBranchMetaModel));
+    public static final KeyCcatchParameterMetaModel keyCcatchParameterMetaModel = new KeyCcatchParameterMetaModel(Optional.of(keyCcatchBranchMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final KeYCcatchReturnMetaModel keYCcatchReturnMetaModel = new KeYCcatchReturnMetaModel(Optional.of(keYCcatchBranchMetaModel));
+    public static final KeyCcatchReturnMetaModel keyCcatchReturnMetaModel = new KeyCcatchReturnMetaModel(Optional.of(keyCcatchBranchMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final KeyEscapeExpressionMetaModel keyEscapeExpressionMetaModel = new KeyEscapeExpressionMetaModel(Optional.of(expressionMetaModel));
@@ -1467,7 +1467,7 @@ public final class JavaParserMetaModel {
     public static final KeyTypeSVMetaModel keyTypeSVMetaModel = new KeyTypeSVMetaModel(Optional.of(typeMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final KeyCcatchSVMetaModel keyCcatchSVMetaModel = new KeyCcatchSVMetaModel(Optional.of(keYCcatchBranchMetaModel));
+    public static final KeyCcatchSVMetaModel keyCcatchSVMetaModel = new KeyCcatchSVMetaModel(Optional.of(keyCcatchBranchMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final KeyExecutionContextSVMetaModel keyExecutionContextSVMetaModel = new KeyExecutionContextSVMetaModel(Optional.of(keyAbstractExecutionContextMetaModel));

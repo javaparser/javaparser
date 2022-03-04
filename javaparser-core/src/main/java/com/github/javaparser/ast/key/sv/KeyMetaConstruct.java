@@ -139,8 +139,9 @@ public class KeyMetaConstruct extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < schemas.size(); i++) {
             if (schemas.get(i) == node) {
                 schemas.remove(i);
@@ -153,8 +154,9 @@ public class KeyMetaConstruct extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == child) {
             setChild((Node) replacementNode);
             return true;

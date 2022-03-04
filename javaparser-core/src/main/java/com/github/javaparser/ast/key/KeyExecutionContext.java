@@ -113,8 +113,9 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (instance != null) {
             if (node == instance) {
                 removeInstance();
@@ -127,8 +128,9 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == context) {
             setContext((Type) replacementNode);
             return true;
@@ -158,6 +160,7 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
         return JavaParserMetaModel.keyExecutionContextMetaModel;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyExecutionContext removeInstance() {
         return setInstance((Expression) null);
     }

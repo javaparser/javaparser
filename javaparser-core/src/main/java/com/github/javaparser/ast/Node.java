@@ -680,8 +680,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (associatedSpecificationComments != null) {
             for (int i = 0; i < associatedSpecificationComments.size(); i++) {
                 if (associatedSpecificationComments.get(i) == node) {
@@ -736,8 +737,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (associatedSpecificationComments != null) {
             for (int i = 0; i < associatedSpecificationComments.size(); i++) {
                 if (associatedSpecificationComments.get(i) == node) {
@@ -1180,10 +1182,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * This field is used by key to associated (JML) comments to this node.
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Comment>> getAssociatedSpecificationComments() {
         return Optional.ofNullable(associatedSpecificationComments);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Node setAssociatedSpecificationComments(final NodeList<Comment> associatedSpecificationComments) {
         if (associatedSpecificationComments == this.associatedSpecificationComments) {
             return this;

@@ -148,13 +148,9 @@ public class ArrayCreationExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
-        if (this.levels != null) {
+        if (this.levels != null)
             this.levels.setParentNode(null);
-        }
         this.levels = levels;
-        if (this.levels.isEmpty()) {
-            this.levels = new NodeList<>(new ArrayCreationLevel());
-        }
         setAsParentNodeOf(levels);
         return this;
     }
