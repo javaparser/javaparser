@@ -807,7 +807,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(JmlQuantifiedExpr n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print("(");
-        printer.print(n.getBinder().symbol);
+        printer.print(n.getBinder().jmlSymbol());
         printer.print(" ");
         printList(n.getVariables(), ", ");
         printer.print(";");

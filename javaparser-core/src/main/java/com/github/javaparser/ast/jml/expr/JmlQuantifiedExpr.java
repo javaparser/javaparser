@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.jml.expr;
 
 import com.github.javaparser.JavaToken;
-import com.github.javaparser.Token;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
@@ -33,9 +32,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlQuantifiedExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -45,12 +46,13 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  */
 public class JmlQuantifiedExpr extends Expression implements Jmlish {
+    public interface JmlBinder extends JmlKeyword {
+    }
 
     /**
      * 12.4.24.2 Generalized Quantifiers
      */
-    public enum JmlBinder implements JmlKeyword {
-
+    public enum JmlDefaultBinder implements JmlBinder {
         FORALL("\\forall"),
         EXISTS("\\exists"),
         NUM_OF("\\num_of"),
@@ -64,16 +66,17 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
 
         public final String symbol;
 
-        JmlBinder(String symbol) {
+        JmlDefaultBinder(String symbol) {
             this.symbol = symbol;
         }
 
         public static JmlBinder valueOf(JavaToken binder) {
-            Optional<JmlBinder> b = Arrays.stream(values()).filter(it -> binder.getText().equals(it.symbol)).findFirst();
+            Optional<JmlDefaultBinder> b = Arrays.stream(values()).filter(it -> binder.getText().equals(it.symbol)).findFirst();
             if (b.isPresent())
                 return b.get();
             else {
-                throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
+                return binder::getText;
+                //throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
             }
         }
 
@@ -92,11 +95,11 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     private NodeList<Expression> expressions;
 
     public JmlQuantifiedExpr() {
-        this(null, JmlBinder.EXISTS, new NodeList<>(), new NodeList<>());
+        this(null, JmlDefaultBinder.EXISTS, new NodeList<>(), new NodeList<>());
     }
 
     public JmlQuantifiedExpr(final NodeList<JmlBoundVariable> variables, final Expression expressions) {
-        this(null, JmlBinder.EXISTS, variables, new NodeList<>(expressions));
+        this(null, JmlDefaultBinder.EXISTS, variables, new NodeList<>(expressions));
     }
 
     @AllFieldsConstructor
@@ -105,7 +108,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     }
 
     public JmlQuantifiedExpr(TokenRange tokenRange, JavaToken binder, NodeList<JmlBoundVariable> variables, NodeList<Expression> expressions) {
-        this(tokenRange, JmlBinder.valueOf(binder), variables, new NodeList<>(expressions));
+        this(tokenRange, JmlDefaultBinder.valueOf(binder), variables, new NodeList<>(expressions));
     }
 
     /**
