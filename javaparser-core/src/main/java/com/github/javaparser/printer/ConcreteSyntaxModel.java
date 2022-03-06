@@ -1042,7 +1042,7 @@ public class ConcreteSyntaxModel {
                 sequence(child(TYPE), space(), child(NAME)));
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlContract.class, sequence());
-        concreteSyntaxModelByClass.put(JmlGhostStatement.class, sequence(
+        concreteSyntaxModelByClass.put(JmlGhostStmt.class, sequence(
 
         ));
         concreteSyntaxModelByClass.put(JmlLabelExpr.class,
@@ -1080,7 +1080,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlRefiningStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlRepresentsDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlSetComprehension.class, sequence());
-        concreteSyntaxModelByClass.put(JmlStmtWithExpression.class, sequence(
+        concreteSyntaxModelByClass.put(JmlExpressionStmt.class, sequence(
                 child(KIND),
                 space(),
                 child(EXPRESSION),

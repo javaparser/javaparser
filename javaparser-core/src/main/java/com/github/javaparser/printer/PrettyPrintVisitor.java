@@ -795,7 +795,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlStmtWithExpression n, Void arg) {
+    public void visit(JmlExpressionStmt n, Void arg) {
 
     }
 
@@ -897,7 +897,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlGhostStatement n, Void arg) {
+    public void visit(JmlGhostStmt n, Void arg) {
 
     }
 
@@ -952,6 +952,21 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlMultiExprClause n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlBeginStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlEndStmt n, Void arg) {
+
+    }
+
+    @Override
+    public void visit(JmlLabelStmt n, Void arg) {
 
     }
 

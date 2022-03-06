@@ -2127,7 +2127,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlStmtWithExpression n, final A arg) {
+    public R visit(final JmlExpressionStmt n, final A arg) {
         R result;
         {
             result = n.getExpression().accept(this, arg);
@@ -2542,7 +2542,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlGhostStatement n, final A arg) {
+    public R visit(final JmlGhostStmt n, final A arg) {
         R result;
         {
             result = n.getStatement().accept(this, arg);
@@ -2855,7 +2855,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlMultiExprClause n, final A arg) {
         R result;
         {
-            result = n.getExpression().accept(this, arg);
+            result = n.getExpressions().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2866,6 +2866,41 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         if (n.getName().isPresent()) {
             result = n.getName().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlBeginStmt n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlEndStmt n, final A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlLabelStmt n, final A arg) {
+        R result;
+        {
+            result = n.getLabel().accept(this, arg);
             if (result != null)
                 return result;
         }

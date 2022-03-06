@@ -251,7 +251,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JmlStmtWithExpression n, Boolean arg) {
+    public ResolvedType visit(JmlExpressionStmt n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 
@@ -353,7 +353,7 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     }
 
     @Override
-    public ResolvedType visit(JmlGhostStatement n, Boolean arg) {
+    public ResolvedType visit(JmlGhostStmt n, Boolean arg) {
         throw new UnsupportedOperationException(n.getClass().getCanonicalName());
     }
 

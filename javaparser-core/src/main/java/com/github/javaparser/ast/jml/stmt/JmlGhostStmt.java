@@ -14,17 +14,18 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.metamodel.JmlGhostStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlGhostStmtMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/26/21)
  */
-public class JmlGhostStatement extends JmlStatement {
+public class JmlGhostStmt extends JmlStatement {
 
     private Statement statement;
 
     @AllFieldsConstructor
-    public JmlGhostStatement(Statement statement) {
+    public JmlGhostStmt(Statement statement) {
         this.statement = statement;
     }
 
@@ -32,7 +33,7 @@ public class JmlGhostStatement extends JmlStatement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlGhostStatement(TokenRange tokenRange, Statement statement) {
+    public JmlGhostStmt(TokenRange tokenRange, Statement statement) {
         super(tokenRange);
         setStatement(statement);
         customInitialization();
@@ -56,7 +57,7 @@ public class JmlGhostStatement extends JmlStatement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlGhostStatement setstatement(final Statement statement) {
+    public JmlGhostStmt setstatement(final Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
             return this;
@@ -84,8 +85,8 @@ public class JmlGhostStatement extends JmlStatement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlGhostStatement clone() {
-        return (JmlGhostStatement) accept(new CloneVisitor(), null);
+    public JmlGhostStmt clone() {
+        return (JmlGhostStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -96,24 +97,24 @@ public class JmlGhostStatement extends JmlStatement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlGhostStatement asJmlGhostStatement() {
+    public JmlGhostStmt asJmlGhostStatement() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlGhostStatement> toJmlGhostStatement() {
+    public Optional<JmlGhostStmt> toJmlGhostStatement() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlGhostStatement(Consumer<JmlGhostStatement> action) {
+    public void ifJmlGhostStatement(Consumer<JmlGhostStmt> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlGhostStatement setStatement(final Statement statement) {
+    public JmlGhostStmt setStatement(final Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
             return this;
@@ -128,7 +129,31 @@ public class JmlGhostStatement extends JmlStatement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlGhostStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlGhostStatementMetaModel;
+    public JmlGhostStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlGhostStmtMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlGhostStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlGhostStmt asJmlGhostStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlGhostStmt> toJmlGhostStmt() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
+        action.accept(this);
     }
 }

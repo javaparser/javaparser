@@ -563,7 +563,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlStmtWithExpression n, final A arg) {
+    public void visit(final JmlExpressionStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -663,7 +663,7 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final JmlGhostStatement n, final A arg) {
+    public void visit(final JmlGhostStmt n, final A arg) {
         defaultAction(n, arg);
     }
 
@@ -729,6 +729,21 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlMultiExprClause n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlBeginStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlEndStmt n, final A arg) {
+        defaultAction(n, arg);
+    }
+
+    @Override
+    public void visit(final JmlLabelStmt n, final A arg) {
         defaultAction(n, arg);
     }
 }

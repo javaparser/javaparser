@@ -1312,10 +1312,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlStmtWithExpression n, final Object arg) {
+    public Visitable visit(final JmlExpressionStmt n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlStmtWithExpression r = new JmlStmtWithExpression(n.getTokenRange().orElse(null), n.getKind(), expression);
+        JmlExpressionStmt r = new JmlExpressionStmt(n.getTokenRange().orElse(null), n.getKind(), expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1555,10 +1555,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlGhostStatement n, final Object arg) {
+    public Visitable visit(final JmlGhostStmt n, final Object arg) {
         Statement statement = cloneNode(n.getStatement(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlGhostStatement r = new JmlGhostStatement(n.getTokenRange().orElse(null), statement);
+        JmlGhostStmt r = new JmlGhostStmt(n.getTokenRange().orElse(null), statement);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1722,11 +1722,42 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlMultiExprClause n, final Object arg) {
-        NodeList<Expression> expression = cloneList(n.getExpression(), arg);
+        NodeList<Expression> expressions = cloneList(n.getExpressions(), arg);
         NodeList<SimpleName> heaps = cloneList(n.getHeaps().orElse(null), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlMultiExprClause r = new JmlMultiExprClause(n.getTokenRange().orElse(null), n.getKind(), name, heaps, expression);
+        JmlMultiExprClause r = new JmlMultiExprClause(n.getTokenRange().orElse(null), n.getKind(), name, heaps, expressions);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlBeginStmt n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlBeginStmt r = new JmlBeginStmt(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlEndStmt n, final Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlEndStmt r = new JmlEndStmt(n.getTokenRange().orElse(null));
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(final JmlLabelStmt n, final Object arg) {
+        SimpleName label = cloneNode(n.getLabel(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        JmlLabelStmt r = new JmlLabelStmt(n.getTokenRange().orElse(null), label);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

@@ -17,12 +17,13 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.metamodel.JmlStmtWithExpressionMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.JmlExpressionStmtMetaModel;
 
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlStmtWithExpression extends JmlStatement {
+public class JmlExpressionStmt extends JmlStatement {
 
     public enum JmlStmtKind implements JmlKeyword {
 
@@ -51,11 +52,11 @@ public class JmlStmtWithExpression extends JmlStatement {
     private Expression expression;
 
     @AllFieldsConstructor
-    public JmlStmtWithExpression(final JmlStmtKind kind, final Expression expression) {
+    public JmlExpressionStmt(final JmlStmtKind kind, final Expression expression) {
         this(null, kind, expression);
     }
 
-    public JmlStmtWithExpression(TokenRange range, final Expression expression) {
+    public JmlExpressionStmt(TokenRange range, final Expression expression) {
         this(range, JmlStmtKind.ASSERT, expression);
         int tt = range.getBegin().getKind();
         Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values()).filter(i -> i.tokenType == tt).findFirst();
@@ -85,19 +86,19 @@ public class JmlStmtWithExpression extends JmlStatement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlStmtWithExpression asJmlAssertStmt() {
+    public JmlExpressionStmt asJmlAssertStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlStmtWithExpression> toJmlAssertStmt() {
+    public Optional<JmlExpressionStmt> toJmlAssertStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlAssertStmt(Consumer<JmlStmtWithExpression> action) {
+    public void ifJmlAssertStmt(Consumer<JmlExpressionStmt> action) {
         action.accept(this);
     }
 
@@ -116,21 +117,21 @@ public class JmlStmtWithExpression extends JmlStatement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlStmtWithExpression clone() {
-        return (JmlStmtWithExpression) accept(new CloneVisitor(), null);
+    public JmlExpressionStmt clone() {
+        return (JmlExpressionStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlStmtWithExpressionMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlStmtWithExpressionMetaModel;
+    public JmlExpressionStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlExpressionStmtMetaModel;
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlStmtWithExpression(TokenRange tokenRange) {
+    public JmlExpressionStmt(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
@@ -141,7 +142,7 @@ public class JmlStmtWithExpression extends JmlStatement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlStmtWithExpression setExpression(final Expression expression) {
+    public JmlExpressionStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -158,7 +159,7 @@ public class JmlStmtWithExpression extends JmlStatement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlStmtWithExpression(TokenRange tokenRange, JmlStmtKind kind, Expression expression) {
+    public JmlExpressionStmt(TokenRange tokenRange, JmlStmtKind kind, Expression expression) {
         super(tokenRange);
         setKind(kind);
         setExpression(expression);
@@ -173,19 +174,19 @@ public class JmlStmtWithExpression extends JmlStatement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlStmtWithExpression asJmlStmtWithExpression() {
+    public JmlExpressionStmt asJmlStmtWithExpression() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlStmtWithExpression> toJmlStmtWithExpression() {
+    public Optional<JmlExpressionStmt> toJmlStmtWithExpression() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlStmtWithExpression(Consumer<JmlStmtWithExpression> action) {
+    public void ifJmlStmtWithExpression(Consumer<JmlExpressionStmt> action) {
         action.accept(this);
     }
 
@@ -195,7 +196,7 @@ public class JmlStmtWithExpression extends JmlStatement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlStmtWithExpression setKind(final JmlStmtKind kind) {
+    public JmlExpressionStmt setKind(final JmlStmtKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -203,5 +204,29 @@ public class JmlStmtWithExpression extends JmlStatement {
         notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);
         this.kind = kind;
         return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJmlExpressionStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JmlExpressionStmt asJmlExpressionStmt() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<JmlExpressionStmt> toJmlExpressionStmt() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJmlExpressionStmt(Consumer<JmlExpressionStmt> action) {
+        action.accept(this);
     }
 }

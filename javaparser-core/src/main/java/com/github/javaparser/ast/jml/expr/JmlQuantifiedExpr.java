@@ -32,11 +32,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlQuantifiedExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,6 +44,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  */
 public class JmlQuantifiedExpr extends Expression implements Jmlish {
+
     public interface JmlBinder extends JmlKeyword {
     }
 
@@ -53,6 +52,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
      * 12.4.24.2 Generalized Quantifiers
      */
     public enum JmlDefaultBinder implements JmlBinder {
+
         FORALL("\\forall"),
         EXISTS("\\exists"),
         NUM_OF("\\num_of"),
@@ -76,7 +76,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
                 return b.get();
             else {
                 return binder::getText;
-                //throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
+                // throw new IllegalArgumentException(String.format("Unknown binder %s", binder.getText()));
             }
         }
 

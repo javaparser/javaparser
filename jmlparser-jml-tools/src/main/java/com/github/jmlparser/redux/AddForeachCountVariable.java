@@ -3,7 +3,7 @@ package com.github.jmlparser.redux;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.jml.stmt.JmlGhostStatement;
+import com.github.javaparser.ast.jml.stmt.JmlGhostStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
@@ -21,7 +21,7 @@ public class AddForeachCountVariable {
         BlockStmt stmt = new BlockStmt();
         forEachStmt.replace(stmt);
         VariableDeclarationExpr vdecl = new VariableDeclarationExpr(PrimitiveType.intType(), VARIABLE_NAME_COUNT);
-        JmlGhostStatement decl = new JmlGhostStatement(new ExpressionStmt(vdecl));
+        JmlGhostStmt decl = new JmlGhostStmt(new ExpressionStmt(vdecl));
         stmt.addStatement(decl);
         stmt.addStatement(forEachStmt);
         Statement loopBody = forEachStmt.getBody();

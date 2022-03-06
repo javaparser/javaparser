@@ -260,7 +260,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlClauseLabel n, A arg);
 
-    R visit(JmlStmtWithExpression n, A arg);
+    R visit(JmlExpressionStmt n, A arg);
 
     R visit(JmlLabelExpr n, A arg);
 
@@ -300,7 +300,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlSetComprehension n, A arg);
 
-    R visit(JmlGhostStatement n, A arg);
+    R visit(JmlGhostStmt n, A arg);
 
     R visit(JmlMethodDeclaration n, A arg);
 
@@ -323,4 +323,10 @@ public interface GenericVisitor<R, A> {
     R visit(JmlTypeExpr n, A arg);
 
     R visit(JmlMultiExprClause n, A arg);
+
+    R visit(JmlBeginStmt n, A arg);
+
+    R visit(JmlEndStmt n, A arg);
+
+    R visit(JmlLabelStmt n, A arg);
 }

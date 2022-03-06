@@ -10,12 +10,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
-
 import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlMultiExprClauseMetaModel;
@@ -73,7 +70,7 @@ public class JmlMultiExprClause extends JmlClause {
         if (expressions == this.expressions) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expressions, expressions);
+        notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
         if (this.expressions != null)
             this.expressions.setParentNode(null);
         this.expressions = expressions;
@@ -176,7 +173,7 @@ public class JmlMultiExprClause extends JmlClause {
         super(tokenRange, name);
         setKind(kind);
         setHeaps(heaps);
-        setExpression(expressions);
+        setExpressions(expressions);
         customInitialization();
     }
 

@@ -1385,7 +1385,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlStmtWithExpression n, final A arg) {
+    public Visitable visit(final JmlExpressionStmt n, final A arg) {
         Expression expression = (Expression) n.getExpression().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expression == null)
@@ -1644,7 +1644,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlGhostStatement n, final A arg) {
+    public Visitable visit(final JmlGhostStmt n, final A arg) {
         Statement statement = (Statement) n.getStatement().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (statement == null)
@@ -1782,13 +1782,38 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlMultiExprClause n, final A arg) {
-        NodeList<Expression> expression = modifyList(n.getExpression(), arg);
+        NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setExpression(expression);
+        n.setExpressions(expressions);
         n.setHeaps(heaps);
         n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlBeginStmt n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlEndStmt n, final A arg) {
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlLabelStmt n, final A arg) {
+        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (label == null)
+            return null;
+        n.setLabel(label);
         n.setComment(comment);
         return n;
     }

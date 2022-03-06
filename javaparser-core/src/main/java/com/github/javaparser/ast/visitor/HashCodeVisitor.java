@@ -482,7 +482,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlStmtWithExpression n, final Void arg) {
+    public Integer visit(final JmlExpressionStmt n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
@@ -582,7 +582,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlGhostStatement n, final Void arg) {
+    public Integer visit(final JmlGhostStmt n, final Void arg) {
         return (n.getStatement().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
@@ -647,6 +647,21 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlMultiExprClause n, final Void arg) {
-        return (n.getExpression().accept(this, arg)) * 31 + (n.getHeaps().isPresent() ? n.getHeaps().get().accept(this, arg) : 0) * 31 + (n.getKind().hashCode()) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getExpressions().accept(this, arg)) * 31 + (n.getHeaps().isPresent() ? n.getHeaps().get().accept(this, arg) : 0) * 31 + (n.getKind().hashCode()) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlBeginStmt n, final Void arg) {
+        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlEndStmt n, final Void arg) {
+        return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
+
+    @Override
+    public Integer visit(final JmlLabelStmt n, final Void arg) {
+        return (n.getLabel().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }

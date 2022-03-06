@@ -849,7 +849,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlStmtWithExpression n, Void arg) {
+    public void visit(JmlExpressionStmt n, Void arg) {
         wrapInJmlIfNeeded(() -> {
             printer.print(n.getKind().jmlSymbol());
             printer.print(" ");
@@ -1084,7 +1084,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlGhostStatement n, Void arg) {
+    public void visit(JmlGhostStmt n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         wrapInJmlIfNeeded(() -> {
             printer.print("ghost");
@@ -1180,6 +1180,28 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
         printList(n.getExpressions(), ", ");
         printer.println(";");
+    }
+
+    @Override
+    public void visit(JmlBeginStmt n, Void arg) {
+        startJmlComment(true, new NodeList<>());
+        printer.print("begin");
+        endJmlComment();
+    }
+
+    @Override
+    public void visit(JmlEndStmt n, Void arg) {
+        startJmlComment(true, new NodeList<>());
+        printer.print("end");
+        endJmlComment();
+    }
+
+    @Override
+    public void visit(JmlLabelStmt n, Void arg) {
+        startJmlComment(true, new NodeList<>());
+        n.getLabel().accept(this, arg);
+        printer.print(":");
+        endJmlComment();
     }
 
 
