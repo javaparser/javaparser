@@ -9,7 +9,7 @@
     },
     "tokenRange": {
         "beginToken": {
-            "kind": 207,
+            "kind": 209,
             "text": "class"
         },
         "endToken": {
@@ -30,11 +30,11 @@
             },
             "tokenRange": {
                 "beginToken": {
-                    "kind": 207,
+                    "kind": 209,
                     "text": "class"
                 },
                 "endToken": {
-                    "kind": 290,
+                    "kind": 292,
                     "text": "}"
                 }
             },
@@ -56,7 +56,7 @@
                     },
                     "tokenRange": {
                         "beginToken": {
-                            "kind": 283,
+                            "kind": 285,
                             "text": "java"
                         },
                         "endToken": {
@@ -77,11 +77,11 @@
                             },
                             "tokenRange": {
                                 "beginToken": {
-                                    "kind": 283,
+                                    "kind": 285,
                                     "text": "y"
                                 },
                                 "endToken": {
-                                    "kind": 283,
+                                    "kind": 285,
                                     "text": "y"
                                 }
                             },
@@ -95,11 +95,11 @@
                                 },
                                 "tokenRange": {
                                     "beginToken": {
-                                        "kind": 283,
+                                        "kind": 285,
                                         "text": "y"
                                     },
                                     "endToken": {
-                                        "kind": 283,
+                                        "kind": 285,
                                         "text": "y"
                                     }
                                 },
@@ -115,11 +115,11 @@
                                 },
                                 "tokenRange": {
                                     "beginToken": {
-                                        "kind": 283,
+                                        "kind": 285,
                                         "text": "java"
                                     },
                                     "endToken": {
-                                        "kind": 283,
+                                        "kind": 285,
                                         "text": "Y"
                                     }
                                 },
@@ -133,11 +133,11 @@
                                     },
                                     "tokenRange": {
                                         "beginToken": {
-                                            "kind": 283,
+                                            "kind": 285,
                                             "text": "Y"
                                         },
                                         "endToken": {
-                                            "kind": 283,
+                                            "kind": 285,
                                             "text": "Y"
                                         }
                                     },
@@ -153,11 +153,11 @@
                                     },
                                     "tokenRange": {
                                         "beginToken": {
-                                            "kind": 283,
+                                            "kind": 285,
                                             "text": "java"
                                         },
                                         "endToken": {
-                                            "kind": 283,
+                                            "kind": 285,
                                             "text": "util"
                                         }
                                     },
@@ -171,11 +171,11 @@
                                         },
                                         "tokenRange": {
                                             "beginToken": {
-                                                "kind": 283,
+                                                "kind": 285,
                                                 "text": "util"
                                             },
                                             "endToken": {
-                                                "kind": 283,
+                                                "kind": 285,
                                                 "text": "util"
                                             }
                                         },
@@ -191,11 +191,11 @@
                                         },
                                         "tokenRange": {
                                             "beginToken": {
-                                                "kind": 283,
+                                                "kind": 285,
                                                 "text": "java"
                                             },
                                             "endToken": {
-                                                "kind": 283,
+                                                "kind": 285,
                                                 "text": "java"
                                             }
                                         },
@@ -209,11 +209,11 @@
                                             },
                                             "tokenRange": {
                                                 "beginToken": {
-                                                    "kind": 283,
+                                                    "kind": 285,
                                                     "text": "java"
                                                 },
                                                 "endToken": {
-                                                    "kind": 283,
+                                                    "kind": 285,
                                                     "text": "java"
                                                 }
                                             },
@@ -246,11 +246,11 @@
                 },
                 "tokenRange": {
                     "beginToken": {
-                        "kind": 283,
+                        "kind": 285,
                         "text": "X"
                     },
                     "endToken": {
-                        "kind": 283,
+                        "kind": 285,
                         "text": "X"
                     }
                 },

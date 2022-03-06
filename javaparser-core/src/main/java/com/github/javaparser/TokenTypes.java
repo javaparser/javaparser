@@ -144,6 +144,8 @@ public class TokenTypes {
             case EXSURES_REDUNDANTLY:
             case EXTRACT:
             case FIELD:
+            case BEGIN:
+            case END:
                 //case FRESH:
             case HELPER:
             case INITIALIZER:

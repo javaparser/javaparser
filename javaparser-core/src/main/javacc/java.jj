@@ -294,6 +294,8 @@ TOKEN : {
 | <REP: "rep">
 | <READ_ONLY: "read_only">
 | <GHOST: "ghost">
+| <BEGIN: "BEGIN">
+| <END: "END">
 | <HELPER: "helper">
 | <HENCE_BY: "hence_by">
 | <HENCE_BY_REDUNDANTLY: "hence_by_redundantly">
@@ -3263,7 +3265,7 @@ String Identifier():
        | <FOR_EXAMPLE> | <GHOST> | <HELPER> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY>
        | <IMPLIES_THAT> | <IN> | <INITIALIZER> | <INITIALLY> | <INSTANCE>
        | <INVARIANT_REDUNDANTLY> | <LOOP_INVARIANT> | <LOOP_INVARIANT_REDUNDANTLY> | <MAINTAINING>
-       | <LOOP_CONTRACT> | <TYPE>
+       | <LOOP_CONTRACT> | <TYPE> | <BEGIN> | <END>
        | <MAINTAINING_REDUNDANTLY> | <MAPS> | <MAPS_REDUNDANTLY> | <MEASURED_BY>
        | <MEASURED_BY_REDUNDANTLY> | <METHOD> | <MODEL> | <MODEL_PROGRAM> | <MODIFIABLE>
        | <MODIFIABLE_REDUNDANTLY> | <MODIFIES> | <MODIFIES_REDUNDANTLY> | <MONITORED>
@@ -6424,10 +6426,10 @@ ArbitraryNodeContainer JmlMethodLevelStart():
 }
 {
   ( contracts = JmlLoopInvariants() { ret.getChildren().addAll(contracts); }
-  | LOOKAHEAD(2)
-    label=SimpleName() ":" {end=token();} [";" {semi=token();}]
-    { ret.getChildren().add(new LabeledStmt(range(label,end), label,
-                              new EmptyStmt(semi!=null ? range(semi,semi) : null))); }
+  //| LOOKAHEAD(2)
+  //  label=SimpleName() ":" {end=token();} [";" {semi=token();}]
+  //  { ret.getChildren().add(new LabeledStmt(range(label,end), label,
+  //                            new EmptyStmt(semi!=null ? range(semi,semi) : null))); }
   | statements=JmlStatements()
       { ret.getChildren().addAll(statements); }
   | contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
@@ -6461,20 +6463,25 @@ NodeList<JmlStatement> JmlStatements():
 }
 
 JmlStatement JmlStatement():
-{ JavaToken begin; Expression expr,target; Statement stmt;}
+{ JavaToken begin; Expression expr,target; Statement stmt; SimpleName label;}
 {
-  ( (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
+    LOOKAHEAD(2) label=SimpleName() {begin=token();} ":"
+	{ return new JmlLabelStmt(range(begin, token()), label); }
+  |
+   (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
     { begin = token(); }
     expr=Expression()
     ";"
-    { return new JmlStmtWithExpression(range(begin, token()), expr); }
-  | <GHOST>
-    stmt=BlockStatement()     { begin = token(); }
-    { return new JmlGhostStatement(range(begin, token()), stmt); }
-  | <UNREACHABLE> ";"
-    { return new JmlUnreachableStmt(range(token(), token())); }
-  )
-
+    { return new JmlExpressionStmt(range(begin, token()), expr); }
+  | <GHOST> { begin = token(); }
+    stmt=BlockStatement()
+    { return new JmlGhostStmt(range(begin, token()), stmt); }
+  | <UNREACHABLE> {begin=token();} ";"
+    { return new JmlUnreachableStmt(range(begin, token())); }
+  | <BEGIN>
+    { return new JmlBeginStmt(range(token(), token())); }
+  | <END>
+    { return new JmlBeginStmt(range(token(), token())); }
 }
 
 JmlClause JmlLoopInvClause():

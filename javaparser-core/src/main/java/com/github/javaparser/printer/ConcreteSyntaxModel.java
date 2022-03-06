@@ -1128,6 +1128,12 @@ public class ConcreteSyntaxModel {
                 child(EXPR),
                 semicolon()
         ));
+
+        concreteSyntaxModelByClass.put(JmlEndStmt.class, token(END));
+        concreteSyntaxModelByClass.put(JmlBeginStmt.class, token(BEGIN));
+        concreteSyntaxModelByClass.put(JmlLabelExpr.class, sequence(attribute(LABEL), token(COLON)));
+
+
         concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence(child(CONTRACT), child(METHOD_DECLARATION)));
         concreteSyntaxModelByClass.put(JmlSignalsOnlyClause.class, sequence(
                 token(SIGNALS_ONLY),
