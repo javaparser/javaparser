@@ -4,7 +4,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -13,7 +12,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
+
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyTypeSVMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -21,26 +20,26 @@ import com.github.javaparser.ast.Generated;
 
 public class KeyTypeSV extends Type {
 
-    private String name;
+    private String text;
 
     @AllFieldsConstructor
-    public KeyTypeSV(String name) {
-        this(null, null, name);
+    public KeyTypeSV(String text) {
+        this(null, null, text);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public KeyTypeSV(TokenRange tokenRange, String name) {
+    public KeyTypeSV(TokenRange tokenRange, String text) {
         super(tokenRange);
-        setName(name);
+        setText(text);
         customInitialization();
     }
 
-    public KeyTypeSV(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, String name) {
+    public KeyTypeSV(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, String text) {
         super(tokenRange, annotations);
-        this.name = name;
+        this.text = text;
     }
 
     @Override
@@ -90,18 +89,18 @@ public class KeyTypeSV extends Type {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String getName() {
-        return name;
+    public String getText() {
+        return text;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public KeyTypeSV setName(final String name) {
-        assertNotNull(name);
-        if (name == this.name) {
+    public KeyTypeSV setText(final String text) {
+        assertNotNull(text);
+        if (text == this.text) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = name;
+        notifyPropertyChange(ObservableProperty.NAME, this.text, text);
+        this.text = text;
         return this;
     }
 

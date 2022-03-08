@@ -1721,7 +1721,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         NodeList<Comment> associatedSpecificationComments = cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        KeyTypeSV r = new KeyTypeSV(n.getTokenRange().orElse(null), n.getName());
+        KeyTypeSV r = new KeyTypeSV(n.getTokenRange().orElse(null), n.getText());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

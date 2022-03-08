@@ -1020,7 +1020,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(KeyTypeSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        printer.print(n.getName());
+        printer.print(n.getText());
     }
 
     @Override

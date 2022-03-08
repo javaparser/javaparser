@@ -1665,7 +1665,7 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final KeyTypeSV n, final Visitable arg) {
         final KeyTypeSV n2 = (KeyTypeSV) arg;
-        if (!objEquals(n.getName(), n2.getName()))
+        if (!objEquals(n.getText(), n2.getText()))
             return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;

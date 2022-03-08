@@ -1101,7 +1101,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
-        printer.print(n.getName());
+        printer.print(n.getText());
     }
 
     @Override
