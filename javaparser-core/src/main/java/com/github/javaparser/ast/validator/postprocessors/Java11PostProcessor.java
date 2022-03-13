@@ -21,11 +21,6 @@
 
 package com.github.javaparser.ast.validator.postprocessors;
 
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.VarType;
-
-import static com.github.javaparser.ParseResult.PostProcessor;
-
 /**
  * Processes the generic AST into a Java 11 AST and validates it.
  */
