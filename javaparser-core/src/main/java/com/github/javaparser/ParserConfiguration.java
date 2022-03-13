@@ -221,71 +221,71 @@ public class ParserConfiguration {
 
     private final List<Supplier<Processor>> processors = new ArrayList<>();
 
-    public ParserConfiguration() {
+    private class UnicodeEscapeProcessor extends Processor {
+        private UnicodeEscapeProcessingProvider _unicodeDecoder;
 
-        class UnicodeEscapeProcessor extends Processor {
-            private UnicodeEscapeProcessingProvider _unicodeDecoder;
-
-            @Override
-            public Provider preProcess(Provider innerProvider) {
-                if (isPreprocessUnicodeEscapes()) {
-                    _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
-                    return _unicodeDecoder;
-                }
-                return innerProvider;
+        @Override
+        public Provider preProcess(Provider innerProvider) {
+            if (isPreprocessUnicodeEscapes()) {
+                _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
+                return _unicodeDecoder;
             }
-
-            @Override
-            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-                if (isPreprocessUnicodeEscapes()) {
-                    result.getResult().ifPresent(
-                            root -> {
-                                PositionMapping mapping = _unicodeDecoder.getPositionMapping();
-                                if (!mapping.isEmpty()) {
-                                    root.walk(
-                                            node -> node.getRange().ifPresent(
-                                                    range -> node.setRange(mapping.transform(range))));
-                                }
-                            }
-                    );
-                }
-            }
+            return innerProvider;
         }
 
-        class LineEndingProcessor extends Processor {
-            private LineEndingProcessingProvider _lineEndingProcessingProvider;
-
-            @Override
-            public Provider preProcess(Provider innerProvider) {
-                if (isDetectOriginalLineSeparator()) {
-                    _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
-                    return _lineEndingProcessingProvider;
-                }
-                return innerProvider;
+        @Override
+        public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+            if (isPreprocessUnicodeEscapes()) {
+                result.getResult().ifPresent(
+                        root -> {
+                            PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+                            if (!mapping.isEmpty()) {
+                                root.walk(
+                                        node -> node.getRange().ifPresent(
+                                                range -> node.setRange(mapping.transform(range))));
+                            }
+                        }
+                );
             }
+        }
+    }
 
-            @Override
-            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-                if (isDetectOriginalLineSeparator()) {
-                    result.getResult().ifPresent(
-                            rootNode -> {
-                                LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
+    private class LineEndingProcessor extends Processor {
+        private LineEndingProcessingProvider _lineEndingProcessingProvider;
 
-                                // Set the line ending on the root node
-                                rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);
+        @Override
+        public Provider preProcess(Provider innerProvider) {
+            if (isDetectOriginalLineSeparator()) {
+                _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
+                return _lineEndingProcessingProvider;
+            }
+            return innerProvider;
+        }
+
+        @Override
+        public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+            if (isDetectOriginalLineSeparator()) {
+                result.getResult().ifPresent(
+                        rootNode -> {
+                            LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
+
+                            // Set the line ending on the root node
+                            rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);
 
 //                                // Set the line ending on all children of the root node -- FIXME: Should ignore """textblocks"""
 //                                rootNode.findAll(Node.class)
 //                                        .forEach(node -> node.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator));
-                            }
-                    );
-                }
+                        }
+                );
             }
         }
+    }
 
-        processors.add(UnicodeEscapeProcessor::new);
 
-        processors.add(LineEndingProcessor::new);
+    public ParserConfiguration() {
+        processors.add(() -> ParserConfiguration.this.new UnicodeEscapeProcessor());
+
+        processors.add(() -> ParserConfiguration.this.new LineEndingProcessor());
 
         processors.add(() -> new Processor() {
             @Override
