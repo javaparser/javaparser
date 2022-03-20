@@ -45,7 +45,7 @@ jobs:
 
       ## Setup the specified version of Java (includes maven/gradle).
       - name: Set up JDK ${{ matrix.jdk }}
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'              # v2 requires explicitly stating the distribution - `zulu` and `adopt` supported at time of writing
           java-version: ${{ matrix.jdk }}   # Use matrix to select which JDK level to use
