@@ -21,7 +21,16 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.ast.expr.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
+import com.github.javaparser.ast.expr.ConditionalExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
@@ -34,12 +43,6 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.ThrowsBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.ExpressionCompatibleWithType;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import static com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper.isStandaloneExpression;
 
 /**
  * The API exposed by the TypeInference subsystem.
@@ -675,11 +678,11 @@ public class TypeInference {
             Expression ei = es.get(i);
             ResolvedType fi = Fs.get(i);
             if (isPertinentToApplicability(ei)) {
-                if (isStandaloneExpression(ei) && JavaParserFacade.get(typeSolver).getType(ei).isPrimitive()
+                if (ei.isStandaloneExpression() && JavaParserFacade.get(typeSolver).getType(ei).isPrimitive()
                         && fi.isReferenceType()) {
                     return Optional.empty();
                 }
-                if (fi.isPrimitive() && (!isStandaloneExpression(ei) || !JavaParserFacade.get(typeSolver).getType(ei).isPrimitive())) {
+                if (fi.isPrimitive() && (!ei.isStandaloneExpression() || !JavaParserFacade.get(typeSolver).getType(ei).isPrimitive())) {
                     return Optional.empty();
                 }
             }

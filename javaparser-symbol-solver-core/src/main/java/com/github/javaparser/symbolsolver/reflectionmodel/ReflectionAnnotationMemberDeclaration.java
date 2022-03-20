@@ -21,18 +21,41 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.DoubleLiteralExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.LongLiteralExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 /**
  * @author Malte Skoruppa
  */
 public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
 
+    private static Map<Class<?>, Function<Object, ? extends Expression>> valueAsExressionConverter = new HashMap<>();
+    static {
+        valueAsExressionConverter.put(Boolean.class, (value) -> new BooleanLiteralExpr(Boolean.class.cast(value)));
+        valueAsExressionConverter.put(Character.class, (value) -> new CharLiteralExpr(Character.class.cast(value)));
+        valueAsExressionConverter.put(Double.class, (value) -> new DoubleLiteralExpr(Double.class.cast(value)));
+        valueAsExressionConverter.put(Integer.class, (value) -> new IntegerLiteralExpr(Integer.class.cast(value)));
+        valueAsExressionConverter.put(Long.class, (value) -> new LongLiteralExpr(Long.class.cast(value)));
+        valueAsExressionConverter.put(String.class, (value) -> new StringLiteralExpr(String.class.cast(value)));
+    }
+    
     private Method annotationMember;
     private TypeSolver typeSolver;
 
@@ -43,15 +66,23 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
 
     @Override
     public Expression getDefaultValue() {
-        // TODO we should do this:
-        // return annotationMember.getDefaultValue();
-        // TODO ...but the interface wants us to return a JavaParser Expression node.
-        throw new UnsupportedOperationException("Obtaining the default value of a reflection annotation member is not supported yet.");
+        Object value = annotationMember.getDefaultValue();
+        Function<Object, ? extends Expression> fn = valueAsExressionConverter.get(value.getClass());
+        if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        return fn.apply(value);
     }
 
     @Override
     public ResolvedType getType() {
-        throw new UnsupportedOperationException();
+        Class returnType = annotationMember.getReturnType();
+        if (returnType.isPrimitive()) {
+            return ResolvedPrimitiveType.byName(returnType.getName());
+        }
+        SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
+        if (rrtd.isSolved()) {
+            return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration(), typeSolver);
+        }
+        throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
     }
 
     @Override

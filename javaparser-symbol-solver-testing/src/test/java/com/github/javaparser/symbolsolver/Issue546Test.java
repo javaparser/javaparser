@@ -2,7 +2,7 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
 

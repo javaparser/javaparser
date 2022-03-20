@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,10 +21,10 @@
 
 package com.github.javaparser;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.util.Iterator;
 import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The range of tokens covered by this node.
@@ -49,7 +49,7 @@ public class TokenRange implements Iterable<JavaToken> {
     }
 
     public Optional<Range> toRange() {
-        if (begin.getRange().isPresent() && end.getRange().isPresent()) {
+        if (begin.hasRange() && end.hasRange()) {
             return Optional.of(new Range(begin.getRange().get().begin, end.getRange().get().end));
         }
         return Optional.empty();

@@ -32,7 +32,7 @@
   Line 94) v.visit(this, arg) ==> void
   Line 98) block ==> com.github.javaparser.ast.stmt.BlockStmt
   Line 108) modifiers ==> int
-  Line 112) name == null ? null : name.getName() ==> null
+  Line 112) name == null ? null : name.getName() ==> java.lang.String
   Line 116) name ==> com.github.javaparser.ast.expr.NameExpr
   Line 120) parameters == null ==> boolean
   Line 121) parameters = new ArrayList<Parameter>() ==> java.util.List<com.github.javaparser.ast.body.Parameter>

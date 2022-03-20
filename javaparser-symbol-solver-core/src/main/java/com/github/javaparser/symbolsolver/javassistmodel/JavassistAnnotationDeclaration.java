@@ -21,20 +21,28 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import javassist.CtClass;
-
+import java.lang.annotation.Inherited;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import javassist.CtClass;
 
 /**
  * @author Malte Skoruppa
@@ -59,7 +67,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
-        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver);
+        this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver, this);
     }
 
     @Override
@@ -90,8 +98,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-        // TODO #1837
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
@@ -101,7 +108,12 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
+    }
+
+    @Override
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        return javassistTypeDeclarationAdapter.internalTypes();
     }
 
     @Override
@@ -152,5 +164,14 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     @Override
     public Optional<AnnotationDeclaration> toAst() {
         return Optional.empty();
+    }
+    
+    @Override
+    public boolean isInheritable() {
+        try {
+            return ctClass.getAnnotation(Inherited.class) != null;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }

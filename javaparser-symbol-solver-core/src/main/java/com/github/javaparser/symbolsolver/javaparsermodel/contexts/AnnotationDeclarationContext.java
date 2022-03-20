@@ -55,9 +55,7 @@ public class AnnotationDeclarationContext extends AbstractJavaParserContext<Anno
         }
 
         // then to parent
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override

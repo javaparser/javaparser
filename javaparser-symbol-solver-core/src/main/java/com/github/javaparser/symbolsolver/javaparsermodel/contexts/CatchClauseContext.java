@@ -47,6 +47,7 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
         super(wrappedNode, typeSolver);
     }
 
+    @Override
     public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParameter(), typeSolver);
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
@@ -55,9 +56,7 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
@@ -70,17 +69,13 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
-    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, false);
+    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        // TODO: Document why staticOnly is forced to be false.
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
     @Override
@@ -90,6 +85,7 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
 
     @Override
     public List<Parameter> parametersExposedToChild(Node child) {
+        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the direct child?
         if (child == getWrappedNode().getBody()) {
             return Collections.singletonList(getWrappedNode().getParameter());
         }

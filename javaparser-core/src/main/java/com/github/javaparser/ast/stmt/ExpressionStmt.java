@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,22 +20,22 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Used to wrap an expression so that it can take the place of a statement.
@@ -86,7 +86,7 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
     public ExpressionStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
-            return (ExpressionStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
@@ -94,14 +94,6 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
     }
 
     @Override
@@ -119,8 +111,9 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == expression) {
             setExpression((Expression) replacementNode);
             return true;
@@ -140,6 +133,7 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExpressionStmt(Consumer<ExpressionStmt> action) {
         action.accept(this);

@@ -21,15 +21,19 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.resolution.typeinference.*;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isInferenceVariable;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariableSubstitution;
+import com.github.javaparser.symbolsolver.resolution.typeinference.ProperLowerBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.ProperUpperBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 
 /**
  * S &lt;: T, where at least one of S or T is an inference variable: S is a subtype of T
@@ -41,7 +45,7 @@ public class SubtypeOfBound extends Bound {
     private ResolvedType t;
 
     public SubtypeOfBound(ResolvedType s, ResolvedType t) {
-        if (!isInferenceVariable(s) && !isInferenceVariable(t)) {
+        if (!s.isInferenceVariable() && !t.isInferenceVariable()) {
             throw new IllegalArgumentException("One of S or T should be an inference variable");
         }
         this.s = s;
@@ -92,7 +96,7 @@ public class SubtypeOfBound extends Bound {
 
     @Override
     public Optional<ProperUpperBound> isProperUpperBound() {
-        if (isInferenceVariable(s) && isProperType(t)) {
+        if (s.isInferenceVariable() && isProperType(t)) {
             return Optional.of(new ProperUpperBound((InferenceVariable) s, t));
         }
         return Optional.empty();
@@ -100,7 +104,7 @@ public class SubtypeOfBound extends Bound {
 
     @Override
     public Optional<ProperLowerBound> isProperLowerBound() {
-        if (isProperType(s) && isInferenceVariable(t)) {
+        if (isProperType(s) && t.isInferenceVariable()) {
             return Optional.of(new ProperLowerBound((InferenceVariable) t, s));
         }
         return Optional.empty();

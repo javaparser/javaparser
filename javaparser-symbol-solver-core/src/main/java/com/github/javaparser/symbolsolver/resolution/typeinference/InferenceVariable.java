@@ -21,11 +21,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * Are meta-variables for types - that is, they are special names that allow abstract reasoning about types.
@@ -58,6 +58,11 @@ public class InferenceVariable implements ResolvedType {
         this.typeParameterDeclaration = typeParameterDeclaration;
     }
 
+    @Override
+    public boolean isInferenceVariable() {
+        return true;
+    }
+    
     @Override
     public String describe() {
         return name;

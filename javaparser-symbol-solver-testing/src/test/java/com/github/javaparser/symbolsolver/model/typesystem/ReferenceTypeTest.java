@@ -36,20 +36,7 @@ import java.net.ProtocolException;
 import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.nio.file.FileSystemException;
-import java.util.AbstractCollection;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.RandomAccess;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,13 +46,17 @@ import org.junit.jupiter.api.Test;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -80,6 +71,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
@@ -128,6 +120,12 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 new ReferenceTypeImpl(new ReflectionClassDeclaration(ClassCastException.class, typeSolver), typeSolver),
                 new ReferenceTypeImpl(new ReflectionClassDeclaration(AssertionError.class, typeSolver), typeSolver)
         ));
+        
+        // minimal initialization of JavaParser
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        // Setup parser
+        StaticJavaParser.setConfiguration(configuration);
     }
 
     @Test
@@ -253,6 +251,12 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         ResolvedReferenceType numberType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Number.class, typeSolver), typeSolver);
         ResolvedReferenceType intType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
         ResolvedReferenceType doubleType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
+        ResolvedReferenceType byteType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
+        ResolvedReferenceType shortType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
+        ResolvedReferenceType charType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
+        ResolvedReferenceType longType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
+        ResolvedReferenceType booleanType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
+        ResolvedReferenceType floatType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
 
         assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.INT));
         assertEquals(true, numberType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
@@ -262,6 +266,67 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         assertEquals(false, numberType.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
         assertEquals(true, intType.isAssignableBy(ResolvedPrimitiveType.INT));
         assertEquals(true, doubleType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
+        assertEquals(true, byteType.isAssignableBy(ResolvedPrimitiveType.BYTE));
+        assertEquals(true, shortType.isAssignableBy(ResolvedPrimitiveType.SHORT));
+        assertEquals(true, charType.isAssignableBy(ResolvedPrimitiveType.CHAR));
+        assertEquals(true, longType.isAssignableBy(ResolvedPrimitiveType.LONG));
+        assertEquals(true, booleanType.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
+        assertEquals(true, floatType.isAssignableBy(ResolvedPrimitiveType.FLOAT));
+    }
+
+    @Test
+    void testIsCorresponding() {
+
+        // ResolvedReferenceTypeTester is defined to allow to test protected method isCorrespondingBoxingType(..)
+        class ResolvedReferenceTypeTester extends ReferenceTypeImpl {
+
+            public ResolvedReferenceTypeTester(ResolvedReferenceTypeDeclaration typeDeclaration,
+                                               TypeSolver typeSolver) {
+                super(typeDeclaration, typeSolver);
+            }
+
+            public boolean isCorrespondingBoxingType(String name) {
+                return super.isCorrespondingBoxingType(name);
+            }
+
+        }
+
+        ResolvedReferenceTypeTester numberType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Number.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester intType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester doubleType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester byteType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester shortType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester charType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester longType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester booleanType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
+        ResolvedReferenceTypeTester floatType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
+
+        ResolvedReferenceTypeTester otherType = new ResolvedReferenceTypeTester(
+                new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+
+        assertEquals(true, intType.isCorrespondingBoxingType(ResolvedPrimitiveType.INT.describe()));
+        assertEquals(true, doubleType.isCorrespondingBoxingType(ResolvedPrimitiveType.DOUBLE.describe()));
+        assertEquals(true, byteType.isCorrespondingBoxingType(ResolvedPrimitiveType.BYTE.describe()));
+        assertEquals(true, shortType.isCorrespondingBoxingType(ResolvedPrimitiveType.SHORT.describe()));
+        assertEquals(true, charType.isCorrespondingBoxingType(ResolvedPrimitiveType.CHAR.describe()));
+        assertEquals(true, longType.isCorrespondingBoxingType(ResolvedPrimitiveType.LONG.describe()));
+        assertEquals(true, booleanType.isCorrespondingBoxingType(ResolvedPrimitiveType.BOOLEAN.describe()));
+        assertEquals(true, floatType.isCorrespondingBoxingType(ResolvedPrimitiveType.FLOAT.describe()));
+
+        assertEquals(false, numberType.isCorrespondingBoxingType(ResolvedPrimitiveType.INT.describe()));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            intType.isCorrespondingBoxingType("String");
+        });
     }
 
     @Test
@@ -816,4 +881,145 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         assertTrue(rtB.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("l")));
         assertTrue(rtB.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("b")));
     }
+    
+    @Test
+    void erasure_non_generic_type() {
+        List<ResolvedType> types = declaredTypes(
+                "class A {}");
+        ResolvedType expected = types.get(0);
+        assertEquals(expected, types.get(0).erasure());
+    }
+    
+    @Test
+    // The erasure of a parameterized type
+    void erasure_rawtype() {
+        List<ResolvedType> types = declaredTypes(
+                "class A<String> {}");
+        ResolvedType rt = types.get(0);
+        String expected = "A";
+        ResolvedType erasedType = rt.erasure();
+        assertTrue(rt.asReferenceType().isRawType());
+        assertTrue(erasedType.asReferenceType().typeParametersValues().isEmpty());
+        assertEquals(expected, erasedType.describe());
+    }
+
+    @Test
+    // The erasure of an array type T[] is |T|[].
+    void erasure_arraytype() {
+        // create a type : List <String>
+        ResolvedType genericList = array(genericType(List.class.getCanonicalName(), String.class.getCanonicalName()));
+        String expected = "java.util.List[]";
+        assertEquals(expected, genericList.erasure().describe());
+    }
+    
+    @Test
+    // The erasure of an array type T[] is |T|[].
+    void erasure_arraytype_with_bound() {
+        // create a type : List <T extends Serializable>
+        ResolvedTypeVariable typeArguments = parametrizedType("T", Serializable.class.getCanonicalName());
+        ResolvedType genericList = array(genericType(List.class.getCanonicalName(), typeArguments));
+        String expected = "java.util.List<java.io.Serializable>[]";
+        assertEquals(expected, genericList.erasure().describe());
+    }
+    
+    @Test
+    // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+    void erasure_type_variable() {
+        List<ResolvedType> types = declaredTypes(
+                "class A<T extends Number> {}");
+        ResolvedType rt = types.get(0);
+        String expected =  "A<java.lang.Number>";
+        assertEquals(expected, rt.erasure().describe());
+    }
+    
+    @Test
+    // The erasure of a nested type T.C is |T|.C.
+    void erasure_nested_type() {
+        List<ResolvedType> types = declaredTypes(
+                "class A<T> {" +
+                        "  class C{}" +
+                        "}",
+                "class A {" +
+                        "  class C{}" +
+                        "}");
+        ResolvedType typeA = types.get(0);
+        ResolvedType typeC = types.get(1);
+        // ResolvedType expectedErasedAType= types.get(2);
+        ResolvedType expectedErasedCType = types.get(3);
+        String expectedA = "A";
+        String expectedC = "A.C";
+        assertEquals(expectedA, typeA.erasure().describe());
+        assertEquals(expectedC, typeC.erasure().describe());
+        // this type declaration are not equals because the type returned by typeA.erasure() always contains original
+        // typeParameters
+        // assertEquals(expectedErasedAType, typeA.erasure());
+        assertEquals(expectedErasedCType, typeC.erasure());
+    }
+    
+    // return a generic type with type arguments (arguments can be bounded)
+    private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
+        return type(type, toList(parameterTypes));
+    }
+    
+    // return a generic type with type arguments
+    private ResolvedType genericType(String type, String... parameterTypes) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type), types(parameterTypes), typeSolver);
+    }
+    
+    // return a list of types
+    private List<ResolvedType> types(String... types) {
+        return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());
+    }
+
+    // return the specified type
+    private ResolvedType type(String type) {
+        return type(type, new ArrayList<>());
+    }
+    
+    private ResolvedType type(String type, List<ResolvedType> typeArguments) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type), typeArguments, typeSolver);
+    }
+    
+    // return a type parameter
+    private ResolvedTypeVariable parametrizedType(String type, String parameterType) {
+        return new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType(parameterType, type + "." + parameterType,
+                Arrays.asList((extendBound(parameterType)))));
+    }
+
+    // rturn an extend bound
+    private Bound extendBound(String type) {
+        return Bound.extendsBound(type(type));
+    }
+
+    private Set<ResolvedType> toSet(ResolvedType... resolvedTypes) {
+        return new HashSet<>(toList(resolvedTypes));
+    }
+    
+    private List<ResolvedType> toList(ResolvedType... resolvedTypes) {
+        return Arrays.asList(resolvedTypes);
+    }
+    
+    // return an array type from the base type
+    private ResolvedType array(ResolvedType baseType) {
+        return new ResolvedArrayType(baseType);
+    }
+    
+    // return a list of types from the declared types (using a static parser) 
+    private List<ResolvedType> declaredTypes(String... lines) {
+        CompilationUnit tree = treeOf(lines);
+        List<ResolvedType> results = Lists.newLinkedList();
+        for (ClassOrInterfaceDeclaration classTree : tree.findAll(ClassOrInterfaceDeclaration.class)) {
+            results.add(new ReferenceTypeImpl(classTree.resolve(), typeSolver));
+        }
+        return results;
+    }
+
+    private CompilationUnit treeOf(String... lines) {
+        StringBuilder builder = new StringBuilder();
+        for (String line : lines) {
+            builder.append(line).append(System.lineSeparator());
+        }
+        return StaticJavaParser.parse(builder.toString());
+    }
+    
 }

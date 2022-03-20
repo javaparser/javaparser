@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -60,7 +60,7 @@ public abstract class AbstractGenerator {
 
     protected static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
             " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
-            " * Copyright (C) 2011, 2013-2020 The JavaParser Team.\n" +
+            " * Copyright (C) 2011, 2013-2021 The JavaParser Team.\n" +
             " *\n" +
             " * This file is part of JavaParser.\n" +
             " *\n" +

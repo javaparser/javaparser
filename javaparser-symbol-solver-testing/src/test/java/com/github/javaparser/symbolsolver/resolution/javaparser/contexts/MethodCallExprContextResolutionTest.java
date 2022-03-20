@@ -156,6 +156,18 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 	}
 
 	@Test
+	public void testGenericParameter() {
+		ParserConfiguration config = new ParserConfiguration()
+				.setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+		StaticJavaParser.setConfiguration(config);
+		CompilationUnit cu = parseSample("ISSUES_Generic_Parameter");
+		List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
+		assertEquals(1, expressions.size());
+		ResolvedType r = expressions.get(0).calculateResolvedType();
+		assertTrue(ReferenceTypeImpl.class.isAssignableFrom(r.getClass()));
+	}
+
+	@Test
 	public void testResolveChainedCallOnReflectionType() throws Exception {
 		Path pathToJar = adaptPath("src/test/resources/issue2667/jsonobject.jar");
 

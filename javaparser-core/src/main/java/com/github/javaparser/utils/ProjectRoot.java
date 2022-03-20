@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,8 +34,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * The structure of a Java project directory.
  * It was originally created specifically to quickly configure the symbol solver.
  * You can use it as a general container for project information.
- * <p/>A project has a root directory, and it has zero or more directories that contain source code.
- * <p/>To create a ProjectRoot use a CollectionStrategy, or instantiate ProjectRoot yourself.
+ * <p>A project has a root directory, and it has zero or more directories that contain source code.
+ * <p>To create a ProjectRoot use a CollectionStrategy, or instantiate ProjectRoot yourself.
  */
 public class ProjectRoot {
 

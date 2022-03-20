@@ -21,21 +21,24 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.expr.*;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 
 class NodeWithOptionalScopeTest {
 
     @Test
     void commonExpressionWhichHaveInterfaceNodeWithOptionalScope() {
-        NodeWithOptionalScope methodCallExpr = new MethodCallExpr(new NameExpr("A"), "call");
-        NodeWithOptionalScope objectCreationExpr = new ObjectCreationExpr();
+        MethodCallExpr methodCallExpr = new MethodCallExpr(new NameExpr("A"), "call");
+        ObjectCreationExpr objectCreationExpr = new ObjectCreationExpr();
 
-        assertTrue(methodCallExpr.getScope().isPresent());
-        assertFalse(objectCreationExpr.getScope().isPresent());
+        assertTrue(methodCallExpr.hasScope());
+        assertFalse(objectCreationExpr.hasScope());
     }
 
     @Test
@@ -44,6 +47,6 @@ class NodeWithOptionalScopeTest {
 
         methodCallExpr.removeScope();
 
-        assertFalse(methodCallExpr.getScope().isPresent());
+        assertFalse(methodCallExpr.hasScope());
     }
 }

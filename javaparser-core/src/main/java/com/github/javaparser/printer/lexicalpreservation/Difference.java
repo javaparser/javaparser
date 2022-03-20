@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,15 +25,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
 import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
@@ -43,6 +35,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
@@ -85,22 +79,40 @@ public class Difference {
         this.indentation = LexicalPreservingPrinter.findIndentation(node);
     }
 
+    /*
+     * Returns the indentation used after the last line break
+     */
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
         List<TextElement> res = new LinkedList<>(indentation);
-        boolean afterNl = false;
-        for (TextElement e : prevElements) {
-            if (e.isNewline()) {
-                res.clear();
-                afterNl = true;
-            } else {
-                if (afterNl && e instanceof TokenTextElement && TokenTypes.isWhitespace(((TokenTextElement)e).getTokenKind())) {
-                    res.add(e);
-                } else {
-                    afterNl = false;
-                }
+        int index = lastIndexOfEol(prevElements);
+        if (index < 0) return res; // no EOL found
+        res.clear(); // initialize previous indentation
+        // search for consecutive space characters
+        for (int i = (index + 1); i < prevElements.size(); i++) {
+            TextElement elem = prevElements.get(i);
+            if (elem.isWhiteSpace()) {
+                res.add(elem);
+                continue;
             }
+            break;
         }
         return res;
+    }
+    
+    /*
+     * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement 
+     */
+    int lastIndexOfEol(List<TextElement> source) {
+        ListIterator listIterator = source.listIterator(source.size());
+        int lastIndex = source.size() -1;
+        while (listIterator.hasPrevious()) {
+            TextElement elem = (TextElement)listIterator.previous();
+            if (elem.isNewline()) {
+                return lastIndex;
+            }
+            lastIndex--;
+        }
+        return -1;
     }
 
     private List<TextElement> indentationBlock() {
@@ -209,14 +221,7 @@ public class Difference {
         if (diffIndex < diffElements.size() && originalIndex >= originalElements.size()) {
             DifferenceElement diffElement = diffElements.get(diffIndex);
             if (diffElement instanceof Kept) {
-                Kept kept = (Kept) diffElement;
-
-                if (kept.isWhiteSpaceOrComment() || kept.isIndent() || kept.isUnindent()) {
-                    diffIndex++;
-                } else {
-                    throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
-                            + nodeText + ". Difference: " + this);
-                }
+                diffIndex++;
             } else if (diffElement instanceof Added) {
                 Added addedElement = (Added) diffElement;
 
@@ -224,7 +229,8 @@ public class Difference {
                 originalIndex++;
                 diffIndex++;
             } else {
-                throw new UnsupportedOperationException(diffElement.getClass().getSimpleName());
+                // let's forget this element
+                diffIndex++;
             }
 
             isLeftOverElement = true;
@@ -476,9 +482,9 @@ public class Difference {
         }
     }
 
-    // note: 
+    // note:
     // increment originalIndex if we want to keep the original element
-    // increment diffIndex if we don't want to skip the diff element 
+    // increment diffIndex if we don't want to skip the diff element
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (originalElement.isComment()) {
             originalIndex++;
@@ -501,6 +507,20 @@ public class Difference {
                 // token is "<" so we have to skip all the tokens which are used in the typed arguments declaration [<][List][<][String][>][>](6 tokens) in the originalElements list.
                 int step = getIndexToNextTokenElement((TokenTextElement) originalElement, 0);
                 originalIndex += step;
+                originalIndex++;
+            }  else if (originalElement.isIdentifier() && isTypeWithFullyQualifiedName(kept)) {
+                    diffIndex++;
+                    // skip all token related to node with the fully qualified name
+                    // for example:
+                    // java.lang.Object is represented in originalElement as a list of tokens "java", ".", "lang", ".", "Object".
+                    // So we have to skip 5 tokens.
+                    int step = getIndexToNextTokenElement((TokenTextElement) originalElement, kept);
+                    originalIndex += step;
+                    originalIndex++; // positioning on the next token
+            } else if ((originalElement.isIdentifier() || originalElement.isKeyword()) && isArrayType(kept)) {
+                int tokenToSkip = getIndexToNextTokenElementInArrayType((TokenTextElement)originalElement, getArrayLevel(kept));
+                diffIndex++;
+                originalIndex += tokenToSkip;
                 originalIndex++;
             } else if (originalElement.isIdentifier()) {
                 originalIndex++;
@@ -525,14 +545,14 @@ public class Difference {
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
                 diffIndex++;
-             // case where originalTextToken is a separator like ";" and
-             // kept is not a new line or whitespace for example "}"
-             // see issue 2351
-            }  else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
-                originalIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
+                originalIndex++;
+            } else if (!kept.isNewLine() && originalTextToken.isSeparator()) {
+                // case where originalTextToken is a separator like ";" and
+                // kept is not a new line or whitespace for example "}"
+                // see issue 2351
                 originalIndex++;
             } else {
                 throw new UnsupportedOperationException("Csm token " + kept.getElement() + " NodeText TOKEN " + originalTextToken);
@@ -559,14 +579,48 @@ public class Difference {
         }
     }
 
+
+    /*
+     * Returns the array level if the DifferenceElement is a CsmChild representing an ArrayType else 0
+     */
+    private int getArrayLevel(DifferenceElement element) {
+        CsmElement csmElem = element.getElement();
+        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild &&
+                ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType) {
+            Node child = ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild();
+            return ((ArrayType)child).getArrayLevel();
+        }
+        return 0;
+    }
+
+    /*
+     * Returns true if the DifferenceElement is a CsmChild representing an ArrayType
+     */
+    private boolean isArrayType(DifferenceElement element) {
+        CsmElement csmElem = element.getElement();
+        return csmElem instanceof LexicalDifferenceCalculator.CsmChild &&
+                ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType;
+    }
+    
+    /*
+     * Returns true if the DifferenceElement is a CsmChild which represents a type with fully qualified name
+     */
+    private boolean isTypeWithFullyQualifiedName(DifferenceElement element) {
+        if (!element.isChild())
+            return false;
+        CsmChild child = (CsmChild) element.getElement();
+        if (!ClassOrInterfaceType.class.isAssignableFrom(child.getChild().getClass()))
+            return false;
+        return ((ClassOrInterfaceType) child.getChild()).getScope().isPresent();
+    }
+
     /*
      * Returns true if the DifferenceElement is a CsmChild with type arguments
      */
     private boolean isNodeWithTypeArguments(DifferenceElement element) {
-        CsmElement csmElem = element.getElement();
-        if (!CsmChild.class.isAssignableFrom(csmElem.getClass()))
+        if (!element.isChild())
             return false;
-        CsmChild child = (CsmChild) csmElem;
+        CsmChild child = (CsmChild) element.getElement();
         if (!NodeWithTypeArguments.class.isAssignableFrom(child.getChild().getClass()))
             return false;
         Optional<NodeList<Type>> typeArgs = ((NodeWithTypeArguments) child.getChild()).getTypeArguments();
@@ -574,17 +628,43 @@ public class Difference {
     }
 
     /*
+     * Try to resolve the number of token to skip in the original list to match 
+     * a ClassOrInterfaceType with a list of tokens like "java", ".", "lang", ".", "Object"
+     */
+    private int getIndexToNextTokenElement(TokenTextElement element, DifferenceElement kept) {
+        int step = 0; // number of token to skip
+        if (!isTypeWithFullyQualifiedName(kept)) return 0; // verify if the DifferenceElement is a ClassOrInterfaceType with a fully qualified name
+        CsmChild child = (CsmChild) kept.getElement();
+        // split the type fully qualified node name to an array of tokens
+        String[] parts = ((ClassOrInterfaceType) child.getChild()).getNameWithScope().split("\\.");
+        JavaToken token = element.getToken();
+        for (String part : parts) {
+            if (part.equals(token.asString())) {
+                token = token.getNextToken().get(); // get 'dot' token
+                if (!token.asString().equals(".")) break;
+                token = token.getNextToken().get(); // get the next part
+                step += 2;
+                continue;
+            }
+            // there is no match so we don't have token to skip
+            step = 0;
+            break;
+        }
+        return step;
+    }
+    
+    /*
      * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
      * This is due to the fact that types are considered as token in the originalElements list.
      * For example,
      * List<String> is represented by 4 tokens ([List][<][String][>]) while it's a CsmChild element in the DiffElements list
      * So in this case, getIndexToNextTokenElement(..) on the [List] token returns 3 because we have to skip 3 tokens ([<][String][>]) to synchronize
-     * DiffElements list and originalElements list 
+     * DiffElements list and originalElements list
      * The end of recursivity is reached when there is no next token or if the nested diamond operators are totally managed, to take into account this type of declaration
      * List <List<String>> l
      * Be careful, this method must be call only if diamond operator could be found in the sequence
-     * 
-     * @Param TokenTextElement the token currently analyzed 
+     *
+     * @Param TokenTextElement the token currently analyzed
      * @Param int the number of nested diamond operators
      * @return the number of token to skip in originalElements list
      */
@@ -592,11 +672,11 @@ public class Difference {
         int step = 0; // number of token to skip
         Optional<JavaToken> next = element.getToken().getNextToken();
         if (!next.isPresent()) return step;
-        // because there is a token, first we need to increment the number of token to skip 
+        // because there is a token, first we need to increment the number of token to skip
         step++;
         // manage nested diamond operators by incrementing the level on LT token and decrementing on GT
-        JavaToken token = next.get();
-        Kind kind = Kind.valueOf(token.getKind());
+        JavaToken nextToken = next.get();
+        Kind kind = Kind.valueOf(nextToken.getKind());
         if (isDiamondOperator(kind)) {
             if (kind.GT.equals(kind))
                 nestedDiamondOperator--;
@@ -606,17 +686,49 @@ public class Difference {
         // manage the fact where the first token is not a diamond operator but a whitespace
         // and the end of the token sequence to skip
         // for example in this declaration List <String> a;
-        if (nestedDiamondOperator == 0 && !next.get().getCategory().isWhitespace())
+        if (nestedDiamondOperator == 0 && !nextToken.getCategory().isWhitespace())
             return step;
         // recursively analyze token to skip
-        return step += getIndexToNextTokenElement(new TokenTextElement(token), nestedDiamondOperator);
+        return step += getIndexToNextTokenElement(new TokenTextElement(nextToken), nestedDiamondOperator);
     }
-    
+
+    /*
+     * Returns the number of tokens to skip in originalElements list to synchronize it with the DiffElements list
+     */
+    private int getIndexToNextTokenElementInArrayType(TokenTextElement element, int arrayLevel) {
+        int step = 0; // number of token to skip
+        Optional<JavaToken> next = element.getToken().getNextToken();
+        if (!next.isPresent()) return step;
+        // because there is a token, first we need to increment the number of token to skip
+        step++;
+        // manage array Level by decrementing the level on right bracket token
+        JavaToken nextToken = next.get();
+        Kind kind = Kind.valueOf(nextToken.getKind());
+        if (isBracket(kind)) {
+            if (kind.RBRACKET.equals(kind))
+                arrayLevel--;
+        }
+        // manage the fact where the first token is not a diamond operator but a whitespace
+        // and the end of the token sequence to skip
+        // for example in this declaration int [] a;
+        if (arrayLevel == 0 && !nextToken.getCategory().isWhitespace())
+            return step;
+        // recursively analyze token to skip
+        return step += getIndexToNextTokenElementInArrayType(new TokenTextElement(nextToken), arrayLevel);
+    }
+
     /*
      * Returns true if the token is possibly a diamond operator
      */
     private boolean isDiamondOperator(Kind kind) {
         return kind.GT.equals(kind) || kind.LT.equals(kind);
+    }
+
+    /*
+     * Returns true if the token is a bracket
+     */
+    private boolean isBracket(Kind kind) {
+        return kind.LBRACKET.equals(kind) || kind.RBRACKET.equals(kind);
     }
 
     private boolean openBraceWasOnSameLine() {
@@ -726,6 +838,8 @@ public class Difference {
             boolean currentIsAComment = nodeText.getTextElement(originalIndex).isComment();
             boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
             boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
+            boolean isFirstElement = originalIndex == 0;
+            boolean previousIsWhiteSpace = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isWhiteSpace();
 
             if (sufficientTokensRemainToSkip && currentIsAComment) {
                 // Need to get behind the comment:
@@ -746,8 +860,20 @@ public class Difference {
                 // We want to adjust the indentation while considering the new element that we added
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
                 nodeText.addElement(originalIndex, addedTextElement); // Defer originalIndex increment
-
                 originalIndex++; // Now we can increment.
+            } else if (currentIsNewline && addedTextElement.isChild()) {
+                // here we want to place the new child element after the current new line character.
+                // Except if indentation has been inserted just before this step (in the case where isPreviousElementNewline is true) 
+                // or if the previous character is a space (it could be the case if we want to replace a statement)
+                // Example 1 : if we insert a statement (a duplicated method call expression ) after this one <code>  value();\n\n</code>
+                // we want to have this result <code>  value();\n  value();\n</code> not <code>  value();\n  \nvalue();</code>
+                // Example 2 : if we want to insert a statement after this one <code>  \n</code> we want to have <code>  value();\n</code> 
+                // not <code>  \nvalue();</code> --> this case appears on member replacement for example 
+                if (!isPreviousElementNewline && !isFirstElement && !previousIsWhiteSpace) {
+                    originalIndex++; // Insert after the new line
+                }
+                nodeText.addElement(originalIndex, addedTextElement);
+                originalIndex++;
             } else {
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
@@ -795,10 +921,14 @@ public class Difference {
         return correspondanceBetweenNextOrderAndPreviousOrder;
     }
 
+    /*
+     * Returns true if the next element in the list is an added element of type CsmUnindent
+     */
     private boolean isFollowedByUnindent(List<DifferenceElement> diffElements, int diffIndex) {
-        return (diffIndex + 1) < diffElements.size()
-                && diffElements.get(diffIndex + 1).isAdded()
-                && diffElements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
+        int nextIndexValue = diffIndex + 1;
+        return (nextIndexValue) < diffElements.size()
+                && diffElements.get(nextIndexValue).isAdded()
+                && diffElements.get(nextIndexValue).getElement() instanceof CsmUnindent;
     }
 
     private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
@@ -921,10 +1051,16 @@ public class Difference {
         return nodeTextIndex;
     }
 
+    /*
+     * Returns true if the current <code>Added</code> element is preceded by a <code>Removed</code> element.
+     */
     private boolean isAReplacement(int diffIndex) {
         return (diffIndex > 0) && diffElements.get(diffIndex) instanceof Added && diffElements.get(diffIndex - 1) instanceof Removed;
     }
 
+    /*
+     * Returns true if the current <code>Removed</code> element is followed by a <code>Added</code> element.
+     */
     private boolean isReplaced(int diffIndex) {
         return (diffIndex < diffElements.size() - 1) && diffElements.get(diffIndex + 1) instanceof Added && diffElements.get(diffIndex) instanceof Removed;
     }

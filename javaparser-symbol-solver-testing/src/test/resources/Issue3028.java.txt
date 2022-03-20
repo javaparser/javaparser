@@ -1,0 +1,16 @@
+import java.util.function.Supplier;
+
+public class AParserTest {
+
+	public void testMethod() {
+		doSomething("abc");
+	}
+	
+	private void doSomething(String string, Supplier<?>... supplier) {
+		
+	}
+
+	private void doSomething(String string, Object... object) {
+		
+	}
+}

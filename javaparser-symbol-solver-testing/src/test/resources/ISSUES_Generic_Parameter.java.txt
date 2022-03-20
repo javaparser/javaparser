@@ -1,0 +1,14 @@
+public class ISSUES_Generic_Parameter {
+
+    public static Object test() {
+        return Foo.error("code", null, "arg1");
+    }
+
+    public static class Foo<T> {
+        public T data;
+        public static <T> Foo<T> error(String resultCode, T data, Object... params) {
+            return null;
+        }
+    }
+
+}

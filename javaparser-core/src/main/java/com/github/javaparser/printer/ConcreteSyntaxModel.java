@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -146,6 +146,36 @@ public class ConcreteSyntaxModel {
                 token(GeneratedJavaParserConstants.LPAREN),
                 list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
                 token(GeneratedJavaParserConstants.RPAREN),
+                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.THROWS), space()), none()),
+                space(),
+                child(ObservableProperty.BODY)
+        ));
+
+        concreteSyntaxModelByClass.put(RecordDeclaration.class, sequence(
+                comment(),
+                memberAnnotations(),
+                modifiers(),
+                token(GeneratedJavaParserConstants.RECORD),
+                space(),
+                child(ObservableProperty.NAME),
+                token(GeneratedJavaParserConstants.LPAREN),
+                list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
+                token(GeneratedJavaParserConstants.RPAREN),
+                list(TYPE_PARAMETERS, sequence(comma(), space()), string(GeneratedJavaParserConstants.LT), string(GeneratedJavaParserConstants.GT)),
+                list(ObservableProperty.IMPLEMENTED_TYPES, sequence(string(GeneratedJavaParserConstants.COMMA), space()), sequence(
+                        space(),
+                        token(GeneratedJavaParserConstants.IMPLEMENTS),
+                        space()), none()),
+                space(),
+                block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
+        ));
+
+        concreteSyntaxModelByClass.put(CompactConstructorDeclaration.class, sequence(
+                comment(),
+                memberAnnotations(),
+                modifiers(),
+                typeParameters(),
+                child(ObservableProperty.NAME),
                 list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.THROWS), space()), none()),
                 space(),
                 child(ObservableProperty.BODY)
@@ -353,6 +383,12 @@ public class ConcreteSyntaxModel {
                 token(GeneratedJavaParserConstants.INSTANCEOF),
                 space(),
                 child(ObservableProperty.TYPE)
+        ));
+
+        concreteSyntaxModelByClass.put(PatternExpr.class, sequence(
+                child(ObservableProperty.TYPE),
+                space(),
+                child(ObservableProperty.NAME)
         ));
 
         concreteSyntaxModelByClass.put(IntegerLiteralExpr.class, sequence(
@@ -673,6 +709,11 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.CLASS_DECLARATION)
         ));
 
+        concreteSyntaxModelByClass.put(LocalRecordDeclarationStmt.class, sequence(
+                comment(),
+                child(ObservableProperty.RECORD_DECLARATION)
+        ));
+
         concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.RETURN),
@@ -778,7 +819,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceType.class, sequence(comment(),
                 conditional(SCOPE, IS_PRESENT, sequence(child(SCOPE), string(GeneratedJavaParserConstants.DOT))),
-                list(ANNOTATIONS, space()),
+                list(ANNOTATIONS, space(), none(), space()),
                 child(NAME),
                 conditional(ObservableProperty.USING_DIAMOND_OPERATOR, FLAG,
                         sequence(string(GeneratedJavaParserConstants.LT), string(GeneratedJavaParserConstants.GT)),

@@ -25,13 +25,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
@@ -172,6 +172,32 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                                 throw new UnsupportedOperationException();
                             }
                         }
+                    } else if (parentNode instanceof CastExpr) {
+                        CastExpr castExpr = (CastExpr) parentNode;
+                        ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(castExpr.getType());
+                        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
+
+                        if (functionalMethod.isPresent()) {
+                            ResolvedType lambdaType = functionalMethod.get().getParamType(index);
+
+                            // Replace parameter from declarator
+                            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
+                            if (lambdaType.isReferenceType()) {
+                                for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
+                                    if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
+                                        ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
+                                        lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
+                                    }
+                                }
+                            } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
+                                lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
+                            }
+
+                            Value value = new Value(lambdaType, name);
+                            return Optional.of(value);
+                        } else {
+                            throw new UnsupportedOperationException();
+                        }
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -181,9 +207,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -197,27 +221,18 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
-    }
-
-    @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, false);
+        // TODO: Document why staticOnly is forced to be false.
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
     @Override
     public List<Parameter> parametersExposedToChild(Node child) {
+        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the direct child?
         if (child == wrappedNode.getBody()) {
             return wrappedNode.getParameters();
         }

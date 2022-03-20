@@ -2,7 +2,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.16.4-SNAPSHOT</version>
+        <version>3.24.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,7 +22,6 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
-
     <build>
         <plugins>
             <plugin>
@@ -49,7 +48,7 @@
                 <executions>
                     <execution>
                         <id>copy-javaparser-core-classes</id>
-                        <phase>compile</phase>
+                        <phase>test-compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -66,7 +65,7 @@
                     </execution>
                     <execution>
                         <id>copy-javaparser-core-generated-sources</id>
-                        <phase>compile</phase>
+                        <phase>test-compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -89,6 +88,14 @@
                 <configuration>
                     <!-- no need to release this module -->
                     <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <reportFormat>plain</reportFormat>
+                    <failIfNoTests>true</failIfNoTests>
                 </configuration>
             </plugin>
         </plugins>
@@ -118,14 +125,18 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.18.1</version>
+            <version>3.22.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.0</version>
+            <version>4.9.3</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
 

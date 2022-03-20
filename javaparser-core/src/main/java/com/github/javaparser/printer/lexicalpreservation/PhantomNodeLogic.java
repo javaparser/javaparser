@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,19 +21,21 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static java.util.Collections.synchronizedMap;
+
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.type.UnknownType;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
-
-import static java.util.Collections.synchronizedMap;
-
 /**
  * We want to recognize and ignore "phantom" nodes, like the fake type of variable in FieldDeclaration
+ * @deprecated This class is no longer used phantom node are now an attribute of each node
  */
+@Deprecated
 public class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
@@ -54,8 +56,10 @@ public class PhantomNodeLogic {
             if (node instanceof UnknownType) {
                 return true;
             }
-            boolean res = (node.getParentNode().isPresent() &&
-                    !node.getParentNode().get().getRange().get().contains(node.getRange().get())
+            boolean res = (node.getParentNode().isPresent() 
+                    && node.getParentNode().get().hasRange()
+                    && node.hasRange()
+                    && !node.getParentNode().get().getRange().get().contains(node.getRange().get())
                     || inPhantomNode(node, LEVELS_TO_EXPLORE));
             isPhantomNodeCache.put(node, res);
             node.register(cacheCleaner);

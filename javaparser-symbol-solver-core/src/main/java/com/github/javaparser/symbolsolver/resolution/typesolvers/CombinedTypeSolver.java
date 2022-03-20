@@ -21,15 +21,19 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.cache.Cache;
+import com.github.javaparser.symbolsolver.cache.NoCache;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * A container for type solvers. All solving is done by the contained type solvers.
@@ -38,6 +42,8 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
  * @author Federico Tomassetti
  */
 public class CombinedTypeSolver implements TypeSolver {
+
+    private final Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> typeCache;
 
     private TypeSolver parent;
     private List<TypeSolver> elements = new ArrayList<>();
@@ -57,15 +63,41 @@ public class CombinedTypeSolver implements TypeSolver {
     private Predicate<Exception> exceptionHandler;
 
     public CombinedTypeSolver(TypeSolver... elements) {
+        this(Arrays.asList(elements));
+    }
+
+    public CombinedTypeSolver(Predicate<Exception> exceptionHandler, TypeSolver... elements) {
+        this(exceptionHandler, Arrays.asList(elements));
+    }
+
+    public CombinedTypeSolver(Iterable<TypeSolver> elements) {
         this(ExceptionHandlers.IGNORE_NONE, elements);
     }
 
     /** @see #exceptionHandler */
-    public CombinedTypeSolver(Predicate<Exception> exceptionHandler, TypeSolver... elements) {
+    public CombinedTypeSolver(Predicate<Exception> exceptionHandler, Iterable<TypeSolver> elements) {
+        this(exceptionHandler, elements, NoCache.create());
+    }
+
+    /**
+     * Create a new instance of {@link CombinedTypeSolver} with a custom symbol cache.
+     *
+     * @param exceptionHandler  How exception should be handled.
+     * @param elements          The list of elements to include by default.
+     * @param typeCache       The cache to be used to store symbols.
+     *
+     * @see #exceptionHandler
+     */
+    public CombinedTypeSolver(Predicate<Exception> exceptionHandler,
+                              Iterable<TypeSolver> elements,
+                              Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> typeCache) {
+        Objects.requireNonNull(typeCache, "The typeCache can't be null.");
+
         setExceptionHandler(exceptionHandler);
+        this.typeCache = typeCache;
 
         for (TypeSolver el : elements) {
-            add(el);
+            add(el, false);
         }
     }
 
@@ -91,17 +123,48 @@ public class CombinedTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
-    public void add(TypeSolver typeSolver) {
+    /**
+     * Append a type solver to the current solver.
+     *
+     * @param typeSolver The type solver to be appended.
+     * @param resetCache If should reset the cache when the solver is inserted.
+     */
+    public void add(TypeSolver typeSolver, boolean resetCache) {
+        Objects.requireNonNull(typeSolver, "The type solver can't be null");
+
         this.elements.add(typeSolver);
         typeSolver.setParent(this);
+
+        // Check if the cache should be reset after inserting
+        if (resetCache) {
+            typeCache.removeAll();
+        }
+    }
+
+    /**
+     * Append a type solver to the current solver.
+     * <br>
+     * By default the cached values will be removed.
+     *
+     * @param typeSolver The type solver to be appended.
+     */
+    public void add(TypeSolver typeSolver) {
+        add(typeSolver, true);
     }
 
     @Override
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
+        Optional<SymbolReference<ResolvedReferenceTypeDeclaration>> cachedSymbol = typeCache.get(name);
+        if (cachedSymbol.isPresent()) {
+            return cachedSymbol.get();
+        }
+
+        // If the symbol is not cached
         for (TypeSolver ts : elements) {
             try {
                 SymbolReference<ResolvedReferenceTypeDeclaration> res = ts.tryToSolveType(name);
                 if (res.isSolved()) {
+                    typeCache.put(name, res);
                     return res;
                 }
             } catch (Exception e) {
@@ -110,7 +173,11 @@ public class CombinedTypeSolver implements TypeSolver {
                 }
             }
         }
-        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+
+        // When unable to solve, cache the value with unsolved symbol
+        SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+        typeCache.put(name, unsolvedSymbol);
+        return unsolvedSymbol;
     }
 
     @Override
