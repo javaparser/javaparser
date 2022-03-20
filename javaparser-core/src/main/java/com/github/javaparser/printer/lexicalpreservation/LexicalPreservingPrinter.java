@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,27 @@
  */
 
 package com.github.javaparser.printer.lexicalpreservation;
+
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.decapitalize;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
@@ -47,33 +68,15 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.decapitalize;
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
-
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
  * operating on the AST and then used them to reproduce the source code
  * in its original formatting including the AST changes.
  */
 public class LexicalPreservingPrinter {
+    
+    private static String JAVA_UTIL_OPTIONAL = Optional.class.getCanonicalName();
+    private static String JAVAPARSER_AST_NODELIST = NodeList.class.getCanonicalName();
 
     private static AstObserver observer;
 
@@ -293,13 +296,25 @@ public class LexicalPreservingPrinter {
             if (index <= 0) {
                 return;
             }
+            
+            TextElement currentSpaceCandidate = null;
 
             for (int i = index - 1; i >= 0; i--) {
                 TextElement spaceCandidate = nodeText.getTextElement(i);
+                if (spaceCandidate.isSpaceOrTab()) {
+                    // save the current indentation char
+                    currentSpaceCandidate = nodeText.getTextElement(i);
+                }
                 if (!spaceCandidate.isSpaceOrTab()) {
                     if (spaceCandidate.isNewline() && i != index - 1) {
                         for (int j = 0; j < (index - 1) - i; j++) {
-                            nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
+                            if (currentSpaceCandidate != null) {
+                                // use the current (or last) indentation character 
+                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind(), currentSpaceCandidate.expand()));
+                            } else {
+                                // use the default indentation character 
+                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
+                            }
                         }
                     }
                     break;
@@ -353,7 +368,7 @@ public class LexicalPreservingPrinter {
             new TreeVisitor() {
                 @Override
                 public void process(Node node) {
-                    if (!PhantomNodeLogic.isPhantomNode(node)) {
+                    if (!node.isPhantom()) {
                         LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
                     }
                 }
@@ -362,7 +377,7 @@ public class LexicalPreservingPrinter {
     }
 
     private static Optional<Node> findNodeForToken(Node node, Range tokenRange) {
-        if (PhantomNodeLogic.isPhantomNode(node)) {
+        if (node.isPhantom()) {
             return Optional.empty();
         }
         if(!node.getRange().isPresent()) {
@@ -387,7 +402,7 @@ public class LexicalPreservingPrinter {
         }
         List<Pair<Range, TextElement>> elements = new LinkedList<>();
         for (Node child : node.getChildNodes()) {
-            if (!PhantomNodeLogic.isPhantomNode(child)) {
+            if (!child.isPhantom()) {
                 if (!child.getRange().isPresent()) {
                     throw new RuntimeException("Range not present on node " + child);
                 }
@@ -617,7 +632,7 @@ public class LexicalPreservingPrinter {
     //
 
     private static boolean isReturningOptionalNodeList(Method m) {
-        if (!m.getReturnType().getCanonicalName().equals(Optional.class.getCanonicalName())) {
+        if (!m.getReturnType().getCanonicalName().equals(JAVA_UTIL_OPTIONAL)) {
             return false;
         }
         if (!(m.getGenericReturnType() instanceof ParameterizedType)) {
@@ -625,13 +640,13 @@ public class LexicalPreservingPrinter {
         }
         ParameterizedType parameterizedType = (ParameterizedType) m.getGenericReturnType();
         java.lang.reflect.Type optionalArgument = parameterizedType.getActualTypeArguments()[0];
-        return (optionalArgument.getTypeName().startsWith(NodeList.class.getCanonicalName()));
+        return (optionalArgument.getTypeName().startsWith(JAVAPARSER_AST_NODELIST));
     }
 
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
-            if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(NodeList.class.getCanonicalName())) {
+            if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
                 try {
                     Object raw = m.invoke(parent);
                     if (!(raw instanceof NodeList)) {

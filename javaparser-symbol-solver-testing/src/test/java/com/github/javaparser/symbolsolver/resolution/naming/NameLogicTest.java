@@ -305,6 +305,13 @@ class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
+    void instanceOfPatternTypeName() {
+        // Note: Requires JDK14
+        assertNameInCodeIsSyntactically("void myMethod() { if (myValue instanceof Foo f) { }; }", "Foo",
+                NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
+    }
+
+    @Test
     void methodReferenceTypeName() {
         assertNameInCodeIsSyntactically("void myMethod() { Object o = Foo::myMethod; }", "Foo",
                 NameCategory.TYPE_NAME, ParseStart.CLASS_BODY);
@@ -817,6 +824,13 @@ class NameLogicTest extends AbstractNameLogicTest {
     }
 
     @Test
+    void classifyRoleInstanceOfPatternTypeName() {
+        // Note: Requires JDK14
+        assertNameInCodeHasRole("void myMethod() { if (myValue instanceof Foo f) { }; }", "Foo",
+                REFERENCE, ParseStart.CLASS_BODY);
+    }
+
+    @Test
     void classifyRoleMethodReferenceTypeName() {
         assertNameInCodeHasRole("void myMethod() { Object o = Foo::myMethod; }", "Foo",
                 REFERENCE, ParseStart.CLASS_BODY);
@@ -943,5 +957,5 @@ class NameLogicTest extends AbstractNameLogicTest {
                         "public static void travelThroughTime(Date destination) {  }",
                 "date", DECLARATION, ParseStart.CLASS_BODY);
     }
-    
+
 }

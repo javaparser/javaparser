@@ -53,6 +53,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         super(wrappedNode, typeSolver);
     }
 
+    @Override
     public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
@@ -63,19 +64,21 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbol(name);
+        return solveSymbolInParentContext(name);
     }
 
     @Override
     public final Optional<ResolvedType> solveGenericType(String name) {
+        // First check if the method-like declaration has type parameters defined.
+        // For example: {@code public <T> boolean containsAll(Collection<T> c);}
         for (TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().getId().equals(name)) {
                 return Optional.of(new ResolvedTypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
-        return super.solveGenericType(name);
+
+        // If no generic types on the method declaration, continue to solve elsewhere as usual.
+        return solveGenericTypeInParentContext(name);
     }
 
     @Override
@@ -90,9 +93,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         }
 
         // if nothing is found we should ask the parent context
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveSymbolAsValue(name);
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
@@ -105,27 +106,25 @@ public abstract class AbstractMethodLikeDeclarationContext
                 }
             }
         }
-        
+
         // Local types
         List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class);
         for (TypeDeclaration<?> localType : localTypes) {
             if (localType.getName().getId().equals(name)) {
-                return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
+                return SymbolReference.solved(JavaParserFacade.get(typeSolver)
+                        .getTypeDeclaration(localType));
             } else if (name.startsWith(String.format("%s.", localType.getName()))) {
-                return JavaParserFactory.getContext(localType, typeSolver).solveType(
-                        name.substring(localType.getName().getId().length() + 1));
+                return JavaParserFactory.getContext(localType, typeSolver)
+                        .solveType(name.substring(localType.getName().getId().length() + 1));
             }
         }
-        
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+
+        return solveTypeInParentContext(name);
     }
 
     @Override
     public final SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, false);
+        // TODO: Document why staticOnly is forced to be false.
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,21 +21,25 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.Position;
-import com.github.javaparser.printer.PrettyPrinterConfiguration.IndentType;
-import com.github.javaparser.utils.Utils;
-
 import java.util.Deque;
 import java.util.LinkedList;
+
+import com.github.javaparser.Position;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.Indentation;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.utils.Utils;
 
 /**
  * A support class for code that outputs formatted source code.
  */
 public class SourcePrinter {
-    private final String endOfLineCharacter;
-    private final String indentation;
-    private final int tabWidth;
-    private final IndentType indentType;
+    private String endOfLineCharacter;
+    private Indentation indentation;
 
     private final Deque<String> indents = new LinkedList<>();
     private final Deque<String> reindentedIndents = new LinkedList<>();
@@ -45,14 +49,21 @@ public class SourcePrinter {
     private boolean indented = false;
 
     SourcePrinter() {
-        this(new PrettyPrinterConfiguration());
+        this(new DefaultPrinterConfiguration());
+    }
+    
+    SourcePrinter(final PrettyPrinterConfiguration configuration) {
+        this(configuration.getIndentation(), configuration.getEndOfLineCharacter());
     }
 
-    SourcePrinter(final PrettyPrinterConfiguration configuration) {
-        indentation = configuration.getIndent();
-        endOfLineCharacter = configuration.getEndOfLineCharacter();
-        tabWidth = configuration.getTabWidth();
-        indentType = configuration.getIndentType();
+    SourcePrinter(final PrinterConfiguration configuration) {
+        this(configuration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue(), 
+                configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString());
+    }
+    
+    SourcePrinter(Indentation indentation, String eol) {
+        this.indentation = indentation;
+        this.endOfLineCharacter = eol;
         indents.push("");
     }
 
@@ -62,14 +73,14 @@ public class SourcePrinter {
      */
     public SourcePrinter indent() {
         String currentIndent = indents.peek();
-        switch (indentType) {
+        switch (indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
-                indents.push(currentIndent + indentation);
+                indents.push(currentIndent + indentation.getIndent());
                 break;
 
             case TABS:
-                indents.push(indentation + currentIndent);
+                indents.push(indentation.getIndent() + currentIndent);
                 break;
 
             default:
@@ -93,33 +104,34 @@ public class SourcePrinter {
         }
 
         StringBuilder newIndent = new StringBuilder(lastPrintedIndent);
-        switch (indentType) {
+        switch (indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
-                    newIndent.append(' ');
+                    newIndent.append(IndentType.SPACES.getCar());
                 }
                 break;
 
             case TABS:
+                IndentType currentIndentType = indentation.getType(); 
                 int logicalIndentLength = newIndent.length();
-                while ((logicalIndentLength + tabWidth) <= column) {
-                    newIndent.insert(0, '\t');
-                    logicalIndentLength += tabWidth;
+                while ((logicalIndentLength + currentIndentType.getWidth()) <= column) {
+                    newIndent.insert(0, currentIndentType.getCar());
+                    logicalIndentLength += currentIndentType.getWidth();
                 }
                 while (logicalIndentLength < column) {
-                    newIndent.append(' ');
+                    newIndent.append(IndentType.SPACES.getCar());
                     logicalIndentLength++;
                 }
                 StringBuilder fullTab = new StringBuilder();
-                for(int i=0; i<tabWidth; i++){
-                    fullTab.append(' ');
+                for(int i=0; i<currentIndentType.getWidth(); i++){
+                    fullTab.append(IndentType.SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= tabWidth)
-                        && newIndent.substring(newIndent.length() - tabWidth).equals(fullTabString)) {
+                if ((newIndent.length() >= currentIndentType.getWidth())
+                        && newIndent.substring(newIndent.length() - currentIndentType.getWidth()).equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
-                    newIndent.replace(i, i + tabWidth, "\t");
+                    newIndent.replace(i, i + currentIndentType.getWidth(), currentIndentType.getCar().toString());
                 }
                 break;
 

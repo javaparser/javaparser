@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,12 +21,12 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.Range;
-import com.github.javaparser.JavaToken.Kind;
-import com.github.javaparser.ast.Node;
-
 import java.util.Optional;
+
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.JavaToken.Kind;
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.Node;
 
 class TokenTextElement extends TextElement {
     private final JavaToken token;
@@ -124,6 +124,11 @@ class TokenTextElement extends TextElement {
     @Override
     public boolean isIdentifier() {
         return getToken().getCategory().isIdentifier();
+    }
+    
+    @Override
+    public boolean isKeyword() {
+        return getToken().getCategory().isKeyword();
     }
 
     @Override

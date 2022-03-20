@@ -28,12 +28,12 @@ import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_13;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_13_PREVIEW;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 
 class Java13ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_13));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_13_PREVIEW));
 
     @Test
     void yieldAllowed() {

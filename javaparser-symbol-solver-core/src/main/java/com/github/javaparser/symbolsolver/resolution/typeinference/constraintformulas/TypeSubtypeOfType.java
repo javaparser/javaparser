@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -28,9 +30,6 @@ import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
-
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isInferenceVariable;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * A reference type S is a subtype of a reference type T
@@ -76,13 +75,13 @@ public class TypeSubtypeOfType extends ConstraintFormula {
 
         // - Otherwise, if S is an inference variable, α, the constraint reduces to the bound α <: T.
 
-        if (isInferenceVariable(S)) {
+        if (S.isInferenceVariable()) {
             return ReductionResult.oneBound(new SubtypeOfBound(S, T));
         }
 
         // - Otherwise, if T is an inference variable, α, the constraint reduces to the bound S <: α.
 
-        if (isInferenceVariable(T)) {
+        if (T.isInferenceVariable()) {
             return ReductionResult.oneBound(new SubtypeOfBound(S, T));
         }
 

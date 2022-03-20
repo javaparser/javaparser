@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -82,8 +82,6 @@ public class Removed implements DifferenceElement {
     }
 
     public boolean isToken() { return element instanceof CsmToken; }
-
-    public boolean isChild() { return element instanceof LexicalDifferenceCalculator.CsmChild; }
 
     public boolean isPrimitiveType() {
         if (isChild()) {

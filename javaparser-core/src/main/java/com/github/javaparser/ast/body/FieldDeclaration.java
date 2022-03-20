@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -48,8 +48,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: {@code class X { private static
@@ -138,7 +136,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     public FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (FieldDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         if (this.modifiers != null)
@@ -152,7 +150,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
-            return (FieldDeclaration) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         if (this.variables != null)
@@ -236,8 +234,9 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
@@ -268,8 +267,9 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.set(i, (Modifier) replacementNode);
@@ -297,6 +297,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldDeclaration(Consumer<FieldDeclaration> action) {
         action.accept(this);

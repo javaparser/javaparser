@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -37,10 +38,10 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration {
+public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration, AssociableToAST<Parameter> {
 
-    private Parameter wrappedNode;
-    private TypeSolver typeSolver;
+    private final Parameter wrappedNode;
+    private final TypeSolver typeSolver;
 
     public JavaParserParameterDeclaration(Parameter wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
@@ -53,23 +54,8 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
     }
 
     @Override
-    public boolean isField() {
-        return false;
-    }
-
-    @Override
-    public boolean isParameter() {
-        return true;
-    }
-
-    @Override
     public boolean isVariadic() {
         return wrappedNode.isVarArgs();
-    }
-
-    @Override
-    public boolean isType() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -87,11 +73,6 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
         return res;
     }
 
-    @Override
-    public ResolvedParameterDeclaration asParameter() {
-        return this;
-    }
-
     /**
      * Returns the JavaParser node associated with this JavaParserParameterDeclaration.
      *
@@ -101,5 +82,9 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
         return wrappedNode;
     }
 
+    @Override
+    public Optional<Parameter> toAst() {
+        return Optional.of(wrappedNode);
+    }
 
 }

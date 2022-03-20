@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,14 @@
 
 package com.github.javaparser;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -29,7 +37,11 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -40,15 +52,13 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-
 /**
  * A simpler, static API than {@link JavaParser}.
  */
 public final class StaticJavaParser {
-    private static ParserConfiguration configuration = new ParserConfiguration();
+    
+    // use ThreadLocal to resolve possible concurrency issues.
+    private static ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(() -> new ParserConfiguration());
 
     private StaticJavaParser() {
     }
@@ -57,7 +67,7 @@ public final class StaticJavaParser {
      * Get the configuration for the parse... methods.
      */
     public static ParserConfiguration getConfiguration() {
-        return configuration;
+        return localConfiguration.get();
     }
 
     /**
@@ -65,11 +75,11 @@ public final class StaticJavaParser {
      * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
      */
     public static void setConfiguration(ParserConfiguration configuration) {
-        StaticJavaParser.configuration = configuration;
+        localConfiguration.set(configuration);
     }
 
     private static JavaParser newParser() {
-        return new JavaParser(configuration);
+        return new JavaParser(getConfiguration());
     }
 
     /**

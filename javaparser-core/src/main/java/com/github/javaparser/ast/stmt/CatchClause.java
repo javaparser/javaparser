@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,8 +34,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CatchClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * The catch part of a try-catch-finally. <br>In {@code try { ... } catch (Exception e) { ... }} the CatchClause
@@ -99,7 +97,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     public CatchClause setParameter(final Parameter parameter) {
         assertNotNull(parameter);
         if (parameter == this.parameter) {
-            return (CatchClause) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
         if (this.parameter != null)
@@ -118,7 +116,7 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     public CatchClause setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (CatchClause) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
@@ -126,14 +124,6 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
         this.body = body;
         setAsParentNodeOf(body);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
     }
 
     @Override
@@ -151,8 +141,9 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == body) {
             setBody((BlockStmt) replacementNode);
             return true;

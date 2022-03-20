@@ -28,43 +28,15 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.ArrayAccessExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -89,6 +61,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprHandler;
+import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
@@ -96,12 +70,18 @@ import com.google.common.collect.ImmutableList;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
+    private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
+    
+    private ReferenceTypeImpl StringReferenceType;
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
         this.facade = facade;
+        //pre-calculate the String reference (optimization)
+        StringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
     }
 
     @Override
@@ -158,6 +138,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case MINUS:
             case DIVIDE:
             case MULTIPLY:
+            case REMAINDER:
+            case BINARY_AND:
+            case BINARY_OR:
+            case XOR:
                 return facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas, node.getOperator());
             case LESS_EQUALS:
             case LESS:
@@ -168,14 +152,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case OR:
             case AND:
                 return ResolvedPrimitiveType.BOOLEAN;
-            case BINARY_AND:
-            case BINARY_OR:
             case SIGNED_RIGHT_SHIFT:
             case UNSIGNED_RIGHT_SHIFT:
             case LEFT_SHIFT:
-            case REMAINDER:
-            case XOR:
-                return node.getLeft().accept(this, solveLambdas);
+                ResolvedType rt = node.getLeft().accept(this, solveLambdas);
+                // apply unary primitive promotion
+                return ResolvedPrimitiveType.unp(rt);
             default:
                 throw new UnsupportedOperationException("Operator " + node.getOperator().name());
         }
@@ -189,14 +171,41 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(ClassExpr node, Boolean solveLambdas) {
         // This implementation does not regard the actual type argument of the ClassExpr.
-        com.github.javaparser.ast.type.Type astType = node.getType();
+        Type astType = node.getType();
         ResolvedType jssType = facade.convertToUsage(astType, node.getType());
         return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType), typeSolver);
     }
 
+    /*
+     * The conditional operator has three operand expressions. ? appears between the first and second expressions, and
+     * : appears between the second and third expressions.
+     * There are three kinds of conditional expressions, classified according to the second and third operand
+     * expressions: boolean conditional expressions, numeric conditional expressions, and reference conditional
+     * expressions.
+     * The classification rules are as follows:
+     * 1/ If both the second and the third operand expressions are boolean expressions, the conditional expression is a
+     * boolean conditional expression.
+     * 2/ If both the second and the third operand expressions are numeric expressions, the conditional expression is a
+     * numeric conditional expression.
+     * 3/ Otherwise, the conditional expression is a reference conditional expression
+     */
     @Override
     public ResolvedType visit(ConditionalExpr node, Boolean solveLambdas) {
+        ResolvedType thenExpr = node.getThenExpr().accept(this, solveLambdas);
+        ResolvedType elseExpr = node.getElseExpr().accept(this, solveLambdas);
+
+        ConditionalExprHandler rce = ConditionalExprResolver.getConditionExprHandler(thenExpr, elseExpr);
+        try {
+            return rce.resolveType();
+        } catch (UnsupportedOperationException e) {
+            // There is nothing to do because, for the moment, we want to run actual implementation
+        }
         return node.getThenExpr().accept(this, solveLambdas);
+    }
+    
+    private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
+        return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
+        || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
     }
 
     @Override
@@ -256,7 +265,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         Optional<Value> value = Optional.empty();
         try {
             value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
-        } catch (com.github.javaparser.resolution.UnsolvedSymbolException use) {
+        } catch (UnsolvedSymbolException use) {
             // This node may have a package name as part of its fully qualified name.
             // We should solve for the type declaration inside this package.
             SymbolReference<ResolvedReferenceTypeDeclaration> sref = typeSolver.tryToSolveType(node.toString());
@@ -267,7 +276,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (value.isPresent()) {
             return value.get().getType();
         }
-        throw new com.github.javaparser.resolution.UnsolvedSymbolException(node.getName().getId());
+        throw new UnsolvedSymbolException(node.getName().getId());
     }
 
     @Override
@@ -277,7 +286,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(StringLiteralExpr node, Boolean solveLambdas) {
-        return new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
+        return StringReferenceType;
     }
 
     @Override
@@ -329,7 +338,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         Log.trace("getType on name expr %s", ()-> node);
         Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
-            throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, node.getName().getId());
+            throw new UnsolvedSymbolException("Solving " + node, node.getName().getId());
         } else {
             return value.get().getType();
         }
@@ -338,19 +347,28 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
         Log.trace("getType on type expr %s", ()-> node);
-        if (!(node.getType() instanceof com.github.javaparser.ast.type.ClassOrInterfaceType)) {
-            // TODO / FIXME... e.g. System.out::println
+        if (!(node.getType() instanceof ClassOrInterfaceType)) {
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
         }
+
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) node.getType();
+        String nameWithScope = classOrInterfaceType.getNameWithScope();
+
+        // JLS 15.13 - ReferenceType :: [TypeArguments] Identifier
         SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory
                 .getContext(classOrInterfaceType, typeSolver)
-                .solveType(classOrInterfaceType.getName().getId());
-        if (!typeDeclarationSymbolReference.isSolved()) {
-            throw new com.github.javaparser.resolution.UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
-        } else {
+                .solveType(nameWithScope);
+        if (typeDeclarationSymbolReference.isSolved()) {
             return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
+
+        // JLS 15.13 - ExpressionName :: [TypeArguments] Identifier
+        Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameWithScope, node);
+        if (value.isPresent()) {
+            return value.get().getType();
+        }
+
+        throw new UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
     }
 
     @Override
@@ -364,21 +382,20 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (node.getTypeName().isPresent()) {
             // Get the class name
             String className = node.getTypeName().get().asString();
-            // Attempt to resolve using a typeSolver
-            SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
-            if (clazz.isSolved()) {
-                return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
-            }
             // Attempt to resolve locally in Compilation unit
-            Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
-            if (cu.isPresent()) {
-                Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
-                if (classByName.isPresent()) {
-                    return new ReferenceTypeImpl(facade.getTypeDeclaration(classByName.get()), typeSolver);
+            // first try a buttom/up approach
+            try {
+                return new ReferenceTypeImpl(
+                        facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)),
+                        typeSolver);
+            } catch (IllegalStateException e) {
+                // trying another approach from type solver
+                Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
+                SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
+                if (clazz.isSolved()) {
+                    return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
                 }
             }
-            return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)), typeSolver);
-
         }
         return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node)), typeSolver);
     }
@@ -419,7 +436,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         switch (node.getOperator()) {
             case MINUS:
             case PLUS:
-                return node.getExpression().accept(this, solveLambdas);
+                return ResolvedPrimitiveType.unp(node.getExpression().accept(this, solveLambdas));
             case LOGICAL_COMPLEMENT:
                 return ResolvedPrimitiveType.BOOLEAN;
             case POSTFIX_DECREMENT:
@@ -449,15 +466,15 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+
+            // The type parameter referred here should be the java.util.stream.Stream.T
+            ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+
             if (solveLambdas) {
-
-                // The type parameter referred here should be the java.util.stream.Stream.T
-                ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
-
-                if (callExpr.getScope().isPresent()) {
+                if (callExpr.hasScope()) {
                     Expression scope = callExpr.getScope().get();
 
                     // If it is a static call we should not try to get the type of the scope
@@ -482,75 +499,94 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     }
                 }
 
-                // We need to replace the type variables
-                Context ctx = JavaParserFactory.getContext(node, typeSolver);
-                result = solveGenericTypes(result, ctx);
-
-                //We should find out which is the functional method (e.g., apply) and replace the params of the
-                //solveLambdas with it, to derive so the values. We should also consider the value returned by the
-                //lambdas
-                Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
-                if (functionalMethod.isPresent()) {
-                    LambdaExpr lambdaExpr = node;
-
-                    InferenceContext lambdaCtx = new InferenceContext(MyObjectProvider.INSTANCE);
-                    InferenceContext funcInterfaceCtx = new InferenceContext(MyObjectProvider.INSTANCE);
-
-                    // At this point parameterType
-                    // if Function<T=? super Stream.T, ? extends map.R>
-                    // we should replace Stream.T
-                    ResolvedType functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
-
-                    lambdaCtx.addPair(result, functionalInterfaceType);
-
-                    ResolvedType actualType;
-
-                    if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                        actualType = facade.getType(((ExpressionStmt) lambdaExpr.getBody()).getExpression());
-                    } else if (lambdaExpr.getBody() instanceof BlockStmt) {
-                        BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
-
-                        // Get all the return statements in the lambda block
-                        List<ReturnStmt> returnStmts = blockStmt.findAll(ReturnStmt.class);
-
-                        if (returnStmts.size() > 0) {
-                            actualType = returnStmts.stream()
-                                    .map(returnStmt -> returnStmt.getExpression().map(e -> facade.getType(e)).orElse(ResolvedVoidType.INSTANCE))
-                                    .filter(x -> x != null && !x.isVoid() && !x.isNull())
-                                    .findFirst()
-                                    .orElse(ResolvedVoidType.INSTANCE);
-
-                        } else {
-                            return ResolvedVoidType.INSTANCE;
-                        }
-
-
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    ResolvedType formalType = functionalMethod.get().returnType();
-
-                    // Infer the functional interfaces' return vs actual type
-                    funcInterfaceCtx.addPair(formalType, actualType);
-                    // Substitute to obtain a new type
-                    ResolvedType functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
-
-                    // if the functional method returns void anyway
-                    // we don't need to bother inferring types
-                    if (!(formalType instanceof ResolvedVoidType)) {
-                        lambdaCtx.addPair(result, functionalTypeWithReturn);
-                        result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
-                    }
-                }
-
-                return result;
-            } else {
-                return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                result = resolveLambda(node, result);
             }
+            return result;
+        } else if (demandParentNode(node) instanceof VariableDeclarator)
+        {
+            VariableDeclarator decExpr = (VariableDeclarator) demandParentNode(node);
+            ResolvedType result = decExpr.getType().resolve();
+
+            if (solveLambdas) {
+                result = resolveLambda(node, result);
+            }
+            return result;
+        } else if (demandParentNode(node) instanceof AssignExpr) {
+            AssignExpr assExpr = (AssignExpr) demandParentNode(node);
+            ResolvedType result = assExpr.calculateResolvedType();
+
+            if (solveLambdas) {
+                result = resolveLambda(node, result);
+            }
+            return result;
         } else {
             throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
         }
+    }
+
+    private ResolvedType resolveLambda(LambdaExpr node, ResolvedType result) {
+        // We need to replace the type variables
+        Context ctx = JavaParserFactory.getContext(node, typeSolver);
+        result = solveGenericTypes(result, ctx);
+
+        //We should find out which is the functional method (e.g., apply) and replace the params of the
+        //solveLambdas with it, to derive so the values. We should also consider the value returned by the
+        //lambdas
+        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
+        if (functionalMethod.isPresent()) {
+            LambdaExpr lambdaExpr = node;
+
+            InferenceContext lambdaCtx = new InferenceContext(MyObjectProvider.INSTANCE);
+            InferenceContext funcInterfaceCtx = new InferenceContext(MyObjectProvider.INSTANCE);
+
+            // At this point parameterType
+            // if Function<T=? super Stream.T, ? extends map.R>
+            // we should replace Stream.T
+            ResolvedType functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
+
+            lambdaCtx.addPair(result, functionalInterfaceType);
+
+            ResolvedType actualType;
+
+            if (lambdaExpr.getBody() instanceof ExpressionStmt) {
+                actualType = facade.getType(((ExpressionStmt) lambdaExpr.getBody()).getExpression());
+            } else if (lambdaExpr.getBody() instanceof BlockStmt) {
+                BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
+
+                // Get all the return statements in the lambda block
+                List<ReturnStmt> returnStmts = blockStmt.findAll(ReturnStmt.class);
+
+                if (returnStmts.size() > 0) {
+                    actualType = returnStmts.stream()
+                            .map(returnStmt -> returnStmt.getExpression().map(e -> facade.getType(e)).orElse(ResolvedVoidType.INSTANCE))
+                            .filter(x -> x != null && !x.isVoid() && !x.isNull())
+                            .findFirst()
+                            .orElse(ResolvedVoidType.INSTANCE);
+
+                } else {
+                    actualType = ResolvedVoidType.INSTANCE;
+                }
+
+
+            } else {
+                throw new UnsupportedOperationException();
+            }
+
+            ResolvedType formalType = functionalMethod.get().returnType();
+
+            // Infer the functional interfaces' return vs actual type
+            funcInterfaceCtx.addPair(formalType, actualType);
+            // Substitute to obtain a new type
+            ResolvedType functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
+
+            // if the functional method returns void anyway
+            // we don't need to bother inferring types
+            if (!(formalType instanceof ResolvedVoidType)) {
+                lambdaCtx.addPair(result, functionalTypeWithReturn);
+                result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
+            }
+        }
+        return result;
     }
 
     @Override
@@ -560,7 +596,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
-                throw new com.github.javaparser.resolution.UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {

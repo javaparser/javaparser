@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -31,7 +31,7 @@ import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.Printable;
+import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.Change;
@@ -301,8 +301,8 @@ class LexicalDifferenceCalculator {
             CsmAttribute csmAttribute = (CsmAttribute) csm;
             Object value = change.getValue(csmAttribute.getProperty(), node);
             String text = value.toString();
-            if (value instanceof Printable) {
-                text = ((Printable) value).asString();
+            if (value instanceof Stringable) {
+                text = ((Stringable) value).asString();
             }
             elements.add(new CsmToken(csmAttribute.getTokenType(node, value.toString(), text), text));
         } else if ((csm instanceof CsmString) && (node instanceof StringLiteralExpr)) {

@@ -60,6 +60,7 @@ public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
+     * // TODO: Convert this to returning Optional.
      */
     public S getCorrespondingDeclaration() {
         if (!isSolved()) {

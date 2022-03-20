@@ -55,18 +55,15 @@ public class ForEachStatementContext extends AbstractJavaParserContext<ForEachSt
             if (demandParentNode(wrappedNode) instanceof BlockStmt) {
                 return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
             } else {
-                return getParent()
-                        .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                        .solveSymbol(name);
+                return solveSymbolInParentContext(name);
             }
         }
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveMethod(name, argumentsTypes, false);
+        // TODO: Document why staticOnly is forced to be false.
+        return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
     @Override

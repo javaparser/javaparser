@@ -49,7 +49,7 @@ public class JavaParserAnnotationMemberDeclaration implements ResolvedAnnotation
 
     @Override
     public Expression getDefaultValue() {
-        throw new UnsupportedOperationException();
+        return wrappedNode.getDefaultValue().orElse(null);
     }
 
     @Override

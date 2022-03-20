@@ -24,11 +24,47 @@ package com.github.javaparser.symbolsolver.resolution.naming;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.ReceiverParameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.ArrayAccessExpr;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.AssignExpr;
+import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.MemberValuePair;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.SuperExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
+import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.modules.ModuleExportsDirective;
+import com.github.javaparser.ast.modules.ModuleOpensDirective;
+import com.github.javaparser.ast.modules.ModuleProvidesDirective;
+import com.github.javaparser.ast.modules.ModuleRequiresDirective;
+import com.github.javaparser.ast.modules.ModuleUsesDirective;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -39,7 +75,6 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.ast.stmt.ReturnStmt;
 
 /**
  * NameLogic contains a set of static methods to implement the abstraction of a "Name" as defined
@@ -180,12 +215,18 @@ public class NameLogic {
         if (whenParentIs(Parameter.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
+        if (whenParentIs(PatternExpr.class, name, (p, c) -> p.getName() == c)) {
+            return NameRole.DECLARATION;
+        }
+        if (whenParentIs(PatternExpr.class, name, (p, c) -> p.getType() == c)) {
+            return NameRole.REFERENCE;
+        }
         if (whenParentIs(ReceiverParameter.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getName() == c ||
                 (p.getTypeArguments().isPresent() && p.getTypeArguments().get().contains(c)) ||
-                (p.getScope().isPresent() && p.getScope().get() == c))) {
+                (p.hasScope() && p.getScope().get() == c))) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ConstructorDeclaration.class, name, (p, c) -> p.getName() == c || p.getThrownExceptions().contains(c))) {
@@ -293,7 +334,7 @@ public class NameLogic {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ObjectCreationExpr.class, name, (p, c) -> p.getType() == c ||
-                (p.getScope().isPresent() && p.getScope().get() == c))) {
+                (p.hasScope() && p.getScope().get() == c))) {
             return NameRole.REFERENCE;
         }
         if (name.getParentNode().isPresent() && NameLogic.isAName(name.getParentNode().get())) {
@@ -342,12 +383,12 @@ public class NameLogic {
             return reclassificationOfContextuallyAmbiguousQualifiedAmbiguousName(name, typeSolver);
         }
         if (ambiguousCategory == NameCategory.PACKAGE_OR_TYPE_NAME) {
-            return reclassificationOfContextuallyAmbiguosPackageOrTypeName(name, typeSolver);
+            return reclassificationOfContextuallyAmbiguousPackageOrTypeName(name, typeSolver);
         }
         throw new UnsupportedOperationException("I do not know how to handle this semantic reclassification of ambiguous name categories");
     }
 
-    private static NameCategory reclassificationOfContextuallyAmbiguosPackageOrTypeName(Node name, TypeSolver typeSolver) {
+    private static NameCategory reclassificationOfContextuallyAmbiguousPackageOrTypeName(Node name, TypeSolver typeSolver) {
         // 6.5.4.1. Simple PackageOrTypeNames
         //
         // If the PackageOrTypeName, Q, is a valid TypeIdentifier and occurs in the scope of a type named Q, then the
@@ -466,6 +507,9 @@ public class NameLogic {
 
         String name = nameAsString(nameNode);
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
+        if (context.patternExprInScope(name).isPresent()) {
+            return NameCategory.EXPRESSION_NAME;
+        }
         if (context.localVariableDeclarationInScope(name).isPresent()) {
             return NameCategory.EXPRESSION_NAME;
         }
@@ -562,7 +606,7 @@ public class NameLogic {
 
         // 2. To the left of the rightmost . that occurs before the "(" in a method invocation expression
 
-        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getScope().isPresent() && p.getScope().get() == c)) {
+        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.hasScope() && p.getScope().get() == c)) {
             return true;
         }
 
@@ -884,12 +928,12 @@ public class NameLogic {
 
         if (whenParentIs(NameExpr.class, name, (nameExpr, c) ->
                 nameExpr.getName() == c && whenParentIs(ObjectCreationExpr.class, nameExpr, (ne, c2) ->
-                        ne.getScope().isPresent() && ne.getScope().get() == c2)
+                        ne.hasScope() && ne.getScope().get() == c2)
         )) {
             return true;
         }
         if (whenParentIs(ObjectCreationExpr.class, name, (ne, c2) ->
-                ne.getScope().isPresent() && ne.getScope().get() == c2)) {
+                ne.hasScope() && ne.getScope().get() == c2)) {
             return true;
         }
 

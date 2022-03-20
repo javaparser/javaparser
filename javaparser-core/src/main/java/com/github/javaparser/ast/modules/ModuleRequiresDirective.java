@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,10 +20,8 @@
  */
 package com.github.javaparser.ast.modules;
 
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStaticModifier;
@@ -31,14 +29,12 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
+import java.util.Optional;
+import java.util.function.Consumer;
 import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
-import java.util.Optional;
-import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.Generated;
 
 /**
  * A require directive in module-info.java. {@code require a.b.C;}
@@ -90,7 +86,7 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     public ModuleRequiresDirective setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
-            return (ModuleRequiresDirective) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         if (this.modifiers != null)
@@ -109,7 +105,7 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     public ModuleRequiresDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (ModuleRequiresDirective) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -130,8 +126,9 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
@@ -150,8 +147,9 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.set(i, (Modifier) replacementNode);
@@ -206,6 +204,7 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleRequiresDirective(Consumer<ModuleRequiresDirective> action) {
         action.accept(this);

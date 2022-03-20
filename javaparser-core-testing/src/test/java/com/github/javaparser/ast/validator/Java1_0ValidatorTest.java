@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.validator.language_level_validations.Java1_0Validator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -107,14 +108,6 @@ class Java1_0ValidatorTest {
     void noReflection() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("Abc.class"));
         assertProblems(result, "(line 1,col 1) Reflection is not supported.");
-    }
-
-    @Test
-    void nonEmptyList() {
-        ArrayCreationExpr expr = new ArrayCreationExpr(PrimitiveType.booleanType());
-        List<Problem> problems = new ArrayList<>();
-        new Java1_0Validator().accept(expr, new ProblemReporter(problems::add));
-        assertEquals("ArrayCreationExpr.levels can not be empty.", problems.get(0).getMessage());
     }
 
     @Test

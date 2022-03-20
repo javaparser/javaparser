@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -51,25 +51,9 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleDirective clone() {
         return (ModuleDirective) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -174,7 +158,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleExportsDirective asModuleExportsDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleExportsDirective", this));
+        throw new IllegalStateException(f("%s is not ModuleExportsDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -193,7 +177,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleOpensDirective asModuleOpensDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleOpensDirective", this));
+        throw new IllegalStateException(f("%s is not ModuleOpensDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -212,7 +196,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleProvidesDirective asModuleProvidesDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleProvidesDirective", this));
+        throw new IllegalStateException(f("%s is not ModuleProvidesDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -231,7 +215,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleRequiresDirective asModuleRequiresDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleRequiresDirective", this));
+        throw new IllegalStateException(f("%s is not ModuleRequiresDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -250,7 +234,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleUsesDirective asModuleUsesDirective() {
-        throw new IllegalStateException(f("%s is not an ModuleUsesDirective", this));
+        throw new IllegalStateException(f("%s is not ModuleUsesDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

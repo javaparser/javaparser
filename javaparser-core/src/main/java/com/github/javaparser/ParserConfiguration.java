@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,21 +27,19 @@ import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
+import com.github.javaparser.ast.validator.language_level_validations.*;
+import com.github.javaparser.ast.validator.postprocessors.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import com.github.javaparser.version.Java10PostProcessor;
-import com.github.javaparser.version.Java11PostProcessor;
-import com.github.javaparser.version.Java12PostProcessor;
-import com.github.javaparser.version.Java13PostProcessor;
-import com.github.javaparser.version.Java14PostProcessor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_8;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
 /**
  * The configuration that is used by the parser.
@@ -96,21 +94,79 @@ public class ParserConfiguration {
          */
         JAVA_10(new Java10Validator(), new Java10PostProcessor()),
         /**
+         * Java 10 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_10_PREVIEW(new Java10PreviewValidator(), new Java10PostProcessor()),
+        /**
          * Java 11
          */
         JAVA_11(new Java11Validator(), new Java11PostProcessor()),
+        /**
+         * Java 11 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_11_PREVIEW(new Java11PreviewValidator(), new Java11PostProcessor()),
         /**
          * Java 12
          */
         JAVA_12(new Java12Validator(), new Java12PostProcessor()),
         /**
+         * Java 12 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         * <ul>
+         *     <li>Switch expressions are permitted, with a single label only and no yield.</li>
+         * </ul>
+         */
+        JAVA_12_PREVIEW(new Java12PreviewValidator(), new Java12PostProcessor()),
+        /**
          * Java 13
          */
         JAVA_13(new Java13Validator(), new Java13PostProcessor()),
         /**
+         * Java 13 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         * <ul>
+         *     <li>Switch expressions are permitted, with a single label only.</li>
+         * </ul>
+         */
+        JAVA_13_PREVIEW(new Java13PreviewValidator(), new Java13PostProcessor()),
+        /**
          * Java 14
          */
-        JAVA_14(new Java14Validator(), new Java14PostProcessor());
+        JAVA_14(new Java14Validator(), new Java14PostProcessor()),
+        /**
+         * Java 14 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_14_PREVIEW(new Java14PreviewValidator(), new Java14PostProcessor()),
+        /**
+         * Java 15
+         */
+        JAVA_15(new Java15Validator(), new Java15PostProcessor()),
+        /**
+         * Java 15 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_15_PREVIEW(new Java15PreviewValidator(), new Java15PostProcessor()),
+        /**
+         * Java 16
+         */
+        JAVA_16(new Java16Validator(), new Java16PostProcessor()),
+        /**
+         * Java 16 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_16_PREVIEW(new Java16PreviewValidator(), new Java16PostProcessor()),
+        /**
+         * Java 16
+         */
+        JAVA_17(new Java17Validator(), new Java17PostProcessor()),
+        /**
+         * Java 16 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -119,22 +175,34 @@ public class ParserConfiguration {
         /**
          * The most used Java version.
          */
-        public static LanguageLevel POPULAR = JAVA_8;
+        public static LanguageLevel POPULAR = JAVA_11;
         /**
          * The latest Java version that is available.
          */
-        public static LanguageLevel CURRENT = JAVA_13;
+        public static LanguageLevel CURRENT = JAVA_16;
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_14;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_17_PREVIEW;
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
 
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{
+                JAVA_13, JAVA_13_PREVIEW,
+                JAVA_14, JAVA_14_PREVIEW,
+                JAVA_15, JAVA_15_PREVIEW,
+                JAVA_16, JAVA_16_PREVIEW,
+                JAVA_17, JAVA_17_PREVIEW
+        };
+
         LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
             this.validator = validator;
             this.postProcessor = postProcessor;
+        }
+
+        public boolean isYieldSupported() {
+            return Arrays.stream(yieldSupport).anyMatch(level -> level == this);
         }
     }
 
@@ -150,7 +218,7 @@ public class ParserConfiguration {
     private boolean preprocessUnicodeEscapes = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
-    private LanguageLevel languageLevel = JAVA_8;
+    private LanguageLevel languageLevel = POPULAR;
     private Charset characterEncoding = Providers.UTF8;
 
     private final List<Providers.PreProcessor> preProcessors = new ArrayList<>();
@@ -187,7 +255,7 @@ public class ParserConfiguration {
                 }
             }
         }
-        
+
         class LineEndingProcessor implements PreProcessor, PostProcessor {
             private LineEndingProcessingProvider _lineEndingProcessingProvider;
 
@@ -218,16 +286,16 @@ public class ParserConfiguration {
                 }
             }
         }
-        
+
         UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
         preProcessors.add(unicodeProcessor);
         postProcessors.add(unicodeProcessor);
-        
+
         LineEndingProcessor lineEndingProcessor = new LineEndingProcessor();
         preProcessors.add(lineEndingProcessor);
         postProcessors.add(lineEndingProcessor);
-        
-        
+
+
         postProcessors.add((result, configuration) -> {
             if (configuration.isAttributeComments()) {
                 result.ifSuccessful(resultNode -> result
@@ -377,7 +445,7 @@ public class ParserConfiguration {
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
     }
-    
+
     public ParserConfiguration setDetectOriginalLineSeparator(boolean detectOriginalLineSeparator) {
         this.detectOriginalLineSeparator = detectOriginalLineSeparator;
         return this;

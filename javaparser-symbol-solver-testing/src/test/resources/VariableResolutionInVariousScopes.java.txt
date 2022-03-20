@@ -1,0 +1,15 @@
+package testcase;
+
+public class VariableResolutionInVariousScopes {
+    public void withBlock() {
+        String s = "";
+        {
+            s.length();
+        }
+    }
+
+    public void noBlock() {
+        String s = "";
+        s.length();
+    }
+}

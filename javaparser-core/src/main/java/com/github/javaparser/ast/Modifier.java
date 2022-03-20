@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,8 +30,6 @@ import com.github.javaparser.metamodel.ModifierMetaModel;
 import java.util.Arrays;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.Generated;
 
 /**
  * A modifier, like private, public, or volatile.
@@ -161,7 +159,7 @@ public class Modifier extends Node {
     public Modifier setKeyword(final Keyword keyword) {
         assertNotNull(keyword);
         if (keyword == this.keyword) {
-            return (Modifier) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.KEYWORD, this.keyword, keyword);
         this.keyword = keyword;
@@ -174,22 +172,6 @@ public class Modifier extends Node {
      */
     public static NodeList<Modifier> createModifierList(Modifier.Keyword... modifiers) {
         return Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList());
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override
