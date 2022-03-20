@@ -48,13 +48,6 @@ public abstract class AbstractSymbolResolutionTest {
         JavaParserFacade.clearInstances();
     }
 
-    @AfterEach
-    public void reset() {
-        // reset configuration to not potentially disturb others tests.
-        // So we have to set specific configuration between each test.
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
-    }
-
     /**
      * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
      * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
