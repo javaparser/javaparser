@@ -34,6 +34,13 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.utils.CodeGenerationUtils;
 
 public abstract class AbstractSymbolResolutionTest {
+    
+    @AfterEach
+    public void reset() {
+        // reset configuration to not potentially disturb others tests.
+        // So we have to set specific configuration between each test.
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+    }
 
     @AfterAll
     public static void tearDown() {
