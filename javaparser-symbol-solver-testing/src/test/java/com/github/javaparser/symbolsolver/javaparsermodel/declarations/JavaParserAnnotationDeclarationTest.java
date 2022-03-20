@@ -21,6 +21,16 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,12 +40,6 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
 
@@ -99,5 +103,35 @@ class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
 		assertTrue(annotation.isPresent());
 		assertEquals(4, annotation.get().resolve().internalTypes().size());
 	}
+	
+	@Test
+    void isAnnotationNotInheritable() {
+        String sourceCode = "@interface Foo {}";
 
+        ParseResult<CompilationUnit> result = javaParser.parse(sourceCode);
+        assertTrue(result.getResult().isPresent());
+        CompilationUnit cu = result.getResult().get();
+
+        Optional<AnnotationDeclaration> annotation = cu.findFirst(AnnotationDeclaration.class);
+        assertTrue(annotation.isPresent());
+
+        assertFalse(annotation.get().resolve().isInheritable());
+    }
+	
+	@Test
+    void isAnnotationInheritable() {
+        String sourceCode = "import java.lang.annotation.Inherited;\n" + 
+                "    @Inherited\n" + 
+                "    @interface Foo {}";
+
+        ParseResult<CompilationUnit> result = javaParser.parse(sourceCode);
+        assertTrue(result.getResult().isPresent());
+        CompilationUnit cu = result.getResult().get();
+
+        Optional<AnnotationDeclaration> annotation = cu.findFirst(AnnotationDeclaration.class);
+        assertTrue(annotation.isPresent());
+
+        assertTrue(annotation.get().resolve().isInheritable());
+    }
+	
 }

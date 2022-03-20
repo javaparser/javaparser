@@ -46,7 +46,7 @@ public class ListRemovalChange implements Change {
             Object currentRawValue = new NoChange().getValue(property, node);
             if (currentRawValue instanceof Optional) {
                 Optional<?> optional = (Optional<?>) currentRawValue;
-                currentRawValue = optional.orElseGet(null);
+                currentRawValue = optional.orElse(null);
             }
             if (!(currentRawValue instanceof NodeList)) {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());

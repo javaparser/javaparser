@@ -234,14 +234,6 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     public String asString() {
         return componentType.asString() + "[]";
     }
@@ -269,8 +261,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == componentType) {
             setComponentType((Type) replacementNode);
             return true;

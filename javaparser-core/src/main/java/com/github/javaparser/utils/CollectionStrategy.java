@@ -21,17 +21,17 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Optional;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 
 /**
  * A strategy for discovering the structure of a project.
@@ -69,11 +69,11 @@ public interface CollectionStrategy {
                 Log.info("There were (%d) problems parsing file: %s", () -> parseResult.getProblems().size(), parseResult::getProblems);
             }
         } catch (ParseProblemException e) {
-            Log.info("Problem parsing file %s", () -> file);
+            Log.info("Problem parsing file %s : %s", () -> file, () -> e.getLocalizedMessage());
         } catch (RuntimeException e) {
-            Log.info("Could not parse file %s", () -> file);
+            Log.info("Could not parse file %s : %s", () -> file, () -> e.getLocalizedMessage());
         } catch (IOException e) {
-            Log.info("Could not read file %s", () -> file);
+            Log.info("Could not read file %s : %s", () -> file, () -> e.getLocalizedMessage());
         }
         return Optional.empty();
     }

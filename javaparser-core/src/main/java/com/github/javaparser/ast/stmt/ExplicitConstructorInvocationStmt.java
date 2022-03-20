@@ -187,8 +187,9 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < arguments.size(); i++) {
             if (arguments.get(i) == node) {
                 arguments.remove(i);
@@ -232,8 +233,9 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < arguments.size(); i++) {
             if (arguments.get(i) == node) {
                 arguments.set(i, (Expression) replacementNode);
