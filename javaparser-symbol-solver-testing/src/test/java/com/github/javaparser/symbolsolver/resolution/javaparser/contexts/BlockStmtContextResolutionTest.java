@@ -30,12 +30,8 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.BlockStmtContext;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -55,7 +51,7 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
         String src = "public class Example {\n"
                 + "    int a = 3;\n"
                 + "    public void bla() {\n"
-                + "        a = 7; // 'a' must be resolved as int not String"
+                + "        a = 7; // 'a' must be resolved as int not String\n"
                 + "        String a = \"\";\n"
                 + "        a = \"test\";\n"
                 + "    }\n"
@@ -64,12 +60,9 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
         StaticJavaParser.setConfiguration(configuration);
         CompilationUnit cu = StaticJavaParser.parse(src);
-        BlockStmt stmt = cu.findFirst(BlockStmt.class).get();
-        BlockStmtContext ctx = new BlockStmtContext(stmt, new ReflectionTypeSolver());
-        SymbolReference<? extends ResolvedValueDeclaration> ref = ctx.solveSymbol("a");
-
-        assertEquals(true, ref.isSolved());
-        assertEquals("int", ref.getCorrespondingDeclaration().getType().asPrimitive().describe());
+        AssignExpr expr = cu.findFirst(AssignExpr.class).get();
+        ResolvedType rt = expr.calculateResolvedType();
+        assertEquals("int", rt.describe());
     }
     
     @Test
@@ -77,7 +70,7 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
         String src = "public class Example {\n"
                 + "    int a = 3;\n"
                 + "    public void bla() {\n"
-                + "        a = 7; // 'a' must be resolved as int not String"
+                + "        a = 7; // 'a' must be resolved as int not String\n"
                 + "        String a = \"\";\n"
                 + "        a = \"test\";\n"
                 + "    }\n"
