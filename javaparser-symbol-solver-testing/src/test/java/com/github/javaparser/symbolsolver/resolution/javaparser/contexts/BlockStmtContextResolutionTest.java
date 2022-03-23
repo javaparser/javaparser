@@ -29,8 +29,10 @@ import org.junit.jupiter.api.Test;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.BlockStmtContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -49,7 +51,7 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
 
     // issue #3526
     @Test
-    void field_must_be_resolved_from_previous_declaration(){
+    void must_be_resolved_from_previous_declaration(){
         String src = "public class Example {\n"
                 + "    int a = 3;\n"
                 + "    public void bla() {\n"
@@ -68,6 +70,25 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
 
         assertEquals(true, ref.isSolved());
         assertEquals("int", ref.getCorrespondingDeclaration().getType().asPrimitive().describe());
+    }
+    
+    @Test
+    void must_be_resolved_from_previous_declaration_second_declaration_of_the_same_field_name(){
+        String src = "public class Example {\n"
+                + "    int a = 3;\n"
+                + "    public void bla() {\n"
+                + "        a = 7; // 'a' must be resolved as int not String"
+                + "        String a = \"\";\n"
+                + "        a = \"test\";\n"
+                + "    }\n"
+                + "}";
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
+        StaticJavaParser.setConfiguration(configuration);
+        CompilationUnit cu = StaticJavaParser.parse(src);
+        AssignExpr expr = cu.findAll(AssignExpr.class).get(1);
+        ResolvedType rt2 = expr.calculateResolvedType();
+        assertEquals("java.lang.String", rt2.describe());
     }
 
 }
