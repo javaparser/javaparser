@@ -109,6 +109,11 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Override
+    public String toDescriptor() {
+        return null;
+    }
+
+    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null) {
