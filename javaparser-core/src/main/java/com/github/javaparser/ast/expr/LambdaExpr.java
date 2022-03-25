@@ -206,7 +206,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
      */
     @DerivedProperty
     public Optional<Expression> getExpressionBody() {
-        body.getExpressionBody();
+        return body.getExpressionBody();
     }
 
     @Override
