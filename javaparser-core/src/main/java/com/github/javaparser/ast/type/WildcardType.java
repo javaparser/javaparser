@@ -145,7 +145,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
 
     @Override
     public String toDescriptor() {
-        return null;
+        return "";
     }
 
     @Override

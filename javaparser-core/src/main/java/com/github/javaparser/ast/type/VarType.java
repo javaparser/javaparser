@@ -66,7 +66,7 @@ public class VarType extends Type {
 
     @Override
     public String toDescriptor() {
-        return null;
+        return "";
     }
 
     @Override

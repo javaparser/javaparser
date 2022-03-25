@@ -110,7 +110,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
 
     @Override
     public String toDescriptor() {
-        return null;
+        return "";
     }
 
     @Override

@@ -107,7 +107,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     @Override
     public String toDescriptor() {
-        return null;
+        return "";
     }
 
     @Override
