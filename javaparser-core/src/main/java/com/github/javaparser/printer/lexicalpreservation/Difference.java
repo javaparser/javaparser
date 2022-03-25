@@ -386,44 +386,48 @@ public class Difference {
         return removedElementsMap;
     }
 
-    private void applyRemovedDiffElement(RemovedGroup removedGroup, Removed removed, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
-        if (removed.isChild() && originalElementIsChild) {
-            ChildTextElement originalElementChild = (ChildTextElement) originalElement;
-            if (originalElementChild.isComment()) {
-                // We expected to remove a proper node but we found a comment in between.
-                // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
-                Comment comment = (Comment) originalElementChild.getChild();
-                if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(removed.getChild())) {
-                    nodeText.removeElement(originalIndex);
-                } else {
-                    originalIndex++;
-                }
-            } else {
+    private void applyRemovedDiffElementConditionOneforIf( RemovedGroup removedGroup,Removed removed, TextElement originalElement) {
+        ChildTextElement originalElementChild = (ChildTextElement) originalElement;
+        if (originalElementChild.isComment()) {
+            // We expected to remove a proper node but we found a comment in between.
+            // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
+            Comment comment = (Comment) originalElementChild.getChild();
+            if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(removed.getChild())) {
                 nodeText.removeElement(originalIndex);
+            } else {
+                originalIndex++;
+            }
+        } else {
+            nodeText.removeElement(originalIndex);
 
-                if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof Added))
-                        && !removedGroup.isACompleteLine()) {
-                    originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
-                }
-                // If in front we have one space and before also we had space let's drop one space
-                if (originalElements.size() > originalIndex && originalIndex > 0) {
-                    if (originalElements.get(originalIndex).isWhiteSpace()
-                            && originalElements.get(originalIndex - 1).isWhiteSpace()) {
-                        // However we do not want to do that when we are about to adding or removing elements
-                        if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof Kept)) {
-                            originalElements.remove(originalIndex--);
-                        }
+            if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1) instanceof Added))
+                    && !removedGroup.isACompleteLine()) {
+                originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
+            }
+            // If in front we have one space and before also we had space let's drop one space
+            if (originalElements.size() > originalIndex && originalIndex > 0) {
+                if (originalElements.get(originalIndex).isWhiteSpace()
+                        && originalElements.get(originalIndex - 1).isWhiteSpace()) {
+                    // However we do not want to do that when we are about to adding or removing elements
+                    if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1) instanceof Kept)) {
+                        originalElements.remove(originalIndex--);
                     }
                 }
-
-                diffIndex++;
             }
-        } else if (removed.isToken() && originalElementIsToken &&
+
+            diffIndex++;
+        }
+    }
+    private void applyRemovedDiffElement(RemovedGroup removedGroup, Removed removed, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
+        if (removed.isChild() && originalElementIsChild) {
+            applyRemovedDiffElementConditionOneforIf(removedGroup,removed, originalElement);
+        }
+        else if (removed.isToken() && originalElementIsToken &&
                 (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
                         // handle EOLs separately as their token kind might not be equal. This is because the 'removed'
                         // element always has the current operating system's EOL as type
                         || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine()
-                                && removed.isNewLine()))) {
+                        && removed.isNewLine()))) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
