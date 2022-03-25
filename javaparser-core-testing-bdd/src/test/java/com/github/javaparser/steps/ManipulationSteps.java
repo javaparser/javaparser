@@ -270,15 +270,15 @@ public class ManipulationSteps {
 
     private static class ChangeMethodNameToUpperCaseVisitor extends VoidVisitorAdapter<Void> {
         @Override
-        public void visit(MethodDeclaration n, Void arg) {
-            n.setName(n.getNameAsString().toUpperCase());
+        public void visit(MethodDeclaration methodDeclaration, Void arg) {
+            methodDeclaration.setName(methodDeclaration.getNameAsString().toUpperCase());
         }
     }
 
     private static class AddNewIntParameterCalledValueVisitor extends VoidVisitorAdapter<Void> {
         @Override
-        public void visit(MethodDeclaration n, Void arg) {
-            n.addParameter(intType(), "value");
+        public void visit(MethodDeclaration methodDeclaration, Void arg) {
+            methodDeclaration.addParameter(intType(), "value");
         }
     }
 }
