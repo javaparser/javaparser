@@ -22,6 +22,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.StatementMetaModel;
@@ -480,5 +481,14 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifYieldStmt(Consumer<YieldStmt> action) {
+    }
+
+    //this method is called from LambdaExpr
+    public Optional<Expression> getExpressionBody() {
+        if (isExpressionStmt()) {
+            return Optional.of(asExpressionStmt().getExpression());
+        } else {
+            return Optional.empty();
+        }
     }
 }
