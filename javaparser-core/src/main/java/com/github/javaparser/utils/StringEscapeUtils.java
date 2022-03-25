@@ -32,6 +32,7 @@ import java.util.HashSet;
  * Unescapes escaped chars in strings.
  */
 public final class StringEscapeUtils {
+    private static Constant constant;
 
     private StringEscapeUtils() {
     }
@@ -57,7 +58,7 @@ public final class StringEscapeUtils {
      * @return String with escaped values, {@code null} if null string input
      */
     public static String escapeJava(final String input) {
-        return ESCAPE_JAVA.translate(input);
+        return constant.ESCAPE_JAVA.translate(input);
     }
 
     /**
@@ -72,56 +73,13 @@ public final class StringEscapeUtils {
      * @return a new unescaped {@code String}, {@code null} if null string input
      */
     public static String unescapeJava(final String input) {
-        return UNESCAPE_JAVA.translate(input);
+        return constant.UNESCAPE_JAVA.translate(input);
     }
 
     public static String unescapeJavaTextBlock(final String input) {
-        return UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
+        return constant.UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
     }
 
-    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(new String[][]{
-            {"\\b", "\b"},
-            {"\\n", "\n"},
-            {"\\t", "\t"},
-            {"\\f", "\f"},
-            {"\\r", "\r"}});
-
-    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(new String[][]{
-            {"\b", "\\b"},
-            {"\n", "\\n"},
-            {"\t", "\\t"},
-            {"\f", "\\f"},
-            {"\r", "\\r"}});
-
-    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
-            new LookupTranslator(
-                    new String[][]{
-                            {"\"", "\\\""},
-                            {"\\", "\\\\"},
-                    }),
-            JAVA_CTRL_CHARS_ESCAPE);
-
-    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
-            new OctalUnescaper(),
-            new UnicodeUnescaper(),
-            JAVA_CTRL_CHARS_UNESCAPE,
-            new LookupTranslator(new String[][]{
-                    {"\\\\", "\\"},
-                    {"\\\"", "\""},
-                    {"\\'", "'"},
-                    {"\\", ""}}));
-
-    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(
-            new OctalUnescaper(),
-            new UnicodeUnescaper(),
-            JAVA_CTRL_CHARS_UNESCAPE,
-            new LookupTranslator(new String[][]{
-                    {"\\\\", "\\"},
-                    {"\\\"", "\""},
-                    {"\\'", "'"},
-                    {"\\", ""},
-                    {"\\s", " "},
-                    {"\\\n", ""}}));
 
     /**
      * Adapted from apache commons-lang3 project.
@@ -132,7 +90,7 @@ public final class StringEscapeUtils {
      *
      * @since 3.0
      */
-    private static abstract class CharSequenceTranslator {
+    public static abstract class CharSequenceTranslator {
 
         /**
          * Translate a set of codepoints, represented by an int index into a CharSequence,
@@ -142,7 +100,7 @@ public final class StringEscapeUtils {
          *
          * @param input CharSequence that is being translated
          * @param index int representing the current point of translation
-         * @param out Writer to translate the text to
+         * @param out   Writer to translate the text to
          * @return int count of codepoints consumed
          * @throws IOException if and only if the Writer produces an IOException
          */
@@ -173,7 +131,7 @@ public final class StringEscapeUtils {
          * tightly coupled with the abstract method of this class.
          *
          * @param input CharSequence that is being translated
-         * @param out Writer to translate the text to
+         * @param out   Writer to translate the text to
          * @throws IOException if and only if the Writer produces an IOException
          */
         private void translate(final CharSequence input, final Writer out) throws IOException {
@@ -218,7 +176,7 @@ public final class StringEscapeUtils {
      *
      * @since 3.0
      */
-    private static class LookupTranslator extends CharSequenceTranslator {
+    public static class LookupTranslator extends CharSequenceTranslator {
 
         private final HashMap<String, String> lookupMap;
         private final HashSet<Character> prefixSet;
@@ -234,7 +192,7 @@ public final class StringEscapeUtils {
          *
          * @param lookup CharSequence[][] table of size [*][2]
          */
-        private LookupTranslator(final CharSequence[]... lookup) {
+        public LookupTranslator(final CharSequence[]... lookup) {
             lookupMap = new HashMap<>();
             prefixSet = new HashSet<>();
             int _shortest = Integer.MAX_VALUE;
@@ -290,7 +248,7 @@ public final class StringEscapeUtils {
      *
      * @since 3.0
      */
-    private static class AggregateTranslator extends CharSequenceTranslator {
+    public static class AggregateTranslator extends CharSequenceTranslator {
 
         private final CharSequenceTranslator[] translators;
 
@@ -299,7 +257,7 @@ public final class StringEscapeUtils {
          *
          * @param translators CharSequenceTranslator array to aggregate
          */
-        private AggregateTranslator(final CharSequenceTranslator... translators) {
+        public AggregateTranslator(final CharSequenceTranslator... translators) {
             this.translators = translators == null ? null : translators.clone();
         }
 
@@ -333,7 +291,7 @@ public final class StringEscapeUtils {
      *
      * @since 3.0
      */
-    private static class OctalUnescaper extends CharSequenceTranslator {
+    public static class OctalUnescaper extends CharSequenceTranslator {
 
         /**
          * {@inheritDoc}
@@ -394,7 +352,7 @@ public final class StringEscapeUtils {
      *
      * @since 3.0
      */
-    private static class UnicodeUnescaper extends CharSequenceTranslator {
+    public static class UnicodeUnescaper extends CharSequenceTranslator {
 
         /**
          * {@inheritDoc}
@@ -431,4 +389,50 @@ public final class StringEscapeUtils {
         }
     }
 
+}
+
+class Constant {
+    private static final StringEscapeUtils.LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new StringEscapeUtils.LookupTranslator(new String[][]{
+            {"\\b", "\b"},
+            {"\\n", "\n"},
+            {"\\t", "\t"},
+            {"\\f", "\f"},
+            {"\\r", "\r"}});
+
+    private static final StringEscapeUtils.LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new StringEscapeUtils.LookupTranslator(new String[][]{
+            {"\b", "\\b"},
+            {"\n", "\\n"},
+            {"\t", "\\t"},
+            {"\f", "\\f"},
+            {"\r", "\\r"}});
+
+    public static final StringEscapeUtils.CharSequenceTranslator ESCAPE_JAVA = new StringEscapeUtils.AggregateTranslator(
+            new StringEscapeUtils.LookupTranslator(
+                    new String[][]{
+                            {"\"", "\\\""},
+                            {"\\", "\\\\"},
+                    }),
+            JAVA_CTRL_CHARS_ESCAPE);
+
+    public static final StringEscapeUtils.CharSequenceTranslator UNESCAPE_JAVA = new StringEscapeUtils.AggregateTranslator(
+            new StringEscapeUtils.OctalUnescaper(),
+            new StringEscapeUtils.UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new StringEscapeUtils.LookupTranslator(new String[][]{
+                    {"\\\\", "\\"},
+                    {"\\\"", "\""},
+                    {"\\'", "'"},
+                    {"\\", ""}}));
+
+    public static final StringEscapeUtils.CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new StringEscapeUtils.AggregateTranslator(
+            new StringEscapeUtils.OctalUnescaper(),
+            new StringEscapeUtils.UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new StringEscapeUtils.LookupTranslator(new String[][]{
+                    {"\\\\", "\\"},
+                    {"\\\"", "\""},
+                    {"\\'", "'"},
+                    {"\\", ""},
+                    {"\\s", " "},
+                    {"\\\n", ""}}));
 }
