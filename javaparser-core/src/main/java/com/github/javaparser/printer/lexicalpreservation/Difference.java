@@ -386,7 +386,7 @@ public class Difference {
         return removedElementsMap;
     }
 
-    private void applyRemovedDiffElementConditionOneforIf( RemovedGroup removedGroup,Removed removed, TextElement originalElement) {
+    private void compareRemovedDiffElement( RemovedGroup removedGroup,Removed removed, TextElement originalElement) {
         ChildTextElement originalElementChild = (ChildTextElement) originalElement;
         if (originalElementChild.isComment()) {
             // We expected to remove a proper node but we found a comment in between.
@@ -420,7 +420,7 @@ public class Difference {
     }
     private void applyRemovedDiffElement(RemovedGroup removedGroup, Removed removed, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
         if (removed.isChild() && originalElementIsChild) {
-            applyRemovedDiffElementConditionOneforIf(removedGroup,removed, originalElement);
+            compareRemovedDiffElement(removedGroup,removed, originalElement);
         }
         else if (removed.isToken() && originalElementIsToken &&
                 (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind()
