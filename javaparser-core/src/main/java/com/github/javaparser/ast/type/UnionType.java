@@ -106,6 +106,11 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     }
 
     @Override
+    public String toDescriptor() {
+        return null;
+    }
+
+    @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);

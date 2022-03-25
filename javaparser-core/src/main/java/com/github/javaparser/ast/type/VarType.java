@@ -65,6 +65,11 @@ public class VarType extends Type {
     }
 
     @Override
+    public String toDescriptor() {
+        return null;
+    }
+
+    @Override
     public String asString() {
         return "var";
     }

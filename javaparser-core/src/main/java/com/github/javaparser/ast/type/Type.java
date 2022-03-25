@@ -110,9 +110,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
         return 0;
     }
 
-    public String toDescriptor() {
-        return "";
-    }
+    public abstract String toDescriptor();
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
