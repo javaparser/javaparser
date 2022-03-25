@@ -32,7 +32,7 @@
   * Unescapes escaped chars in strings.
   */
  public final class StringEscapeUtils {
-     static A a;
+     static Const constant;
      LookupTranslator l;
      private StringEscapeUtils() {
      }
@@ -58,7 +58,7 @@
       * @return String with escaped values, {@code null} if null string input
       */
      public static String escapeJava(final String input) {
-         return a.ESCAPE_JAVA.translate(input);
+         return constant.ESCAPE_JAVA.translate(input);
      }
 
      /**
@@ -73,11 +73,11 @@
       * @return a new unescaped {@code String}, {@code null} if null string input
       */
      public static String unescapeJava(final String input) {
-         return a.UNESCAPE_JAVA.translate(input);
+         return constant.UNESCAPE_JAVA.translate(input);
      }
 
      public static String unescapeJavaTextBlock(final String input) {
-         return a.UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
+         return constant.UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
      }
 
 
@@ -390,7 +390,7 @@
      }
 
  }
- class A
+ class Const
  {
      private static final StringEscapeUtils.LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new StringEscapeUtils.LookupTranslator(new String[][]{
              {"\\b", "\b"},
