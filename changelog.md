@@ -19,7 +19,7 @@ GPG Fingerprint: `253E8E4C6FB28D11748115C1249DEE8E2C07A0A2`
 ### Added
 
 * Improve unit test for BlockStmtContextResolutionTest (PR [#3530](https://github.com/javaparser/javaparser/pull/3530) by [@jlerbsc](https://github.com/jlerbsc))
-~~~~
+
 ### Changed
 
 * Improve Conditional Operator resolution [JLS 15.25] (PR [#3522](https://github.com/javaparser/javaparser/pull/3522) by [@jlerbsc](https://github.com/jlerbsc))
