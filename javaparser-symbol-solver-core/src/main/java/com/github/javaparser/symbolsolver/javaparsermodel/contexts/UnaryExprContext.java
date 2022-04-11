@@ -15,6 +15,10 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
         super(wrappedNode, typeSolver);
     }
 
+    public UnaryExprContext() {
+        super();
+    }
+
     @Override
     public List<PatternExpr> patternExprsExposedFromChildren() {
         List<PatternExpr> results = new ArrayList<>();

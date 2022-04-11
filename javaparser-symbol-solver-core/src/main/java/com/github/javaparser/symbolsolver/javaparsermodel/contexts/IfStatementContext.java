@@ -11,7 +11,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IfStatementContext extends StatementContext<IfStmt> {
+public class IfStatementContext extends StatementContext<IfStmt> implements JavaParser{
 //public class IfStatementContext extends AbstractJavaParserContext<IfStmt> {
 
     public IfStatementContext(IfStmt wrappedNode, TypeSolver typeSolver) {
@@ -41,6 +41,9 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         return results;
     }
 
+    public IfStatementContext() {
+        super();
+    }
 
     /**
      * <pre>{@code
@@ -159,5 +162,10 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         }
 
         return false;
+    }
+
+    @Override
+    public String getContext() {
+        return null;
     }
 }

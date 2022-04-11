@@ -42,10 +42,14 @@ import java.util.List;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
-public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
+public class ForStatementContext extends AbstractJavaParserContext<ForStmt> implements JavaParser{
 
     public ForStatementContext(ForStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+    }
+
+    public ForStatementContext() {
+        super();
     }
 
     @Override
@@ -86,5 +90,10 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
             }
         }
         return res;
+    }
+
+    @Override
+    public String getContext() {
+        return null;
     }
 }

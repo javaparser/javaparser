@@ -53,6 +53,10 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         super(wrappedNode, typeSolver);
     }
 
+    public StatementContext() {
+        super();
+    }
+
     public static SymbolReference<? extends ResolvedValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
         Optional<Node> optionalParentNode = stmt.getParentNode();
         if(!optionalParentNode.isPresent()) {

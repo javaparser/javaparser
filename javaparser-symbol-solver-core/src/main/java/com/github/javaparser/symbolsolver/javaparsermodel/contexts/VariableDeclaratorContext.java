@@ -43,6 +43,10 @@ public class VariableDeclaratorContext extends AbstractJavaParserContext<Variabl
         super(wrappedNode, typeSolver);
     }
 
+    public VariableDeclaratorContext() {
+        super();
+    }
+
     @Override
     public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
         if (wrappedNode.getInitializer().isPresent() && wrappedNode.getInitializer().get() == child) {

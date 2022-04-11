@@ -35,7 +35,7 @@ import java.util.Optional;
  */
 public class ContextHelper {
 
-    private ContextHelper() {
+    public ContextHelper() {
         // prevent instantiation
     }
 
@@ -45,9 +45,15 @@ public class ContextHelper {
 
         if (typeDeclaration instanceof MethodUsageResolutionCapability) {
             return ((MethodUsageResolutionCapability) typeDeclaration)
-                           .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
+                    .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
         } else {
             throw new UnsupportedOperationException(typeDeclaration.toString());
         }
+    }
+
+
+    public static String solveMethodAsUsage(ResolvedTypeDeclaration ifStatementContext) {
+
+        return null;
     }
 }

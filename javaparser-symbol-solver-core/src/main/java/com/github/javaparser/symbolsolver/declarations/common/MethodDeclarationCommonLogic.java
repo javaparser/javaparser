@@ -41,7 +41,18 @@ import java.util.Optional;
  */
 public class MethodDeclarationCommonLogic {
 
-    private ResolvedMethodDeclaration methodDeclaration;
+/*   private MethodDeclarationCommonLogic(){}
+    private static MethodDeclarationCommonLogic declaration;
+
+    public static MethodDeclarationCommonLogic getObject(){
+        if(declaration==null)
+            synchronized (MethodDeclarationCommonLogic.class) {
+                declaration = new MethodDeclarationCommonLogic();
+            }
+        return declaration;
+    }}*/
+
+   private ResolvedMethodDeclaration methodDeclaration;
     private TypeSolver typeSolver;
 
     public MethodDeclarationCommonLogic(ResolvedMethodDeclaration methodDeclaration, TypeSolver typeSolver) {

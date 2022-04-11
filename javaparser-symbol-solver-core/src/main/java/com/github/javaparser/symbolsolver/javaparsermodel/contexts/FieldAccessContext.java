@@ -50,12 +50,16 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 /**
  * @author Federico Tomassetti
  */
-public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> {
+public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> implements JavaParser{
 
     private static final String ARRAY_LENGTH_FIELD_NAME = "length";
 
     public FieldAccessContext(FieldAccessExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+    }
+
+    public FieldAccessContext() {
+        super();
     }
 
     @Override
@@ -137,5 +141,10 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
             }
         }
         return SymbolReference.unsolved(ResolvedFieldDeclaration.class);
+    }
+
+    @Override
+    public String getContext() {
+        return null;
     }
 }

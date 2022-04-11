@@ -16,7 +16,7 @@ import java.util.Optional;
 /**
  * @author Roger Howell
  */
-public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfExpr> {
+public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfExpr> implements JavaParser {
 
     public InstanceOfExprContext(InstanceOfExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -63,5 +63,8 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
     }
 
 
-
+    @Override
+    public String getContext() {
+        return null;
+    }
 }

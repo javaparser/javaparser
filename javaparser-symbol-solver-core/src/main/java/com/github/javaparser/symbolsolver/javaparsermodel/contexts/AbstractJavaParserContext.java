@@ -63,6 +63,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     protected N wrappedNode;
     protected TypeSolver typeSolver;
 
+    public AbstractJavaParserContext() {
+
+    }
+
     ///
     /// Static methods
     ///
