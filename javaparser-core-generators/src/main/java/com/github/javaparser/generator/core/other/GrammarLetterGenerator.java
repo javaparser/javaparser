@@ -33,6 +33,7 @@ public class GrammarLetterGenerator {
         return instance;
     }
     public static void main(String[] args) {
+        getInstance();
         generate("LETTER", c -> Character.isJavaIdentifierStart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
         generate("PART_LETTER", c -> Character.isJavaIdentifierPart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
     }
@@ -66,6 +67,7 @@ public class GrammarLetterGenerator {
                 nltime = 0;
                 System.out.println();
                 System.out.print(indent);
+
             }
         }
         // Too lazy to remove the final illegal comma.
