@@ -27,6 +27,11 @@ import java.util.function.Function;
  * Prints the LETTER and PART_LETTER tokens. They should be inserted into the grammar manually.
  */
 public class GrammarLetterGenerator {
+    private GrammarLetterGenerator(){}
+    private static GrammarLetterGenerator instance=new GrammarLetterGenerator();
+    public static GrammarLetterGenerator getInstance(){
+        return instance;
+    }
     public static void main(String[] args) {
         generate("LETTER", c -> Character.isJavaIdentifierStart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
         generate("PART_LETTER", c -> Character.isJavaIdentifierPart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
