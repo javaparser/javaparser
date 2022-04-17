@@ -1119,6 +1119,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
 
         printer.print("(");
+        n.getReceiverParameter().ifPresent(rp -> {
+            rp.accept(this, arg);
+            if (!isNullOrEmpty(n.getParameters())) {
+                printer.print(", ");
+            }
+        });
         if (!n.getParameters().isEmpty()) {
             for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
                 final Parameter p = i.next();
