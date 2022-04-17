@@ -1,6 +1,6 @@
-Next Release (Version 3.24.2)
+Next Release (Version 3.24.3)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/189?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
 
 ### Added
 ### Changed
@@ -9,9 +9,49 @@ Next Release (Version 3.24.2)
 ### Fixed
 ### Security
 
-Version 3.24.1
+
+Version 3.24.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/188?closed=1)
+
+GPG Fingerprint: `253E8E4C6FB28D11748115C1249DEE8E2C07A0A2`
+
+### Added
+
+* Improve unit test for BlockStmtContextResolutionTest (PR [#3530](https://github.com/javaparser/javaparser/pull/3530) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Changed
+
+* Improve Conditional Operator resolution [JLS 15.25] (PR [#3522](https://github.com/javaparser/javaparser/pull/3522) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix issue #3526 Variable or FieldDeclaration is not resolved correctl… (PR [#3529](https://github.com/javaparser/javaparser/pull/3529) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* Bump jbehave-junit-runner from 2.3.0 to 2.3.1 (PR [#3531](https://github.com/javaparser/javaparser/pull/3531) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Bump actions/cache from 2.1.7 to 3 (PR [#3525](https://github.com/javaparser/javaparser/pull/3525) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Update JDK 18 and add JDK 19 feature details to FEATURES.md (PR [#3521](https://github.com/javaparser/javaparser/pull/3521) by [@MysterAitch](https://github.com/MysterAitch))
+* Bump maven-dependency-plugin from 3.2.0 to 3.3.0 (PR [#3514](https://github.com/javaparser/javaparser/pull/3514) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency org.apache.maven.plugins:maven-dependency-plugin to v3.3.0 (PR [#3512](https://github.com/javaparser/javaparser/pull/3512) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.10.1 (PR [#3511](https://github.com/javaparser/javaparser/pull/3511) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action (PR [#3508](https://github.com/javaparser/javaparser/pull/3508) by [@renovate[bot]](https://github.com/apps/renovate))
+* Bump bnd-maven-plugin from 6.1.0 to 6.2.0 (PR [#3505](https://github.com/javaparser/javaparser/pull/3505) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency biz.aqute.bnd:bnd-maven-plugin to v6.2.0 (PR [#3503](https://github.com/javaparser/javaparser/pull/3503) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/setup-java action to v3 (PR [#3502](https://github.com/javaparser/javaparser/pull/3502) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@jlerbsc](https://github.com/jlerbsc)
+
+
+Version 3.24.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/189?closed=1)
 
 ### Fixed
 
