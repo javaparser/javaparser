@@ -115,6 +115,6 @@ public interface NodeWithModifiers<N extends Node> {
                     return AccessSpecifier.PRIVATE;
             }
         }
-        return AccessSpecifier.PACKAGE_PRIVATE;
+        return AccessSpecifier.NONE;
     }
 }
