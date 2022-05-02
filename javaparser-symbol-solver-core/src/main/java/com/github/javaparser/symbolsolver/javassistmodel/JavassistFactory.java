@@ -85,7 +85,7 @@ public class JavassistFactory {
     } else if (Modifier.isPrivate(modifiers)) {
       return AccessSpecifier.PRIVATE;
     } else {
-      return AccessSpecifier.PACKAGE_PRIVATE;
+      return AccessSpecifier.NONE;
     }
   }
 
