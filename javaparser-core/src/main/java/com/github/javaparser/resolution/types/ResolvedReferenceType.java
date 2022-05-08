@@ -54,6 +54,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     
     protected static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
     protected static String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
+    protected static String JAVA_LANG_RECORD = "java.lang.record"; // Record.class.getCanonicalName(); // Hardcoded, because JavaParser is written using Java 8 language features only (per pom.xml).
 
     //
     // Fields

@@ -74,6 +74,14 @@ class AstResolutionUtils {
             } else {
                 return b + "." + cn;
             }
+        } else if (container instanceof com.github.javaparser.ast.body.RecordDeclaration) {
+            String b = getClassName(base, container.getParentNode().orElse(null));
+            String cn = ((com.github.javaparser.ast.body.RecordDeclaration) container).getName().getId();
+            if (b.isEmpty()) {
+                return cn;
+            } else {
+                return b + "." + cn;
+            }
         } else if (container instanceof com.github.javaparser.ast.body.EnumDeclaration) {
             String b = getClassName(base, container.getParentNode().orElse(null));
             String cn = ((com.github.javaparser.ast.body.EnumDeclaration) container).getName().getId();
