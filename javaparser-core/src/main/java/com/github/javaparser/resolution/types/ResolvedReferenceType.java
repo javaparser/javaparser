@@ -51,10 +51,6 @@ import com.github.javaparser.utils.Pair;
  */
 public abstract class ResolvedReferenceType implements ResolvedType,
         ResolvedTypeParametrized, ResolvedTypeParameterValueProvider {
-    
-    protected static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-    protected static String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
-    protected static String JAVA_LANG_RECORD = "java.lang.record"; // Record.class.getCanonicalName(); // Hardcoded, because JavaParser is written using Java 8 language features only (per pom.xml).
 
     //
     // Fields
@@ -553,7 +549,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isJavaLangObject() {
         return this.isReferenceType()
                 && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_OBJECT);
+                && getQualifiedName().equals(Object.class.getCanonicalName());
     }
 
     /**
@@ -563,7 +559,7 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     public boolean isJavaLangEnum() {
         return this.isReferenceType()
                 && hasName() // Consider anonymous classes
-                && getQualifiedName().equals(JAVA_LANG_ENUM);
+                && getQualifiedName().equals(Enum.class.getCanonicalName());
     }
     
     

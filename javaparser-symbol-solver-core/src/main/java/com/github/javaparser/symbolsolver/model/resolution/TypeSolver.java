@@ -32,10 +32,6 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
  */
 public interface TypeSolver {
     
-    String JAVA_LANG_ENUM = Enum.class.getCanonicalName();
-    String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
-    String JAVA_LANG_RECORD = "java.lang.record"; // Record.class.getCanonicalName(); // Hardcoded, because JavaParser is written using Java 8 language features only (per pom.xml).
-
     /**
      * Get the root of the hierarchy of type solver.
      */
@@ -79,14 +75,14 @@ public interface TypeSolver {
      * @return A resolved reference to {@code java.lang.Object}
      */
     default ResolvedReferenceTypeDeclaration getSolvedJavaLangObject() throws UnsolvedSymbolException {
-        return solveType(JAVA_LANG_OBJECT);
+        return solveType(Object.class.getCanonicalName());
     }
 
     /**
      * @return A resolved reference to {@code java.lang.Record}
      */
     default ResolvedReferenceTypeDeclaration getSolvedJavaLangRecord() throws UnsolvedSymbolException {
-        return solveType(JAVA_LANG_RECORD);
+        return solveType("java.lang.record"); // Hardcoded, because JavaParser is written using Java 8 language features only (per pom.xml) and record is unavailable.
     }
 
     default boolean hasType(String name) {
