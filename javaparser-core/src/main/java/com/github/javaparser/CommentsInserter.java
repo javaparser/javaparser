@@ -21,20 +21,20 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.utils.PositionUtils;
+import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
+import static java.util.stream.Collectors.toList;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
-import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
-import static java.util.stream.Collectors.toList;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.utils.PositionUtils;
 
 /**
  * Assigns comments to nodes of the AST.
@@ -103,7 +103,7 @@ class CommentsInserter {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
             commentsInsideChild.addAll(
                     commentsToAttribute.stream()
-                            .filter(comment -> comment.getRange().isPresent())
+                            .filter(comment -> comment.hasRange())
                             .filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation))
                             .collect(toList())
             );
@@ -168,10 +168,10 @@ class CommentsInserter {
          there is something contained in their line */
         List<Comment> attributedComments = new LinkedList<>();
         commentsToAttribute.stream()
-                .filter(comment -> comment.getRange().isPresent())
+                .filter(comment -> comment.hasRange())
                 .filter(Comment::isLineComment)
                 .forEach(comment -> children.stream()
-                        .filter(child -> child.getRange().isPresent())
+                        .filter(child -> child.hasRange())
                         .forEach(child -> {
                             Range commentRange = comment.getRange().get();
                             Range childRange = child.getRange().get();
@@ -185,7 +185,7 @@ class CommentsInserter {
     }
 
     private boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment) {
-        if (!node.getRange().isPresent() || !lineComment.getRange().isPresent()) {
+        if (!node.hasRange() || !lineComment.hasRange()) {
             return false;
         }
 
@@ -197,26 +197,25 @@ class CommentsInserter {
                 node.setComment(lineComment);
             }
             return true;
-        } else {
-            // try with all the children, sorted by reverse position (so the
-            // first one is the nearest to the comment
-            List<Node> children = new LinkedList<>();
-            children.addAll(node.getChildNodes());
-            PositionUtils.sortByBeginPosition(children);
-            Collections.reverse(children);
-
-            for (Node child : children) {
-                if (attributeLineCommentToNodeOrChild(child, lineComment)) {
-                    return true;
-                }
-            }
-
-            return false;
         }
+        // try with all the children, sorted by reverse position (so the
+        // first one is the nearest to the comment
+        List<Node> children = new LinkedList<>();
+        children.addAll(node.getChildNodes());
+        PositionUtils.sortByBeginPosition(children);
+        Collections.reverse(children);
+
+        for (Node child : children) {
+            if (attributeLineCommentToNodeOrChild(child, lineComment)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean thereAreLinesBetween(Node a, Node b) {
-        if (!a.getRange().isPresent() || !b.getRange().isPresent()) {
+        if (!a.hasRange() || !b.hasRange()) {
             return true;
         }
         if (!PositionUtils.areInOrder(a, b)) {
@@ -227,7 +226,7 @@ class CommentsInserter {
     }
 
     private boolean commentIsOnNextLine(Node a, Comment c) {
-        if (!c.getRange().isPresent() || !a.getRange().isPresent()) return false;
+        if (!c.hasRange() || !a.hasRange()) return false;
         return c.getRange().get().end.line + 1 == a.getRange().get().begin.line;
     }
 
