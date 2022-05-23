@@ -18,7 +18,7 @@
         <ktor.version>1.6.7</ktor.version>
         <logback_version>1.2.10</logback_version>
         <kotlin.compiler.jvmTarget>8</kotlin.compiler.jvmTarget>
-        <kotlin.version>1.6.10</kotlin.version>
+        <kotlin.version>1.6.21</kotlin.version>
     </properties>
 
     <dependencies>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
-            <version>1.6.10</version>
+            <version>1.6.21</version>
             <scope>test</scope>
         </dependency>
         <dependency>
