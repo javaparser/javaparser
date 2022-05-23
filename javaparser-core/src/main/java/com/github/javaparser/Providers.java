@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -38,7 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * use UTF-8.
  */
 public final class Providers {
-    public static final Charset UTF8 = Charset.forName("utf-8");
+    public static final Charset UTF8 = StandardCharsets.UTF_8;
 
     private Providers() {
     }
@@ -113,7 +114,4 @@ public final class Providers {
         return resourceProvider(pathToResource, UTF8);
     }
 
-    public interface PreProcessor {
-        Provider process(Provider innerProvider);
-    }
 }

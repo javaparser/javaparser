@@ -1,15 +1,150 @@
-Next Release (Version 3.24.1)
+Next Release (Version 3.24.3)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+Version 3.24.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/188?closed=1)
 
+GPG Fingerprint: `253E8E4C6FB28D11748115C1249DEE8E2C07A0A2`
+
 ### Added
+
+* Improve unit test for BlockStmtContextResolutionTest (PR [#3530](https://github.com/javaparser/javaparser/pull/3530)
+  by [@jlerbsc](https://github.com/jlerbsc))
+
 ### Changed
-### Deprecated
-### Removed
+
+* Improve Conditional Operator resolution [JLS 15.25] (PR [#3522](https://github.com/javaparser/javaparser/pull/3522)
+  by [@jlerbsc](https://github.com/jlerbsc))
+
 ### Fixed
-### Security
 
+* Fix issue #3526 Variable or FieldDeclaration is not resolved correctl… (
+  PR [#3529](https://github.com/javaparser/javaparser/pull/3529) by [@jlerbsc](https://github.com/jlerbsc))
 
+### Developer Changes
+
+* Bump jbehave-junit-runner from 2.3.0 to 2.3.1 (PR [#3531](https://github.com/javaparser/javaparser/pull/3531)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Bump actions/cache from 2.1.7 to 3 (PR [#3525](https://github.com/javaparser/javaparser/pull/3525)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Update JDK 18 and add JDK 19 feature details to FEATURES.md (
+  PR [#3521](https://github.com/javaparser/javaparser/pull/3521) by [@MysterAitch](https://github.com/MysterAitch))
+* Bump maven-dependency-plugin from 3.2.0 to 3.3.0 (PR [#3514](https://github.com/javaparser/javaparser/pull/3514)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency org.apache.maven.plugins:maven-dependency-plugin to v3.3.0 (
+  PR [#3512](https://github.com/javaparser/javaparser/pull/3512) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.10.1 (
+  PR [#3511](https://github.com/javaparser/javaparser/pull/3511) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action (PR [#3508](https://github.com/javaparser/javaparser/pull/3508)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+* Bump bnd-maven-plugin from 6.1.0 to 6.2.0 (PR [#3505](https://github.com/javaparser/javaparser/pull/3505)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency biz.aqute.bnd:bnd-maven-plugin to v6.2.0 (
+  PR [#3503](https://github.com/javaparser/javaparser/pull/3503) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/setup-java action to v3 (PR [#3502](https://github.com/javaparser/javaparser/pull/3502)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@jlerbsc](https://github.com/jlerbsc)
+
+Version 3.24.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/189?closed=1)
+
+### Fixed
+
+* Adding constructor descriptor (PR [#3499](https://github.com/javaparser/javaparser/pull/3499)
+  by [@kanghj](https://github.com/kanghj))
+* Fix issue #3491 Method has a multidimensional arrays argument in jar … (
+  PR [#3493](https://github.com/javaparser/javaparser/pull/3493) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3218 GetSourceRoots() does not return all source roots (
+  PR [#3485](https://github.com/javaparser/javaparser/pull/3485) by [@jlerbsc](https://github.com/jlerbsc))
+* Bug in ArrayCreationExpr constructors (PR [#3473](https://github.com/javaparser/javaparser/pull/3473)
+  by [@sergekukharev](https://github.com/sergekukharev))
+* Fix issue 3440 Removing a node with LexicalPreservingPrinter causes UnsupportedOperationException (
+  PR [#3449](https://github.com/javaparser/javaparser/pull/3449) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): update dependency org.codehaus.mojo:versions-maven-plugin to v2.10.0 (
+  PR [#3517](https://github.com/javaparser/javaparser/pull/3517) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v4.4.0 (
+  PR [#3510](https://github.com/javaparser/javaparser/pull/3510) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency com.google.guava:guava to v31.1-jre (
+  PR [#3507](https://github.com/javaparser/javaparser/pull/3507) by [@renovate[bot]](https://github.com/apps/renovate))
+* Bump guava from 31.0.1-jre to 31.1-jre (PR [#3506](https://github.com/javaparser/javaparser/pull/3506)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency org.apache.maven.plugins:maven-site-plugin to v3.11.0 (
+  PR [#3496](https://github.com/javaparser/javaparser/pull/3496) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.10.0 (
+  PR [#3494](https://github.com/javaparser/javaparser/pull/3494) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.3.2 (
+  PR [#3492](https://github.com/javaparser/javaparser/pull/3492) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v4.3.1 (
+  PR [#3481](https://github.com/javaparser/javaparser/pull/3481) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.mockito:mockito-core to v4.3.0 (
+  PR [#3479](https://github.com/javaparser/javaparser/pull/3479) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.codehaus.mojo:versions-maven-plugin to v2.9.0 (
+  PR [#3477](https://github.com/javaparser/javaparser/pull/3477) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-jar-plugin to v3.2.2 (
+  PR [#3470](https://github.com/javaparser/javaparser/pull/3470) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.9.0 (
+  PR [#3469](https://github.com/javaparser/javaparser/pull/3469) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.helger.maven:ph-javacc-maven-plugin to v4.1.5 (
+  PR [#3468](https://github.com/javaparser/javaparser/pull/3468) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.github.javaparser:javaparser-parent to v3 (
+  PR [#3465](https://github.com/javaparser/javaparser/pull/3465) by [@renovate[bot]](https://github.com/apps/renovate))
+* Partial revert of #3462 (removed GitHub Action) (PR [#3464](https://github.com/javaparser/javaparser/pull/3464)
+  by [@MysterAitch](https://github.com/MysterAitch))
+* Updated release script to be non-interactive, and added option to use a manually-triggered GitHub Action to build a
+  release (PR [#3462](https://github.com/javaparser/javaparser/pull/3462)
+  by [@MysterAitch](https://github.com/MysterAitch))
+* chore(deps): update dependency org.apache.maven.plugins:maven-jar-plugin to v3.2.1 (
+  PR [#3459](https://github.com/javaparser/javaparser/pull/3459) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.codehaus.mojo:build-helper-maven-plugin to v3.3.0 (
+  PR [#3458](https://github.com/javaparser/javaparser/pull/3458) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.assertj:assertj-core to v3.22.0 (
+  PR [#3457](https://github.com/javaparser/javaparser/pull/3457) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-scm-plugin to v1.12.2 (
+  PR [#3456](https://github.com/javaparser/javaparser/pull/3456) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-deploy-plugin to v3.0.0-m2 (
+  PR [#3453](https://github.com/javaparser/javaparser/pull/3453) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+* Fix the release gha, originally submitted in #3462 (PR [#3463](https://github.com/javaparser/javaparser/pull/3463)
+  by [@MysterAitch](https://github.com/MysterAitch))
+* Update changelog.md to contain 3.24.0 changes, and prepare for 3.24.1 (
+  PR [#3461](https://github.com/javaparser/javaparser/pull/3461) by [@MysterAitch](https://github.com/MysterAitch))
+* Update changelog.md (PR [#3460](https://github.com/javaparser/javaparser/pull/3460)
+  by [@MysterAitch](https://github.com/MysterAitch))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@MysterAitch](https://github.com/MysterAitch)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@kanghj](https://github.com/kanghj)
+* [@sergekukharev](https://github.com/sergekukharev)
 
 Version 3.24.0
 ------------------
@@ -17,8 +152,10 @@ Version 3.24.0
 
 ### Added
 
-* Add erasure on parametrized type (PR [#3438](https://github.com/javaparser/javaparser/pull/3438) by [@jlerbsc](https://github.com/jlerbsc))
-* Add test cases for `NoChange` API (PR [#3431](https://github.com/javaparser/javaparser/pull/3431) by [@jlerbsc](https://github.com/jlerbsc))
+* Add erasure on parametrized type (PR [#3438](https://github.com/javaparser/javaparser/pull/3438)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Add test cases for `NoChange` API (PR [#3431](https://github.com/javaparser/javaparser/pull/3431)
+  by [@jlerbsc](https://github.com/jlerbsc))
 
 ### Changed
 

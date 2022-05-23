@@ -21,8 +21,6 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ParseResult.PostProcessor;
-import com.github.javaparser.Providers.PreProcessor;
 import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -37,6 +35,11 @@ import com.github.javaparser.utils.LineSeparator;
 
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
@@ -195,7 +198,7 @@ public class ParserConfiguration {
         public static LanguageLevel BLEEDING_EDGE = JAVA_17_PREVIEW;
 
         final Validator validator;
-        final PostProcessor postProcessor;
+        final PostProcessors postProcessor;
 
         private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{
                 JAVA_13, JAVA_13_PREVIEW,
@@ -205,7 +208,7 @@ public class ParserConfiguration {
                 JAVA_17, JAVA_17_PREVIEW
         };
 
-        LanguageLevel(Validator validator, PostProcessor postProcessor) {
+        LanguageLevel(Validator validator, PostProcessors postProcessor) {
             this.validator = validator;
             this.postProcessor = postProcessor;
         }
@@ -230,113 +233,119 @@ public class ParserConfiguration {
     private LanguageLevel languageLevel = POPULAR;
     private Charset characterEncoding = Providers.UTF8;
 
-    private final List<PreProcessor> preProcessors = new ArrayList<>();
-    private final List<PostProcessor> postProcessors = new ArrayList<>();
+    private final List<Supplier<Processor>> processors = new ArrayList<>();
 
-    public ParserConfiguration() {
+    private class UnicodeEscapeProcessor extends Processor {
+        private UnicodeEscapeProcessingProvider _unicodeDecoder;
 
-        class UnicodeEscapeProcessor implements PreProcessor, PostProcessor {
-            private UnicodeEscapeProcessingProvider _unicodeDecoder;
-
-            @Override
-            public Provider process(Provider innerProvider) {
-                if (isPreprocessUnicodeEscapes()) {
-                    _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
-                    return _unicodeDecoder;
-                }
-                return innerProvider;
+        @Override
+        public Provider preProcess(Provider innerProvider) {
+            if (isPreprocessUnicodeEscapes()) {
+                _unicodeDecoder = new UnicodeEscapeProcessingProvider(innerProvider);
+                return _unicodeDecoder;
             }
-
-            @Override
-            public void process(ParseResult<? extends Node> result,
-                                ParserConfiguration configuration) {
-                if (isPreprocessUnicodeEscapes()) {
-                    result.getResult().ifPresent(
-                            root -> {
-                                PositionMapping mapping = _unicodeDecoder.getPositionMapping();
-                                if (!mapping.isEmpty()) {
-                                    root.walk(
-                                            node -> node.getRange().ifPresent(
-                                                    range -> node.setRange(mapping.transform(range))));
-                                }
-                            }
-                    );
-                }
-            }
+            return innerProvider;
         }
 
-        class LineEndingProcessor implements PreProcessor, PostProcessor {
-            private LineEndingProcessingProvider _lineEndingProcessingProvider;
-
-            @Override
-            public Provider process(Provider innerProvider) {
-                if (isDetectOriginalLineSeparator()) {
-                    _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
-                    return _lineEndingProcessingProvider;
-                }
-                return innerProvider;
+        @Override
+        public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+            if (isPreprocessUnicodeEscapes()) {
+                result.getResult().ifPresent(
+                        root -> {
+                            PositionMapping mapping = _unicodeDecoder.getPositionMapping();
+                            if (!mapping.isEmpty()) {
+                                root.walk(
+                                        node -> node.getRange().ifPresent(
+                                                range -> node.setRange(mapping.transform(range))));
+                            }
+                        }
+                );
             }
+        }
+    }
 
-            @Override
-            public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-                if (isDetectOriginalLineSeparator()) {
-                    result.getResult().ifPresent(
-                            rootNode -> {
-                                LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
+    private class LineEndingProcessor extends Processor {
+        private LineEndingProcessingProvider _lineEndingProcessingProvider;
 
-                                // Set the line ending on the root node
-                                rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);
+        @Override
+        public Provider preProcess(Provider innerProvider) {
+            if (isDetectOriginalLineSeparator()) {
+                _lineEndingProcessingProvider = new LineEndingProcessingProvider(innerProvider);
+                return _lineEndingProcessingProvider;
+            }
+            return innerProvider;
+        }
+
+        @Override
+        public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+            if (isDetectOriginalLineSeparator()) {
+                result.getResult().ifPresent(
+                        rootNode -> {
+                            LineSeparator detectedLineSeparator = _lineEndingProcessingProvider.getDetectedLineEnding();
+
+                            // Set the line ending on the root node
+                            rootNode.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator);
 
 //                                // Set the line ending on all children of the root node -- FIXME: Should ignore """textblocks"""
 //                                rootNode.findAll(Node.class)
 //                                        .forEach(node -> node.setData(Node.LINE_SEPARATOR_KEY, detectedLineSeparator));
-                            }
-                    );
-                }
+                        }
+                );
             }
         }
-
-        UnicodeEscapeProcessor unicodeProcessor = new UnicodeEscapeProcessor();
-        preProcessors.add(unicodeProcessor);
-        postProcessors.add(unicodeProcessor);
-
-        LineEndingProcessor lineEndingProcessor = new LineEndingProcessor();
-        preProcessors.add(lineEndingProcessor);
-        postProcessors.add(lineEndingProcessor);
+    }
 
 
-        postProcessors.add((result, configuration) -> {
-            if (configuration.isAttributeComments()) {
-                result.ifSuccessful(resultNode -> result
-                        .getCommentsCollection().ifPresent(comments ->
-                                new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
+    public ParserConfiguration() {
+        processors.add(() -> ParserConfiguration.this.new UnicodeEscapeProcessor());
+
+        processors.add(() -> ParserConfiguration.this.new LineEndingProcessor());
+
+        processors.add(() -> new Processor() {
+            @Override
+            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+                if (configuration.isAttributeComments()) {
+                    result.ifSuccessful(resultNode -> result
+                            .getCommentsCollection().ifPresent(comments ->
+                                    new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
+                }
             }
         });
 
         JmlProcessor jmlProcessor = new JmlProcessor();
-        postProcessors.add(jmlProcessor);
+        processors.add(() -> jmlProcessor);
 
-        postProcessors.add((result, configuration) -> {
-            LanguageLevel languageLevel = getLanguageLevel();
-            if (languageLevel != null) {
-                if (languageLevel.postProcessor != null) {
-                    languageLevel.postProcessor.process(result, configuration);
-                }
-                if (languageLevel.validator != null) {
-                    languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+        processors.add(() -> new Processor() {
+            @Override
+            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+                LanguageLevel languageLevel = getLanguageLevel();
+                if (languageLevel != null) {
+                    if (languageLevel.postProcessor != null) {
+                        languageLevel.postProcessor.postProcess(result, configuration);
+                    }
+                    if (languageLevel.validator != null) {
+                        languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+                    }
                 }
             }
         });
-        postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver ->
-                result.ifSuccessful(resultNode -> {
-                    if (resultNode instanceof CompilationUnit) {
-                        resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
-                    }
-                })
-        ));
-        postProcessors.add((result, configuration) -> {
-            if (configuration.isLexicalPreservationEnabled()) {
-                result.ifSuccessful(LexicalPreservingPrinter::setup);
+        processors.add(() -> new Processor() {
+            @Override
+            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+                configuration.getSymbolResolver().ifPresent(symbolResolver ->
+                        result.ifSuccessful(resultNode -> {
+                            if (resultNode instanceof CompilationUnit) {
+                                resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+                            }
+                        }));
+            }
+        });
+        processors.add(() -> new Processor() {
+            @Override
+            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+                if (configuration.isLexicalPreservationEnabled()) {
+                    result.ifSuccessful(LexicalPreservingPrinter::setup);
+                }
             }
         });
 
@@ -427,6 +436,10 @@ public class ParserConfiguration {
         return this;
     }
 
+    public List<Supplier<Processor>> getProcessors() {
+        return processors;
+    }
+
     public ParserConfiguration setLanguageLevel(LanguageLevel languageLevel) {
         this.languageLevel = languageLevel;
         return this;
@@ -484,32 +497,14 @@ public class ParserConfiguration {
     }
 
     //region weigl
-    public ParserConfiguration addPostProcessor(PostProcessor postProcessor) {
-        postProcessors.add(postProcessor);
+    public ParserConfiguration addProcessor(Processor processor) {
+        processors.add(() -> processor);
         return this;
     }
 
-    public ParserConfiguration addPostProcessor(int pos, PostProcessor postProcessor) {
-        postProcessors.add(pos, postProcessor);
+    public ParserConfiguration addProcessor(int pos, Processor processor) {
+        processors.add(pos, () -> processor);
         return this;
-    }
-
-    public ParserConfiguration addPreProcessor(PreProcessor postProcessor) {
-        preProcessors.add(postProcessor);
-        return this;
-    }
-
-    public ParserConfiguration addPreProcessor(int pos, PreProcessor postProcessor) {
-        preProcessors.add(pos, postProcessor);
-        return this;
-    }
-
-    public List<PreProcessor> getPreProcessors() {
-        return preProcessors;
-    }
-
-    public List<PostProcessor> getPostProcessors() {
-        return postProcessors;
     }
     //endregion
 }

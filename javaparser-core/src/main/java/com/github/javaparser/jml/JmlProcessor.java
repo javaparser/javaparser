@@ -1,9 +1,6 @@
 package com.github.javaparser.jml;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Problem;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -30,9 +27,9 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (11/20/21)
  */
-public class JmlProcessor implements ParseResult.PostProcessor {
+public class JmlProcessor extends Processor {
     @Override
-    public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();
@@ -40,7 +37,7 @@ public class JmlProcessor implements ParseResult.PostProcessor {
                 r.get().accept(new JmlReplaceVisitor(configuration, result.getProblems()), null);
             }
             JmlWarnRemaingJmlDoc warn = new JmlWarnRemaingJmlDoc();
-            warn.process(result, configuration);
+            warn.postProcess(result, configuration);
         }
     }
 

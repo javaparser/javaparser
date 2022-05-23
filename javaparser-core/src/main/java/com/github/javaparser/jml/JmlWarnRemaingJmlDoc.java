@@ -3,6 +3,7 @@ package com.github.javaparser.jml;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
+import com.github.javaparser.Processor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.CommentsCollection;
@@ -17,9 +18,9 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (2/1/22)
  */
-public class JmlWarnRemaingJmlDoc implements ParseResult.PostProcessor {
+public class JmlWarnRemaingJmlDoc extends Processor {
     @Override
-    public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();

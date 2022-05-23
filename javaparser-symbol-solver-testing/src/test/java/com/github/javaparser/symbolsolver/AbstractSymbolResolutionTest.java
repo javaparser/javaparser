@@ -35,12 +35,6 @@ import com.github.javaparser.utils.CodeGenerationUtils;
 
 public abstract class AbstractSymbolResolutionTest {
 
-    @AfterAll
-    public static void tearDown() {
-        // clear internal caches
-        JavaParserFacade.clearInstances();
-    }
-
     @AfterEach
     public void reset() {
         // reset configuration to not potentially disturb others tests.
@@ -48,8 +42,15 @@ public abstract class AbstractSymbolResolutionTest {
         StaticJavaParser.setConfiguration(new ParserConfiguration());
     }
 
+    @AfterAll
+    public static void tearDown() {
+        // clear internal caches
+        JavaParserFacade.clearInstances();
+    }
+
     /**
      * An initial attempt at allowing JDK-specific test cases. It is a work-in-progress, and subject to change.
+     *
      * @deprecated <strong>Note that use of TestJdk should be a last-resort, preferably implementing JDK-agnostic tests.</strong>
      */
     @Deprecated

@@ -39,13 +39,13 @@ jobs:
     steps:
       ## Checkout the current version of the code from the repo.
       - name: Checkout latest code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: "0"
 
       ## Setup the specified version of Java (includes maven/gradle).
       - name: Set up JDK ${{ matrix.jdk }}
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'              # v2 requires explicitly stating the distribution - `zulu` and `adopt` supported at time of writing
           java-version: ${{ matrix.jdk }}   # Use matrix to select which JDK level to use
@@ -58,7 +58,7 @@ jobs:
       ## Use a cache to reduce the build/test times (avoids having to download dependencies on EVERY run).
       ### https://help.github.com/en/actions/language-and-framework-guides/building-and-testing-java-with-maven#caching-dependencies
       - name: Cache Maven packages
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -81,26 +81,3 @@ jobs:
         if: always()
         with:
           files: "*/target/surefire-reports/*.xml"
-
-#
-#
-#      - name: CodeCov - JavaParser Core
-#        uses: codecov/codecov-action@v2.1.0
-#        timeout-minutes: 10
-#        with:
-#          files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
-#          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
-#          verbose: false # optional (default = false):
-#          flags: javaparser-core,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-#          env_vars: OS,JDK
-#
-#
-#      - name: CodeCov - JavaParser Symbol Solver
-#        uses: codecov/codecov-action@v2.1.0
-#        timeout-minutes: 10
-#        with:
-#          file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
-#          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
-#          verbose: false # optional (default = false):
-#          flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
-#          env_vars: OS,JDK

@@ -47,7 +47,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
  */
 public class ReflectionFactory {
     
-    private static String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
+    private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     public static ResolvedReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
@@ -128,7 +128,7 @@ public class ReflectionFactory {
         } else if (Modifier.isPrivate(modifiers)) {
             return AccessSpecifier.PRIVATE;
         } else {
-            return AccessSpecifier.PACKAGE_PRIVATE;
+            return AccessSpecifier.NONE;
         }
     }
 }

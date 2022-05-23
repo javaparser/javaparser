@@ -33,9 +33,9 @@ public enum AccessSpecifier {
     PUBLIC("public"),
     PRIVATE("private"),
     PROTECTED("protected"),
-    PACKAGE_PRIVATE("");
+    NONE("");
 
-    private String codeRepresenation;
+    private final String codeRepresenation;
 
     AccessSpecifier(String codeRepresentation) {
         this.codeRepresenation = codeRepresentation;

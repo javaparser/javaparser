@@ -21,8 +21,6 @@
 
 package com.github.javaparser;
 
-import static com.github.javaparser.Position.pos;
-
 /**
  * A range of characters in a source file, from "begin" to "end", including the characters at "begin" and "end".
  */
@@ -206,11 +204,27 @@ public class Range {
     }
 
     /**
+     * @param other The range to compare against.
+     * @return True if the end of this range is before (but not equal to) the given position to compare against.
+     */
+    public boolean isBefore(Range other) {
+        return end.isBefore(other.begin);
+    }
+
+    /**
      * @param position The position to compare against.
      * @return True if the start of this range is after (but not equal to) the given position to compare against.
      */
     public boolean isAfter(Position position) {
         return begin.isAfter(position);
+    }
+
+    /**
+     * @param other The range to compare against.
+     * @return True if the start of this range is after (but not equal to) the given position to compare against.
+     */
+    public boolean isAfter(Range other) {
+        return begin.isAfter(other.end);
     }
 
     @Override

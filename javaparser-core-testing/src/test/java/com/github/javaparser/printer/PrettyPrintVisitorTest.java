@@ -411,7 +411,7 @@ class PrettyPrintVisitorTest extends TestParser {
                 "}\n", cu.toString());
     }
 
-    private String expected = "public class SomeClass {\n" +
+    private final String expected = "public class SomeClass {\n" +
             "\n" +
             "    /**\n" +
             "     * tester line\n" +
@@ -505,12 +505,26 @@ class PrettyPrintVisitorTest extends TestParser {
         CompilationUnit cu = parseCompilationUnit(
                 ParserConfiguration.LanguageLevel.JAVA_13_PREVIEW,
                 "class X{String html = \"\"\"\n" +
-                "              <html>\n" +
-                "              </html>\"\"\";}"
+                        "              <html>\n" +
+                        "              </html>\"\"\";}"
         );
 
         assertEqualsStringIgnoringEol("String html = \"\"\"\n" +
                 "    <html>\n" +
                 "    </html>\"\"\";", cu.getClassByName("X").get().getFieldByName("html").get().toString());
+    }
+
+
+    @Test
+    void innerClassWithConstructorReceiverParameterTest() {
+        String innerClassWithConstructorReceiverParam =
+                "public class A {\n\n" +
+                        "    class InnerA {\n\n" +
+                        "        InnerA(A A.this) {\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}\n";
+        CompilationUnit cu = parseCompilationUnit(innerClassWithConstructorReceiverParam);
+        assertEqualsStringIgnoringEol(innerClassWithConstructorReceiverParam, print(cu));
     }
 }

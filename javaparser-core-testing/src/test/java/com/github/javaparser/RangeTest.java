@@ -21,9 +21,11 @@
 
 package com.github.javaparser;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class RangeTest {
 
@@ -48,12 +50,12 @@ class RangeTest {
 
     // Potential expansion option for a larger variety of these categories of values to be provided to parameterised tests.
     //@formatter:off
-    private Range[] rangePair_overlappingButNotContained = new Range[]{Range.range(posA1, posC1), Range.range(posB1, posE1)};
-    private Range[] rangePair_unrelated                  = new Range[]{Range.range(posA1, posB1), Range.range(posD1, posE1)};
-    private Range[] rangePair_equalBeginEnd              = new Range[]{Range.range(posA1, posB1), Range.range(posA1, posB1)};
-    private Range[] rangePair_strictlyContained          = new Range[]{Range.range(posA1, posE1), Range.range(posB1, posD1)};
-    private Range[] rangePair_touchingLineAndColumn      = new Range[]{Range.range(posA1, posC1), Range.range(posC1, posE1)};
-    private Range[] rangePair_touchingLineNotColumn      = new Range[]{Range.range(posA1, posC1), Range.range(posC5, posD1)};
+    private final Range[] rangePair_overlappingButNotContained = new Range[]{Range.range(posA1, posC1), Range.range(posB1, posE1)};
+    private final Range[] rangePair_unrelated = new Range[]{Range.range(posA1, posB1), Range.range(posD1, posE1)};
+    private final Range[] rangePair_equalBeginEnd = new Range[]{Range.range(posA1, posB1), Range.range(posA1, posB1)};
+    private final Range[] rangePair_strictlyContained = new Range[]{Range.range(posA1, posE1), Range.range(posB1, posD1)};
+    private final Range[] rangePair_touchingLineAndColumn = new Range[]{Range.range(posA1, posC1), Range.range(posC1, posE1)};
+    private final Range[] rangePair_touchingLineNotColumn = new Range[]{Range.range(posA1, posC1), Range.range(posC5, posD1)};
     //@formatter:on
 
     @Test
@@ -256,6 +258,38 @@ class RangeTest {
         Range r2 = rangePair_strictlyContained[1];
         assertTrue(r1.overlapsWith(r2));
         assertTrue(r2.overlapsWith(r1));
+    }
+
+    @Test
+    void rangePair_is_before() {
+        Range r1 = Range.range(new Position(1, 1), new Position(1, 2));
+        Range r2 = Range.range(new Position(1, 3), new Position(1, 4));
+        assertTrue(r1.isBefore(r2));
+    }
+
+    @Test
+    void rangePair_is_not_before() {
+        Range r1 = Range.range(new Position(1, 1), new Position(1, 2));
+        Range r2 = Range.range(new Position(1, 3), new Position(1, 4));
+        Range r3 = Range.range(new Position(1, 1), new Position(1, 4));
+        assertFalse(r2.isBefore(r1));
+        assertFalse(r3.isBefore(r1));
+    }
+
+    @Test
+    void rangePair_is_after() {
+        Range r1 = Range.range(new Position(1, 1), new Position(1, 2));
+        Range r2 = Range.range(new Position(1, 3), new Position(1, 4));
+        assertTrue(r2.isAfter(r1));
+    }
+
+    @Test
+    void rangePair_is_not_after() {
+        Range r1 = Range.range(new Position(1, 1), new Position(1, 2));
+        Range r2 = Range.range(new Position(1, 3), new Position(1, 4));
+        Range r3 = Range.range(new Position(1, 1), new Position(1, 4));
+        assertFalse(r1.isAfter(r2));
+        assertFalse(r1.isAfter(r3));
     }
 
 }

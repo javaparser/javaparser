@@ -110,16 +110,16 @@ class EnumResolutionTest extends AbstractResolutionTest {
             ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
 
             EnumDeclaration ed_public = Navigator.findType(clazz, "EnumPublic").get().toEnumDeclaration().get();
-            assertEquals(AccessSpecifier.PUBLIC, ((JavaParserEnumDeclaration) ed_public.resolve()).accessSpecifier());
+            assertEquals(AccessSpecifier.PUBLIC, ed_public.resolve().accessSpecifier());
 
             EnumDeclaration ed_protected = Navigator.findType(clazz, "EnumProtected").get().toEnumDeclaration().get();
-            assertEquals(AccessSpecifier.PROTECTED, ((JavaParserEnumDeclaration) ed_protected.resolve()).accessSpecifier());
+            assertEquals(AccessSpecifier.PROTECTED, ed_protected.resolve().accessSpecifier());
 
             EnumDeclaration ed_private = Navigator.findType(clazz, "EnumPrivate").get().toEnumDeclaration().get();
-            assertEquals(AccessSpecifier.PRIVATE, ((JavaParserEnumDeclaration) ed_private.resolve()).accessSpecifier());
+            assertEquals(AccessSpecifier.PRIVATE, ed_private.resolve().accessSpecifier());
 
             EnumDeclaration ed_default = Navigator.findType(clazz, "EnumDefault").get().toEnumDeclaration().get();
-            assertEquals(AccessSpecifier.PACKAGE_PRIVATE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
+            assertEquals(AccessSpecifier.NONE, ed_default.resolve().accessSpecifier());
         } finally {
             StaticJavaParser.setConfiguration(new ParserConfiguration());
         }
