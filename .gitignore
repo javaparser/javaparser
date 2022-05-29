@@ -1,28 +1,28 @@
-/lib
-bin
-.manager
-target
-.settings
-*~
-.project
-.classpath
-.idea/
-*.iml
-release.properties
-**/.DS_Store
-**/pom.xml.releaseBackup
+bazel-*
+.gradle/
+target/
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# IDE
+.idea
+.ijwb
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# Vim.
+*.sw*
+*.vim
 
-.gradle
-*.ipr
-*.iws
-build-*
-*.asc
-build
-out
-.java-version
+# Vscode Settings
+.vscode/settings.json
+
+# Joern generated files
+.bsp/
+*defaultContentRootJars*
+joern-cli.zip
+joern-cli/project/*
+joern-cli/workspace/*
+joern-cli/frontends/kotlin2cpg/cpg*.bin*
+*.fuse_hidden*
+out/*
+orig_workspace/*
+workspace/*
+
+
