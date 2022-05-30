@@ -9,6 +9,7 @@ import com.github.javaparser.ast.jml.doc.JmlDoc;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * @author Alexander Weigl
@@ -42,12 +43,16 @@ public class JmlDocSanitizer {
             }
             s.append(jmlDoc.getContent().getText());
         }
-        cleanComments(s.getBuffer());
-        cleanAtSigns(s.getBuffer());
+        return toSanitizedString(s.getBuffer());
+    }
+
+    public String toSanitizedString(StringBuilder s) {
+        cleanComments(s);
+        cleanAtSigns(s);
         return s.toString();
     }
 
-    private void cleanAtSigns(StringBuilder s) {
+    private static void cleanAtSigns(StringBuilder s) {
         for (int pos = 0; pos < s.length(); pos++) {
             char cur = s.charAt(pos);
             if (cur == '\n') {
@@ -82,7 +87,7 @@ public class JmlDocSanitizer {
         char second = s.charAt(pos + 1);
         int end;
         if (second == '*') {
-            end = s.indexOf("*/", pos + 2);
+            end = s.indexOf("*/", pos + 2) + 2;
         } else {
             end = s.indexOf("\n", pos + 2);
         }
@@ -128,13 +133,14 @@ public class JmlDocSanitizer {
         if (pos + 2 == posAt) //unconditonal JML comment
             return true;
 
-        String[] keys = s.substring(pos + 2, posAt).split("[+-]");
+        String[] keys = splitTags(s.substring(pos + 2, posAt));
         return isActiveJmlSpec(keys);
+    }
 
-        /*for (int i = pos + 2; i < s.length() ; i++) {
-            if()
-            else if (Character.isJavaIdentifierPart(point) || point == '-' || point == '+') {
-        }*/
+    private static final Pattern tag = Pattern.compile("(?=[+-])");
+
+    private static String[] splitTags(String substring) {
+        return tag.split(substring);
     }
 
     private boolean isJavaCommentStart(StringBuilder s, int pos) {
