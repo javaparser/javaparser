@@ -6466,22 +6466,22 @@ JmlStatement JmlStatement():
 { JavaToken begin; Expression expr,target; Statement stmt; SimpleName label;}
 {
     LOOKAHEAD(2) label=SimpleName() {begin=token();} ":"
-	{ return new JmlLabelStmt(range(begin, token()), label); }
+	{ return new JmlLabelStmt(range(begin, token()), new NodeList<>(), label); }
   |
    (<ASSERT> | <ASSUME> | <HENCE_BY> | <HENCE_BY_REDUNDANTLY> | <SET>)
     { begin = token(); }
     expr=Expression()
     ";"
-    { return new JmlExpressionStmt(range(begin, token()), expr); }
+    { return new JmlExpressionStmt(range(begin, token()), new NodeList<>(), expr); }
   | <GHOST> { begin = token(); }
     stmt=BlockStatement()
-    { return new JmlGhostStmt(range(begin, token()), stmt); }
+    { return new JmlGhostStmt(range(begin, token()), new NodeList<>(), stmt); }
   | <UNREACHABLE> {begin=token();} ";"
-    { return new JmlUnreachableStmt(range(begin, token())); }
+    { return new JmlUnreachableStmt(range(begin, token()), new NodeList<>()); }
   | <BEGIN>
-    { return new JmlBeginStmt(range(token(), token())); }
+    { return new JmlBeginStmt(range(token(), token()), new NodeList<>()); }
   | <END>
-    { return new JmlBeginStmt(range(token(), token())); }
+    { return new JmlBeginStmt(range(token(), token()), new NodeList<>()); }
 }
 
 JmlClause JmlLoopInvClause():
@@ -6990,7 +6990,7 @@ JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
 {
     decl=FieldDeclaration(modifier)
     {
-        return new JmlFieldDeclaration(range(decl, decl), decl);
+        return new JmlFieldDeclaration(range(decl, decl), new NodeList<>(), decl);
     }
 }
 
@@ -7044,7 +7044,7 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
         MethodDeclaration m = new  MethodDeclaration(range(begin, token()),
             modifier.modifiers, modifier.annotations, typeParameters.list,
             type, name, parameters.a, throws_, body, parameters.b);
-        return new JmlMethodDeclaration(range(m,m), m, c);
+        return new JmlMethodDeclaration(range(m,m), new NodeList<>(), m, c);
     }
 }
 
@@ -7078,7 +7078,7 @@ JmlClassLevel JmlClassAccessible(ModifierHolder modifiers):
   [<ESC_MEASURED_BY> measuredBy=Expression()]
   ";"
   {
-    return new JmlClassAccessibleDeclaration(range(begin, token()),
+    return new JmlClassAccessibleDeclaration(range(begin, token()), new NodeList<>(),
                              modifiers.modifiers, var, expressions, measuredBy);}
 }
 
@@ -7096,7 +7096,7 @@ JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
   )
   ";"
   { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
-    return new JmlRepresentsDeclaration(range(begin, token()), modifiers.modifiers, id, expr);}
+    return new JmlRepresentsDeclaration(range(begin, token()), new NodeList<>(), modifiers.modifiers, id, expr);}
 }
 
 

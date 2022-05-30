@@ -32,13 +32,15 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
 
     private Expression invariant;
 
+    private NodeList<SimpleName> jmlTags;
+
     public JmlClassExprDeclaration() {
         super(null);
     }
 
     @AllFieldsConstructor
-    public JmlClassExprDeclaration(NodeList<Modifier> modifiers, SimpleName kind, SimpleName name, Expression invariant) {
-        this(null, modifiers, kind, invariant);
+    public JmlClassExprDeclaration(NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, SimpleName kind, SimpleName name, Expression invariant) {
+        this(null, jmlTags, modifiers, kind, name, invariant);
     }
 
     public JmlClassExprDeclaration(TokenRange range, JavaToken begin, NodeList<Modifier> modifiers, Expression expr) {
@@ -82,6 +84,12 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
         if (node == null) {
             return false;
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
@@ -106,6 +114,12 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
         if (node == invariant) {
             setInvariant((Expression) replacementNode);
             return true;
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
+                return true;
+            }
         }
         if (node == kind) {
             setKind((SimpleName) replacementNode);
@@ -261,19 +275,40 @@ public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclarati
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClassExprDeclaration removeName() {
-        return setName(null);
+        return setName((SimpleName) null);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClassExprDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, SimpleName kind, SimpleName name, Expression invariant) {
+    public JmlClassExprDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, SimpleName kind, SimpleName name, Expression invariant) {
         super(tokenRange);
+        setJmlTags(jmlTags);
         setModifiers(modifiers);
         setKind(kind);
         setName(name);
         setInvariant(invariant);
         customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClassExprDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
     }
 }

@@ -21,7 +21,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public class JmlDocStmt extends Statement {
+public class JmlDocStmt extends Statement implements JmlDocContainer {
 
     private NodeList<JmlDoc> jmlComments;
 

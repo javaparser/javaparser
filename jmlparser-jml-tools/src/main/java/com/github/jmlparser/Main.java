@@ -58,7 +58,7 @@ public class Main {
         return config;
     }
 
-    private static Collection<? extends Node> parse(List<String> files, ParserConfiguration config) {
+    public static Collection<CompilationUnit> parse(List<String> files, ParserConfiguration config) {
         List<File> expanded = new ArrayList<>(files.size() * 10);
         for (String file : files) {
             File f = new File(file);
@@ -119,7 +119,7 @@ public class Main {
 
     private static ParserConfiguration createParserConfiguration(Args args) {
         ParserConfiguration config = new ParserConfiguration();
-        config.setJmlKeys(new TreeSet<>(args.activeJmlKeys));
+        config.getJmlKeys().add(new ArrayList<>(args.activeJmlKeys));
         config.setProcessJml(!args.disableJml);
         return config;
     }

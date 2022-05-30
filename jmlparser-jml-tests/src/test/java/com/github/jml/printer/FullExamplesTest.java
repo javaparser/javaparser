@@ -3,6 +3,7 @@ package com.github.jml.printer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Processor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -168,12 +169,12 @@ public class FullExamplesTest {
 
 }
 
-class StoreJMLComments implements ParseResult.PostProcessor {
+class StoreJMLComments extends Processor {
     private final JmlDocSanitizer sanitizer = new JmlDocSanitizer(new TreeSet<>());
     private String origin;
 
     @Override
-    public void process(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (result.getResult().isPresent()) {
             final Node node = result.getResult().get();
             if (node instanceof CompilationUnit) {

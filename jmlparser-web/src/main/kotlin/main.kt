@@ -95,16 +95,16 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.renderPage(params: Pa
                 config.isProcessJml = !doNotProcessJml
 
                 if (keyKey != null) {
-                    config.jmlKeys.add("key")
+                    config.jmlKeys.add(arrayListOf<String>("key"))
                 }
                 if (keyESC != null) {
-                    config.jmlKeys.add("openjml")
+                    config.jmlKeys.add(arrayListOf<String>("openjml"))
                 }
                 if (keyOpenJml != null) {
-                    config.jmlKeys.add("ESC")
+                    config.jmlKeys.add(arrayListOf<String>("ESC"))
                 }
                 if (keyRAC != null) {
-                    config.jmlKeys.add("RAC")
+                    config.jmlKeys.add(arrayListOf<String>("RAC"))
                 }
 
                 val jpb = JavaParser(config)

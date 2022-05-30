@@ -34,7 +34,6 @@ import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
 
 import java.nio.charset.Charset;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,16 +48,40 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+    //region jmlparser
+    private List<List<String>> jmlKeys = new ArrayList<>();
 
-    private Set<String> jmlKeys = new TreeSet<>();
-
-    public Set<String> getJmlKeys() {
+    public List<List<String>> getJmlKeys() {
         return jmlKeys;
     }
 
-    public void setJmlKeys(Set<String> jmlKeys) {
+    public void setJmlKeys(List<List<String>> jmlKeys) {
         this.jmlKeys = jmlKeys;
     }
+
+    private boolean keepJmlDocs = false;
+
+    public ParserConfiguration setKeepJmlDocs(boolean flag) {
+        this.keepJmlDocs = flag;
+        return this;
+    }
+
+    public boolean isKeepJmlDocs() {
+        return this.keepJmlDocs;
+    }
+
+    private boolean preprocessJml = false;
+
+    public ParserConfiguration setProcessJml(boolean jml) {
+        this.preprocessJml = jml;
+        return this;
+    }
+
+    public boolean isProcessJml() {
+        return this.preprocessJml;
+    }
+
+    //endregion
 
     public enum LanguageLevel {
         /**
@@ -227,7 +250,6 @@ public class ParserConfiguration {
     private boolean ignoreAnnotationsWhenAttributingComments = false;
     private boolean lexicalPreservationEnabled = false;
     private boolean preprocessUnicodeEscapes = false;
-    private boolean preprocessJml = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
     private LanguageLevel languageLevel = POPULAR;
@@ -463,16 +485,6 @@ public class ParserConfiguration {
 
     public boolean isPreprocessUnicodeEscapes() {
         return preprocessUnicodeEscapes;
-    }
-
-
-    public ParserConfiguration setProcessJml(boolean jml) {
-        this.preprocessJml = jml;
-        return this;
-    }
-
-    public boolean isProcessJml() {
-        return this.preprocessJml;
     }
 
     public ParserConfiguration setDetectOriginalLineSeparator(boolean detectOriginalLineSeparator) {

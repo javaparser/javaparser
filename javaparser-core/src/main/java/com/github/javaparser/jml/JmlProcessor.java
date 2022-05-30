@@ -4,10 +4,13 @@ import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.ArbitraryNodeContainer;
 import com.github.javaparser.ast.jml.NodeWithContracts;
+import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.stmt.JmlStatement;
@@ -16,12 +19,12 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Alexander Weigl
@@ -33,11 +36,22 @@ public class JmlProcessor extends Processor {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();
+            ArrayList<JmlDocContainer> processedJmlDoc = new ArrayList<>(4096);
             if (r.isPresent() && comments.isPresent()) {
-                r.get().accept(new JmlReplaceVisitor(configuration, result.getProblems()), null);
+                for (List<String> activeKeys : configuration.getJmlKeys()) {
+                    final JmlReplaceVisitor v = new JmlReplaceVisitor(configuration, new TreeSet<>(activeKeys), result.getProblems());
+                    r.get().accept(v, null);
+                    processedJmlDoc.addAll(v.processedJmlDoc);
+                }
             }
-            JmlWarnRemaingJmlDoc warn = new JmlWarnRemaingJmlDoc();
-            warn.postProcess(result, configuration);
+            if (!configuration.isKeepJmlDocs()) {
+                for (JmlDocContainer jmlDocContainer : processedJmlDoc) {
+                    ((Node) jmlDocContainer).remove();
+                }
+
+                JmlWarnRemaingJmlDoc warn = new JmlWarnRemaingJmlDoc();
+                warn.postProcess(result, configuration);
+            }
         }
     }
 
@@ -47,11 +61,18 @@ public class JmlProcessor extends Processor {
         final JavaParser javaParser;
         private final List<Problem> problems;
 
-        private JmlReplaceVisitor(ParserConfiguration config, List<Problem> problems) {
+        private final List<JmlDocContainer> processedJmlDoc = new ArrayList<>(4096);
+
+        private NodeList<SimpleName> enabledKeys = new NodeList<>();
+
+        private JmlReplaceVisitor(ParserConfiguration config, Set<String> activeKeys, List<Problem> problems) {
             this.problems = problems;
             this.reporter = new ProblemReporter(this.problems::add);
             javaParser = new JavaParser(config);
-            sanitizer = new JmlDocSanitizer(config.getJmlKeys());
+            sanitizer = new JmlDocSanitizer(activeKeys);
+            for (String k : activeKeys) {
+                enabledKeys.add(new SimpleName(k));
+            }
         }
 
         @Nullable
@@ -59,6 +80,17 @@ public class JmlProcessor extends Processor {
             ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlMethodLevel(sanitizer.asString(jmlDocs));
             problems.addAll(r.getProblems());
             return r.getResult().orElse(null);
+        }
+
+        private void setJmlTags(ArbitraryNodeContainer result) {
+            if (result != null) {
+                for (Node child : result.getChildren()) {
+                    if (child instanceof NodeWithJmlTags) {
+                        ((NodeWithJmlTags) child).setJmlTags(
+                                (NodeList<SimpleName>) enabledKeys.accept(new CloneVisitor(), null));
+                    }
+                }
+            }
         }
 
         @Nullable
@@ -84,8 +116,10 @@ public class JmlProcessor extends Processor {
 
         @Override
         public JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
+            processedJmlDoc.add(n);
             ArbitraryNodeContainer t = parseJmlClasslevel(n.getJmlComments());
             if (t != null) {
+                setJmlTags(t);
                 TypeDeclaration<?> parent = (TypeDeclaration<?>) n.getParentNode().get();
                 NodeList<BodyDeclaration<?>> members = parent.getMembers();
                 int pos = members.indexOf(n);
@@ -106,7 +140,6 @@ public class JmlProcessor extends Processor {
                     }
                 } else {
                     BodyDeclaration<?> next = members.get(pos + 1);
-                    members.remove(pos);
                     for (Node child : t.getChildren()) {
                         if (child instanceof BodyDeclaration<?>) {
                             members.add(pos, (BodyDeclaration<?>) child);
@@ -120,16 +153,16 @@ public class JmlProcessor extends Processor {
                         }
                     }
                 }
-
-                n.remove();
             }
             return n;
         }
 
         @Override
         public Visitable visit(JmlDocType n, Void arg) {
+            processedJmlDoc.add(n);
             ArbitraryNodeContainer t = parseJmlTypeLevel(n.getJmlComments());
             if (t != null) {
+                setJmlTags(t);
                 CompilationUnit parent = (CompilationUnit) n.getParentNode().get();
                 NodeList<TypeDeclaration<?>> members = parent.getTypes();
                 int pos = members.indexOf(n);
@@ -164,15 +197,16 @@ public class JmlProcessor extends Processor {
         }
 
         private int handleJmlStatementLevel(BlockStmt p, JmlDocStmt n, int pos) {
+            processedJmlDoc.add(n);
             ArbitraryNodeContainer t = parseJmlMethodLevel(n.getJmlComments());
 
             if (t == null) {
                 reporter.report(n, "Could not handle the JML comment.");
                 return pos;
             }
+            setJmlTags(t);
 
-            // remove this node from the AST
-            n.remove();
+            pos = pos + 1;
 
             // possible the next statement after the given comment
             @Nullable Statement nextStatement = pos < p.getStatements().size() ? p.getStatement(pos) : null;
@@ -234,10 +268,12 @@ public class JmlProcessor extends Processor {
         private void handleModifier(Modifier n) {
             JmlDocModifier doc = (JmlDocModifier) n.getKeyword();
             if (n.getParentNode().isPresent()) {
+                processedJmlDoc.add(doc);
                 NodeWithModifiers<?> parent = (NodeWithModifiers<?>) n.getParentNode().get();
                 ArbitraryNodeContainer t = parseJmlModifierLevel(doc.getJmlComments());
                 if (t == null) return;
-                n.remove();
+                setJmlTags(t);
+
                 for (Node child : t.getChildren()) {
                     if (child instanceof Modifier) {
                         parent.getModifiers().add((Modifier) child);

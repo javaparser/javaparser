@@ -40,4 +40,6 @@ public class JmlBeginStmtMetaModel extends JmlStatementMetaModel {
     JmlBeginStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlBeginStmt.class, "JmlBeginStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
+
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
 }

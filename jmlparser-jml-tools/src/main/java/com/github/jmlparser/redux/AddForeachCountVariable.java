@@ -1,5 +1,6 @@
 package com.github.jmlparser.redux;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -21,7 +22,7 @@ public class AddForeachCountVariable {
         BlockStmt stmt = new BlockStmt();
         forEachStmt.replace(stmt);
         VariableDeclarationExpr vdecl = new VariableDeclarationExpr(PrimitiveType.intType(), VARIABLE_NAME_COUNT);
-        JmlGhostStmt decl = new JmlGhostStmt(new ExpressionStmt(vdecl));
+        JmlGhostStmt decl = new JmlGhostStmt(new NodeList<>(), new ExpressionStmt(vdecl));
         stmt.addStatement(decl);
         stmt.addStatement(forEachStmt);
         Statement loopBody = forEachStmt.getBody();

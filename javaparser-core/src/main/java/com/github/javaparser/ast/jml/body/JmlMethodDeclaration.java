@@ -2,7 +2,9 @@ package com.github.javaparser.ast.jml.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -28,21 +30,24 @@ public class JmlMethodDeclaration extends JmlClassLevel<JmlMethodDeclaration> {
     @OptionalProperty
     private JmlContract contract;
 
+    private NodeList<SimpleName> jmlTags;
+
     public JmlMethodDeclaration() {
-        this(null, null);
+        this(null, new NodeList<>(), new MethodDeclaration(), null);
     }
 
     @AllFieldsConstructor
-    public JmlMethodDeclaration(MethodDeclaration methodDeclaration, JmlContract contract) {
-        this(null, methodDeclaration, contract);
+    public JmlMethodDeclaration(NodeList<SimpleName> jmlTags, MethodDeclaration methodDeclaration, JmlContract contract) {
+        this(null, jmlTags, methodDeclaration, contract);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlMethodDeclaration(TokenRange tokenRange, MethodDeclaration methodDeclaration, JmlContract contract) {
+    public JmlMethodDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, MethodDeclaration methodDeclaration, JmlContract contract) {
         super(tokenRange);
+        setJmlTags(jmlTags);
         setMethodDeclaration(methodDeclaration);
         setContract(contract);
         customInitialization();
@@ -91,6 +96,12 @@ public class JmlMethodDeclaration extends JmlClassLevel<JmlMethodDeclaration> {
                 return true;
             }
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -103,6 +114,12 @@ public class JmlMethodDeclaration extends JmlClassLevel<JmlMethodDeclaration> {
         if (contract != null) {
             if (node == contract) {
                 setContract((JmlContract) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
                 return true;
             }
         }
@@ -170,5 +187,25 @@ public class JmlMethodDeclaration extends JmlClassLevel<JmlMethodDeclaration> {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlMethodDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlMethodDeclarationMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlMethodDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
     }
 }

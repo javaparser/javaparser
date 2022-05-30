@@ -43,5 +43,7 @@ public class JmlMethodDeclarationMetaModel extends JmlClassLevelMetaModel {
 
     public PropertyMetaModel contractPropertyMetaModel;
 
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
+
     public PropertyMetaModel methodDeclarationPropertyMetaModel;
 }

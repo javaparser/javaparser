@@ -3,6 +3,7 @@ package com.github.javaparser.ast.jml.body;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -30,21 +31,24 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel<JmlClassAccessi
     @OptionalProperty
     private Expression measuredBy;
 
+    private NodeList<SimpleName> jmlTags;
+
     public JmlClassAccessibleDeclaration() {
-        this(null, new NodeList<>(), null, new NodeList<>(), null);
+        this(null, new NodeList<>(), new NodeList<>(), null, new NodeList<>(), null);
     }
 
     @AllFieldsConstructor
-    public JmlClassAccessibleDeclaration(NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
-        this(null, modifiers, variable, expressions, measuredBy);
+    public JmlClassAccessibleDeclaration(NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
+        this(null, jmlTags, modifiers, variable, expressions, measuredBy);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClassAccessibleDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
+    public JmlClassAccessibleDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Expression variable, NodeList<Expression> expressions, Expression measuredBy) {
         super(tokenRange);
+        setJmlTags(jmlTags);
         setModifiers(modifiers);
         setVariable(variable);
         setExpressions(expressions);
@@ -104,6 +108,12 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel<JmlClassAccessi
                 return true;
             }
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
         if (measuredBy != null) {
             if (node == measuredBy) {
                 removeMeasuredBy();
@@ -128,6 +138,12 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel<JmlClassAccessi
         for (int i = 0; i < expressions.size(); i++) {
             if (expressions.get(i) == node) {
                 expressions.set(i, (Expression) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
                 return true;
             }
         }
@@ -245,5 +261,25 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevel<JmlClassAccessi
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClassAccessibleDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClassAccessibleDeclarationMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClassAccessibleDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
     }
 }

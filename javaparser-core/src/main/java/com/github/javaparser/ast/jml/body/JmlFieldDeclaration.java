@@ -2,7 +2,10 @@ package com.github.javaparser.ast.jml.body;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
@@ -23,21 +26,24 @@ public class JmlFieldDeclaration extends JmlClassLevel<JmlFieldDeclaration> {
 
     private FieldDeclaration decl;
 
+    private NodeList<SimpleName> jmlTags;
+
     public JmlFieldDeclaration() {
-        this(null);
+        this(null, null);
     }
 
     @AllFieldsConstructor
-    public JmlFieldDeclaration(FieldDeclaration decl) {
-        this(null, decl);
+    public JmlFieldDeclaration(NodeList<SimpleName> jmlTags, FieldDeclaration decl) {
+        this(null, jmlTags, decl);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlFieldDeclaration(TokenRange tokenRange, FieldDeclaration decl) {
+    public JmlFieldDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, FieldDeclaration decl) {
         super(tokenRange);
+        setJmlTags(jmlTags);
         setDecl(decl);
         customInitialization();
     }
@@ -107,6 +113,12 @@ public class JmlFieldDeclaration extends JmlClassLevel<JmlFieldDeclaration> {
             setDecl((FieldDeclaration) replacementNode);
             return true;
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
+                return true;
+            }
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -120,5 +132,40 @@ public class JmlFieldDeclaration extends JmlClassLevel<JmlFieldDeclaration> {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlFieldDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlFieldDeclarationMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlFieldDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }

@@ -42,4 +42,6 @@ public class JmlFieldDeclarationMetaModel extends JmlClassLevelMetaModel {
     }
 
     public PropertyMetaModel declPropertyMetaModel;
+
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
 }

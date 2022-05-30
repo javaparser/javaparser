@@ -21,7 +21,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public class JmlDocType extends TypeDeclaration<JmlDocType> {
+public class JmlDocType extends TypeDeclaration<JmlDocType> implements JmlDocContainer {
 
     private NodeList<JmlDoc> jmlComments;
 

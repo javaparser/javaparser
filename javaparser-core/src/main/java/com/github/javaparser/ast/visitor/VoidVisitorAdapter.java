@@ -761,6 +761,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlExpressionStmt n, final A arg) {
         n.getExpression().accept(this, arg);
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -816,6 +817,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlUnreachableStmt n, final A arg) {
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -839,6 +841,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlRefiningStmt n, final A arg) {
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -857,6 +860,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlClassExprDeclaration n, final A arg) {
         n.getInvariant().accept(this, arg);
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getKind().accept(this, arg);
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().ifPresent(l -> l.accept(this, arg));
@@ -867,6 +871,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlClassAccessibleDeclaration n, final A arg) {
         n.getExpressions().forEach(p -> p.accept(this, arg));
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getMeasuredBy().ifPresent(l -> l.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getVariable().accept(this, arg);
@@ -877,6 +882,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlRepresentsDeclaration n, final A arg) {
         n.getExpr().accept(this, arg);
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getAnnotations().forEach(p -> p.accept(this, arg));
@@ -910,6 +916,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlGhostStmt n, final A arg) {
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getStatement().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -941,6 +948,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlMethodDeclaration n, final A arg) {
         n.getContract().ifPresent(l -> l.accept(this, arg));
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getMethodDeclaration().accept(this, arg);
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -992,6 +1000,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final JmlFieldDeclaration n, final A arg) {
         n.getDecl().accept(this, arg);
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -1019,16 +1028,19 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final JmlBeginStmt n, final A arg) {
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     public void visit(final JmlEndStmt n, final A arg) {
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
     public void visit(final JmlLabelStmt n, final A arg) {
+        n.getJmlTags().forEach(p -> p.accept(this, arg));
         n.getLabel().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

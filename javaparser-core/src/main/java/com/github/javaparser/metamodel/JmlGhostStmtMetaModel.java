@@ -41,5 +41,7 @@ public class JmlGhostStmtMetaModel extends JmlStatementMetaModel {
         super(superBaseNodeMetaModel, JmlGhostStmt.class, "JmlGhostStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
+
     public PropertyMetaModel statementPropertyMetaModel;
 }

@@ -6,6 +6,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,15 +22,23 @@ public class JmlDocSanitizer {
     }
 
     public String asString(NodeList<JmlDoc> jmlDocs) {
+        return asString(jmlDocs, true);
+    }
+
+    public String asString(NodeList<JmlDoc> jmlDocs, boolean emulateGlobalPosition) {
         if (jmlDocs.isEmpty()) return "";
-        StringConstructer s = new StringConstructer();
+        StringConstructor s = new StringConstructor();
 
         for (JmlDoc jmlDoc : jmlDocs) {
             JavaToken tok = jmlDoc.getContent();
-            final Optional<Range> range = tok.getRange();
-            if (range.isPresent()) {
-                Position cur = range.get().begin;
-                s.expandTo(cur.line, cur.column);
+            if (emulateGlobalPosition) {
+                final Optional<Range> range = tok.getRange();
+                if (range.isPresent()) {
+                    Position cur = range.get().begin;
+                    s.expandTo(cur.line, cur.column);
+                }
+            } else {
+                s.append("\n");
             }
             s.append(jmlDoc.getContent().getText());
         }
@@ -132,7 +141,7 @@ public class JmlDocSanitizer {
         return s.charAt(pos) == '/' && (s.charAt(pos + 1) == '*' || s.charAt(pos + 1) == '/');
     }
 
-    public boolean isActiveJmlSpec(String[] keys) {
+    public static boolean isActiveJmlSpec(Collection<String> activeKeys, String[] keys) {
         if (keys.length == 0) {
             //a JML annotation with no keys is always included,
             return true;
@@ -150,8 +159,8 @@ public class JmlDocSanitizer {
             if (marker.isEmpty()) continue;
 
             plusKeyFound = plusKeyFound || isPositive(marker);
-            enabledPlusKeyFound = enabledPlusKeyFound || isPositive(marker) && isEnabled(marker);
-            enabledNegativeKeyFound = enabledNegativeKeyFound || isNegative(marker) && isEnabled(marker);
+            enabledPlusKeyFound = enabledPlusKeyFound || isPositive(marker) && isEnabled(activeKeys, marker);
+            enabledNegativeKeyFound = enabledNegativeKeyFound || isNegative(marker) && isEnabled(activeKeys, marker);
             if ("-".equals(marker) || "+".equals(marker)) {
                 return false;
             }
@@ -160,40 +169,50 @@ public class JmlDocSanitizer {
         return (!plusKeyFound || enabledPlusKeyFound) && !enabledNegativeKeyFound;
     }
 
-    private boolean isNegative(String marker) {
+
+    public boolean isActiveJmlSpec(String[] keys) {
+        return isActiveJmlSpec(enabledKeys, keys);
+    }
+
+    private static boolean isNegative(String marker) {
         return marker.charAt(0) == '-';
     }
 
-    private boolean isEnabled(String marker) {
+    private static boolean isEnabled(Collection<String> enabledKeys, String marker) {
         // remove [+-] prefix
         return enabledKeys.contains(marker.substring(1).toLowerCase());
     }
 
-    private boolean isPositive(String marker) {
+    private static boolean isPositive(String marker) {
         return marker.charAt(0) == '+';
+    }
+
+    public Set<String> getEnabledKeys() {
+        return enabledKeys;
     }
 }
 
-class StringConstructer {
+class StringConstructor {
     private final StringBuilder sb = new StringBuilder(1024);
     //JavaCC starts with 1/1
     private int curLine = 1;
     private int curColumn = 1;
 
-    public StringConstructer append(String value) {
+    public StringConstructor append(String value) {
         sb.ensureCapacity(sb.length() + value.length() + 1);
         for (char c : value.toCharArray()) {
             sb.append(c);
-            if(c=='\n'){
-                curColumn = 1; curLine++;
-            }else{
+            if (c == '\n') {
+                curColumn = 1;
+                curLine++;
+            } else {
                 curColumn++;
             }
         }
         return this;
     }
 
-    public StringConstructer expandTo(int line, int column) {
+    public StringConstructor expandTo(int line, int column) {
         if (curLine > line || (curLine == line && curColumn > column)) {
             throw new IllegalArgumentException();
         }

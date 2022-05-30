@@ -1387,10 +1387,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlExpressionStmt n, final A arg) {
         Expression expression = (Expression) n.getExpression().accept(this, arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expression == null)
             return null;
         n.setExpression(expression);
+        n.setJmlTags(jmlTags);
         n.setComment(comment);
         return n;
     }
@@ -1488,7 +1490,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlUnreachableStmt n, final A arg) {
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setJmlTags(jmlTags);
         n.setComment(comment);
         return n;
     }
@@ -1522,7 +1526,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlRefiningStmt n, final A arg) {
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setJmlTags(jmlTags);
         n.setComment(comment);
         return n;
     }
@@ -1550,6 +1556,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression invariant = (Expression) n.getInvariant().accept(this, arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         SimpleName kind = (SimpleName) n.getKind().accept(this, arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1558,6 +1565,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setInvariant(invariant);
+        n.setJmlTags(jmlTags);
         n.setKind(kind);
         n.setName(name);
         n.setComment(comment);
@@ -1569,6 +1577,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Expression variable = (Expression) n.getVariable().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -1577,6 +1586,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setExpressions(expressions);
+        n.setJmlTags(jmlTags);
         n.setMeasuredBy(measuredBy);
         n.setVariable(variable);
         n.setComment(comment);
@@ -1588,6 +1598,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         Expression expr = (Expression) n.getExpr().accept(this, arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Name name = (Name) n.getName().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expr == null || name == null)
@@ -1595,6 +1606,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setAnnotations(annotations);
         n.setModifiers(modifiers);
         n.setExpr(expr);
+        n.setJmlTags(jmlTags);
         n.setName(name);
         n.setComment(comment);
         return n;
@@ -1645,10 +1657,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlGhostStmt n, final A arg) {
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Statement statement = (Statement) n.getStatement().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (statement == null)
             return null;
+        n.setJmlTags(jmlTags);
         n.setStatement(statement);
         n.setComment(comment);
         return n;
@@ -1658,12 +1672,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final JmlMethodDeclaration n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         JmlContract contract = n.getContract().map(s -> (JmlContract) s.accept(this, arg)).orElse(null);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         MethodDeclaration methodDeclaration = (MethodDeclaration) n.getMethodDeclaration().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (methodDeclaration == null)
             return null;
         n.setAnnotations(annotations);
         n.setContract(contract);
+        n.setJmlTags(jmlTags);
         n.setMethodDeclaration(methodDeclaration);
         n.setComment(comment);
         return n;
@@ -1747,11 +1763,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final JmlFieldDeclaration n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         FieldDeclaration decl = (FieldDeclaration) n.getDecl().accept(this, arg);
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (decl == null)
             return null;
         n.setAnnotations(annotations);
         n.setDecl(decl);
+        n.setJmlTags(jmlTags);
         n.setComment(comment);
         return n;
     }
@@ -1795,24 +1813,30 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlBeginStmt n, final A arg) {
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setJmlTags(jmlTags);
         n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final JmlEndStmt n, final A arg) {
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setJmlTags(jmlTags);
         n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final JmlLabelStmt n, final A arg) {
+        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (label == null)
             return null;
+        n.setJmlTags(jmlTags);
         n.setLabel(label);
         n.setComment(comment);
         return n;

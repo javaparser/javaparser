@@ -43,6 +43,8 @@ public class JmlRepresentsDeclarationMetaModel extends JmlClassLevelMetaModel {
 
     public PropertyMetaModel exprPropertyMetaModel;
 
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
+
     public PropertyMetaModel modifiersPropertyMetaModel;
 
     public PropertyMetaModel namePropertyMetaModel;

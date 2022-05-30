@@ -204,7 +204,7 @@ public class ArrayCreationExpr extends Expression {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ArrayCreationExpr removeInitializer() {
-        return setInitializer(null);
+        return setInitializer((ArrayInitializerExpr) null);
     }
 
     @Override

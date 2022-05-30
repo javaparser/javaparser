@@ -1,9 +1,16 @@
 package java.util;
+
 import java.io.*;
 //@ model import java.io.*;
 
-class T  {
-    /*@ public ghost int f = 0; */
+class T {
+    /*@ public ghost int f1 = 0; */
+
+    /*+key@ public ghost int f2 = 0; */
+    /*+key@ public ghost int f3 = 0; */
+
+    /*+openjml@ public ghost int f3 = 0; */
+
 
     /*@ spec_public */ void a() {
         //@ assert true;
@@ -22,6 +29,6 @@ class T  {
     */
     void b() {
         //@loop_invariant abc;
-        while(i++!=0) i--;
+        while (i++ != 0) i--;
     }
 }

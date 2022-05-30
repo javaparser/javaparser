@@ -475,7 +475,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlExpressionStmt n, final Void arg) {
-        return (n.getExpression().accept(this, arg)) * 31 + (n.getKind().hashCode());
+        return (n.getExpression().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getKind().hashCode());
     }
 
     @Override
@@ -510,7 +510,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlUnreachableStmt n, final Void arg) {
-        return 0;
+        return (n.getJmlTags().accept(this, arg));
     }
 
     @Override
@@ -530,7 +530,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlRefiningStmt n, final Void arg) {
-        return 0;
+        return (n.getJmlTags().accept(this, arg));
     }
 
     @Override
@@ -545,17 +545,17 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlClassExprDeclaration n, final Void arg) {
-        return (n.getInvariant().accept(this, arg)) * 31 + (n.getKind().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getInvariant().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getKind().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Override
     public Integer visit(final JmlClassAccessibleDeclaration n, final Void arg) {
-        return (n.getExpressions().accept(this, arg)) * 31 + (n.getMeasuredBy().isPresent() ? n.getMeasuredBy().get().accept(this, arg) : 0) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getVariable().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getExpressions().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getMeasuredBy().isPresent() ? n.getMeasuredBy().get().accept(this, arg) : 0) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getVariable().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Override
     public Integer visit(final JmlRepresentsDeclaration n, final Void arg) {
-        return (n.getExpr().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getExpr().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Override
@@ -575,7 +575,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlGhostStmt n, final Void arg) {
-        return (n.getStatement().accept(this, arg));
+        return (n.getJmlTags().accept(this, arg)) * 31 + (n.getStatement().accept(this, arg));
     }
 
     @Override
@@ -589,7 +589,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlMethodDeclaration n, final Void arg) {
-        return (n.getContract().isPresent() ? n.getContract().get().accept(this, arg) : 0) * 31 + (n.getMethodDeclaration().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getContract().isPresent() ? n.getContract().get().accept(this, arg) : 0) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getMethodDeclaration().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Override
@@ -624,7 +624,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlFieldDeclaration n, final Void arg) {
-        return (n.getDecl().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getDecl().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Override
@@ -644,16 +644,16 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final JmlBeginStmt n, final Void arg) {
-        return 0;
+        return (n.getJmlTags().accept(this, arg));
     }
 
     @Override
     public Integer visit(final JmlEndStmt n, final Void arg) {
-        return 0;
+        return (n.getJmlTags().accept(this, arg));
     }
 
     @Override
     public Integer visit(final JmlLabelStmt n, final Void arg) {
-        return (n.getLabel().accept(this, arg));
+        return (n.getJmlTags().accept(this, arg)) * 31 + (n.getLabel().accept(this, arg));
     }
 }

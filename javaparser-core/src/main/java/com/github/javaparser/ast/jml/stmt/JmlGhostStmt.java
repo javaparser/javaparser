@@ -4,6 +4,9 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -20,21 +23,24 @@ import com.github.javaparser.metamodel.JmlGhostStmtMetaModel;
  * @author Alexander Weigl
  * @version 1 (3/26/21)
  */
-public class JmlGhostStmt extends JmlStatement {
+public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGhostStmt> {
 
     private Statement statement;
 
+    private NodeList<SimpleName> jmlTags;
+
     @AllFieldsConstructor
-    public JmlGhostStmt(Statement statement) {
-        this.statement = statement;
+    public JmlGhostStmt(NodeList<SimpleName> jmlTags, Statement statement) {
+        this(null, jmlTags, statement);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlGhostStmt(TokenRange tokenRange, Statement statement) {
+    public JmlGhostStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, Statement statement) {
         super(tokenRange);
+        setJmlTags(jmlTags);
         setStatement(statement);
         customInitialization();
     }
@@ -75,6 +81,12 @@ public class JmlGhostStmt extends JmlStatement {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
+                return true;
+            }
         }
         if (node == statement) {
             setStatement((Statement) replacementNode);
@@ -155,5 +167,39 @@ public class JmlGhostStmt extends JmlStatement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
         action.accept(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlGhostStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }

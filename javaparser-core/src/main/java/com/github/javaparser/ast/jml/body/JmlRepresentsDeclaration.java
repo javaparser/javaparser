@@ -6,6 +6,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,17 +38,20 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
 
     private Expression expr;
 
+    private NodeList<SimpleName> jmlTags;
+
     @AllFieldsConstructor
-    public JmlRepresentsDeclaration(NodeList<Modifier> modifiers, Name name, Expression expr) {
-        this(null, modifiers, name, expr);
+    public JmlRepresentsDeclaration(NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Name name, Expression expr) {
+        this(null, jmlTags, modifiers, name, expr);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlRepresentsDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, Name name, Expression expr) {
+    public JmlRepresentsDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, NodeList<Modifier> modifiers, Name name, Expression expr) {
         super(tokenRange);
+        setJmlTags(jmlTags);
         setModifiers(modifiers);
         setName(name);
         setExpr(expr);
@@ -129,6 +133,12 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
         if (node == null) {
             return false;
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
                 modifiers.remove(i);
@@ -147,6 +157,12 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
         if (node == expr) {
             setExpr((Expression) replacementNode);
             return true;
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
+                return true;
+            }
         }
         for (int i = 0; i < modifiers.size(); i++) {
             if (modifiers.get(i) == node) {
@@ -195,5 +211,25 @@ public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclara
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlRepresentsDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlRepresentsDeclarationMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlRepresentsDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
     }
 }

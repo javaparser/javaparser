@@ -3,6 +3,7 @@ package com.github.javaparser.ast.jml.clauses;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.Behavior;
@@ -19,7 +20,7 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
-public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract> {
+public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract>, NodeWithJmlTags<JmlContract> {
 
     private NodeList<SimpleName> jmlTags;
 
@@ -37,24 +38,20 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     private NodeList<JmlContract> subContracts = new NodeList<>();
 
     public JmlContract() {
-        this(null, false, Behavior.NONE, new NodeList<>(), new NodeList<>(), new NodeList<>());
+        this((TokenRange) null, new NodeList<>(), Type.METHOD, Behavior.NONE, null, new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
     public JmlContract(NodeList<SimpleName> jmlTags, Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
-        this(null, behavior, modifiers, clauses, subContracts);
+        this(null, jmlTags, type, behavior, name, modifiers, clauses, subContracts);
     }
 
     public JmlContract(Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
-        this(null, behavior, modifiers, clauses, subContracts);
-    }
-
-    public JmlContract(TokenRange tokenRange) {
-        super(tokenRange);
+        this((TokenRange) null, new NodeList<>(), type, behavior, name, modifiers, clauses, subContracts);
     }
 
     public JmlContract(TokenRange range, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
-        this(range, false, behavior, modifiers, clauses, subContracts);
+        this(range, new NodeList<>(), Type.METHOD, behavior, null, modifiers, clauses, subContracts);
     }
 
     @Override
@@ -316,7 +313,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlContract removeName() {
-        return setName(null);
+        return setName((SimpleName) null);
     }
 
     /**

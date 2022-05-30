@@ -41,5 +41,7 @@ public class JmlLabelStmtMetaModel extends JmlStatementMetaModel {
         super(superBaseNodeMetaModel, JmlLabelStmt.class, "JmlLabelStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
+
     public PropertyMetaModel labelPropertyMetaModel;
 }

@@ -40,4 +40,6 @@ public class JmlUnreachableStmtMetaModel extends JmlStatementMetaModel {
     JmlUnreachableStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlUnreachableStmt.class, "JmlUnreachableStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
+
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
 }

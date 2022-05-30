@@ -84,7 +84,7 @@ public abstract class JmlClause extends Node implements Jmlish {
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public JmlClause removeName() {
-        return setName(null);
+        return setName((SimpleName) null);
     }
 
     @Override

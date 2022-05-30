@@ -2,8 +2,11 @@ package com.github.javaparser.ast.jml.stmt;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.JmlKeyword;
+import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
@@ -23,7 +26,7 @@ import com.github.javaparser.metamodel.JmlExpressionStmtMetaModel;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlExpressionStmt extends JmlStatement {
+public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<JmlExpressionStmt> {
 
     public enum JmlStmtKind implements JmlKeyword {
 
@@ -51,13 +54,15 @@ public class JmlExpressionStmt extends JmlStatement {
 
     private Expression expression;
 
+    private NodeList<SimpleName> jmlTags;
+
     @AllFieldsConstructor
-    public JmlExpressionStmt(final JmlStmtKind kind, final Expression expression) {
-        this(null, kind, expression);
+    public JmlExpressionStmt(NodeList<SimpleName> jmlTags, final JmlStmtKind kind, final Expression expression) {
+        this(null, jmlTags, kind, expression);
     }
 
-    public JmlExpressionStmt(TokenRange range, final Expression expression) {
-        this(range, JmlStmtKind.ASSERT, expression);
+    public JmlExpressionStmt(TokenRange range, NodeList<SimpleName> jmlTags, final Expression expression) {
+        this(range, jmlTags, JmlStmtKind.ASSERT, expression);
         int tt = range.getBegin().getKind();
         Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values()).filter(i -> i.tokenType == tt).findFirst();
         k.ifPresent(this::setKind);
@@ -112,6 +117,12 @@ public class JmlExpressionStmt extends JmlStatement {
             setExpression((Expression) replacementNode);
             return true;
         }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.set(i, (SimpleName) replacementNode);
+                return true;
+            }
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -159,8 +170,9 @@ public class JmlExpressionStmt extends JmlStatement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlExpressionStmt(TokenRange tokenRange, JmlStmtKind kind, Expression expression) {
+    public JmlExpressionStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, JmlStmtKind kind, Expression expression) {
         super(tokenRange);
+        setJmlTags(jmlTags);
         setKind(kind);
         setExpression(expression);
         customInitialization();
@@ -228,5 +240,39 @@ public class JmlExpressionStmt extends JmlStatement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlExpressionStmt(Consumer<JmlExpressionStmt> action) {
         action.accept(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SimpleName> getJmlTags() {
+        return jmlTags;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlExpressionStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+        assertNotNull(jmlTags);
+        if (jmlTags == this.jmlTags) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.JML_TAGS, this.jmlTags, jmlTags);
+        if (this.jmlTags != null)
+            this.jmlTags.setParentNode(null);
+        this.jmlTags = jmlTags;
+        setAsParentNodeOf(jmlTags);
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < jmlTags.size(); i++) {
+            if (jmlTags.get(i) == node) {
+                jmlTags.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }

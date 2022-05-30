@@ -40,4 +40,6 @@ public class JmlRefiningStmtMetaModel extends JmlStatementMetaModel {
     JmlRefiningStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlRefiningStmt.class, "JmlRefiningStmt", "com.github.javaparser.ast.jml.stmt", false, false);
     }
+
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
 }

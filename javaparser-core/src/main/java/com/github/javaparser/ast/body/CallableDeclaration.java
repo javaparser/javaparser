@@ -465,7 +465,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CallableDeclaration removeReceiverParameter() {
-        return setReceiverParameter(null);
+        return setReceiverParameter((ReceiverParameter) null);
     }
 
     @Override

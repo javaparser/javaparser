@@ -22,7 +22,7 @@ import com.github.javaparser.ast.Generated;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> {
+public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> implements JmlDocContainer {
 
     private NodeList<JmlDoc> jmlComments;
 

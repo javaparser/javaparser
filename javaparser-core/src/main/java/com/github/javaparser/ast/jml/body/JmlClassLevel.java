@@ -6,6 +6,8 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.jml.NodeWithJmlTags;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JmlClassLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -16,7 +18,7 @@ import java.util.function.Consumer;
  * @author Alexander Weigl
  * @version 1 (3/17/21)
  */
-public abstract class JmlClassLevel<T extends BodyDeclaration<?>> extends BodyDeclaration<T> implements Jmlish {
+public abstract class JmlClassLevel<T extends BodyDeclaration<?>> extends BodyDeclaration<T> implements Jmlish, NodeWithJmlTags<T> {
 
     @AllFieldsConstructor
     public JmlClassLevel() {
