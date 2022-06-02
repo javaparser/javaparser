@@ -21,6 +21,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -31,8 +40,8 @@ import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.Change;
 import com.github.javaparser.printer.lexicalpreservation.changes.ListAdditionChange;
@@ -41,15 +50,6 @@ import com.github.javaparser.printer.lexicalpreservation.changes.ListReplacement
 import com.github.javaparser.printer.lexicalpreservation.changes.NoChange;
 import com.github.javaparser.printer.lexicalpreservation.changes.PropertyChange;
 import com.github.javaparser.utils.LineSeparator;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import static com.github.javaparser.TokenTypes.eolTokenKind;
 
 class LexicalDifferenceCalculator {
 
@@ -144,19 +144,24 @@ class LexicalDifferenceCalculator {
         return differenceElements;
     }
 
+    /*
+     * Replace EOL token in the list of {@code DifferenceElement} by the specified line separator
+     */
     private void replaceEolTokens(List<DifferenceElement> differenceElements, LineSeparator lineSeparator) {
+        CsmElement eol = getNewLineToken(lineSeparator);
         for (int i = 0; i < differenceElements.size(); i++) {
             DifferenceElement differenceElement = differenceElements.get(i);
-            if (differenceElement.isAdded()) {
-                CsmElement element = differenceElement.getElement();
-                boolean isWhitespaceToken = element instanceof CsmToken && ((CsmToken) element).isNewLine();
-                if (isWhitespaceToken) {
-                    differenceElements.set(i, new Added(CsmElement.newline(lineSeparator)));
-                }
-            }
+            differenceElements.set(i, differenceElement.replaceEolTokens(eol));
         }
     }
-
+    
+    /*
+     * Returns a new line token 
+     */
+    private CsmElement getNewLineToken(LineSeparator lineSeparator) {
+        return CsmElement.newline(lineSeparator);
+    }
+    
     List<DifferenceElement> calculateListReplacementDifference(ObservableProperty observableProperty, NodeList<?> nodeList, int index, Node newValue) {
         Node container = nodeList.getParentNodeForChildren();
         CsmElement element = ConcreteSyntaxModel.forClass(container.getClass());
