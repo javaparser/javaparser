@@ -21,7 +21,6 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.CommentsCollection;
 
 import java.util.List;
@@ -106,10 +105,4 @@ public class ParseResult<T> {
         return message.toString();
     }
 
-    /**
-     * A post processor that can be added to ParserConfiguration to add some processing right after parsing.
-     */
-    public interface PostProcessor {
-        void process(ParseResult<? extends Node> result, ParserConfiguration configuration);
-    }
 }

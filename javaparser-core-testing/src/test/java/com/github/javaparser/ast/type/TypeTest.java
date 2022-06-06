@@ -55,9 +55,9 @@ class TypeTest {
     void primitiveTypeArgumentLenientValidator() {
         ParserConfiguration config = new ParserConfiguration()
                 .setLanguageLevel(RAW);
-        config.getPostProcessors().add(new Java5Validator() {{
+        config.getProcessors().add(() -> new Java5Validator() {{
             remove(noPrimitiveGenericArguments);
-        }}.postProcessor());
+        }}.processor());
 
         ParseResult<VariableDeclarationExpr> result = new JavaParser(config).parse(
                 VARIABLE_DECLARATION_EXPR, provider("List<long> x"));

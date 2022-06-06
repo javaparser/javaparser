@@ -42,11 +42,15 @@ import com.github.javaparser.ast.type.TypeParameter;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
 import static com.github.javaparser.Providers.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.*;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -114,8 +118,10 @@ public final class JavaParser {
         assertNotNull(start);
         assertNotNull(provider);
 
-        for (PreProcessor preProcessor : configuration.getPreProcessors()) {
-            provider = preProcessor.process(provider);
+        List<Processor> processors = configuration.getProcessors().stream().map(Supplier::get).collect(toList());
+
+        for (Processor processor : processors) {
+            provider = processor.preProcess(provider);
         }
 
         final GeneratedJavaParser parser = getParserForProvider(provider);
@@ -123,8 +129,9 @@ public final class JavaParser {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getCommentsCollection());
 
-            configuration.getPostProcessors()
-                    .forEach(postProcessor -> postProcessor.process(result, configuration));
+            for (Processor processor : processors) {
+                    processor.postProcess(result, configuration);
+            }
 
             result.getProblems()
                     .sort(PROBLEM_BY_BEGIN_POSITION);

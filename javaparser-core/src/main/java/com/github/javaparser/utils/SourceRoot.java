@@ -175,12 +175,13 @@ public class SourceRoot {
         return getCache();
     }
 
-    private static boolean isSensibleDirectoryToEnter(Path dir) throws IOException {
+    boolean isSensibleDirectoryToEnter(Path dir) throws IOException  {
         final String dirToEnter = dir.getFileName().toString();
         // Don't enter directories that cannot be packages.
         final boolean directoryIsAValidJavaIdentifier = JAVA_IDENTIFIER.matcher(dirToEnter).matches();
         // Don't enter directories that are hidden, assuming that people don't store source files in hidden directories.
-        if (Files.isHidden(dir) || !directoryIsAValidJavaIdentifier) {
+        // But we can enter in root directory even if the root directory is not considered as a valid java identifier
+        if (!root.equals(dir) && (Files.isHidden(dir) || !directoryIsAValidJavaIdentifier)) {
             Log.trace("Not processing directory \"%s\"", () -> dirToEnter);
             return false;
         }
@@ -577,25 +578,26 @@ public class SourceRoot {
     private static class ParallelParse extends RecursiveAction {
 
         private static final long serialVersionUID = 1L;
-        private final Path path;
+        private final SourceRoot root;
         private final VisitFileCallback callback;
 
         ParallelParse(Path path, VisitFileCallback callback) {
-            this.path = path;
+            this.root = new SourceRoot(path);
             this.callback = callback;
         }
 
         @Override
         protected void compute() {
             final List<ParallelParse> walks = new ArrayList<>();
+            Path path = root.getRoot();
             try {
                 Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                        if (!SourceRoot.isSensibleDirectoryToEnter(dir)) {
+                        if (!root.isSensibleDirectoryToEnter(dir)) {
                             return SKIP_SUBTREE;
                         }
-                        if (!dir.equals(ParallelParse.this.path)) {
+                        if (!dir.equals(path)) {
                             ParallelParse w = new ParallelParse(dir, callback);
                             w.fork();
                             walks.add(w);
