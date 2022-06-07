@@ -6,6 +6,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -14,12 +15,19 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JavaParserRecordDeclarationTest {
 
 
-    private final String code = "package x.y; record Test() {}";
+    private final String basicRecord = "record Test() {}";
+    private final String basicRecordWithPackage = "package x.y; record Test() {}";
+    private final String basicRecordWithImplements = "" +
+            "interface A {}\n" +
+            "record Test() implements A {}";
+
     private TypeSolver typeSolver;
 
 
@@ -42,7 +50,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -59,7 +67,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -76,7 +84,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -93,7 +101,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -110,7 +118,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -127,7 +135,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -144,7 +152,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -162,7 +170,7 @@ public class JavaParserRecordDeclarationTest {
 
             JavaParser javaParser = new JavaParser(configuration);
 
-            ParseResult<CompilationUnit> x = javaParser.parse(code);
+            ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
             CompilationUnit compilationUnit = x.getResult().get();
 
             RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -180,7 +188,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -199,7 +207,7 @@ public class JavaParserRecordDeclarationTest {
 
             JavaParser javaParser = new JavaParser(configuration);
 
-            ParseResult<CompilationUnit> x = javaParser.parse(code);
+            ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
             CompilationUnit compilationUnit = x.getResult().get();
 
             RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -218,7 +226,7 @@ public class JavaParserRecordDeclarationTest {
 
             JavaParser javaParser = new JavaParser(configuration);
 
-            ParseResult<CompilationUnit> x = javaParser.parse(code);
+            ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
             CompilationUnit compilationUnit = x.getResult().get();
 
             RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -237,7 +245,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -255,7 +263,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -273,7 +281,7 @@ public class JavaParserRecordDeclarationTest {
 
         JavaParser javaParser = new JavaParser(configuration);
 
-        ParseResult<CompilationUnit> x = javaParser.parse(code);
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithPackage);
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
@@ -281,4 +289,30 @@ public class JavaParserRecordDeclarationTest {
 
         assertEquals("x.y.Test", resolvedReferenceTypeDeclaration.getQualifiedName());
     }
+
+
+    ///
+    /// Test ancestors
+    ///
+
+    @Test
+    void getGetAncestors() {
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()))
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
+
+        JavaParser javaParser = new JavaParser(configuration);
+
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithImplements);
+        CompilationUnit compilationUnit = x.getResult().get();
+
+        RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
+        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = recordDeclaration.resolve();
+
+        List<ResolvedReferenceType> ancestors = resolvedReferenceTypeDeclaration.getAncestors();
+        assertEquals(2, ancestors.size());
+        assertEquals("java.lang.Record", ancestors.get(0).getQualifiedName());
+        assertEquals("A", ancestors.get(1).getQualifiedName());
+    }
+
 }

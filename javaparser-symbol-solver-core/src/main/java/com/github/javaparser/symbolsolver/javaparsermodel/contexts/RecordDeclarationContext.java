@@ -22,7 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -41,7 +41,7 @@ import java.util.Optional;
  * @author Federico Tomassetti
  * @author Roger Howell
  */
-public class RecordDeclarationContext extends AbstractJavaParserContext<ClassOrInterfaceDeclaration> {
+public class RecordDeclarationContext extends AbstractJavaParserContext<RecordDeclaration> {
 
     private JavaParserTypeDeclarationAdapter javaParserTypeDeclarationAdapter;
 
@@ -49,7 +49,7 @@ public class RecordDeclarationContext extends AbstractJavaParserContext<ClassOrI
     /// Constructors
     ///
 
-    public RecordDeclarationContext(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
+    public RecordDeclarationContext(RecordDeclaration wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
         this.javaParserTypeDeclarationAdapter = new JavaParserTypeDeclarationAdapter(wrappedNode, typeSolver,
                 getDeclaration(), this);
@@ -115,7 +115,6 @@ public class RecordDeclarationContext extends AbstractJavaParserContext<ClassOrI
     public List<ResolvedFieldDeclaration> fieldsExposedToChild(Node child) {
         List<ResolvedFieldDeclaration> fields = new LinkedList<>();
         fields.addAll(this.wrappedNode.resolve().getDeclaredFields());
-        this.wrappedNode.getExtendedTypes().forEach(i -> fields.addAll(i.resolve().asReferenceType().getAllFieldsVisibleToInheritors()));
         this.wrappedNode.getImplementedTypes().forEach(i -> fields.addAll(i.resolve().asReferenceType().getAllFieldsVisibleToInheritors()));
         return fields;
     }

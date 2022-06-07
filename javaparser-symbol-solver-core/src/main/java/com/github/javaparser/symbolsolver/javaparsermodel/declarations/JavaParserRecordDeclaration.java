@@ -205,12 +205,30 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedReferenceType> getAllSuperClasses() {
-        return null;
+        List<ResolvedReferenceType> superclasses = new ArrayList<>();
+
+        getSuperClass().ifPresent(superClass -> {
+            superclasses.add(superClass);
+            superclasses.addAll(superClass.getAllClassesAncestors());
+        });
+
+        if (superclasses.removeIf(ResolvedReferenceType::isJavaLangObject)) {
+            superclasses.add(record());
+        }
+        return superclasses;
     }
 
     @Override
     public List<ResolvedReferenceType> getAllInterfaces() {
-        return null;
+        List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
+            interfaces.add(interfaceDeclaration);
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
+        }
+        getSuperClass().ifPresent(superClass -> {
+            interfaces.addAll(superClass.getAllInterfacesAncestors());
+        });
+        return interfaces;
     }
 
     @Override
@@ -426,6 +444,10 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     ///
     /// Protected methods
     ///
+
+    protected ResolvedReferenceType record() {
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangRecord(), typeSolver);
+    }
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {

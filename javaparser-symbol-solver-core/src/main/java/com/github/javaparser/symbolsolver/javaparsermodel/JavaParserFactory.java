@@ -92,6 +92,8 @@ public class JavaParserFactory {
             return new MethodReferenceExprContext((MethodReferenceExpr) node, typeSolver);
         } else if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
+        } else if (node instanceof RecordDeclaration) {
+            return new RecordDeclarationContext((RecordDeclaration) node, typeSolver);
         } else if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
         } else if (node instanceof SwitchEntry) {

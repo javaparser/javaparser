@@ -82,7 +82,7 @@ public interface TypeSolver {
      * @return A resolved reference to {@code java.lang.Record}
      */
     default ResolvedReferenceTypeDeclaration getSolvedJavaLangRecord() throws UnsolvedSymbolException {
-        return solveType("java.lang.record"); // Hardcoded, because JavaParser is written using Java 8 language features only (per pom.xml) and record is unavailable.
+        return solveType("java.lang.Record"); // Hardcoded, because JavaParser is written using Java 8 language features only (per pom.xml) and record is unavailable.
     }
 
     default boolean hasType(String name) {
