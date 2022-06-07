@@ -57,24 +57,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -1726,6 +1709,50 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 "  @Nullable\n" +
                                 "  java.lang.Object foo[], bar;\n" +
                                 "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    // issue 3588 Modifier is removed when removing an annotation. 
+    @Test
+    void testRemovingInlinedAnnotation() {
+        // Given
+        considerCode("public class Foo{\n"
+                + "     protected @Nullable Object bar;\n"
+                + "}");
+
+        // When
+        FieldDeclaration fd = cu.findFirst(FieldDeclaration.class).get();
+        // modification of the AST
+        AnnotationExpr ae = fd.getAnnotations().get(0);
+        ae.remove();
+
+        // Assert
+        String expectedCode =   "public class Foo{\n"
+                + "     protected Object bar;\n"
+                + "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    // issue 3588 Modifier is removed when removing an annotation. 
+    @Test
+    void testRemovingInlinedAnnotation_alternate_case() {
+        // Given
+        considerCode("public class Foo{\n"
+                + "     @Nullable protected Object bar;\n"
+                + "}");
+
+        // When
+        FieldDeclaration fd = cu.findFirst(FieldDeclaration.class).get();
+        // modification of the AST
+        AnnotationExpr ae = fd.getAnnotations().get(0);
+        ae.remove();
+
+        // Assert
+        String expectedCode =   "public class Foo{\n"
+                + "     protected Object bar;\n"
+                + "}";
         assertTransformedToString(expectedCode, cu);
 
     }
