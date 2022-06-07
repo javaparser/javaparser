@@ -5,6 +5,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -14,6 +15,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 import java.util.List;
 
@@ -296,7 +298,30 @@ public class JavaParserRecordDeclarationTest {
     ///
 
     @Test
-    void getGetAncestors() {
+    @EnabledForJreRange(max=org.junit.jupiter.api.condition.JRE.JAVA_13)
+    void getGetAncestors_javaLangRecord_notAvailable() {
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()))
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
+
+        JavaParser javaParser = new JavaParser(configuration);
+
+        ParseResult<CompilationUnit> x = javaParser.parse(basicRecordWithImplements);
+        CompilationUnit compilationUnit = x.getResult().get();
+
+        RecordDeclaration recordDeclaration = compilationUnit.findFirst(RecordDeclaration.class).get();
+        ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = recordDeclaration.resolve();
+
+        /*
+         * `java.lang.Record` will have been introduced from  JRE14 preview / JRE16 release
+         *  -- thus the `java.lang.Record` ancestor will not be available via classloader/reflection before these versions
+         */
+        assertThrows(UnsolvedSymbolException.class, () -> resolvedReferenceTypeDeclaration.getAncestors());
+    }
+
+    @Test
+    @EnabledForJreRange(min=org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void getGetAncestors_javaLangRecord_available() {
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()))
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
