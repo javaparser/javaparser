@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -591,6 +591,35 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      */
     public Optional<ResolvedPrimitiveType> toUnboxedType() {
         return Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> this.asReferenceType().getQualifiedName().equals(pt.getBoxTypeQName())).findFirst();
+    }
+    
+    
+    ///
+    /// Erasure
+    ///
+    // The erasure of a parameterized type (§4.5) G<T1,...,Tn> is |G|.
+    @Override
+    public ResolvedType erasure() {
+        if (!typeDeclaration.isGeneric()) return this;
+        return create(typeDeclaration, erasureOfParamaters(typeParametersMap));
+    }
+    
+    private List<ResolvedType> erasureOfParamaters(ResolvedTypeParametersMap typeParametersMap) {
+        List<ResolvedType> erasedParameters = new ArrayList<ResolvedType>();
+        if (!typeParametersMap.isEmpty()) {
+            // add erased type except java.lang.object
+            erasedParameters.addAll(
+                    typeParametersMap.getTypes().stream()
+                            .filter(type -> !type.isReferenceType())
+                            .map(type -> type.erasure())
+                            .filter(erasedType -> !(isJavaObject(erasedType)))
+                            .collect(Collectors.toList()));
+        }
+        return erasedParameters;
+    }
+    
+    private boolean isJavaObject(ResolvedType rt) {
+        return rt.isReferenceType() && rt.asReferenceType().isJavaLangObject();
     }
 
 }

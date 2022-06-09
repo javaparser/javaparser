@@ -21,18 +21,21 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.annotation.Inherited;
+import java.util.Collections;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @interface OuterAnnotation {
   @interface InnerAnnotation {}
@@ -45,6 +48,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @interface WithField {
   int FIELD_DECLARATION = 0;
 }
+
+@Inherited
+@interface InheritedAnnotation {}
 
 class ReflectionAnnotationDeclarationTest {
   private TypeSolver typeSolver = new ReflectionTypeSolver(false);
@@ -90,6 +96,22 @@ class ReflectionAnnotationDeclarationTest {
                     "com.github.javaparser.symbolsolver.reflectionmodel.WithField");
     assertEquals(Collections.singleton("FIELD_DECLARATION"),
             annotation.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
+  }
+  
+  @Test
+  void isAnnotationNotInheritable() {
+    ReflectionAnnotationDeclaration
+        annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
+            "com.github.javaparser.symbolsolver.reflectionmodel.OuterAnnotation");
+    assertFalse(annotation.isInheritable());
+  }
+  
+  @Test
+  void isAnnotationInheritable() {
+    ReflectionAnnotationDeclaration
+        annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
+            "com.github.javaparser.symbolsolver.reflectionmodel.InheritedAnnotation");
+    assertTrue(annotation.isInheritable());
   }
 
 }

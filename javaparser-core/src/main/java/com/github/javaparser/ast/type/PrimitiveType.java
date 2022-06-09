@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,11 +34,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
-
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -197,14 +195,6 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PrimitiveType clone() {
         return (PrimitiveType) accept(new CloneVisitor(), null);
@@ -214,14 +204,6 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public PrimitiveTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.primitiveTypeMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override

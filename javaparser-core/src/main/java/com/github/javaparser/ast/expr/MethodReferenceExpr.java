@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -38,10 +38,8 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -161,8 +159,9 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (typeArguments != null) {
             for (int i = 0; i < typeArguments.size(); i++) {
                 if (typeArguments.get(i) == node) {
@@ -189,8 +188,9 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == scope) {
             setScope((Expression) replacementNode);
             return true;
@@ -239,7 +239,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     /*
-     * Method reference expressions are always poly expressions 
+     * Method reference expressions are always poly expressions
      * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html 15.13. Method Reference Expressions)
      */
     @Override

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,7 +29,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -1086,6 +1085,22 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         return result;
     }
 
+    public List<R> visit(final LocalRecordDeclarationStmt n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getRecordDeclaration().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
     public List<R> visit(final LongLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
@@ -2093,6 +2108,99 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getType().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final RecordDeclaration n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getImplementedTypes().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getParameters().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getReceiverParameter().isPresent()) {
+            tmp = n.getReceiverParameter().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getTypeParameters().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getMembers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getName().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    public List<R> visit(final CompactConstructorDeclaration n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getBody().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getModifiers().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getName().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getThrownExceptions().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getTypeParameters().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getAnnotations().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

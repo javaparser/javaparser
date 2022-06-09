@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -133,6 +133,8 @@ public interface VoidVisitor<A> {
 
     void visit(LocalClassDeclarationStmt n, A arg);
 
+    void visit(LocalRecordDeclarationStmt n, A arg);
+
     void visit(LongLiteralExpr n, A arg);
 
     void visit(MarkerAnnotationExpr n, A arg);
@@ -160,6 +162,10 @@ public interface VoidVisitor<A> {
     void visit(Parameter n, A arg);
 
     void visit(PrimitiveType n, A arg);
+
+    void visit(RecordDeclaration n, A arg);
+
+    void visit(CompactConstructorDeclaration n, A arg);
 
     void visit(ReturnStmt n, A arg);
 

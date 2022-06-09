@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,12 +30,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TextBlockLiteralExprMetaModel;
 import com.github.javaparser.utils.Pair;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
 import static com.github.javaparser.utils.StringEscapeUtils.unescapeJavaTextBlock;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
@@ -84,14 +82,6 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isTextBlockLiteralExpr() {
         return true;
@@ -113,14 +103,6 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
         action.accept(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override
@@ -153,7 +135,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
         /* Remove the common white space prefix from each non-blank line in the list of individual lines. */
         /* Remove all trailing white space from all lines in the modified list of individual lines from step 5. 
         This step collapses wholly-whitespace lines in the modified list so that they are empty, but does not discard them. */
-        return Arrays.stream(rawLines).map(l -> l.substring(commonWhiteSpacePrefixSize)).map(this::trimTrailing);
+        return Arrays.stream(rawLines).map(l -> l.length() < commonWhiteSpacePrefixSize ? l : l.substring(commonWhiteSpacePrefixSize)).map(this::trimTrailing);
     }
 
     /**

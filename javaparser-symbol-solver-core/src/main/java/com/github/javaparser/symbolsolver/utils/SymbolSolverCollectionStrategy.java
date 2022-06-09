@@ -74,16 +74,33 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
         try {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                 private Path current_root;
+                private Path currentProjectDir;
+                private String previousSourceDirectory;
                 private final PathMatcher javaMatcher = getPathMatcher("glob:**.java");
                 private final PathMatcher jarMatcher = getPathMatcher("glob:**.jar");
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (javaMatcher.matches(file)) {
-                        if (current_root == null || !file.startsWith(current_root)) {
-                            current_root = getRoot(file).orElse(null);
+                        String parent = file.getParent().toString();
+                        // This is not a very elegant or powerful solution but it works and it allows to unblock users :-(
+                        // We are trying to verify the current_root directory for each package.
+                        // Sometime (for exemple https://github.com/apache/logging-log4j1) we can have java packages directly under a base directory
+                        // and source directory under the same base package.
+                        // for exemple:
+                        // logging-log4j1\examples\customLevel\XLevel.java <- examples is a package (the root source directory is logging-log4j1)
+                        // logging-log4j1\src\main\java\org\apache\log4j\Appender.java <- org is a package (the root source directory is logging-log4j1\src\main\java)
+                        if (!parent.equals(previousSourceDirectory)) {
+                            Log.info("Trying to compute the source root from %s", () -> file.toString());
+                            previousSourceDirectory = parent;
+                            currentProjectDir = getRoot(file).orElse(null);
+                        }
+                        if (current_root == null || (currentProjectDir != null && !currentProjectDir.equals(current_root))) {
+                            current_root = currentProjectDir;
+                            if (current_root != null) Log.info("New current source root is %s", () -> current_root.toString());
                         }
                     } else if (jarMatcher.matches(file)) {
+                        Log.info("Jar file is found %s", () -> file.toString());
                         typeSolver.add(new JarTypeSolver(file.toString()));
                     }
                     return CONTINUE;
@@ -92,6 +109,7 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     if (Files.isHidden(dir)) {
+                        Log.info("Skipping sub-tree %s", () -> dir.toString());
                         return SKIP_SUBTREE;
                     }
                     return CONTINUE;
@@ -100,6 +118,7 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
                 @Override
                 public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
                     if (current_root != null && Files.isSameFile(dir, current_root)) {
+                        Log.info("Adding source root %s", () -> dir.toString());
                         projectRoot.addSourceRoot(dir);
                         typeSolver.add(new JavaParserTypeSolver(current_root.toFile(), parserConfiguration));
                         current_root = null;

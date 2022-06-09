@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.ReturnStmtMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -112,8 +111,9 @@ public class ReturnStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (expression != null) {
             if (node == expression) {
                 removeExpression();
@@ -143,8 +143,9 @@ public class ReturnStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (expression != null) {
             if (node == expression) {
                 setExpression((Expression) replacementNode);

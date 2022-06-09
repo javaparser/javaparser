@@ -1,0 +1,79 @@
+name: Build Snapshot
+on:
+  push:
+    branches: [ master ]
+
+  ## (testing only) Trigger the workflow on any pull request
+  #pull_request:
+
+jobs:
+
+  generate_changelog:
+    name: Generate Changelog
+    runs-on: ubuntu-latest
+    steps:
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v3.0.2
+
+      # Setup Java 11 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+
+      # Set environment variables
+      - name: Generate Changelog
+        id: vars
+        shell: bash
+        working-directory: ./scripts
+        run: |
+          ## By convention, the "next" milestone is named "next release"
+          ./run_generate_changelog_by_milestone_title.sh "next release"
+
+          SHA_LONG=$(git rev-parse HEAD)
+          SHA_SHORT=$(git rev-parse --short HEAD)
+          CHANGELOG="$(<temp_changelog.md)"
+          RELEASE_TITLE="SNAPSHOT - $SHA_SHORT"
+          RELEASE_TAG_NAME="v_snapshot_$SHA_SHORT"
+
+          echo "::set-output name=sha_long::$SHA_LONG"
+          echo "::set-output name=sha_short::$SHA_SHORT"
+          echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=release_title::$RELEASE_TITLE"
+          echo "::set-output name=release_tag_name::$RELEASE_TAG_NAME"
+
+
+      - name: Output variables
+        run: |
+          echo sha_short = ${{ steps.vars.outputs.sha_short }}
+          echo sha_long  = ${{ steps.vars.outputs.sha_long }}
+          echo changelog = "${{ steps.vars.outputs.changelog }}"
+          echo changelog = "${{ steps.vars.outputs.release_title }}"
+          echo changelog = "${{ steps.vars.outputs.release_tag_name }}"
+
+
+      # Remove old release drafts by using the curl request for the available releases with draft flag
+      - name: Remove Old Release Drafts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/{owner}/{repo}/releases \
+            --jq '.[] | select(.draft == true) | .id' \
+            | xargs -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
+
+
+      # Create new release draft - which is not publicly visible and requires manual acceptance
+      - name: Create Release Draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.vars.outputs.release_tag_name }}  \
+            --target ${{ steps.vars.outputs.sha_long }} \
+            --draft \
+            --prerelease \
+            --title "${{ steps.vars.outputs.release_title }}" \
+            --notes-file ./scripts/temp_changelog.md
+

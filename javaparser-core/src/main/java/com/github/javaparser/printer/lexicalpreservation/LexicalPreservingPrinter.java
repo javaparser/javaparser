@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -296,13 +296,25 @@ public class LexicalPreservingPrinter {
             if (index <= 0) {
                 return;
             }
+            
+            TextElement currentSpaceCandidate = null;
 
             for (int i = index - 1; i >= 0; i--) {
                 TextElement spaceCandidate = nodeText.getTextElement(i);
+                if (spaceCandidate.isSpaceOrTab()) {
+                    // save the current indentation char
+                    currentSpaceCandidate = nodeText.getTextElement(i);
+                }
                 if (!spaceCandidate.isSpaceOrTab()) {
                     if (spaceCandidate.isNewline() && i != index - 1) {
                         for (int j = 0; j < (index - 1) - i; j++) {
-                            nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
+                            if (currentSpaceCandidate != null) {
+                                // use the current (or last) indentation character 
+                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind(), currentSpaceCandidate.expand()));
+                            } else {
+                                // use the default indentation character 
+                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
+                            }
                         }
                     }
                     break;

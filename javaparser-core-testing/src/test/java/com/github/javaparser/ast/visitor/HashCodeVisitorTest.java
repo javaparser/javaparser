@@ -510,6 +510,14 @@ class HashCodeVisitorTest {
 	}
 
 	@Test
+	void testVisitLocalRecordDeclarationStmt() {
+		LocalRecordDeclarationStmt node = spy(new LocalRecordDeclarationStmt());
+		HashCodeVisitor.hashCode(node);
+		verify(node, times(1)).getRecordDeclaration();
+		verify(node, times(1)).getComment();
+	}
+
+	@Test
 	void testVisitLongLiteralExpr() {
 		LongLiteralExpr node = spy(new LongLiteralExpr());
 		HashCodeVisitor.hashCode(node);

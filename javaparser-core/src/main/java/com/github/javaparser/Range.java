@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,8 +20,6 @@
  */
 
 package com.github.javaparser;
-
-import static com.github.javaparser.Position.pos;
 
 /**
  * A range of characters in a source file, from "begin" to "end", including the characters at "begin" and "end".
@@ -204,6 +202,14 @@ public class Range {
     public boolean isBefore(Position position) {
         return end.isBefore(position);
     }
+    
+    /**
+     * @param other The range to compare against.
+     * @return True if the end of this range is before (but not equal to) the given position to compare against.
+     */
+    public boolean isBefore(Range other) {
+        return end.isBefore(other.begin);
+    }
 
     /**
      * @param position The position to compare against.
@@ -211,6 +217,14 @@ public class Range {
      */
     public boolean isAfter(Position position) {
         return begin.isAfter(position);
+    }
+    
+    /**
+     * @param other The range to compare against.
+     * @return True if the start of this range is after (but not equal to) the given position to compare against.
+     */
+    public boolean isAfter(Range other) {
+        return begin.isAfter(other.end);
     }
 
     @Override
