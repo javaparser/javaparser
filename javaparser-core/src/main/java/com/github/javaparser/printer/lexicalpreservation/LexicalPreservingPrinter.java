@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -74,6 +74,9 @@ import com.github.javaparser.utils.Pair;
  * in its original formatting including the AST changes.
  */
 public class LexicalPreservingPrinter {
+    
+    private static String JAVA_UTIL_OPTIONAL = Optional.class.getCanonicalName();
+    private static String JAVAPARSER_AST_NODELIST = NodeList.class.getCanonicalName();
 
     private static AstObserver observer;
 
@@ -293,13 +296,25 @@ public class LexicalPreservingPrinter {
             if (index <= 0) {
                 return;
             }
+            
+            TextElement currentSpaceCandidate = null;
 
             for (int i = index - 1; i >= 0; i--) {
                 TextElement spaceCandidate = nodeText.getTextElement(i);
+                if (spaceCandidate.isSpaceOrTab()) {
+                    // save the current indentation char
+                    currentSpaceCandidate = nodeText.getTextElement(i);
+                }
                 if (!spaceCandidate.isSpaceOrTab()) {
                     if (spaceCandidate.isNewline() && i != index - 1) {
                         for (int j = 0; j < (index - 1) - i; j++) {
-                            nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
+                            if (currentSpaceCandidate != null) {
+                                // use the current (or last) indentation character 
+                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind(), currentSpaceCandidate.expand()));
+                            } else {
+                                // use the default indentation character 
+                                nodeText.addElement(index, new TokenTextElement(JavaToken.Kind.SPACE.getKind()));
+                            }
                         }
                     }
                     break;
@@ -617,7 +632,7 @@ public class LexicalPreservingPrinter {
     //
 
     private static boolean isReturningOptionalNodeList(Method m) {
-        if (!m.getReturnType().getCanonicalName().equals(Optional.class.getCanonicalName())) {
+        if (!m.getReturnType().getCanonicalName().equals(JAVA_UTIL_OPTIONAL)) {
             return false;
         }
         if (!(m.getGenericReturnType() instanceof ParameterizedType)) {
@@ -625,13 +640,13 @@ public class LexicalPreservingPrinter {
         }
         ParameterizedType parameterizedType = (ParameterizedType) m.getGenericReturnType();
         java.lang.reflect.Type optionalArgument = parameterizedType.getActualTypeArguments()[0];
-        return (optionalArgument.getTypeName().startsWith(NodeList.class.getCanonicalName()));
+        return (optionalArgument.getTypeName().startsWith(JAVAPARSER_AST_NODELIST));
     }
 
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
-            if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(NodeList.class.getCanonicalName())) {
+            if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(JAVAPARSER_AST_NODELIST)) {
                 try {
                     Object raw = m.invoke(parent);
                     if (!(raw instanceof NodeList)) {

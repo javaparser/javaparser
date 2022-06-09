@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -189,6 +189,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
         return type;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
         action.accept(this);
@@ -203,8 +204,9 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (pattern != null) {
             if (node == pattern) {
                 removePattern();
@@ -222,8 +224,9 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == expression) {
             setExpression((Expression) replacementNode);
             return true;
@@ -245,7 +248,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     public InstanceOfExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
-            return (InstanceOfExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
@@ -258,7 +261,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InstanceOfExpr setPattern(final PatternExpr pattern) {
         if (pattern == this.pattern) {
-            return (InstanceOfExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.PATTERN, this.pattern, pattern);
         if (this.pattern != null)
@@ -272,7 +275,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     public InstanceOfExpr setType(final ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (InstanceOfExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)

@@ -1,10 +1,24 @@
 #!/usr/bin/env bash
 
+## Exit script if any non-zero exit code (nb: some redundancy with checks below - may remove if exit code checks are thorough)
+set -e
+## Disallow references to non-existent environment variables
+set -u
+## Exit on invalid/bad pipes
+set -o pipefail
+
+#TODO --- Replace all mentions of Bintray
 
 echo "[JavaParser]"
 echo "[JavaParser]"
 echo "[JavaParser]: See also: http://github.com/javaparser/javaparser/wiki/Release-Process"
-echo "[JavaParser]:"
+echo "[JavaParser]"
+echo "[JavaParser]: ##"
+echo "[JavaParser]: ##"
+echo "[JavaParser]: ## TODO --- Replace all mentions of Bintray"
+echo "[JavaParser]: ##"
+echo "[JavaParser]: ##"
+echo "[JavaParser]"
 echo "[JavaParser]: Before running this script, ensure that your settings.xml file (~/.m/setings.xml) has been updated with your Bintray credentials."
 echo "[JavaParser]: - A template settings.xml file can be found within the dev-files directory."
 echo "[JavaParser]: - You must also be added to the JavaParser organisation on Bintray for releases to be successful."
@@ -25,6 +39,12 @@ echo "[JavaParser]"
 
 set -x
 
-mvn -e -Darguments="-DskipTests" release:perform
+./mvnw --errors --show-version \
+  -Darguments="-DskipTests" release:perform
+
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing release:perform"
+  exit 10;
+fi
 
 set +x

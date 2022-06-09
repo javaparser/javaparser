@@ -24,11 +24,13 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -61,7 +63,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         // Attempt to resolve `DuplicateTypeName` from `class ExtendingType extends **DuplicateTypeName**`
         assumeTrue(extendingTypeClass.getExtendedTypes().size() > 0);
         ClassOrInterfaceType extendedType = extendingTypeClass.getExtendedTypes(0);
-        ResolvedReferenceType resolvedExtendedType = extendedType.resolve();
+        ResolvedReferenceType resolvedExtendedType = extendedType.resolve().asReferenceType();
 
         // Verify qualified name matches the non-nested class in the same package.
         // Note verbose assertions show both the "correct" expected value, and the erroneous value to be avoided.
@@ -91,7 +93,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         // Attempt to resolve `DuplicateTypeName` from `class ImplementingType implements **DuplicateTypeName**`
         assumeTrue(implementingTypeClass.getImplementedTypes().size() > 0);
         ClassOrInterfaceType implementedType = implementingTypeClass.getImplementedTypes(0);
-        ResolvedReferenceType resolvedImplementedType = implementedType.resolve();
+        ResolvedReferenceType resolvedImplementedType = implementedType.resolve().asReferenceType();
 
         // Verify qualified name matches the non-nested class in the same package.
         // Note verbose assertions show both the "correct" expected value, and the erroneous value to be avoided.
@@ -172,4 +174,32 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
         assertNotEquals("java.lang.String", qualifiedName, "Error - mistakenly resolved to a member of java.lang instead of a member of asterisk-imported package.");
     }
 
+    @Test
+    void testTypesWithSameNameInPackageAndNestedMethodDeclaration() {
+        String code = "package implements_duplicate;\n" +
+            "\n" +
+            "import java.util.Formattable;\n" +
+            "\n" +
+            "public abstract class A implements Formattable {\n" +
+            "\n" +
+            "    public interface Formattable {\n" +
+            "    }\n" +
+            "\n" +
+            "    public void foo(Formattable f) {\n" +
+            "    }\n" +
+            "\n" +
+            "}\n";
+
+        StaticJavaParser
+                .getConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+
+        CompilationUnit cu = StaticJavaParser.parse(code);
+
+        MethodDeclaration decl = cu.findFirst(MethodDeclaration.class).get();
+        String qualifiedName = decl.getParameters().get(0).getType().resolve().asReferenceType().getQualifiedName();
+        assertEquals("implements_duplicate.A.Formattable", qualifiedName, "Error - not resolved to local interface");
+        assertNotEquals("java.util.Formattable", qualifiedName,
+                        "Error - mistakenly resolved to import used in implements");
+    }
 }

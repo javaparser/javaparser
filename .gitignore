@@ -10,6 +10,7 @@ target
 *.iml
 release.properties
 **/.DS_Store
+**/pom.xml.releaseBackup
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

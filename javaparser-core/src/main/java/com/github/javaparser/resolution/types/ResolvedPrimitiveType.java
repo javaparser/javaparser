@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -185,7 +185,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     /*
      * Verify if the ResolvedPrimitiveType is in the list of ResolvedPrimitiveType
      */
-    public boolean in(ResolvedPrimitiveType[] types) {
+    public boolean in(ResolvedPrimitiveType... types) {
         return Arrays.stream(types).anyMatch(type -> this == type); 
     }
     

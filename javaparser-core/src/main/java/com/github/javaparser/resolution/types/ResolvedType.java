@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -214,5 +214,27 @@ public interface ResolvedType {
     default boolean isNumericType() {
         return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(this));
     }
+    
+    ///
+    /// Erasure
+    ///
+    // Type erasure is a mapping from types (possibly including parameterized types and type variables) to types (that
+    /// are never parameterized types or type variables). We write |T| for the erasure of type T. The erasure mapping
+    /// is defined as follows:
+    //
+    // The erasure of a parameterized type (§4.5) G<T1,...,Tn> is |G|.
+    //
+    // The erasure of a nested type T.C is |T|.C.
+    //
+    // The erasure of an array type T[] is |T|[].
+    //
+    // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+    //
+    // The erasure of every other type is the type itself.
+    
+    default ResolvedType erasure() {
+        return this;
+    }
+    
     
 }

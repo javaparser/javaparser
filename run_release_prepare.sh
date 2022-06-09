@@ -26,8 +26,19 @@ set -x
 
 git pull
 
-mvn -e clean
-mvn -e -Darguments="-DskipTests" release:prepare
+./mvnw --errors --show-version clean
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing clean"
+  exit 1
+fi
+
+./mvnw --errors --show-version --batch-mode \
+  -Darguments="-DskipTests" release:prepare
+
+if [ "$?" -ne 0 ]; then
+  echo "Error when performing release:prepare"
+  exit 1
+fi
 
 set +x
 
@@ -35,5 +46,9 @@ echo "[JavaParser]"
 echo "[JavaParser]"
 echo "[JavaParser]: Assuming the release:prepare is successful, you MUST now push the changes."
 echo "[JavaParser]: - Specifically, release:perform requires the newly created tag to have been pushed."
+echo "[JavaParser]"
+echo "[JavaParser]: This can be achieved using: \`git push --follow-tags\`."
+echo "[JavaParser]: Follow tags will push any tags associated with the current head commit."
+echo "[JavaParser]: Alternatively, you can push the tag itself using \`git push <repo-name> <tag-name>\`."
 echo "[JavaParser]"
 echo "[JavaParser]"

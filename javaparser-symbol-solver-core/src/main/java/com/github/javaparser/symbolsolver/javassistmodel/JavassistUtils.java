@@ -21,28 +21,55 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javassist.*;
-import javassist.bytecode.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import javassist.CtBehavior;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.Modifier;
+import javassist.bytecode.AccessFlag;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
+import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.SyntheticAttribute;
 
 /**
  * @author Federico Tomassetti
  */
 class JavassistUtils {
 
-    static Optional<MethodUsage> getMethodUsage(CtClass ctClass, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
-                                                List<ResolvedTypeParameterDeclaration> typeParameters, List<ResolvedType> typeParameterValues) {
+    static Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+                                                    Context invokationContext, List<ResolvedType> typeParameterValues,
+                                                    ResolvedReferenceTypeDeclaration scopeType, CtClass ctClass) {
+        List<ResolvedTypeParameterDeclaration> typeParameters = scopeType.getTypeParameters();
+
         List<MethodUsage> methods = new ArrayList<>();
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)
@@ -63,30 +90,53 @@ class JavassistUtils {
             }
         }
 
-        try {
-            CtClass superClass = ctClass.getSuperclass();
-            if (superClass != null) {
-                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(superClass, name, argumentsTypes, typeSolver, typeParameters, typeParameterValues);
-                if (ref.isPresent()) {
-                    methods.add(ref.get());
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                Optional<MethodUsage> ref = JavassistUtils.getMethodUsage(interfaze, name, argumentsTypes, typeSolver, typeParameters, typeParameterValues);
-                if (ref.isPresent()) {
-                    methods.add(ref.get());
-                }
-            }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+        for (ResolvedReferenceType ancestor : scopeType.getAncestors()) {
+            ancestor.getTypeDeclaration()
+                .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
+                .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
+                .ifPresent(methods::add);
         }
 
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
+    }
+
+    static SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+                                                                  TypeSolver typeSolver, ResolvedReferenceTypeDeclaration scopeType, CtClass ctClass) {
+        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
+        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || java.lang.reflect.Modifier.isStatic(m.getModifiers());
+        for (CtMethod method : ctClass.getDeclaredMethods()) {
+            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
+            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
+            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
+                ResolvedMethodDeclaration candidate = new JavassistMethodDeclaration(method, typeSolver);
+                candidates.add(candidate);
+
+                // no need to search for overloaded/inherited methods if the method has no parameters
+                if (argumentsTypes.isEmpty() && candidate.getNumberOfParams() == 0) {
+                    return SymbolReference.solved(candidate);
+                }
+            }
+        }
+
+        // add the method declaration of the interfaces to the candidates, if present
+        for (ResolvedReferenceType ancestorRefType : scopeType.getAncestors()) {
+            Optional<ResolvedReferenceTypeDeclaration> ancestorTypeDeclOpt = ancestorRefType.getTypeDeclaration();
+            if (ancestorTypeDeclOpt.isPresent()) {
+                SymbolReference<ResolvedMethodDeclaration> ancestorMethodRef = MethodResolutionLogic.solveMethodInType(
+                        ancestorTypeDeclOpt.get(),
+                        name,
+                        argumentsTypes,
+                        staticOnly
+                );
+                if (ancestorMethodRef.isSolved()) {
+                    candidates.add(ancestorMethodRef.getCorrespondingDeclaration());
+                }
+            } else {
+                // Consider IllegalStateException or similar?
+            }
+        }
+
+        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
     }
 
     static ResolvedType signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
@@ -106,7 +156,8 @@ class JavassistUtils {
             return new ResolvedTypeVariable(typeParameterDeclaration);
         } else if (signatureType instanceof SignatureAttribute.ArrayType) {
             SignatureAttribute.ArrayType arrayType = (SignatureAttribute.ArrayType) signatureType;
-            return new ResolvedArrayType(signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable));
+            ResolvedType baseType = signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable);
+            return getArrayType(baseType, arrayType.getDimension());
         } else if (signatureType instanceof SignatureAttribute.BaseType) {
             SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType) signatureType;
             if (baseType.toString().equals("void")) {
@@ -117,6 +168,13 @@ class JavassistUtils {
         } else {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
+    }
+    /*
+     * Manage dimension of an array
+     */
+    private static ResolvedType getArrayType(ResolvedType resolvedType, int dimension) {
+        if (dimension > 0) return getArrayType(new ResolvedArrayType(resolvedType), --dimension);
+        return resolvedType;
     }
 
     private static String getTypeName(SignatureAttribute.ClassType classType) {

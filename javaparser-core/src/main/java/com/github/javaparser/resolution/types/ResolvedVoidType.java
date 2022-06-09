@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,7 +39,18 @@ public class ResolvedVoidType implements ResolvedType {
 
     @Override
     public boolean isAssignableBy(ResolvedType other) {
-        throw new UnsupportedOperationException();
+        // According to https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.8:
+        // """
+        // Note that the Java programming language does not allow a "cast to void" - void is not a type - so the
+        // traditional C trick of writing an expression statement such as:
+        //
+        // (void)... ;  // incorrect!
+        //
+        // does not work.
+        // """
+        //
+        // In short, nothing can be assign to "void".
+        return false;
     }
 
     @Override

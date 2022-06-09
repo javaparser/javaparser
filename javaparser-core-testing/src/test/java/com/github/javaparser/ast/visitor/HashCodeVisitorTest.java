@@ -183,7 +183,7 @@ class HashCodeVisitorTest {
 	void testVisitBreakStmt() {
 		BreakStmt node = spy(new BreakStmt());
 		HashCodeVisitor.hashCode(node);
-		verify(node, times(2)).getLabel();
+		verify(node, times(1)).getLabel();
 		verify(node, times(1)).getComment();
 	}
 
@@ -506,6 +506,14 @@ class HashCodeVisitorTest {
 		LocalClassDeclarationStmt node = spy(new LocalClassDeclarationStmt());
 		HashCodeVisitor.hashCode(node);
 		verify(node, times(1)).getClassDeclaration();
+		verify(node, times(1)).getComment();
+	}
+
+	@Test
+	void testVisitLocalRecordDeclarationStmt() {
+		LocalRecordDeclarationStmt node = spy(new LocalRecordDeclarationStmt());
+		HashCodeVisitor.hashCode(node);
+		verify(node, times(1)).getRecordDeclaration();
 		verify(node, times(1)).getComment();
 	}
 

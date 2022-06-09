@@ -108,7 +108,7 @@ public class SymbolSolver {
 
             // FIXME should call typesolver here!
 
-            String name = ((ClassOrInterfaceType) type).getName().getId();
+            String name = ((ClassOrInterfaceType) type).getNameWithScope();
             SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver).toString(), name);

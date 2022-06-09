@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -34,7 +35,13 @@ import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class Issue343Test extends AbstractResolutionTest{
+/**
+ * Note this issue number refers to the archived `javasymbolsolver` repository,
+ * whose issues prior to it being integrated into JavaParser itself are numbered separately:
+ *
+ * https://github.com/javaparser/javasymbolsolver/issues/343
+ */
+class Issue343Test extends AbstractResolutionTest {
 
     private TypeSolver typeResolver;
     private JavaParserFacade javaParserFacade;
@@ -61,13 +68,13 @@ class Issue343Test extends AbstractResolutionTest{
 
     @Test
     void toResolveDoubleWeNeedTheAST() {
-        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, parseExpression("new Double[]{2.0d, 3.0d}[1]")));
+        assertThrows(UnsolvedSymbolException.class, () -> getExpressionType(typeResolver, parseExpression("new Double[]{2.0d, 3.0d}[1]")));
     }
 
 
     @Test
     void toResolveFloatWeNeedTheAST() {
-        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}")));
+        assertThrows(UnsolvedSymbolException.class, () -> getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}[1]")));
     }
 
     @Test

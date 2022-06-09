@@ -56,7 +56,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
             if (expr instanceof VariableDeclarationExpr) {
                 for (VariableDeclarator v : ((VariableDeclarationExpr)expr).getVariables()) {
                     if (v.getName().getIdentifier().equals(name)) {
-                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.localVar(v, typeSolver);
+                        ResolvedValueDeclaration decl = JavaParserSymbolDeclaration.localVar(v, typeSolver);
                         return Optional.of(Value.from(decl));
                     }
                 }
