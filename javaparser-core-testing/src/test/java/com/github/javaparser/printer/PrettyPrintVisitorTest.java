@@ -513,4 +513,18 @@ class PrettyPrintVisitorTest extends TestParser {
                 "    <html>\n" +
                 "    </html>\"\"\";", cu.getClassByName("X").get().getFieldByName("html").get().toString());
     }
+
+
+    @Test
+    void innerClassWithConstructorReceiverParameterTest() {
+        String innerClassWithConstructorReceiverParam =
+                "public class A {\n\n" +
+                        "    class InnerA {\n\n" +
+                        "        InnerA(A A.this) {\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}\n";
+        CompilationUnit cu = parseCompilationUnit(innerClassWithConstructorReceiverParam);
+        assertEqualsStringIgnoringEol(innerClassWithConstructorReceiverParam, print(cu));
+    }
 }

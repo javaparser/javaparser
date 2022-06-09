@@ -21,7 +21,12 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
 /**
  * Elements in a CsmMix have been reshuffled. It could also mean that
@@ -81,4 +86,33 @@ public class Reshuffled implements DifferenceElement {
     public boolean isRemoved() {
         return false;
     }
+    
+    /*
+     * If the {@code DifferenceElement} wraps an EOL token then this method returns a new {@code DifferenceElement}
+     * with all eof token replaced by the specified line separator. The line separator parameter must be a CsmToken with a valid line separator.
+     */
+    @Override
+    public DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
+        CsmMix modifiedNextOrder = new CsmMix(replaceTokens(nextOrder.getElements(), lineSeparator));
+        CsmMix modifiedPreviousOrder = new CsmMix(replaceTokens(previousOrder.getElements(), lineSeparator));
+        return new Reshuffled(modifiedPreviousOrder, modifiedNextOrder);
+    }
+    
+    /*
+     * Replaces all eol tokens in the list by the specified line separator token 
+     */
+    private List<CsmElement> replaceTokens(List<CsmElement> elements, CsmElement lineSeparator) {
+        return elements.stream()
+                .map(element -> isNewLineToken(element) ? lineSeparator : element)
+                .collect(Collectors.toList());
+    }
+    
+    /*
+     * Return true if the wrapped {@code CsmElement} is a new line token
+     */
+    private boolean isNewLineToken(CsmElement element) {
+        return isToken(element) && ((CsmToken) element).isNewLine();
+    }
+    
+    private boolean isToken(CsmElement element) { return element instanceof CsmToken; }
 }
