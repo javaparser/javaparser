@@ -805,6 +805,8 @@ public class JavaParserFacade {
                 //getTypeConcrete(Node node, boolean solveLambdas)
                 try {
                     params.add(getType(param, false));
+                } catch (UnsolvedSymbolException e) {
+                    throw e;
                 } catch (Exception e) {
                     throw new RuntimeException(String.format("Error calculating the type of parameter %s of method call %s", param, call), e);
                 }
