@@ -4,20 +4,23 @@ import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.NodeWithJmlTags;
+import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.body.JmlFieldDeclaration;
 import com.github.javaparser.ast.jml.body.JmlMethodDeclaration;
+import com.github.javaparser.ast.jml.body.JmlRepresentsDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.jml.doc.*;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.jml.JmlDocSanitizer;
 import lombok.Getter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Alexander Weigl
@@ -27,6 +30,7 @@ public class StatVisitor extends VoidVisitorAdapter<Object> {
     private final List<List<String>> keys;
     @Getter
     private final Map<List<String>, Stat> newlines = new HashMap<>();
+    private final ExpressionCosts expressionCosts = new ExpressionCosts();
 
     public StatVisitor(List<List<String>> keys) {
         this.keys = keys;
@@ -46,19 +50,26 @@ public class StatVisitor extends VoidVisitorAdapter<Object> {
         }
     }
 
-    private Stat getStatistics(List<String> keySet) {
-        return newlines.computeIfAbsent(keySet, k -> new Stat());
+    @Override
+    public void visit(JmlClassExprDeclaration n, Object arg) {
+        update(n, this::update);
     }
 
-    private static int newlines(String text) {
-        char[] chars = text.toCharArray();
-        int n = 0;
-        for (char aChar : chars) {
-            if (aChar == '\n') {
-                n++;
-            }
-        }
-        return n;
+    private void update(Stat stat, JmlClassExprDeclaration n) {
+        Stat.ClassStat classStat = getClassStat(stat, n);
+        Stat.ClassStat.CEStat a = classStat.getClassExpressionSpecification(n.getKind().getIdentifier());
+        a.numOf++;
+        a.sumOfComplexity += n.getInvariant().accept(new ExpressionComplexity(), expressionCosts);
+    }
+
+    @Override
+    public void visit(JmlRepresentsDeclaration n, Object arg) {
+        update(n, this::update);
+    }
+
+    private void update(Stat stat, JmlRepresentsDeclaration repr) {
+        Stat.ClassStat c = getClassStat(stat, repr);
+        c.setNumOfRepresents(c.getNumOfRepresents());
     }
 
     @Override
@@ -90,14 +101,43 @@ public class StatVisitor extends VoidVisitorAdapter<Object> {
 
     @Override
     public void visit(JmlContract n, Object arg) {
-        for (List<String> keySet : keys) {
-            String[] tags = toArray(n.getJmlTags());
-            if (JmlDocSanitizer.isActiveJmlSpec(keySet, tags)) {
-                Stat stat = getStatistics(keySet);
-                update(stat, n);
+        update(n, this::update);
+        super.visit(n, arg);
+    }
+
+
+    private Stat getStatistics(List<String> keySet) {
+        return newlines.computeIfAbsent(keySet, k -> new Stat());
+    }
+
+    private static int newlines(String text) {
+        char[] chars = text.toCharArray();
+        int n = 0;
+        for (char aChar : chars) {
+            if (aChar == '\n') {
+                n++;
             }
         }
-        super.visit(n, arg);
+        return n;
+    }
+
+
+    @Override
+    public void visit(JmlFieldDeclaration n, Object arg) {
+        update(n, this::update);
+    }
+
+    interface Update<R> {
+        void fn(Stat s, R node);
+    }
+
+    public <R extends NodeWithJmlTags<?>> void update(R n, Update<R> update) {
+        for (List<String> keySet : keys) {
+            if (equal(keySet, n.getJmlTags())) {
+                Stat stat = getStatistics(keySet);
+                update.fn(stat, n);
+            }
+        }
     }
 
     private void update(Stat stat, JmlContract n) {
@@ -105,17 +145,7 @@ public class StatVisitor extends VoidVisitorAdapter<Object> {
         mstat.addNumOfContracts(1);
     }
 
-    @Override
-    public void visit(JmlFieldDeclaration n, Object arg) {
-        for (List<String> keySet : keys) {
-            if (equal(keySet, n.getJmlTags())) {
-                Stat stat = getStatistics(keySet);
-                update(stat, n);
-            }
-        }
-    }
-
-    private boolean equal(List<String> keySet, NodeList<SimpleName> jmlTags) {
+    private static boolean equal(List<String> keySet, NodeList<SimpleName> jmlTags) {
         if (keySet.size() != jmlTags.size()) {
             return false;
         }
@@ -126,10 +156,6 @@ public class StatVisitor extends VoidVisitorAdapter<Object> {
             }
         }
         return true;
-    }
-
-    private List<String> toList(NodeList<SimpleName> jmlTags) {
-        return jmlTags.stream().map(it -> it.getIdentifier()).collect(Collectors.toList());
     }
 
     private void update(Stat stat, JmlFieldDeclaration n) {
@@ -147,7 +173,6 @@ public class StatVisitor extends VoidVisitorAdapter<Object> {
             return stat.getClassStats(fqdn);
         }
         return null;
-
     }
 
     private Stat.MethodStat getMethodStat(Stat stat, HasParentNode<Node> n) {
@@ -158,15 +183,139 @@ public class StatVisitor extends VoidVisitorAdapter<Object> {
             final String sig = mdecl.get().getSignature().asString();
             return stat.getClassStats(fqdn).getMethodStats(sig);
         }
-        return null;
+        throw new IllegalArgumentException();
     }
 
-    private String[] toArray(NodeList<SimpleName> jmlTags) {
-        final String[] ret = new String[jmlTags.size()];
-        int i = 0;
-        for (SimpleName jmlTag : jmlTags) {
-            ret[i++] = jmlTag.getIdentifier();
-        }
-        return ret;
+
+}
+
+class ExpressionComplexity extends GenericVisitorAdapter<Integer, ExpressionCosts> {
+    @Override
+    public Integer visit(ArrayAccessExpr n, ExpressionCosts arg) {
+        return super.visit(n, arg);
+    }
+
+    @Override
+    public Integer visit(ArrayCreationExpr n, ExpressionCosts arg) {
+        return super.visit(n, arg);
+    }
+
+    @Override
+    public Integer visit(ArrayInitializerExpr n, ExpressionCosts arg) {
+        return super.visit(n, arg);
+    }
+
+    @Override
+    public Integer visit(AssignExpr n, ExpressionCosts arg) {
+        return arg.getAssign() + n.getTarget().accept(this, arg) + n.getValue().accept(this, arg);
+    }
+
+    @Override
+    public Integer visit(BinaryExpr n, ExpressionCosts arg) {
+        //TODO distinguish by operator
+        return arg.getMinus() + n.getLeft().accept(this, arg) + n.getRight().accept(this, arg);
+    }
+
+    @Override
+    public Integer visit(UnaryExpr n, ExpressionCosts arg) {
+        return super.visit(n, arg);
+    }
+
+    @Override
+    public Integer visit(LambdaExpr n, ExpressionCosts arg) {
+        return super.visit(n, arg);
+    }
+
+    @Override
+    public Integer visit(CastExpr n, ExpressionCosts arg) {
+        return arg.getCast() + n.accept(this, arg);
+    }
+
+    @Override
+    public Integer visit(CharLiteralExpr n, ExpressionCosts arg) {
+        return arg.getCharLiteral();
+    }
+
+    @Override
+    public Integer visit(ConditionalExpr n, ExpressionCosts arg) {
+        return arg.getConditional() + n.getCondition().accept(this, arg)
+                + n.getThenExpr().accept(this, arg)
+                + n.getElseExpr().accept(this, arg);
+    }
+
+    @Override
+    public Integer visit(EnclosedExpr n, ExpressionCosts arg) {
+        return n.getInner().accept(this, arg);
+    }
+
+    @Override
+    public Integer visit(IntegerLiteralExpr n, ExpressionCosts arg) {
+        return arg.getIntegerLiteral();
+    }
+
+    @Override
+    public Integer visit(LongLiteralExpr n, ExpressionCosts arg) {
+        return arg.getLongLiteral();
+    }
+
+    @Override
+    public Integer visit(MethodCallExpr n, ExpressionCosts arg) {
+        return arg.getMethodCall() + sum(n.getArguments(), arg);
+    }
+
+    @Override
+    public Integer visit(NameExpr n, ExpressionCosts arg) {
+        return arg.getName();
+    }
+
+    @Override
+    public Integer visit(NullLiteralExpr n, ExpressionCosts arg) {
+        return arg.getNullLiteral();
+    }
+
+    @Override
+    public Integer visit(JmlQuantifiedExpr n, ExpressionCosts arg) {
+        return arg.getQuantor() + n.getVariables().size() * arg.getBinderCostsPerVariable() +
+                sum(n.getExpressions(), arg);
+    }
+
+    private int sum(NodeList<Expression> n, ExpressionCosts arg) {
+        return n.stream().mapToInt(it -> it.accept(this, arg)).sum();
+    }
+
+    @Override
+    public Integer visit(SuperExpr n, ExpressionCosts arg) {
+        return 0;
+    }
+
+    @Override
+    public Integer visit(SwitchExpr n, ExpressionCosts arg) {
+        return n.getSelector().accept(this, arg) +
+                n.getEntries().stream().mapToInt(it -> sum(it.getLabels(), arg) + 1).sum();
+    }
+
+    @Override
+    public Integer visit(PatternExpr n, ExpressionCosts arg) {
+        return 0;
+    }
+
+    @Override
+    public Integer visit(InstanceOfExpr n, ExpressionCosts arg) {
+        return arg.get_instanceof() + n.getExpression().accept(this, arg);
+    }
+
+    @Override
+    public Integer visit(JmlLabelExpr n, ExpressionCosts arg) {
+        return super.visit(n, arg);
+    }
+
+    @Override
+    public Integer visit(JmlLetExpr n, ExpressionCosts arg) {
+        return arg.getLet() + arg.getBinderCostsPerVariable() * n.getVariables().getVariables().size();
+    }
+
+    @Override
+    public Integer visit(JmlMultiCompareExpr n, ExpressionCosts arg) {
+        return arg.getCompare() * n.getOperators().size();
     }
 }

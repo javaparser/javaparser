@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Alexander Weigl
@@ -25,7 +26,7 @@ public class Stat {
 
     @Data
     public static class ClassStat {
-        private int numOfInvariants;
+        private Map<String, CEStat> classExpressionSpecification = new TreeMap<String, CEStat>();
         private int lengthOfInvariants;
         private int numOfRepresents;
         private int numOfModelFields;
@@ -43,6 +44,20 @@ public class Stat {
 
         public void addNumOfModelFields(int i) {
             numOfModelFields += i;
+        }
+
+        public Map<String, CEStat> getClassExpressionSpecification() {
+            return classExpressionSpecification;
+        }
+
+        public CEStat getClassExpressionSpecification(String identifier) {
+            return classExpressionSpecification.computeIfAbsent(identifier, (k) -> new CEStat());
+        }
+
+        @Data
+        public class CEStat {
+            int numOf;
+            int sumOfComplexity;
         }
     }
 

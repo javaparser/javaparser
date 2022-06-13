@@ -11,6 +11,8 @@ class T {
 
     /*+openjml@ public ghost int f3 = 0; */
 
+    /*+openjml@ invariant x == 1; */
+
 
     /*@ spec_public */ void a() {
         //@ assert true;
