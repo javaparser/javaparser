@@ -18,9 +18,9 @@ import java.util.stream.Stream;
  * @author Alexander Weigl
  * @version 1 (12/9/21)
  */
-public class FragmentTest {
+class FragmentTest {
     @TestFactory
-    public Stream<DynamicTest> testStatementLevel() {
+    Stream<DynamicTest> testStatementLevel() {
         return files()
                 .filter(it -> it.getName().startsWith("stmt"))
                 .map(it -> DynamicTest.dynamicTest(it.getName(), () -> testStatementLevel(it)));
@@ -38,7 +38,7 @@ public class FragmentTest {
     }
 
     @TestFactory
-    public Stream<DynamicTest> testClassLevel() {
+    Stream<DynamicTest> testClassLevel() {
         return files()
                 .filter(it -> it.getName().startsWith("decl"))
                 //.filter(it -> it.getName().endsWith("510942598.txt"))

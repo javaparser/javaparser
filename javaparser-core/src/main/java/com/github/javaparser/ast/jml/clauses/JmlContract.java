@@ -273,8 +273,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     public enum Type {
-
-        METHOD, LOOP, BLOCK, STATEMENT, LAMBDA
+        METHOD, LOOP, LOOP_INV, BLOCK, STATEMENT, LAMBDA
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")

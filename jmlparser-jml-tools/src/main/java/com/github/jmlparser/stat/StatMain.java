@@ -7,7 +7,17 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.jmlparser.Main;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.Getter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -17,7 +27,7 @@ import java.util.*;
 public class StatMain {
     private static final Args args = new Args();
 
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws ParserConfigurationException, TransformerException {
         JCommander cmd = JCommander.newBuilder()
                 .programName("jml-stat")
                 .addObject(args)
@@ -38,19 +48,40 @@ public class StatMain {
         }
 
         if (args.activeJmlKeys.isEmpty()) {
-            config.getJmlKeys().add(new ArrayList<>());
+            //config.getJmlKeys().add(new ArrayList<>());
             config.getJmlKeys().add(Collections.singletonList("key"));
-            config.getJmlKeys().add(Collections.singletonList("openjml"));
+            //config.getJmlKeys().add(Collections.singletonList("openjml"));
         }
+
+
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = builderFactory.newDocumentBuilder();
+        Document xmlDocument = builder.newDocument();
+        final Element xmlRoot = xmlDocument.createElement("statistics-model");
 
         Collection<CompilationUnit> nodes = Main.parse(args.files, config);
-        StatVisitor statVisitor = new StatVisitor(config.getJmlKeys());
-        for (CompilationUnit node : nodes) {
-            node.accept(statVisitor, null);
+        final ExpressionCosts costs = new ExpressionCosts();
+        for (List<String> key : config.getJmlKeys()) {
+            StatVisitor statVisitor = new StatVisitor(xmlDocument, key, costs);
+            Element e = xmlDocument.createElement("settings");
+            e.setAttribute("keys", "" + key);
+            xmlRoot.appendChild(e);
+            for (CompilationUnit node : nodes) {
+                node.accept(statVisitor, e);
+            }
         }
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(statVisitor.getNewlines()));
+        //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        //System.out.println(gson.toJson(statVisitor.getNewlines()));
+
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        StreamResult result = new StreamResult(new StringWriter());
+        DOMSource source = new DOMSource(xmlRoot);
+        transformer.transform(source, result);
+        String xmlString = result.getWriter().toString();
+        System.out.println(xmlString);
     }
 
     private static class Args {

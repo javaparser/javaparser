@@ -6456,7 +6456,7 @@ NodeList<JmlStatement> JmlStatements():
 }
 {
   first=JmlStatement() {statements.add(first);}
-  ( last=JmlStatement() {statements.add(last);} )*
+  (LOOKAHEAD(3) last=JmlStatement() {statements.add(last);} )*
   {
     return statements;
   }
@@ -6556,14 +6556,17 @@ JmlContract JmlInvContract():
   JavaToken begin;
   JmlClause clause;
   NodeList<JmlClause> clauses = new NodeList<>();
+  SimpleName name=null;
 }
 {
+  //[name=SimpleName() ":"]
   //This line is unfolded -- important for the fast lookahead
   clause = JmlLoopInvClause() ";" { clauses.add(clause); }
   (
       clause=JmlLoopInvClauses() { clauses.add(clause); }
   )*
-  { return new JmlContract(range(clause, token()), Behavior.NONE, new NodeList<>(), clauses, new NodeList<>()); }
+  { return new JmlContract(range(clause, token()), JmlContract.Type.LOOP_INV, false, Behavior.NONE,
+                                    name, new NodeList<>(), clauses, new NodeList<>()); }
 }
 
 JmlClause JmlLoopInvClauses():
@@ -6577,6 +6580,7 @@ JmlClause JmlLoopInvClauses():
   | ret=JmlReturnsClause()
   | ret=JmlDecreasesClause()
   | ret=JmlDefaultClause()
+  | ret=JmlMultiExprClauses()
   )
   ";"
   {return ret;}
@@ -6651,6 +6655,7 @@ JmlClause JmlContractClause():
   | ret=JmlSignalsOnlyClause()
   | ret=JmlAccessibleClause()
   | ret=JmlDefaultClause()
+  | ret=JmlMultiExprClauses()
   )
   ";"
   {return ret;}
@@ -6792,9 +6797,6 @@ JmlClause JmlDefaultClause():
 {
   ( <REQUIRES> | <REQUIRES_FREE> | <REQUIRES_REDUNDANTLY>
   | <ENSURES> | <ENSURES_FREE> | <ENSURES_REDUNDANTLY>
-  | <DIVERGES> | <DIVERGES_REDUNDANTLY> | <MEASURED_BY>
-  | <ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES>
-  | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY>
   )
   { begin = token();}
   (heaps=JmlHeaps())?
@@ -6802,6 +6804,26 @@ JmlClause JmlDefaultClause():
   e=Expression()
   { return new JmlSimpleExprClause(range(begin, token()), begin, name, heaps, e); }
 }
+
+JmlClause JmlMultiExprClauses():
+{
+    NodeList<SimpleName> heaps=new NodeList<>();
+    Expression e=null;
+    NodeList<Expression> exprs = new NodeList<>();
+    JavaToken begin;
+    SimpleName label = null;
+}
+{
+  ( <DIVERGES> | <DIVERGES_REDUNDANTLY> | <MEASURED_BY>
+  | <ASSIGNABLE> |  <MODIFIABLE> | <MODIFIES>
+  | <ASSIGNABLE_REDUNDANTLY> | <MODIFIABLE_REDUNDANTLY> | <MODIFIES_REDUNDANTLY> )
+  { begin = token();}
+  (heaps=JmlHeaps())*
+  [ LOOKAHEAD(2) label=SimpleName() ":"]
+  exprs=ExpressionList()
+  { return new JmlMultiExprClause(range(begin, token()), begin, label, heaps, exprs); }
+}
+
 
 /**
 */

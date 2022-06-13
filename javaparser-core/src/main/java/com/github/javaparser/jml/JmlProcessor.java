@@ -77,7 +77,11 @@ public class JmlProcessor extends Processor {
 
         @Nullable
         private ArbitraryNodeContainer parseJmlMethodLevel(NodeList<JmlDoc> jmlDocs) {
-            ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlMethodLevel(sanitizer.asString(jmlDocs));
+            final String content = sanitizer.asString(jmlDocs);
+            if (content.trim().isEmpty()) {
+                return new ArbitraryNodeContainer(new NodeList<>());
+            }
+            ParseResult<ArbitraryNodeContainer> r = javaParser.parseJmlMethodLevel(content);
             problems.addAll(r.getProblems());
             return r.getResult().orElse(null);
         }
@@ -201,7 +205,8 @@ public class JmlProcessor extends Processor {
             ArbitraryNodeContainer t = parseJmlMethodLevel(n.getJmlComments());
 
             if (t == null) {
-                reporter.report(n, "Could not handle the JML comment.");
+                String s = sanitizer.asString(n.getJmlComments());
+                reporter.report(n, "Could not handle the JML comment.\n---\n" + s + "\n---\n");
                 return pos;
             }
             setJmlTags(t);
