@@ -38,6 +38,7 @@ public class FullExamplesTest {
     {
         //private final StoreJMLComments storeProcessor = new StoreJMLComments()
         ParserConfiguration config = new ParserConfiguration();
+        config.setKeepJmlDocs(false);
         config.setProcessJml(true);
         config.setStoreTokens(true);
         jpb = new JavaParser(config);
@@ -116,7 +117,6 @@ public class FullExamplesTest {
         blocked.add("/openjml/test/gitbug555/Test.java");
         blocked.add("/key/standard_key/java_dl/classpath/IllegalStateException.java");
         blocked.add("/key/standard_key/java_dl/classpath/InputStream.java");
-
 
         blockedPaths = blocked.stream().map(it -> Paths.get(dir.toString(), it))
                 .collect(Collectors.toSet());

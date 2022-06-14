@@ -4,7 +4,6 @@ import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -27,8 +26,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
+ * Here happens the JML magic. This post-processor consumes {@link JmlDoc}
+ * and transfer them into proper AST nodes, which are attached to the corresponding node.
+ * <p>
+ * You can configure the {@link JmlProcessor} via the {@link ParserConfiguration} given in the {@link JavaParser}.
+ * <p>
+ * The {@link JmlProcessor} is re-run for every given key set.
+ * <p>
+ * Warnings are produced, if {@code isKeepJmlDocs} is false, and not all {@link JmlDocContainer} are removed.
+ * This should considered as a programing failure in the JML attacher algorithm.
+ *
  * @author Alexander Weigl
  * @version 1 (11/20/21)
+ * @see ParserConfiguration#isKeepJmlDocs()
+ * @see ParserConfiguration#isProcessJml()
+ * @see ParserConfiguration#getJmlKeys()
  */
 public class JmlProcessor extends Processor {
     @Override
@@ -36,18 +48,23 @@ public class JmlProcessor extends Processor {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();
-            ArrayList<JmlDocContainer> processedJmlDoc = new ArrayList<>(4096);
+            ArrayList<Node> processedJmlDoc = new ArrayList<>(4096);
             if (r.isPresent() && comments.isPresent()) {
                 for (List<String> activeKeys : configuration.getJmlKeys()) {
-                    final JmlReplaceVisitor v = new JmlReplaceVisitor(configuration, new TreeSet<>(activeKeys), result.getProblems());
+                    final JmlReplaceVisitor v = new JmlReplaceVisitor(configuration,
+                            new TreeSet<>(activeKeys), result.getProblems());
                     r.get().accept(v, null);
                     processedJmlDoc.addAll(v.processedJmlDoc);
                 }
             }
+
             if (!configuration.isKeepJmlDocs()) {
-                for (JmlDocContainer jmlDocContainer : processedJmlDoc) {
-                    ((Node) jmlDocContainer).remove();
+                for (Node jmlDocContainer : processedJmlDoc) {
+                    jmlDocContainer.remove();
                 }
+
+                //JmlDocHardRemover remover = new JmlDocHardRemover();
+                //remover.postProcess(result, configuration);
 
                 JmlWarnRemaingJmlDoc warn = new JmlWarnRemaingJmlDoc();
                 warn.postProcess(result, configuration);
@@ -61,9 +78,9 @@ public class JmlProcessor extends Processor {
         final JavaParser javaParser;
         private final List<Problem> problems;
 
-        private final List<JmlDocContainer> processedJmlDoc = new ArrayList<>(4096);
+        private final List<Node> processedJmlDoc = new ArrayList<>(4096);
 
-        private NodeList<SimpleName> enabledKeys = new NodeList<>();
+        private final NodeList<SimpleName> enabledKeys = new NodeList<>();
 
         private JmlReplaceVisitor(ParserConfiguration config, Set<String> activeKeys, List<Problem> problems) {
             this.problems = problems;
@@ -273,7 +290,7 @@ public class JmlProcessor extends Processor {
         private void handleModifier(Modifier n) {
             JmlDocModifier doc = (JmlDocModifier) n.getKeyword();
             if (n.getParentNode().isPresent()) {
-                processedJmlDoc.add(doc);
+                processedJmlDoc.add(n);
                 NodeWithModifiers<?> parent = (NodeWithModifiers<?>) n.getParentNode().get();
                 ArbitraryNodeContainer t = parseJmlModifierLevel(doc.getJmlComments());
                 if (t == null) return;

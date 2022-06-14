@@ -51,6 +51,10 @@ public class ParserConfiguration {
     //region jmlparser
     private List<List<String>> jmlKeys = new ArrayList<>();
 
+    {
+        jmlKeys.add(new ArrayList<>());
+    }
+
     public List<List<String>> getJmlKeys() {
         return jmlKeys;
     }
