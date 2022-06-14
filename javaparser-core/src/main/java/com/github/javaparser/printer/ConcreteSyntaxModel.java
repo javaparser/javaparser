@@ -21,28 +21,8 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-import static com.github.javaparser.ast.observer.ObservableProperty.*;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.FLAG;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_EMPTY;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_NOT_EMPTY;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_PRESENT;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
@@ -52,12 +32,6 @@ import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.modules.ModuleDeclaration;
-import com.github.javaparser.ast.modules.ModuleExportsDirective;
-import com.github.javaparser.ast.modules.ModuleOpensDirective;
-import com.github.javaparser.ast.modules.ModuleProvidesDirective;
-import com.github.javaparser.ast.modules.ModuleRequiresDirective;
-import com.github.javaparser.ast.modules.ModuleUsesDirective;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
