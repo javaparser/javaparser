@@ -51,5 +51,10 @@
 		    <version>1.18.24</version>
 		    <scope>compile</scope>
 	    </dependency>
+        <dependency>
+            <groupId>org.sosy-lab</groupId>
+            <artifactId>java-smt</artifactId>
+            <version>3.12.0</version>
+        </dependency>
     </dependencies>
 </project>
