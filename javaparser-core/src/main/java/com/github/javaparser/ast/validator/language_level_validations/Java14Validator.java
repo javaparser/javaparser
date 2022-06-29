@@ -22,7 +22,7 @@
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.body.RecordDeclaration;
-import com.github.javaparser.ast.validator.ReservedKeywordValidator;
+import com.github.javaparser.ast.validator.RecordAsTypeIdentifierNotAllowed;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.ast.validator.language_level_validations.chunks.RecordDeclarationValidator;
@@ -45,7 +45,7 @@ public class Java14Validator extends Java13Validator {
      * </blockquote>
      * https://docs.oracle.com/javase/specs/jls/se15/preview/specs/records-jls.html#jls-3.8
      */
-    final Validator recordAsTypeIdentifierNotAllowed = new ReservedKeywordValidator("record");
+    final Validator recordAsTypeIdentifierNotAllowed = new RecordAsTypeIdentifierNotAllowed();
 
     final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
 

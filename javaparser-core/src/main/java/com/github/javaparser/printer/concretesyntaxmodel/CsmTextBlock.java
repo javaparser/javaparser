@@ -31,6 +31,10 @@ public class CsmTextBlock implements CsmElement {
     public CsmTextBlock(ObservableProperty property) {
         this.property = property;
     }
+    
+    public ObservableProperty getProperty() {
+        return property;
+    }
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
@@ -42,7 +46,7 @@ public class CsmTextBlock implements CsmElement {
 
     @Override
     public String toString() {
-        return String.format("CsmTextBlock(property:%s)", property);
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 
 }

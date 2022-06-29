@@ -57,24 +57,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -1518,4 +1501,260 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testArrayPreservation_WithSingleLanguageStyle() {
+
+        // Given
+        considerCode("class Test {\n" +
+                    "  int[] foo;\n" +
+                    "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  int[] foo;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+
+    @Test
+    void testArrayPreservation_WithMultipleLanguageStyle() {
+
+        // Given
+        considerCode("class Test {\n" +
+                    "  int[][] foo;\n" +
+                    "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  int[][] foo;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+
+    @Test
+    void testArrayPreservation_WithSingleCLanguageStyle() {
+
+        // Given
+        considerCode("class Test {\n" +
+                    "  int foo[];\n" +
+                    "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  int foo[];\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+
+    /**
+     * Given a field that have arrays declared in C style and
+     * When a marker annotation is added to the code
+     * Assert that the result matches the expected.
+     *
+     * Issue: 3419
+     */
+    @Test
+    void testArrayPreservation_WithMultipleCLanguageStyle() {
+
+        // Given
+        considerCode("class Test {\n" +
+                     "  int foo[][];\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  int foo[][];\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+
+    @Test
+    void testArrayPreservation_WithSingleBracketWithoutSpace() {
+
+        // Given
+        considerCode("class Test {\n" +
+                     "  int[]foo;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  int[]foo;\n" +
+                                 "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+
+    @Test
+    void testArrayPreservation_WithMultipleBracketWithoutSpace() {
+
+        // Given
+        considerCode("class Test {\n" +
+                     "  int[][]foo;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  int[][]foo;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_SingleType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object foo;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object foo;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_ArrayType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object[] foo;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object[] foo;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_MultipleVariablesDeclarationWithSameType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object[] foo, bar;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object[] foo, bar;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    @Test
+    void testClassOrInterfacePreservationWithFullyQualifiedName_MultipleVariablesDeclarationwithDifferentType() {
+        // Given
+        considerCode("class Test {\n" +
+                     "  java.lang.Object foo[], bar;\n" +
+                     "}");
+
+        // When
+        FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
+        // modification of the AST
+        fooField.addMarkerAnnotation("Nullable");
+
+        // Assert
+        String expectedCode =   "class Test {\n" +
+                                "  @Nullable\n" +
+                                "  java.lang.Object foo[], bar;\n" +
+                                "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    // issue 3588 Modifier is removed when removing an annotation. 
+    @Test
+    void testRemovingInlinedAnnotation() {
+        // Given
+        considerCode("public class Foo{\n"
+                + "     protected @Nullable Object bar;\n"
+                + "}");
+
+        // When
+        FieldDeclaration fd = cu.findFirst(FieldDeclaration.class).get();
+        // modification of the AST
+        AnnotationExpr ae = fd.getAnnotations().get(0);
+        ae.remove();
+
+        // Assert
+        String expectedCode =   "public class Foo{\n"
+                + "     protected Object bar;\n"
+                + "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+    
+    // issue 3588 Modifier is removed when removing an annotation. 
+    @Test
+    void testRemovingInlinedAnnotation_alternate_case() {
+        // Given
+        considerCode("public class Foo{\n"
+                + "     @Nullable protected Object bar;\n"
+                + "}");
+
+        // When
+        FieldDeclaration fd = cu.findFirst(FieldDeclaration.class).get();
+        // modification of the AST
+        AnnotationExpr ae = fd.getAnnotations().get(0);
+        ae.remove();
+
+        // Assert
+        String expectedCode =   "public class Foo{\n"
+                + "     protected Object bar;\n"
+                + "}";
+        assertTransformedToString(expectedCode, cu);
+
+    }
+
 }

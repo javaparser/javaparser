@@ -21,13 +21,13 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class CsmAttribute implements CsmElement {
     public ObservableProperty getProperty() {
@@ -84,5 +84,10 @@ public class CsmAttribute implements CsmElement {
         }
         throw new UnsupportedOperationException("getTokenType does not know how to handle property "
                 + property + " with text: " + text);
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

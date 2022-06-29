@@ -44,4 +44,10 @@ public class CsmSingleReference implements CsmElement {
             ConcreteSyntaxModel.genericPrettyPrint(child, printer);
         }
     }
+    
+    @Override
+    public String toString() {
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
+    }
+    
 }

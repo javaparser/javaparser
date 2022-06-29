@@ -119,7 +119,7 @@ class EnumResolutionTest extends AbstractResolutionTest {
             assertEquals(AccessSpecifier.PRIVATE, ((JavaParserEnumDeclaration) ed_private.resolve()).accessSpecifier());
 
             EnumDeclaration ed_default = Navigator.findType(clazz, "EnumDefault").get().toEnumDeclaration().get();
-            assertEquals(AccessSpecifier.PACKAGE_PRIVATE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
+            assertEquals(AccessSpecifier.NONE, ((JavaParserEnumDeclaration) ed_default.resolve()).accessSpecifier());
         } finally {
             StaticJavaParser.setConfiguration(new ParserConfiguration());
         }

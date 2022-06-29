@@ -28,39 +28,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.ArrayAccessExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
@@ -90,7 +61,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
+import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprHandler;
+import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
@@ -221,179 +193,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(ConditionalExpr node, Boolean solveLambdas) {
         ResolvedType thenExpr = node.getThenExpr().accept(this, solveLambdas);
         ResolvedType elseExpr = node.getElseExpr().accept(this, solveLambdas);
-        
-        // manage null expression
-        if ( thenExpr.isNull()) {
-            return  elseExpr;
+
+        ConditionalExprHandler rce = ConditionalExprResolver.getConditionExprHandler(thenExpr, elseExpr);
+        try {
+            return rce.resolveType();
+        } catch (UnsupportedOperationException e) {
+            // There is nothing to do because, for the moment, we want to run actual implementation
         }
-        if ( elseExpr.isNull()) {
-            return  thenExpr;
-        }
-        /*
-         * Boolean conditional expressions are standalone expressions
-         * The type of a boolean conditional expression is determined as follows:
-         * If the second and third operands are both of type Boolean, the conditional expression has type Boolean.
-         * Otherwise, the conditional expression has type boolean.
-         */
-        if ( thenExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN) 
-                && elseExpr.isAssignableBy(ResolvedPrimitiveType.BOOLEAN)) {
-            if (thenExpr.isReferenceType() && elseExpr.isReferenceType()) {
-                return thenExpr.asReferenceType();
-            }
-            return thenExpr.isPrimitive() ? thenExpr : elseExpr;
-        }
-        
-        /*
-         * Numeric conditional expressions are standalone expressions (§15.2).
-         * The type of a numeric conditional expression is determined as follows:
-         * If the second and third operands have the same type, then that is the type of the conditional expression.
-         * If one of the second and third operands is of primitive type T, and the type of the other is the result of
-         * applying boxing conversion (§5.1.7) to T, then the type of the conditional expression is T.
-         * If one of the operands is of type byte or Byte and the other is of type short or Short, then the type of the
-         * conditional expression is short.
-         * If one of the operands is of type T where T is byte, short, or char, and the other operand is a constant
-         * expression (§15.28) of type int whose value is representable in type T, then the type of the conditional
-         * expression is T.
-         * If one of the operands is of type T, where T is Byte, Short, or Character, and the other operand is a
-         * constant expression of type int whose value is representable in the type U which is the result of applying
-         * unboxing conversion to T, then the type of the conditional expression is U.
-         * Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types, and the type of the
-         * conditional expression is the promoted type of the second and third operands.
-         */
-        if (thenExpr.isNumericType() && elseExpr.isNumericType()) {
-            ResolvedPrimitiveType[] resolvedPrimitiveTypeSubList = new ResolvedPrimitiveType[] {ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR};
-            /*
-             *  If the second and third operands have the same type, then that is the type of the conditional expression.
-             */
-            String qnameTypeThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive().describe()
-                    : thenExpr.asReferenceType().describe();
-            String qnameTypeElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive().describe()
-                    : elseExpr.asReferenceType().describe();
-            if (qnameTypeThenExpr.equals(qnameTypeElseExpr)) {
-                return thenExpr;
-            }
-            /*
-             * If one of the second and third operands is of primitive type T, and the type of the other is the result of
-             * applying boxing conversion (§5.1.7) to T, then the type of the conditional expression is T.
-             */
-            else if ((thenExpr.isPrimitive() && elseExpr.isReferenceType()
-                    && isCompatible(elseExpr.asReferenceType(), thenExpr.asPrimitive()))) {
-                return thenExpr;
-            } else if ((elseExpr.isPrimitive() && thenExpr.isReferenceType()
-                    && isCompatible(thenExpr.asReferenceType(), elseExpr.asPrimitive()))) {
-                return elseExpr;
-            }
-            /*
-             * If one of the operands is of type byte or Byte and the other is of type short or Short, then the type of the
-             * conditional expression is short.
-             */
-            else if ((isCompatible(thenExpr, ResolvedPrimitiveType.BYTE) && isCompatible(elseExpr, ResolvedPrimitiveType.SHORT))
-                    || (isCompatible(elseExpr, ResolvedPrimitiveType.BYTE) && isCompatible(thenExpr, ResolvedPrimitiveType.SHORT))) {
-                return ResolvedPrimitiveType.SHORT;
-            }
-            /*
-             *  If one of the operands is of type T where T is byte, short, or char, and the
-             *  other operand is a constant expression (§15.28) of type int whose value is
-             *  representable in type T, then the type of the conditional expression is T
-             *  How can we know if the constant expression of type int is representable in type T ?
-             *  "The constant expression of type int is representable in type T" is a runtime decision!
-             */
-            else if (thenExpr.isPrimitive() && elseExpr.isPrimitive()) {
-                if (((ResolvedPrimitiveType)thenExpr).in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
-                    return thenExpr;
-                } else if (((ResolvedPrimitiveType)elseExpr).in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
-                    return elseExpr;
-                }
-            }
-             /*  If one of the operands is of type T, where T is Byte, Short, or Character,
-             * and the other operand is a constant expression of type int whose value is
-             * representable in the type U which is the result of applying unboxing
-             * conversion to T, then the type of the conditional expression is U.
-             * A priori this is a runtime decision!
-             */
-            else if (thenExpr.isReference() && elseExpr.isPrimitive()
-                    && thenExpr.asReferenceType().isUnboxable()
-                    && thenExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
-                return thenExpr.asReferenceType().toUnboxedType().get();
-            } else if (elseExpr.isReference() && thenExpr.isPrimitive()
-                    && elseExpr.asReferenceType().isUnboxable()
-                    && elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
-                    && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
-                return elseExpr.asReferenceType().toUnboxedType().get();
-            }
-             
-            /* Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types,
-             * and the type of the conditional expression is the promoted type of the second
-             * and third operands.
-             */
-            ResolvedPrimitiveType PrimitiveThenExpr = thenExpr.isPrimitive() ? thenExpr.asPrimitive()
-                    : thenExpr.asReferenceType().toUnboxedType().get();
-            ResolvedPrimitiveType PrimitiveElseExpr = elseExpr.isPrimitive() ? elseExpr.asPrimitive()
-                    : elseExpr.asReferenceType().toUnboxedType().get();
-            return PrimitiveThenExpr.bnp(PrimitiveElseExpr);
-        }
-        
-        /*
-         * Otherwise, the conditional expression is a reference conditional expression.
-         * A reference conditional expression is a poly expression if it appears in an assignment context or an
-         * invocation context (§5.2. §5.3).
-         * Otherwise, it is a standalone expression.
-         * The type of a poly reference conditional expression is the same as its target type.
-         * The type of a standalone reference conditional expression is determined as follows:
-         * If the second and third operands have the same type (which may be the null type), then that is the type of
-         * the conditional expression.
-         * If the type of one of the second and third operands is the null type, and the type of the other operand is a
-         * reference type, then the type of the conditional expression is that reference type.
-         * Otherwise, the second and third operands are of types S1 and S2 respectively. Let T1 be the type that
-         * results from applying boxing conversion to S1, and let T2 be the type that results from applying boxing
-         * conversion to S2. The type of the conditional expression is the result of applying capture conversion
-         * (§5.1.10) to lub(T1, T2).
-         * TODO : must be implemented
-         */
-        if (node.isPolyExpression()) {
-            // The type of a poly reference conditional expression is the same as its target type.
-            Optional<Node> parentNode = node.getParentNode();
-            if (parentNode.isPresent()) {
-                Node parent = parentNode.get();
-                if (parent instanceof AssignExpr) {
-                    return visit((AssignExpr)parent, solveLambdas);
-                } else if (parent instanceof MethodCallExpr) {
-                    // how to define the target type?
-                    // a priori it is the type of the parameter of the method which takes the value of the conditional expression
-                    // TODO for the moment we keep the original return type
-                    return thenExpr;
-                }
-                throw new RuntimeException("Cannot resolve type of poly expression "+ node.toString());
-            } else {
-                throw new RuntimeException("Parent node unexpectedly empty");
-            }
-            
-        }
-        
-        // The type of a standalone reference conditional expression is determined as follows:
-        
-        // If the second and third operands have the same type (which may be the null type), then that is the type of
-        // the conditional expression.
-        if (thenExpr.equals(elseExpr)) {
-            return thenExpr;
-        }
-        // If the type of one of the second and third operands is the null type, and the type of the other operand is a
-        // reference type, then the type of the conditional expression is that reference type.
-        // this case is already supported above
-        
-        // Otherwise, the second and third operands are of types S1 and S2 respectively. Let T1 be the type that
-        // results from applying boxing conversion to S1, and let T2 be the type that results from applying boxing
-        // conversion to S2. The type of the conditional expression is the result of applying capture conversion
-        // (§5.1.10) to lub(T1, T2).
-        ResolvedType resolvedThenType = thenExpr.isPrimitive() ? TypeHelper.toBoxedType(thenExpr.asPrimitive(), typeSolver) : thenExpr;
-        ResolvedType resolvedElseType = elseExpr.isPrimitive() ? TypeHelper.toBoxedType(elseExpr.asPrimitive(), typeSolver) : elseExpr;
-        
-        // TypeHelper.leastUpperBound method is not yet implemented so for the moment we keep the original return type of this method
-        // TODO implement TypeHelper.leastUpperBound method
-        // return TypeHelper.leastUpperBound(new HashSet<ResolvedType>(Arrays.asList(resolvedThenType, resolvedElseType)));
         return node.getThenExpr().accept(this, solveLambdas);
     }
     
@@ -542,18 +348,27 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
         Log.trace("getType on type expr %s", ()-> node);
         if (!(node.getType() instanceof ClassOrInterfaceType)) {
-            // TODO / FIXME... e.g. System.out::println
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
         }
+
         ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) node.getType();
+        String nameWithScope = classOrInterfaceType.getNameWithScope();
+
+        // JLS 15.13 - ReferenceType :: [TypeArguments] Identifier
         SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = JavaParserFactory
                 .getContext(classOrInterfaceType, typeSolver)
-                .solveType(classOrInterfaceType.getName().getId());
-        if (!typeDeclarationSymbolReference.isSolved()) {
-            throw new UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
-        } else {
+                .solveType(nameWithScope);
+        if (typeDeclarationSymbolReference.isSolved()) {
             return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
+
+        // JLS 15.13 - ExpressionName :: [TypeArguments] Identifier
+        Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameWithScope, node);
+        if (value.isPresent()) {
+            return value.get().getType();
+        }
+
+        throw new UnsolvedSymbolException("Solving " + node, classOrInterfaceType.getName().getId());
     }
 
     @Override
@@ -621,7 +436,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         switch (node.getOperator()) {
             case MINUS:
             case PLUS:
-                return node.getExpression().accept(this, solveLambdas);
+                return ResolvedPrimitiveType.unp(node.getExpression().accept(this, solveLambdas));
             case LOGICAL_COMPLEMENT:
                 return ResolvedPrimitiveType.BOOLEAN;
             case POSTFIX_DECREMENT:
@@ -654,11 +469,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+
+            // The type parameter referred here should be the java.util.stream.Stream.T
+            ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+
             if (solveLambdas) {
-
-                // The type parameter referred here should be the java.util.stream.Stream.T
-                ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
-
                 if (callExpr.hasScope()) {
                     Expression scope = callExpr.getScope().get();
 
@@ -684,75 +499,94 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     }
                 }
 
-                // We need to replace the type variables
-                Context ctx = JavaParserFactory.getContext(node, typeSolver);
-                result = solveGenericTypes(result, ctx);
-
-                //We should find out which is the functional method (e.g., apply) and replace the params of the
-                //solveLambdas with it, to derive so the values. We should also consider the value returned by the
-                //lambdas
-                Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
-                if (functionalMethod.isPresent()) {
-                    LambdaExpr lambdaExpr = node;
-
-                    InferenceContext lambdaCtx = new InferenceContext(MyObjectProvider.INSTANCE);
-                    InferenceContext funcInterfaceCtx = new InferenceContext(MyObjectProvider.INSTANCE);
-
-                    // At this point parameterType
-                    // if Function<T=? super Stream.T, ? extends map.R>
-                    // we should replace Stream.T
-                    ResolvedType functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
-
-                    lambdaCtx.addPair(result, functionalInterfaceType);
-
-                    ResolvedType actualType;
-
-                    if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                        actualType = facade.getType(((ExpressionStmt) lambdaExpr.getBody()).getExpression());
-                    } else if (lambdaExpr.getBody() instanceof BlockStmt) {
-                        BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
-
-                        // Get all the return statements in the lambda block
-                        List<ReturnStmt> returnStmts = blockStmt.findAll(ReturnStmt.class);
-
-                        if (returnStmts.size() > 0) {
-                            actualType = returnStmts.stream()
-                                    .map(returnStmt -> returnStmt.getExpression().map(e -> facade.getType(e)).orElse(ResolvedVoidType.INSTANCE))
-                                    .filter(x -> x != null && !x.isVoid() && !x.isNull())
-                                    .findFirst()
-                                    .orElse(ResolvedVoidType.INSTANCE);
-
-                        } else {
-                            actualType = ResolvedVoidType.INSTANCE;
-                        }
-
-
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    ResolvedType formalType = functionalMethod.get().returnType();
-
-                    // Infer the functional interfaces' return vs actual type
-                    funcInterfaceCtx.addPair(formalType, actualType);
-                    // Substitute to obtain a new type
-                    ResolvedType functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
-
-                    // if the functional method returns void anyway
-                    // we don't need to bother inferring types
-                    if (!(formalType instanceof ResolvedVoidType)) {
-                        lambdaCtx.addPair(result, functionalTypeWithReturn);
-                        result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
-                    }
-                }
-
-                return result;
-            } else {
-                return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                result = resolveLambda(node, result);
             }
+            return result;
+        } else if (demandParentNode(node) instanceof VariableDeclarator)
+        {
+            VariableDeclarator decExpr = (VariableDeclarator) demandParentNode(node);
+            ResolvedType result = decExpr.getType().resolve();
+
+            if (solveLambdas) {
+                result = resolveLambda(node, result);
+            }
+            return result;
+        } else if (demandParentNode(node) instanceof AssignExpr) {
+            AssignExpr assExpr = (AssignExpr) demandParentNode(node);
+            ResolvedType result = assExpr.calculateResolvedType();
+
+            if (solveLambdas) {
+                result = resolveLambda(node, result);
+            }
+            return result;
         } else {
             throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
         }
+    }
+
+    private ResolvedType resolveLambda(LambdaExpr node, ResolvedType result) {
+        // We need to replace the type variables
+        Context ctx = JavaParserFactory.getContext(node, typeSolver);
+        result = solveGenericTypes(result, ctx);
+
+        //We should find out which is the functional method (e.g., apply) and replace the params of the
+        //solveLambdas with it, to derive so the values. We should also consider the value returned by the
+        //lambdas
+        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
+        if (functionalMethod.isPresent()) {
+            LambdaExpr lambdaExpr = node;
+
+            InferenceContext lambdaCtx = new InferenceContext(MyObjectProvider.INSTANCE);
+            InferenceContext funcInterfaceCtx = new InferenceContext(MyObjectProvider.INSTANCE);
+
+            // At this point parameterType
+            // if Function<T=? super Stream.T, ? extends map.R>
+            // we should replace Stream.T
+            ResolvedType functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
+
+            lambdaCtx.addPair(result, functionalInterfaceType);
+
+            ResolvedType actualType;
+
+            if (lambdaExpr.getBody() instanceof ExpressionStmt) {
+                actualType = facade.getType(((ExpressionStmt) lambdaExpr.getBody()).getExpression());
+            } else if (lambdaExpr.getBody() instanceof BlockStmt) {
+                BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
+
+                // Get all the return statements in the lambda block
+                List<ReturnStmt> returnStmts = blockStmt.findAll(ReturnStmt.class);
+
+                if (returnStmts.size() > 0) {
+                    actualType = returnStmts.stream()
+                            .map(returnStmt -> returnStmt.getExpression().map(e -> facade.getType(e)).orElse(ResolvedVoidType.INSTANCE))
+                            .filter(x -> x != null && !x.isVoid() && !x.isNull())
+                            .findFirst()
+                            .orElse(ResolvedVoidType.INSTANCE);
+
+                } else {
+                    actualType = ResolvedVoidType.INSTANCE;
+                }
+
+
+            } else {
+                throw new UnsupportedOperationException();
+            }
+
+            ResolvedType formalType = functionalMethod.get().returnType();
+
+            // Infer the functional interfaces' return vs actual type
+            funcInterfaceCtx.addPair(formalType, actualType);
+            // Substitute to obtain a new type
+            ResolvedType functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
+
+            // if the functional method returns void anyway
+            // we don't need to bother inferring types
+            if (!(formalType instanceof ResolvedVoidType)) {
+                lambdaCtx.addPair(result, functionalTypeWithReturn);
+                result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
+            }
+        }
+        return result;
     }
 
     @Override

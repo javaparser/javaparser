@@ -121,14 +121,6 @@ public class LabeledStmt extends Statement {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LabeledStmt clone() {
         return (LabeledStmt) accept(new CloneVisitor(), null);
@@ -143,8 +135,9 @@ public class LabeledStmt extends Statement {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == label) {
             setLabel((SimpleName) replacementNode);
             return true;

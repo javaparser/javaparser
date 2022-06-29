@@ -91,7 +91,7 @@ import static java.util.stream.Collectors.toList;
  * @author Roger Howell
  * @see <a href="https://openjdk.java.net/jeps/359">https://openjdk.java.net/jeps/395</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10">JLS 8.10 - Record Classes</a>
- * @since 3.21.0
+ * @since 3.22.0
  */
 public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implements NodeWithParameters<RecordDeclaration>, NodeWithImplements<RecordDeclaration>, NodeWithTypeParameters<RecordDeclaration>, NodeWithFinalModifier<RecordDeclaration>, Resolvable<ResolvedReferenceTypeDeclaration> {
 
@@ -229,8 +229,9 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < implementedTypes.size(); i++) {
             if (implementedTypes.get(i) == node) {
                 implementedTypes.remove(i);
@@ -261,8 +262,9 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < implementedTypes.size(); i++) {
             if (implementedTypes.get(i) == node) {
                 implementedTypes.set(i, (ClassOrInterfaceType) replacementNode);

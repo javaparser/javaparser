@@ -21,17 +21,18 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.lang.reflect.Modifier;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
 import javassist.CtField;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
-
-import java.lang.reflect.Modifier;
 
 /**
  * @author Federico Tomassetti
@@ -62,6 +63,11 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public boolean isStatic() {
         return Modifier.isStatic(ctField.getModifiers());
+    }
+    
+    @Override
+    public boolean isVolatile() {
+        return Modifier.isVolatile(ctField.getModifiers());
     }
 
     @Override

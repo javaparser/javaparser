@@ -21,11 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.Optional;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-
-import java.util.Optional;
 
 public abstract class TextElement implements TextElementMatcher {
 
@@ -59,6 +59,8 @@ public abstract class TextElement implements TextElementMatcher {
     public abstract boolean isSeparator();
 
     public abstract boolean isIdentifier();
+    
+    public abstract boolean isKeyword();
 
     public abstract boolean isPrimitive();
 

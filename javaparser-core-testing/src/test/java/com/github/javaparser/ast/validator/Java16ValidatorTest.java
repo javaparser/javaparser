@@ -57,22 +57,45 @@ class Java16ValidatorTest {
     class Record {
 
         @Nested
-        class RecordAsIdentifierForbidden {
+        class RecordAsTypeIdentifierForbidden {
             @Test
-            void recordUsedAsClassName() {
+            void recordUsedAsClassIdentifier() {
                 String s = "public class record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 14) 'record' cannot be used as an identifier as it is a keyword.");
+                TestUtils.assertProblems(result, "(line 1,col 14) 'record' is a restricted identifier and cannot be used for type declarations");
             }
 
             @Test
-            void recordUsedAsFieldName() {
-                String s = "class X { int record; }";
+            void recordUsedAsEnumIdentifier() {
+                String s = "public enum record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 15) 'record' cannot be used as an identifier as it is a keyword.");
+                TestUtils.assertProblems(result, "(line 1,col 13) 'record' is a restricted identifier and cannot be used for type declarations");
+            }
+
+            @Test
+            void recordUsedAsRecordIdentifier() {
+                String s = "public record record() {}";
+                ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+                TestUtils.assertProblems(result, "(line 1,col 15) 'record' is a restricted identifier and cannot be used for type declarations");
             }
         }
 
+        @Nested
+        class RecordUsedAsIdentifierAllowedAsFieldDeclarations {
+            @Test
+            void recordUsedAsFieldIdentifierInClass() {
+                String s = "class X { int record; }";
+                ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+                TestUtils.assertNoProblems(result);
+            }
+
+            @Test
+            void recordUsedAsFieldIdentifierInInterface() {
+                String s = "interface X { int record; }";
+                ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
+                TestUtils.assertNoProblems(result);
+            }
+        }
 
         @Nested
         class RecordDeclarationPermitted {

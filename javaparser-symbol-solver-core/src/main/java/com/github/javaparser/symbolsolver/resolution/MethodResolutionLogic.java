@@ -98,11 +98,9 @@ public class MethodResolutionLogic {
 
         // The index of the final method parameter (on the method declaration).
         int countOfMethodParametersDeclared = methodDeclaration.getNumberOfParams();
-        int lastMethodParameterIndex = Math.max(0, countOfMethodParametersDeclared - 1);
 
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
-        int lastNeedleArgumentIndex = Math.max(0, countOfNeedleArgumentsPassed - 1);
 
         boolean methodIsDeclaredWithVariadicParameter = methodDeclaration.hasVariadicParameter();
 
@@ -112,6 +110,14 @@ public class MethodResolutionLogic {
         }
 
         if (methodIsDeclaredWithVariadicParameter) {
+
+            if(countOfNeedleArgumentsPassed <= (countOfMethodParametersDeclared - 2)) {
+                // If it is variadic, and the number of arguments are short by **two or more** -- this is not a match.
+                // Note that omitting the variadic parameter is treated as an empty array
+                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+                return false;
+            }
+            
             // If the method declaration we're considering has a variadic parameter,
             // attempt to convert the given list of arguments to fit this pattern
             // e.g. foo(String s, String... s2) {} --- consider the first argument, then group the remainder as an array
@@ -120,20 +126,8 @@ public class MethodResolutionLogic {
             for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
                 expectedVariadicParameterType = replaceTypeParam(expectedVariadicParameterType, tp, typeSolver);
             }
-
-            if(countOfNeedleArgumentsPassed <= (countOfMethodParametersDeclared - 2)) {
-                // If it is variadic, and the number of arguments are short by **two or more** -- this is not a match.
-                // Note that omitting the variadic parameter is treated as an empty array
-                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
-                return false;
-            } else if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
-                // If it is variadic and we are short of **exactly one** parameter, this is a match.
-                // Note that omitting the variadic parameter is treated as an empty array
-                //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
-
-                // thus group the "empty" value into an empty array...
-                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
-            } else if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
+            
+            if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
                 // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a valid type. (Maybe this is also done later..?)
                 for(int variadicArgumentIndex = countOfMethodParametersDeclared; variadicArgumentIndex < countOfNeedleArgumentsPassed; variadicArgumentIndex++) {
@@ -144,27 +138,14 @@ public class MethodResolutionLogic {
                         return false;
                     }
                 }
-                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
-            } else if (countOfNeedleArgumentsPassed == countOfMethodParametersDeclared) {
-                ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
-                boolean finalArgumentIsArray = actualArgumentType.isArray() && expectedVariadicParameterType.isAssignableBy(actualArgumentType.asArrayType().getComponentType());
-                if(finalArgumentIsArray) {
-                    // Treat as an array of values -- in which case the expected parameter type is the common type of this array.
-                    // no need to do anything
-//                    expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
-                } else {
-                    // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
-                    needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
-                }
-            } else {
-                // Should be unreachable.
             }
+            needleArgumentTypes = groupTrailingArgumentsIntoArray(methodDeclaration, needleArgumentTypes, expectedVariadicParameterType);
         }
 
 
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassedAfterGrouping = needleArgumentTypes.size();
-        int lastNeedleArgumentIndexAfterGrouping = Math.max(0, countOfNeedleArgumentsPassed - 1);
+        int lastNeedleArgumentIndexAfterGrouping = getLastParameterIndex(countOfNeedleArgumentsPassed);
 
         // If variadic parameters are possible then they will have been "grouped" into a single argument.
         // At this point, therefore, the number of arguments must be equal -- if they're not, then there is no match.
@@ -223,19 +204,67 @@ public class MethodResolutionLogic {
         return !withWildcardTolerance || needForWildCardTolerance;
     }
 
+    /*
+     * Returns the last parameter index
+     */
+    private static int getLastParameterIndex(int countOfMethodParametersDeclared) {
+        return Math.max(0, countOfMethodParametersDeclared - 1);
+    }
+
+    private static List<ResolvedType> groupTrailingArgumentsIntoArray(ResolvedMethodDeclaration methodDeclaration,
+                                                                      List<ResolvedType> needleArgumentTypes,
+                                                                      ResolvedType expectedVariadicParameterType) {
+        // The index of the final method parameter (on the method declaration).
+        int countOfMethodParametersDeclared = methodDeclaration.getNumberOfParams();
+        int lastMethodParameterIndex = getLastParameterIndex(countOfMethodParametersDeclared);
+
+        // The index of the final argument passed (on the method usage).
+        int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
+        int lastNeedleArgumentIndex = getLastParameterIndex(countOfNeedleArgumentsPassed);
+        
+        if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
+            // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
+            // Here we are sure that all of these grouped "trailing" arguments have the required type
+            needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+        }
+        if (countOfNeedleArgumentsPassed == (countOfMethodParametersDeclared - 1)) {
+            // If it is variadic and we are short of **exactly one** parameter, this is a match.
+            // Note that omitting the variadic parameter is treated as an empty array
+            //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
+
+            // thus group the "empty" value into an empty array...
+            needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+        } else if (countOfNeedleArgumentsPassed == countOfMethodParametersDeclared) {
+            ResolvedType actualArgumentType = needleArgumentTypes.get(lastNeedleArgumentIndex);
+            boolean finalArgumentIsArray = actualArgumentType.isArray() && expectedVariadicParameterType.isAssignableBy(actualArgumentType.asArrayType().getComponentType());
+            if(finalArgumentIsArray) {
+                // Treat as an array of values -- in which case the expected parameter type is the common type of this array.
+                // no need to do anything
+                // expectedVariadicParameterType = actualArgumentType.asArrayType().getComponentType();
+            } else {
+                // Treat as a single value -- in which case, the expected parameter type is the same as the single value.
+                needleArgumentTypes = groupVariadicParamValues(needleArgumentTypes, lastMethodParameterIndex, methodDeclaration.getLastParam().getType());
+            }
+        } else {
+            // Should be unreachable.
+        }
+        return needleArgumentTypes;
+    }
+
     public static boolean isAssignableMatchTypeParameters(ResolvedType expected, ResolvedType actual,
                                                           Map<String, ResolvedType> matchedParameters) {
         if (expected.isReferenceType() && actual.isReferenceType()) {
             return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
-        } else if (expected.isTypeVariable()) {
+        }
+        if (expected.isTypeVariable()) {
             matchedParameters.put(expected.asTypeParameter().getName(), actual);
             return true;
-        } else if (expected.isArray()) {
+        }
+        if (expected.isArray()) {
             matchedParameters.put(expected.asArrayType().getComponentType().toString(), actual);
             return true;
-        } else {
-            throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " " + actual.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException(expected.getClass().getCanonicalName() + " " + actual.getClass().getCanonicalName());
     }
 
     public static boolean isAssignableMatchTypeParameters(ResolvedReferenceType expected, ResolvedReferenceType actual,
@@ -285,7 +314,8 @@ public class MethodResolutionLogic {
             } else if (expectedParam.isReferenceType()) {
                 if (actualParam.isTypeVariable()) {
                     return matchTypeVariable(actualParam.asTypeVariable(), expectedParam, matchedParameters);
-                } else if (!expectedParam.equals(actualParam)) {
+                }
+                if (!expectedParam.equals(actualParam)) {
                     return false;
                 }
             } else if (expectedParam.isWildcard()) {
@@ -325,24 +355,26 @@ public class MethodResolutionLogic {
                 List<ResolvedTypeParameterDeclaration.Bound> bounds = tp.getBounds();
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();
-                } else if (bounds.size() == 1) {
-                    return bounds.get(0).getType();
-                } else {
-                    return new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver);
                 }
+                if (bounds.size() == 1) {
+                    return bounds.get(0).getType();
+                }
+                return new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_OBJECT), typeSolver);
             }
             return type;
-        } else if (type.isPrimitive()) {
+        }
+        if (type.isPrimitive()) {
             return type;
-        } else if (type.isArray()) {
+        }
+        if (type.isArray()) {
             return new ResolvedArrayType(replaceTypeParam(type.asArrayType().getComponentType(), tp, typeSolver));
-        } else if (type.isReferenceType()) {
+        }
+        if (type.isReferenceType()) {
             ResolvedReferenceType result = type.asReferenceType();
             result = result.transformTypeParameters(typeParam -> replaceTypeParam(typeParam, tp, typeSolver)).asReferenceType();
             return result;
-        } else {
-            throw new UnsupportedOperationException("Replacing " + type + ", param " + tp + " with " + type.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException("Replacing " + type + ", param " + tp + " with " + type.getClass().getCanonicalName());
     }
 
     /**
@@ -362,11 +394,11 @@ public class MethodResolutionLogic {
 
         // The index of the final method parameter (on the method declaration).
         int countOfMethodUsageArgumentsPassed = methodUsage.getNoParams();
-        int lastMethodUsageArgumentIndex = Math.max(0, countOfMethodUsageArgumentsPassed - 1);
+        int lastMethodUsageArgumentIndex = getLastParameterIndex(countOfMethodUsageArgumentsPassed);
 
         // The index of the final argument passed (on the method usage).
         int needleParameterCount = needleParameterTypes.size();
-        int lastNeedleParameterIndex = Math.max(0, needleParameterCount - 1);
+        int lastNeedleParameterIndex = getLastParameterIndex(needleParameterCount);
 
         // TODO: Does the method usage have a declaration at this point..?
         boolean methodIsDeclaredWithVariadicParameter = methodUsage.getDeclaration().hasVariadicParameter();
@@ -620,11 +652,11 @@ public class MethodResolutionLogic {
 
         if (i < numberOfParams) {
             return method.getParam(i).getType();
-        } else if (method.hasVariadicParameter()) {
-            return method.getParam(numberOfParams - 1).getType();
-        } else {
-            return null;
         }
+        if (method.hasVariadicParameter()) {
+            return method.getParam(numberOfParams - 1).getType();
+        }
+        return null;
     }
 
     private static boolean isMoreSpecific(ResolvedMethodDeclaration methodA, ResolvedMethodDeclaration methodB,
@@ -645,7 +677,8 @@ public class MethodResolutionLogic {
         if (!aVariadic && aNumberOfParams == numberOfArgs && (bVariadic && (bNumberOfParams != numberOfArgs ||
                 !isLastArgArray))) {
             return true;
-        } else if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs ||
+        }
+        if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs ||
                 !isLastArgArray))) {
             return false;
         }
@@ -670,7 +703,8 @@ public class MethodResolutionLogic {
             // This should not happen but it also means that this signature is immediately disqualified.
             if (paramTypeA == null) {
                 return false;
-            } else if (paramTypeB == null) {
+            }
+            if (paramTypeB == null) {
                 return true;
             }
             // Widening primitive conversions have priority over boxing/unboxing conversions when finding the most
@@ -678,13 +712,14 @@ public class MethodResolutionLogic {
             // The method call will call foo(long), as it requires a widening primitive conversion from int to long
             // instead of a boxing conversion from int to Integer. See JLS §15.12.2.
             // This is what we check here.
-            else if (argType != null &&
+            if (argType != null &&
             		paramTypeA.isPrimitive() == argType.isPrimitive() &&
                     paramTypeB.isPrimitive() != argType.isPrimitive() &&
                     paramTypeA.isAssignableBy(argType)) {
 
                 return true;
-            } else if (argType != null &&
+            }
+            if (argType != null &&
             		paramTypeB.isPrimitive() == argType.isPrimitive() &&
                     paramTypeA.isPrimitive() != argType.isPrimitive() &&
                     paramTypeB.isAssignableBy(argType)) {
@@ -693,7 +728,8 @@ public class MethodResolutionLogic {
             // if paramA and paramB are not the last parameters
             // and the type of paramA or paramB (which are not more specific at this stage) is java.lang.Object
             // then we have to consider others parameters before concluding
-            } else if ((i < numberOfArgs - 1)
+            }
+            if ((i < numberOfArgs - 1)
                     && (isJavaLangObject(paramTypeB) || (isJavaLangObject(paramTypeA)))) {
                 // consider others parameters
                 // but eventually mark the method A as more specific if the methodB has an argument of type java.lang.Object
@@ -709,7 +745,8 @@ public class MethodResolutionLogic {
                 if (bAssignableFromA && !aAssignableFromB) {
                     // A's parameter is more specific
                     return true;
-                } else if (aAssignableFromB && !bAssignableFromA) {
+                }
+                if (aAssignableFromB && !bAssignableFromA) {
                     // B's parameter is more specific
                     return false;
                 }
@@ -719,7 +756,8 @@ public class MethodResolutionLogic {
         if (aVariadic && !bVariadic) {
             // if the last argument is an array then m1 is more specific
             return isLastArgArray;
-        } else if (!aVariadic && bVariadic) {
+        }
+        if (!aVariadic && bVariadic) {
             // if the last argument is an array and m1 is not variadic then
             // it is not more specific
             return !isLastArgArray;
@@ -819,9 +857,8 @@ public class MethodResolutionLogic {
         if (typeDeclaration instanceof MethodResolutionCapability) {
             return ((MethodResolutionCapability) typeDeclaration).solveMethod(name, argumentsTypes,
                     staticOnly);
-        } else {
-            throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
     private static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
@@ -877,6 +914,5 @@ public class MethodResolutionLogic {
             return;
         }
     }
-
 
 }

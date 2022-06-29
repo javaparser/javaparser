@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -66,9 +67,10 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
+        int index = -1;
         for (Parameter parameter : wrappedNode.getParameters()) {
+            index++;
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            int index = 0;
             for (ResolvedValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
                     Node parentNode = demandParentNode(wrappedNode);
@@ -202,7 +204,6 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         throw new UnsupportedOperationException();
                     }
                 }
-                index++;
             }
         }
 

@@ -21,17 +21,17 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Optional;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 
 /**
  * A strategy for discovering the structure of a project.
@@ -48,33 +48,32 @@ public interface CollectionStrategy {
             final JavaParser javaParser = new JavaParser(getParserConfiguration());
             final ParseResult<CompilationUnit> parseResult = javaParser.parse(file);
 
+
             if (parseResult.isSuccessful()) {
-                if (parseResult.getProblems().isEmpty()) {
-                    if (parseResult.getResult().isPresent()) {
-                        final CompilationUnit compilationUnit = parseResult.getResult().get();
-                        final Optional<CompilationUnit.Storage> storage = compilationUnit.getStorage();
-                        if (storage.isPresent()) {
-                            final Optional<Path> sourceRootPath = storage.map(CompilationUnit.Storage::getSourceRoot);
-                            return sourceRootPath;
-                        } else {
-                            Log.info("Storage information not present -- an issue with providing a string rather than file reference?");
+                if (parseResult.getResult().isPresent()) {
+                    final Optional<CompilationUnit.Storage> storage = parseResult.getResult().flatMap(CompilationUnit::getStorage);
+                    if (storage.isPresent()) {
+                        if (storage.get().getFileName().equals("module-info.java")) {
+                            // module-info.java is useless for finding the source root, since it can be placed in any directory.
+                            return Optional.empty();
                         }
+                        return storage.map(CompilationUnit.Storage::getSourceRoot);
                     } else {
-                        Log.info("Parse result not present");
+                        Log.info("Storage information not present -- an issue with providing a string rather than file reference?");
                     }
                 } else {
-                    Log.info("There were (%d) problems parsing file: %s", () -> parseResult.getProblems().size(), () -> parseResult.getProblems());
+                    Log.info("Parse result not present");
                 }
             } else {
                 Log.info("Parsing was not successful.");
-                Log.info("There were (%d) problems parsing file: %s", () -> parseResult.getProblems().size(), () -> parseResult.getProblems());
+                Log.info("There were (%d) problems parsing file: %s", () -> parseResult.getProblems().size(), parseResult::getProblems);
             }
         } catch (ParseProblemException e) {
-            Log.info("Problem parsing file %s", () -> file);
+            Log.info("Problem parsing file %s : %s", () -> file, () -> e.getLocalizedMessage());
         } catch (RuntimeException e) {
-            Log.info("Could not parse file %s", () -> file);
+            Log.info("Could not parse file %s : %s", () -> file, () -> e.getLocalizedMessage());
         } catch (IOException e) {
-            Log.info("Could not read file %s", () -> file);
+            Log.info("Could not read file %s : %s", () -> file, () -> e.getLocalizedMessage());
         }
         return Optional.empty();
     }

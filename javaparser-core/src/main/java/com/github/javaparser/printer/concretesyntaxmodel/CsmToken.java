@@ -21,13 +21,14 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import static com.github.javaparser.TokenTypes.isEndOfLineToken;
+import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.utils.LineSeparator;
-
-import static com.github.javaparser.TokenTypes.*;
 
 public class CsmToken implements CsmElement {
     private final int tokenType;
@@ -87,7 +88,7 @@ public class CsmToken implements CsmElement {
 
     @Override
     public String toString() {
-        return "token(" + content + ")";
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), content);
     }
 
     @Override
