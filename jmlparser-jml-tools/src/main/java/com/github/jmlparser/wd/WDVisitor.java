@@ -10,6 +10,7 @@ import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.sosy_lab.java_smt.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,8 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
     private final BitvectorFormulaManager bitmgr;
     private final IntegerFormulaManager imgr;
     private final BooleanFormulaManager bmgr;
+    private final QuantifiedFormulaManager qmgr;
+
     private GenericVisitor<? extends NumeralFormula.IntegerFormula, ? super Object> smtFormula;
 
     WDVisitorExpr(SolverContext context) {
@@ -45,6 +48,19 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
         this.imgr = context.getFormulaManager().getIntegerFormulaManager();
         this.bmgr = context.getFormulaManager().getBooleanFormulaManager();
         this.bitmgr = context.getFormulaManager().getBitvectorFormulaManager();
+        this.qmgr = context.getFormulaManager().getQuantifiedFormulaManager();
+    }
+
+    @Override
+    public BooleanFormula visit(NameExpr n, Object arg) {
+        String name = n.getNameAsString();
+        switch (name) {
+            case "\\result":
+            case "\\exception":
+                return bmgr.makeTrue();
+            default:
+                return bmgr.makeTrue();
+        }
     }
 
     @Override
@@ -121,12 +137,12 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
 
     @Override
     public BooleanFormula visit(EnclosedExpr n, Object arg) {
-        return n.getInner().accept(this, arg);
+        return wd(n.getInner());
     }
 
     @Override
     public BooleanFormula visit(FieldAccessExpr n, Object arg) {
-        return n.getScope().accept(this, arg);
+        return wd(n.getScope());
     }
 
     @Override
@@ -201,7 +217,35 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
 
     @Override
     public BooleanFormula visit(JmlQuantifiedExpr n, Object arg) {
-        return super.visit(n, arg);
+        /*The quantified-expression is well-defined iff the two sub-expressions are well-defined. For a quantifier Q*/
+        List<BooleanFormula> seq = n.getExpressions().stream()
+                .map(it -> it.accept(this, arg))
+                .collect(Collectors.toList());
+
+        Expression r = n.getExpressions().get(0);
+        Expression v = n.getExpressions().get(0);
+
+        List<Formula> args = new ArrayList<>();
+
+        if (JmlQuantifiedExpr.JmlDefaultBinder.CHOOSE.equals(n.getBinder())) {
+            return bmgr.and(
+                    qmgr.forall(args, wd(r)),
+                    qmgr.forall(args, bmgr.implication((BooleanFormula) valueOf(r), wd(v))),
+                    qmgr.exists(args, bmgr.and(
+                            (BooleanFormula) valueOf(r),
+                            (BooleanFormula) valueOf(v))));
+        }
+        return bmgr.and(
+                qmgr.forall(args, wd(r)),
+                qmgr.forall(args, bmgr.implication((BooleanFormula) valueOf(r), wd(v))));
+    }
+
+    private Formula valueOf(Expression e) {
+        return e.accept(smtFormula, null);
+    }
+
+    private BooleanFormula wd(Expression e) {
+        return e.accept(this, null);
     }
 
     @Override
@@ -232,5 +276,29 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
     @Override
     public BooleanFormula visit(JmlMultiExprClause n, Object arg) {
         return super.visit(n, arg);
+    }
+
+    @Override
+    public BooleanFormula visit(MethodCallExpr n, Object arg) {
+        String name = n.getNameAsString();
+        switch (name) {
+            case "\\old":
+            case "\\pre":
+            case "\\past":
+                /* Well-definedness: The expression is well-defined if the first argument is well-defined
+                   and any label argument names either a built-in label (§11.611.6) or an in-scope Java or
+                   JML ghost label (S11.511.5).*/
+                return n.getArguments().get(0).accept(this, arg);
+            case "\\fresh":
+                /* Well-definedness: The argument must be well-defined and non-null. The second argument,
+                   if present, must be the identifier corresponding to an in-scope label or a built-in label. */
+                return n.getArguments().get(0).accept(this, arg);
+            //TODO valueOf(n.getArguments().get(0)) != null
+        }
+
+        List<BooleanFormula> seq = n.getArguments().stream()
+                .map(it -> it.accept(this, arg))
+                .collect(Collectors.toList());
+        return bmgr.and(seq);
     }
 }

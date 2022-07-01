@@ -62,7 +62,8 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
         BSUM("\\bsum"),
         UNION("\\infinite_union"),
         SEQDEF("\\seq_def"),
-        PRODUCT("\\product");
+        PRODUCT("\\product"),
+        CHOOSE("\\choose");
 
         public final String symbol;
 

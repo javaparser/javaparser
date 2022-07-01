@@ -6425,15 +6425,17 @@ ArbitraryNodeContainer JmlMethodLevelStart():
     SimpleName label;
 }
 {
-  ( contracts = JmlLoopInvariants() { ret.getChildren().addAll(contracts); }
+  ( LOOKAHEAD(4)
+    contracts = JmlLoopInvariants()   { ret.getChildren().addAll(contracts); }
   //| LOOKAHEAD(2)
   //  label=SimpleName() ":" {end=token();} [";" {semi=token();}]
   //  { ret.getChildren().add(new LabeledStmt(range(label,end), label,
   //                            new EmptyStmt(semi!=null ? range(semi,semi) : null))); }
-  | statements=JmlStatements()
-      { ret.getChildren().addAll(statements); }
-  | contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
-  | jmlModifiersInner(mods)         { ret.getChildren().addAll(mods); mods.clear();}
+  | LOOKAHEAD(4)
+    statements = JmlStatements()      { ret.getChildren().addAll(statements); }
+  | LOOKAHEAD(4)
+    contracts = JmlRefiningContract() { ret.getChildren().addAll(contracts); }
+  | jmlModifiersInner(mods)           { ret.getChildren().addAll(mods); mods.clear();}
   )+
   <EOF>
   { return ret; }
@@ -6606,7 +6608,8 @@ JmlContract JmlContract():
 
     Behavior b = Behavior.NONE;
     JmlClause clause;
-    //ModifierHolder modifiers = new ModifierHolder();
+
+    SimpleName name = null;
 }
 {
   (( "public"  {  }
@@ -6616,10 +6619,11 @@ JmlContract JmlContract():
    ))? //TODO weigl
   {begin=token();}
   (b=JmlBehavior())?
-  (LOOKAHEAD(3) SimpleName() ":")?
+  (LOOKAHEAD(3) name=SimpleName() ":")?
   (clause=JmlContractClause() {clauses.add(clause);})+
   (<NESTED_CONTRACT_START> subContracts=JmlContracts() <NESTED_CONTRACT_END>)?
-  {return new JmlContract(range(orIfInvalid(begin==null?INVALID:begin,clauses.get(0)), token()), b, new NodeList<>(), clauses, subContracts);}
+  {return new JmlContract(range(orIfInvalid(begin==null?INVALID:begin,clauses.get(0)), token()), JmlContract.Type.METHOD, false, b,
+				name, new NodeList<>(), clauses, subContracts);}
 }
 
 JmlModelProgram JmlModelProgram():
@@ -7106,19 +7110,21 @@ JmlClassLevel JmlClassAccessible(ModifierHolder modifiers):
 
 JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
 {
-     Token b;
+     JavaToken begin;
      Name id=null;
      Expression expr;
 }
 {
-  b=<REPRESENTS>
-  (
+  <REPRESENTS> {begin=token();}
+  ( LOOKAHEAD(3)
     id=Name() (<ASSIGN> | <SUCH_THAT> | <BACKARROW>) expr=Expression()
-  | LOOKAHEAD(2) expr=Expression()
+  | expr=Expression()
   )
   ";"
-  { JavaToken begin = orIfInvalid(modifiers.begin, b.javaToken);
-    return new JmlRepresentsDeclaration(range(begin, token()), new NodeList<>(), modifiers.modifiers, id, expr);}
+  {
+    begin = orIfInvalid(modifiers.begin, begin);
+    return new JmlRepresentsDeclaration(range(begin, token()), new NodeList<>(), modifiers.modifiers, id, expr);
+  }
 }
 
 
