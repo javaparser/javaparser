@@ -5,11 +5,13 @@ import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlMultiExprClause;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.stmt.JmlExpressionStmt;
-import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.sosy_lab.java_smt.api.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,10 +43,14 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
     private final BooleanFormulaManager bmgr;
     private final QuantifiedFormulaManager qmgr;
 
-    private GenericVisitor<? extends NumeralFormula.IntegerFormula, ? super Object> smtFormula;
+    @NotNull
+    private final JmlExpr2Smt smtFormula;
+    private Translator translator;
 
     WDVisitorExpr(SolverContext context) {
         this.context = context;
+        smtFormula = new JmlExpr2Smt(context);
+        translator = smtFormula.getTranslator();
         this.imgr = context.getFormulaManager().getIntegerFormulaManager();
         this.bmgr = context.getFormulaManager().getBooleanFormulaManager();
         this.bitmgr = context.getFormulaManager().getBitvectorFormulaManager();
@@ -97,11 +103,14 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
                 return be.accept(this, arg);
             case DIVIDE:
             case REMAINDER:
-                NumeralFormula.IntegerFormula value = n.accept(smtFormula, arg);
+                Formula fml = n.getRight().accept(smtFormula, arg);
+                translator = smtFormula.getTranslator();
                 return bmgr.and(
                         n.getRight().accept(this, arg),
                         n.getLeft().accept(this, arg),
-                        bmgr.not(imgr.equal(value, imgr.makeNumber(0))));
+                        bmgr.not((BooleanFormula)
+                                translator.binary(BinaryExpr.Operator.EQUALS,
+                                        fml, smtFormula.getTranslator().makeInt(BigInteger.ZERO))));
             default:
                 return bmgr.and(
                         n.getRight().accept(this, arg),
@@ -156,11 +165,6 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
     }
 
     @Override
-    public BooleanFormula visit(SingleMemberAnnotationExpr n, Object arg) {
-        return super.visit(n, arg);
-    }
-
-    @Override
     public BooleanFormula visit(StringLiteralExpr n, Object arg) {
         return bmgr.makeTrue();
     }
@@ -181,11 +185,6 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
     }
 
     @Override
-    public BooleanFormula visit(VariableDeclarationExpr n, Object arg) {
-        return super.visit(n, arg);
-    }
-
-    @Override
     public BooleanFormula visit(LambdaExpr n, Object arg) {
         return super.visit(n, arg);
     }
@@ -202,17 +201,17 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
 
     @Override
     public BooleanFormula visit(SwitchExpr n, Object arg) {
-        return super.visit(n, arg);
+        return bmgr.and(wd(n.getSelector()));
     }
 
     @Override
     public BooleanFormula visit(TextBlockLiteralExpr n, Object arg) {
-        return super.visit(n, arg);
+        return bmgr.makeTrue();
     }
 
     @Override
     public BooleanFormula visit(PatternExpr n, Object arg) {
-        return super.visit(n, arg);
+        return bmgr.makeTrue();
     }
 
     @Override
@@ -250,32 +249,32 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
 
     @Override
     public BooleanFormula visit(JmlExpressionStmt n, Object arg) {
-        return super.visit(n, arg);
+        return wd(n.getExpression());
     }
 
     @Override
     public BooleanFormula visit(JmlLabelExpr n, Object arg) {
-        return super.visit(n, arg);
+        return wd(n.getExpression());
     }
 
     @Override
     public BooleanFormula visit(JmlLetExpr n, Object arg) {
-        return super.visit(n, arg);
+        return bmgr.and(wd(n.getBody())  /* TODO  arguments */, bmgr.makeTrue());
     }
 
     @Override
     public BooleanFormula visit(JmlClassExprDeclaration n, Object arg) {
-        return super.visit(n, arg);
+        return bmgr.makeTrue();
     }
 
     @Override
     public BooleanFormula visit(JmlTypeExpr n, Object arg) {
-        return super.visit(n, arg);
+        return bmgr.makeTrue();
     }
 
     @Override
     public BooleanFormula visit(JmlMultiExprClause n, Object arg) {
-        return super.visit(n, arg);
+        return bmgr.and(n.getExpressions().stream().map(this::wd).collect(Collectors.toList()));
     }
 
     @Override
