@@ -2178,7 +2178,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlAccessibleClause n, final A arg) {
         R result;
         {
-            result = n.getExprs().accept(this, arg);
+            result = n.getExpressions().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2292,7 +2292,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlMultiCompareExpr n, final A arg) {
         R result;
         {
-            result = n.getExprs().accept(this, arg);
+            result = n.getExpressions().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2334,12 +2334,12 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlSignalsClause n, final A arg) {
         R result;
         {
-            result = n.getExpr().accept(this, arg);
+            result = n.getExpression().accept(this, arg);
             if (result != null)
                 return result;
         }
         {
-            result = n.getType().accept(this, arg);
+            result = n.getParameter().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2423,7 +2423,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final JmlForallClause n, final A arg) {
         R result;
         {
-            result = n.getVariables().accept(this, arg);
+            result = n.getBoundedVariables().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2462,27 +2462,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             return result;
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(final JmlBoundVariable n, final A arg) {
-        R result;
-        {
-            result = n.getName().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getType().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        if (n.getComment().isPresent()) {
-            result = n.getComment().get().accept(this, arg);
-            if (result != null)
-                return result;
         }
         return null;
     }

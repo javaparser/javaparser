@@ -23,6 +23,7 @@ package com.github.javaparser.ast.jml.expr;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -90,7 +91,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     private JmlBinder binder;
 
     @NonEmptyProperty
-    private NodeList<JmlBoundVariable> variables;
+    private NodeList<Parameter> variables;
 
     @NonEmptyProperty
     private NodeList<Expression> expressions;
@@ -99,16 +100,16 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
         this(null, JmlDefaultBinder.EXISTS, new NodeList<>(), new NodeList<>());
     }
 
-    public JmlQuantifiedExpr(final NodeList<JmlBoundVariable> variables, final Expression expressions) {
+    public JmlQuantifiedExpr(final NodeList<Parameter> variables, final Expression expressions) {
         this(null, JmlDefaultBinder.EXISTS, variables, new NodeList<>(expressions));
     }
 
     @AllFieldsConstructor
-    public JmlQuantifiedExpr(final JmlBinder binder, final NodeList<JmlBoundVariable> variables, final Expression expressions) {
+    public JmlQuantifiedExpr(final JmlBinder binder, final NodeList<Parameter> variables, final Expression expressions) {
         this(null, binder, variables, new NodeList<>(expressions));
     }
 
-    public JmlQuantifiedExpr(TokenRange tokenRange, JavaToken binder, NodeList<JmlBoundVariable> variables, NodeList<Expression> expressions) {
+    public JmlQuantifiedExpr(TokenRange tokenRange, JavaToken binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
         this(tokenRange, JmlDefaultBinder.valueOf(binder), variables, new NodeList<>(expressions));
     }
 
@@ -116,7 +117,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlQuantifiedExpr(TokenRange tokenRange, JmlBinder binder, NodeList<JmlBoundVariable> variables, NodeList<Expression> expressions) {
+    public JmlQuantifiedExpr(TokenRange tokenRange, JmlBinder binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
         super(tokenRange);
         setBinder(binder);
         setVariables(variables);
@@ -180,12 +181,12 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlBoundVariable> getVariables() {
+    public NodeList<Parameter> getVariables() {
         return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setVariables(final NodeList<JmlBoundVariable> variables) {
+    public JmlQuantifiedExpr setVariables(final NodeList<Parameter> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -233,7 +234,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
         }
         for (int i = 0; i < variables.size(); i++) {
             if (variables.get(i) == node) {
-                variables.set(i, (JmlBoundVariable) replacementNode);
+                variables.set(i, (Parameter) replacementNode);
                 return true;
             }
         }

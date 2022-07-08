@@ -41,7 +41,7 @@ public class JmlMultiCompareExprMetaModel extends ExpressionMetaModel {
         super(superBaseNodeMetaModel, JmlMultiCompareExpr.class, "JmlMultiCompareExpr", "com.github.javaparser.ast.jml.expr", false, false);
     }
 
-    public PropertyMetaModel exprsPropertyMetaModel;
+    public PropertyMetaModel expressionsPropertyMetaModel;
 
     public PropertyMetaModel operatorsPropertyMetaModel;
 }

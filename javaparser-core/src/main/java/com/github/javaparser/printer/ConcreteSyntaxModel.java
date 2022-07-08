@@ -1037,8 +1037,6 @@ public class ConcreteSyntaxModel {
                 child(EXPRESSION),
                 semicolon()));
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
-        concreteSyntaxModelByClass.put(JmlBoundVariable.class,
-                sequence(child(TYPE), space(), child(NAME)));
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlContract.class, sequence());
         concreteSyntaxModelByClass.put(JmlGhostStmt.class, sequence(

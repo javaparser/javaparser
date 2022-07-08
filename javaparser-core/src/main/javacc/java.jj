@@ -4253,7 +4253,7 @@ Expression JmlPrimaryPrefix():
     NodeList<Expression> exprs = new NodeList<>();
     NodeList<Expression> lsexprs;
     JavaToken begin, quant;
-    NodeList<JmlBoundVariable> vars;
+    NodeList<Parameter> vars;
     Type ret;
     VariableDeclarationExpr decls;
     SimpleName name;
@@ -4279,7 +4279,7 @@ Expression JmlPrimaryPrefix():
       "(" {begin=token();}
        (<FORALLQ> | <EXISTS> | <NUM_OF> |  <SUM> | <MIN> | <PRODUCT> | <MAX> | <JML_IDENTIFIER>)
        {quant=token();}
-       vars=JmlBoundedVariables()
+       vars=ParameterList()
        ";"
        expr=Expression() {exprs.add(expr);} (";" expr=Expression() {exprs.add(expr);})*
       ")"
@@ -6707,11 +6707,11 @@ Behavior JmlBehavior():
 JmlClause ForallClause():
 {
     JavaToken begin;
-    NodeList<JmlBoundVariable> vars;
+    NodeList<Parameter> vars;
 }
 {
   <FORALL> {begin=token();}
-  vars=JmlBoundedVariables()
+  vars=ParameterList()
   {return new JmlForallClause(range(begin, token()), vars);}
 }
 
@@ -6835,13 +6835,35 @@ JmlClause JmlSignalsClause():
 {
     SimpleName id=null;
     Expression e;
-    Type type;
-    JavaToken begin;
+    JavaToken begin, typesBegin, paramEnd;
+    ModifierHolder exceptModifier;
+	NodeList<ReferenceType> exceptionTypes = new NodeList<>();
+    Type type; ReferenceType exceptionType;
+    Pair<SimpleName, List<ArrayBracketPair>> exceptId;
+    Parameter parameter;
 }
 {
   <SIGNALS>   { begin = token(); }
-  <LPAREN> type=Type(emptyNodeList()) (id=SimpleName())? <RPAREN> e=Expression()
-  { return new JmlSignalsClause(range(begin, token()), type, id, e); }
+  "("
+              exceptModifier = Modifiers() { typesBegin = exceptModifier.begin; }
+              exceptionType = ReferenceType(emptyNodeList()) { exceptionTypes.add(exceptionType); typesBegin = orIfInvalid(typesBegin, token()); }
+              (
+                  "|"
+                  exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); }
+              )*
+              exceptId = VariableDeclaratorId() { paramEnd = token(); }
+              ")"
+  {
+      if (exceptionTypes.size() > 1) {
+          type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
+      } else {
+          type = exceptionTypes.get(0);
+      }
+      parameter = new Parameter(range(typesBegin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyNodeList(), exceptId.a);
+  }
+  [ LOOKAHEAD(3) id=SimpleName() ":" ]
+  e=Expression()
+  { return new JmlSignalsClause(range(begin, token()), id, parameter, e); }
 }
 
 
@@ -6991,22 +7013,16 @@ ArbitraryNodeContainer JmlModifierLevelStart():
     }
 }
 
-NodeList<JmlBoundVariable> JmlBoundedVariables():
-{ NodeList<JmlBoundVariable> variables = new NodeList<>();
-  Type partialType; SimpleName val; }
+
+NodeList<Parameter> ParameterList():
 {
-   partialType = Type(emptyNodeList())
-   val=SimpleName()
-   { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
-  ( ","
-    // TODO weigl This is a problem.
-    //[ LOOKAHEAD(Type() SimpleName() ("," | ";"))
-    //  partialType = Type(emptyNodeList())
-    //]
-    val=SimpleName()
-    { variables.add(new JmlBoundVariable(range(partialType,val), partialType, val)); }
-  )*
-  {return variables;}
+  NodeList<Parameter> variables = new NodeList<>();
+  Parameter p;
+}
+{
+  p = Parameter() { variables.add(p); }
+  ( "," p = Parameter() { variables.add(p); })*
+  { return variables; }
 }
 
 JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
@@ -7075,10 +7091,11 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
 }
 
 JmlClassLevel JmlClassExpr(ModifierHolder modifiers):
-{ Expression expr; JavaToken begin; }
+{ Expression expr; JavaToken begin; SimpleName id;}
 {
   (<AXIOM> | <INVARIANT> | <INITIALLY> | <CONSTRAINT> | <CONSTRAINT_REDUNDANTLY>)
   {begin=token();}
+  [ LOOKAHEAD(3) id=SimpleName() ":" ] //TODO weigl
   expr=Expression() ";"
   {
     begin = orIfInvalid(modifiers.begin, begin);

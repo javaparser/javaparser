@@ -27,12 +27,20 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
+import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
+import com.github.javaparser.ast.jml.expr.JmlLetExpr;
+import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlContractContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlLetExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlQuantifiedExprContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlSignalsClauseContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
@@ -57,7 +65,15 @@ public class JavaParserFactory {
         }
 
         // TODO: Is order important here?
-        if (node instanceof ArrayAccessExpr) {
+        if (node instanceof JmlLetExpr) {
+            return new JmlLetExprContext((JmlLetExpr) node, typeSolver);
+        } else if (node instanceof JmlContract) {
+            return new JmlContractContext((JmlContract) node, typeSolver);
+        } else if (node instanceof JmlSignalsClause) {
+            return new JmlSignalsClauseContext((JmlSignalsClause) node, typeSolver);
+        } else if (node instanceof JmlQuantifiedExpr) {
+            return new JmlQuantifiedExprContext((JmlQuantifiedExpr) node, typeSolver);
+        } else if (node instanceof ArrayAccessExpr) {
             return new ArrayAccessExprContext((ArrayAccessExpr) node, typeSolver);
         } else if (node instanceof AnnotationDeclaration) {
             return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
@@ -108,10 +124,10 @@ public class JavaParserFactory {
         } else if (node instanceof VariableDeclarationExpr) {
             return new VariableDeclarationExprContext((VariableDeclarationExpr) node, typeSolver);
         } else if (node instanceof ObjectCreationExpr &&
-            ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
+                ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
             return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);
         } else if (node instanceof ObjectCreationExpr) {
-            return new ObjectCreationContext((ObjectCreationExpr)node, typeSolver);
+            return new ObjectCreationContext((ObjectCreationExpr) node, typeSolver);
         } else {
             if (node instanceof NameExpr) {
                 // to resolve a name when in a fieldAccess context, we can go up until we get a node other than FieldAccessExpr,
@@ -134,7 +150,7 @@ public class JavaParserFactory {
             if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
                 ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
                 if (parentDeclaration.getImplementedTypes().contains(node) ||
-                    parentDeclaration.getExtendedTypes().contains(node)) {
+                        parentDeclaration.getExtendedTypes().contains(node)) {
                     // When resolving names in implements and extends the body of the declaration
                     // should not be searched so use limited context.
                     return new ClassOrInterfaceDeclarationExtendsContext(parentDeclaration, typeSolver);

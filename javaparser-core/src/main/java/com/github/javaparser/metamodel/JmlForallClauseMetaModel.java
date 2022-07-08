@@ -41,5 +41,5 @@ public class JmlForallClauseMetaModel extends JmlClauseMetaModel {
         super(superBaseNodeMetaModel, JmlForallClause.class, "JmlForallClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
-    public PropertyMetaModel variablesPropertyMetaModel;
+    public PropertyMetaModel boundedVariablesPropertyMetaModel;
 }

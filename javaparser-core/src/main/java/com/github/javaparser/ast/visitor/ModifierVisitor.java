@@ -1358,11 +1358,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlAccessibleClause n, final A arg) {
-        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
+        NodeList<Expression> exprs = modifyList(n.getExpressions(), arg);
         NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
         Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setExprs(exprs);
+        n.setExpressions(exprs);
         n.setHeaps(heaps);
         n.setMeasuredBy(measuredBy);
         n.setComment(comment);
@@ -1400,7 +1400,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlQuantifiedExpr n, final A arg) {
         NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
-        NodeList<JmlBoundVariable> variables = modifyList(n.getVariables(), arg);
+        NodeList<Parameter> variables = modifyList(n.getVariables(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (expressions.isEmpty() || variables.isEmpty())
             return null;
@@ -1438,11 +1438,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlMultiCompareExpr n, final A arg) {
-        NodeList<Expression> exprs = modifyList(n.getExprs(), arg);
+        NodeList<Expression> expressions = modifyList(n.getExpressions(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (exprs.isEmpty())
+        if (expressions.isEmpty())
             return null;
-        n.setExprs(exprs);
+        n.setExpressions(expressions);
         n.setComment(comment);
         return n;
     }
@@ -1464,14 +1464,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlSignalsClause n, final A arg) {
-        Expression expr = (Expression) n.getExpr().accept(this, arg);
-        Type type = (Type) n.getType().accept(this, arg);
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Parameter parameter = (Parameter) n.getParameter().accept(this, arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (expr == null || type == null)
+        if (expression == null || parameter == null)
             return null;
-        n.setExpr(expr);
-        n.setType(type);
+        n.setExpression(expression);
+        n.setParameter(parameter);
         n.setName(name);
         n.setComment(comment);
         return n;
@@ -1515,10 +1515,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlForallClause n, final A arg) {
-        NodeList<JmlBoundVariable> variables = modifyList(n.getVariables(), arg);
+        NodeList<Parameter> boundedVariables = modifyList(n.getBoundedVariables(), arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setVariables(variables);
+        n.setBoundedVariables(boundedVariables);
         n.setName(name);
         n.setComment(comment);
         return n;
@@ -1536,19 +1536,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(JmlClauseIf n, A arg) {
         return null;
-    }
-
-    @Override
-    public Visitable visit(final JmlBoundVariable n, final A arg) {
-        SimpleName name = (SimpleName) n.getName().accept(this, arg);
-        Type type = (Type) n.getType().accept(this, arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (name == null || type == null)
-            return null;
-        n.setName(name);
-        n.setType(type);
-        n.setComment(comment);
-        return n;
     }
 
     @Override

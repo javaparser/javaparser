@@ -24,7 +24,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 @Deprecated
 public class JmlAccessibleClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
     private NodeList<SimpleName> heaps;
-    private NodeList<Expression> exprs;
+    private NodeList<Expression> expressions;
 
     @OptionalProperty
     private Expression measuredBy;
@@ -34,10 +34,10 @@ public class JmlAccessibleClause extends JmlClause implements MethodContractable
     }
 
     @AllFieldsConstructor
-    public JmlAccessibleClause(NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
+    public JmlAccessibleClause(NodeList<SimpleName> heaps, NodeList<Expression> expressions, Expression measuredBy) {
         super();
         setHeaps(heaps);
-        setExprs(exprs);
+        setExpressions(expressions);
         setMeasuredBy(measuredBy);
     }
 
@@ -45,10 +45,10 @@ public class JmlAccessibleClause extends JmlClause implements MethodContractable
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlAccessibleClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> exprs, Expression measuredBy) {
+    public JmlAccessibleClause(TokenRange tokenRange, NodeList<SimpleName> heaps, NodeList<Expression> expressions, Expression measuredBy) {
         super(tokenRange);
         setHeaps(heaps);
-        setExprs(exprs);
+        setExpressions(expressions);
         setMeasuredBy(measuredBy);
         customInitialization();
     }
@@ -58,9 +58,9 @@ public class JmlAccessibleClause extends JmlClause implements MethodContractable
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        for (int i = 0; i < exprs.size(); i++) {
-            if (exprs.get(i) == node) {
-                exprs.remove(i);
+        for (int i = 0; i < expressions.size(); i++) {
+            if (expressions.get(i) == node) {
+                expressions.remove(i);
                 return true;
             }
         }
@@ -84,9 +84,9 @@ public class JmlAccessibleClause extends JmlClause implements MethodContractable
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        for (int i = 0; i < exprs.size(); i++) {
-            if (exprs.get(i) == node) {
-                exprs.set(i, (Expression) replacementNode);
+        for (int i = 0; i < expressions.size(); i++) {
+            if (expressions.get(i) == node) {
+                expressions.set(i, (Expression) replacementNode);
                 return true;
             }
         }
@@ -138,21 +138,21 @@ public class JmlAccessibleClause extends JmlClause implements MethodContractable
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExprs() {
-        return exprs;
+    public NodeList<Expression> getExpressions() {
+        return expressions;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlAccessibleClause setExprs(final NodeList<Expression> exprs) {
-        assertNotNull(exprs);
-        if (exprs == this.exprs) {
+    public JmlAccessibleClause setExpressions(final NodeList<Expression> expressions) {
+        assertNotNull(expressions);
+        if (expressions == this.expressions) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.exprs, exprs);
-        if (this.exprs != null)
-            this.exprs.setParentNode(null);
-        this.exprs = exprs;
-        setAsParentNodeOf(exprs);
+        notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
+        if (this.expressions != null)
+            this.expressions.setParentNode(null);
+        this.expressions = expressions;
+        setAsParentNodeOf(expressions);
         return this;
     }
 

@@ -25,6 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -37,6 +38,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.Optional;
 
 /**
  * This implementation of the SymbolResolver wraps the functionality of the library to make them easily usable
@@ -86,6 +89,25 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     @Override
     public <T> T resolveDeclaration(Node node, Class<T> resultClass) {
+        T ret = resolveDeclarationImpl(node, resultClass);
+        if (ret instanceof AssociableToAST) {
+            AssociableToAST r = (AssociableToAST) ret;
+            Node n = (Node) r.toAst().get();
+            if (!inJml(node) && inJml(n)) {
+                throw new JavaRefersToJmlException("Java to JML reference!");
+            }
+        }
+        return ret;
+    }
+
+    private boolean inJml(Node node) {
+        if (node instanceof NodeWithJmlTags) return true;
+        if (node.hasParentNode())
+            return inJml(node.getParentNode().get());
+        return false;
+    }
+
+    public <T> T resolveDeclarationImpl(Node node, Class<T> resultClass) {
         if (node instanceof MethodDeclaration) {
             return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration) node, typeSolver));
         }

@@ -1276,7 +1276,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final JmlQuantifiedExpr n, final Object arg) {
         NodeList<Expression> expressions = cloneList(n.getExpressions(), arg);
-        NodeList<JmlBoundVariable> variables = cloneList(n.getVariables(), arg);
+        NodeList<Parameter> variables = cloneList(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         JmlQuantifiedExpr r = new JmlQuantifiedExpr(n.getTokenRange().orElse(null), n.getBinder(), variables, expressions);
         r.setComment(comment);
@@ -1287,7 +1287,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlAccessibleClause n, final Object arg) {
-        NodeList<Expression> exprs = cloneList(n.getExprs(), arg);
+        NodeList<Expression> exprs = cloneList(n.getExpressions(), arg);
         NodeList<SimpleName> heaps = cloneList(n.getHeaps(), arg);
         Expression measuredBy = cloneNode(n.getMeasuredBy(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -1349,9 +1349,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlMultiCompareExpr n, final Object arg) {
-        NodeList<Expression> exprs = cloneList(n.getExprs(), arg);
+        NodeList<Expression> expressions = cloneList(n.getExpressions(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlMultiCompareExpr r = new JmlMultiCompareExpr(n.getTokenRange().orElse(null), exprs, n.getOperators());
+        JmlMultiCompareExpr r = new JmlMultiCompareExpr(n.getTokenRange().orElse(null), expressions, n.getOperators());
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1373,11 +1373,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlSignalsClause n, final Object arg) {
-        Expression expr = cloneNode(n.getExpr(), arg);
-        Type type = cloneNode(n.getType(), arg);
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Parameter parameter = cloneNode(n.getParameter(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlSignalsClause r = new JmlSignalsClause(n.getTokenRange().orElse(null), type, name, expr);
+        JmlSignalsClause r = new JmlSignalsClause(n.getTokenRange().orElse(null), name, parameter, expression);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1430,10 +1430,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlForallClause n, final Object arg) {
-        NodeList<JmlBoundVariable> variables = cloneList(n.getVariables(), arg);
+        NodeList<Parameter> boundedVariables = cloneList(n.getBoundedVariables(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlForallClause r = new JmlForallClause(n.getTokenRange().orElse(null), variables);
+        JmlForallClause r = new JmlForallClause(n.getTokenRange().orElse(null), boundedVariables);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);
@@ -1455,18 +1455,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final JmlClauseIf n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         JmlClauseIf r = new JmlClauseIf(n.getTokenRange().orElse(null));
-        r.setComment(comment);
-        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
-        copyData(n, r);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(final JmlBoundVariable n, final Object arg) {
-        SimpleName name = cloneNode(n.getName(), arg);
-        Type type = cloneNode(n.getType(), arg);
-        Comment comment = cloneNode(n.getComment(), arg);
-        JmlBoundVariable r = new JmlBoundVariable(n.getTokenRange().orElse(null), type, name);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

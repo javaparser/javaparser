@@ -2,11 +2,11 @@ package com.github.javaparser.ast.jml.clauses;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.ForallClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.JmlForallClauseMetaModel;
@@ -17,20 +17,20 @@ import com.github.javaparser.metamodel.JmlForallClauseMetaModel;
  */
 public class JmlForallClause extends JmlClause implements MethodContractable {
 
-    private NodeList<JmlBoundVariable> variables;
+    private NodeList<Parameter> boundedVariables;
 
     @AllFieldsConstructor
-    public JmlForallClause(NodeList<JmlBoundVariable> variables) {
-        this(null, variables);
+    public JmlForallClause(NodeList<Parameter> boundedVariables) {
+        this(null, boundedVariables);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlForallClause(TokenRange tokenRange, NodeList<JmlBoundVariable> variables) {
+    public JmlForallClause(TokenRange tokenRange, NodeList<Parameter> boundedVariables) {
         super(tokenRange);
-        setVariables(variables);
+        setBoundedVariables(boundedVariables);
         customInitialization();
     }
 
@@ -47,21 +47,21 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlBoundVariable> getVariables() {
-        return variables;
+    public NodeList<Parameter> getBoundedVariables() {
+        return boundedVariables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlForallClause setVariables(final NodeList<JmlBoundVariable> variables) {
-        assertNotNull(variables);
-        if (variables == this.variables) {
+    public JmlForallClause setBoundedVariables(final NodeList<Parameter> boundedVariables) {
+        assertNotNull(boundedVariables);
+        if (boundedVariables == this.boundedVariables) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null)
-            this.variables.setParentNode(null);
-        this.variables = variables;
-        setAsParentNodeOf(variables);
+        notifyPropertyChange(ObservableProperty.BOUNDED_VARIABLES, this.boundedVariables, boundedVariables);
+        if (this.boundedVariables != null)
+            this.boundedVariables.setParentNode(null);
+        this.boundedVariables = boundedVariables;
+        setAsParentNodeOf(boundedVariables);
         return this;
     }
 
@@ -71,9 +71,9 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.remove(i);
+        for (int i = 0; i < boundedVariables.size(); i++) {
+            if (boundedVariables.get(i) == node) {
+                boundedVariables.remove(i);
                 return true;
             }
         }
@@ -86,9 +86,9 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < variables.size(); i++) {
-            if (variables.get(i) == node) {
-                variables.set(i, (JmlBoundVariable) replacementNode);
+        for (int i = 0; i < boundedVariables.size(); i++) {
+            if (boundedVariables.get(i) == node) {
+                boundedVariables.set(i, (Parameter) replacementNode);
                 return true;
             }
         }

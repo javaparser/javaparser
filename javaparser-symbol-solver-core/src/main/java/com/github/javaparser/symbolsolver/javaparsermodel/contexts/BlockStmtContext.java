@@ -29,6 +29,7 @@ import java.util.Optional;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.jml.stmt.JmlGhostStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -58,6 +59,10 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
     }
 
     private List<VariableDeclarator> localVariablesDeclaredIn(Statement statement) {
+        if (statement instanceof JmlGhostStmt) {
+            return localVariablesDeclaredIn(((JmlGhostStmt) statement).getStatement());
+        }
+
         if (statement instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) statement;
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {

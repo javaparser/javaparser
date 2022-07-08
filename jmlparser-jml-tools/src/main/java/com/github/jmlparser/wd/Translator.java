@@ -1,7 +1,7 @@
 package com.github.jmlparser.wd;
 
-import com.github.javaparser.ast.JmlBoundVariable;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.*;
 import org.sosy_lab.java_smt.api.Formula;
 
@@ -28,11 +28,11 @@ public interface Translator {
 
     Formula makeIntVar();
 
-    default List<? extends Formula> getVariable(NodeList<JmlBoundVariable> variables) {
-        return variables.stream().map(this::getVariable0).collect(Collectors.toList());
+    default List<? extends Formula> getVariable(NodeList<Parameter> variables) {
+        return variables.stream().map(this::getVariable).collect(Collectors.toList());
     }
 
-    Formula getVariable0(JmlBoundVariable jmlBoundVariable);
+    Formula getVariable(Parameter jmlBoundVariable);
 
     Formula conditional(Formula accept, Formula accept1, Formula accept2);
 }

@@ -4,18 +4,19 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.JmlSignalsClauseMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl
@@ -23,51 +24,24 @@ import java.util.Optional;
  */
 public class JmlSignalsClause extends JmlClause implements MethodContractable, BlockContractable {
 
-    private Type type;
+    private Parameter parameter;
 
-    private Expression expr;
-
-    public JmlSignalsClause() {
-        this(null, null, null);
-    }
+    private Expression expression;
 
     @AllFieldsConstructor
-    public JmlSignalsClause(Type type, SimpleName name, Expression expr) {
-        this(null, type, name, expr);
+    public JmlSignalsClause(SimpleName name, Parameter parameter, Expression expression) {
+        this(null, name, parameter, expression);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlSignalsClause(TokenRange tokenRange, Type type, SimpleName name, Expression expr) {
+    public JmlSignalsClause(TokenRange tokenRange, SimpleName name, Parameter parameter, Expression expression) {
         super(tokenRange, name);
-        setType(type);
-        setExpr(expr);
+        setParameter(parameter);
+        setExpression(expression);
         customInitialization();
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null) {
-            return false;
-        }
-        if (node == expr) {
-            setExpr((Expression) replacementNode);
-            return true;
-        }
-        if (node == type) {
-            setType((Type) replacementNode);
-            return true;
-        }
-        return super.replace(node, replacementNode);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlSignalsClause clone() {
-        return (JmlSignalsClause) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -92,52 +66,21 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getExpr() {
-        return expr;
+    public Expression getExpression() {
+        return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlSignalsClause setExpr(final Expression expr) {
-        assertNotNull(expr);
-        if (expr == this.expr) {
+    public JmlSignalsClause setExpression(final Expression expression) {
+        assertNotNull(expression);
+        if (expression == this.expression) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-        if (this.expr != null)
-            this.expr.setParentNode(null);
-        this.expr = expr;
-        setAsParentNodeOf(expr);
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<SimpleName> getName() {
-        return Optional.ofNullable(null);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlSignalsClause setName(final SimpleName name) {
-        setAsParentNodeOf(name);
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type getType() {
-        return type;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlSignalsClause setType(final Type type) {
-        assertNotNull(type);
-        if (type == this.type) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
-            this.type.setParentNode(null);
-        this.type = type;
-        setAsParentNodeOf(type);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
     }
 
@@ -152,8 +95,42 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
         return JmlClauseKind.SIGNALS;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public JmlSignalsClause removeName() {
-        return setName(null);
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Parameter getParameter() {
+        return parameter;
+    }
+
+    public JmlSignalsClause setParameter(final Parameter parameter) {
+        assertNotNull(parameter);
+        if (parameter == this.parameter) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
+        if (this.parameter != null)
+            this.parameter.setParentNode(null);
+        this.parameter = parameter;
+        setAsParentNodeOf(parameter);
+        return this;
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null) {
+            return false;
+        }
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
+        if (node == parameter) {
+            setParameter((Parameter) replacementNode);
+            return true;
+        }
+        return super.replace(node, replacementNode);
+    }
+
+    @Override
+    public JmlSignalsClause clone() {
+        return (JmlSignalsClause) accept(new CloneVisitor(), null);
     }
 }

@@ -1,6 +1,6 @@
 package com.github.jmlparser.wd;
 
-import com.github.javaparser.ast.JmlBoundVariable;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.*;
 import org.sosy_lab.java_smt.api.*;
 
@@ -131,7 +131,14 @@ public class BitVectorTranslator implements Translator {
     }
 
     @Override
-    public Formula getVariable0(JmlBoundVariable jmlBoundVariable) {
+    public Formula getVariable(Parameter jmlBoundVariable) {
+        //switch (jmlBoundVariable.getTypeAsString()) {
+        return null;
+        //}
+    }
+
+    @Override
+    public Formula conditional(Formula accept, Formula accept1, Formula accept2) {
         return null;
     }
 }

@@ -278,8 +278,6 @@ public interface VoidVisitor<A> {
 
     void visit(JmlClauseIf n, A arg);
 
-    void visit(JmlBoundVariable n, A arg);
-
     void visit(JmlClassExprDeclaration n, A arg);
 
     void visit(JmlClassAccessibleDeclaration n, A arg);

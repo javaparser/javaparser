@@ -2192,7 +2192,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getExprs().accept(this, arg);
+            tmp = n.getExpressions().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2312,7 +2312,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getExprs().accept(this, arg);
+            tmp = n.getExpressions().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2356,12 +2356,12 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getExpr().accept(this, arg);
+            tmp = n.getExpression().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
         {
-            tmp = n.getType().accept(this, arg);
+            tmp = n.getParameter().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2451,7 +2451,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
-            tmp = n.getVariables().accept(this, arg);
+            tmp = n.getBoundedVariables().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2489,28 +2489,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final JmlClauseIf n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final JmlBoundVariable n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getName().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getType().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)

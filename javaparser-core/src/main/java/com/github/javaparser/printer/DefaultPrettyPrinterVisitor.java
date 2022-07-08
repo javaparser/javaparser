@@ -818,7 +818,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlAccessibleClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printClause(n.getKind(), n.getHeaps(), n.getExprs());
+        printClause(n.getKind(), n.getHeaps(), n.getExpressions());
     }
 
     @Override
@@ -893,10 +893,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(JmlMultiCompareExpr n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         for (int i = 0; i < n.getOperators().size(); i++) {
-            n.getExprs().get(i).accept(this, arg);
+            n.getExpressions().get(i).accept(this, arg);
             printer.print(n.getOperators().get(i).asString());
         }
-        n.getExprs().get(n.getExprs().size() - 1).accept(this, arg);
+        n.getExpressions().get(n.getExpressions().size() - 1).accept(this, arg);
     }
 
     @Override
@@ -908,7 +908,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlSignalsClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        printClause(n.getKind(), n.getExpr());
+        printClause(n.getKind(), n.getExpression());
     }
 
     @Override
@@ -960,7 +960,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print(n.getKind().jmlSymbol);
         printer.print(" ");
-        printList(n.getVariables(), ", ");
+        printList(n.getBoundedVariables(), ", ");
         printer.println(";");
     }
 
@@ -979,14 +979,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(JmlClauseIf n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printClause(n.getKind(), new StringLiteralExpr(("")));
-    }
-
-    @Override
-    public void visit(JmlBoundVariable n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        n.getType().accept(this, arg);
-        printer.print(" ");
-        n.getName().accept(this, arg);
     }
 
     @Override

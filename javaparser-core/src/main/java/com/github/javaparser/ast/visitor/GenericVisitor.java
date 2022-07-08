@@ -286,8 +286,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlClauseIf n, A arg);
 
-    R visit(JmlBoundVariable n, A arg);
-
     R visit(JmlClassExprDeclaration n, A arg);
 
     R visit(JmlClassAccessibleDeclaration n, A arg);

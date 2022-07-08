@@ -23,8 +23,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class JmlMultiCompareExpr extends Expression implements Jmlish {
 
-    public JmlMultiCompareExpr(TokenRange range, NodeList<Expression> exprs, List<BinaryExpr.Operator> ops) {
-        this(range, exprs, new Operators(ops));
+    public JmlMultiCompareExpr(TokenRange range, NodeList<Expression> expressions, List<BinaryExpr.Operator> ops) {
+        this(range, expressions, new Operators(ops));
     }
 
     public static class Operators extends ArrayList<BinaryExpr.Operator> {
@@ -35,22 +35,22 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @NonEmptyProperty
-    private NodeList<Expression> exprs;
+    private NodeList<Expression> expressions;
 
     private Operators operators;
 
     @AllFieldsConstructor
-    public JmlMultiCompareExpr(NodeList<Expression> exprs, Operators operators) {
-        this(null, exprs, operators);
+    public JmlMultiCompareExpr(NodeList<Expression> expressions, Operators operators) {
+        this(null, expressions, operators);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlMultiCompareExpr(TokenRange tokenRange, NodeList<Expression> exprs, Operators operators) {
+    public JmlMultiCompareExpr(TokenRange tokenRange, NodeList<Expression> expressions, Operators operators) {
         super(tokenRange);
-        setExprs(exprs);
+        setExpressions(expressions);
         setOperators(operators);
         customInitialization();
     }
@@ -118,21 +118,21 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExprs() {
-        return exprs;
+    public NodeList<Expression> getExpressions() {
+        return expressions;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiCompareExpr setExprs(final NodeList<Expression> exprs) {
-        assertNotNull(exprs);
-        if (exprs == this.exprs) {
+    public JmlMultiCompareExpr setExpressions(final NodeList<Expression> expressions) {
+        assertNotNull(expressions);
+        if (expressions == this.expressions) {
             return this;
         }
-        notifyPropertyChange(ObservableProperty.EXPRS, this.exprs, exprs);
-        if (this.exprs != null)
-            this.exprs.setParentNode(null);
-        this.exprs = exprs;
-        setAsParentNodeOf(exprs);
+        notifyPropertyChange(ObservableProperty.EXPRESSIONS, this.expressions, expressions);
+        if (this.expressions != null)
+            this.expressions.setParentNode(null);
+        this.expressions = expressions;
+        setAsParentNodeOf(expressions);
         return this;
     }
 
@@ -158,9 +158,9 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < exprs.size(); i++) {
-            if (exprs.get(i) == node) {
-                exprs.remove(i);
+        for (int i = 0; i < expressions.size(); i++) {
+            if (expressions.get(i) == node) {
+                expressions.remove(i);
                 return true;
             }
         }
@@ -173,9 +173,9 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
         if (node == null) {
             return false;
         }
-        for (int i = 0; i < exprs.size(); i++) {
-            if (exprs.get(i) == node) {
-                exprs.set(i, (Expression) replacementNode);
+        for (int i = 0; i < expressions.size(); i++) {
+            if (expressions.get(i) == node) {
+                expressions.set(i, (Expression) replacementNode);
                 return true;
             }
         }

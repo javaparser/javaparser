@@ -1392,7 +1392,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlAccessibleClause n, final Visitable arg) {
         final JmlAccessibleClause n2 = (JmlAccessibleClause) arg;
-        if (!nodesEquals(n.getExprs(), n2.getExprs()))
+        if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
             return false;
         if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
             return false;
@@ -1476,7 +1476,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlMultiCompareExpr n, final Visitable arg) {
         final JmlMultiCompareExpr n2 = (JmlMultiCompareExpr) arg;
-        if (!nodesEquals(n.getExprs(), n2.getExprs()))
+        if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
             return false;
         if (!objEquals(n.getOperators(), n2.getOperators()))
             return false;
@@ -1504,9 +1504,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlSignalsClause n, final Visitable arg) {
         final JmlSignalsClause n2 = (JmlSignalsClause) arg;
-        if (!nodeEquals(n.getExpr(), n2.getExpr()))
+        if (!nodeEquals(n.getExpression(), n2.getExpression()))
             return false;
-        if (!nodeEquals(n.getType(), n2.getType()))
+        if (!nodeEquals(n.getParameter(), n2.getParameter()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
@@ -1558,7 +1558,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final JmlForallClause n, final Visitable arg) {
         final JmlForallClause n2 = (JmlForallClause) arg;
-        if (!nodesEquals(n.getVariables(), n2.getVariables()))
+        if (!nodesEquals(n.getBoundedVariables(), n2.getBoundedVariables()))
             return false;
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
@@ -1583,18 +1583,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!objEquals(n.getKind(), n2.getKind()))
             return false;
         return nodeEquals(n.getComment(), n2.getComment());
-    }
-
-    @Override
-    public Boolean visit(final JmlBoundVariable n, final Visitable arg) {
-        final JmlBoundVariable n2 = (JmlBoundVariable) arg;
-        if (!nodeEquals(n.getName(), n2.getName()))
-            return false;
-        if (!nodeEquals(n.getType(), n2.getType()))
-            return false;
-        if (!nodeEquals(n.getComment(), n2.getComment()))
-            return false;
-        return true;
     }
 
     @Override

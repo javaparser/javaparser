@@ -41,7 +41,7 @@ public class JmlSignalsClauseMetaModel extends JmlClauseMetaModel {
         super(superBaseNodeMetaModel, JmlSignalsClause.class, "JmlSignalsClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
 
-    public PropertyMetaModel exprPropertyMetaModel;
+    public PropertyMetaModel expressionPropertyMetaModel;
 
-    public PropertyMetaModel typePropertyMetaModel;
+    public PropertyMetaModel parameterPropertyMetaModel;
 }

@@ -333,7 +333,7 @@ public class StatVisitor extends VoidVisitorAdapter<Element> {
     @Override
     public void visit(JmlForallClause n, Element arg) {
         Element e = newElement(arg, n.getKind().jmlSymbol);
-        e.setAttribute("numVars", "" + n.getVariables().size());
+        e.setAttribute("numVars", "" + n.getBoundedVariables().size());
     }
 
     @Override
