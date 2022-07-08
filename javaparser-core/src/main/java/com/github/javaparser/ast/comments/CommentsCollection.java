@@ -69,12 +69,12 @@ public class CommentsCollection {
     }
 
     public boolean contains(Comment comment) {
-        if (!comment.getRange().isPresent()) {
+        if (!comment.hasRange()) {
             return false;
         }
         Range commentRange = comment.getRange().get();
         for (Comment c : getComments()) {
-            if (!c.getRange().isPresent()) {
+            if (!c.hasRange()) {
                 return false;
             }
             Range cRange = c.getRange().get();
