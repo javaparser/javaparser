@@ -261,6 +261,22 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             ListIterator<Statement> statementListIterator = nodeWithStmt.getStatements().listIterator(position);
             while(statementListIterator.hasPrevious()) {
                 Context prevContext = JavaParserFactory.getContext(statementListIterator.previous(), typeSolver);
+                if (prevContext instanceof BlockStmtContext) {
+                    // Issue #3631
+                    // We have an explicit check for "BlockStmtContext" to avoid resolving the variable x with the
+                    // declaration defined in the block preceding the use of the variable
+                    // For example consider the following:
+                    //
+                    // int x = 0;
+                    // void method() {
+                    // {
+                    // var x = 1;
+                    // System.out.println(x); // prints 1
+                    // }
+                    // System.out.println(x); // prints 0
+                    // }
+                    continue;
+                }
                 if (prevContext instanceof StatementContext) {
                     // We have an explicit check for "StatementContext" to prevent a factorial increase of visited statements.
                     //

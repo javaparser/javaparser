@@ -64,13 +64,13 @@ public final class PositionUtils {
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
-        if (a.getRange().isPresent() && !b.getRange().isPresent()) {
+        if (a.hasRange() && !b.hasRange()) {
             return -1;
         }
-        if (!a.getRange().isPresent() && b.getRange().isPresent()) {
+        if (!a.hasRange() && b.hasRange()) {
             return 1;
         }
-        if (!a.getRange().isPresent() && !b.getRange().isPresent()) {
+        if (!a.hasRange() && !b.hasRange()) {
             return 0;
         }
         if (ignoringAnnotations) {
@@ -122,7 +122,7 @@ public final class PositionUtils {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
             Modifier earliestModifier = casted.getModifiers()
                     .stream()
-                    .filter(modifier -> modifier.getRange().isPresent())
+                    .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
                     .orElse(null);
             if (earliestModifier == null) {
@@ -135,7 +135,7 @@ public final class PositionUtils {
             MethodDeclaration casted = (MethodDeclaration) node;
             Modifier earliestModifier = casted.getModifiers()
                     .stream()
-                    .filter(modifier -> modifier.getRange().isPresent())
+                    .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
                     .orElse(null);
             if (earliestModifier == null) {
@@ -148,7 +148,7 @@ public final class PositionUtils {
             FieldDeclaration casted = (FieldDeclaration) node;
             Modifier earliestModifier = casted.getModifiers()
                     .stream()
-                    .filter(modifier -> modifier.getRange().isPresent())
+                    .filter(modifier -> modifier.hasRange())
                     .min(Comparator.comparing(o -> o.getRange().get().begin))
                     .orElse(null);
             if (earliestModifier == null) {
@@ -173,10 +173,10 @@ public final class PositionUtils {
      * `container == other`, the raw `other` may extend beyond the sans-annotations `container` thus return false.
      */
     public static boolean nodeContains(Node container, Node other, boolean ignoringAnnotations) {
-        if (!container.getRange().isPresent()) {
+        if (!container.hasRange()) {
             throw new IllegalArgumentException("Cannot compare the positions of nodes if container node does not have a range.");
         }
-        if (!other.getRange().isPresent()) {
+        if (!other.hasRange()) {
             throw new IllegalArgumentException("Cannot compare the positions of nodes if contained node does not have a range.");
         }
 

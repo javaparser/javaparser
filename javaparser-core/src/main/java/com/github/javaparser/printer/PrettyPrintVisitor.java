@@ -116,7 +116,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     protected void printAnnotations(final NodeList<AnnotationExpr> annotations, boolean prefixWithASpace,
-                                    final Void arg) {
+                                  final Void arg) {
         if (annotations.isEmpty()) {
             return;
         }
@@ -692,6 +692,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
 
+
     /**
      * work in progress for issue-545
      */
@@ -765,7 +766,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getExpression().accept(this, arg);
         printer.print(" instanceof ");
         n.getType().accept(this, arg);
-        if (n.getName().isPresent()) {
+        if(n.getName().isPresent()) {
             printer.print(" ");
             n.getName().get().accept(this, arg);
         }
@@ -1272,8 +1273,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final MethodDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-
-        n.getContracts().get().accept(this, arg);
 
         printComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
@@ -2103,7 +2102,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) return;
 
         // extract all nodes for which the position/range is indicated to avoid to skip orphan comments
-        List<Node> everything = node.getChildNodes().stream().filter(n -> n.getRange().isPresent()).collect(Collectors.toList());
+        List<Node> everything = node.getChildNodes().stream().filter(n->n.hasRange()).collect(Collectors.toList());
         sortByBeginPosition(everything);
         if (everything.isEmpty()) {
             return;
@@ -2123,13 +2122,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
     }
 
-    private void indentIf(boolean expr) {
-        if (expr)
+     private void indentIf(boolean expr){
+        if(expr)
             printer.indent();
-    }
+     }
 
-    private void unindentIf(boolean expr) {
-        if (expr)
+    private void unindentIf(boolean expr){
+        if(expr)
             printer.unindent();
     }
 }
