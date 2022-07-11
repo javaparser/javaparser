@@ -167,7 +167,7 @@ class JavaParserJsonDeserializerTest {
 
         CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertTrue(deserialized.getRange().isPresent());
+        assertTrue(deserialized.hasRange());
         Range range = deserialized.getRange().get();
         assertEquals(1, range.begin.line);
         assertEquals(1, range.begin.line);

@@ -380,7 +380,7 @@ public class LexicalPreservingPrinter {
         if (node.isPhantom()) {
             return Optional.empty();
         }
-        if(!node.getRange().isPresent()) {
+        if(!node.hasRange()) {
             return Optional.empty();
         }
         if (!node.getRange().get().contains(tokenRange)) {
@@ -403,7 +403,7 @@ public class LexicalPreservingPrinter {
         List<Pair<Range, TextElement>> elements = new LinkedList<>();
         for (Node child : node.getChildNodes()) {
             if (!child.isPhantom()) {
-                if (!child.getRange().isPresent()) {
+                if (!child.hasRange()) {
                     throw new RuntimeException("Range not present on node " + child);
                 }
                 elements.add(new Pair<>(child.getRange().get(), new ChildTextElement(child)));

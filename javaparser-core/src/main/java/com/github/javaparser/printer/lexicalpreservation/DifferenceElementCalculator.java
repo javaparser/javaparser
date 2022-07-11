@@ -54,7 +54,7 @@ class DifferenceElementCalculator {
             // because we can have nodes with the same content but in different lines
             // in this case we consider that nodes are not equals
             return this.node.equals(cpi.node) 
-                    && this.node.getRange().isPresent() && cpi.node.getRange().isPresent()
+                    && this.node.hasRange() && cpi.node.hasRange()
                     && this.node.getRange().get().contains(cpi.node.getRange().get());
         }
         @Override

@@ -110,7 +110,7 @@ public class JavaParserJsonSerializer {
     }
 
     protected void writeRange(Node node, JsonGenerator generator) {
-        if (node.getRange().isPresent()) {
+        if (node.hasRange()) {
             Range range = node.getRange().get();
             generator.writeStartObject(JsonNode.RANGE.propertyKey);
             generator.write(JsonRange.BEGIN_LINE.propertyKey, range.begin.line);
