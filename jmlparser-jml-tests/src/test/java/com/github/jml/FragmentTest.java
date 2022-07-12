@@ -1,4 +1,4 @@
-package com.github.jml.printer;
+package com.github.jml;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -11,6 +11,8 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -54,6 +56,9 @@ class FragmentTest {
         r.getProblems().forEach(
                 it -> System.out.println(it.getMessage())
         );
+        if (!r.isSuccessful()) {
+            System.out.println(f.getAbsolutePath());
+        }
         Assertions.assertTrue(r.isSuccessful());
     }
 

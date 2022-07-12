@@ -1,4 +1,4 @@
-package com.github.jml.printer;
+package com.github.jml;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * @author Alexander Weigl
  * @version 1 (7/2/21)
  */
-public class FullExamplesTest {
+class FullExamplesTest {
     private final JavaParser jpb;
 
     {

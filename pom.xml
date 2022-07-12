@@ -11,7 +11,7 @@
         <module>javaparser-symbol-solver-testing</module>
         <module>jmlparser-jml-tests</module>
         <module>jmlparser-jml-tools</module>
-        <module>jmlparser-web</module>
+        <!--<module>jmlparser-web</module>-->
     </modules>
 
     <groupId>org.key</groupId>

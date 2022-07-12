@@ -23,6 +23,7 @@ class ConcreteSyntaxModelTest {
     @CsvFileSource(resources = "/csm_jml_expression.txt", delimiterString = "FOOBARFOOBAZ")
     void printQuantifiedExpr(String line) {
         Expression expr = parseJmlExpression(line);
+        System.out.println(expr);
         assertEquals(line, print(expr));
     }
 }

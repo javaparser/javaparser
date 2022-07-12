@@ -1,9 +1,4 @@
 public class ResolutionTest {
-
-    //invariant INV_LET: (\let int x = 5; x);
-
-
-
     public int i,j;
     /*@
     forall int x, int j;

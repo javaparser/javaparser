@@ -11,10 +11,12 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlMultiCompareExprMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -65,11 +67,6 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    @Override
-    public boolean hasParentNode() {
-        return false;
     }
 
     @Override

@@ -46,6 +46,7 @@ class JavaParserJsonSerializerTest {
         int len = is.read(buffer);
         Assume.assumeTrue(len > 0);
         String expected = new String(buffer, 0, len);
+        System.out.println(serialized);
         Truth.assertThat(serialized).isEqualTo(expected);
     }
 

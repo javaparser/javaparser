@@ -10,7 +10,7 @@ class C {
     }
 
     /*@ exceptional_behavior
-      @ signals (Throwable) true;
+      @ signals (Throwable e) true;
       @ signals_only AssertionError;
       @*/
     void bar () {

@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract>, NodeWithJmlTags<JmlContract> {
 
-    private NodeList<SimpleName> jmlTags;
+    private NodeList<SimpleName> jmlTags = new NodeList<>();
 
     private Type type = Type.METHOD;
 

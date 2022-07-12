@@ -39,6 +39,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -90,11 +91,14 @@ public class JavaSymbolSolver implements SymbolResolver {
     @Override
     public <T> T resolveDeclaration(Node node, Class<T> resultClass) {
         T ret = resolveDeclarationImpl(node, resultClass);
-        if (ret instanceof AssociableToAST) {
-            AssociableToAST r = (AssociableToAST) ret;
-            Node n = (Node) r.toAst().get();
-            if (!inJml(node) && inJml(n)) {
-                throw new JavaRefersToJmlException("Java to JML reference!");
+        if (ret instanceof AssociableToAST<?>) {
+            AssociableToAST<? extends Node> r = (AssociableToAST<? extends Node>) ret;
+            final Optional<? extends Node> ast = r.toAst();
+            if (ast.isPresent()) {
+                Node n = ast.get();
+                if (!inJml(node) && inJml(n)) {
+                    throw new JavaRefersToJmlException("Java to JML reference!");
+                }
             }
         }
         return ret;

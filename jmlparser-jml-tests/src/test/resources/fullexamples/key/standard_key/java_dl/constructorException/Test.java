@@ -8,7 +8,7 @@ class Test {
   //@ invariant x == 4 && w == 0;
 
   //@ requires e != null;
-  //@ signals (Exception) y == z;
+  //@ signals (Exception e) y == z;
   //@ signals_only RuntimeException;
   Test (int z) {
       y = z;

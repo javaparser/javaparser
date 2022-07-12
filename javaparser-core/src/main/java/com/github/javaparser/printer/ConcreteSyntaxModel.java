@@ -36,6 +36,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
@@ -997,6 +998,11 @@ public class ConcreteSyntaxModel {
                 newline()
         ));
 
+        concreteSyntaxModelByClass.put(JmlLabelStmt.class, sequence(
+                child(LABEL),
+                token(SEMICOLON)
+        ));
+
         concreteSyntaxModelByClass.put(JmlSimpleExprClause.class, sequence(
                 child(ObservableProperty.KIND),
                 child(HEAPS),
@@ -1032,10 +1038,13 @@ public class ConcreteSyntaxModel {
                 semicolon()));
         concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class, sequence(
                 child(MODIFIERS),
-                token(INVARIANT),
+                attribute(KIND),
                 space(),
+                attribute(NAME),
+                token(COLON),
                 child(EXPRESSION),
                 semicolon()));
+
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlContract.class, sequence());
@@ -1061,7 +1070,18 @@ public class ConcreteSyntaxModel {
                 child(BODY),
                 token(RPAREN)
         ));
-        concreteSyntaxModelByClass.put(JmlMultiCompareExpr.class, sequence());
+        concreteSyntaxModelByClass.put(JmlMultiCompareExpr.class, (node, printer) -> {
+            NodeList<Expression> exprs = ((JmlMultiCompareExpr) node).getExpressions();
+            JmlMultiCompareExpr.Operators ops = ((JmlMultiCompareExpr) node).getOperators();
+            int i = 0;
+            for (; i < exprs.size() - 1; i++) {
+                ConcreteSyntaxModel.genericPrettyPrint(exprs.get(i), printer);
+                printer.print(" " + ops.get(i).asString() + " ");
+            }
+            ConcreteSyntaxModel.genericPrettyPrint(exprs.get(i), printer);
+        });
+
+
         concreteSyntaxModelByClass.put(JmlQuantifiedExpr.class,
                 sequence(
                         token(LPAREN),
@@ -1086,12 +1106,6 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(JmlTypeExpr.class, sequence(child(TYPE)));
 
-        concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class,
-                sequence(modifiers(),
-                        attribute(KIND),
-                        attribute(NAME),
-                        child(EXPR),
-                        semicolon()));
 
         concreteSyntaxModelByClass.put(JmlUnreachableStmt.class, sequence(token(UNREACHABLE), semicolon()));
         concreteSyntaxModelByClass.put(JmlBinaryInfixExpr.class, sequence(
@@ -1128,8 +1142,6 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(JmlEndStmt.class, token(END));
         concreteSyntaxModelByClass.put(JmlBeginStmt.class, token(BEGIN));
-        concreteSyntaxModelByClass.put(JmlLabelExpr.class, sequence(attribute(LABEL), token(COLON)));
-
 
         concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence(child(CONTRACT), child(METHOD_DECLARATION)));
         concreteSyntaxModelByClass.put(JmlSignalsOnlyClause.class, sequence(

@@ -38,7 +38,7 @@ public class ExamDataBaseImpl extends ExamDataBase {
       @               0<=i && i<students.length && students[i]!=null
       @               && students[i].matrNr==matrNr && \result==i);
       @  assignable \object_creation(ExamDataBaseException);
-      @  signals (ExamDataBaseException) 
+      @  signals (ExamDataBaseException e)
       @      !(\exists int i; 
       @            0<=i && i<students.length && students[i]!=null
       @            && students[i].matrNr==matrNr);

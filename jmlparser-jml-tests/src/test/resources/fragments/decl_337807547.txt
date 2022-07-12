@@ -2,7 +2,7 @@
 public normal_behavior
         ensures \result == (i<0 ? ((long)i - Integer.MIN_VALUE - Integer.MIN_VALUE) : i);
         ensures 0 <= \result && \result <= 0xffff_ffffL;
-      pure helper function
+      pure helper
       model public static long cv(int i);
 
       public normal_behavior

@@ -8,7 +8,7 @@ class False {
      @ also
      @ exceptional_behavior
      @ requires true;
-     @ signals (Exception) false;
+     @ signals (Exception e) false;
      @ diverges true;
    */
 
