@@ -392,6 +392,9 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         return Optional.empty();
     }
 
+    /**
+     * @return A copy of the current reference type, without type parameters.
+     */
     public abstract ResolvedType toRawType();
 
     /**

@@ -1,6 +1,6 @@
-Next Release (Version 3.24.3)
+Next Release (Version 3.24.4)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,49 @@ Next Release (Version 3.24.3)
 ### Fixed
 ### Security
 
+
+Version 3.24.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
+
+### API or Behaviour Change
+
+* Issue #3405 thread safety of pre/postprocessors (incl. breaking change to `Processor` with pre/post processor methods). (PR [#3515](https://github.com/javaparser/javaparser/pull/3515) by [@matozoid](https://github.com/matozoid))
+
+### Changed
+
+* Minor refactoring to manage check in range and use hasRange method in class CommentsInserter (PR [#3587](https://github.com/javaparser/javaparser/pull/3587) by [@jlerbsc](https://github.com/jlerbsc))
+* Renaming PACKAGE_PRIVATE to NONE (this refers to the discussion in the issue #2242) (PR [#3573](https://github.com/javaparser/javaparser/pull/3573) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix documentation of `JAVA_17` (PR [#3623](https://github.com/javaparser/javaparser/pull/3623) by [@mernst](https://github.com/mernst))
+* Fix issue 3631 NameExpr.resolve() does not take end of inner block scopes into account (PR [#3613](https://github.com/javaparser/javaparser/pull/3613) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3588 Modifier is removed when removing an annotation (PR [#3600](https://github.com/javaparser/javaparser/pull/3600) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix lambda generic types that are always resolved to the first type param (PR [#3595](https://github.com/javaparser/javaparser/pull/3595) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix issue #3489 SourceRoot.tryToParse() fails if the root path ends with a directory that is not a java identifier (PR [#3551](https://github.com/javaparser/javaparser/pull/3551) by [@jlerbsc](https://github.com/jlerbsc))
+* Default pretty printer should print inner-class receiver parameters on constructors (PR [#3527](https://github.com/javaparser/javaparser/pull/3527) by [@kelloggm](https://github.com/kelloggm))
+* Issue #3405 thread safety of pre/postprocessors (incl. breaking change to `Processor` with pre/post processor methods). (PR [#3515](https://github.com/javaparser/javaparser/pull/3515) by [@matozoid](https://github.com/matozoid))
+
+### Developer Changes
+
+* chore(deps): update actions/checkout action to v3.0.1 (PR [#3555](https://github.com/javaparser/javaparser/pull/3555) by [@renovate[bot]](https://github.com/apps/renovate))
+* official Apache Maven wrapper (PR [#3552](https://github.com/javaparser/javaparser/pull/3552) by [@sullis](https://github.com/sullis))
+* chore(deps): update codecov/codecov-action action to v3 (PR [#3545](https://github.com/javaparser/javaparser/pull/3545) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.8 (PR [#3544](https://github.com/javaparser/javaparser/pull/3544) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-clean-plugin to v3.2.0 (PR [#3542](https://github.com/javaparser/javaparser/pull/3542) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.0.0-m6 (PR [#3541](https://github.com/javaparser/javaparser/pull/3541) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@sullis](https://github.com/sullis)
+* [@johannescoetzee](https://github.com/johannescoetzee)
+* [@kelloggm](https://github.com/kelloggm)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@mernst](https://github.com/mernst)
+* [@matozoid](https://github.com/matozoid)
 
 Version 3.24.2
 ------------------

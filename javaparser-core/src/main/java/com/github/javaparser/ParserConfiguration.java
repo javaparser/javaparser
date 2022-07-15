@@ -158,11 +158,11 @@ public class ParserConfiguration {
          */
         JAVA_16_PREVIEW(new Java16PreviewValidator(), new Java16PostProcessor()),
         /**
-         * Java 16
+         * Java 17
          */
         JAVA_17(new Java17Validator(), new Java17PostProcessor()),
         /**
-         * Java 16 -- including incubator/preview/second preview features.
+         * Java 17 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
         JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor());
