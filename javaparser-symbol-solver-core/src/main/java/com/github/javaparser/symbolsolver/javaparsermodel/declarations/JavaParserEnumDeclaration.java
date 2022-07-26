@@ -49,12 +49,14 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -71,15 +73,15 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
  */
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
-        AssociableToAST<EnumDeclaration> {
+        SymbolResolutionCapability, AssociableToAST<EnumDeclaration> {
+    
+    private static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
+    private static String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
+    private static String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
 
-    private static final String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-    private static final String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
-    private static final String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
-
-    private final TypeSolver typeSolver;
-    private final EnumDeclaration wrappedNode;
-    private final JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
+    private TypeSolver typeSolver;
+    private EnumDeclaration wrappedNode;
+    private JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
 
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
@@ -151,7 +153,10 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (otherName.equals(JAVA_IO_SERIALIZABLE)) {
             return true;
         }
-        return other.isJavaLangObject();
+        if (other.isJavaLangObject()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -201,7 +206,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         JavaParserEnumDeclaration that = (JavaParserEnumDeclaration) o;
 
-        return wrappedNode.equals(that.wrappedNode);
+        if (!wrappedNode.equals(that.wrappedNode)) return false;
+
+        return true;
     }
 
     @Override
@@ -228,6 +235,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             }
         }
         return getContext().solveMethod(name, argumentsTypes, staticOnly);
+    }
+
+    @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        return getContext().solveSymbol(name);
     }
 
     @Override
@@ -281,7 +293,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
             // look for the qualified name (for example class of type Rectangle2D.Double)
-            className = classOrInterfaceType.getScope().get() + "." + className;
+            className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
         SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
         if (!ref.isSolved()) {
@@ -353,8 +365,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
      */
     public static class ValuesMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
-        private final JavaParserEnumDeclaration enumDeclaration;
-        private final TypeSolver typeSolver;
+        private JavaParserEnumDeclaration enumDeclaration;
+        private TypeSolver typeSolver;
 
         public ValuesMethod(JavaParserEnumDeclaration enumDeclaration, TypeSolver typeSolver) {
             this.enumDeclaration = enumDeclaration;
@@ -447,8 +459,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
      */
     public static class ValueOfMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
-        private final JavaParserEnumDeclaration enumDeclaration;
-        private final TypeSolver typeSolver;
+        private JavaParserEnumDeclaration enumDeclaration;
+        private TypeSolver typeSolver;
 
         public ValueOfMethod(JavaParserEnumDeclaration enumDeclaration, TypeSolver typeSolver) {
             this.enumDeclaration = enumDeclaration;
