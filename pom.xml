@@ -150,14 +150,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-
         <!-- Maven Plugins -->
     </properties>
 
     <scm>
-        <connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
-        <developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
-        <url>https://github.com/javaparser/javaparser.git</url>
+        <connection>scm:git:git://github.com/wadoon/jmlparser.git</connection>
+        <developerConnection>scm:git:git@github.com:wadoon/jmlparser.git</developerConnection>
+        <url>https://github.com/wadoon/jmlparser.git</url>
         <tag>HEAD</tag>
     </scm>
 
