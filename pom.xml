@@ -20,21 +20,15 @@
     <version>3.24.3-SNAPSHOT</version>
 
     <name>jmlparser-parent</name>
-    <url>https://github.com/javaparser</url>
-    <inceptionYear>2007</inceptionYear>
-    <description>Java Parser and Abstract Syntax Tree for Java</description>
+    <url>https://github.com/wadoon/jmlparser</url>
+    <inceptionYear>2021</inceptionYear>
+    <description>Java+Jml Parser and Abstract Syntax Tree</description>
 
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
             <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
             <distribution>repo</distribution>
-        </license>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-            <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
 
@@ -164,7 +158,7 @@
 
     <issueManagement>
         <system>GitHub Issue Tracker</system>
-        <url>https://github.com/javaparser/javaparser/issues</url>
+        <url>https://github.com/wadoon/jmlparser/issues</url>
     </issueManagement>
 
     <distributionManagement>

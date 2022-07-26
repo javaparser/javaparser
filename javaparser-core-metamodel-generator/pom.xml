@@ -12,7 +12,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.key</groupId>
+            <groupId>io.github.wadoon</groupId>
             <artifactId>jmlparser-core</artifactId>
             <version>${project.version}</version>
         </dependency>
