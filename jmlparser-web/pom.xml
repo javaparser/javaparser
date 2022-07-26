@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>jmlparser-parent</artifactId>
-        <groupId>org.key</groupId>
+        <groupId>io.github.wadoon</groupId>
         <version>3.24.3-SNAPSHOT</version>
     </parent>
 

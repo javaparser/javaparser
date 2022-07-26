@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies{ ... 
-  implementation("org.key:jmlparser-symbol-solver-core:3.24.3-SNAPSHOT")
+  implementation("io.github.wadoon:jmlparser-symbol-solver-core:3.24.3-SNAPSHOT")
 }
 ```
 
