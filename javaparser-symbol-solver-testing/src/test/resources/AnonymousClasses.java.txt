@@ -1,0 +1,35 @@
+public class AnonymousClasses {
+	interface InterFoo {
+		public void foo();
+	}
+
+	abstract class ClassFoo {
+		public void foo();
+		public void implFoo() {
+			System.out.println("This is in the abstract ClassFoo");
+		}
+	}
+
+	public void testInterFoo() {
+		InterFoo f = new InterFoo() {
+			@Override
+			public void foo() {
+				System.out.println("Extremely important output");
+			}
+		};
+
+		f.foo();
+	}
+
+	public void testClassFoo() {
+		ClassFoo f = new ClassFoo() {
+			@Override
+			public void foo() {
+				System.out.println("Extremely important output");
+			}
+		};
+
+		f.foo();
+		f.implFoo();
+	}
+}
