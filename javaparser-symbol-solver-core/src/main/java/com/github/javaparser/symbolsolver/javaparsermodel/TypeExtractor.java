@@ -71,17 +71,17 @@ import com.google.common.collect.ImmutableList;
 public class TypeExtractor extends DefaultVisitorAdapter {
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+    private final ReferenceTypeImpl stringReferenceType;
+
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
     
-    private ReferenceTypeImpl StringReferenceType;
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
         this.facade = facade;
         //pre-calculate the String reference (optimization)
-        StringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
+        stringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
     }
 
     @Override
@@ -264,7 +264,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
         Optional<Value> value = Optional.empty();
         try {
-            value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
+            value = createSolver().solveSymbolAsValue(node.getName().getId(), node);
         } catch (UnsolvedSymbolException use) {
             // This node may have a package name as part of its fully qualified name.
             // We should solve for the type declaration inside this package.
@@ -286,7 +286,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(StringLiteralExpr node, Boolean solveLambdas) {
-        return StringReferenceType;
+        return stringReferenceType;
     }
 
     @Override
@@ -336,7 +336,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(NameExpr node, Boolean solveLambdas) {
         Log.trace("getType on name expr %s", ()-> node);
-        Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node);
+        Optional<Value> value = createSolver().solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
             throw new UnsolvedSymbolException("Solving " + node, node.getName().getId());
         } else {
@@ -363,7 +363,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
 
         // JLS 15.13 - ExpressionName :: [TypeArguments] Identifier
-        Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameWithScope, node);
+        Optional<Value> value = createSolver().solveSymbolAsValue(nameWithScope, node);
         if (value.isPresent()) {
             return value.get().getType();
         }
@@ -647,5 +647,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             return node.getVariables().get(0).accept(this, solveLambdas);
         }
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
+    }
+
+    protected SymbolSolver createSolver() {
+        return new SymbolSolver(typeSolver);
     }
 }

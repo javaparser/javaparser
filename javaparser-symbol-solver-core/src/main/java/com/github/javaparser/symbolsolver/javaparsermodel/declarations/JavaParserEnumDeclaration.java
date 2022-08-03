@@ -49,12 +49,14 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -71,7 +73,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
  */
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
-        AssociableToAST<EnumDeclaration> {
+        SymbolResolutionCapability, AssociableToAST<EnumDeclaration> {
     
     private static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
     private static String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
@@ -233,6 +235,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             }
         }
         return getContext().solveMethod(name, argumentsTypes, staticOnly);
+    }
+
+    @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        return getContext().solveSymbol(name);
     }
 
     @Override

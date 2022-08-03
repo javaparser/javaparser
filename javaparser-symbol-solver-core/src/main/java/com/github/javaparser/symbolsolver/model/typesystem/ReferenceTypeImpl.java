@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -177,7 +178,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         if (this.isRawType()) {
             return this;
         }
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList(), typeSolver);
     }
 
     @Override

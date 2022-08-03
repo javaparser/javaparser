@@ -36,6 +36,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
@@ -135,36 +136,8 @@ public class SymbolSolver {
      * It should contain its own private fields but not inherited private fields.
      */
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name) {
-        if (typeDeclaration instanceof JavaParserClassDeclaration) {
-            Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
-            return ctx.solveSymbol(name);
-        }
-        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
-            Context ctx = ((JavaParserInterfaceDeclaration) typeDeclaration).getContext();
-            return ctx.solveSymbol(name);
-        }
-        if (typeDeclaration instanceof JavaParserEnumDeclaration) {
-            Context ctx = ((JavaParserEnumDeclaration) typeDeclaration).getContext();
-            return ctx.solveSymbol(name);
-        }
-        if (typeDeclaration instanceof ReflectionClassDeclaration) {
-            return ((ReflectionClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-            return ((ReflectionInterfaceDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof ReflectionEnumDeclaration) {
-            ResolvedEnumConstantDeclaration  red = ((ReflectionEnumDeclaration) typeDeclaration).getEnumConstant(name);
-            return SymbolReference.solved(red);
-        }
-        if (typeDeclaration instanceof JavassistClassDeclaration) {
-            return ((JavassistClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof JavassistEnumDeclaration) {
-            return ((JavassistEnumDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
-            return ((JavassistInterfaceDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
+        if (typeDeclaration instanceof SymbolResolutionCapability) {
+            return ((SymbolResolutionCapability) typeDeclaration).solveSymbol(name, typeSolver);
         }
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
