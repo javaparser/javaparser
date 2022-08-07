@@ -76,7 +76,6 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     private final TypeSolver typeSolver;
     private final JavaParserFacade facade;
     
-    private final ReferenceTypeImpl stringReferenceType;
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;

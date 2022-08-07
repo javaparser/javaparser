@@ -1,16 +1,23 @@
 package com.github.jmlparser.wd;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlMultiExprClause;
-import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.expr.JmlLabelExpr;
+import com.github.javaparser.ast.jml.expr.JmlLetExpr;
+import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
+import com.github.javaparser.ast.jml.expr.JmlTypeExpr;
 import com.github.javaparser.ast.jml.stmt.JmlExpressionStmt;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.jmlparser.smt.ArithmeticTranslator;
+import com.github.jmlparser.smt.JmlExpr2Smt;
+import com.github.jmlparser.smt.SmtQuery;
+import com.github.jmlparser.smt.SmtTermFactory;
+import com.github.jmlparser.smt.model.SExpr;
 import org.jetbrains.annotations.NotNull;
-import org.sosy_lab.java_smt.api.*;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,80 +28,65 @@ import java.util.stream.Collectors;
  * @version 1 (14.06.22)
  */
 public class WDVisitor extends VoidVisitorAdapter<Object> {
-    private final SolverContext context;
-    private final IntegerFormulaManager imgr;
-
-    public WDVisitor(SolverContext context) {
-        this.context = context;
-        this.imgr = context.getFormulaManager().getIntegerFormulaManager();
+    public WDVisitor() {
     }
 
     @Override
     public void visit(JmlExpressionStmt n, Object arg) {
         n.getExpression().accept(this, arg);
     }
-
 }
 
-class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
-    private final SolverContext context;
-    private final BitvectorFormulaManager bitmgr;
-    private final IntegerFormulaManager imgr;
-    private final BooleanFormulaManager bmgr;
-    private final QuantifiedFormulaManager qmgr;
-
+class WDVisitorExpr extends GenericVisitorAdapter<SExpr, Object> {
     @NotNull
     private final JmlExpr2Smt smtFormula;
-    private Translator translator;
+    private final ArithmeticTranslator translator;
 
-    WDVisitorExpr(SolverContext context) {
-        this.context = context;
-        smtFormula = new JmlExpr2Smt(context);
-        translator = smtFormula.getTranslator();
-        this.imgr = context.getFormulaManager().getIntegerFormulaManager();
-        this.bmgr = context.getFormulaManager().getBooleanFormulaManager();
-        this.bitmgr = context.getFormulaManager().getBitvectorFormulaManager();
-        this.qmgr = context.getFormulaManager().getQuantifiedFormulaManager();
+    private static final SmtTermFactory term = SmtTermFactory.INSTANCE;
+
+    WDVisitorExpr(SmtQuery smtLog, ArithmeticTranslator translator) {
+        smtFormula = new JmlExpr2Smt(smtLog, translator);
+        this.translator = translator;
     }
 
     @Override
-    public BooleanFormula visit(NameExpr n, Object arg) {
+    public SExpr visit(NameExpr n, Object arg) {
         String name = n.getNameAsString();
         switch (name) {
             case "\\result":
             case "\\exception":
-                return bmgr.makeTrue();
+                return term.makeTrue();
             default:
-                return bmgr.makeTrue();
+                return term.makeTrue();
         }
     }
 
     @Override
-    public BooleanFormula visit(ArrayAccessExpr n, Object arg) {
-        return bmgr.and(
+    public SExpr visit(ArrayAccessExpr n, Object arg) {
+        return term.and(
                 n.getName().accept(this, arg),
                 n.getIndex().accept(this, arg));
     }
 
     @Override
-    public BooleanFormula visit(ArrayCreationExpr n, Object arg) {
+    public SExpr visit(ArrayCreationExpr n, Object arg) {
         //TODO
         return n.getInitializer().get().accept(this, arg);
     }
 
     @Override
-    public BooleanFormula visit(ArrayInitializerExpr n, Object arg) {
-        List<BooleanFormula> seq = n.getValues().stream().map(it -> it.accept(this, arg)).collect(Collectors.toList());
-        return bmgr.and(seq);
+    public SExpr visit(ArrayInitializerExpr n, Object arg) {
+        List<SExpr> seq = n.getValues().stream().map(it -> it.accept(this, arg)).collect(Collectors.toList());
+        return term.and(seq);
     }
 
     @Override
-    public BooleanFormula visit(AssignExpr n, Object arg) {
-        return bmgr.makeFalse();
+    public SExpr visit(AssignExpr n, Object arg) {
+        return term.makeFalse();
     }
 
     @Override
-    public BooleanFormula visit(BinaryExpr n, Object arg) {
+    public SExpr visit(BinaryExpr n, Object arg) {
         switch (n.getOperator()) {
             case IMPLICATION:
                 BinaryExpr be = new BinaryExpr(
@@ -103,182 +95,180 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
                 return be.accept(this, arg);
             case DIVIDE:
             case REMAINDER:
-                Formula fml = n.getRight().accept(smtFormula, arg);
-                translator = smtFormula.getTranslator();
-                return bmgr.and(
+                SExpr fml = n.getRight().accept(smtFormula, arg);
+                return term.and(
                         n.getRight().accept(this, arg),
                         n.getLeft().accept(this, arg),
-                        bmgr.not((BooleanFormula)
-                                translator.binary(BinaryExpr.Operator.EQUALS,
-                                        fml, smtFormula.getTranslator().makeInt(BigInteger.ZERO))));
+                        term.not(translator.binary(BinaryExpr.Operator.EQUALS,
+                                fml, smtFormula.getTranslator().makeInt(BigInteger.ZERO))));
             default:
-                return bmgr.and(
+                return term.and(
                         n.getRight().accept(this, arg),
                         n.getLeft().accept(this, arg));
         }
     }
 
     @Override
-    public BooleanFormula visit(BooleanLiteralExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(BooleanLiteralExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(CastExpr n, Object arg) {
+    public SExpr visit(CastExpr n, Object arg) {
         //TODO Type-check?
         return n.getExpression().accept(this, arg);
     }
 
     @Override
-    public BooleanFormula visit(CharLiteralExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(CharLiteralExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(ClassExpr n, Object arg) {
-        return bmgr.makeFalse();
+    public SExpr visit(ClassExpr n, Object arg) {
+        return term.makeFalse();
     }
 
     @Override
-    public BooleanFormula visit(DoubleLiteralExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(DoubleLiteralExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(EnclosedExpr n, Object arg) {
+    public SExpr visit(EnclosedExpr n, Object arg) {
         return wd(n.getInner());
     }
 
     @Override
-    public BooleanFormula visit(FieldAccessExpr n, Object arg) {
+    public SExpr visit(FieldAccessExpr n, Object arg) {
         return wd(n.getScope());
     }
 
     @Override
-    public BooleanFormula visit(InstanceOfExpr n, Object arg) {
+    public SExpr visit(InstanceOfExpr n, Object arg) {
         return n.getExpression().accept(this, arg);
     }
 
     @Override
-    public BooleanFormula visit(IntegerLiteralExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(IntegerLiteralExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(StringLiteralExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(StringLiteralExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(SuperExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(SuperExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(ThisExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(ThisExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(UnaryExpr n, Object arg) {
+    public SExpr visit(UnaryExpr n, Object arg) {
         return n.getExpression().accept(this, arg);
     }
 
     @Override
-    public BooleanFormula visit(LambdaExpr n, Object arg) {
+    public SExpr visit(LambdaExpr n, Object arg) {
         return super.visit(n, arg);
     }
 
     @Override
-    public BooleanFormula visit(MethodReferenceExpr n, Object arg) {
+    public SExpr visit(MethodReferenceExpr n, Object arg) {
         return super.visit(n, arg);
     }
 
     @Override
-    public BooleanFormula visit(TypeExpr n, Object arg) {
+    public SExpr visit(TypeExpr n, Object arg) {
         return super.visit(n, arg);
     }
 
     @Override
-    public BooleanFormula visit(SwitchExpr n, Object arg) {
-        return bmgr.and(wd(n.getSelector()));
+    public SExpr visit(SwitchExpr n, Object arg) {
+        return term.and(wd(n.getSelector()));
     }
 
     @Override
-    public BooleanFormula visit(TextBlockLiteralExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(TextBlockLiteralExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(PatternExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(PatternExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(JmlQuantifiedExpr n, Object arg) {
+    public SExpr visit(JmlQuantifiedExpr n, Object arg) {
         /*The quantified-expression is well-defined iff the two sub-expressions are well-defined. For a quantifier Q*/
-        List<BooleanFormula> seq = n.getExpressions().stream()
+        List<SExpr> seq = n.getExpressions().stream()
                 .map(it -> it.accept(this, arg))
                 .collect(Collectors.toList());
 
         Expression r = n.getExpressions().get(0);
         Expression v = n.getExpressions().get(0);
 
-        List<Formula> args = new ArrayList<>();
+        List<SExpr> args = new ArrayList<>();
 
         if (JmlQuantifiedExpr.JmlDefaultBinder.CHOOSE.equals(n.getBinder())) {
-            return bmgr.and(
-                    qmgr.forall(args, wd(r)),
-                    qmgr.forall(args, bmgr.implication((BooleanFormula) valueOf(r), wd(v))),
-                    qmgr.exists(args, bmgr.and(
-                            (BooleanFormula) valueOf(r),
-                            (BooleanFormula) valueOf(v))));
+            return term.and(
+                    term.forall(args, wd(r)),
+                    term.forall(args, term.impl(valueOf(r), wd(v))),
+                    term.exists(args, term.and(
+                            valueOf(r),
+                            valueOf(v))));
         }
-        return bmgr.and(
-                qmgr.forall(args, wd(r)),
-                qmgr.forall(args, bmgr.implication((BooleanFormula) valueOf(r), wd(v))));
+        return term.and(
+                term.forall(args, wd(r)),
+                term.forall(args, term.impl(valueOf(r), wd(v))));
     }
 
-    private Formula valueOf(Expression e) {
+    private SExpr valueOf(Expression e) {
         return e.accept(smtFormula, null);
     }
 
-    private BooleanFormula wd(Expression e) {
+    private SExpr wd(Expression e) {
         return e.accept(this, null);
     }
 
     @Override
-    public BooleanFormula visit(JmlExpressionStmt n, Object arg) {
+    public SExpr visit(JmlExpressionStmt n, Object arg) {
         return wd(n.getExpression());
     }
 
     @Override
-    public BooleanFormula visit(JmlLabelExpr n, Object arg) {
+    public SExpr visit(JmlLabelExpr n, Object arg) {
         return wd(n.getExpression());
     }
 
     @Override
-    public BooleanFormula visit(JmlLetExpr n, Object arg) {
-        return bmgr.and(wd(n.getBody())  /* TODO  arguments */, bmgr.makeTrue());
+    public SExpr visit(JmlLetExpr n, Object arg) {
+        return term.and(wd(n.getBody())  /* TODO  arguments */, term.makeTrue());
     }
 
     @Override
-    public BooleanFormula visit(JmlClassExprDeclaration n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(JmlClassExprDeclaration n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(JmlTypeExpr n, Object arg) {
-        return bmgr.makeTrue();
+    public SExpr visit(JmlTypeExpr n, Object arg) {
+        return term.makeTrue();
     }
 
     @Override
-    public BooleanFormula visit(JmlMultiExprClause n, Object arg) {
-        return bmgr.and(n.getExpressions().stream().map(this::wd).collect(Collectors.toList()));
+    public SExpr visit(JmlMultiExprClause n, Object arg) {
+        return term.and(n.getExpressions().stream().map(this::wd).collect(Collectors.toList()));
     }
 
     @Override
-    public BooleanFormula visit(MethodCallExpr n, Object arg) {
+    public SExpr visit(MethodCallExpr n, Object arg) {
         String name = n.getNameAsString();
         switch (name) {
             case "\\old":
@@ -295,9 +285,9 @@ class WDVisitorExpr extends GenericVisitorAdapter<BooleanFormula, Object> {
             //TODO valueOf(n.getArguments().get(0)) != null
         }
 
-        List<BooleanFormula> seq = n.getArguments().stream()
+        List<SExpr> seq = n.getArguments().stream()
                 .map(it -> it.accept(this, arg))
                 .collect(Collectors.toList());
-        return bmgr.and(seq);
+        return term.and(seq);
     }
 }

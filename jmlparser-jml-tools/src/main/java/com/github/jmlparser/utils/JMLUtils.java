@@ -11,20 +11,23 @@ import com.github.javaparser.ast.jml.expr.JmlMultiCompareExpr;
  */
 public class JMLUtils {
     public static Expression unroll(JmlMultiCompareExpr n) {
+        Expression r;
         if (n.getExpressions().isEmpty()) {
-            return new BooleanLiteralExpr(true);
+            r = new BooleanLiteralExpr(true);
         } else if (n.getExpressions().size() == 1) {
-            return n.getExpressions().get(0);
+            r = n.getExpressions().get(0);
         } else {
-            Expression e = new BooleanLiteralExpr(true);
+            Expression e = null;
             for (int i = 0; i < n.getExpressions().size() - 1; i++) {
                 BinaryExpr cmp = new BinaryExpr(
-                        n.getExpressions().get(i),
-                        n.getExpressions().get(i + 1),
+                        n.getExpressions().get(i).clone(),
+                        n.getExpressions().get(i + 1).clone(),
                         n.getOperators().get(i));
-                e = new BinaryExpr(e, cmp, BinaryExpr.Operator.AND);
+                e = e == null ? cmp : new BinaryExpr(e, cmp, BinaryExpr.Operator.AND);
             }
-            return e;
+            r = e;
         }
+        r.setParentNode(n.getParentNode().orElse(null));
+        return r;
     }
 }
