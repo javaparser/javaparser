@@ -9,7 +9,11 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.jmlparser.smt.ArithmeticTranslator;
 import com.github.jmlparser.smt.BitVectorArithmeticTranslator;
 import com.github.jmlparser.smt.SmtQuery;
+import com.github.jmlparser.smt.SmtTermFactory;
 import com.github.jmlparser.smt.model.SExpr;
+import com.github.jmlparser.smt.solver.Solver;
+import com.github.jmlparser.smt.solver.SolverAnswer;
+import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,16 +66,23 @@ public class WellDefinednessMain {
         return false;
     }
 
+    @SneakyThrows
     private static boolean isWelldefined(Expression e) {
         SmtQuery query = new SmtQuery();
         ArithmeticTranslator translator = new BitVectorArithmeticTranslator(query);
         WDVisitorExpr visitor = new WDVisitorExpr(query, translator);
         SExpr res = e.accept(visitor, null);
-        System.out.println(res);
         if ("true".equals(res.toString())) {
             return true;
         }
-        return true;
+        query.addAssert(SmtTermFactory.INSTANCE.not(res));
+        query.checkSat();
+        Solver solver = new Solver();
+        SolverAnswer ans = solver.run(query);
+        System.out.println(query.toString());
+        System.out.println(ans.toString());
+        ans.consumeErrors();
+        return ans.isSymbol("unsat");
     }
 
     private static class Args {

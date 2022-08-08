@@ -18,13 +18,13 @@ class WDVisitorExprTest {
     private final JavaParser parser = new JavaParser();
 
     @ParameterizedTest
-    @CsvFileSource(resources = "wd/wd-expr.csv", delimiterString = "§")
+    @CsvFileSource(resources = "wd-expr.csv", delimiterString = "§")
     void wdExpression(String expr) {
         assertTrue(isWelldefined(parser, expr));
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "wd/not-wd-expr.csv", delimiterString = "§")
+    @CsvFileSource(resources = "not-wd-expr.csv", delimiterString = "§")
     void wdExpressionError(String expr) {
         assertFalse(isWelldefined(parser, expr));
     }

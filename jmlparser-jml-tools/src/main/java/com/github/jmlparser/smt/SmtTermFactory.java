@@ -334,14 +334,15 @@ public class SmtTermFactory {
 
 
     public SExpr makeBitvector(int width, long value) {
-        SmtType.BitVec type = SmtType.getBitVec(width);
-        return new SList(type, null, symbol("_"), symbol("bv" + width), intValue(value));
+        return makeBitvector(width, BigInteger.valueOf(value));
     }
 
 
     public SExpr makeBitvector(int width, BigInteger value) {
         SmtType.BitVec type = SmtType.getBitVec(width);
-        return new SList(type, null, symbol("_"), symbol("bv" + width), intValue(value));
+        return new SList(type, null,
+                new SList(null, null, symbol("_"), symbol("int2bv"), symbol("" + width)),
+                intValue(value));
     }
 
 

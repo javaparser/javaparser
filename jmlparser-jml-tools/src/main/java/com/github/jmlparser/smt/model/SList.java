@@ -36,4 +36,8 @@ public class SList extends SExpr {
         }
         writer.write(')');
     }
+
+    public SExpr get(int i) {
+        return value[i];
+    }
 }

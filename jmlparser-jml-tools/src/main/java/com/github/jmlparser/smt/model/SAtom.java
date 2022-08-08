@@ -1,6 +1,5 @@
 package com.github.jmlparser.smt.model;
 
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.io.PrintWriter;

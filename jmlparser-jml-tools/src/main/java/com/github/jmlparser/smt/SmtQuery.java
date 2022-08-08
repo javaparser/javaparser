@@ -2,8 +2,10 @@ package com.github.jmlparser.smt;
 
 import com.github.jmlparser.smt.model.SExpr;
 import com.github.jmlparser.smt.model.SmtType;
+import com.github.jmlparser.smt.solver.AppendableTo;
 
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Map;
  * @author Alexander Weigl
  * @version 1 (07.08.22)
  */
-public class SmtQuery {
+public class SmtQuery implements AppendableTo {
     private static final SmtTermFactory term = SmtTermFactory.INSTANCE;
 
     private final List<SExpr> commands = new ArrayList<>(1024);
@@ -53,6 +55,7 @@ public class SmtQuery {
         return variableStack.get(variableStack.size() - 1);
     }
 
+    @Override
     public void appendTo(PrintWriter pw) {
         for (SExpr command : commands) {
             command.appendTo(pw);
@@ -68,5 +71,21 @@ public class SmtQuery {
 
     public void addAssert(SExpr nonNull) {
         commands.add(term.command("assert", nonNull));
+    }
+
+    public void checkSat() {
+        commands.add(term.command("check-sat"));
+    }
+
+
+    @Override
+    public String toString() {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        commands.forEach(a -> {
+            a.appendTo(pw);
+            pw.println();
+        });
+        return sw.toString();
     }
 }
