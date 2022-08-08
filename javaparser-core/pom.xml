@@ -33,7 +33,6 @@
     </dependencies>
 
     <properties>
-        <java.version>1.8</java.version>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
     </properties>
 
