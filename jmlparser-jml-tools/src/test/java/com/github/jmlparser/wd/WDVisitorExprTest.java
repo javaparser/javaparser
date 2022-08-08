@@ -2,6 +2,9 @@ package com.github.jmlparser.wd;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
+import com.github.jmlparser.SolverTest;
+import com.github.jmlparser.smt.SmtTest;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,12 +23,14 @@ class WDVisitorExprTest {
     @ParameterizedTest
     @CsvFileSource(resources = "wd-expr.csv", delimiterString = "§")
     void wdExpression(String expr) {
+        Assumptions.assumeTrue(SolverTest.z3Installed());
         assertTrue(isWelldefined(parser, expr));
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "not-wd-expr.csv", delimiterString = "§")
     void wdExpressionError(String expr) {
+        Assumptions.assumeTrue(SolverTest.z3Installed());
         assertFalse(isWelldefined(parser, expr));
     }
 }

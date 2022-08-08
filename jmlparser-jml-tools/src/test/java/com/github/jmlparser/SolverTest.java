@@ -11,7 +11,7 @@ import java.io.IOException;
  * @author Alexander Weigl
  * @version 1 (08.08.22)
  */
-class SolverTest {
+public class SolverTest {
     @Test
     void startZ3Mini() throws IOException, InterruptedException {
         Assumptions.assumeTrue(z3Installed());
@@ -22,7 +22,14 @@ class SolverTest {
 
     }
 
-    private boolean z3Installed() throws IOException, InterruptedException {
-        return new ProcessBuilder("sh", "-c", "which z3").start().waitFor() == 0;
+    private static Boolean z3Installed = null;
+
+    public static boolean z3Installed() {
+        if (z3Installed != null) return z3Installed;
+        try {
+            return z3Installed = new ProcessBuilder("sh", "-c", "which z3").start().waitFor() == 0;
+        } catch (Exception e) {
+        }
+        return z3Installed = false;
     }
 }

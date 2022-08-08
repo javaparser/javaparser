@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Alexander Weigl
  * @version 1 (14.06.22)
  */
-class SmtTest {
+public class SmtTest {
     private final JavaParser parser;
     private final Node parent;
 

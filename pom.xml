@@ -143,7 +143,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
 
         <sonar.organization>wadoon</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
