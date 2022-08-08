@@ -3,7 +3,7 @@
     <parent>
         <artifactId>jmlparser-parent</artifactId>
         <groupId>io.github.wadoon</groupId>
-        <version>3.24.3-SNAPSHOT</version>
+        <version>3.24.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -188,7 +188,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-	        <artifactId>mockito-inline</artifactId>
+            <artifactId>mockito-inline</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.wadoon</groupId>
