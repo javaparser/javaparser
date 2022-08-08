@@ -6,7 +6,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-core</artifactId>
+    <artifactId>jmlparser-core</artifactId>
     <packaging>jar</packaging>
     <description>The core parser functionality. This may be all you need.</description>
 
@@ -23,12 +23,13 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
+
     <dependencies>
-	    <dependency>
-		    <groupId>com.intellij</groupId>
-		    <artifactId>annotations</artifactId>
-		    <version>12.0</version>
-	    </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>23.0.0</version>
+        </dependency>
     </dependencies>
 
     <properties>
