@@ -33,7 +33,12 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
+
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.WeakHashMap;
+
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
@@ -49,6 +54,11 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
  * @see SimpleName
  */
 public class Name extends Node implements NodeWithIdentifier<Name> {
+
+    private final static Map<Name,String> asStringOfName =
+            Boolean.getBoolean("com.github.javaparser.performance.cache-node-name-string")
+                    ? new WeakHashMap<>()
+                    : null;
 
     @NonEmptyProperty
     private String identifier;
@@ -105,6 +115,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
+        if (asStringOfName != null) {
+            asStringOfName.remove(this); // clear cached value for asString
+        }
         return this;
     }
 
@@ -112,6 +125,12 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
      * @return the complete qualified name. Only the identifiers and the dots, so no comments or whitespace.
      */
     public String asString() {
+        return asStringOfName == null
+                ? calcAsString()
+                : asStringOfName.computeIfAbsent(this, n -> calcAsString());
+    }
+
+    private String calcAsString() {
         if (qualifier != null) {
             return qualifier.asString() + "." + identifier;
         }
@@ -132,6 +151,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         if (this.qualifier != null)
             this.qualifier.setParentNode(null);
         this.qualifier = qualifier;
+        if (asStringOfName != null) {
+            asStringOfName.remove(this); // clear cached value for asString
+        }
         setAsParentNodeOf(qualifier);
         return this;
     }
