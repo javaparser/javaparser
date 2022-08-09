@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
@@ -650,6 +651,7 @@ class HashCodeVisitorTest {
 		verify(node, times(1)).getComment();
 	}
 
+	@Disabled // for Name nodes the hash code is directly implemented in the class Name
 	@Test
 	void testVisitName() {
 		Name node = spy(new Name());

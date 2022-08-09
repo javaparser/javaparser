@@ -331,7 +331,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return HashCodeVisitor.hashCode(this);
     }
 
