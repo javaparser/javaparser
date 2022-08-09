@@ -35,6 +35,8 @@ public class Java1_2Validator extends Java1_1Validator {
     public Java1_2Validator() {
         super();
         replace(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods, modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
-        add(strictfpNotAllowed);
+        if (!Boolean.getBoolean("com.github.javaparser.performance.no-strictfp-identifier-validation")) {
+            add(strictfpNotAllowed);
+        }
     }
 }

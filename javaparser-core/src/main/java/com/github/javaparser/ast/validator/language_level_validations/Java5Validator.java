@@ -76,7 +76,9 @@ public class Java5Validator extends Java1_4Validator {
         super();
         replace(noGenerics, genericsWithoutDiamondOperator);
         add(noPrimitiveGenericArguments);
-        add(enumNotAllowed);
+        if (!Boolean.getBoolean("com.github.javaparser.performance.no-enum-identifier-validation")) {
+            add(enumNotAllowed);
+        }
         add(forEachStmt);
 
         // TODO validate annotations on classes, fields and methods but nowhere else
