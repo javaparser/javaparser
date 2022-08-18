@@ -23,8 +23,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 
 
-import static com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.isQualifiedName;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +58,8 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
  * @author Federico Tomassetti
  */
 public class CompilationUnitContext extends AbstractJavaParserContext<CompilationUnit> {
+    
+    private static final String DEFAULT_PACKAGE = "java.lang";
 
     ///
     /// Static methods
@@ -199,7 +199,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
         // Look in current package
         if (this.wrappedNode.getPackageDeclaration().isPresent()) {
-            String qName = this.wrappedNode.getPackageDeclaration().get().getName().toString() + "." + name;
+            String qName = this.wrappedNode.getPackageDeclaration().get().getNameAsString() + "." + name;
             SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref != null && ref.isSolved()) {
                 return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
@@ -225,7 +225,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // Look in the java.lang package
-        SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
+        SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(DEFAULT_PACKAGE+ "." + name);
         if (ref != null && ref.isSolved()) {
             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
         }
