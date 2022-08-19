@@ -102,7 +102,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
         ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()), ts);
         listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
-        
+
         // init parser
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
@@ -160,17 +160,17 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        compilationUnit.asInterface();
-    });
-}
+            compilationUnit.asInterface();
+        });
+    }
 
     @Test
     void testAsEnum() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        compilationUnit.asEnum();
-    });
-}
+            compilationUnit.asEnum();
+        });
+    }
 
     @Test
     void testGetPackageName() {
@@ -332,9 +332,9 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetAncestorsWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        
+
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
-        
+
         assertEquals(8, ancestors.size());
 
         ResolvedReferenceType ancestor;
@@ -380,7 +380,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        
+
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         assertEquals(12, ancestors.size());
 
@@ -459,10 +459,10 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetFieldForUnexistingField() {
         assertThrows(UnsolvedSymbolException.class, () -> {
             JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        constructorDeclaration.getField("unexisting");
-    });
+            constructorDeclaration.getField("unexisting");
+        });
 
-}
+    }
 
     @Test
     void testGetAllFields() {
@@ -796,7 +796,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         ));
 
         // Temporary workaround to allow tests to pass on JDK14
-        if(TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
+        if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
 
@@ -955,28 +955,28 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedReferenceTypeDeclaration serializableTypeDeclaration = typeSolver.solveType("java.io.Serializable");
 
         // Assign "UP" (implicit) -- Assign to implicitly state ancestor (java.lang.Object) -- should be permitted
-        assertTrue(compilationUnit.canBeAssignedTo(objectTypeDeclaration),"CompilationUnit should be reported as assignable to Object");
+        assertTrue(compilationUnit.canBeAssignedTo(objectTypeDeclaration), "CompilationUnit should be reported as assignable to Object");
 
         // Assign "UP" (explicit) -- Assign to explicitly stated ancestors (extends/implements) -- should be permitted
-        assertTrue(compilationUnit.canBeAssignedTo(cloneableTypeDeclaration),"CompilationUnit should be reported as assignable to Cloneable, because it extends Node which implements Cloneable");
+        assertTrue(compilationUnit.canBeAssignedTo(cloneableTypeDeclaration), "CompilationUnit should be reported as assignable to Cloneable, because it extends Node which implements Cloneable");
 
         // Assign "SELF" -- Assign to self -- should be permitted
-        assertTrue(compilationUnit.canBeAssignedTo(compilationUnit),"CompilationUnit should not be reported as assignable to CompilationUnit");
-        assertTrue(stringTypeDeclaration.canBeAssignedTo(stringTypeDeclaration),"String should not be reported as assignable to String");
-        assertTrue(objectTypeDeclaration.canBeAssignedTo(objectTypeDeclaration),"Object should be reported as assignable to Object");
+        assertTrue(compilationUnit.canBeAssignedTo(compilationUnit), "CompilationUnit should not be reported as assignable to CompilationUnit");
+        assertTrue(stringTypeDeclaration.canBeAssignedTo(stringTypeDeclaration), "String should not be reported as assignable to String");
+        assertTrue(objectTypeDeclaration.canBeAssignedTo(objectTypeDeclaration), "Object should be reported as assignable to Object");
 
 
         // Assign "DOWN" -- Assign ancestor to descendent -- should be rejected
-        assertFalse(cloneableTypeDeclaration.canBeAssignedTo(compilationUnit),"CloneableTypeDeclaration should not be reported as assignable to CompilationUnit");
-        assertFalse(objectTypeDeclaration.canBeAssignedTo(compilationUnit),"Object should not be reported as assignable to CompilationUnit");
+        assertFalse(cloneableTypeDeclaration.canBeAssignedTo(compilationUnit), "CloneableTypeDeclaration should not be reported as assignable to CompilationUnit");
+        assertFalse(objectTypeDeclaration.canBeAssignedTo(compilationUnit), "Object should not be reported as assignable to CompilationUnit");
 
         // Assign "independent" -- Assign to a class with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
-        assertFalse(compilationUnit.canBeAssignedTo(stringTypeDeclaration),"CompilationUnit should not be reported as assignable to String");
+        assertFalse(compilationUnit.canBeAssignedTo(stringTypeDeclaration), "CompilationUnit should not be reported as assignable to String");
 
         // Assign "independent" -- Assign to a interface with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
         assertFalse(compilationUnit.canBeAssignedTo(serializableTypeDeclaration), "CompilationUnit should not be reported as assignable to Serializable");
     }
-    
+
     @Test
     // issue #3436 getAncestors()/getAllAncestors() does not work if base class starts with the same name
     public void getAncestors_with_child_name_is_part_of_ancestor_name() {
@@ -988,7 +988,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertTrue(ancestors.size() == 1);
         assertEquals("FooBase", ancestors.get(0).getQualifiedName());
     }
-    
+
     private List<ResolvedType> declaredTypes(String... lines) {
         CompilationUnit tree = treeOf(lines);
         List<ResolvedType> results = Lists.newLinkedList();

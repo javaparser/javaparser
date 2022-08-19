@@ -37,6 +37,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserRecordDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
@@ -91,6 +92,8 @@ public class JavaParserFactory {
             return new MethodReferenceExprContext((MethodReferenceExpr) node, typeSolver);
         } else if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
+        } else if (node instanceof RecordDeclaration) {
+            return new RecordDeclarationContext((RecordDeclaration) node, typeSolver);
         } else if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
         } else if (node instanceof SwitchEntry) {
@@ -175,6 +178,9 @@ public class JavaParserFactory {
                 return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
             }
             return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
+        }
+        if (node instanceof RecordDeclaration) {
+            return new JavaParserRecordDeclaration((RecordDeclaration) node, typeSolver);
         }
         if (node instanceof TypeParameter) {
             return new JavaParserTypeParameter((TypeParameter) node, typeSolver);

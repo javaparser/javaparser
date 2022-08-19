@@ -21,66 +21,53 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
-import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
+ * This is heavily based on JavaParserClassDeclaration.
+ *
  * @author Federico Tomassetti
+ * @author Roger Howell
  */
-public class JavaParserClassDeclaration extends AbstractClassDeclaration
-        implements MethodUsageResolutionCapability, SymbolResolutionCapability {
+public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
+        implements ResolvedRecordDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
 
     ///
     /// Fields
     ///
 
     private TypeSolver typeSolver;
-    private ClassOrInterfaceDeclaration wrappedNode;
-    private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
+    private RecordDeclaration wrappedNode;
+    private JavaParserTypeAdapter<RecordDeclaration> javaParserTypeAdapter;
 
     ///
     /// Constructors
     ///
 
-    public JavaParserClassDeclaration(ClassOrInterfaceDeclaration wrappedNode,
-                                      TypeSolver typeSolver) {
-        if (wrappedNode.isInterface()) {
-            throw new IllegalArgumentException("Interface given");
-        }
+    public JavaParserRecordDeclaration(RecordDeclaration wrappedNode,
+                                       TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
         this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
@@ -95,7 +82,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        JavaParserClassDeclaration that = (JavaParserClassDeclaration) o;
+        JavaParserRecordDeclaration that = (JavaParserRecordDeclaration) o;
 
         return wrappedNode.equals(that.wrappedNode);
     }
@@ -107,7 +94,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public String toString() {
-        return "JavaParserClassDeclaration{" +
+        return "JavaParserRecordDeclaration{" +
                 "wrappedNode=" + wrappedNode +
                 '}';
     }
@@ -200,16 +187,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        if(isJavaLangObject()) {
-            // If this is java.lang.Object, it has no super class.
-            return Optional.empty();
-        } else if (wrappedNode.getExtendedTypes().isEmpty()) {
-            // All objects implicitly extend java.lang.Object -- inject it here (only when this isn't java.lang.Object)
-            return Optional.of(object());
-        } else {
-            // Otherwise, return the first ancestor (n.b.: we know it's not empty due to check above).
-            return Optional.of(toReferenceType(wrappedNode.getExtendedTypes().getFirst().get()));
-        }
+        // All records implicitly extend java.lang.Record (and no other class) -- inject it here (only when this isn't java.lang.Object)
+        return Optional.of(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangRecord(), typeSolver));
     }
 
     @Override
@@ -225,6 +204,34 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     }
 
     @Override
+    public List<ResolvedReferenceType> getAllSuperClasses() {
+        List<ResolvedReferenceType> superclasses = new ArrayList<>();
+
+        getSuperClass().ifPresent(superClass -> {
+            superclasses.add(superClass);
+            superclasses.addAll(superClass.getAllClassesAncestors());
+        });
+
+        if (superclasses.removeIf(ResolvedReferenceType::isJavaLangObject)) {
+            superclasses.add(record());
+        }
+        return superclasses;
+    }
+
+    @Override
+    public List<ResolvedReferenceType> getAllInterfaces() {
+        List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
+            interfaces.add(interfaceDeclaration);
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
+        }
+        getSuperClass().ifPresent(superClass -> {
+            interfaces.addAll(superClass.getAllInterfacesAncestors());
+        });
+        return interfaces;
+    }
+
+    @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
     }
@@ -236,7 +243,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public boolean isInterface() {
-        return wrappedNode.isInterface();
+        return false;
     }
 
     @Override
@@ -319,7 +326,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
         String prefix = wrappedNode.getName() + ".";
         if (name.startsWith(prefix) && name.length() > prefix.length()) {
-            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()));
+            return new JavaParserRecordDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()));
         }
 
         return getContext().getParent()
@@ -331,11 +338,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                   boolean staticOnly) {
         return getContext().solveMethod(name, argumentsTypes, staticOnly);
-    }
-
-    @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        return getContext().solveSymbol(name);
     }
 
     @Override
@@ -421,11 +423,11 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     }
 
     /**
-     * Returns the JavaParser node associated with this JavaParserClassDeclaration.
+     * Returns the JavaParser node associated with this JavaParserRecordDeclaration.
      *
      * @return A visitable JavaParser node wrapped by this object.
      */
-    public ClassOrInterfaceDeclaration getWrappedNode() {
+    public RecordDeclaration getWrappedNode() {
         return wrappedNode;
     }
 
@@ -443,9 +445,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     /// Protected methods
     ///
 
-    @Override
-    protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+    protected ResolvedReferenceType record() {
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangRecord(), typeSolver);
     }
 
     @Override

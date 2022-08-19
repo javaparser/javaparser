@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * A declaration of a type. It could be a primitive type, an enum, a class, an interface
+ * A declaration of a type. It could be a primitive type, an enum, a class, an interface, a record,
  * or a type variable.
  * It cannot be an annotation or an array.
  *
@@ -76,7 +76,7 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
 
     /**
      * Is this the declaration of a class?
-     * Note that an Enum is not considered a Class in this case.
+     * Note that an Enum and Record is not considered a Class in this case.
      */
     default boolean isClass() {
         return false;
@@ -86,6 +86,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * Is this the declaration of an interface?
      */
     default boolean isInterface() {
+        return false;
+    }
+
+    /**
+     * Is this the declaration of a record?
+     */
+    default boolean isRecord() {
         return false;
     }
 
@@ -155,6 +162,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      */
     default ResolvedInterfaceDeclaration asInterface() {
         throw new UnsupportedOperationException(String.format("%s is not an interface", this));
+    }
+
+    /**
+     * Return this as a RecordDeclaration or throw UnsupportedOperationException.
+     */
+    default ResolvedRecordDeclaration asRecord() {
+        throw new UnsupportedOperationException(String.format("%s is not a record", this));
     }
 
     /**

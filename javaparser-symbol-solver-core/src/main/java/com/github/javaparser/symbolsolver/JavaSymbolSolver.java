@@ -95,6 +95,12 @@ public class JavaSymbolSolver implements SymbolResolver {
                 return resultClass.cast(resolved);
             }
         }
+        if (node instanceof RecordDeclaration) {
+            ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
+            }
+        }
         if (node instanceof EnumDeclaration) {
             ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
             if (resultClass.isInstance(resolved)) {
