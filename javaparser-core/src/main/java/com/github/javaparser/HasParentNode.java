@@ -49,7 +49,7 @@ public interface HasParentNode<T> extends Observable {
      * Sets the parent node.
      *
      * @param parentNode the parent node, or {@code null} to set no parent.
-     * @return return {@code this}
+     * @return {@code this}
      */
     T setParentNode(Node parentNode);
 
