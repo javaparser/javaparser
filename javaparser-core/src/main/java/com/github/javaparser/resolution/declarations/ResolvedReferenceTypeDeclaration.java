@@ -136,7 +136,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     };
     
     /*
-     * breadth first search all all ancestors
+     * breadth first search all ancestors
      * In the example above, this method returns B,C,D,E
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
