@@ -1,4 +1,4 @@
-Next Release (Version 3.24.6)
+Next Release (Version 3.24.7)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
 
@@ -9,7 +9,7 @@ Next Release (Version 3.24.6)
 ### Fixed
 ### Security
 
-Next Release (Version 3.24.5)
+Next Release (Version 3.24.6)
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
 
