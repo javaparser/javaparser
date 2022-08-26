@@ -75,7 +75,7 @@ public class SourceRoot {
         /**
          * @param localPath the path to the file that was parsed, relative to the source root path.
          * @param absolutePath the absolute path to the file that was parsed.
-         * @param result the result of of parsing the file.
+         * @param result the result of parsing the file.
          */
         Result process(Path localPath, Path absolutePath, ParseResult<CompilationUnit> result);
     }

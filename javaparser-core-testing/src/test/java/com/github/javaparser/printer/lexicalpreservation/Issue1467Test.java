@@ -54,7 +54,7 @@ public class Issue1467Test {
                 "    }" ;
         CompilationUnit cu = StaticJavaParser.parse(before);
         LexicalPreservingPrinter.setup(cu);
-        // add method method declaration
+        // add method declaration
         MethodDeclaration decl = cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Modifier.DefaultKeyword.PUBLIC);
         // create body 
         BlockStmt body = new BlockStmt();

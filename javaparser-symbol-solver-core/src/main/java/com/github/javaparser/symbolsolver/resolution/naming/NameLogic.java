@@ -614,7 +614,7 @@ public class NameLogic {
         //
         // 4. In the default value clause of an annotation type element declaration (§9.6.2)
         //
-        // 5. To the right of an "=" in an an element-value pair (§9.7.1)
+        // 5. To the right of an "=" in an element-value pair (§9.7.1)
 
         if (whenParentIs(MemberValuePair.class, name, (p, c) -> p.getValue() == c)) {
             return true;

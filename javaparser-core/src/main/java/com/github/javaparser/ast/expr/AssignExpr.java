@@ -36,7 +36,7 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
+ * An assignment expression. It supports the operators that are found the AssignExpr.Operator enum.
  * <br>{@code a=5}
  * <br>{@code time+=500}AssignExpr
  * <br>{@code watch.time+=500}

@@ -91,7 +91,7 @@ import static java.util.Spliterator.NONNULL;
  * like where braces or comma's are exactly.
  * Therefore there is no position information on everything in the original source file.
  * <h2>Observers</h2>
- * <p>It is possible to add observers to the the tree.
+ * <p>It is possible to add observers to the tree.
  * Any change in the tree is sent as an event to any observers watching.
  * <h2>Visitors</h2>
  * <p>The most comfortable way of working with an abstract syntax tree is using visitors.

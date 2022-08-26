@@ -18,7 +18,7 @@ class JavaParserSymbolDeclarationTest {
 
     /**
      * Try to create a field using {@link JavaParserSymbolDeclaration#field(VariableDeclarator, TypeSolver)} and check
-     * if the returned declaration is marked as a field and can be converted converted to a
+     * if the returned declaration is marked as a field and can be converted to a
      * {@link com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration} using {@link ResolvedValueDeclaration#asField()}.
      */
     @Test
@@ -34,7 +34,7 @@ class JavaParserSymbolDeclarationTest {
 
     /**
      * Try to create a parameter using {@link JavaParserSymbolDeclaration#parameter(Parameter, TypeSolver)} and check
-     * if the returned declaration is marked as a parameter and can be converted converted to a
+     * if the returned declaration is marked as a parameter and can be converted to a
      * {@link com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration} using {@link ResolvedValueDeclaration#asParameter()}.
      */
     @Test
@@ -60,7 +60,7 @@ class JavaParserSymbolDeclarationTest {
 
     /**
      * Try to create a pattern variable using {@link JavaParserSymbolDeclaration#patternVar(PatternExpr, TypeSolver)} and check
-     * if the returned declaration is marked as a pattern and can be converted converted to a
+     * if the returned declaration is marked as a pattern and can be converted to a
      * {@link com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration} using {@link ResolvedValueDeclaration#asPattern()}.
      */
     @Test
