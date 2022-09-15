@@ -101,7 +101,7 @@ public final class ReferenceType extends Type {
 	 * int @Ann1 [] @Ann2 [] array;
 	 * }</pre></p>
 	 * 
-	 * <p>in this this method will return a list with the annotation expressions <pre>@Ann1</pre>
+	 * <p>in this method will return a list with the annotation expressions <pre>@Ann1</pre>
 	 * and <pre>@Ann2</pre></p>
 	 * 
 	 * <p>Note that the first list element of arraysAnnotations will refer to the first array modifier encountered.
