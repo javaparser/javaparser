@@ -87,6 +87,11 @@ public class Reshuffled implements DifferenceElement {
         return false;
     }
     
+    @Override
+    public boolean isKept() {
+        return false;
+    }
+    
     /*
      * If the {@code DifferenceElement} wraps an EOL token then this method returns a new {@code DifferenceElement}
      * with all eof token replaced by the specified line separator. The line separator parameter must be a CsmToken with a valid line separator.

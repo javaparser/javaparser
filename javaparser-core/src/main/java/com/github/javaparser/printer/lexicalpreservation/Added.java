@@ -67,6 +67,11 @@ public class Added implements DifferenceElement {
     public boolean isRemoved() {
         return false;
     }
+    
+    @Override
+    public boolean isKept() {
+        return false;
+    }
 
     public boolean isIndent() { return element instanceof CsmIndent; }
 
