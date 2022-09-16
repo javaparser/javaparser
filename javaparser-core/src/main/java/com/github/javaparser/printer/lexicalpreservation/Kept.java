@@ -73,6 +73,16 @@ public class Kept implements DifferenceElement {
     public boolean isAdded() {
         return false;
     }
+    
+    @Override
+    public boolean isRemoved() {
+        return false;
+    }
+    
+    @Override
+    public boolean isKept() {
+        return true;
+    }
 
     public boolean isIndent() { return element instanceof CsmIndent; }
 
@@ -116,8 +126,4 @@ public class Kept implements DifferenceElement {
         return false;
     }
 
-    @Override
-    public boolean isRemoved() {
-        return false;
-    }
 }

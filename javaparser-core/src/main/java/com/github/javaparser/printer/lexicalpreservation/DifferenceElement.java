@@ -45,6 +45,8 @@ public interface DifferenceElement {
 
     boolean isRemoved();
     
+    boolean isKept();
+    
     default boolean isChild() { 
         return getElement() instanceof LexicalDifferenceCalculator.CsmChild; 
     }
