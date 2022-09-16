@@ -148,20 +148,11 @@ public class Difference {
                 hasOnlyWsBefore = false;
             }
         }
-        int res = nodeTextIndex;
-        if (hasOnlyWsBefore) {
-            for (int i = nodeTextIndex; i >= 0 && i < nodeText.getElements().size(); i--) {
-                if (nodeText.getElements().get(i).isNewline()) {
-                    break;
-                }
-                nodeText.removeElement(i);
-                res = i;
-            }
+        //TODO are there use-cases for removing more than just the first whitespace?
+        if (hasOnlyWsBefore && nodeTextIndex >= 0 && nodeTextIndex < nodeText.getElements().size()) {
+            nodeText.removeElement(nodeTextIndex);
         }
-        if (res < 0) {
-            throw new IllegalStateException();
-        }
-        return res;
+        return nodeTextIndex;
     }
 
     /**
