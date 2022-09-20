@@ -167,7 +167,9 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
         md.setType(PrimitiveType.intType());
         assertTransformed("Example_param5b", cu);
         md.getBody().get().getStatements().add(new ReturnStmt(new NameExpr("p1")));
-        assertTransformed("Example_param5", cu);
+        String expected = readExample("Example_param5" + "_expected");
+        String s = LexicalPreservingPrinter.print(cu);
+        assertEqualsStringIgnoringEol(expected, s);
     }
 
     @Test
