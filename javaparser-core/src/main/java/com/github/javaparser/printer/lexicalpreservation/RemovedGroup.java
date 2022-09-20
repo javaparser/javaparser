@@ -21,18 +21,18 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.TokenTypes;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.TokenTypes;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
 /**
  * This class represents a group of {@link Removed} elements.
@@ -187,14 +187,30 @@ final class RemovedGroup implements Iterable<Removed> {
 
     /**
      * Returns the indentation in front of this RemovedGroup if possible.
-     * If there is something else than whitespace in front, Optional.empty() is returned.
+     * Sometimes the first deleted element may be a line break because the <code>ConcreteSyntaxModel</code> generates a line break before the members (for example FieldDeclaration).
+     * In this case a remove operation on the member will generate the deletion of the first line break.
+     * It is therefore necessary to avoid taking this element into account so we're looking for the first element that isn't a line break..
+     * For example
+     * class Foo {
+     *     int x;
+     * }
+     * If there is something else than whitespace in front this element, Optional.empty() is returned.
      *
      * @return the indentation in front of this RemovedGroup or Optional.empty()
      */
     final Optional<Integer> getIndentation() {
-        Removed firstElement = getFirstElement();
-
+        Removed firstElement = null;
         int indentation = 0;
+        
+        // search for the first element which is not a new line
+        Iterator it = iterator();
+        while(it.hasNext() ) {
+            firstElement = (Removed) it.next();
+            if (firstElement.isNewLine())
+                continue;
+            break;
+        }
+        
         if (firstElement.isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) firstElement.getElement();
             Node child = csmChild.getChild();
