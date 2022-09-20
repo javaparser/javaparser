@@ -564,16 +564,8 @@ public class Difference {
         } else if (kept.isIndent()) {
             diffIndex++;
         } else if (kept.isUnindent()) {
-            // Nothing to do, beside considering indentation
-            // However we want to consider the case in which the indentation was not applied, like when we have
-            // just a left brace followed by space
-
+            // Nothing to do
             diffIndex++;
-            if (!openBraceWasOnSameLine()) {
-                for (int i = 0; i < STANDARD_INDENTATION_SIZE && originalIndex >= 1 && nodeText.getTextElement(originalIndex - 1).isSpaceOrTab(); i++) {
-                    nodeText.removeElement(--originalIndex);
-                }
-            }
         } else {
             throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
         }
