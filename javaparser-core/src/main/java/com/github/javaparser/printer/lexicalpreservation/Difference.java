@@ -410,6 +410,9 @@ public class Difference {
                     if (originalElements.get(originalIndex).isWhiteSpace()
                             && originalElements.get(originalIndex - 1).isWhiteSpace()) {
                         // However we do not want to do that when we are about to adding or removing elements
+                        // The intention is not very clear maybe it should clarify this with examples!
+                        // Are we to understand that we can only do this if there is a single modification to process
+                        // OR or if the next change is to keep the element
                         if ((diffIndex + 1) == diffElements.size() || (diffElements.get(diffIndex + 1).isKept())) {
                             originalElements.remove(originalIndex--);
                         }
@@ -470,7 +473,7 @@ public class Difference {
                         // If the current element is a space, remove it
                         nodeText.removeElement(originalIndex);
                     } else if (originalIndex >= 1 && originalElements.get(originalIndex - 1).isSpaceOrTab()) {
-                        // If the current element is not a space itself we remove the space in front of it
+                        // If the current element is not a space itself we remove the space in front of (before) it
                         nodeText.removeElement(originalIndex - 1);
                         originalIndex--;
                     }
