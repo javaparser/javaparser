@@ -139,29 +139,53 @@ public class Difference {
      * the same as the indentation.
      */
     private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
-        boolean hasOnlyWsBefore = true;
-        for (int i = nodeTextIndex; i >= 0 && hasOnlyWsBefore && i < nodeText.numberOfElements(); i--) {
-            if (nodeText.getTextElement(i).isNewline()) {
-                break;
-            }
-            if (!nodeText.getTextElement(i).isSpaceOrTab()) {
-                hasOnlyWsBefore = false;
-            }
-        }
-        int res = nodeTextIndex;
+        boolean hasOnlyWsBefore = hasOnlyWsBefore(nodeText, nodeTextIndex);
+        int res = nodeTextIndex; // the next position in the list (by default the current position)
         if (hasOnlyWsBefore) {
-            for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
-                if (nodeText.getTextElement(i).isNewline()) {
-                    break;
-                }
-                nodeText.removeElement(i);
-                res = i;
-            }
+            res = removeExtraCharacters(nodeText, nodeTextIndex);
         }
         if (res < 0) {
             throw new IllegalStateException();
         }
         return res;
+    }
+
+    /**
+     * 
+     * @param nodeText Contains a list of elements to analyze
+     * @param nodeTextIndex Starting position in the input list 
+     * @return The current position in the list of the elements
+     */
+    private int removeExtraCharacters(NodeText nodeText, int nodeTextIndex) {
+        int pos = nodeTextIndex;
+        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
+            if (nodeText.getTextElement(i).isNewline()) {
+                break;
+            }
+            nodeText.removeElement(i);
+            pos = i;
+        }
+        return pos;
+    }
+
+    /**
+     * Tries to determine if there are only spaces between the previous end of line and the index
+     * @param nodeText List of elements to analyze
+     * @param nodeTextIndex Starting position in the input list
+     * @return
+     */
+    private boolean hasOnlyWsBefore(NodeText nodeText, int nodeTextIndex) {
+        boolean hasOnlyWsBefore = true;
+        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
+            if (nodeText.getTextElement(i).isNewline()) {
+                break;
+            }
+            if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+                hasOnlyWsBefore = false;
+                break;
+            }
+        }
+        return hasOnlyWsBefore;
     }
 
     /**
