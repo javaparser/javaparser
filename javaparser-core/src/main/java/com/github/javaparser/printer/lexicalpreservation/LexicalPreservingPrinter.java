@@ -41,6 +41,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
@@ -166,7 +168,12 @@ public class LexicalPreservingPrinter {
                         }
                         int index = getIndexOfComment((Comment) oldValue, nodeText);
                         nodeText.removeElement(index);
-                        if (nodeText.getElements().get(index).isNewline()) {
+                        Function<NodeText, Boolean> keepRemoving = 	(n) -> {
+                        	List<TextElement> elements = n.getElements();
+                        	TextElement node = elements.get(index);
+                        	return index < elements.size() && (node.isNewline() || node.isWhiteSpace());
+                        };
+                        while (keepRemoving.apply(nodeText)) {
                             nodeText.removeElement(index);
                         }
                     } else {
