@@ -22,6 +22,7 @@
 package com.github.javaparser;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualToTextResource;
+import static com.github.javaparser.utils.TestUtils.assertEqualToTextResourceNoEol;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -109,6 +110,6 @@ class CommentsInserterTest {
     @Test
     void issue412() throws IOException {
         CompilationUnit cu = parseSample("Issue412").getResult().get();
-        assertEqualToTextResource(makeExpectedFilename("Issue412"), cu.toString());
+        assertEqualToTextResourceNoEol(makeExpectedFilename("Issue412"), cu.toString());
     }
 }
