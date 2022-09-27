@@ -78,7 +78,7 @@ jobs:
 
 
       - name: CodeCov - JavaParser Core
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@v3.1.1
         timeout-minutes: 10
         with:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
@@ -88,7 +88,7 @@ jobs:
           env_vars: OS,JDK
 
       - name: CodeCov - JavaParser Symbol Solver
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@v3.1.1
         timeout-minutes: 10
         with:
           file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
