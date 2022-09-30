@@ -1,0 +1,12 @@
+import java.util.Collection;
+import java.util.LinkedList;
+
+public class Issue3433 {
+
+    public <E, T extends Collection<? extends E>> void method1(Collection<T> options) {
+    }
+
+    public void init() {
+        method1(new LinkedList<Collection<Object>>());
+    }
+}

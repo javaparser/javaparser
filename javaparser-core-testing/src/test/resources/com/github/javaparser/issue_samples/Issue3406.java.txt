@@ -1,6 +1,6 @@
 package com.github.javaparser;
 
-public class EscapeSequences {
+public class Issue3406 {
 
     public static void main(String[] args) {
         Object[] chars = {
