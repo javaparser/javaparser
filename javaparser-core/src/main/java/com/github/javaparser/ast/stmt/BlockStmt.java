@@ -76,6 +76,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         v.visit(this, arg);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;

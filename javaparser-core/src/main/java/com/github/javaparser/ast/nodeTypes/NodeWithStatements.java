@@ -32,9 +32,13 @@ import com.github.javaparser.ast.stmt.Statement;
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 /**
- * A node that contains a list of statements.
+ * A node that contains an ordered list of statement nodes.
  */
 public interface NodeWithStatements<N extends Node> {
+
+    /**
+     * @return An ordered list of nodes, in the order that they appear in the source code.
+     */
     NodeList<Statement> getStatements();
 
     default Statement getStatement(int i) {
