@@ -76,8 +76,9 @@ public class Jml2JavaTests {
         var actual = Jml2JavaFacade.translate(expr);
 
         DefaultPrettyPrinter dpp = new DefaultPrettyPrinter();
-        var sactual = dpp.print(actual);
-        Truth.assertThat(trimAllWs(sactual))
+        var sblock = dpp.print(actual.a);
+        var sexpr = dpp.print(actual.b);
+        Truth.assertThat(trimAllWs(sblock + " " + sexpr))
                 .isEqualTo(trimAllWs(expected));
     }
 

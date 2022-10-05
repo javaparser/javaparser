@@ -3,6 +3,7 @@ package com.github.jmlparser.jml2java;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -49,28 +50,61 @@ public class Jml2JavaTranslator {
 
     private final class Jml2JavaVisitor extends GenericVisitorAdapter<Expression, BlockStmt> {
         @Override
+        public Expression visit(JmlQuantifiedExpr n, BlockStmt arg) {
+            if (n.getBinder() == JmlQuantifiedExpr.JmlDefaultBinder.FORALL)
+                return visitForall(n, arg);
+            if (n.getBinder() == JmlQuantifiedExpr.JmlDefaultBinder.EXISTS)
+                return visitExists(n, arg);
+
+            throw new IllegalArgumentException("Unsupport quantifier " + n.getBinder());
+        }
+
+        private Expression visitForall(JmlQuantifiedExpr n, BlockStmt arg) {
+            final var EXISTS_TEMPLATE = """
+                    boolean rvalue = true;
+                    for (int i = low; i < high; i++) {
+                        if(!(pred)) {
+                            rvalue = false;
+                            break;
+                        }
+                    }
+                    """;
+
+            return null;
+        }
+
+        private Expression visitExists(JmlQuantifiedExpr n, BlockStmt arg) {
+            final var EXISTS_TEMPLATE = """
+                    boolean rvalue = false;
+                    for (int i = low; i < high; i++) {
+                        if(pred) {
+                            rvalue = true;
+                            break;
+                        }
+                    }
+                    """;
+
+            return createAssignmentAndAdd(n, arg);
+        }
+
+        @Override
         public Expression visit(BinaryExpr n, BlockStmt arg) {
             var left = accept(n.getLeft(), arg);
             var right = accept(n.getRight(), arg);
             switch (n.getOperator()) {
                 case IMPLICATION:
-                    return createAssignmentAndAdd(
-                            new BinaryExpr(
-                                    new UnaryExpr(left, UnaryExpr.Operator.LOGICAL_COMPLEMENT),
-                                    right,
-                                    BinaryExpr.Operator.OR),
-                            arg);
+                    return new BinaryExpr(
+                            new UnaryExpr(new EnclosedExpr(left), UnaryExpr.Operator.LOGICAL_COMPLEMENT),
+                            right,
+                            BinaryExpr.Operator.OR);
                 case RIMPLICATION:
-                    return createAssignmentAndAdd(
+                    return
                             new BinaryExpr(
                                     left,
-                                    new UnaryExpr(right, UnaryExpr.Operator.LOGICAL_COMPLEMENT),
-                                    BinaryExpr.Operator.OR),
-                            arg);
+                                    new UnaryExpr(new EnclosedExpr(right), UnaryExpr.Operator.LOGICAL_COMPLEMENT),
+                                    BinaryExpr.Operator.OR);
                 case EQUIVALENCE:
-                    return createAssignmentAndAdd(
-                            new BinaryExpr(left, right, BinaryExpr.Operator.EQUALS),
-                            arg);
+                    return new BinaryExpr(left, right, BinaryExpr.Operator.EQUALS);
                 case SUBTYPE:
                 case SUB_LOCK:
                 case SUB_LOCKE:

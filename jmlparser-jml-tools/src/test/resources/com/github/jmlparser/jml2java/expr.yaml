@@ -7,6 +7,12 @@
   result: |
     { final var _gen_1 = 2 + 3; }
 
+
+- expr: |
+    !(a != null && b != null) ==> a == b
+  result: |
+    { final var _gen_1 = !(!(a != null && b != null)) || a == b; }
+
 - expr: |
     a != null && b != null ==> a == b
   result: |

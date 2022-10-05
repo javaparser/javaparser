@@ -6,7 +6,7 @@
     <parent>
         <artifactId>jmlparser-parent</artifactId>
         <groupId>io.github.wadoon</groupId>
-        <version>3.24.5-SNAPSHOT</version>
+        <version>3.24.7-SNAPSHOT</version>
     </parent>
 
     <artifactId>jmlparser-web</artifactId>

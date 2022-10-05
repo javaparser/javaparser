@@ -7,6 +7,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.utils.Pair;
 
 import java.util.Stack;
 
@@ -15,11 +16,11 @@ import java.util.Stack;
  * @version 1 (04.10.22)
  */
 public class Jml2JavaFacade {
-    public static BlockStmt translate(Expression expression) {
+    public static Pair<BlockStmt, Expression> translate(Expression expression) {
         Jml2JavaTranslator j2jt = new Jml2JavaTranslator();
         BlockStmt result = new BlockStmt();
-        j2jt.accept(expression, result);
-        return result;
+        var e = j2jt.accept(expression, result);
+        return new Pair<>(result, e);
     }
 
     public BlockStmt translate(JmlContract expression) {
