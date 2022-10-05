@@ -176,6 +176,11 @@ public class BitVectorArithmeticTranslator implements ArithmeticTranslator {
         return makeInt(BigInteger.valueOf(i));
     }
 
+    @Override
+    public SExpr makeVar(ResolvedType rtype) {
+        return null;
+    }
+
     public SmtType getPrimitiveType(ResolvedPrimitiveType rType) {
         switch (rType) {
             case BOOLEAN:

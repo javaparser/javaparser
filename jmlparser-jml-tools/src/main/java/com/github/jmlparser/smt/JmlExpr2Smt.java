@@ -18,7 +18,6 @@ import com.github.jmlparser.utils.JMLUtils;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Alexander Weigl
@@ -50,7 +49,7 @@ public class JmlExpr2Smt extends GenericVisitorAdapter<SExpr, Object> {
         if (n.getInitializer().isPresent())
             return n.getInitializer().get().accept(this, arg);
 
-        String name = "anon_array_" + (++anon_cnt);
+        String name = "anon_array_" + (++anonCnt);
         final ResolvedType rType = n.calculateResolvedType();
         SmtType type = translator.getType(rType);
         smtLog.declareConst(name, type);
@@ -90,8 +89,8 @@ public class JmlExpr2Smt extends GenericVisitorAdapter<SExpr, Object> {
 
     @Override
     public SExpr visit(ArrayInitializerExpr n, Object arg) {
-        String name = "anon_array_" + (++anon_cnt);
-        List<SExpr> seq = n.getValues().stream().map(it -> it.accept(this, arg)).collect(Collectors.toList());
+        String name = "anon_array_" + (++anonCnt);
+        List<SExpr> seq = n.getValues().stream().map(it -> it.accept(this, arg)).toList();
         SmtType.Array myType = new SmtType.Array(SmtType.INT, seq.get(0).getSmtType());
         smtLog.declareConst(name, myType);
         SExpr var = termFactory.var(myType, null, name);
@@ -220,14 +219,24 @@ public class JmlExpr2Smt extends GenericVisitorAdapter<SExpr, Object> {
 
     @Override
     public SExpr visit(MethodCallExpr n, Object arg) {
-        return super.visit(n, arg);
+        var method = n.resolve();
+        var variable = translator.makeVar(method.getReturnType());
+        final var ast = method.toAst();
+        if (ast.isPresent()) {
+            var contract =
+                    JMLUtils.createJointContract(ast.get().getContracts().get());
+            //TODO weigl add assertion for the return variable
+            //TODO weigl add assertion for each parameter
+            // smtLog.addAssert();
+        }
+        return variable;
     }
 
-    int anon_cnt;
+    int anonCnt;
 
     @Override
     public SExpr visit(ObjectCreationExpr n, Object arg) {
-        final String name = "anon" + (++anon_cnt);
+        final String name = "anon" + (++anonCnt);
         smtLog.declareConst(name, SmtType.JAVA_OBJECT);
         SExpr var = termFactory.var(SmtType.JAVA_OBJECT, null, name);
         smtLog.addAssert(termFactory.nonNull(var));

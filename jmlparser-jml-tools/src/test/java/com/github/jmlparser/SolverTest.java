@@ -13,13 +13,11 @@ import java.io.IOException;
  */
 public class SolverTest {
     @Test
-    void startZ3Mini() throws IOException, InterruptedException {
+    void startZ3Mini() throws IOException {
         Assumptions.assumeTrue(z3Installed());
         Solver s = new Solver();
         SolverAnswer result = s.run("(assert (= (* 2 3) 6)) (check-sat) (get-model) (exit)");
-        result.expectSat()
-                .consume();
-
+        result.expectSat().consume();
     }
 
     private static Boolean z3Installed = null;

@@ -43,4 +43,6 @@ public interface ArithmeticTranslator {
     SExpr arrayLength(SExpr obj);
 
     SExpr makeInt(long i);
+
+    SExpr makeVar(ResolvedType rtype);
 }
