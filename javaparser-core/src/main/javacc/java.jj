@@ -3716,13 +3716,15 @@ Expression EqualityExpression():
  */
 PatternExpr PatternExpression():
 {
+    ModifierHolder modifier;
     ReferenceType type;
     SimpleName name;
 }
 {
-    type = AnnotatedReferenceType()
+    modifier = Modifiers()
+    type = ReferenceType(modifier.annotations)
     name = SimpleName()
-    { return new PatternExpr(range(type, token()), type, name); }
+    { return new PatternExpr(range(type, token()), modifier.modifiers, type, name); }
 }
 
 

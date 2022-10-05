@@ -86,6 +86,11 @@ public class Reshuffled implements DifferenceElement {
     public boolean isRemoved() {
         return false;
     }
+    
+    @Override
+    public boolean isKept() {
+        return false;
+    }
 
     /*
      * If the {@code DifferenceElement} wraps an EOL token then this method returns a new {@code DifferenceElement}
@@ -97,16 +102,16 @@ public class Reshuffled implements DifferenceElement {
         CsmMix modifiedPreviousOrder = new CsmMix(replaceTokens(previousOrder.getElements(), lineSeparator));
         return new Reshuffled(modifiedPreviousOrder, modifiedNextOrder);
     }
-
+    
     /*
-     * Replaces all eol tokens in the list by the specified line separator token
+     * Replaces all eol tokens in the list by the specified line separator token 
      */
     private List<CsmElement> replaceTokens(List<CsmElement> elements, CsmElement lineSeparator) {
         return elements.stream()
                 .map(element -> isNewLineToken(element) ? lineSeparator : element)
                 .collect(Collectors.toList());
     }
-
+    
     /*
      * Return true if the wrapped {@code CsmElement} is a new line token
      */

@@ -80,6 +80,16 @@ public class Removed implements DifferenceElement {
     public boolean isAdded() {
         return false;
     }
+    
+    @Override
+    public boolean isRemoved() {
+        return true;
+    }
+    
+    @Override
+    public boolean isKept() {
+        return false;
+    }
 
     public boolean isToken() { return element instanceof CsmToken; }
 
@@ -101,11 +111,6 @@ public class Removed implements DifferenceElement {
         return false;
     }
 
-    @Override
-    public boolean isRemoved() {
-        return true;
-    }
-    
     public boolean isNewLine() {
         if(isToken()) {
             CsmToken csmToken = (CsmToken) element;

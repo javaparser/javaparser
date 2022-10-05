@@ -2136,6 +2136,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final PatternExpr n, final A arg) {
         R result;
         {
+            result = n.getModifiers().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;

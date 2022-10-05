@@ -713,6 +713,7 @@ class HashCodeVisitorTest {
 	void testVisitPatternExpr() {
 		PatternExpr node = spy(new PatternExpr());
 		HashCodeVisitor.hashCode(node);
+		verify(node, times(1)).getModifiers();
 		verify(node, times(1)).getName();
 		verify(node, times(1)).getType();
 		verify(node, times(1)).getComment();

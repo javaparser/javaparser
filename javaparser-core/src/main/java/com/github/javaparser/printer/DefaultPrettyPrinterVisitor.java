@@ -767,15 +767,16 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getExpression().accept(this, arg);
         printer.print(" instanceof ");
-        n.getType().accept(this, arg);
-        if (n.getName().isPresent()) {
-            printer.print(" ");
-            n.getName().get().accept(this, arg);
+        if (n.getPattern().isPresent()) {
+            n.getPattern().get().accept(this, arg);
+        } else {
+            n.getType().accept(this, arg);
         }
     }
 
     @Override
     public void visit(final PatternExpr n, final Void arg) {
+        printModifiers(n.getModifiers());
         n.getType().accept(this, arg);
         printer.print(" ");
         n.getName().accept(this, arg);

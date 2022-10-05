@@ -25,8 +25,8 @@ import java.util.function.Function;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 /**
  * Pretty printer for AST nodes.
@@ -41,11 +41,6 @@ public class DefaultPrettyPrinter implements Printer {
     // static methods 
     
     private static Function<PrinterConfiguration, VoidVisitor<Void>> createDefaultVisitor() {
-        PrinterConfiguration configuration = createDefaultConfiguration();
-        return createDefaultVisitor(configuration);
-    }
-    
-    private static Function<PrinterConfiguration, VoidVisitor<Void>> createDefaultVisitor(PrinterConfiguration configuration) {
         return (config) -> new DefaultPrettyPrinterVisitor(config, new SourcePrinter(config));
     }
     
@@ -59,7 +54,7 @@ public class DefaultPrettyPrinter implements Printer {
      * Build a new DefaultPrettyPrinter with a default configuration and a default factory
      */
     public DefaultPrettyPrinter() {
-        this(createDefaultVisitor(), createDefaultConfiguration() );
+        this(createDefaultConfiguration() );
     }
     
     /**
@@ -67,7 +62,7 @@ public class DefaultPrettyPrinter implements Printer {
      * @param configuration
      */
     public DefaultPrettyPrinter(PrinterConfiguration configuration) {
-        this(createDefaultVisitor(configuration), configuration );
+        this(createDefaultVisitor(), configuration );
     }
     
     /**

@@ -1,6 +1,6 @@
-Next Release (Version 3.24.6)
+Next Release (Version 3.24.7)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/192?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
 
 ### Added
 ### Changed
@@ -9,9 +9,9 @@ Next Release (Version 3.24.6)
 ### Fixed
 ### Security
 
-Next Release (Version 3.24.5)
+Next Release (Version 3.24.6)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
 
 ### API or Behaviour Change
 
@@ -29,7 +29,7 @@ Next Release (Version 3.24.5)
 ### Fixed
 
 * Fix typos (PR [#3675](https://github.com/javaparser/javaparser/pull/3675) by [@mernst](https://github.com/mernst))
-*  Fix issue #3614 UnsolvedSymbolException when package declaration contains comment (PR [#3671](https://github.com/javaparser/javaparser/pull/3671) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3614 UnsolvedSymbolException when package declaration contains comment (PR [#3671](https://github.com/javaparser/javaparser/pull/3671) by [@jlerbsc](https://github.com/jlerbsc))
 * chore(deps): update dependency org.apache.maven.plugins:maven-install-plugin to v3.0.0 (PR [#3640](https://github.com/javaparser/javaparser/pull/3640) by [@renovate[bot]](https://github.com/apps/renovate))
 * Fix documentation of `JAVA_17` (PR [#3623](https://github.com/javaparser/javaparser/pull/3623) by [@mernst](https://github.com/mernst))
 * Fix issue 3631 NameExpr.resolve() does not take end of inner block scopes into account (PR [#3613](https://github.com/javaparser/javaparser/pull/3613) by [@jlerbsc](https://github.com/jlerbsc))
