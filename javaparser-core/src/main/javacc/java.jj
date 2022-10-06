@@ -4313,6 +4313,11 @@ Statement BlockStatement():
             modifier = Modifiers()
             recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
          |
+            // try yield statement separate from more general Statement() because yield is not a keyword but
+            // just a restricted identifier and a yield statement can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( YieldStatement() )
+            ret = YieldStatement()
+         |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
