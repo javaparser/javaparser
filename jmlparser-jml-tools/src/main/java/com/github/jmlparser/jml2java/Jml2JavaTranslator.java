@@ -3,10 +3,10 @@ package com.github.jmlparser.jml2java;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.expr.JmlMultiCompareExpr;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.VarType;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 
@@ -48,6 +48,134 @@ public class Jml2JavaTranslator {
         return getTargetForAssignment();
     }
 
+    public Expression findPredicate(JmlQuantifiedExpr n) {
+        return n.getExpressions().get(n.getExpressions().size() - 1);
+    }
+
+    public static Expression findBound(JmlQuantifiedExpr n) {
+        if (n.getExpressions().size() == 2)
+            return n.getExpressions().get(0);
+        else if (n.getExpressions().size() == 1)
+            if (n.getExpressions().get(0) instanceof BinaryExpr be)
+                return be.getLeft();
+        throw new IllegalArgumentException("Could not determine bound.");
+
+    }
+
+    public static Expression findLowerBound(JmlQuantifiedExpr n, String variable) {
+        if (n.getExpressions().size() == 3) return n.getExpressions().get(0);
+
+        var e = findBound(n);
+
+        if (e instanceof JmlMultiCompareExpr mc) {
+            if (mc.getExpressions().size() == 3 &&
+                    mc.getExpressions().get(1) instanceof NameExpr v &&
+                    v.getNameAsString().equals(variable)) {
+                if (mc.getOperators().get(0) == BinaryExpr.Operator.LESS_EQUALS)
+                    return mc.getExpressions().get(0);
+                if (mc.getOperators().get(0) == BinaryExpr.Operator.LESS)
+                    return new BinaryExpr(mc.getExpressions().get(0), new IntegerLiteralExpr(1), BinaryExpr.Operator.PLUS);
+                throw new IllegalStateException();
+            }
+        }
+
+        Expression ph = new NameExpr("_");
+        {
+            var be = new BinaryExpr(new NameExpr(variable), ph, BinaryExpr.Operator.GREATER_EQUALS);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return (Expression) result.get("min");
+        }
+
+        {
+            var be = new BinaryExpr(new NameExpr(variable), ph, BinaryExpr.Operator.GREATER);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return new BinaryExpr((Expression) result.get("min"), new IntegerLiteralExpr(1), BinaryExpr.Operator.PLUS);
+        }
+
+        {
+            var be = new BinaryExpr(ph, new NameExpr(variable), BinaryExpr.Operator.LESS_EQUALS);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return (Expression) result.get("min");
+        }
+
+        {
+            var be = new BinaryExpr(ph, new NameExpr(variable), BinaryExpr.Operator.LESS);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return new BinaryExpr((Expression) result.get("min"), new IntegerLiteralExpr(1), BinaryExpr.Operator.PLUS);
+        }
+
+        return null;
+    }
+
+    public Expression findUpperBound(JmlQuantifiedExpr n, String variable) {
+        if (n.getExpressions().size() == 3) return n.getExpressions().get(1);
+
+        var e = findBound(n);
+
+        if (e instanceof JmlMultiCompareExpr mc) {
+            if (mc.getExpressions().size() == 3 &&
+                    mc.getExpressions().get(1) instanceof NameExpr v &&
+                    v.getNameAsString().equals(variable)) {
+                if (mc.getOperators().get(0) == BinaryExpr.Operator.LESS_EQUALS)
+                    return mc.getExpressions().get(0);
+                if (mc.getOperators().get(0) == BinaryExpr.Operator.LESS)
+                    return new BinaryExpr(mc.getExpressions().get(0), new IntegerLiteralExpr(1), BinaryExpr.Operator.PLUS);
+                throw new IllegalStateException();
+            }
+        }
+
+        Expression ph = new NameExpr("_");
+        {
+            var be = new BinaryExpr(new NameExpr(variable), ph, BinaryExpr.Operator.GREATER_EQUALS);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return (Expression) result.get("min");
+        }
+
+        {
+            var be = new BinaryExpr(new NameExpr(variable), ph, BinaryExpr.Operator.GREATER);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return new BinaryExpr((Expression) result.get("min"), new IntegerLiteralExpr(1), BinaryExpr.Operator.PLUS);
+        }
+
+        {
+            var be = new BinaryExpr(ph, new NameExpr(variable), BinaryExpr.Operator.LESS_EQUALS);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return (Expression) result.get("min");
+        }
+
+        {
+            var be = new BinaryExpr(ph, new NameExpr(variable), BinaryExpr.Operator.LESS);
+            var pattern = new Pattern<>(be);
+            pattern.addPlaceholder(ph, "min");
+            var result = pattern.find(n);
+            if (result != null)
+                return new BinaryExpr((Expression) result.get("min"), new IntegerLiteralExpr(1), BinaryExpr.Operator.PLUS);
+        }
+
+        return null;
+    }
+
     private final class Jml2JavaVisitor extends GenericVisitorAdapter<Expression, BlockStmt> {
         @Override
         public Expression visit(JmlQuantifiedExpr n, BlockStmt arg) {
@@ -60,17 +188,73 @@ public class Jml2JavaTranslator {
         }
 
         private Expression visitForall(JmlQuantifiedExpr n, BlockStmt arg) {
-            final var EXISTS_TEMPLATE = """
-                    boolean rvalue = true;
-                    for (int i = low; i < high; i++) {
-                        if(!(pred)) {
-                            rvalue = false;
-                            break;
-                        }
-                    }
-                    """;
+            assert n.getVariables().size() == 1;
+            var rvalue = newSymbol("result_");
+            var highVar = newSymbol("high_");
+            var predVar = newSymbol("pred_");
 
-            return null;
+            arg.addAndGetStatement(
+                    new ExpressionStmt(new VariableDeclarationExpr(
+                            new VariableDeclarator(
+                                    new PrimitiveType(PrimitiveType.Primitive.BOOLEAN),
+                                    rvalue, new BooleanLiteralExpr(true)))));
+
+            var variable = n.getVariables().get(1);
+            var lowCode = Jml2JavaFacade.translate(findLowerBound(n, variable.getNameAsString()));
+            arg.addAndGetStatement(
+                    new ExpressionStmt(new VariableDeclarationExpr(
+                            new VariableDeclarator(
+                                    variable.getType().clone(), variable.getNameAsString()))));
+            lowCode.a.addAndGetStatement(
+                    new ExpressionStmt(
+                            new AssignExpr(
+                                    new NameExpr(variable.getNameAsString()), lowCode.b,
+                                    AssignExpr.Operator.ASSIGN)));
+            arg.addAndGetStatement(lowCode.a);
+
+            var highCode = Jml2JavaFacade.translate(findUpperBound(n, variable.getNameAsString()));
+            arg.addAndGetStatement(
+                    new ExpressionStmt(new VariableDeclarationExpr(
+                            new VariableDeclarator(
+                                    variable.getType().clone(), highVar))));
+            highCode.a.addAndGetStatement(
+                    new ExpressionStmt(
+                            new AssignExpr(
+                                    new NameExpr(highVar), highCode.b,
+                                    AssignExpr.Operator.ASSIGN)));
+            arg.addAndGetStatement(highCode.a.clone());
+
+            var predCode = Jml2JavaFacade.translate(findPredicate(n));
+
+            WhileStmt whileStmt = arg.addAndGetStatement(new WhileStmt());
+            var lessThanExpr = new BinaryExpr(new NameExpr(variable.getNameAsString()),
+                    new NameExpr(highVar), BinaryExpr.Operator.LESS);
+            whileStmt.setCondition(
+                    new BinaryExpr(lessThanExpr, new NameExpr(rvalue), BinaryExpr.Operator.AND));
+            var body = new BlockStmt();
+
+            body.addAndGetStatement(
+                    new ExpressionStmt(new VariableDeclarationExpr(
+                            new VariableDeclarator(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN), predVar))));
+            predCode.a.addAndGetStatement(
+                    new ExpressionStmt(
+                            new AssignExpr(
+                                    new NameExpr(predVar), predCode.b,
+                                    AssignExpr.Operator.ASSIGN)));
+            body.addAndGetStatement(predCode.a);
+
+            final var assignPred = new ExpressionStmt(new AssignExpr(new NameExpr(rvalue),
+                    new BooleanLiteralExpr(true), AssignExpr.Operator.ASSIGN));
+            body.addAndGetStatement(
+                    new IfStmt(new NameExpr(predVar), assignPred, null));
+            body.addAndGetStatement(highCode.a.clone());
+
+            whileStmt.setBody(body);
+            return new NameExpr(rvalue);
+        }
+
+        private String newSymbol(String prefix) {
+            return prefix + counter.getAndIncrement();
         }
 
         private Expression visitExists(JmlQuantifiedExpr n, BlockStmt arg) {
