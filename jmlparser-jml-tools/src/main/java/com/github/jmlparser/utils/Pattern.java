@@ -1,4 +1,4 @@
-package com.github.jmlparser.jml2java;
+package com.github.jmlparser.utils;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;

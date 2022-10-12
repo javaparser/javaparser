@@ -4,9 +4,8 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.jmlparser.utils.Pattern;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Alexander Weigl

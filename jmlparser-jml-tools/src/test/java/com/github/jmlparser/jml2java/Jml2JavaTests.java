@@ -40,13 +40,12 @@ public class Jml2JavaTests {
         config.setSymbolResolver(new JavaSymbolSolver(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader())));
         parser = new JavaParser(config);
 
-        /*ParseResult<CompilationUnit> r = parser.parse(getClass().getResourceAsStream("Test.java"));
+        ParseResult<CompilationUnit> r = parser.parse(getClass().getResourceAsStream("Test.java"));
         if (!r.isSuccessful()) {
             r.getProblems().forEach(System.err::println);
             fail("Error during parsing");
         }
-        parent = r.getResult().get().getType(0);*/
-        parent = null;
+        parent = r.getResult().get().getType(0);
     }
 
     @TestFactory

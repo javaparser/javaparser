@@ -4921,7 +4921,12 @@ Statement BlockStatementOrig():
             modifier = Modifiers()
             recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
          |
-            LOOKAHEAD( VariableDeclarationExpression() ";" ) 
+            // try yield statement separate from more general Statement() because yield is not a keyword but
+            // just a restricted identifier and a yield statement can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( YieldStatement() )
+            ret = YieldStatement()
+         |
+            LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
             ";"
             { ret = new ExpressionStmt(range(expr, token()), expr); }
@@ -6486,8 +6491,8 @@ ArbitraryNodeContainer JmlMethodLevelStart():
   //  label=SimpleName() ":" {end=token();} [";" {semi=token();}]
   //  { ret.getChildren().add(new LabeledStmt(range(label,end), label,
   //                            new EmptyStmt(semi!=null ? range(semi,semi) : null))); }
-  | LOOKAHEAD(4) 
-    statement = JmlSpecialStatement() { ret.getChildren().add(statement); }  	
+  | LOOKAHEAD(4)
+    statement = JmlSpecialStatement() { ret.getChildren().add(statement); }
   | LOOKAHEAD(4)
     statement = JmlStatement()       { ret.getChildren().add(statement); }
   | LOOKAHEAD(4)
@@ -6521,11 +6526,11 @@ NodeList<JmlStatement> JmlStatements():
   }
 }
 
-JmlStatement JmlStatement(): 
-{ 
-	JavaToken begin; 
-	Expression expr , target; 
-	Statement stmt; 
+JmlStatement JmlStatement():
+{
+	JavaToken begin;
+	Expression expr , target;
+	Statement stmt;
 	SimpleName label;
 }
 {
@@ -7003,35 +7008,35 @@ void jmlModifiersInner(NodeList<Modifier> modifiers):
 
 }
 
-void JmlClassLevelInner(ModifierHolder modifiers,  NodeList<Node> ret): 
+void JmlClassLevelInner(ModifierHolder modifiers,  NodeList<Node> ret):
 {
-		JmlClassLevel element; 
+		JmlClassLevel element;
 		NodeList<JmlContract> contracts;
 		MethodDeclaration method = null;
-		boolean hit = false;	
+		boolean hit = false;
 }
 {
 		LOOKAHEAD(1) element = JmlClassExpr(modifiers)         { ret.add(element); }
 	| LOOKAHEAD(1) element = JmlClassAccessible(modifiers)   { ret.add(element); }
 	| LOOKAHEAD(1) element = JmlClassRepresents(modifiers)   { ret.add(element); }
 	| LOOKAHEAD(3) contracts = JmlContracts()
-		[ LOOKAHEAD(10) 
-			modifiers = Modifiers() 
+		[ LOOKAHEAD(10)
+			modifiers = Modifiers()
 			method=MethodDeclaration(modifiers) ]
 		{
 			if( method != null )  {
 				method.setContracts(contracts);
 				ret.add(new JmlMethodDeclaration(
 								range(contracts.get(0), method),
-								new NodeList<>(), method, null)); 
+								new NodeList<>(), method, null));
 				method = null;
 			}
-			else 
-				ret.addAll(contracts);	      	
+			else
+				ret.addAll(contracts);
 		}
 	| LOOKAHEAD(4) element = JmlFieldDeclaration(modifiers)  { ret.add(element); }
-	| method = MethodDeclaration(modifiers)              
-	  { ret.add(new JmlMethodDeclaration(range(method, method), new NodeList<>(), method, null)); }	
+	| method = MethodDeclaration(modifiers)
+	  { ret.add(new JmlMethodDeclaration(range(method, method), new NodeList<>(), method, null)); }
 }
 
 
@@ -7054,7 +7059,7 @@ ArbitraryNodeContainer JmlClassLevelStart():
 		        return new ArbitraryNodeContainer(ret);
 		    }
 
-		  | 
+		  |
 				JmlClassLevelInner(modifiers, ret)
 			)
 		)+

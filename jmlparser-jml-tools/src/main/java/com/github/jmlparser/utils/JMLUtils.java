@@ -1,14 +1,20 @@
 package com.github.jmlparser.utils;
 
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.clauses.JmlClause;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.jml.expr.JmlMultiCompareExpr;
+import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.jmlparser.smt.model.SmtType;
 
+import javax.lang.model.type.NullType;
 import java.util.*;
 
 /**
@@ -80,5 +86,35 @@ public class JMLUtils {
         //TODO weigl combine all requires, ensures ... clauses
         m.add(contract);
         return contract;
+    }
+
+    public static Type resolvedType2Type(ResolvedType type) {
+        if (type.isPrimitive()) {
+            ResolvedPrimitiveType rType = type.asPrimitive();
+            return new PrimitiveType(
+                    switch (rType) {
+                        case BYTE -> PrimitiveType.Primitive.BYTE;
+                        case SHORT -> PrimitiveType.Primitive.SHORT;
+                        case CHAR -> PrimitiveType.Primitive.CHAR;
+                        case INT -> PrimitiveType.Primitive.INT;
+                        case LONG -> PrimitiveType.Primitive.LONG;
+                        case BOOLEAN -> PrimitiveType.Primitive.BOOLEAN;
+                        case FLOAT -> PrimitiveType.Primitive.FLOAT;
+                        case DOUBLE -> PrimitiveType.Primitive.DOUBLE;
+                    }
+            );
+        }
+
+        if (type.isArray()) {
+            ResolvedArrayType aType = type.asArrayType();
+            return new ArrayType(resolvedType2Type(aType.getComponentType()));
+        }
+
+        if (type.isReferenceType()) {
+            var rType = type.asReferenceType();
+            return new ClassOrInterfaceType(rType.getQualifiedName());
+        }
+
+        throw new RuntimeException("Unsupported type");
     }
 }

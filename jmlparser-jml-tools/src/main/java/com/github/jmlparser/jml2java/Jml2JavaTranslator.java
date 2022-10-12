@@ -1,14 +1,18 @@
 package com.github.jmlparser.jml2java;
 
+import com.beust.ah.A;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.expr.JmlLetExpr;
 import com.github.javaparser.ast.jml.expr.JmlMultiCompareExpr;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.VarType;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
+import com.github.jmlparser.utils.JMLUtils;
+import com.github.jmlparser.utils.Pattern;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -199,7 +203,7 @@ public class Jml2JavaTranslator {
                                     new PrimitiveType(PrimitiveType.Primitive.BOOLEAN),
                                     rvalue, new BooleanLiteralExpr(true)))));
 
-            var variable = n.getVariables().get(1);
+            var variable = n.getVariables().get(0);
             var lowCode = Jml2JavaFacade.translate(findLowerBound(n, variable.getNameAsString()));
             arg.addAndGetStatement(
                     new ExpressionStmt(new VariableDeclarationExpr(
@@ -258,17 +262,23 @@ public class Jml2JavaTranslator {
         }
 
         private Expression visitExists(JmlQuantifiedExpr n, BlockStmt arg) {
-            final var EXISTS_TEMPLATE = """
-                    boolean rvalue = false;
-                    for (int i = low; i < high; i++) {
-                        if(pred) {
-                            rvalue = true;
-                            break;
-                        }
-                    }
-                    """;
+            return new UnaryExpr(visitForall(n, arg), UnaryExpr.Operator.LOGICAL_COMPLEMENT);
+        }
 
-            return createAssignmentAndAdd(n, arg);
+
+        @Override
+        public Expression visit(JmlLetExpr n, BlockStmt arg) {
+            var inner = new BlockStmt();
+            SimpleName target = newTargetForAssignment();
+            var type = n.getBody().calculateResolvedType();
+            arg.addAndGetStatement(
+                    new ExpressionStmt(new VariableDeclarationExpr(JMLUtils.resolvedType2Type(type),
+                            target.asString())));
+            inner.addAndGetStatement(new ExpressionStmt(n.getVariables()));
+            var e = accept(n.getBody(), inner);
+            arg.addAndGetStatement(inner);
+            inner.addAndGetStatement(new AssignExpr(new NameExpr(target.asString()), e, AssignExpr.Operator.ASSIGN));
+            return new NameExpr(target.asString());
         }
 
         @Override
