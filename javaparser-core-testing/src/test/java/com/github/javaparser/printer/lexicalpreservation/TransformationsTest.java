@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
@@ -56,7 +56,7 @@ import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
  * The idea is to perform some transformations on the code, print it back and see if the generated code
  * is the expected one. We do not care about the internal state of LexicalPreservingPrinter, just the visible result.
  */
-class TransformationsTest extends  AbstractLexicalPreservingTest {
+class TransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
     void unchangedSimpleClasses() throws IOException {
@@ -183,8 +183,8 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     void issue2099AddingStatementAfterTraillingComment1() {
         Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
                 "    if(value != null) {" + SYSTEM_EOL +
-                "        value.value();" + SYSTEM_EOL +
-                "    }"));
+                        "        value.value();" + SYSTEM_EOL +
+                        "    }"));
 
         BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + SYSTEM_EOL +
                 "       value1();" + SYSTEM_EOL +
@@ -207,8 +207,8 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     void issue2099AddingStatementAfterTraillingComment2() {
         Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
                 "    if(value != null) {" + SYSTEM_EOL +
-                "        value.value();" + SYSTEM_EOL +
-                "    }"));
+                        "        value.value();" + SYSTEM_EOL +
+                        "    }"));
 
         BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + SYSTEM_EOL +
                 "       value1();" + SYSTEM_EOL +
@@ -241,8 +241,8 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        value2(); // Test" + SYSTEM_EOL +
                 "    }" + SYSTEM_EOL +
                 "}"));
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) compilationUnit.getChildNodes().get(0);
+        MethodDeclaration methodDeclaration = (MethodDeclaration) classOrInterfaceDeclaration.getChildNodes().get(2);
         methodDeclaration.getBody().get().addStatement(statement);
 
         String s = LexicalPreservingPrinter.print(compilationUnit);
@@ -271,8 +271,8 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        value2();" + SYSTEM_EOL +
                 "    }" + SYSTEM_EOL +
                 "}"));
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) compilationUnit.getChildNodes().get(0);
+        MethodDeclaration methodDeclaration = (MethodDeclaration) classOrInterfaceDeclaration.getChildNodes().get(2);
         methodDeclaration.getBody().get().addStatement(statement);
 
         String s = LexicalPreservingPrinter.print(compilationUnit);
@@ -301,8 +301,8 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "        value2();" + SYSTEM_EOL + SYSTEM_EOL +
                 "    }" + SYSTEM_EOL +
                 "}"));
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) compilationUnit.getChildNodes().get(0);
+        MethodDeclaration methodDeclaration = (MethodDeclaration) classOrInterfaceDeclaration.getChildNodes().get(2);
         methodDeclaration.getBody().get().addStatement(statement);
 
         String s = LexicalPreservingPrinter.print(compilationUnit);
@@ -322,12 +322,12 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     void removingInSingleMemberList() {
         considerCode(
                 "class A {\n" +
-                "    int a;\n" +
-                "}");
+                        "    int a;\n" +
+                        "}");
         cu.getClassByName("A").get().getMembers().remove(0);
         String expected =
                 "class A {\n" +
-                "}";
+                        "}";
         String s = LexicalPreservingPrinter.print(cu);
         assertEqualsStringIgnoringEol(expected, s);
     }
@@ -336,14 +336,14 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     void removingInMultiMembersList() {
         considerCode(
                 "class A {\n" +
-                "    int a;\n" +
-                "    int b;\n" +
-                "}");
+                        "    int a;\n" +
+                        "    int b;\n" +
+                        "}");
         cu.getClassByName("A").get().getMembers().removeLast();
         String expected =
                 "class A {\n" +
-                "    int a;\n" +
-                "}";
+                        "    int a;\n" +
+                        "}";
         String s = LexicalPreservingPrinter.print(cu);
         assertEqualsStringIgnoringEol(expected, s);
     }
