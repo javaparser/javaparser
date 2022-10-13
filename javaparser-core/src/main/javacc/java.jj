@@ -78,6 +78,7 @@ PARSER_BEGIN(GeneratedJavaParser)
 package com.github.javaparser;
 
 import java.util.*;
+import com.github.javaparser.jml.JmlUtility;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.body.*;
@@ -7026,6 +7027,7 @@ void JmlClassLevelInner(ModifierHolder modifiers,  NodeList<Node> ret):
 		{
 			if( method != null )  {
 				method.setContracts(contracts);
+                JmlUtility.fixRangeContracts(method);
 				ret.add(new JmlMethodDeclaration(
 								range(contracts.get(0), method),
 								new NodeList<>(), method, null));

@@ -54,6 +54,11 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public class JavaSymbolSolver implements SymbolResolver {
+    /**
+     * Sometimes you want the old simple Java name resolution without consideration of any JML annotation.
+     * For example, to determine name clashes between Java and JML.
+     */
+    public static boolean ENABLE_JML_RESOLUTION = true;
 
     private static class ArrayLengthValueDeclaration implements ResolvedValueDeclaration {
 

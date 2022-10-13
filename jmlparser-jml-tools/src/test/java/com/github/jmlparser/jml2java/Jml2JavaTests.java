@@ -9,6 +9,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
+import com.github.jmlparser.TestWithJavaParser;
 import com.github.jmlparser.smt.SMTFacade;
 import com.github.jmlparser.smt.SmtQuery;
 import com.github.jmlparser.smt.model.SExpr;
@@ -31,23 +32,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Alexander Weigl
  * @version 1 (04.10.22)
  */
-public class Jml2JavaTests {
-    private final JavaParser parser;
-    private final Node parent;
-
-    {
-        ParserConfiguration config = new ParserConfiguration();
-        config.setSymbolResolver(new JavaSymbolSolver(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader())));
-        parser = new JavaParser(config);
-
-        ParseResult<CompilationUnit> r = parser.parse(getClass().getResourceAsStream("Test.java"));
-        if (!r.isSuccessful()) {
-            r.getProblems().forEach(System.err::println);
-            fail("Error during parsing");
-        }
-        parent = r.getResult().get().getType(0);
-    }
-
+public class Jml2JavaTests extends TestWithJavaParser {
     @TestFactory
     public Stream<DynamicTest> j2jTranslation() throws IOException {
         try (InputStream inputStream = getClass().getResourceAsStream("expr.yaml")) {

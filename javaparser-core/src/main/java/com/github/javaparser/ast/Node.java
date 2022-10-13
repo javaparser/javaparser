@@ -782,7 +782,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return LineSeparator.SYSTEM;
     }
 
-    protected SymbolResolver getSymbolResolver() {
+    public final SymbolResolver getSymbolResolver() {
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
                 return cu.getData(SYMBOL_RESOLVER_KEY);

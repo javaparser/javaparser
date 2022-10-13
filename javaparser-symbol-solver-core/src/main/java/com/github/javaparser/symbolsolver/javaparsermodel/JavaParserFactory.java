@@ -35,6 +35,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlContractContext;
@@ -65,15 +66,19 @@ public class JavaParserFactory {
         }
 
         // TODO: Is order important here?
-        if (node instanceof JmlLetExpr) {
-            return new JmlLetExprContext((JmlLetExpr) node, typeSolver);
-        } else if (node instanceof JmlContract) {
-            return new JmlContractContext((JmlContract) node, typeSolver);
-        } else if (node instanceof JmlSignalsClause) {
-            return new JmlSignalsClauseContext((JmlSignalsClause) node, typeSolver);
-        } else if (node instanceof JmlQuantifiedExpr) {
-            return new JmlQuantifiedExprContext((JmlQuantifiedExpr) node, typeSolver);
-        } else if (node instanceof ArrayAccessExpr) {
+        if (JavaSymbolSolver.ENABLE_JML_RESOLUTION) {
+            if (node instanceof JmlLetExpr) {
+                return new JmlLetExprContext((JmlLetExpr) node, typeSolver);
+            } else if (node instanceof JmlContract) {
+                return new JmlContractContext((JmlContract) node, typeSolver);
+            } else if (node instanceof JmlSignalsClause) {
+                return new JmlSignalsClauseContext((JmlSignalsClause) node, typeSolver);
+            } else if (node instanceof JmlQuantifiedExpr) {
+                return new JmlQuantifiedExprContext((JmlQuantifiedExpr) node, typeSolver);
+            }
+        }
+
+        if (node instanceof ArrayAccessExpr) {
             return new ArrayAccessExprContext((ArrayAccessExpr) node, typeSolver);
         } else if (node instanceof AnnotationDeclaration) {
             return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);

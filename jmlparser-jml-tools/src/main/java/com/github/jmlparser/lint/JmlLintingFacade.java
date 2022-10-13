@@ -1,14 +1,12 @@
 package com.github.jmlparser.lint;
 
-import com.github.javaparser.Problem;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.validator.ProblemReporter;
-import com.github.javaparser.ast.validator.Validators;
+import com.github.javaparser.utils.Log;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -16,9 +14,15 @@ import java.util.function.Consumer;
  * @version 1 (12/29/21)
  */
 public class JmlLintingFacade {
-    public static Validators getLinter(JmlLintingConfig config) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JmlLintingFacade.class);
+
+    private JmlLintingFacade() {
+
+    }
+
+    public static List<LintRule> getLinter(JmlLintingConfig config) {
         ServiceLoader<LintRule> loader = ServiceLoader.load(LintRule.class);
-        Validators validators = new Validators();
+        List<LintRule> validators = new ArrayList<>(64);
         for (LintRule lintRule : loader) {
             if (!config.isDisabled(lintRule)) {
                 validators.add(lintRule);
@@ -27,15 +31,24 @@ public class JmlLintingFacade {
         return validators;
     }
 
-    public static void lint(@NotNull JmlLintingConfig config, ProblemReporter reporter, Collection<? extends Node> nodes) {
-        Validators linter = getLinter(config);
-        nodes.forEach(it -> linter.accept(it, reporter));
+    public static void lint(@NotNull JmlLintingConfig config, LintProblemReporter reporter, Collection<? extends Node> nodes) {
+        var linters = getLinter(config);
+        for (Node it : nodes) {
+            for (LintRule linter : linters) {
+                try {
+                    linter.accept(it, reporter);
+                } catch (Exception e) {
+                    LOGGER.error("Error in linter: {}", linter.getClass().getName(), e);
+                }
+            }
+        }
     }
 
-    public static Collection<Problem> lint(@NotNull JmlLintingConfig config, @NotNull Collection<?extends Node> nodes) {
-        Collection<Problem> problems = new ArrayList<>(1024);
-        Consumer<Problem> collector = problems::add;
-        lint(config, new ProblemReporter(collector), nodes);
+    public static Collection<LintProblem> lint(@NotNull JmlLintingConfig config, @NotNull Collection<? extends Node> nodes) {
+        var problems = new ArrayList<LintProblem>(1024);
+        Consumer<LintProblem> collector = problems::add;
+        lint(config, new LintProblemReporter(collector), nodes);
+        problems.sort(Comparator.comparing(it -> it.getLocation().get().toRange().get().begin));
         return problems;
     }
 

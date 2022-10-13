@@ -47,7 +47,7 @@ public class Main {
 
     private static void lint(Collection<? extends Node> nodes) {
         JmlLintingConfig lconfig = createLinterConfiguration(args);
-        Collection<Problem> problems = JmlLintingFacade.lint(lconfig, nodes);
+        var problems = JmlLintingFacade.lint(lconfig, nodes);
         for (Problem problem : problems) {
             report(problem);
         }
