@@ -44,6 +44,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
@@ -95,6 +96,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
         // Look among statically imported values
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
+            if (!JavaSymbolSolver.ENABLE_JML_RESOLUTION && importDecl.isJmlModel()) {
+                //ignore JML import declaration when JML resolution is disabled.
+                continue;
+            }
+
             if (importDecl.isStatic()) {
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
