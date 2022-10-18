@@ -6664,36 +6664,40 @@ NodeList<JmlContract> JmlContracts():
 {
     JmlContract bc = null;
     NodeList<JmlContract> contracts = emptyNodeList();
+	JavaToken begin;
 }
 {
-  (<ALSO>)?
+  (<ALSO>)? {begin=token();}
   bc=JmlContract() {contracts.add(bc);}
-  (<ALSO> bc=JmlContract() {contracts.add(bc);})*
+  (<ALSO> {begin=token();} bc=JmlContract() {contracts.add(bc);})*
   {return contracts;}
 }
 
 JmlContract JmlContract():
 {
-    JavaToken begin = INVALID;
+    JavaToken beginVisibility = INVALID, beginBehavior=INVALID;
     NodeList<JmlClause> clauses = new NodeList<>();
     NodeList<JmlContract> subContracts = new NodeList<>();
 
     Behavior b = Behavior.NONE;
     JmlClause clause;
-
     SimpleName name = null;
+    NodeList<Modifier> modifiers = new NodeList<>();
 }
 {
-  (( "public"  {  }
-   | "private" {  }
-   | "package" {  }
-   | "protected" { }
-   ))? //TODO weigl
-  {begin=token();}
-  (b=JmlBehavior() (LOOKAHEAD(3) name=SimpleName() ":")? )?
+  (( "public"  { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.PUBLIC));  }
+   | "private" { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.PRIVATE)); }
+   | "package" { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.JML_PACKAGE)); }
+   | "protected" { add(modifiers, new Modifier(tokenRange(), Modifier.DefaultKeyword.PROTECTED)); }
+   )
+   {beginVisibility=token();}
+  )?
+
+  (b=JmlBehavior()  {beginBehavior=token();}  (LOOKAHEAD(3) name=SimpleName() ":")? )?
   (clause=JmlContractClause() {clauses.add(clause);})+
   (<NESTED_CONTRACT_START> subContracts=JmlContracts() <NESTED_CONTRACT_END>)?
-  {return new JmlContract(range(orIfInvalid(begin==null?INVALID:begin,clauses.get(0)), token()), JmlContract.Type.METHOD, false, b,
+  { JavaToken begin = orIfInvalid(orIfInvalid(orIfInvalid(beginVisibility,beginBehavior), name),clauses.get(0));
+	return new JmlContract(range(begin, token()), JmlContract.Type.METHOD, false, b,
 				name, new NodeList<>(), clauses, subContracts);}
 }
 
@@ -7083,7 +7087,10 @@ ArbitraryNodeContainer JmlTypeLevelStart():
       {ret.addAll(imports);}
     ]
     ( modifiers = Modifiers()
-        {ret.addAll(modifiers.modifiers); ret.addAll(modifiers.annotations); }
+      {
+        ret.addAll(modifiers.modifiers);
+        ret.addAll(modifiers.annotations);
+      }
     )
     <EOF>
     {
