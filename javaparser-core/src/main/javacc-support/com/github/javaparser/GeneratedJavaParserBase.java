@@ -27,6 +27,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.clauses.JmlClause;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
@@ -149,6 +150,21 @@ abstract class GeneratedJavaParserBase {
     TokenRange range(Node begin, Node end) {
         if (storeTokens) {
             return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
+        }
+        return null;
+    }
+
+
+    public JavaToken orIfInvalid(Object... nodesOrTokens) {
+        if (!storeTokens)
+            return null;
+
+        for (Object nort : nodesOrTokens) {
+            if (nort == null) continue;
+            if (nort instanceof JavaToken j && j.valid())
+                return j;
+            if (nort instanceof Node n)
+                return n.getTokenRange().get().getBegin();
         }
         return null;
     }

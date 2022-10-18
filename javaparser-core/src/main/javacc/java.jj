@@ -6696,7 +6696,7 @@ JmlContract JmlContract():
   (b=JmlBehavior()  {beginBehavior=token();}  (LOOKAHEAD(3) name=SimpleName() ":")? )?
   (clause=JmlContractClause() {clauses.add(clause);})+
   (<NESTED_CONTRACT_START> subContracts=JmlContracts() <NESTED_CONTRACT_END>)?
-  { JavaToken begin = orIfInvalid(orIfInvalid(orIfInvalid(beginVisibility,beginBehavior), name),clauses.get(0));
+  { JavaToken begin = orIfInvalid(beginVisibility,beginBehavior, name, clauses.get(0));
 	return new JmlContract(range(begin, token()), JmlContract.Type.METHOD, false, b,
 				name, new NodeList<>(), clauses, subContracts);}
 }

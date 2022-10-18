@@ -8,6 +8,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 
+import java.io.InputStream;
+
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -24,11 +26,16 @@ public class TestWithJavaParser {
         config.setSymbolResolver(new JavaSymbolSolver(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader())));
         parser = new JavaParser(config);
 
-        ParseResult<CompilationUnit> r = parser.parse(getClass().getResourceAsStream("Test.java"));
-        if (!r.isSuccessful()) {
-            r.getProblems().forEach(System.err::println);
-            fail("Error during parsing");
+        final var resourceAsStream = getClass().getResourceAsStream("Test.java");
+        if (resourceAsStream != null) {
+            ParseResult<CompilationUnit> r = parser.parse(resourceAsStream);
+            if (!r.isSuccessful()) {
+                r.getProblems().forEach(System.err::println);
+                fail("Error during parsing");
+            }
+            parent = r.getResult().get().getType(0);
+        } else {
+            parent = null;
         }
-        parent = r.getResult().get().getType(0);
     }
 }

@@ -8,7 +8,10 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Alexander Weigl
@@ -33,4 +36,94 @@ public class JmlUtility {
         var rjle = n.getSymbolResolver().toResolvedType(jle, ResolvedType.class);
         return rjle;
     }
+
+    public static Stream<Node> getAllNodes(Node node) {
+        return StreamSupport.stream(new NodeSpliterator(node), false);
+    }
+}
+
+class NodeSpliterator implements Spliterator<Node> {
+    private final Queue<Node> toExplore = new LinkedList<>();
+    private final Queue<Node> toSupply = new LinkedList<>();
+
+    public NodeSpliterator(Node node) {
+        toExplore.add(node);
+    }
+
+    private void explore() {
+        if (!toExplore.isEmpty()) {
+            var n = toExplore.poll();
+            toExplore.addAll(n.getChildNodes());
+            toSupply.add(n);
+        }
+    }
+
+
+    @Override
+    public boolean tryAdvance(Consumer<? super Node> action) {
+        if (toSupply.isEmpty()) {
+            explore();
+        }
+
+        if (!toSupply.isEmpty()) {
+            action.accept(toSupply.poll());
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Spliterator<Node> trySplit() {
+        if (!toExplore.isEmpty()) {
+            return new NodeSpliterator(toExplore.poll());
+        }
+        return null;
+    }
+
+    @Override
+    public long estimateSize() {
+        return 64;
+    }
+
+    @Override
+    public int characteristics() {
+        return Spliterator.NONNULL | Spliterator.IMMUTABLE;
+    }
+}
+
+class NodeIterator implements Iterator<Node> {
+    private final Queue<Node> toExplore = new LinkedList<>();
+    private final Queue<Node> toSupply = new LinkedList<>();
+
+    public NodeIterator(Node node) {
+        toExplore.add(node);
+    }
+
+    @Override
+    public Node next() {
+        if (toSupply.isEmpty()) {
+            explore();
+        }
+
+        if (!toSupply.isEmpty())
+            return toSupply.poll();
+
+        throw new IllegalStateException("no more elements");
+    }
+
+    @Override
+    public boolean hasNext() {
+        return !toSupply.isEmpty() || !toExplore.isEmpty();
+    }
+
+    private void explore() {
+        if (!toExplore.isEmpty()) {
+            var n = toExplore.poll();
+            toExplore.addAll(n.getChildNodes());
+            toSupply.add(n);
+        }
+    }
+
+
 }
