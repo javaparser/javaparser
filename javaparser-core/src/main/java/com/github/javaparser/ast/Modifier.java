@@ -146,6 +146,7 @@ public class Modifier extends Node {
         STRICTFP("strictfp"),
         TRANSITIVE("transitive"),
         // JML
+        JML_PACKAGE("package"),
         JML_PURE("pure"),
         JML_STRICTLY_PURE("strictly_pure"),
         JML_HELPER("helper"),
