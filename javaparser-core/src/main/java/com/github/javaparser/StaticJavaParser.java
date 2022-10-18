@@ -66,6 +66,7 @@ public final class StaticJavaParser {
     /**
      * Get the configuration for the parse... methods.
      */
+    @Deprecated
     public static ParserConfiguration getConfiguration() {
         return localConfiguration.get();
     }
