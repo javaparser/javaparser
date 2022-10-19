@@ -115,6 +115,50 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     }
 
     /**
+     * Add a field to this after the nth field
+     *
+     * @param type      the type of the field
+     * @param name      the name of the field
+     * @param position  the location in the fields to add the new one after
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addFieldAfterField(Type type, String name, Integer position,
+                                               Modifier.Keyword... modifiers) {
+        FieldDeclaration fieldDeclaration = new FieldDeclaration();
+        VariableDeclarator variable = new VariableDeclarator(type, name);
+        fieldDeclaration.getVariables().add(variable);
+        fieldDeclaration.setModifiers(createModifierList(modifiers));
+        getMembers().addAfter(fieldDeclaration, getFields().get(position));
+        // getMembers().add(fieldDeclaration);
+        return fieldDeclaration;
+    }
+
+    /**
+     * Add a field to this after the field with the given afterName
+     *
+     * @param type      the type of the field
+     * @param name      the name of the field
+     * @param afterName the name of the field to add after
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addFieldAfterField(Type type, String name, String afterName,
+                                               Modifier.Keyword... modifiers) {
+        FieldDeclaration fieldDeclaration = new FieldDeclaration();
+        VariableDeclarator variable = new VariableDeclarator(type, name);
+        fieldDeclaration.getVariables().add(variable);
+        fieldDeclaration.setModifiers(createModifierList(modifiers));
+        //TODO: Check what error should be thrown in this situation!
+        if (getFieldByName(afterName).isPresent()) {
+            getMembers().addAfter(fieldDeclaration, getFieldByName(afterName).get());
+        } else {
+            throw new IllegalArgumentException("There is no field in " + getName().asString() + " called " + name);
+        }
+        return fieldDeclaration;
+    }
+
+    /**
      * Add a field to this and automatically add the import of the type if needed
      *
      * @param typeClass   the type of the field
