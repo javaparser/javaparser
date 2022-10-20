@@ -170,17 +170,20 @@ class CommentsInserter {
         commentsToAttribute.stream()
                 .filter(comment -> comment.hasRange())
                 .filter(Comment::isLineComment)
-                .forEach(comment -> children.stream()
-                        .filter(child -> child.hasRange())
-                        .forEach(child -> {
-                            Range commentRange = comment.getRange().get();
-                            Range childRange = child.getRange().get();
-                            if (childRange.end.line == commentRange.begin.line
-                                    && attributeLineCommentToNodeOrChild(child,
-                                    comment.asLineComment())) {
-                                attributedComments.add(comment);
-                            }
-                        }));
+                .forEach(comment -> {
+                    for (Node child : children) {
+                        if (!child.hasRange()) continue;
+
+                        Range commentRange = comment.getRange().get();
+                        Range childRange = child.getRange().get();
+                        if (childRange.end.line == commentRange.begin.line
+                                && attributeLineCommentToNodeOrChild(child, comment.asLineComment())) {
+                            attributedComments.add(comment);
+                            break;
+                        }
+                    }
+                });
+
         commentsToAttribute.removeAll(attributedComments);
     }
 
