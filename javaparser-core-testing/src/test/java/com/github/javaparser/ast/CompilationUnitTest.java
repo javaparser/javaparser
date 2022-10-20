@@ -106,4 +106,17 @@ class CompilationUnitTest {
         assertFalse(cu.getPrimaryType().isPresent());
     }
 
+    @Test
+    void testMethodDeclarationCommentDoesNotDuplicate() {
+        String src = "public class TestClass {\n" +
+                "public void test(String p1, String p2) // this is a test\n" +
+                "{\n" +
+                "System.out.println(\"test\");\n" +
+                "}\n" +
+                "} ";
+        CompilationUnit cu = parse(src);
+
+        assertEquals(1, cu.getAllComments().size());
+    }
+
 }
