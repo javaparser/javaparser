@@ -119,4 +119,17 @@ class CompilationUnitTest {
         assertEquals(1, cu.getAllComments().size());
     }
 
+    @Test
+    void testMultiSingleLineComments() {
+        String src = "public class TestClass {\n" +
+                "public void test(String p1, String p2) // comment // this should still be 1 comment\n" +
+                "{\n" +
+                "System.out.println(\"test\");\n" +
+                "}\n" +
+                "} ";
+        CompilationUnit cu = parse(src);
+
+        assertEquals(1, cu.getAllComments().size());
+    }
+
 }
