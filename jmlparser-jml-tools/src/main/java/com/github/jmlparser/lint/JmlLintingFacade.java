@@ -1,7 +1,6 @@
 package com.github.jmlparser.lint;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.utils.Log;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +15,13 @@ import java.util.function.Consumer;
 public class JmlLintingFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(JmlLintingFacade.class);
 
-    private JmlLintingFacade() {
+    private List<LintRule> linters;
 
+    public JmlLintingFacade(JmlLintingConfig config) {
+        linters = getLinter(config);
     }
 
-    public static List<LintRule> getLinter(JmlLintingConfig config) {
+    public List<LintRule> getLinter(JmlLintingConfig config) {
         ServiceLoader<LintRule> loader = ServiceLoader.load(LintRule.class);
         List<LintRule> validators = new ArrayList<>(64);
         for (LintRule lintRule : loader) {
@@ -31,8 +32,7 @@ public class JmlLintingFacade {
         return validators;
     }
 
-    public static void lint(@NotNull JmlLintingConfig config, LintProblemReporter reporter, Collection<? extends Node> nodes) {
-        var linters = getLinter(config);
+    public void lint(LintProblemReporter reporter, Collection<? extends Node> nodes) {
         for (Node it : nodes) {
             for (LintRule linter : linters) {
                 try {
@@ -44,11 +44,11 @@ public class JmlLintingFacade {
         }
     }
 
-    public static Collection<LintProblem> lint(@NotNull JmlLintingConfig config, @NotNull Collection<? extends Node> nodes) {
+    public Collection<LintProblem> lint(@NotNull Collection<? extends Node> nodes) {
         var problems = new ArrayList<LintProblem>(1024);
         Consumer<LintProblem> collector = problems::add;
-        lint(config, new LintProblemReporter(collector), nodes);
-        problems.sort(Comparator.comparing(it -> it.getLocation().get().toRange().get().begin));
+        lint(new LintProblemReporter(collector), nodes);
+        problems.sort(Comparator.comparing(it -> it.location().toRange().get().begin));
         return problems;
     }
 

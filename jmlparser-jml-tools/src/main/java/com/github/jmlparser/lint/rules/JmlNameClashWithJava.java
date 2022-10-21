@@ -1,11 +1,12 @@
 package com.github.jmlparser.lint.rules;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.clauses.JmlForallClause;
+import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
+import com.github.javaparser.ast.jml.clauses.JmlSimpleExprClause;
 import com.github.javaparser.jml.JmlUtility;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.jmlparser.lint.LintProblemReporter;
+import com.github.jmlparser.lint.LintRule;
 import com.github.jmlparser.lint.LintRuleVisitor;
 
 /**
@@ -13,14 +14,15 @@ import com.github.jmlparser.lint.LintRuleVisitor;
  * @version 1 (12/29/21)
  */
 public class JmlNameClashWithJava extends LintRuleVisitor {
-    public static final String NOT_AN_EXCEPTION_CLASS = "This is not an exception class";
+    public static final LintProblemMeta NOT_AN_EXCEPTION_CLASS
+            = new LintProblemMeta("JML-1", "This is not an exception class", LintRule.ERROR);
 
     @Override
     public void visit(JmlSignalsClause n, LintProblemReporter arg) {
         var rtype = n.getParameter().getType().resolve();
         var exception = JmlUtility.resolveException(n);
         if (exception.isAssignableBy(rtype)) {
-            arg.error(n.getParameter(), NOT_AN_EXCEPTION_CLASS);
+            arg.report(NOT_AN_EXCEPTION_CLASS.create(n));
         }
         super.visit(n, arg);
     }
@@ -33,8 +35,6 @@ public class JmlNameClashWithJava extends LintRuleVisitor {
 
     @Override
     public void visit(JmlForallClause n, LintProblemReporter arg) {
-        var method = n.findAncestor(MethodDeclaration.class);
-
         super.visit(n, arg);
     }
 

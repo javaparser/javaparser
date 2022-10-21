@@ -212,7 +212,7 @@ public class AllowedJmlClauses extends LintRuleVisitor {
                               EnumSet<JmlClauseKind> allowed, String type) {
         for (JmlClause clause : clauses) {
             if (!allowed.contains(clause.getKind())) {
-                arg.warn(clause, "%s clause not allowed in a %s contract", clause.getKind(), type);
+                arg.warn(clause, "", "%s clause not allowed in a %s contract", clause.getKind(), type);
             }
         }
     }

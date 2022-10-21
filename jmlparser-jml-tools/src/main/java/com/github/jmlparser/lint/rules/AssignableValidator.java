@@ -23,16 +23,16 @@ public class AssignableValidator extends LintRuleVisitor {
         for (Expression e : n.getExpression()) {
             if (e.isNameExpr()) {
                 if (e.asNameExpr().getNameAsString().equals("this")) {
-                    arg.error(e, "This reference is not re-assignable!");
+                    arg.error(e, "", "This reference is not re-assignable!");
                     continue;
                 }
                 var value = e.asNameExpr().resolve();
                 if (value.isEnumConstant()) {
-                    arg.error(e, "Enum constants are not re-assignable!");
+                    arg.error(e, "", "Enum constants are not re-assignable!");
                 } else if (value.isField()) {
                     var ast = value.asField().toAst();
                     if (ast.isPresent() && ast.get().isFinal()) {
-                        arg.error(e, "This variable is final, so cannot be assigned");
+                        arg.error(e, "", "This variable is final, so cannot be assigned");
                     }
                 }
             } else if (e.isArrayAccessExpr()) {

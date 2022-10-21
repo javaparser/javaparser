@@ -10,6 +10,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.jmlparser.lint.JmlLintingConfig;
 import com.github.jmlparser.lint.JmlLintingFacade;
+import com.github.jmlparser.lint.LintProblem;
 import com.github.jmlparser.redux.ReduxPipeline;
 
 import java.io.File;
@@ -47,15 +48,14 @@ public class Main {
 
     private static void lint(Collection<? extends Node> nodes) {
         JmlLintingConfig lconfig = createLinterConfiguration(args);
-        var problems = JmlLintingFacade.lint(lconfig, nodes);
-        for (Problem problem : problems) {
+        var problems = new JmlLintingFacade(lconfig).lint(nodes);
+        for (var problem : problems) {
             report(problem);
         }
     }
 
     private static JmlLintingConfig createLinterConfiguration(Args args) {
-        JmlLintingConfig config = new JmlLintingConfig();
-        return config;
+        return new JmlLintingConfig();
     }
 
     public static Collection<CompilationUnit> parse(List<String> files, ParserConfiguration config) {
@@ -88,6 +88,10 @@ public class Main {
     }
 
     private static void report(Problem problem) {
+        System.out.println(problem.toString());
+    }
+
+    private static void report(LintProblem problem) {
         System.out.println(problem.toString());
     }
 

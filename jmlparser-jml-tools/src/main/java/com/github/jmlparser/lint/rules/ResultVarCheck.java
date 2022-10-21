@@ -44,9 +44,9 @@ public class ResultVarCheck extends LintRuleVisitor {
     public void visit(NameExpr n, LintProblemReporter arg) {
         if (n.getNameAsString().equals("\\result")) {
             if (!inPostCondition)
-                arg.error(n, "Use of \\result in non-post-conditional clause.");
+                arg.error(n, "", "Use of \\result in non-post-conditional clause.");
             if (!inMethodWithNonVoidReturnType)
-                arg.error(n, NO_METHOD_RESULT);
+                arg.error(n, "", NO_METHOD_RESULT);
         }
     }
 }

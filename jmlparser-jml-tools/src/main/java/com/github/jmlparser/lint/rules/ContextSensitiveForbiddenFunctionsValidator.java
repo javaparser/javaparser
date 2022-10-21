@@ -1,16 +1,10 @@
 package com.github.jmlparser.lint.rules;
 
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.jml.clauses.JmlClause;
 import com.github.javaparser.ast.jml.clauses.JmlClauseKind;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
-import com.github.javaparser.ast.validator.ProblemReporter;
-import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.jmlparser.lint.LintProblemReporter;
-import com.github.jmlparser.lint.LintRule;
 import com.github.jmlparser.lint.LintRuleVisitor;
-
-import javax.swing.plaf.multi.MultiTabbedPaneUI;
 
 /**
  * @author Alexander Weigl
@@ -35,7 +29,7 @@ public class ContextSensitiveForbiddenFunctionsValidator extends LintRuleVisitor
                 signalsOnlyCounter++;
 
             if (signalsOnlyCounter > 1) {
-                arg.warn(clause, MULTIPLE_SIGNALS_ONLY);
+                arg.warn(clause, "", MULTIPLE_SIGNALS_ONLY);
             }
         }
 

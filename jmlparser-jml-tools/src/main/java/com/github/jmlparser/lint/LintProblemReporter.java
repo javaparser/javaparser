@@ -1,11 +1,11 @@
 package com.github.jmlparser.lint;
 
-import com.github.javaparser.Problem;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 
 import java.util.function.Consumer;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -19,20 +19,24 @@ public class LintProblemReporter {
         this.problemConsumer = problemConsumer;
     }
 
-    public void warn(NodeWithTokenRange<?> node, String message, Object... args) {
-        report(Severity.WARN, node.getTokenRange().orElse(null), message, args);
+    public void warn(NodeWithTokenRange<?> node, String category, String message, Object... args) {
+        report(LintRule.WARN, node.getTokenRange().orElse(null), category, message, args);
     }
 
-    public void hint(NodeWithTokenRange<?> node, String message, Object... args) {
-        report(Severity.HINT, node.getTokenRange().orElse(null), message, args);
+    public void hint(NodeWithTokenRange<?> node, String category, String message, Object... args) {
+        report(LintRule.HINT, node.getTokenRange().orElse(null), category, message, args);
     }
 
-    public void error(NodeWithTokenRange<?> node, String message, Object... args) {
-        report(Severity.ERROR, node.getTokenRange().orElse(null), message, args);
+    public void error(NodeWithTokenRange<?> node, String category, String message, Object... args) {
+        report(LintRule.ERROR, node.getTokenRange().orElse(null), category, message, args);
     }
 
-    public void report(Severity level, TokenRange range, String message, Object... args) {
-        problemConsumer.accept(new LintProblem(f(message, args), range, null, level));
+    public void report(String level, TokenRange range, String category, String message, Object... args) {
+        problemConsumer.accept(new LintProblem(level, f(message, args), range, null, category));
+    }
+
+    public void report(LintProblem lintProblem) {
+        problemConsumer.accept(lintProblem);
     }
 }
 
