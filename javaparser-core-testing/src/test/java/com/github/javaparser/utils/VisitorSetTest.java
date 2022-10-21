@@ -22,8 +22,7 @@
 package com.github.javaparser.utils;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -137,5 +136,43 @@ class VisitorSetTest {
         set.addAll(list);
         for (CompilationUnit u : set.toArray(new CompilationUnit[2]))
             assertTrue(set.contains(u));
+    }
+
+    @Test
+    void containsAllFalse() {
+        List<CompilationUnit> list = new ArrayList<>();
+        list.add(parse("class X{}"));
+        list.add(parse("class X{}"));
+
+        Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
+                new ObjectIdentityEqualsVisitor());
+        assertTrue(set.isEmpty());
+
+        set.addAll(list);
+        list.add(parse("class X{}"));
+        assertFalse(set.containsAll(list));
+    }
+
+    @Test
+    void visitorSetToString() {
+        Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
+                new ObjectIdentityEqualsVisitor());
+        CompilationUnit x1 = parse("class X{}");
+        set.add(x1);
+        CompilationUnit x2 = parse("class Y{}");
+        set.add(x2);
+
+        String[] validStrings = new String[]{"[" + x1 + "," + x2 + "]", "[" + x2 + "," + x1 + "]"};
+        boolean valid = false;
+        String setString = set.toString();
+        for (String s : validStrings) {
+            if (s.equals(setString)) {
+                valid = true;
+                break;
+            }
+        }
+
+        if (!valid)
+            fail("Did not return valid string.");
     }
 }
