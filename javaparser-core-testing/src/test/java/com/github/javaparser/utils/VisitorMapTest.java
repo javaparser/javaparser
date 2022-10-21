@@ -118,6 +118,48 @@ class VisitorMapTest {
     }
 
     @Test
+    void visitorMapValues() {
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+
+        Set<Integer> valueSet = new HashSet<>();
+        valueSet.add(1);
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 2);
+
+        assertEquals(2, map.values().size());
+
+        Set<Integer> set = new HashSet<>(map.values());
+        assertNotEquals(valueSet, set);
+
+        valueSet.add(2);
+        set.clear();
+        set.addAll(map.values());
+        assertEquals(valueSet, set);
+    }
+
+    @Test
+    void visitorMapEntrySet() {
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+
+        HashMap<CompilationUnit, Integer> regularMap = new HashMap<>();
+        regularMap.put(x1, 1);
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 2);
+
+        assertEquals(2, map.entrySet().size());
+        assertNotEquals(regularMap.entrySet(), map.entrySet());
+
+        regularMap.put(x2, 2);
+        assertEquals(regularMap.entrySet(), map.entrySet());
+    }
+
+    @Test
     void visitorMapContainsValue() {
         CompilationUnit x1 = parse("class X{}");
 
