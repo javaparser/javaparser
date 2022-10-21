@@ -26,13 +26,10 @@ import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class VisitorMapTest {
     @Test
@@ -97,5 +94,37 @@ class VisitorMapTest {
         map.remove(x1);
         
         assertFalse(map.containsKey(x1));
+    }
+
+    @Test
+    void visitorMapKeySet() {
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+        CompilationUnit x3 = parse("class Z{}");
+
+        Set<CompilationUnit> cuSet = new HashSet<>();
+        Collections.addAll(cuSet, x1, x2);
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 2);
+        map.put(x3, 3);
+
+        assertEquals(3, map.keySet().size());
+        assertNotEquals(cuSet, map.keySet());
+
+        cuSet.add(x3);
+        assertEquals(cuSet, map.keySet());
+    }
+
+    @Test
+    void visitorMapContainsValue() {
+        CompilationUnit x1 = parse("class X{}");
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+
+        assertTrue(map.containsValue(1));
+        assertFalse(map.containsValue(2));
     }
 }
