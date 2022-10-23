@@ -162,7 +162,7 @@ class VisitorSetTest {
         CompilationUnit x2 = parse("class Y{}");
         set.add(x2);
 
-        String[] validStrings = new String[]{"[" + x1 + "," + x2 + "]", "[" + x2 + "," + x1 + "]"};
+        String[] validStrings = new String[]{"[" + x1 + ", " + x2 + "]", "[" + x2 + ", " + x1 + "]"};
         boolean valid = false;
         String setString = set.toString();
         for (String s : validStrings) {
