@@ -469,6 +469,9 @@ public class Difference {
             diffIndex++;
         } else if (originalElement.isWhiteSpace()) {
             originalIndex++;
+        } else if (removed.isChild()) { // see issue #3721 this case is linked for example to a change of type of variable declarator
+            nodeText.removeElement(originalIndex);
+            diffIndex++;
         } else {
             throw new UnsupportedOperationException("removed " + removed.getElement() + " vs " + originalElement);
         }
