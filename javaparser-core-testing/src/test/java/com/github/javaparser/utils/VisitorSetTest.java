@@ -22,7 +22,10 @@
 package com.github.javaparser.utils;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -157,6 +160,8 @@ class VisitorSetTest {
     void visitorSetToString() {
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
+        assertEquals("[]", set.toString());
+
         CompilationUnit x1 = parse("class X{}");
         set.add(x1);
         CompilationUnit x2 = parse("class Y{}");

@@ -22,7 +22,9 @@
 package com.github.javaparser.utils;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -73,6 +75,10 @@ class VisitorListTest {
         vList.add(parse("class A{}"));
         vList.add(parse("class B{}"));
         vList.addAll(1, list);
+
+        // check that the "B" code is still there, pushed to the end of list
+        assertEquals(vList.get(3), parse("class B{}"));
+
         vList.add(parse("class C{}"));
         for (int i = 0; i < list.size(); i++)
             assertEquals(list.get(i), vList.get(1 + i));
@@ -84,6 +90,7 @@ class VisitorListTest {
         VisitorList<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         assertFalse(vList.addAll(list));
+        assertFalse(vList.addAll(1, list));
     }
 
     @Test
@@ -207,14 +214,16 @@ class VisitorListTest {
 
     @Test
     void visitorListToString() {
-        List<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
+        List<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        CompilationUnit x1 = parse("class X{}");
-        list.add(x1);
-        CompilationUnit x2 = parse("class Y{}");
-        list.add(x2);
+        assertEquals("[]", vList.toString());
 
-        assertEquals("[" + x1 + ", " + x2 + "]", list.toString());
+        CompilationUnit x1 = parse("class X{}");
+        vList.add(x1);
+        CompilationUnit x2 = parse("class Y{}");
+        vList.add(x2);
+
+        assertEquals("[" + x1 + ", " + x2 + "]", vList.toString());
     }
 
     @Test
@@ -234,26 +243,26 @@ class VisitorListTest {
 
     @Test
     void visitorListIndexOf() {
-        List<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
+        List<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         CompilationUnit x1 = parse("class X{}");
-        list.add(x1);
+        vList.add(x1);
         CompilationUnit x2 = parse("class Y{}");
-        list.add(x2);
+        vList.add(x2);
 
-        assertEquals(0, list.indexOf(x1));
-        assertEquals(1, list.indexOf(x2));
+        assertEquals(0, vList.indexOf(x1));
+        assertEquals(1, vList.indexOf(x2));
     }
 
     @Test
     void visitorListLastIndexOf() {
-        List<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
+        List<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         CompilationUnit x1 = parse("class X{}");
-        list.add(x1);
-        list.add(x1);
+        vList.add(x1);
+        vList.add(x1);
 
-        assertEquals(2, list.size());
-        assertEquals(1, list.lastIndexOf(x1));
+        assertEquals(2, vList.size());
+        assertEquals(1, vList.lastIndexOf(x1));
     }
 }
