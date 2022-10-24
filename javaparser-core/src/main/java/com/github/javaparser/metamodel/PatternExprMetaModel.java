@@ -41,6 +41,8 @@ public class PatternExprMetaModel extends ExpressionMetaModel {
         super(superBaseNodeMetaModel, PatternExpr.class, "PatternExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
+    public PropertyMetaModel modifiersPropertyMetaModel;
+
     public PropertyMetaModel namePropertyMetaModel;
 
     public PropertyMetaModel typePropertyMetaModel;

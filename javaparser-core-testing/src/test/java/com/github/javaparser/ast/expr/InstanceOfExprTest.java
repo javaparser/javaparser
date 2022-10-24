@@ -64,6 +64,23 @@ class InstanceOfExprTest {
     }
 
     @Test
+    void annotationsOnTheType_finalPatternExpression() {
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14_PREVIEW, "obj instanceof @A final @DA String s");
+
+        assertThat(expr.getType().getAnnotations())
+                .containsExactly(
+                        new MarkerAnnotationExpr("A"),
+                        new MarkerAnnotationExpr("DA"));
+    }
+
+    @Test
+    void annotationsOnTheType_finalPatternExpression_prettyPrinter() {
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14_PREVIEW, "obj instanceof @A final @DA String s");
+
+        assertEquals("obj instanceof final @A @DA String s", expr.toString());
+    }
+
+    @Test
     void annotationsOnTheType_referenceTypeExpression() {
         InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14, "obj instanceof @A @DA String");
 
@@ -86,6 +103,7 @@ class InstanceOfExprTest {
         PatternExpr patternExpr = expr.getPattern().get();
         assertEquals("String", patternExpr.getType().asString());
         assertEquals("s", patternExpr.getName().asString());
+        assertFalse(patternExpr.isFinal());
 
         //
         assertTrue(expr.getName().isPresent());
@@ -113,6 +131,32 @@ class InstanceOfExprTest {
         assertFalse(expr.getName().isPresent());
     }
 
+    @Test
+    void instanceOf_finalPatternExpression() {
+        String x = "obj instanceof final String s";
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14_PREVIEW, x);
+
+        assertEquals("obj", expr.getExpression().toString());
+        assertEquals("String", expr.getType().asString());
+        assertTrue(expr.getPattern().isPresent());
+
+        PatternExpr patternExpr = expr.getPattern().get();
+        assertEquals("String", patternExpr.getType().asString());
+        assertEquals("s", patternExpr.getName().asString());
+        assertTrue(patternExpr.isFinal());
+
+        //
+        assertTrue(expr.getName().isPresent());
+        assertEquals("s", expr.getName().get().asString());
+    }
+
+    @Test
+    void instanceOf_finalPatternExpression_prettyPrinter() {
+        String x = "obj instanceof final String s";
+        InstanceOfExpr expr = TestParser.parseExpression(LanguageLevel.JAVA_14_PREVIEW, x);
+
+        assertEquals("obj instanceof final String s", expr.toString());
+    }
 
 
     /*

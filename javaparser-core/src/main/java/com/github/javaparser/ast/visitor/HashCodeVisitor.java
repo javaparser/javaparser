@@ -451,7 +451,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final PatternExpr n, final Void arg) {
-        return (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override

@@ -3278,13 +3278,15 @@ Expression EqualityExpression():
  */
 PatternExpr PatternExpression():
 {
+    ModifierHolder modifier;
     ReferenceType type;
     SimpleName name;
 }
 {
-    type = AnnotatedReferenceType()
+    modifier = Modifiers()
+    type = ReferenceType(modifier.annotations)
     name = SimpleName()
-    { return new PatternExpr(range(type, token()), type, name); }
+    { return new PatternExpr(range(type, token()), modifier.modifiers, type, name); }
 }
 
 
@@ -4310,6 +4312,11 @@ Statement BlockStatement():
             LOOKAHEAD( Modifiers() "record" SimpleName() [ TypeParameters() ] Parameters() )
             modifier = Modifiers()
             recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
+         |
+            // try yield statement separate from more general Statement() because yield is not a keyword but
+            // just a restricted identifier and a yield statement can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( YieldStatement() )
+            ret = YieldStatement()
          |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()
