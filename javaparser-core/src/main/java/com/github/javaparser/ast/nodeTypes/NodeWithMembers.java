@@ -58,6 +58,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
         return getMembers().get(i);
     }
 
+    enum LocationType { ALL, FIELD, METHOD, CONSTRUCTOR}
     @SuppressWarnings("unchecked")
     default N setMember(int i, BodyDeclaration<?> member) {
         getMembers().set(i, member);
@@ -123,37 +124,35 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addFieldAfterField(Type type, String name, Integer position,
+    default FieldDeclaration addFieldAtLocation(Type type, String name, Integer position,
+                                                LocationType locationType, boolean after,
                                                Modifier.Keyword... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         VariableDeclarator variable = new VariableDeclarator(type, name);
         fieldDeclaration.getVariables().add(variable);
         fieldDeclaration.setModifiers(createModifierList(modifiers));
-        getMembers().addAfter(fieldDeclaration, getFields().get(position));
-        // getMembers().add(fieldDeclaration);
-        return fieldDeclaration;
-    }
 
-    /**
-     * Add a field to this after the field with the given afterName
-     *
-     * @param type      the type of the field
-     * @param name      the name of the field
-     * @param afterName the name of the field to add after
-     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
-     * @return the {@link FieldDeclaration} created
-     */
-    default FieldDeclaration addFieldAfterField(Type type, String name, String afterName,
-                                               Modifier.Keyword... modifiers) {
-        FieldDeclaration fieldDeclaration = new FieldDeclaration();
-        VariableDeclarator variable = new VariableDeclarator(type, name);
-        fieldDeclaration.getVariables().add(variable);
-        fieldDeclaration.setModifiers(createModifierList(modifiers));
-        //TODO: Check what error should be thrown in this situation!
-        if (getFieldByName(afterName).isPresent()) {
-            getMembers().addAfter(fieldDeclaration, getFieldByName(afterName).get());
+        // Switch statement based on how we want to calculate the location of the thing
+        BodyDeclaration tempNode = null;
+        switch (locationType){
+            case ALL:
+                tempNode = getMembers().get(position);
+                break;
+            case FIELD:
+                tempNode = getFields().get(position);
+                break;
+            case METHOD:
+                tempNode = getMethods().get(position);
+                break;
+            case CONSTRUCTOR:
+                tempNode = getConstructors().get(position);
+                break;
+        }
+        
+        if (after) {
+            getMembers().addAfter(fieldDeclaration, (BodyDeclaration<?>) tempNode);
         } else {
-            throw new IllegalArgumentException("There is no field in " + getName().asString() + " called " + name);
+            getMembers().addBefore(fieldDeclaration, (BodyDeclaration<?>) tempNode);
         }
         return fieldDeclaration;
     }
