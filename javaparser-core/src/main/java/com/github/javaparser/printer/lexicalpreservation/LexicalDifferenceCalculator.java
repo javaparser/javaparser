@@ -97,7 +97,8 @@ class LexicalDifferenceCalculator {
 
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("prettyPrint method is not supported in " +
+                    "LexicalDifferenceCalculator class.");
         }
 
         @Override
