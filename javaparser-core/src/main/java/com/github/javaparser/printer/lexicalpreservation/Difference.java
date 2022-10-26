@@ -1040,7 +1040,8 @@ public class Difference {
                 return childTextElement.getChild() == csmChild.getChild();
             }
         } else {
-            throw new UnsupportedOperationException("CsmElement is " + csmElement.getClass());
+            throw new UnsupportedOperationException("Operation only supported for instance of CsmToken and CsmChild. " +
+                    "The CsmElement is " + csmElement.getClass());
         }
 
         return false;

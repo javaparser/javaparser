@@ -170,7 +170,7 @@ public class LexicalPreservingPrinter {
                             nodeText.removeElement(index);
                         }
                     } else {
-                        throw new UnsupportedOperationException("Object is " + oldValue.getClass());
+                        throw new UnsupportedOperationException("Object is not an instance of Comment. Object is " + oldValue.getClass());
                     }
                 } else {
                     List<TokenTextElement> matchingTokens = findTokenTextElementForComment((Comment) oldValue, nodeText);
@@ -331,7 +331,8 @@ public class LexicalPreservingPrinter {
             } else if (type == AstObserver.ListChangeType.ADDITION) {
                 differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
             } else {
-                throw new UnsupportedOperationException("ListChangeType is " + type.name());
+                throw new UnsupportedOperationException("ListChangeType is not listed in ENUM of Removal and " +
+                        "Addition. The ListChangeType is " + type.name());
             }
 
             Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
