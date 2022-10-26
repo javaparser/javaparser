@@ -486,7 +486,7 @@ public class JavaParserFacade {
         }
 
         if (!result.isPresent()) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("There is no MethodUsage present upon converting to MethodUsage.");
         }
 
         return result.get();
