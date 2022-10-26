@@ -134,7 +134,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
         fieldDeclaration.getVariables().add(variable);
         fieldDeclaration.setModifiers(createModifierList(modifiers));
 
-        // Switch statement based on how we want to calculate the location of the thing
+        // Switch statement to determine how we want to calculate the location to insert the method at
         BodyDeclaration<?> tempNode = null;
         switch (locationType){
             case ALL:
@@ -336,7 +336,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
         methodDeclaration.setType(new VoidType());
         methodDeclaration.setModifiers(createModifierList(modifiers));
 
-        // Switch statement based on how we want to calculate the location of the thing
+        // Switch statement to determine how we want to calculate the location to insert the method at
         BodyDeclaration<?> tempNode = null;
         switch (locationType){
             case ALL:
