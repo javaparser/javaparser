@@ -3,6 +3,7 @@ package com.github.javaparser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PositionTest {
 
@@ -18,6 +19,23 @@ public class PositionTest {
 
         assertEquals(p1, invalid.orIfInvalid(p1));
         assertEquals(invalid2, invalid2.orIfInvalid(invalid));
+    }
+
+    @Test
+    public void testPositionExceptionMessage() {
+        try {
+            Position p = new Position(-10, 1);
+            fail("Created " + p + " without exception.");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Can't position at line -10", e.getMessage());
+        }
+
+        try {
+            Position p = new Position(1, -10);
+            fail("Created " + p + " without exception.");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Can't position at column -10", e.getMessage());
+        }
     }
 
 }

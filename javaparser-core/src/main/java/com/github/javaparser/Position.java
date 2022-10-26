@@ -62,7 +62,6 @@ public class Position implements Comparable<Position> {
      */
     public Position(int line, int column) {
         if (line < Position.ABSOLUTE_END_LINE) {
-            // TODO/FIXME: This doesn't read correctly due to use of the variable.
             throw new IllegalArgumentException("Can't position at line " + line);
         }
         if (column < -1) {
