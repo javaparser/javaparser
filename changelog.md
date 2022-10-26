@@ -1,6 +1,6 @@
-Next Release (Version 3.24.7)
+Next Release (Version 3.24.8)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/192?closed=1)
 
 ### Added
 ### Changed
@@ -8,6 +8,42 @@ Next Release (Version 3.24.7)
 ### Removed
 ### Fixed
 ### Security
+
+Next Release (Version 3.24.7)
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
+
+### Highlights
+
+* Issue #3415 (PR [#3722](https://github.com/javaparser/javaparser/pull/3722) by [@nelson-ng-96](https://github.com/nelson-ng-96))
+
+### Changed
+
+* Refactoring - use of existing methods (PR [#3697](https://github.com/javaparser/javaparser/pull/3697) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactoring adding convenient methods to know if a DifferenceElement is added, removed or kept (PR [#3695](https://github.com/javaparser/javaparser/pull/3695) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Deprecated
+
+* Issue #3415 (PR [#3722](https://github.com/javaparser/javaparser/pull/3722) by [@nelson-ng-96](https://github.com/nelson-ng-96))
+
+### Fixed
+
+* Fix for ReflectionAnnotationDeclaration getClassName() (PR [#3723](https://github.com/javaparser/javaparser/pull/3723) by [@Blackgen](https://github.com/Blackgen))
+* Fix some yield expressions not recognized (PR [#3714](https://github.com/javaparser/javaparser/pull/3714) by [@PPazderski](https://github.com/PPazderski))
+* Accept final in instanceof pattern (PR [#3713](https://github.com/javaparser/javaparser/pull/3713) by [@PPazderski](https://github.com/PPazderski))
+* [Fix] Avoid test failure due to line separator differences on windows host (PR [#3711](https://github.com/javaparser/javaparser/pull/3711) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3700 Removing last statement with LexicalPreservingPrinter results in loss of indendation (PR [#3704](https://github.com/javaparser/javaparser/pull/3704) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3678 Function accepts a configuration but it does not do anything (PR [#3692](https://github.com/javaparser/javaparser/pull/3692) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@PPazderski](https://github.com/PPazderski)
+* [@nelson-ng-96](https://github.com/nelson-ng-96)
+* [@Blackgen](https://github.com/Blackgen)
+* [@jlerbsc](https://github.com/jlerbsc)
+
 
 Next Release (Version 3.24.6)
 ------------------

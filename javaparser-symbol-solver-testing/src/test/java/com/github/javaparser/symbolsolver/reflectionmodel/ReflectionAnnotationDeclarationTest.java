@@ -99,6 +99,14 @@ class ReflectionAnnotationDeclarationTest {
   }
   
   @Test
+  void getClassName_shouldReturnCorrectValue() {
+    ReflectionAnnotationDeclaration annotation =
+        (ReflectionAnnotationDeclaration) typeSolver.solveType(
+            "com.github.javaparser.symbolsolver.reflectionmodel.WithField");
+    assertEquals("WithField", annotation.getClassName());
+  }
+  
+  @Test
   void isAnnotationNotInheritable() {
     ReflectionAnnotationDeclaration
         annotation = (ReflectionAnnotationDeclaration) typeSolver.solveType(
