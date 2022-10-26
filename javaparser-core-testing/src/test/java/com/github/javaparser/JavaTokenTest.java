@@ -21,6 +21,7 @@
 
 package com.github.javaparser;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.jupiter.api.Test;
 
@@ -34,9 +35,8 @@ import static com.github.javaparser.JavaToken.Category.OPERATOR;
 import static com.github.javaparser.JavaToken.Category.WHITESPACE_NO_EOL;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavaTokenTest {
 
@@ -123,6 +123,43 @@ class JavaTokenTest {
                             "\n - token #" + jpTokenNumber + " - JavaToken (generated using JP Generators)."
             );
         }
+    }
+
+    @Test
+    void testDeleteToken() {
+        ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1+/*2*/1\n"));
+        TokenRange tokenRange = result.getResult().get().getTokenRange().get();
+
+        JavaToken tokenToBeDeleted = tokenRange.getBegin().getNextToken().get();
+        tokenToBeDeleted.deleteToken();
+        JavaToken nextTokenAfterDelete = tokenRange.getBegin().getNextToken().get();
+        JavaToken previous = nextTokenAfterDelete.getPreviousToken().get();
+
+        assertNotEquals(tokenToBeDeleted, nextTokenAfterDelete);
+        assertEquals("/*2*/", nextTokenAfterDelete.getText());
+        assertEquals("1", previous.getText());
+    }
+
+    @Test
+    void testFindLastToken() {
+        ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1 +/*2*/3 "));
+        TokenRange tokenRange = result.getResult().get().getTokenRange().get();
+        Iterator<JavaToken> iterator = tokenRange.iterator();
+        assertToken("", range(1, 10, 1, 10), EOF, WHITESPACE_NO_EOL, iterator.next().findLastToken());
+
+        // getEnd token in TokenRange is not the same as the last token from findLastToken()
+        // assertEquals(tokenRange.getEnd(), tokenRange.getBegin().findLastToken());
+    }
+
+    @Test
+    void testFindFirstToken() {
+        ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1 +/*2*/3+4"));
+        Iterator<JavaToken> iterator = result.getResult().get().getTokenRange().get().iterator();
+        iterator.next();
+        iterator.next();
+        iterator.next();
+        assertEquals("/*2*/", iterator.next().getText());
+        assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, LITERAL, iterator.next().findFirstToken());
     }
 
 }
