@@ -116,11 +116,12 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     }
 
     /**
-     * Add a field to this after the nth field
+     * Add a field to this at the specified location, with options for before/after.
      *
      * @param type      the type of the field
      * @param name      the name of the field
-     * @param position  the location in the fields to add the new one after
+     * @param position  the location in the to add the new one before/after
+     * @param locationType the type of location to insert the new field before/after
      * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
@@ -133,7 +134,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
         fieldDeclaration.setModifiers(createModifierList(modifiers));
 
         // Switch statement based on how we want to calculate the location of the thing
-        BodyDeclaration tempNode = null;
+        BodyDeclaration<?> tempNode = null;
         switch (locationType){
             case ALL:
                 tempNode = getMembers().get(position);
@@ -148,11 +149,10 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
                 tempNode = getConstructors().get(position);
                 break;
         }
-        
         if (after) {
-            getMembers().addAfter(fieldDeclaration, (BodyDeclaration<?>) tempNode);
+            getMembers().addAfter(fieldDeclaration, tempNode);
         } else {
-            getMembers().addBefore(fieldDeclaration, (BodyDeclaration<?>) tempNode);
+            getMembers().addBefore(fieldDeclaration, tempNode);
         }
         return fieldDeclaration;
     }
@@ -314,6 +314,47 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
         methodDeclaration.setType(new VoidType());
         methodDeclaration.setModifiers(createModifierList(modifiers));
         getMembers().add(methodDeclaration);
+        return methodDeclaration;
+    }
+
+    /**
+     * Add a field to this at the specified location, with options for before/after.
+     *
+     * @param methodName      the name of the field
+     * @param position  the location in the to add the new one before/after
+     * @param locationType the type of location to insert the new field before/after
+     * @param modifiers the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default MethodDeclaration addMethodAtLocation(String methodName, Integer position,
+                                                LocationType locationType, boolean after,
+                                                Modifier.Keyword... modifiers) {
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        methodDeclaration.setName(methodName);
+        methodDeclaration.setType(new VoidType());
+        methodDeclaration.setModifiers(createModifierList(modifiers));
+
+        // Switch statement based on how we want to calculate the location of the thing
+        BodyDeclaration<?> tempNode = null;
+        switch (locationType){
+            case ALL:
+                tempNode = getMembers().get(position);
+                break;
+            case FIELD:
+                tempNode = getFields().get(position);
+                break;
+            case METHOD:
+                tempNode = getMethods().get(position);
+                break;
+            case CONSTRUCTOR:
+                tempNode = getConstructors().get(position);
+                break;
+        }
+        if (after) {
+            getMembers().addAfter(methodDeclaration, tempNode);
+        } else {
+            getMembers().addBefore(methodDeclaration, tempNode);
+        }
         return methodDeclaration;
     }
 
