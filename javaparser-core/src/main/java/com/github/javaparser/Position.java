@@ -18,10 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
-
-import com.github.javaparser.ast.Node;
 
 import java.util.Objects;
 
@@ -31,22 +28,25 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * A position in a source file. Lines and columns start counting at 1.
  */
 public class Position implements Comparable<Position> {
+
     public final int line;
+
     public final int column;
 
     /**
      * The first line -- note that it is 1-indexed (i.e. the first line is line 1, as opposed to 0)
      */
     public static final int FIRST_LINE = 1;
+
     /**
      * The first column -- note that it is 1-indexed (i.e. the first column is column 1, as opposed to 0)
      */
     public static final int FIRST_COLUMN = 1;
+
     /**
      * The first position in the file.
      */
     public static final Position HOME = new Position(FIRST_LINE, FIRST_COLUMN);
-
 
     /**
      * Line numbers must be positive, thus
@@ -54,7 +54,6 @@ public class Position implements Comparable<Position> {
     public static final int ABSOLUTE_BEGIN_LINE = -1;
 
     public static final int ABSOLUTE_END_LINE = -2;
-
 
     /**
      * TODO: Do we refer to the characters as columns,
@@ -67,8 +66,8 @@ public class Position implements Comparable<Position> {
         }
         if (column < -1) {
             // TODO: This allows/permits column 0, which seemingly contradicts first column being 1
-            //  ... (see also nextLine() which indicates 1 being the first column of the next line)
-            //  ... (see also valid() which requires a column > 0)
+            // ... (see also nextLine() which indicates 1 being the first column of the next line)
+            // ... (see also valid() which requires a column > 0)
             // TODO: Maybe we need an "ABSOLUTE_BEGIN_LINE" and "ABSOLUTE_END_LINE"?
             throw new IllegalArgumentException("Can't position at column " + column);
         }
@@ -140,7 +139,7 @@ public class Position implements Comparable<Position> {
     public Position orIfInvalid(Position alternativePosition) {
         assertNotNull(alternativePosition);
         // TODO: Why the || ?
-        //  ... It seems that if both this and the alternative are invalid, then we return this..?
+        // ... It seems that if both this and the alternative are invalid, then we return this..?
         if (valid() || alternativePosition.invalid()) {
             return this;
         }
@@ -159,7 +158,6 @@ public class Position implements Comparable<Position> {
             return column > otherPosition.column;
         }
         return false;
-
     }
 
     public boolean isAfterOrEqual(Position otherPosition) {
@@ -200,13 +198,12 @@ public class Position implements Comparable<Position> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Position otherPosition = (Position) o;
-
-        return Objects.equals(line, otherPosition.line)
-                && Objects.equals(column, otherPosition.column);
+        return Objects.equals(line, otherPosition.line) && Objects.equals(column, otherPosition.column);
     }
 
     @Override

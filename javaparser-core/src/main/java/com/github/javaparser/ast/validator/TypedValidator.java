@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ParseResult;
@@ -32,6 +31,7 @@ import java.util.function.BiConsumer;
  * A validator that validates a known node type.
  */
 public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemReporter> {
+
     /**
      * @param node            the node that wants to be validated
      * @param problemReporter when found, validation errors can be reported here
@@ -41,11 +41,10 @@ public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemRep
     @SuppressWarnings("unchecked")
     default Processor processor() {
         return new Processor() {
+
             @Override
             public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
-                result.getResult().ifPresent(node ->
-                        accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem)))
-                );
+                result.getResult().ifPresent(node -> accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem))));
             }
         };
     }
