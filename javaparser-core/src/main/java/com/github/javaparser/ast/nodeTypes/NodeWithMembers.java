@@ -32,6 +32,7 @@ import com.github.javaparser.ast.type.VoidType;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.Keyword;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
@@ -157,6 +158,23 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
             getMembers().addBefore(fieldDeclaration, tempNode);
         }
         return fieldDeclaration;
+    }
+
+    /**
+     * Add a field to this at the specified location, with options for before/after.
+     *
+     * @param type         the type of the field
+     * @param name         the name of the field
+     * @param position     the location in the to add the new one before/after
+     * @param locationType the type of location to insert the new field before/after
+     * @param after        whether the new field should be inserted before the specified point, or after it.
+     * @param modifiers    the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addFieldAtLocation(String type, String name, Integer position,
+                                                LocationType locationType, boolean after,
+                                                Modifier.Keyword... modifiers) {
+        return addFieldAtLocation(parseType(type), name, position, locationType, after, modifiers);
     }
 
     /**
