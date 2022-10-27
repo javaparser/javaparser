@@ -57,10 +57,10 @@ class NodeWithMembersTest {
                 NodeWithMembers.LocationType.ALL, true);
         assertEquals(decl.getMember(decl.getMembers().size() -1), a1);
 
-        // Adding it at the end of just the fields! This notably should be in the "2" position in the class
+        // Adding it before the end of the fields! This notably should be in the "2" position in them
         FieldDeclaration a2 = decl.addFieldAtLocation("String", "a2", decl.getFields().size()-1,
-                NodeWithMembers.LocationType.FIELD, true);
-        assertEquals(decl.getMember(2), a2);
+                NodeWithMembers.LocationType.FIELD, false);
+        assertEquals(decl.getFields().get(2), a2);
     }
 
     @Test
