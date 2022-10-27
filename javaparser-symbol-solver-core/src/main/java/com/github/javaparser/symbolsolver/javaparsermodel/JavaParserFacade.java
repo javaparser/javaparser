@@ -103,7 +103,7 @@ public class JavaParserFacade {
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
     
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-
+    
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
      * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
@@ -148,11 +148,14 @@ public class JavaParserFacade {
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final SymbolSolver symbolSolver;
+    
+    private FailureHandler failureHandler;
 
     private JavaParserFacade(TypeSolver typeSolver) {
         this.typeSolver = typeSolver.getRoot();
         this.symbolSolver = new SymbolSolver(typeSolver);
         this.typeExtractor = new TypeExtractor(typeSolver, this);
+        this.failureHandler = new FailureHandler();
     }
 
     public TypeSolver getTypeSolver() {
@@ -294,11 +297,9 @@ public class JavaParserFacade {
             } else {
                 try {
                     argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
-                } catch (UnsolvedSymbolException e) {
-                    throw e;
                 } catch (Exception e) {
-                    throw new RuntimeException(String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
-                            node, parameterValue), e);
+                    throw failureHandler.handle(e, String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
+                            node, parameterValue));
                 }
             }
             i++;
@@ -384,7 +385,7 @@ public class JavaParserFacade {
                     return ReferenceTypeImpl.undeterminedParameters(resolvedReferenceTypeDeclaration, typeSolver);
                 }
             }
-            throw e;
+            throw failureHandler.handle(e);
         }
     }
 
@@ -806,7 +807,7 @@ public class JavaParserFacade {
                 try {
                     params.add(getType(param, false));
                 } catch (Exception e) {
-                    throw new RuntimeException(String.format("Error calculating the type of parameter %s of method call %s", param, call), e);
+                    throw failureHandler.handle(e, String.format("Error calculating the type of parameter %s of method call %s", param, call));
                 }
                 //params.add(getTypeConcrete(param, false));
             }
