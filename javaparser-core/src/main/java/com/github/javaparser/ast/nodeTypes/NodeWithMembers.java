@@ -59,6 +59,7 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     }
 
     enum LocationType { ALL, FIELD, METHOD, CONSTRUCTOR}
+
     @SuppressWarnings("unchecked")
     default N setMember(int i, BodyDeclaration<?> member) {
         getMembers().set(i, member);
