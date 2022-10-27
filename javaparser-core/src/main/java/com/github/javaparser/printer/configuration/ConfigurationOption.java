@@ -28,4 +28,5 @@ public interface ConfigurationOption {
     Boolean asBoolean();
 
     <T extends Object> T asValue();
+
 }

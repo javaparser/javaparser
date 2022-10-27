@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -34,4 +35,5 @@ public interface HasAccessSpecifier {
      * The access specifier of this element.
      */
     AccessSpecifier accessSpecifier();
+
 }

@@ -18,18 +18,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.utils;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+package com.github.javaparser.utils;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * A set that overrides the equals and hashcode calculation of the added nodes
@@ -38,9 +39,7 @@ import java.util.stream.Collectors;
 public class VisitorSet<N extends Node> implements Set<N> {
 
     private final Set<EqualsHashcodeOverridingFacade> innerSet = new HashSet<>();
-
     private final GenericVisitor<Integer, Void> hashcodeVisitor;
-
     private final GenericVisitor<Boolean, Visitable> equalsVisitor;
 
     /**
@@ -59,8 +58,9 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public boolean addAll(Collection<? extends N> col) {
         boolean modified = false;
-        for (N elem : col) if (add(elem))
-            modified = true;
+        for (N elem : col)
+            if (add(elem))
+                modified = true;
         return modified;
     }
 
@@ -76,8 +76,9 @@ public class VisitorSet<N extends Node> implements Set<N> {
 
     @Override
     public boolean containsAll(Collection<?> col) {
-        for (Object elem : col) if (!contains(elem))
-            return false;
+        for (Object elem : col)
+            if (!contains(elem))
+                return false;
         return true;
     }
 
@@ -89,7 +90,6 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public Iterator<N> iterator() {
         return new Iterator<N>() {
-
             final Iterator<EqualsHashcodeOverridingFacade> itr = innerSet.iterator();
 
             @Override
@@ -117,8 +117,9 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public boolean removeAll(Collection<?> col) {
         boolean modified = false;
-        for (Object elem : col) if (remove(elem))
-            modified = true;
+        for (Object elem : col)
+            if (remove(elem))
+                modified = true;
         return modified;
     }
 
@@ -157,7 +158,6 @@ public class VisitorSet<N extends Node> implements Set<N> {
     }
 
     private class EqualsHashcodeOverridingFacade implements Visitable {
-
         private final N overridden;
 
         EqualsHashcodeOverridingFacade(N overridden) {
@@ -187,4 +187,5 @@ public class VisitorSet<N extends Node> implements Set<N> {
             return overridden.accept(equalsVisitor, ((EqualsHashcodeOverridingFacade) obj).overridden);
         }
     }
+
 }

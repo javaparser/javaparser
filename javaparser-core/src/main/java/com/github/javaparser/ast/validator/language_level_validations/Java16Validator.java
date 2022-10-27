@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -29,9 +30,9 @@ public class Java16Validator extends Java15Validator {
 
     public Java16Validator() {
         super();
+
         // Released Language Features
-        // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
-        remove(noPatternMatchingInstanceOf);
+        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
         // TODO: remove(noRecordDeclaration); // Records released within Java 16 - https://openjdk.java.net/jeps/395
     }
 }

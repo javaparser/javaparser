@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
@@ -31,7 +32,7 @@ import com.github.javaparser.utils.Utils;
 public interface Change {
 
     default boolean evaluate(CsmConditional csmConditional, Node node) {
-        switch(csmConditional.getCondition()) {
+        switch (csmConditional.getCondition()) {
             case FLAG:
                 return csmConditional.getProperties().stream().anyMatch(p -> (Boolean) getValue(p, node));
             case IS_NOT_EMPTY:

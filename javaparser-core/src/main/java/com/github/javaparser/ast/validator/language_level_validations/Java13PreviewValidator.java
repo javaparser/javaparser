@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -29,11 +30,13 @@ public class Java13PreviewValidator extends Java13Validator {
 
     public Java13PreviewValidator() {
         super();
+
         // Incubator
         // No new incubator language features added within Java 13
+
         // Preview
-        // Text Block Literals - first preview within Java 13 - https://openjdk.java.net/jeps/355
-        remove(noTextBlockLiteral);
+        remove(noTextBlockLiteral); // Text Block Literals - first preview within Java 13 - https://openjdk.java.net/jeps/355
+
         // 2nd Preview
         {
             /*
@@ -48,5 +51,6 @@ public class Java13PreviewValidator extends Java13Validator {
             remove(onlyOneLabelInSwitchCase);
             remove(noYield);
         }
+
     }
 }

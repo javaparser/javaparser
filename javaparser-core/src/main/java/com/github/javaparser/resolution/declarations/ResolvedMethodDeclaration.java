@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -50,4 +51,5 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
      * Is this method static?
      */
     boolean isStatic();
+
 }

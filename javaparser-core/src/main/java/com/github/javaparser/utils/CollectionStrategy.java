@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.utils;
 
 import com.github.javaparser.JavaParser;
@@ -46,6 +47,7 @@ public interface CollectionStrategy {
         try {
             final JavaParser javaParser = new JavaParser(getParserConfiguration());
             final ParseResult<CompilationUnit> parseResult = javaParser.parse(file);
+
             if (parseResult.isSuccessful()) {
                 if (parseResult.getProblems().isEmpty()) {
                     if (parseResult.getResult().isPresent()) {

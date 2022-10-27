@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.TokenTypes;
@@ -28,7 +29,6 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
 public class Kept implements DifferenceElement {
-
     private final CsmElement element;
 
     Kept(CsmElement element) {
@@ -42,11 +42,11 @@ public class Kept implements DifferenceElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Kept kept = (Kept) o;
+
         return element.equals(kept.element);
     }
 
@@ -65,6 +65,7 @@ public class Kept implements DifferenceElement {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.getTokenType();
         }
+
         throw new IllegalStateException("Kept is not a " + CsmToken.class.getSimpleName());
     }
 
@@ -73,35 +74,29 @@ public class Kept implements DifferenceElement {
         return false;
     }
 
-    public boolean isIndent() {
-        return element instanceof CsmIndent;
-    }
+    public boolean isIndent() { return element instanceof CsmIndent; }
 
-    public boolean isUnindent() {
-        return element instanceof CsmUnindent;
-    }
+    public boolean isUnindent() { return element instanceof CsmUnindent; }
 
-    public boolean isToken() {
-        return element instanceof CsmToken;
-    }
+    public boolean isToken() { return element instanceof CsmToken; }
 
-    public boolean isChild() {
-        return element instanceof LexicalDifferenceCalculator.CsmChild;
-    }
+    public boolean isChild() { return element instanceof LexicalDifferenceCalculator.CsmChild; }
 
     public boolean isPrimitiveType() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
             return csmChild.getChild() instanceof PrimitiveType;
         }
+
         return false;
     }
 
     public boolean isWhiteSpace() {
-        if (isToken()) {
+        if(isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isWhiteSpace();
         }
+
         return false;
     }
 
@@ -110,14 +105,16 @@ public class Kept implements DifferenceElement {
             CsmToken csmToken = (CsmToken) element;
             return TokenTypes.isWhitespaceOrComment(csmToken.getTokenType());
         }
+
         return false;
     }
 
     public boolean isNewLine() {
-        if (isToken()) {
+        if(isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isNewLine();
         }
+
         return false;
     }
 

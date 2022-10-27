@@ -18,13 +18,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
+package com.github.javaparser.resolution.declarations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +27,19 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable {
+public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration,
+                                                                  ResolvedTypeParametrizable {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
@@ -46,9 +47,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         return this;
     }
 
-    // /
-    // / Ancestors
-    // /
+    ///
+    /// Ancestors
+    ///
+
     /**
      * Resolves the types of all direct ancestors (i.e., the directly extended class and the directly implemented
      * interfaces) and returns the list of ancestors as a list of resolved reference types.
@@ -106,9 +108,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         return ancestors;
     }
 
-    // /
-    // / Fields
-    // /
+    ///
+    /// Fields
+    ///
+
     /**
      * Note that the type of the field should be expressed using the type variables of this particular type.
      * Consider for example:
@@ -121,7 +124,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Bar I should get a FieldDeclaration with type String.
      */
     default ResolvedFieldDeclaration getField(String name) {
-        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         if (field.isPresent()) {
             return field.get();
         } else {
@@ -164,7 +169,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Return a list of all fields declared and the inherited ones which are not private.
      */
     default List<ResolvedFieldDeclaration> getVisibleFields() {
-        return getAllFields().stream().filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE).collect(Collectors.toList());
+        return getAllFields().stream()
+                       .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
+                       .collect(Collectors.toList());
     }
 
     /**
@@ -185,12 +192,14 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Return a list of all the fields declared in this type.
      */
     default List<ResolvedFieldDeclaration> getDeclaredFields() {
-        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName().equals(getQualifiedName())).collect(Collectors.toList());
+        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName()
+                                                            .equals(getQualifiedName())).collect(Collectors.toList());
     }
 
-    // /
-    // / Methods
-    // /
+    ///
+    /// Methods
+    ///
+
     /**
      * Return a list of all the methods declared in this type declaration.
      */
@@ -202,9 +211,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     Set<MethodUsage> getAllMethods();
 
-    // /
-    // / Assignability
-    // /
+    ///
+    /// Assignability
+    ///
+
     /**
      * Can we assign instances of the given type to variables having the type defined
      * by this declaration?
@@ -225,9 +235,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     boolean isAssignableBy(ResolvedReferenceTypeDeclaration other);
 
-    // /
-    // / Annotations
-    // /
+    ///
+    /// Annotations
+    ///
+
     /**
      * Has the type at least one annotation declared having the specified qualified name?
      */
@@ -240,7 +251,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return getAllAncestors().stream().filter(it -> it.asReferenceType().getTypeDeclaration().isPresent()).anyMatch(it -> it.asReferenceType().getTypeDeclaration().get().hasDirectlyAnnotation(qualifiedName));
+        return getAllAncestors().stream()
+                .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+                .anyMatch(it -> it.asReferenceType().getTypeDeclaration().get().hasDirectlyAnnotation(qualifiedName));
     }
 
     /**
@@ -249,9 +262,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     boolean isFunctionalInterface();
 
-    // /
-    // / Type parameters
-    // /
+    ///
+    /// Type parameters
+    ///
+
     @Override
     default Optional<ResolvedTypeParameterDeclaration> findTypeParameter(String name) {
         for (ResolvedTypeParameterDeclaration tp : this.getTypeParameters()) {
@@ -267,6 +281,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     List<ResolvedConstructorDeclaration> getConstructors();
 
+
     /**
      * We don't make this _ex_plicit in the data representation because that would affect codegen
      * and make everything generate like {@code <T extends Object>} instead of {@code <T>}
@@ -276,8 +291,10 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     default boolean isJavaLangObject() {
-        return this.isClass() && !isAnonymousClass() && // Consider anonymous classes
-        hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return this.isClass()
+                && !isAnonymousClass()
+                && hasName() // Consider anonymous classes
+                && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -285,6 +302,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see ResolvedReferenceType#isJavaLangEnum()
      */
     default boolean isJavaLangEnum() {
-        return this.isEnum() && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isEnum()
+                && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
+
 }

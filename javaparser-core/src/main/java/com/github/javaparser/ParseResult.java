@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
@@ -33,11 +34,8 @@ import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
  * The results given when parsing with an instance of JavaParser.
  */
 public class ParseResult<T> {
-
     private final T result;
-
     private final List<Problem> problems;
-
     private final CommentsCollection commentsCollection;
 
     /**
@@ -112,7 +110,6 @@ public class ParseResult<T> {
      * A post processor that can be added to ParserConfiguration to add some processing right after parsing.
      */
     public interface PostProcessor {
-
         void process(ParseResult<? extends Node> result, ParserConfiguration configuration);
     }
 }

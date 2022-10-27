@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
@@ -26,9 +27,7 @@ import com.github.javaparser.ast.Node;
  * Runs a validator on all nodes of a certain type.
  */
 public class SingleNodeTypeValidator<N extends Node> implements Validator {
-
     private final Class<N> type;
-
     private final TypedValidator<N> validator;
 
     public SingleNodeTypeValidator(Class<N> type, TypedValidator<N> validator) {

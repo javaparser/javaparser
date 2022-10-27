@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
@@ -25,7 +26,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmTextBlock implements CsmElement {
-
     private final ObservableProperty property;
 
     public CsmTextBlock(ObservableProperty property) {
@@ -36,8 +36,7 @@ public class CsmTextBlock implements CsmElement {
     public void prettyPrint(Node node, SourcePrinter printer) {
         // Note that values within TextBlocks ALWAYS have the \n line ending, per https://openjdk.java.net/jeps/378#1--Line-terminators
         printer.print("\"\"\"\n");
-        // TODO: Confirm if we need to force this to use {@code \n} separators
-        printer.print(property.getValueAsStringAttribute(node));
+        printer.print(property.getValueAsStringAttribute(node)); // TODO: Confirm if we need to force this to use {@code \n} separators
         printer.print("\"\"\"");
     }
 
@@ -45,4 +44,5 @@ public class CsmTextBlock implements CsmElement {
     public String toString() {
         return String.format("CsmTextBlock(property:%s)", property);
     }
+
 }

@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
@@ -46,7 +47,6 @@ import java.util.stream.Stream;
  * @param <N> the type of nodes contained.
  */
 public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable {
-
     @InternalProperty
     private final List<N> innerList = new ArrayList<>(0);
 
@@ -140,7 +140,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public N set(int index, N element) {
         if (index < 0 || index >= innerList.size()) {
-            throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size() + " excluded. It is instead " + index);
+            throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size()
+                    + " excluded. It is instead " + index);
         }
         if (element == innerList.get(index)) {
             return element;
@@ -226,6 +227,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         add(i, node);
         return this;
     }
+
 
     /**
      * @return the first node, or empty if the list is empty.
@@ -565,10 +567,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         return innerList.stream().map(Node::toString).collect(Collectors.joining(", ", "[", "]"));
     }
 
-    protected class NodeListIterator implements ListIterator<N> {
+    protected class NodeListIterator implements ListIterator<N>{
 
         ListIterator<N> iterator;
-
         N current = null;
 
         // initialize pointer to head of the list for iteration
@@ -626,12 +627,14 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         public void set(N n) {
             int index = innerList.indexOf(current);
             if (index < 0 || index >= innerList.size()) {
-                throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size() + " excluded. It is instead " + index);
+                throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size()
+                        + " excluded. It is instead " + index);
             }
             if (n != innerList.get(index)) {
                 notifyElementReplaced(index, n);
                 innerList.get(index).setParentNode(null);
                 setAsParentNodeOf(n);
+
                 iterator.set(n);
             }
         }

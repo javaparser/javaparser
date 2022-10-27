@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.javadoc.description;
 
 /**
@@ -27,7 +28,6 @@ package com.github.javaparser.javadoc.description;
  * before and one after the inline tag (<code>{@link String}</code>).
  */
 public class JavadocSnippet implements JavadocDescriptionElement {
-
     private String text;
 
     public JavadocSnippet(String text) {
@@ -44,12 +44,13 @@ public class JavadocSnippet implements JavadocDescriptionElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         JavadocSnippet that = (JavadocSnippet) o;
+
         return text.equals(that.text);
+
     }
 
     @Override
@@ -59,6 +60,8 @@ public class JavadocSnippet implements JavadocDescriptionElement {
 
     @Override
     public String toString() {
-        return "JavadocSnippet{" + "text='" + text + '\'' + '}';
+        return "JavadocSnippet{" +
+                "text='" + text + '\'' +
+                '}';
     }
 }

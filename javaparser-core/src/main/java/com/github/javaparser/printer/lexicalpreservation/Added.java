@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
@@ -26,7 +27,6 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
 public class Added implements DifferenceElement {
-
     private final CsmElement element;
 
     Added(CsmElement element) {
@@ -40,11 +40,11 @@ public class Added implements DifferenceElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Added added = (Added) o;
+
         return element.equals(added.element);
     }
 
@@ -68,13 +68,9 @@ public class Added implements DifferenceElement {
         return false;
     }
 
-    public boolean isIndent() {
-        return element instanceof CsmIndent;
-    }
+    public boolean isIndent() { return element instanceof CsmIndent; }
 
-    public boolean isUnindent() {
-        return element instanceof CsmUnindent;
-    }
+    public boolean isUnindent() { return element instanceof CsmUnindent; }
 
     public TextElement toTextElement() {
         if (element instanceof LexicalDifferenceCalculator.CsmChild) {

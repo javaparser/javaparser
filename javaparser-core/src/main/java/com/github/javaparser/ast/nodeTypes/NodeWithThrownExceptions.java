@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -30,7 +31,6 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
  * A node that declares the types of exception it throws.
  */
 public interface NodeWithThrownExceptions<N extends Node> {
-
     N setThrownExceptions(NodeList<ReferenceType> thrownExceptions);
 
     NodeList<ReferenceType> getThrownExceptions();

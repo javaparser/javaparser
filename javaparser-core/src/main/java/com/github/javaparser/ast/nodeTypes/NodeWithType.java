@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -36,7 +37,6 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
  * @since 2.3.1
  */
 public interface NodeWithType<N extends Node, T extends Type> {
-
     /**
      * Gets the type
      *

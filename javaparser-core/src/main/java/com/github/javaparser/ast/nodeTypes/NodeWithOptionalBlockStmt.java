@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -29,7 +30,6 @@ import java.util.Optional;
  * A node with a body that is a BlockStmt, which is optional.
  */
 public interface NodeWithOptionalBlockStmt<N extends Node> {
-
     Optional<BlockStmt> getBody();
 
     N setBody(BlockStmt block);

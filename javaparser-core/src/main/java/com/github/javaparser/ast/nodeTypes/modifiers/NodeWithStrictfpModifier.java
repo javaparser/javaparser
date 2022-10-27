@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
 import com.github.javaparser.ast.Node;
@@ -29,7 +30,6 @@ import static com.github.javaparser.ast.Modifier.Keyword.STRICTFP;
  * A node that can be strictfp.
  */
 public interface NodeWithStrictfpModifier<N extends Node> extends NodeWithModifiers<N> {
-
     default boolean isStrictfp() {
         return hasModifier(STRICTFP);
     }

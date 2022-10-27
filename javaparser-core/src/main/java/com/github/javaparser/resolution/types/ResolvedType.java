@@ -18,14 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+package com.github.javaparser.resolution.types;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * <p>A resolved type. </p>
@@ -49,9 +50,10 @@ import java.util.Map;
  */
 public interface ResolvedType {
 
-    // /
-    // / Relation with other types
-    // /
+    ///
+    /// Relation with other types
+    ///
+
     /**
      * @return true, if this type represent an array - otherwise false.
      */
@@ -102,9 +104,7 @@ public interface ResolvedType {
     /**
      * Is this a lambda constraint type?
      */
-    default boolean isConstraint() {
-        return false;
-    }
+    default boolean isConstraint() { return false; }
 
     /**
      * Can this be seen as a ReferenceTypeUsage?
@@ -125,14 +125,15 @@ public interface ResolvedType {
     default boolean isWildcard() {
         return false;
     }
-
+    
     default boolean isInferenceVariable() {
         return false;
     }
 
-    // /
-    // / Downcasting
-    // /
+    ///
+    /// Downcasting
+    ///
+
     default ResolvedArrayType asArrayType() {
         throw new UnsupportedOperationException(String.format("%s is not an Array", this));
     }
@@ -165,14 +166,16 @@ public interface ResolvedType {
         throw new UnsupportedOperationException(String.format("%s is not a union type", this));
     }
 
-    // /
-    // / Naming
-    // /
+    ///
+    /// Naming
+    ///
+
     String describe();
 
-    // /
-    // / TypeParameters
-    // /
+    ///
+    /// TypeParameters
+    ///
+
     /**
      * Replace all variables referring to the given TypeParameter with the given value.
      * By replacing these values I could also infer some type equivalence.
@@ -196,18 +199,20 @@ public interface ResolvedType {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
-    // /
-    // / Assignability
-    // /
+    ///
+    /// Assignability
+    ///
+
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */
     boolean isAssignableBy(ResolvedType other);
-
+    
     /*
      * Returns true if the ResolvedType is a numeric
      */
     default boolean isNumericType() {
-        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt -> rpt.isAssignableBy(this));
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(this));
     }
+    
 }

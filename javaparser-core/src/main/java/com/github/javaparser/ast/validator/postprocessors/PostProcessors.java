@@ -18,6 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+
 package com.github.javaparser.ast.validator.postprocessors;
 
 import com.github.javaparser.ParseResult;
@@ -34,7 +35,6 @@ import static com.github.javaparser.ParseResult.PostProcessor;
  * A post processor that will call a collection of post processors.
  */
 public class PostProcessors implements PostProcessor {
-
     private final List<PostProcessor> postProcessors = new ArrayList<>();
 
     public PostProcessors(PostProcessor... postProcessors) {
