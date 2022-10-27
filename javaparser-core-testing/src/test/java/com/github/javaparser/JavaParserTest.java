@@ -67,7 +67,7 @@ class JavaParserTest {
         String code = "@interface AD { String foo(); }";
         CompilationUnit cu = parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertTrue(memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.hasRange());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
 
@@ -76,7 +76,7 @@ class JavaParserTest {
         String code = "@interface AD \\u007B String foo(); \\u007D";
         CompilationUnit cu = parseWithUnicodeEscapes(code).getResult().get();
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertTrue(memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.hasRange());
         assertEquals(new Range(new Position(1, 22), new Position(1, 34)), memberDeclaration.getRange().get());
     }
 
@@ -90,7 +90,7 @@ class JavaParserTest {
     	assertFalse(cu.getResult().isPresent());
     	assertEquals("Lexical error at line 1, column 34.  Encountered: \"\\\"\" (34), after : \"\\\"\\\\uABC\"", cu.getProblem(0).getMessage());
     }
-    
+
 	private static ParseResult<CompilationUnit> parseWithUnicodeEscapes(String code) {
 		ParserConfiguration config = new ParserConfiguration();
         config.setPreprocessUnicodeEscapes(true);
@@ -102,7 +102,7 @@ class JavaParserTest {
         String code = "@interface AD { String[] foo(); }";
         CompilationUnit cu = parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertTrue(memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.hasRange());
         assertEquals(new Range(new Position(1, 17), new Position(1, 31)), memberDeclaration.getRange().get());
     }
 
@@ -142,7 +142,7 @@ class JavaParserTest {
 
         Problem problem = result.getProblem(0);
         assertEquals(range(1, 9, 1, 17), problem.getLocation().get().toRange().get());
-        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
+        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"record\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"yield\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
         assertInstanceOf(ParseException.class, problem.getCause().get());
     }
 
@@ -303,7 +303,7 @@ class JavaParserTest {
     void parseTypeDeclaration() {
         StaticJavaParser.parseTypeDeclaration("enum Z {A, B}");
     }
-    
+
     @Test
     void xxx(){
         YamlPrinter.print(StaticJavaParser.parse("class X{}"));

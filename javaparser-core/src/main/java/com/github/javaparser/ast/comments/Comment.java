@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,10 +29,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -165,14 +163,6 @@ public abstract class Comment extends Node {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Comment clone() {
         return (Comment) accept(new CloneVisitor(), null);
@@ -182,14 +172,6 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CommentMetaModel getMetaModel() {
         return JavaParserMetaModel.commentMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

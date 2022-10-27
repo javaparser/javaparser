@@ -24,13 +24,19 @@ package com.github.javaparser;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
-import static com.github.javaparser.JavaToken.Category.*;
+import static com.github.javaparser.JavaToken.Category.COMMENT;
+import static com.github.javaparser.JavaToken.Category.LITERAL;
+import static com.github.javaparser.JavaToken.Category.OPERATOR;
+import static com.github.javaparser.JavaToken.Category.WHITESPACE_NO_EOL;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaTokenTest {
 
@@ -73,4 +79,50 @@ class JavaTokenTest {
         assertEquals(JavaToken.Kind.ASSERT, kind);
         assertEquals(GeneratedJavaParserConstants.ASSERT, kind.getKind());
     }
+
+    /**
+     * Two places where "generated" token types exist.
+     * - Firstly, {@link GeneratedJavaParserConstants} which is produced by JavaCC
+     * - Secondly, {@link JavaToken}, which is produced by JavaParser
+     * <p>
+     * This test makes a best-effort attempt to ensure that the two are aligned.
+     */
+    @Test
+    void test() throws NoSuchFieldException, IllegalAccessException {
+
+        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
+        assertEquals(tokenCount, JavaToken.Kind.values().length, "Error - mismatch between number of tokens.");
+
+        // Iterate through the JP Tokens, and ensure that it matches the JavaCC tokens.
+        for (int i = 0; i < tokenCount; i++) {
+
+            // Details about the Java Parser Token
+            JavaToken.Kind jpToken = JavaToken.Kind.valueOf(i);
+            String jpTokenName = jpToken.name();
+            int jpTokenNumber = jpToken.getKind();
+
+            // Details about the JavaCC Token (using reflection)
+            Field declaredField = GeneratedJavaParserConstants.class.getDeclaredField(jpTokenName);
+            String javaCcTokenName = declaredField.getName();
+            Object javaccTokenNumber = declaredField.get(null); // static fields, therefore null is okay
+
+
+            // Optional printing -- for debugging purposes.
+            System.out.println(i + " - " +
+                    jpTokenName + " (" + jpTokenNumber + ") - " +
+                    javaCcTokenName + " (" + javaccTokenNumber + ")"
+            );
+
+            assertEquals(jpTokenName, javaCcTokenName);
+            assertEquals(
+                    javaccTokenNumber, jpTokenNumber,
+                    "Error - Likely need to rerun JP Generators following a grammar change." +
+                            "\nProblem with `" + jpTokenName + "`." +
+                            "\nNote mismatch between:" +
+                            "\n - token #" + javaccTokenNumber + " - GeneratedJavaParserConstants (generated using JavaCC)" +
+                            "\n - token #" + jpTokenNumber + " - JavaToken (generated using JP Generators)."
+            );
+        }
+    }
+
 }

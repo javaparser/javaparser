@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,10 +40,8 @@ import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -274,8 +272,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (body != null) {
             if (node == body) {
                 removeBody();
@@ -305,8 +304,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (body != null) {
             if (node == body) {
                 setBody((BlockStmt) replacementNode);

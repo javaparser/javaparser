@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,12 +21,37 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import static com.github.javaparser.ast.observer.ObservableProperty.*;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.FLAG;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_EMPTY;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_NOT_EMPTY;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_PRESENT;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.modules.*;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.modules.ModuleExportsDirective;
+import com.github.javaparser.ast.modules.ModuleOpensDirective;
+import com.github.javaparser.ast.modules.ModuleProvidesDirective;
+import com.github.javaparser.ast.modules.ModuleRequiresDirective;
+import com.github.javaparser.ast.modules.ModuleUsesDirective;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -34,14 +59,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-import static com.github.javaparser.ast.observer.ObservableProperty.*;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
 
 /**
  * The Concrete Syntax Model for a single node type. It knows the syntax used to represent a certain element in Java
@@ -151,6 +168,36 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.BODY)
         ));
 
+        concreteSyntaxModelByClass.put(RecordDeclaration.class, sequence(
+                comment(),
+                memberAnnotations(),
+                modifiers(),
+                token(GeneratedJavaParserConstants.RECORD),
+                space(),
+                child(ObservableProperty.NAME),
+                token(GeneratedJavaParserConstants.LPAREN),
+                list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
+                token(GeneratedJavaParserConstants.RPAREN),
+                list(TYPE_PARAMETERS, sequence(comma(), space()), string(GeneratedJavaParserConstants.LT), string(GeneratedJavaParserConstants.GT)),
+                list(ObservableProperty.IMPLEMENTED_TYPES, sequence(string(GeneratedJavaParserConstants.COMMA), space()), sequence(
+                        space(),
+                        token(GeneratedJavaParserConstants.IMPLEMENTS),
+                        space()), none()),
+                space(),
+                block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), newline(), newline())))
+        ));
+
+        concreteSyntaxModelByClass.put(CompactConstructorDeclaration.class, sequence(
+                comment(),
+                memberAnnotations(),
+                modifiers(),
+                typeParameters(),
+                child(ObservableProperty.NAME),
+                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.THROWS), space()), none()),
+                space(),
+                child(ObservableProperty.BODY)
+        ));
+
         concreteSyntaxModelByClass.put(EnumConstantDeclaration.class, sequence(
                 comment(),
                 memberAnnotations(),
@@ -192,8 +239,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(FieldDeclaration.class, sequence(
                 orphanCommentsBeforeThis(),
                 comment(),
-                annotations(),
-                modifiers(),
+                mix(annotations(), modifiers()),
                 conditional(ObservableProperty.VARIABLES, IS_NOT_EMPTY, child(ObservableProperty.MAXIMUM_COMMON_TYPE)),
                 space(),
                 list(ObservableProperty.VARIABLES, sequence(comma(), space())),
@@ -677,6 +723,11 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(LocalClassDeclarationStmt.class, sequence(
                 comment(),
                 child(ObservableProperty.CLASS_DECLARATION)
+        ));
+
+        concreteSyntaxModelByClass.put(LocalRecordDeclarationStmt.class, sequence(
+                comment(),
+                child(ObservableProperty.RECORD_DECLARATION)
         ));
 
         concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(

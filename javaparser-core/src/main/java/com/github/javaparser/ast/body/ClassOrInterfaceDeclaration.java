@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,14 +40,12 @@ import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * A definition of a class or interface.<br>{@code class X { ... }}
+ * A definition of a class or interface.<br>{@code class X { ... }}<br>{@code interface X { ... }}
  *
  * @author Julio Vilmar Gesser
  */
@@ -175,8 +173,9 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < extendedTypes.size(); i++) {
             if (extendedTypes.get(i) == node) {
                 extendedTypes.remove(i);
@@ -236,8 +235,9 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < extendedTypes.size(); i++) {
             if (extendedTypes.get(i) == node) {
                 extendedTypes.set(i, (ClassOrInterfaceType) replacementNode);

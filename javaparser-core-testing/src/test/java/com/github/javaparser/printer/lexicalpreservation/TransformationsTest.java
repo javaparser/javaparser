@@ -21,6 +21,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+
+import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -35,13 +43,6 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * These tests are more "high level" than the ones in LexicalPreservingPrinterTest.
@@ -166,7 +167,9 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
         md.setType(PrimitiveType.intType());
         assertTransformed("Example_param5b", cu);
         md.getBody().get().getStatements().add(new ReturnStmt(new NameExpr("p1")));
-        assertTransformed("Example_param5", cu);
+        String expected = readExample("Example_param5" + "_expected");
+        String s = LexicalPreservingPrinter.print(cu);
+        assertEqualsStringIgnoringEol(expected, s);
     }
 
     @Test
@@ -307,4 +310,36 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
                 "}";
         assertEqualsStringIgnoringEol(expected, s);
     }
+    
+    @Test
+    void removingInSingleMemberList() {
+        considerCode(
+                "class A {\n" +
+                "    int a;\n" +
+                "}");
+        cu.getClassByName("A").get().getMembers().remove(0);
+        String expected = 
+                "class A {\n" +
+                "}";
+        String s = LexicalPreservingPrinter.print(cu);
+        assertEqualsStringIgnoringEol(expected, s);
+    }
+    
+    @Test
+    void removingInMultiMembersList() {
+        considerCode(
+                "class A {\n" +
+                "    int a;\n" +
+                "    int b;\n" +
+                "}");
+        cu.getClassByName("A").get().getMembers().removeLast();
+        String expected = 
+                "class A {\n" +
+                "    int a;\n" +
+                "}";
+        String s = LexicalPreservingPrinter.print(cu);
+        assertEqualsStringIgnoringEol(expected, s);
+    }
+    
+    
 }

@@ -21,9 +21,12 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
@@ -35,10 +38,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.google.common.collect.ImmutableList;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -53,16 +52,17 @@ class AstResolutionUtils {
                 className;
     }
 
+    /*
+     * Returns the package name from a node (that can be null) or an empty string
+     */
     static String getPackageName(Node container) {
-        if (container instanceof CompilationUnit) {
-            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackageDeclaration();
-            if (p.isPresent()) {
-                return p.get().getName().toString();
-            }
-        } else if (container != null) {
-            return getPackageName(container.getParentNode().orElse(null));
+        String packageName = "";
+        if (container == null) return packageName;
+        Optional<CompilationUnit> cu = container.findCompilationUnit();
+        if (cu.isPresent()) {
+            packageName = cu.get().getPackageDeclaration().map(pd -> pd.getNameAsString()).orElse("");
         }
-        return "";
+        return packageName;
     }
 
     static String getClassName(String base, Node container) {

@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
@@ -104,6 +105,27 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "testFunctionalVar");
         VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a").get();
         LambdaExpr lambdaExpr = (LambdaExpr) varDecl.getInitializer().get();
+
+        Path src = adaptPath("src/test/resources");
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+        combinedTypeSolver.add(new ReflectionTypeSolver());
+        combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+
+        Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);
+
+        Optional<Value> ref = context.solveSymbolAsValue("p");
+        assertTrue(ref.isPresent());
+        assertEquals("java.lang.String", ref.get().getType().describe());
+    }
+
+    @Test
+    void solveParameterOfLambdaInCast() {
+        CompilationUnit cu = parseSample("Lambda");
+
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testCast");
+        VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a").get();
+        LambdaExpr lambdaExpr = ((CastExpr) varDecl.getInitializer().get()).getExpression().asLambdaExpr();
 
         Path src = adaptPath("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();

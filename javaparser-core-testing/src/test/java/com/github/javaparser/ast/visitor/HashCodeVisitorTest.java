@@ -183,7 +183,7 @@ class HashCodeVisitorTest {
 	void testVisitBreakStmt() {
 		BreakStmt node = spy(new BreakStmt());
 		HashCodeVisitor.hashCode(node);
-		verify(node, times(2)).getLabel();
+		verify(node, times(1)).getLabel();
 		verify(node, times(1)).getComment();
 	}
 
@@ -510,6 +510,14 @@ class HashCodeVisitorTest {
 	}
 
 	@Test
+	void testVisitLocalRecordDeclarationStmt() {
+		LocalRecordDeclarationStmt node = spy(new LocalRecordDeclarationStmt());
+		HashCodeVisitor.hashCode(node);
+		verify(node, times(1)).getRecordDeclaration();
+		verify(node, times(1)).getComment();
+	}
+
+	@Test
 	void testVisitLongLiteralExpr() {
 		LongLiteralExpr node = spy(new LongLiteralExpr());
 		HashCodeVisitor.hashCode(node);
@@ -705,6 +713,7 @@ class HashCodeVisitorTest {
 	void testVisitPatternExpr() {
 		PatternExpr node = spy(new PatternExpr());
 		HashCodeVisitor.hashCode(node);
+		verify(node, times(1)).getModifiers();
 		verify(node, times(1)).getName();
 		verify(node, times(1)).getType();
 		verify(node, times(1)).getComment();

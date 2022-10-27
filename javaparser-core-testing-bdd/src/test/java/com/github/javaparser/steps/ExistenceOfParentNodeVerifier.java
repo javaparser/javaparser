@@ -479,6 +479,12 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
+        public void visit(LocalRecordDeclarationStmt n, Void arg) {
+            assertParentIsSet(n);
+            super.visit(n, arg);
+        }
+
+        @Override
         public void visit(TypeExpr n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);

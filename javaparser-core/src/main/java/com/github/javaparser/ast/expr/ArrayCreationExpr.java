@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,10 +33,8 @@ import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -59,7 +57,7 @@ public class ArrayCreationExpr extends Expression {
     private ArrayInitializerExpr initializer;
 
     public ArrayCreationExpr() {
-        this(null, new ClassOrInterfaceType(), new NodeList<>(), new ArrayInitializerExpr());
+        this(null, new ClassOrInterfaceType(), new NodeList<>(new ArrayCreationLevel()), new ArrayInitializerExpr());
     }
 
     @AllFieldsConstructor
@@ -68,7 +66,7 @@ public class ArrayCreationExpr extends Expression {
     }
 
     public ArrayCreationExpr(Type elementType) {
-        this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
+        this(null, elementType, new NodeList<>(new ArrayCreationLevel()), new ArrayInitializerExpr());
     }
 
     /**
@@ -150,9 +148,13 @@ public class ArrayCreationExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
-        if (this.levels != null)
+        if (this.levels != null) {
             this.levels.setParentNode(null);
+        }
         this.levels = levels;
+        if (this.levels.isEmpty()) {
+            this.levels = new NodeList<>(new ArrayCreationLevel());
+        }
         setAsParentNodeOf(levels);
         return this;
     }
@@ -186,8 +188,9 @@ public class ArrayCreationExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (initializer != null) {
             if (node == initializer) {
                 removeInitializer();
@@ -223,8 +226,9 @@ public class ArrayCreationExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == elementType) {
             setElementType((Type) replacementNode);
             return true;

@@ -218,7 +218,7 @@ class NoCommentHashCodeVisitorTest {
 		BreakStmt node = spy(new BreakStmt());
 		NoCommentHashCodeVisitor.hashCode(node);
 
-		verify(node, times(2)).getLabel();
+		verify(node, times(1)).getLabel();
 		verify(node, never()).getComment();
 	}
 
@@ -556,6 +556,15 @@ class NoCommentHashCodeVisitorTest {
 		NoCommentHashCodeVisitor.hashCode(node);
 
 		verify(node, times(1)).getClassDeclaration();
+		verify(node, never()).getComment();
+	}
+
+	@Test
+	void testVisitLocalRecordDeclarationStmt() {
+		LocalRecordDeclarationStmt node = spy(new LocalRecordDeclarationStmt());
+		NoCommentHashCodeVisitor.hashCode(node);
+
+		verify(node, times(1)).getRecordDeclaration();
 		verify(node, never()).getComment();
 	}
 

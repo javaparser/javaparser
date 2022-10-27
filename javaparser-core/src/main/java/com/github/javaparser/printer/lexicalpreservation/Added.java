@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -67,10 +67,17 @@ public class Added implements DifferenceElement {
     public boolean isRemoved() {
         return false;
     }
+    
+    @Override
+    public boolean isKept() {
+        return false;
+    }
 
     public boolean isIndent() { return element instanceof CsmIndent; }
 
     public boolean isUnindent() { return element instanceof CsmUnindent; }
+    
+    private boolean isToken() { return element instanceof CsmToken; }
 
     public TextElement toTextElement() {
         if (element instanceof LexicalDifferenceCalculator.CsmChild) {
@@ -81,4 +88,21 @@ public class Added implements DifferenceElement {
             throw new UnsupportedOperationException(element.getClass().getSimpleName());
         }
     }
+    
+    /*
+     * If the {@code DifferenceElement} wraps an EOL token then this method returns a new wrapped {@code CsmElement}
+     * with the specified line separator. The line separator parameter must be a CsmToken with a valid line separator.
+     */
+    @Override
+    public DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
+        return isNewLineToken() ? new Added(lineSeparator) : this;
+    }
+    
+    /*
+     * Return true if the wrapped {@code CsmElement} is a new line token
+     */
+    private boolean isNewLineToken() {
+        return isToken() && ((CsmToken) element).isNewLine();
+    }
+    
 }

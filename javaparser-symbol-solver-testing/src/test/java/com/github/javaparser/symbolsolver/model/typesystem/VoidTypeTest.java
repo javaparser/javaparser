@@ -37,7 +37,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VoidTypeTest {
@@ -116,36 +117,11 @@ class VoidTypeTest {
 
     @Test
     void testIsAssignableBy() {
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(NullType.INSTANCE));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(OBJECT));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(STRING));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedVoidType.INSTANCE));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(NullType.INSTANCE));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(OBJECT));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(STRING));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedVoidType.INSTANCE));
     }
 
 }

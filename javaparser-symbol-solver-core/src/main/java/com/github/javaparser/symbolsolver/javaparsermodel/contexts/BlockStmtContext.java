@@ -21,9 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -34,11 +38,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
 
     public BlockStmtContext(BlockStmt wrappedNode, TypeSolver typeSolver) {
@@ -47,12 +46,7 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
 
     @Override
     public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
-        int position = -1;
-        for (int i = 0; i < wrappedNode.getStatements().size(); i++) {
-            if (wrappedNode.getStatements().get(i).equals(child)) {
-                position = i;
-            }
-        }
+        int position = wrappedNode.getStatements().indexOf(child);
         if (position == -1) {
             throw new RuntimeException();
         }
@@ -93,8 +87,11 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
             // }
 
             List<VariableDeclarator> variableDeclarators = new LinkedList<>();
-            // find all variable declarators exposed in child
-            wrappedNode.getStatements().forEach(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
+            // find all variable declarators exposed to child
+            // given that we don't know the statement we are trying to resolve, we look for all variable declarations 
+            // defined in the context of the wrapped node whether it is located before or after the statement that interests us 
+            // because a variable cannot be (re)defined after having been used
+            wrappedNode.getStatements().getLast().ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
             if (!variableDeclarators.isEmpty()) {
                 // FIXME: Work backwards from the current statement, to only consider declarations prior to this statement.
                 for (VariableDeclarator vd : variableDeclarators) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -44,4 +44,19 @@ public interface DifferenceElement {
     boolean isAdded();
 
     boolean isRemoved();
+    
+    boolean isKept();
+    
+    default boolean isChild() { 
+        return getElement() instanceof LexicalDifferenceCalculator.CsmChild; 
+    }
+    
+    /*
+     * If the {@code DifferenceElement} wraps an EOL token then this method returns a new wrapped {@code CsmElement}
+     * with the specified line separator. The line separator parameter must be a {@code CsmToken} with a valid line
+     * separator. By default this method returns the instance itself.
+     */
+    default DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
+        return this;
+    }
 }

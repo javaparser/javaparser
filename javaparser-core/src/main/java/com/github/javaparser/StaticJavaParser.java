@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -57,9 +57,19 @@ public final class StaticJavaParser {
     }
 
     /**
+     * Get the configuration for the parse... methods. Deprecated method.
+     *
+     * @deprecated use {@link #getParserConfiguration()} instead
+     */
+    @Deprecated
+    public static ParserConfiguration getConfiguration() {
+        return getParserConfiguration();
+    }
+
+    /**
      * Get the configuration for the parse... methods.
      */
-    public static ParserConfiguration getConfiguration() {
+    public static ParserConfiguration getParserConfiguration() {
         return localConfiguration.get();
     }
 

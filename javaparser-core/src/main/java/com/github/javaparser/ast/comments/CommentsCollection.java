@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -69,12 +69,12 @@ public class CommentsCollection {
     }
 
     public boolean contains(Comment comment) {
-        if (!comment.getRange().isPresent()) {
+        if (!comment.hasRange()) {
             return false;
         }
         Range commentRange = comment.getRange().get();
         for (Comment c : getComments()) {
-            if (!c.getRange().isPresent()) {
+            if (!c.hasRange()) {
                 return false;
             }
             Range cRange = c.getRange().get();

@@ -111,14 +111,6 @@ class Java1_0ValidatorTest {
     }
 
     @Test
-    void nonEmptyList() {
-        ArrayCreationExpr expr = new ArrayCreationExpr(PrimitiveType.booleanType());
-        List<Problem> problems = new ArrayList<>();
-        new Java1_0Validator().accept(expr, new ProblemReporter(problems::add));
-        assertEquals("ArrayCreationExpr.levels can not be empty.", problems.get(0).getMessage());
-    }
-
-    @Test
     void noForEach() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x : xs){}"));
         assertProblems(result, "(line 1,col 1) For-each loops are not supported.");

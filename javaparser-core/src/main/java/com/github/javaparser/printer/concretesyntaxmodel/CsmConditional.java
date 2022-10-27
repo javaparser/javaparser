@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,13 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class CsmConditional implements CsmElement {
     private final Condition condition;
@@ -59,28 +59,35 @@ public class CsmConditional implements CsmElement {
     }
 
     public enum Condition {
-        IS_EMPTY,
-        IS_NOT_EMPTY,
-        IS_PRESENT,
-        FLAG;
-
-        boolean evaluate(Node node, ObservableProperty property){
-            if (this == IS_PRESENT) {
-                return !property.isNullOrNotPresent(node);
-            }
-            if (this == FLAG) {
-                return property.getValueAsBooleanAttribute(node);
-            }
-            if (this == IS_EMPTY) {
+        IS_EMPTY {
+            @Override
+            boolean evaluate(Node node, ObservableProperty property) {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value == null || value.isEmpty();
             }
-            if (this == IS_NOT_EMPTY) {
+        },
+        IS_NOT_EMPTY {
+            @Override
+            boolean evaluate(Node node, ObservableProperty property) {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
-            throw new UnsupportedOperationException(name());
-        }
+        },
+        IS_PRESENT {
+            @Override
+            boolean evaluate(Node node, ObservableProperty property) {
+                return !property.isNullOrNotPresent(node);
+            }
+        },
+        FLAG {
+            @Override
+            boolean evaluate(Node node, ObservableProperty property) {
+                return property.getValueAsBooleanAttribute(node);
+            }
+        };
+        
+        abstract boolean evaluate(Node node, ObservableProperty property);
+
     }
 
     public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {

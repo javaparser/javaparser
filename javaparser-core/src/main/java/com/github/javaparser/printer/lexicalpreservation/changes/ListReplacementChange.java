@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -48,7 +48,7 @@ public class ListReplacementChange implements Change {
             Object currentRawValue = new NoChange().getValue(property, node);
             if (currentRawValue instanceof Optional) {
                 Optional<?> optional = (Optional<?>) currentRawValue;
-                currentRawValue = optional.orElseGet(null);
+                currentRawValue = optional.orElse(null);
             }
             if (!(currentRawValue instanceof NodeList)) {
                 throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
