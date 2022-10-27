@@ -35,6 +35,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.ParserConfiguration;
@@ -125,21 +126,18 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		assertCanSolveGenericMethodCallCanInferFromArguments("staticGenericMethod1");
 	}
 
+	@Test
+	void solveVariadicStaticGenericMethodCallCanInferFromArguments() {
+		assertCanSolveGenericMethodCallCanInferFromArguments("variadicStaticGenericMethod");
+	}
+
 	private void assertCanSolveGenericMethodCallCanInferFromArguments(String callMethodName) {
 		MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", callMethodName);
 		CombinedTypeSolver typeSolver = createTypeSolver();
 
-		MethodCallExprContext context = new MethodCallExprContext(methodCallExpr, typeSolver);
-
-		ResolvedReferenceTypeDeclaration stringType = typeSolver.solveType("java.lang.String");
-
-		List<ResolvedType> argumentsTypes = new ArrayList<>();
-		argumentsTypes.add(new ReferenceTypeImpl(stringType, typeSolver));
-
-		Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes);
-		assertTrue(ref.isPresent());
-		assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
-		assertEquals(Collections.singletonList("java.lang.String"), ref.get().typeParametersMap().getTypes().stream()
+		MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
+		assertEquals("MethodCalls", methodUsage.declaringType().getQualifiedName());
+		assertEquals(Collections.singletonList("java.lang.String"), methodUsage.typeParametersMap().getTypes().stream()
 				.map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));
 	}
 
@@ -195,4 +193,23 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 
 		assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
 	}
+
+	@Test
+	void testIssue3195() {
+		ParserConfiguration config = new ParserConfiguration();
+		config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
+		StaticJavaParser.setConfiguration(config);
+		String s =
+				"import java.util.Arrays;\n" +
+						"class MyClass {\n" +
+						"    public void writeFile() {\n" +
+						"        Arrays.asList(\"\", \"\");\n" +
+						"    }\n" +
+						"}\n";
+		CompilationUnit cu = StaticJavaParser.parse(s);
+		MethodCallExpr metCallExpr = cu.findFirst(MethodCallExpr.class).get();
+		ResolvedType resolvedType = metCallExpr.calculateResolvedType();
+		assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
+	}
+
 }

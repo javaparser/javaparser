@@ -66,6 +66,8 @@ class MethodCalls {
     static <T> T staticGenericMethod0() { return null; }
     static <T> T staticGenericMethod1(T x) { return x; }
 
+    static <T> T variadicStaticGenericMethod(T... x) { return null; }
+
     static class GenericClass<T> {}
 
     static void variadicWithGenericArg(int i, GenericClass<?>... c) {}
@@ -78,5 +80,6 @@ class MethodCalls {
         MethodCalls.staticGenericMethod1("Hello");
 
         MethodCalls.variadicWithGenericArg(1, new GenericClass<Long>());
+        MethodCalls.variadicStaticGenericMethod("Hello1", "Hello2");
     }
 }
