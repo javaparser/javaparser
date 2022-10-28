@@ -257,13 +257,9 @@ public class VisitorList<N extends Node> implements List<N> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-        if (size() == 0)
-            return sb.append("]").toString();
-        for (EqualsHashcodeOverridingFacade facade : innerList) {
-            sb.append(facade.overridden.toString() + ", ");
-        }
-        return sb.replace(sb.length() - 2, sb.length(), "]").toString();
+        return innerList.stream()
+                .map(facade -> facade.overridden.toString())
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 
     private class EqualsHashcodeOverridingFacade implements Visitable {
