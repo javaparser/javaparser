@@ -23,7 +23,6 @@ package com.github.javaparser.utils;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -163,21 +162,18 @@ class VisitorSetTest {
         assertEquals("[]", set.toString());
 
         CompilationUnit x1 = parse("class X{}");
-        set.add(x1);
         CompilationUnit x2 = parse("class Y{}");
+        CompilationUnit x3 = parse("class Z{}");
+
+        set.add(x1);
         set.add(x2);
+        set.add(x3);
 
-        String[] validStrings = new String[]{"[" + x1 + ", " + x2 + "]", "[" + x2 + ", " + x1 + "]"};
-        boolean valid = false;
-        String setString = set.toString();
-        for (String s : validStrings) {
-            if (s.equals(setString)) {
-                valid = true;
-                break;
-            }
-        }
+        Set<CompilationUnit> hSet = new HashSet<>();
+        hSet.add(x1);
+        hSet.add(x2);
+        hSet.add(x3);
 
-        if (!valid)
-            fail("Did not return valid string.");
+        assertEquals(hSet.toString(), set.toString());
     }
 }
