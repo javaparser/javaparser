@@ -142,7 +142,7 @@ class VisitorSetTest {
     }
 
     @Test
-    void containsAllFalse() {
+    void visitorSetContainsOnlyPart() {
         List<CompilationUnit> list = new ArrayList<>();
         list.add(parse("class X{}"));
         list.add(parse("class X{}"));
