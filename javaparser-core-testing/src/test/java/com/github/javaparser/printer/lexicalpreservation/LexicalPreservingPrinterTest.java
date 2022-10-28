@@ -1757,4 +1757,23 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     }
 
+    @Test
+    void testAtypicalCommentAssignment() {
+        considerCode("public class TestClass {\n" +
+                "public void test(String p1, String p2) // this is a test\n" +
+                "{\n" +
+                "System.out.println(\"test\");\n" +
+                "}\n" +
+                "} ");
+
+        String expectedCode =   "public class TestClass {\n" +
+                "public void test(String p1, String p2) // this is a test\n" +
+                "{\n" +
+                "System.out.println(\"test\");\n" +
+                "}\n" +
+                "} ";
+
+        assertTransformedToString(expectedCode, cu);
+    }
+
 }
