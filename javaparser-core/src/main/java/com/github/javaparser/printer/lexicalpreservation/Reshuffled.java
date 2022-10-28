@@ -18,22 +18,23 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Elements in a CsmMix have been reshuffled. It could also mean that
  * some new elements have been added or removed to the mix.
  */
 public class Reshuffled implements DifferenceElement {
+
     private final CsmMix previousOrder;
+
     private final CsmMix nextOrder;
 
     Reshuffled(CsmMix previousOrder, CsmMix nextOrder) {
@@ -43,17 +44,18 @@ public class Reshuffled implements DifferenceElement {
 
     @Override
     public String toString() {
-        return "Reshuffled{" + nextOrder + ", previous="+ previousOrder+ '}';
+        return "Reshuffled{" + nextOrder + ", previous=" + previousOrder + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Reshuffled that = (Reshuffled) o;
-
-        if (!previousOrder.equals(that.previousOrder)) return false;
+        if (!previousOrder.equals(that.previousOrder))
+            return false;
         return nextOrder.equals(that.nextOrder);
     }
 
@@ -86,12 +88,12 @@ public class Reshuffled implements DifferenceElement {
     public boolean isRemoved() {
         return false;
     }
-    
+
     @Override
     public boolean isKept() {
         return false;
     }
-    
+
     /*
      * If the {@code DifferenceElement} wraps an EOL token then this method returns a new {@code DifferenceElement}
      * with all eof token replaced by the specified line separator. The line separator parameter must be a CsmToken with a valid line separator.
@@ -102,22 +104,22 @@ public class Reshuffled implements DifferenceElement {
         CsmMix modifiedPreviousOrder = new CsmMix(replaceTokens(previousOrder.getElements(), lineSeparator));
         return new Reshuffled(modifiedPreviousOrder, modifiedNextOrder);
     }
-    
+
     /*
      * Replaces all eol tokens in the list by the specified line separator token 
      */
     private List<CsmElement> replaceTokens(List<CsmElement> elements, CsmElement lineSeparator) {
-        return elements.stream()
-                .map(element -> isNewLineToken(element) ? lineSeparator : element)
-                .collect(Collectors.toList());
+        return elements.stream().map(element -> isNewLineToken(element) ? lineSeparator : element).collect(Collectors.toList());
     }
-    
+
     /*
      * Return true if the wrapped {@code CsmElement} is a new line token
      */
     private boolean isNewLineToken(CsmElement element) {
         return isToken(element) && ((CsmToken) element).isNewLine();
     }
-    
-    private boolean isToken(CsmElement element) { return element instanceof CsmToken; }
+
+    private boolean isToken(CsmElement element) {
+        return element instanceof CsmToken;
+    }
 }

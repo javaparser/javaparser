@@ -33,8 +33,10 @@ import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -148,13 +150,9 @@ public class ArrayCreationExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
-        if (this.levels != null) {
+        if (this.levels != null)
             this.levels.setParentNode(null);
-        }
         this.levels = levels;
-        if (this.levels.isEmpty()) {
-            this.levels = new NodeList<>(new ArrayCreationLevel());
-        }
         setAsParentNodeOf(levels);
         return this;
     }

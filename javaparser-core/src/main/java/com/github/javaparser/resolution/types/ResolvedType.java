@@ -18,15 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * <p>A resolved type. </p>
@@ -50,10 +49,9 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
  */
 public interface ResolvedType {
 
-    ///
-    /// Relation with other types
-    ///
-
+    // /
+    // / Relation with other types
+    // /
     /**
      * @return true, if this type represent an array - otherwise false.
      */
@@ -104,7 +102,9 @@ public interface ResolvedType {
     /**
      * Is this a lambda constraint type?
      */
-    default boolean isConstraint() { return false; }
+    default boolean isConstraint() {
+        return false;
+    }
 
     /**
      * Can this be seen as a ReferenceTypeUsage?
@@ -125,15 +125,14 @@ public interface ResolvedType {
     default boolean isWildcard() {
         return false;
     }
-    
+
     default boolean isInferenceVariable() {
         return false;
     }
 
-    ///
-    /// Downcasting
-    ///
-
+    // /
+    // / Downcasting
+    // /
     default ResolvedArrayType asArrayType() {
         throw new UnsupportedOperationException(String.format("%s is not an Array", this));
     }
@@ -166,16 +165,14 @@ public interface ResolvedType {
         throw new UnsupportedOperationException(String.format("%s is not a union type", this));
     }
 
-    ///
-    /// Naming
-    ///
-
+    // /
+    // / Naming
+    // /
     String describe();
 
-    ///
-    /// TypeParameters
-    ///
-
+    // /
+    // / TypeParameters
+    // /
     /**
      * Replace all variables referring to the given TypeParameter with the given value.
      * By replacing these values I could also infer some type equivalence.
@@ -199,42 +196,38 @@ public interface ResolvedType {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName());
     }
 
-    ///
-    /// Assignability
-    ///
-
+    // /
+    // / Assignability
+    // /
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */
     boolean isAssignableBy(ResolvedType other);
-    
+
     /*
      * Returns true if the ResolvedType is a numeric
      */
     default boolean isNumericType() {
-        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt-> rpt.isAssignableBy(this));
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt -> rpt.isAssignableBy(this));
     }
-    
-    ///
-    /// Erasure
-    ///
+
+    // /
+    // / Erasure
+    // /
     // Type erasure is a mapping from types (possibly including parameterized types and type variables) to types (that
-    /// are never parameterized types or type variables). We write |T| for the erasure of type T. The erasure mapping
-    /// is defined as follows:
-    //
+    // / are never parameterized types or type variables). We write |T| for the erasure of type T. The erasure mapping
+    // / is defined as follows:
+    // 
     // The erasure of a parameterized type (§4.5) G<T1,...,Tn> is |G|.
-    //
+    // 
     // The erasure of a nested type T.C is |T|.C.
-    //
+    // 
     // The erasure of an array type T[] is |T|[].
-    //
+    // 
     // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
-    //
+    // 
     // The erasure of every other type is the type itself.
-    
     default ResolvedType erasure() {
         return this;
     }
-    
-    
 }

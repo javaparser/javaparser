@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
@@ -30,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
  * Implement the "visit" methods you want to use for validation.
  */
 public abstract class VisitorValidator extends VoidVisitorAdapter<ProblemReporter> implements Validator {
+
     @Override
     public void accept(Node node, ProblemReporter problemReporter) {
         node.accept(this, problemReporter);

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types.parametrization;
 
 /**
@@ -27,5 +26,6 @@ package com.github.javaparser.resolution.types.parametrization;
  * @author Federico Tomassetti
  */
 public interface ResolvedTypeParametrized {
+
     ResolvedTypeParametersMap typeParametersMap();
 }

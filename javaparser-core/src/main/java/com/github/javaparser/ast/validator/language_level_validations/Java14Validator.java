@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.body.RecordDeclaration;
@@ -49,10 +48,8 @@ public class Java14Validator extends Java13Validator {
 
     final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
 
-
     public Java14Validator() {
         super();
-
         // Released Language Features
         {
             /*
