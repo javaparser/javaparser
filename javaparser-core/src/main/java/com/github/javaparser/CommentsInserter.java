@@ -28,6 +28,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.Optional;
+import java.util.Comparator;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -164,26 +166,22 @@ class CommentsInserter {
     }
 
     private void attributeLineCommentsOnSameLine(TreeSet<Comment> commentsToAttribute, List<Node> children) {
-        /* I can attribute in line comments to elements preceeding them, if
+        /* I can attribute in line comments to the last element preceeding them, if
          there is something contained in their line */
         List<Comment> attributedComments = new LinkedList<>();
         commentsToAttribute.stream()
                 .filter(comment -> comment.hasRange())
                 .filter(Comment::isLineComment)
                 .forEach(comment -> {
-                    for (Node child : children) {
-                        if (!child.hasRange()) continue;
+                    Optional<Node> last = children.stream()
+                            .filter(child -> child.hasRange())
+                            .filter(child -> !child.getComment().isPresent())
+                            .filter(child -> child.getRange().get().end.line == comment.getRange().get().begin.line)
+                            .max(Comparator.comparing(child -> child.getRange().get().end.column));
 
-                        Range commentRange = comment.getRange().get();
-                        Range childRange = child.getRange().get();
-                        if (childRange.end.line == commentRange.begin.line
-                                && attributeLineCommentToNodeOrChild(child, comment.asLineComment())) {
-                            attributedComments.add(comment);
-                            break;
-                        }
-                    }
+                    if (last.isPresent() && attributeLineCommentToNodeOrChild(last.get(), comment.asLineComment()))
+                        attributedComments.add(comment);
                 });
-
         commentsToAttribute.removeAll(attributedComments);
     }
 
