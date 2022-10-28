@@ -18,21 +18,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
-
-import java.util.Arrays;
-import java.util.List;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CsmConditional implements CsmElement {
+
     private final Condition condition;
+
     private final List<ObservableProperty> properties;
+
     private final CsmElement thenElement;
+
     private final CsmElement elseElement;
 
     public Condition getCondition() {
@@ -45,7 +48,7 @@ public class CsmConditional implements CsmElement {
         }
         return properties.get(0);
     }
-    
+
     public List<ObservableProperty> getProperties() {
         return properties;
     }
@@ -59,35 +62,40 @@ public class CsmConditional implements CsmElement {
     }
 
     public enum Condition {
+
         IS_EMPTY {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value == null || value.isEmpty();
             }
-        },
-        IS_NOT_EMPTY {
+        }
+        , IS_NOT_EMPTY {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
-        },
-        IS_PRESENT {
+        }
+        , IS_PRESENT {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 return !property.isNullOrNotPresent(node);
             }
-        },
-        FLAG {
+        }
+        , FLAG {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 return property.getValueAsBooleanAttribute(node);
             }
-        };
-        
-        abstract boolean evaluate(Node node, ObservableProperty property);
+        }
+        ;
 
+        abstract boolean evaluate(Node node, ObservableProperty property);
     }
 
     public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {

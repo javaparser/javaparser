@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -36,6 +35,7 @@ import java.util.stream.Collectors;
  * A node which has a list of variables.
  */
 public interface NodeWithVariables<N extends Node> {
+
     NodeList<VariableDeclarator> getVariables();
 
     N setVariables(NodeList<VariableDeclarator> variables);
@@ -130,6 +130,7 @@ public interface NodeWithVariables<N extends Node> {
     static Optional<Type> calculateMaximumCommonType(List<Type> types) {
         // we use a local class because we cannot use an helper static method in an interface
         class Helper {
+
             // Conceptually: given a type we start from the Element Type and get as many array levels as indicated
             // From the implementation point of view we start from the actual type and we remove how many array
             // levels as needed to get the target level of arrays
@@ -147,7 +148,6 @@ public interface NodeWithVariables<N extends Node> {
                 return Optional.of(type);
             }
         }
-
         Helper helper = new Helper();
         int level = 0;
         boolean keepGoing = true;
@@ -170,5 +170,4 @@ public interface NodeWithVariables<N extends Node> {
         }
         return helper.toArrayLevel(types.get(0), --level);
     }
-
 }

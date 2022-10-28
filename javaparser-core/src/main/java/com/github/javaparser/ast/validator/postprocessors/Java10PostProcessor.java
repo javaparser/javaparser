@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.postprocessors;
 
 import com.github.javaparser.ParseResult;
@@ -32,7 +31,9 @@ import com.github.javaparser.ast.type.VarType;
  * Processes the generic AST into a Java 10 AST and validates it.
  */
 public class Java10PostProcessor extends PostProcessors {
+
     protected final Processor varNodeCreator = new Processor() {
+
         @Override
         public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
             result.getResult().ifPresent(node -> {
