@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 /**
@@ -70,10 +69,6 @@ public class UnsolvedSymbolException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "UnsolvedSymbolException{" +
-               "context='" + context + "'" +
-               ", name='" + name + "'" +
-               ", cause='" + cause + "'" +
-               "}";
+        return "UnsolvedSymbolException{" + "context='" + context + "'" + ", name='" + name + "'" + ", cause='" + cause + "'" + "}";
     }
 }

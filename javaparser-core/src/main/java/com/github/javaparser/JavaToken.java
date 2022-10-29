@@ -20,14 +20,14 @@
  */
 package com.github.javaparser;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Generated;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.github.javaparser.ast.Generated;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A token from a parsed source file.

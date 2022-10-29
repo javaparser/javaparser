@@ -18,12 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
-import java.util.Map;
-
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+
+import java.util.Map;
 
 /**
  * Array Type.
@@ -38,19 +37,18 @@ public class ResolvedArrayType implements ResolvedType {
         this.baseType = baseType;
     }
 
-    ///
-    /// Object methods
-    ///
-
+    // /
+    // / Object methods
+    // /
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ResolvedArrayType that = (ResolvedArrayType) o;
-
-        if (!baseType.equals(that.baseType)) return false;
-
+        if (!baseType.equals(that.baseType))
+            return false;
         return true;
     }
 
@@ -64,10 +62,9 @@ public class ResolvedArrayType implements ResolvedType {
         return "ResolvedArrayType{" + baseType + "}";
     }
 
-    ///
-    /// Type methods
-    ///
-
+    // /
+    // / Type methods
+    // /
     @Override
     public ResolvedArrayType asArrayType() {
         return this;
@@ -91,7 +88,7 @@ public class ResolvedArrayType implements ResolvedType {
     public boolean isAssignableBy(ResolvedType other) {
         if (other.isArray()) {
             if (baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive()) {
-              return baseType.equals(other.asArrayType().getComponentType());
+                return baseType.equals(other.asArrayType().getComponentType());
             }
             return baseType.isAssignableBy(other.asArrayType().getComponentType());
         } else if (other.isNull()) {
@@ -109,14 +106,13 @@ public class ResolvedArrayType implements ResolvedType {
             return new ResolvedArrayType(baseTypeReplaced);
         }
     }
-    
-    ///
-    /// Erasure
-    ///
+
+    // /
+    // / Erasure
+    // /
     // The erasure of an array type T[] is |T|[].
     @Override
     public ResolvedType erasure() {
         return new ResolvedArrayType(baseType.erasure());
     }
-
 }

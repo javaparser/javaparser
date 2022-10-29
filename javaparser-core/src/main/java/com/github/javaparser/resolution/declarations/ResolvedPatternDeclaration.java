@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 /**
@@ -45,7 +44,6 @@ public interface ResolvedPatternDeclaration extends ResolvedValueDeclaration {
     default boolean hasName() {
         return true;
     }
-
 
     default String describeType() {
         return getType().describe();
