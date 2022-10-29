@@ -896,6 +896,13 @@ class ContextTest extends AbstractSymbolResolutionTest {
             assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
         }
 
+        @Test
+        void patternExprPrint() {
+            InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof final String s",
+                    ParseStart.EXPRESSION).asInstanceOfExpr();
+            assertEquals("final String s", instanceOfExpr.getPattern().get().toString());
+        }
+
 
         @Nested
         class PatternExprNegationTests {

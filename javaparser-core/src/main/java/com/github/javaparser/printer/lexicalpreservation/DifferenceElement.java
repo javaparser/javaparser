@@ -18,12 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 
 public interface DifferenceElement {
+
     static DifferenceElement added(CsmElement element) {
         return new Added(element);
     }
@@ -44,11 +44,13 @@ public interface DifferenceElement {
     boolean isAdded();
 
     boolean isRemoved();
-    
-    default boolean isChild() { 
-        return getElement() instanceof LexicalDifferenceCalculator.CsmChild; 
+
+    boolean isKept();
+
+    default boolean isChild() {
+        return getElement() instanceof LexicalDifferenceCalculator.CsmChild;
     }
-    
+
     /*
      * If the {@code DifferenceElement} wraps an EOL token then this method returns a new wrapped {@code CsmElement}
      * with the specified line separator. The line separator parameter must be a {@code CsmToken} with a valid line
