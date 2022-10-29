@@ -21,6 +21,7 @@
 
 package com.github.javaparser;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualToTextResource;
 import static com.github.javaparser.utils.TestUtils.assertEqualToTextResourceNoEol;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
@@ -112,4 +113,24 @@ class CommentsInserterTest {
         CompilationUnit cu = parseSample("Issue412").getResult().get();
         assertEqualToTextResourceNoEol(makeExpectedFilename("Issue412"), cu.toString());
     }
+
+    @Test
+    void lineCommentAssignedToLastNode() {
+        String src = "public class TestClass {\n" +
+                "public void test(String p1, String p2) // this is a test\n" +
+                "{\n" +
+                "System.out.println(\"test\");\n" +
+                "}\n" +
+                "} ";
+        CompilationUnit cu = parse(src);
+
+        assertEqualsStringIgnoringEol("public class TestClass {\n" +
+                "\n" +
+                "    public void test(String p1, // this is a test\n" +
+                "    String p2) {\n" +
+                "        System.out.println(\"test\");\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
 }
