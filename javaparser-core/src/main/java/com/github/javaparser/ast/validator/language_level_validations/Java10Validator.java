@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.type.VarType;
@@ -37,9 +36,7 @@ public class Java10Validator extends Java9Validator {
 
     public Java10Validator() {
         super();
-
         // Released Language Features
-
         {
             /*
              * Java 10 released local variable type inference in for and try-with (JEP286).
@@ -47,6 +44,5 @@ public class Java10Validator extends Java9Validator {
              */
             add(varOnlyOnLocalVariableDefinitionAndForAndTry);
         }
-
     }
 }

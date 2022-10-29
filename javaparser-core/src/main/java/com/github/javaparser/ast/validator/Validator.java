@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
@@ -28,6 +27,7 @@ import com.github.javaparser.ast.Node;
  * It is fully up to the implementor how to do this.
  */
 public interface Validator extends TypedValidator<Node> {
+
     /**
      * @param node the node that wants to be validated
      * @param problemReporter when found, validation errors can be reported here

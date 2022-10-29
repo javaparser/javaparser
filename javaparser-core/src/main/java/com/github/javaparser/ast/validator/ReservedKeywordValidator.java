@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.expr.Name;
@@ -31,7 +30,9 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * accepts because they were added after Java 1.0.
  */
 public class ReservedKeywordValidator extends VisitorValidator {
+
     private final String keyword;
+
     private final String error;
 
     public ReservedKeywordValidator(String keyword) {
