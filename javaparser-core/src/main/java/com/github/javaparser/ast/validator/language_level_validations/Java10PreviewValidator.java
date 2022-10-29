@@ -18,13 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
-
-import com.github.javaparser.ast.type.VarType;
-import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
-import com.github.javaparser.ast.validator.Validator;
-import com.github.javaparser.ast.validator.language_level_validations.chunks.VarValidator;
 
 /**
  * This validator validates according to Java 10 syntax rules -- including incubator/preview/second preview features.
@@ -35,15 +29,11 @@ public class Java10PreviewValidator extends Java10Validator {
 
     public Java10PreviewValidator() {
         super();
-
         // Incubator
         // No incubator language features added within Java 10
-
         // Preview
         // No preview language features added within Java 10
-
         // 2nd Preview
         // No 2nd preview language features added within Java 10
-
     }
 }
