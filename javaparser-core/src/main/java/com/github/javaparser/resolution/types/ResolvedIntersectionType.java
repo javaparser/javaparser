@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -32,6 +31,7 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class ResolvedIntersectionType implements ResolvedType {
+
     private List<ResolvedType> elements;
 
     public ResolvedIntersectionType(Collection<ResolvedType> elements) {
@@ -43,11 +43,11 @@ public class ResolvedIntersectionType implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ResolvedIntersectionType that = (ResolvedIntersectionType) o;
-
         return new HashSet<>(elements).equals(new HashSet<>(that.elements));
     }
 
@@ -68,14 +68,11 @@ public class ResolvedIntersectionType implements ResolvedType {
 
     @Override
     public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
-        List<ResolvedType> elementsReplaced = elements.stream()
-                .map(e -> e.replaceTypeVariables(tp, replaced, inferredTypes))
-                .collect(Collectors.toList());
+        List<ResolvedType> elementsReplaced = elements.stream().map(e -> e.replaceTypeVariables(tp, replaced, inferredTypes)).collect(Collectors.toList());
         if (elementsReplaced.equals(elements)) {
             return this;
         } else {
             return new ResolvedIntersectionType(elementsReplaced);
         }
     }
-
 }
