@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
@@ -38,6 +37,14 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.utils.PositionUtils;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeSet;
+
+import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
+import static java.util.stream.Collectors.toList;
+
 /**
  * Assigns comments to nodes of the AST.
  *
@@ -45,6 +52,7 @@ import com.github.javaparser.utils.PositionUtils;
  * @author Júlio Vilmar Gesser
  */
 class CommentsInserter {
+
     private final ParserConfiguration configuration;
 
     CommentsInserter(ParserConfiguration configuration) {
@@ -58,20 +66,14 @@ class CommentsInserter {
     private void insertComments(CompilationUnit cu, TreeSet<Comment> comments) {
         if (comments.isEmpty())
             return;
-
         /* I should sort all the direct children and the comments, if a comment
          is the first thing then it is a comment to the CompilationUnit */
-
         // FIXME if there is no package it could be also a comment to the following class...
         // so I could use some heuristics in these cases to distinguish the two
         // cases
-
         List<Node> children = cu.getChildNodes();
-
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackageDeclaration().isPresent()
-                && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, cu.getPackageDeclaration().get()))) {
+        if (cu.getPackageDeclaration().isPresent() && (children.isEmpty() || PositionUtils.areInOrder(firstComment, cu.getPackageDeclaration().get()))) {
             cu.setComment(firstComment);
             comments.remove(firstComment);
         }
@@ -84,37 +86,24 @@ class CommentsInserter {
     void insertComments(Node node, TreeSet<Comment> commentsToAttribute) {
         if (commentsToAttribute.isEmpty())
             return;
-
         if (node instanceof CompilationUnit) {
             insertComments((CompilationUnit) node, commentsToAttribute);
         }
-
         /* the comment can...
          1) be inside one of the children, then the comment should be associated to this child
          2) be outside all children. They could be preceding nothing, a comment or a child.
             If they preceed a child they are assigned to it, otherwise they remain "orphans"
          */
-
-        List<Node> children = node.getChildNodes().stream()
-                // Never attribute comments to modifiers.
-                .filter(n -> !(n instanceof Modifier))
-                .collect(toList());
-
+        List<Node> children = node.getChildNodes().stream().// Never attribute comments to modifiers.
+        filter(n -> !(n instanceof Modifier)).collect(toList());
         boolean attributeToAnnotation = !(configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);
-            commentsInsideChild.addAll(
-                    commentsToAttribute.stream()
-                            .filter(comment -> comment.hasRange())
-                            .filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation))
-                            .collect(toList())
-            );
+            commentsInsideChild.addAll(commentsToAttribute.stream().filter(comment -> comment.hasRange()).filter(comment -> PositionUtils.nodeContains(child, comment, !attributeToAnnotation)).collect(toList()));
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }
-
         attributeLineCommentsOnSameLine(commentsToAttribute, children);
-
         /* if a comment is on the line right before a node it should belong
         to that node*/
         if (!commentsToAttribute.isEmpty()) {
@@ -123,7 +112,6 @@ class CommentsInserter {
                 commentsToAttribute.remove(commentsToAttribute.first());
             }
         }
-
         /* at this point I create an ordered list of all remaining comments and
          children */
         Comment previousComment = null;
@@ -132,11 +120,8 @@ class CommentsInserter {
         // Avoid attributing comments to a meaningless container.
         childrenAndComments.addAll(children);
         commentsToAttribute.removeAll(attributedComments);
-
         childrenAndComments.addAll(commentsToAttribute);
-        PositionUtils.sortByBeginPosition(childrenAndComments,
-                configuration.isIgnoreAnnotationsWhenAttributingComments());
-
+        PositionUtils.sortByBeginPosition(childrenAndComments, configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node thing : childrenAndComments) {
             if (thing instanceof Comment) {
                 previousComment = (Comment) thing;
@@ -145,8 +130,7 @@ class CommentsInserter {
                 }
             } else {
                 if (previousComment != null && !thing.getComment().isPresent()) {
-                    if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines()
-                            || !thereAreLinesBetween(previousComment, thing)) {
+                    if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines() || !thereAreLinesBetween(previousComment, thing)) {
                         thing.setComment(previousComment);
                         attributedComments.add(previousComment);
                         previousComment = null;
@@ -154,9 +138,7 @@ class CommentsInserter {
                 }
             }
         }
-
         commentsToAttribute.removeAll(attributedComments);
-
         // all the remaining are orphan nodes
         for (Comment c : commentsToAttribute) {
             if (c.isOrphan()) {
@@ -189,11 +171,9 @@ class CommentsInserter {
         if (!node.hasRange() || !lineComment.hasRange()) {
             return false;
         }
-
         // The node start and end at the same line as the comment,
         // let's give to it the comment
-        if (node.getBegin().get().line == lineComment.getBegin().get().line
-                && !node.getComment().isPresent()) {
+        if (node.getBegin().get().line == lineComment.getBegin().get().line && !node.getComment().isPresent()) {
             if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
             }
@@ -205,13 +185,11 @@ class CommentsInserter {
         children.addAll(node.getChildNodes());
         PositionUtils.sortByBeginPosition(children);
         Collections.reverse(children);
-
         for (Node child : children) {
             if (attributeLineCommentToNodeOrChild(child, lineComment)) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -227,8 +205,8 @@ class CommentsInserter {
     }
 
     private boolean commentIsOnNextLine(Node a, Comment c) {
-        if (!c.hasRange() || !a.hasRange()) return false;
+        if (!c.hasRange() || !a.hasRange())
+            return false;
         return c.getRange().get().end.line + 1 == a.getRange().get().begin.line;
     }
-
 }
