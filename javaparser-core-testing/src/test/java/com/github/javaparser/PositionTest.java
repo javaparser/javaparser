@@ -1,5 +1,6 @@
 package com.github.javaparser;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,20 +23,14 @@ public class PositionTest {
     }
 
     @Test
-    public void testPositionExceptionMessage() {
-        try {
-            Position p = new Position(-10, 1);
-            fail("Created " + p + " without exception.");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Can't position at line -10", e.getMessage());
-        }
+    public void testPositionExceptionFormat() {
+        IllegalArgumentException thrown1 = Assertions.assertThrows(IllegalArgumentException.class, () -> new Position(-10, 1));
 
-        try {
-            Position p = new Position(1, -10);
-            fail("Created " + p + " without exception.");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Can't position at column -10", e.getMessage());
-        }
+        assertEquals("Can't position at line -10", thrown1.getMessage());
+
+        IllegalArgumentException thrown2 = Assertions.assertThrows(IllegalArgumentException.class, () -> new Position(1, -10));
+
+        assertEquals("Can't position at column -10", thrown2.getMessage());
     }
 
 }
