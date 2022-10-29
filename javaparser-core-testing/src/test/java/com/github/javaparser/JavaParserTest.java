@@ -68,7 +68,7 @@ class JavaParserTest {
         String code = "@interface AD { String foo(); }";
         CompilationUnit cu = parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertTrue(memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.hasRange());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
 
@@ -77,7 +77,7 @@ class JavaParserTest {
         String code = "@interface AD \\u007B String foo(); \\u007D";
         CompilationUnit cu = parseWithUnicodeEscapes(code).getResult().get();
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertTrue(memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.hasRange());
         assertEquals(new Range(new Position(1, 22), new Position(1, 34)), memberDeclaration.getRange().get());
     }
 
@@ -103,7 +103,7 @@ class JavaParserTest {
         String code = "@interface AD { String[] foo(); }";
         CompilationUnit cu = parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
-        assertTrue(memberDeclaration.getRange().isPresent());
+        assertTrue(memberDeclaration.hasRange());
         assertEquals(new Range(new Position(1, 17), new Position(1, 31)), memberDeclaration.getRange().get());
     }
 

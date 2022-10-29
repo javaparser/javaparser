@@ -17,27 +17,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.configuration;
 
 /**
- * This class defines the characteristics of an indentation: the type (space, tabs..) and the size (How many characters must be used to indent the code). 
- *
+ * This class defines the characteristics of an indentation: the type (space, tabs..) and the size (How many characters must be used to indent the code).
  */
 public class Indentation {
-    
+
     public enum IndentType {
+
         /**
          * Indent with spaces.
          */
         SPACES(' ', 1),
-
         /**
          * Indent with tabs as far as possible.
          * For proper aligning, the tab width is necessary and by default 4.
          */
         TABS('\t', 4),
-
         /**
          * Indent with tabs but align with spaces when wrapping and aligning
          * method call chains and method call parameters.
@@ -60,11 +57,11 @@ public class Indentation {
          * </pre>
          */
         TABS_WITH_SPACE_ALIGN('\t', 4);
-        
+
         private Character car;
-        
+
         private int width;
-        
+
         private IndentType(Character c, int width) {
             this.car = c;
             this.width = width;
@@ -77,21 +74,20 @@ public class Indentation {
         public int getWidth() {
             return width;
         }
-        
     }
-    
+
     // default size
-    private static final int DEFAULT_SIZE = 4; 
-    
+    private static final int DEFAULT_SIZE = 4;
+
     // type of the indentation
     private IndentType type;
-    
+
     // size of the indentation (define how many spaces or tabs is used to indent)
     private int size;
-    
+
     // formatted indentation
     private String formattedIndentation = "";
-    
+
     /*
      * Creates an Indentation with a type and size
      */
@@ -100,14 +96,14 @@ public class Indentation {
         this.size = size;
         format();
     }
-    
+
     /*
      * Creates an Indentation with the default size
      */
     public Indentation(IndentType type) {
         this(type, DEFAULT_SIZE);
     }
-    
+
     /*
      * set the size of the indentation (how many spaces or tabs?)
      */
@@ -116,11 +112,11 @@ public class Indentation {
         format();
         return this;
     }
-    
+
     public int getSize() {
         return size;
     }
-    
+
     /*
      * set the type of the indentation (spaces, tabs...)
      */
@@ -129,7 +125,7 @@ public class Indentation {
         format();
         return this;
     }
-    
+
     public IndentType getType() {
         return type;
     }
@@ -140,7 +136,7 @@ public class Indentation {
     public String getIndent() {
         return formattedIndentation;
     }
-    
+
     // format the indentation string
     private void format() {
         StringBuilder indentString = new StringBuilder();
@@ -150,9 +146,9 @@ public class Indentation {
         }
         formattedIndentation = indentString.toString();
     }
-    
+
     @Override
     public String toString() {
-        return type.name() + " size=" + size ;
+        return type.name() + " size=" + size;
     }
 }

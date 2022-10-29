@@ -18,9 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
-
 
 import com.github.javaparser.resolution.types.ResolvedType;
 
@@ -35,5 +33,4 @@ public interface ResolvedValueDeclaration extends ResolvedDeclaration {
      * Type of the declaration.
      */
     ResolvedType getType();
-
 }

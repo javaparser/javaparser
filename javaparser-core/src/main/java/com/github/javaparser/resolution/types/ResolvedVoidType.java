@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
 /**
@@ -27,6 +26,7 @@ package com.github.javaparser.resolution.types;
  * @author Federico Tomassetti
  */
 public class ResolvedVoidType implements ResolvedType {
+
     public static final ResolvedType INSTANCE = new ResolvedVoidType();
 
     private ResolvedVoidType() {
@@ -43,12 +43,12 @@ public class ResolvedVoidType implements ResolvedType {
         // """
         // Note that the Java programming language does not allow a "cast to void" - void is not a type - so the
         // traditional C trick of writing an expression statement such as:
-        //
+        // 
         // (void)... ;  // incorrect!
-        //
+        // 
         // does not work.
         // """
-        //
+        // 
         // In short, nothing can be assign to "void".
         return false;
     }
