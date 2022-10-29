@@ -554,13 +554,14 @@ public final class JavaParser {
         if (result.isSuccessful()) {
 
             Optional<T> results = result.getResult();
-            if (results.isPresent())
+            if (results.isPresent()) {
                 return results.get();
-            else
-                throw new IllegalStateException(
-                        "Parsed results are marked as successful but there are no values present.");
-        } else
-            throw new ParseProblemException(result.getProblems());
+            }
+
+            throw new IllegalStateException("Parsed results are marked as successful but there are no values present.");
+        }
+
+        throw new ParseProblemException(result.getProblems());
     }
 
     /**
