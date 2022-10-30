@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -26,6 +25,7 @@ import com.github.javaparser.ast.Node;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 public interface NodeWithIdentifier<N extends Node> {
+
     String getIdentifier();
 
     N setIdentifier(String identifier);

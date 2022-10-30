@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import java.util.List;
@@ -28,8 +27,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaration,
-        HasAccessSpecifier {
+public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaration, HasAccessSpecifier {
 
     @Override
     default boolean isEnum() {
@@ -48,7 +46,6 @@ public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaratio
     }
 
     default ResolvedEnumConstantDeclaration getEnumConstant(final String name) {
-        return getEnumConstants().stream().filter(c -> c.getName().equals(name)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No constant named " + name));
+        return getEnumConstants().stream().filter(c -> c.getName().equals(name)).findFirst().orElseThrow(() -> new IllegalArgumentException("No constant named " + name));
     }
 }
