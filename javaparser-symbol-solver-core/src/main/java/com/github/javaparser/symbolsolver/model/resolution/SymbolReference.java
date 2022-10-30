@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.model.resolution;
 
+import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 
 import java.util.Optional;
@@ -33,9 +34,9 @@ import java.util.Optional;
  */
 public class SymbolReference<S extends ResolvedDeclaration> {
 
-    private Optional<? extends S> correspondingDeclaration;
+    private final S correspondingDeclaration;
 
-    private SymbolReference(Optional<? extends S> correspondingDeclaration) {
+    private SymbolReference(@Nullable S correspondingDeclaration) {
         this.correspondingDeclaration = correspondingDeclaration;
     }
 
@@ -43,14 +44,25 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * Create a solve reference to the given symbol.
      */
     public static <S extends ResolvedDeclaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration) {
-        return new SymbolReference<S>(Optional.of(symbolDeclaration));
+        return new SymbolReference<>(symbolDeclaration);
+    }
+
+    /**
+     * Create a reference for an unsolved symbol.
+     *
+     * @return The created unsolved symbol reference.
+     *
+     * @param <S> The symbol reference type.
+     */
+    public static <S extends ResolvedDeclaration> SymbolReference<S> unsolved() {
+        return new SymbolReference<>(null);
     }
 
     /**
      * Create an unsolved reference specifying the type of the value expected.
      */
     public static <S extends ResolvedDeclaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz) {
-        return new SymbolReference<>(Optional.empty());
+        return new SymbolReference<>(null);
     }
 
     @Override
@@ -59,28 +71,44 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     }
 
     /**
-     * The corresponding declaration. If not solve this throws UnsupportedOperationException.
-     * // TODO: Convert this to returning Optional.
+     * Get the declaration associated with the Symbol.
+     *
+     * @return an {@link Optional} with a present value if the symbol is solved, otherwise an empty {@link Optional}.
      */
+    public Optional<S> getDeclaration() {
+        return Optional.ofNullable(correspondingDeclaration);
+    }
+
+    /**
+     * The corresponding declaration. If not solve this throws UnsupportedOperationException.
+     *
+     * @deprecated This function is deprecated. Please consider using {@link #getDeclaration()}
+     */
+    @Deprecated
     public S getCorrespondingDeclaration() {
-        if (!isSolved()) {
-            throw new UnsupportedOperationException("CorrespondingDeclaration not available for unsolved symbol.");
+
+        Optional<S> declaration = getDeclaration();
+        if (declaration.isPresent()) {
+            return declaration.get();
         }
-        return correspondingDeclaration.get();
+
+        throw new UnsupportedOperationException("CorrespondingDeclaration not available for unsolved symbol.");
     }
 
     /**
      * Is the reference solved?
+     *
+     * @deprecated To check if the reference is solved, please consider using {@link #getDeclaration()}
+     *             followed by {@link Optional#isPresent()}.
      */
+    @Deprecated
     public boolean isSolved() {
-        return correspondingDeclaration.isPresent();
+        return getDeclaration().isPresent();
     }
 
     public static <O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<? extends O> ref, Class<O> clazz) {
-        if (ref.isSolved()) {
-            return SymbolReference.solved(ref.getCorrespondingDeclaration());
-        } else {
-            return SymbolReference.unsolved(clazz);
-        }
+        return ref.getDeclaration()
+                .<SymbolReference<O>>map(SymbolReference::solved)
+                .orElseGet(() -> SymbolReference.unsolved(clazz));
     }
 }
