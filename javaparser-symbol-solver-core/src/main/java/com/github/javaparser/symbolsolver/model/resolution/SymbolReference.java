@@ -105,10 +105,7 @@ public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
-     *
-     * @deprecated This function is deprecated. Please consider using {@link #getDeclaration()}
      */
-    @Deprecated
     public S getCorrespondingDeclaration() {
 
         Optional<S> declaration = getDeclaration();
@@ -121,11 +118,7 @@ public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
      * Is the reference solved?
-     *
-     * @deprecated To check if the reference is solved, please consider using {@link #getDeclaration()}
-     *             followed by {@link Optional#isPresent()}.
      */
-    @Deprecated
     public boolean isSolved() {
         return getDeclaration().isPresent();
     }
