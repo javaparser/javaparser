@@ -18,13 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +40,7 @@ import static com.github.javaparser.utils.Utils.*;
 class JavadocParser {
 
     private static String BLOCK_TAG_PREFIX = "@";
+
     private static Pattern BLOCK_PATTERN = Pattern.compile("^\\s*" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
 
     public static Javadoc parse(JavadocComment comment) {
@@ -48,11 +49,7 @@ class JavadocParser {
 
     public static Javadoc parse(String commentContent) {
         List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, SYSTEM_EOL));
-        int indexOfFirstBlockTag = cleanLines.stream()
-                .filter(JavadocParser::isABlockLine)
-                .map(cleanLines::indexOf)
-                .findFirst()
-                .orElse(-1);
+        int indexOfFirstBlockTag = cleanLines.stream().filter(JavadocParser::isABlockLine).map(cleanLines::indexOf).findFirst().orElse(-1);
         List<String> blockLines;
         String descriptionText;
         if (indexOfFirstBlockTag == -1) {
@@ -60,21 +57,13 @@ class JavadocParser {
             blockLines = Collections.emptyList();
         } else {
             descriptionText = trimRight(String.join(SYSTEM_EOL, cleanLines.subList(0, indexOfFirstBlockTag)));
-
-            //Combine cleaned lines, but only starting with the first block tag till the end
-            //In this combined string it is easier to handle multiple lines which actually belong together
-            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size())
-                .stream()
-                .collect(Collectors.joining(SYSTEM_EOL));
-
-            //Split up the entire tag back again, considering now that some lines belong to the same block tag.
-            //The pattern splits the block at each new line starting with the '@' symbol, thus the symbol
-            //then needs to be added again so that the block parsers handles everything correctly.
-            blockLines = BLOCK_PATTERN
-                .splitAsStream(tagBlock)
-                .filter(s1 -> !s1.isEmpty())
-                .map(s -> BLOCK_TAG_PREFIX + s)
-                .collect(Collectors.toList());
+            // Combine cleaned lines, but only starting with the first block tag till the end
+            // In this combined string it is easier to handle multiple lines which actually belong together
+            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()).stream().collect(Collectors.joining(SYSTEM_EOL));
+            // Split up the entire tag back again, considering now that some lines belong to the same block tag.
+            // The pattern splits the block at each new line starting with the '@' symbol, thus the symbol
+            // then needs to be added again so that the block parsers handles everything correctly.
+            blockLines = BLOCK_PATTERN.splitAsStream(tagBlock).filter(s1 -> !s1.isEmpty()).map(s -> BLOCK_TAG_PREFIX + s).collect(Collectors.toList());
         }
         Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
@@ -104,7 +93,6 @@ class JavadocParser {
         if (lines.length == 0) {
             return Collections.emptyList();
         }
-
         List<String> cleanedLines = Arrays.stream(lines).map(l -> {
             int asteriskIndex = startsWithAsterisk(l);
             if (asteriskIndex == -1) {
@@ -113,7 +101,6 @@ class JavadocParser {
                 // if a line starts with space followed by an asterisk drop to the asterisk
                 // if there is a space immediately after the asterisk drop it also
                 if (l.length() > (asteriskIndex + 1)) {
-
                     char c = l.charAt(asteriskIndex + 1);
                     if (c == ' ' || c == '\t') {
                         return l.substring(asteriskIndex + 2);

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -33,8 +32,8 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
-        ResolvedTypeParametrizable, HasAccessSpecifier {
+public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
+
     /**
      * The package name of the declaring type.
      */
@@ -150,7 +149,7 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
             return Collections.emptyList();
         } else {
             List<ResolvedType> exceptions = new LinkedList<>();
-            for (int i=0;i<getNumberOfSpecifiedExceptions();i++) {
+            for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
                 exceptions.add(getSpecifiedException(i));
             }
             return exceptions;

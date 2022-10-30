@@ -18,17 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -39,7 +32,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * use UTF-8.
  */
 public final class Providers {
-    public static final Charset UTF8 = StandardCharsets.UTF_8;
+
+    public static final Charset UTF8 = Charset.forName("utf-8");
 
     private Providers() {
     }
@@ -84,7 +78,6 @@ public final class Providers {
         return new StringProvider(assertNotNull(source));
     }
 
-
     /**
      * Provide a Provider from the resource found in class loader with the provided encoding.<br> As resource is
      * accessed through a class loader, a leading "/" is not allowed in pathToResource
@@ -113,5 +106,4 @@ public final class Providers {
     public static Provider resourceProvider(String pathToResource) throws IOException {
         return resourceProvider(pathToResource, UTF8);
     }
-
 }

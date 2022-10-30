@@ -18,22 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 
 public class UnderscoreKeywordValidator extends VisitorValidator {
-
-    @Override
-    public void visit(LocalRecordDeclarationStmt n, ProblemReporter arg) {
-        n.getRecordDeclaration().accept(this, arg);
-    }
 
     @Override
     public void visit(Name n, ProblemReporter arg) {

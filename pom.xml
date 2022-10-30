@@ -18,7 +18,7 @@
 	<groupId>io.github.wadoon</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-    <version>3.24.7-SNAPSHOT</version>
+    <version>3.24.8-SNAPSHOT</version>
 
 	<name>jmlparser-parent</name>
 	<url>https://github.com/wadoon/jmlparser</url>
@@ -330,7 +330,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
-                    <version>2.12.0</version>
+                    <version>2.13.0</version>
 					<configuration>
 						<generateBackupPoms>false</generateBackupPoms>
 					</configuration>

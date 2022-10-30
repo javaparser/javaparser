@@ -17,24 +17,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.configuration;
+
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.utils.Utils;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.utils.Utils;
-
 /**
  * Configuration options for the {@link Printer}.
  */
 public class DefaultPrinterConfiguration implements PrinterConfiguration {
-    
+
     public enum ConfigOption {
+
         /**
          * Order imports alphabetically
          */
@@ -108,16 +108,16 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Indentation proprerty
          */
         INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4));
-        
+
         Object defaultValue;
-        
+
         Class type;
-        
+
         // DefaultConfigurationOption without currentValue
         ConfigOption(Class clazz) {
             this.type = clazz;
         }
-        
+
         // DefaultConfigurationOption with initial currentValue
         ConfigOption(Class clazz, Object value) {
             this.type = clazz;
@@ -126,8 +126,6 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
             }
             this.defaultValue = value;
         }
-        
-       
     }
 
     // contains all available options
@@ -145,7 +143,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
 
     public DefaultPrinterConfiguration() {
     }
-    
+
     /*
      * add the specified option if it does not exist or replace the existing option
      */
@@ -155,7 +153,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         defaultOptions.add(option);
         return this;
     }
-    
+
     /*
      * remove the specified option
      */
@@ -164,7 +162,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         defaultOptions.remove(option);
         return this;
     }
-    
+
     /*
      * True if an option is activated
      */
@@ -172,13 +170,13 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
     public boolean isActivated(ConfigurationOption option) {
         return defaultOptions.contains(option);
     }
-    
+
     /*
      * returns the specified option
      */
     @Override
     public Optional<ConfigurationOption> get(ConfigurationOption option) {
-        return defaultOptions.stream().filter(o-> o.equals(option)).findFirst();
+        return defaultOptions.stream().filter(o -> o.equals(option)).findFirst();
     }
 
     /**
@@ -188,5 +186,4 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
     public Set<ConfigurationOption> get() {
         return defaultOptions;
     }
-    
 }
