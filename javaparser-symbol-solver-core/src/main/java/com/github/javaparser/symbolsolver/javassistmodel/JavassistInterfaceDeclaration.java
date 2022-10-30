@@ -36,6 +36,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -43,7 +44,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.NotFoundException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,7 +56,8 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
-        implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
+        implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
+        SymbolResolutionCapability {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -168,8 +169,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
         return this;
     }
 
-
-    @Deprecated
+    @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {
@@ -208,15 +208,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        try {
-            /*
-            Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
-            Finally, return them in a Set.
-             */
-            return Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.internalTypes();
     }
 
     @Override

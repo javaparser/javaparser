@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -28,8 +27,7 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration,
-        AssociableToAST<ConstructorDeclaration> {
+public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration, AssociableToAST<ConstructorDeclaration> {
 
     /**
      * A constructor can be declared in a class or an enum.

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -31,7 +31,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -143,8 +142,9 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.remove(i);
@@ -169,8 +169,9 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.set(i, (AnnotationExpr) replacementNode);

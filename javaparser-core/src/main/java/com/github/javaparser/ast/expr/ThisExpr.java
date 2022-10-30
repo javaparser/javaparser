@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,7 +33,6 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -105,8 +104,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (typeName != null) {
             if (node == typeName) {
                 removeTypeName();
@@ -136,8 +136,9 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (typeName != null) {
             if (node == typeName) {
                 setTypeName((Name) replacementNode);

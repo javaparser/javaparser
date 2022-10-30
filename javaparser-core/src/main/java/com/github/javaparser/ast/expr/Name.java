@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,9 +33,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
@@ -141,8 +139,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (qualifier != null) {
             if (node == qualifier) {
                 removeQualifier();
@@ -172,8 +171,9 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (qualifier != null) {
             if (node == qualifier) {
                 setQualifier((Name) replacementNode);

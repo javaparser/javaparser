@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -31,15 +31,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.BinaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Stringable;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
- * It supports the operators that are found the the BinaryExpr.Operator enum.
+ * It supports the operators that are found the BinaryExpr.Operator enum.
  * <br>{@code a && b}
  * <br>{@code 155 * 33}
  *
@@ -203,14 +201,6 @@ public class BinaryExpr extends Expression {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BinaryExpr clone() {
         return (BinaryExpr) accept(new CloneVisitor(), null);
@@ -225,8 +215,9 @@ public class BinaryExpr extends Expression {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == left) {
             setLeft((Expression) replacementNode);
             return true;

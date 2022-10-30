@@ -44,10 +44,12 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -62,7 +64,8 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
  * @author Federico Tomassetti
  */
 public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
-        implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
+        implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
+        SymbolResolutionCapability {
 
     private TypeSolver typeSolver;
     private ClassOrInterfaceDeclaration wrappedNode;
@@ -232,6 +235,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                                 public boolean isStatic() {
                                     return f.isStatic();
                                 }
+                                
+                                @Override
+                                public boolean isVolatile() {
+                                    return f.isVolatile();
+                                }
 
                                 @Override
                                 public ResolvedTypeDeclaration declaringType() {
@@ -298,6 +306,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        return getContext().solveSymbol(name);
+    }
+
+    @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
         if (wrappedNode.getExtendedTypes() != null) {
@@ -356,13 +369,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        Set<ResolvedReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
-            }
-        }
-        return res;
+        return javaParserTypeAdapter.internalTypes();
     }
 
     @Override

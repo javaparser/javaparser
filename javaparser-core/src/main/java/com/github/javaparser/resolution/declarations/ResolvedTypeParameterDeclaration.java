@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,10 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
-
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.List;
@@ -45,6 +44,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     static ResolvedTypeParameterDeclaration onType(final String name, String classQName, List<Bound> bounds) {
         return new ResolvedTypeParameterDeclaration() {
+
             @Override
             public String getName() {
                 return name;
@@ -74,7 +74,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
             public String getContainerId() {
                 return classQName;
             }
-            
+
             @Override
             public ResolvedTypeParametrizable getContainer() {
                 return null;
@@ -92,6 +92,11 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
 
             @Override
             public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public ResolvedReferenceType object() {
                 throw new UnsupportedOperationException();
             }
         };
@@ -157,7 +162,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * The ID of the container. See TypeContainer.getId
      */
     String getContainerId();
-    
+
     /**
      * The TypeParametrizable of the container. Can be either a ReferenceTypeDeclaration or a MethodLikeDeclaration
      */
@@ -233,10 +238,31 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
     }
 
     /**
+     * Return true if the Type variable is bounded
+     */
+    default boolean isBounded() {
+        return !isUnbounded();
+    }
+
+    /**
+     * Return true if the Type variable is unbounded
+     */
+    default boolean isUnbounded() {
+        return getBounds().isEmpty();
+    }
+
+    /*
+     * Return an Object ResolvedType
+     */
+    ResolvedReferenceType object();
+
+    /**
      * A Bound on a Type Parameter.
      */
     class Bound {
+
         private boolean extendsBound;
+
         private ResolvedType type;
 
         private Bound(boolean extendsBound, ResolvedType type) {
@@ -287,20 +313,18 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
 
         @Override
         public String toString() {
-            return "Bound{" +
-                    "extendsBound=" + extendsBound +
-                    ", type=" + type +
-                    '}';
+            return "Bound{" + "extendsBound=" + extendsBound + ", type=" + type + '}';
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
             Bound bound = (Bound) o;
-
-            if (extendsBound != bound.extendsBound) return false;
+            if (extendsBound != bound.extendsBound)
+                return false;
             return type != null ? type.equals(bound.type) : bound.type == null;
         }
 
@@ -311,5 +335,4 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
             return result;
         }
     }
-
 }

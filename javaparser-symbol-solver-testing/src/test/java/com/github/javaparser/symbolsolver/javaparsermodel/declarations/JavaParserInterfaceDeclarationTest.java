@@ -276,7 +276,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest imp
 //    }
 
     @Test
-    void testGetAllInterfacesWithParameters() {
+    void testGetAllInterfacesWithParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAllInterfaces().size());
 
@@ -363,7 +363,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest imp
     }
 
     @Test
-    void testGetAllAncestorsWithTypeParameters() {
+    void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();

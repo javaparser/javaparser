@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,19 +18,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.postprocessors;
 
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Processor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.VarType;
-
-import static com.github.javaparser.ParseResult.PostProcessor;
 
 /**
  * Processes the generic AST into a Java 10 AST and validates it.
  */
 public class Java10PostProcessor extends PostProcessors {
-    protected final PostProcessor varNodeCreator = (result, configuration) ->
+
+    protected final Processor varNodeCreator = new Processor() {
+
+        @Override
+        public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
             result.getResult().ifPresent(node -> {
                 node.findAll(ClassOrInterfaceType.class).forEach(n -> {
                     if (n.getNameAsString().equals("var")) {
@@ -38,6 +43,8 @@ public class Java10PostProcessor extends PostProcessors {
                     }
                 });
             });
+        }
+    };
 
     public Java10PostProcessor() {
         add(varNodeCreator);

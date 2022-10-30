@@ -24,11 +24,19 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -36,17 +44,20 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
-import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
 public class JavassistEnumDeclaration extends AbstractTypeDeclaration
-        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
+        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
+        SymbolResolutionCapability {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -158,15 +169,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        try {
-            /*
-            Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
-            Finally, return them in a Set.
-             */
-            return Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet());
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return javassistTypeDeclarationAdapter.internalTypes();
     }
 
     @Override
@@ -190,6 +193,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
     }
 
+    @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {

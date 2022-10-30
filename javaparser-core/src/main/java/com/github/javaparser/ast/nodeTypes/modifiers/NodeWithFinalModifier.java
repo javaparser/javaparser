@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
 import com.github.javaparser.ast.Node;
@@ -30,11 +29,15 @@ import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
  * A node that can be final.
  */
 public interface NodeWithFinalModifier<N extends Node> extends NodeWithModifiers<N> {
+
+    /**
+     * @return true, if the modifier {@code final} is explicitly added to this node. If the node is implicitly final
+     * without an explicit modifier (e.g. records, and components of a record), this method should be overridden.
+     */
     default boolean isFinal() {
         return hasModifier(FINAL);
     }
 
-    @SuppressWarnings("unchecked")
     default N setFinal(boolean set) {
         return setModifier(FINAL, set);
     }

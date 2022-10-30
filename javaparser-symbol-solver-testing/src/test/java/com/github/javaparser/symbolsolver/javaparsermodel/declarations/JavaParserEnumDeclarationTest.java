@@ -281,7 +281,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
 //    }
 
     @Test
-    void testGetAllInterfacesWithParameters() {
+    void testGetAllInterfacesWithParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAllInterfaces().size());
 
@@ -362,13 +362,13 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     }
 
     @Test
-    void testGetAllAncestorsWithoutTypeParameters() {
+    void testGetAllAncestorsWithoutTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration cu = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllAncestors().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
-    void testGetAllAncestorsWithTypeParameters() {
+    void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
@@ -903,6 +903,22 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     ///
 
     // Set<TypeDeclaration> internalTypes()
+    @Test
+    void testGetInternalTypes() {
+        Path src = adaptPath("src/test/resources/enums");
+        CombinedTypeSolver combinedtypeSolver = new CombinedTypeSolver();
+        combinedtypeSolver.add(new ReflectionTypeSolver());
+        combinedtypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+
+        JavaParserEnumDeclaration enum1 = (JavaParserEnumDeclaration) combinedtypeSolver.solveType("EnumWithAncestor");
+        Set<ResolvedReferenceTypeDeclaration> internalTypes1 = enum1.internalTypes();
+        assertEquals(0, internalTypes1.size());
+
+        JavaParserEnumDeclaration enum2 = (JavaParserEnumDeclaration) combinedtypeSolver.solveType("EnumWithInnerType");
+        Set<ResolvedReferenceTypeDeclaration> internalTypes2 = enum2.internalTypes();
+        assertEquals(1, internalTypes2.size());
+        assertEquals("EnumWithInnerType.EnumInner", internalTypes2.iterator().next().getQualifiedName());
+    }
 
     // Optional<TypeDeclaration> containerType()
 

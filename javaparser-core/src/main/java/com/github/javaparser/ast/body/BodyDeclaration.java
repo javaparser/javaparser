@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -37,7 +37,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.Optional;
 
 /**
- * Any declaration that can appear between the { and } of a class, interface, or enum.
+ * Any declaration that can appear between the { and } of a class, interface, enum, or record.
  *
  * @author Julio Vilmar Gesser
  */
@@ -91,8 +91,9 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.remove(i);
@@ -117,8 +118,9 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.set(i, (AnnotationExpr) replacementNode);
@@ -176,6 +178,16 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ConstructorDeclaration asConstructorDeclaration() {
         throw new IllegalStateException(f("%s is not ConstructorDeclaration, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isCompactConstructorDeclaration() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public CompactConstructorDeclaration asCompactConstructorDeclaration() {
+        throw new IllegalStateException(f("%s is not CompactConstructorDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -283,6 +295,14 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifRecordDeclaration(Consumer<RecordDeclaration> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifCompactConstructorDeclaration(Consumer<CompactConstructorDeclaration> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
         return Optional.empty();
     }
@@ -334,6 +354,26 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypeDeclaration> toTypeDeclaration() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isRecordDeclaration() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public RecordDeclaration asRecordDeclaration() {
+        throw new IllegalStateException(f("%s is not RecordDeclaration, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<RecordDeclaration> toRecordDeclaration() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<CompactConstructorDeclaration> toCompactConstructorDeclaration() {
         return Optional.empty();
     }
 }

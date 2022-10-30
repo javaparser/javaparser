@@ -40,9 +40,22 @@ class ConditionalExprTest extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
     }
+    
+    @Test
+    void test_if_operands_have_the_same_type() {
+        String code = "class A { public void m() { Object o = true ? null : null;}}";
+        ResolvedType rt1 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("null", rt1.describe());
+        code = "class A { public void m() { Object o = true ? \"\" : \"\";}}";
+        ResolvedType rt2 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("java.lang.String", rt2.describe());
+        code = "class A { public void m() { Object o = true ? new A() : new A();}}";
+        ResolvedType rt3 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("A", rt3.describe());
+    }
 
     @Test
-    void nullOperandInConditionalExpression() {
+    void test_null_operand_in_conditional_expression() {
         String code = "class A { public void m() { Object o = true ? \"\" : null;}}";
         ResolvedType rt1 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
         assertEquals("java.lang.String", rt1.describe());
@@ -52,7 +65,7 @@ class ConditionalExprTest extends AbstractResolutionTest {
     }
     
     @Test
-    void booleanConditionalExpression() {
+    void test_boolean_conditional_expression() {
         // If the second and third operands are both of type Boolean, the conditional expression has type Boolean.
         String code = "class A { public void m() { boolean r = true ? Boolean.TRUE : Boolean.FALSE;}}";
         ResolvedType rt1 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
@@ -64,7 +77,7 @@ class ConditionalExprTest extends AbstractResolutionTest {
     }
     
     @Test
-    void numericConditionalExpression() {
+    void test_numeric_conditional_expression() {
         // If the second and third operands have the same type, then that is the type of the conditional expression.
         String code = "class A { public void m() { int r = true ? 1 : 2;}}";
         ResolvedType rt1 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
@@ -85,6 +98,9 @@ class ConditionalExprTest extends AbstractResolutionTest {
         code = "class A { public void m() { short r = true ? Short.MIN_VALUE : Byte.valueOf(Byte.MIN_VALUE);}}";
         ResolvedType rt5 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
         assertEquals("short", rt5.describe());
+        code = "class A { public void m() { short r = true ? Short.valueOf(Short.MIN_VALUE) : Byte.valueOf(Byte.MIN_VALUE);}}";
+        ResolvedType rt5b = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("short", rt5b.describe());
         // If one of the operands is of type T where T is byte, short, or char, and the other operand is a constant
         // expression (§15.28) of type int whose value is representable in type T, then the type of the conditional
         // expression is T.
@@ -126,8 +142,11 @@ class ConditionalExprTest extends AbstractResolutionTest {
         
     }
     
+    /*
+     * These test cases must evolved when least upper bound willbe implemented
+     */
     @Test
-    void referenceConditionalExpression() {
+    void test_reference_conditional_expression() {
         // If the second and third operands have the same type, then that is the type of the conditional expression.
         String code = "class A { public void m() { String r = true ? new String(\"new string\") : \"\";}}";
         ResolvedType rt1 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
@@ -152,7 +171,6 @@ class ConditionalExprTest extends AbstractResolutionTest {
 //        assertEquals("java.lang.Class<java.io.Serializable>", rt5.describe()); ???
         code = "class A { public void m() { String r = true ?  Integer.valueOf(1) : \"\";}}";
         ResolvedType rt6 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
-        System.out.println(rt6.describe());
 //        assertEquals("java.io.Serializable", rt6.describe()); ???
     }
 

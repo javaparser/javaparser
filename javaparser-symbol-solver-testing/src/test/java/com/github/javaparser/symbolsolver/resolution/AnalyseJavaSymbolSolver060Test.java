@@ -21,23 +21,29 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.SlowTest;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * We analyze JavaParser version 0.6.0.
@@ -89,6 +95,9 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         Path sourceFile = src.resolve(projectName + "/" + fileName + ".java");
         OutputStream outErrStream = new ByteArrayOutputStream();
         PrintStream outErr = new PrintStream(outErrStream);
+        
+        // set configuration to ignore comment
+        StaticJavaParser.getConfiguration().setAttributeComments(false);
 
         sourceFileInfoExtractor.setOut(outErr);
         sourceFileInfoExtractor.setErr(outErr);

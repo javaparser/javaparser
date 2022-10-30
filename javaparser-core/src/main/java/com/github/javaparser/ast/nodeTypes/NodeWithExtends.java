@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
@@ -98,5 +97,4 @@ public interface NodeWithExtends<N extends Node> {
         getExtendedTypes().add(parseClassOrInterfaceType(name));
         return (N) this;
     }
-
 }

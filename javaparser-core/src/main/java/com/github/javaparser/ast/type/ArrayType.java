@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -234,14 +234,6 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     public String asString() {
         return componentType.asString() + "[]";
     }
@@ -269,8 +261,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == componentType) {
             setComponentType((Type) replacementNode);
             return true;
@@ -300,5 +293,23 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayType> toArrayType() {
         return Optional.of(this);
+    }
+
+    /**
+     * Finds the element type, meaning: the type without ArrayTypes around it.
+     * <p>
+     * In "{@code int[] a[];}", the element type is int.
+     */
+    @Override
+    public Type getElementType() {
+        return this.getComponentType().getElementType();
+    }
+
+    /**
+     * returns the array level that is 0 for non array type.
+     */
+    @Override
+    public int getArrayLevel() {
+        return 1 + this.getComponentType().getArrayLevel();
     }
 }

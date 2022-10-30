@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
@@ -31,10 +30,15 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class CsmList implements CsmElement {
+
     private final ObservableProperty property;
+
     private final CsmElement separatorPost;
+
     private final CsmElement separatorPre;
+
     private final CsmElement preceeding;
+
     private final CsmElement following;
 
     public ObservableProperty getProperty() {
@@ -116,5 +120,10 @@ public class CsmList implements CsmElement {
                 following.prettyPrint(node, printer);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

@@ -21,7 +21,9 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -103,18 +105,19 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         if (other.isPrimitive()) {
             if (this.isJavaLangObject()) {
                 return true;
-            } else {
-                // Check if 'other' can be boxed to match this type
-                if (isCorrespondingBoxingType(other.describe())) return true;
-
-                // Resolve the boxed type and check if it can be assigned via widening reference conversion
-                SymbolReference<ResolvedReferenceTypeDeclaration> type = typeSolver.tryToSolveType(other.asPrimitive().getBoxTypeQName());
-                return type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration);
             }
+            // Check if 'other' can be boxed to match this type
+            if (isCorrespondingBoxingType(other.describe())) return true;
+
+            // Resolve the boxed type and check if it can be assigned via widening reference conversion
+            SymbolReference<ResolvedReferenceTypeDeclaration> type = typeSolver
+                    .tryToSolveType(other.asPrimitive().getBoxTypeQName());
+            return type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration);
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
-        } else if (other instanceof ReferenceTypeImpl) {
+        }
+        if (other instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherRef = (ReferenceTypeImpl) other;
             if (compareConsideringTypeParameters(otherRef)) {
                 return true;
@@ -125,7 +128,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 }
             }
             return false;
-        } else if (other.isTypeVariable()) {
+        }
+        if (other.isTypeVariable()) {
             for (ResolvedTypeParameterDeclaration.Bound bound : other.asTypeVariable().asTypeParameter().getBounds()) {
                 if (bound.isExtends()) {
                     if (this.isAssignableBy(bound.getType())) {
@@ -134,22 +138,24 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 }
             }
             return false;
-        } else if (other.isConstraint()){
+        }
+        if (other.isConstraint()){
             return isAssignableBy(other.asConstraintType().getBound());
-        } else if (other.isWildcard()) {
+        }
+        if (other.isWildcard()) {
             if (this.isJavaLangObject()) {
                 return true;
-            } else if (other.asWildcard().isExtends()) {
-                return isAssignableBy(other.asWildcard().getBoundedType());
-            } else {
-                return false;
             }
-        } else if (other.isUnionType()) {
-            return other.asUnionType().getCommonAncestor()
-                    .map(ancestor -> isAssignableBy(ancestor)).orElse(false);
-        } else {
+            if (other.asWildcard().isExtends()) {
+                return isAssignableBy(other.asWildcard().getBoundedType());
+            }
             return false;
         }
+        if (other.isUnionType()) {
+            return other.asUnionType().getCommonAncestor()
+                    .map(ancestor -> isAssignableBy(ancestor)).orElse(false);
+        }
+        return false;
     }
 
     @Override
@@ -170,10 +176,9 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     @Override
     public ResolvedType toRawType() {
         if (this.isRawType()) {
-                return this;
-        } else {
-            return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+            return this;
         }
+        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList(), typeSolver);
     }
 
     @Override
@@ -202,7 +207,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     public List<ResolvedReferenceType> getAllAncestors() {
-        // We need to go through the inheritance line and propagate the type parametes
+        // We need to go through the inheritance line and propagate the type parameters
 
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors();
 
@@ -258,10 +263,10 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public Set<ResolvedFieldDeclaration> getDeclaredFields() {
-        Set<ResolvedFieldDeclaration> allFields = new HashSet<>();
+        Set<ResolvedFieldDeclaration> allFields = new LinkedHashSet<>();
 
         if (getTypeDeclaration().isPresent()) {
-            allFields = new HashSet<>(getTypeDeclaration().get().getDeclaredFields());
+            allFields.addAll(getTypeDeclaration().get().getDeclaredFields());
         }
 
         return allFields;

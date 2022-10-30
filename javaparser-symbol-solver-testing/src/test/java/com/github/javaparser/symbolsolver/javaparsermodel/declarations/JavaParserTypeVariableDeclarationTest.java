@@ -21,18 +21,26 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.AssociableToASTTest;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<TypeParameter> {
@@ -60,6 +68,42 @@ class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest 
     @Test
     void getWrappedNodeShouldNotBeNull() {
         assertNotNull(createValue().getWrappedNode());
+    }
+
+    @Nested
+    class TestGetAncestorAncestorsMethod {
+
+        private final JavaParser parser = new JavaParser();
+        private final ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+
+        private void testGetAncestorWith(Iterable<String> expectedTypes, String sourceCode) {
+            CompilationUnit cu = parser.parse(sourceCode).getResult().orElseThrow(AssertionError::new);
+            TypeParameter typeParameter = Navigator.demandNodeOfGivenClass(cu, TypeParameter.class);
+            JavaParserTypeVariableDeclaration parserTypeParameter = new JavaParserTypeVariableDeclaration(typeParameter, typeSolver);
+            assertEquals(expectedTypes, parserTypeParameter.getAncestors().stream()
+                    .map(ResolvedReferenceType::getQualifiedName)
+                    .sorted()
+                    .collect(Collectors.toList()));
+        }
+
+        @Test
+        void withoutBound() {
+            String sourceCode = "class A<T> {}";
+            testGetAncestorWith(Collections.singletonList("java.lang.Object"), sourceCode);
+        }
+
+        @Test
+        void withObjectBound() {
+            String sourceCode = "class A<T extends Object> {}";
+            testGetAncestorWith(Collections.singletonList("java.lang.Object"), sourceCode);
+        }
+
+        @Test
+        void withMultipleBounds() {
+            String sourceCode = "class A {} interface B {} class C<T extends A & B> {}";
+            testGetAncestorWith(Arrays.asList("A", "B"), sourceCode);
+        }
+
     }
 
 }

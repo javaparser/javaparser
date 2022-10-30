@@ -266,7 +266,7 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     }
 
     @Test
-    void testGetAllAncestors() {
+    void testGetAllAncestorsWithDepthFirstTraversalOrder() {
         JavassistClassDeclaration cu = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllAncestors().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
     }
@@ -377,7 +377,7 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     }
 
     @Test
-    void testGetAllInterfacesWithParameters() {
+    void testGetAllInterfacesWithParametersWithDepthFirstTraversalOrder() {
         JavassistClassDeclaration constructorDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAllInterfaces().size());
 
@@ -419,7 +419,7 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     }
 
     @Test
-    void testGetAncestorsWithTypeParameters() {
+    void testGetAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavassistClassDeclaration constructorDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(8, constructorDeclaration.getAncestors().size());
 
@@ -458,13 +458,13 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     }
 
     @Test
-    void testGetAllAncestorsWithoutTypeParameters() {
+    void testGetAllAncestorsWithoutTypeParametersWithDepthFirstTraversalOrder() {
         JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.Node", "java.lang.Object"), cu.getAllAncestors().stream().map(ResolvedReferenceType::getQualifiedName).collect(Collectors.toSet()));
     }
 
     @Test
-    void testGetAllAncestorsWithTypeParameters() {
+    void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavassistClassDeclaration constructorDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();

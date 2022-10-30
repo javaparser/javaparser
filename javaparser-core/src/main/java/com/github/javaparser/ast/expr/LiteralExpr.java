@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,7 +27,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LiteralExprMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -53,14 +52,6 @@ public abstract class LiteralExpr extends Expression {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LiteralExpr clone() {
         return (LiteralExpr) accept(new CloneVisitor(), null);
@@ -70,14 +61,6 @@ public abstract class LiteralExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.literalExprMetaModel;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
     }
 
     @Override

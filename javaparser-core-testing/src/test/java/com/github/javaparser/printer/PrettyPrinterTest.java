@@ -31,6 +31,7 @@ import static com.github.javaparser.printer.configuration.Indentation.IndentType
 import static com.github.javaparser.printer.configuration.Indentation.IndentType.TABS_WITH_SPACE_ALIGN;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -351,6 +352,21 @@ class PrettyPrinterTest {
                 "\t}\n" +
                 "}\n", printed);
     }
+    
+    @Test
+    void initializeWithSpecificConfiguration() {
+        CompilationUnit cu = parse("class Foo { // this is a comment \n"
+                + "}");
+        PrinterConfiguration config = new DefaultPrinterConfiguration()
+                .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+        
+        Printer printer = new DefaultPrettyPrinter(config);
+        assertFalse(printer.getConfiguration().get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS)).isPresent());
+        String printed = printer.print(cu);
+        assertEqualsStringIgnoringEol("class Foo {\n"
+                + "}\n", printed);
+    }
+                
 
     @Test
     void indentWithTabsAlignWithSpaces() {

@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
@@ -44,7 +45,8 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
-        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
+        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
+        SymbolResolutionCapability {
 
   ///
   /// Fields
@@ -204,6 +206,15 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
         return res;
     }
 }
+
+  @Override
+  public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    if (hasEnumConstant(name)) {
+      ResolvedEnumConstantDeclaration enumConstant = getEnumConstant(name);
+      return SymbolReference.solved(enumConstant);
+    }
+    return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+  }
 
   @Override
   public List<ResolvedEnumConstantDeclaration> getEnumConstants() {

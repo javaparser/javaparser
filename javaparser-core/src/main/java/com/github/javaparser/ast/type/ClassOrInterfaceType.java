@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -37,7 +37,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -210,8 +210,9 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (scope != null) {
             if (node == scope) {
                 removeScope();
@@ -244,7 +245,7 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
      */
     @Override
     public String toDescriptor() {
-        return String.format("L%s;", resolve().getQualifiedName().replace(".", "/"));
+        return String.format("L%s;", resolve().asReferenceType().getQualifiedName().replace(".", "/"));
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
@@ -267,8 +268,9 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == name) {
             setName((SimpleName) replacementNode);
             return true;
@@ -309,8 +311,8 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     }
 
     @Override
-    public ResolvedReferenceType resolve() {
-        return getSymbolResolver().toResolvedType(this, ResolvedReferenceType.class);
+    public ResolvedType resolve() {
+        return getSymbolResolver().toResolvedType(this, ResolvedType.class);
     }
 
     @Override
