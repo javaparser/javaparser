@@ -34,12 +34,6 @@ import java.util.Optional;
  */
 public class SymbolReference<S extends ResolvedDeclaration> {
 
-    private final S correspondingDeclaration;
-
-    private SymbolReference(@Nullable S correspondingDeclaration) {
-        this.correspondingDeclaration = correspondingDeclaration;
-    }
-
     /**
      * Create a solve reference to the given symbol.
      */
@@ -60,9 +54,44 @@ public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
      * Create an unsolved reference specifying the type of the value expected.
+     *
+     * @deprecated Consider using {@link #unsolved()} instead.
      */
+    @Deprecated
     public static <S extends ResolvedDeclaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz) {
-        return new SymbolReference<>(null);
+        return unsolved();
+    }
+
+    /**
+     * Adapt a {@link SymbolReference} into another {@link SymbolReference}.
+     *
+     * @param ref   The reference to be adapted.
+     * @param clazz The final type to be used.
+     *
+     * @return The adapted symbol reference.
+     *
+     * @param <I> The Symbol Reference before adapting.
+     * @param <O> The Symbol Reference after adapting.
+     */
+    public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<I> ref, Class<O> clazz) {
+
+        Optional<I> declaration = ref.getDeclaration();
+        if (declaration.isPresent()) {
+
+            I symbol = declaration.get();
+            if (clazz.isInstance(symbol)) {
+                return solved(clazz.cast(symbol));
+            }
+
+        }
+
+        return unsolved();
+    }
+
+    private final S correspondingDeclaration;
+
+    private SymbolReference(@Nullable S correspondingDeclaration) {
+        this.correspondingDeclaration = correspondingDeclaration;
     }
 
     /**
@@ -106,9 +135,4 @@ public class SymbolReference<S extends ResolvedDeclaration> {
         return "SymbolReference{" + correspondingDeclaration + "}";
     }
 
-    public static <O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<? extends O> ref, Class<O> clazz) {
-        return ref.getDeclaration()
-                .<SymbolReference<O>>map(SymbolReference::solved)
-                .orElseGet(() -> SymbolReference.unsolved(clazz));
-    }
 }
