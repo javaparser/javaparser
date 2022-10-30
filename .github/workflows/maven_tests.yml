@@ -18,6 +18,9 @@ on:
   # Enable manual triggering (important for contributors to enable a check on their fork)
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   maven_test:
     strategy:
