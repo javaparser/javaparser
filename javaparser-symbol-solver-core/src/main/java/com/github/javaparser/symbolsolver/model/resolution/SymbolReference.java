@@ -65,11 +65,6 @@ public class SymbolReference<S extends ResolvedDeclaration> {
         return new SymbolReference<>(null);
     }
 
-    @Override
-    public String toString() {
-        return "SymbolReference{" + correspondingDeclaration + "}";
-    }
-
     /**
      * Get the declaration associated with the Symbol.
      *
@@ -104,6 +99,11 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     @Deprecated
     public boolean isSolved() {
         return getDeclaration().isPresent();
+    }
+
+    @Override
+    public String toString() {
+        return "SymbolReference{" + correspondingDeclaration + "}";
     }
 
     public static <O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<? extends O> ref, Class<O> clazz) {
