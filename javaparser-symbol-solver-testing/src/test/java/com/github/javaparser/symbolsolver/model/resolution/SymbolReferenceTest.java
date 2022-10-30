@@ -65,4 +65,23 @@ class SymbolReferenceTest {
         assertTrue(adaptedSymbol.getDeclaration().isPresent());
     }
 
+    @Test
+    void testIsSolvedWithResolvedSymbol() {
+        ResolvedClassDeclaration resolvedDeclaration = new ReflectionClassDeclaration(String.class, typeSolver);
+        SymbolReference<ResolvedClassDeclaration> symbol = SymbolReference.solved(resolvedDeclaration);
+
+        assertNotNull(symbol);
+        assertTrue(symbol.isSolved());
+        assertEquals(resolvedDeclaration, symbol.getCorrespondingDeclaration());
+    }
+
+    @Test
+    void testIsSolvedWithUnresolvedSymbol() {
+        SymbolReference<ResolvedClassDeclaration> symbol = SymbolReference.unsolved();
+
+        assertNotNull(symbol);
+        assertFalse(symbol.isSolved());
+        assertThrows(UnsupportedOperationException.class, symbol::getCorrespondingDeclaration);
+    }
+
 }
