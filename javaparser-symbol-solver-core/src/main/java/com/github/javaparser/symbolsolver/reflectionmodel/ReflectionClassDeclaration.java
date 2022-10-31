@@ -24,12 +24,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -47,11 +42,7 @@ import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -203,7 +194,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         // MethodResolutionLogic.findMostApplicable method returns very early 
         // when candidateSolvedMethods is empty.
         if (candidateSolvedMethods.isEmpty()) {
-            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+            return SymbolReference.unsolved();
         }
         return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver);
     }
@@ -312,7 +303,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     @Override
