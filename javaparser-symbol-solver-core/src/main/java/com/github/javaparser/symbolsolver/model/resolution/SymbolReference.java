@@ -35,9 +35,13 @@ import java.util.Optional;
 public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
-     * Create a solve reference to the given symbol.
+     * Create a reference for a solved symbol.
+     *
+     * @return The created solved symbol reference.
+     *
+     * @param <S> The symbol reference type.
      */
-    public static <S extends ResolvedDeclaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration) {
+    public static <S extends ResolvedDeclaration> SymbolReference<S> solved(S symbolDeclaration) {
         return new SymbolReference<>(symbolDeclaration);
     }
 
