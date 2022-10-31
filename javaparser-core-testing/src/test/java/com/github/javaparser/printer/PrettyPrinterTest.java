@@ -532,7 +532,6 @@ class PrettyPrinterTest {
         TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
         assertEquals(2, td.getAllContainedComments().size());
         td.setPublic(true); // --- simple AST change -----
-        System.out.println(cu.toString()); // orphan and /*orphan*/ must be printed
         assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
     }
     

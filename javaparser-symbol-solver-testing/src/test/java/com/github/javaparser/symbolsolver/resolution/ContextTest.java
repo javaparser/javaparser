@@ -21,13 +21,45 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.StringProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
@@ -42,21 +74,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class ContextTest extends AbstractSymbolResolutionTest {
 
@@ -1298,7 +1321,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
-                System.out.println("symbolReference = " + symbolReference);
 
                 assertTrue(symbolReference.isSolved(), "symbol not solved");
                 ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration();
@@ -1326,7 +1348,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
-                System.out.println("symbolReference = " + symbolReference);
 
                 assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
             }
@@ -1348,7 +1369,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                 Context context = JavaParserFactory.getContext(nameExpr, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> symbolReference = context.solveSymbol("s");
-                System.out.println("symbolReference = " + symbolReference);
 
                 assertFalse(symbolReference.isSolved(), "symbol supposed to be not solved");
             }
@@ -1367,7 +1387,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
 
                     List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
-                    System.out.println("methodCallExprs = " + methodCallExprs);
                     assertEquals(1, methodCallExprs.size());
 
                     MethodCallExpr methodCallExpr = methodCallExprs.get(0);
@@ -1388,7 +1407,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
 
                     List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
-                    System.out.println("methodCallExprs = " + methodCallExprs);
                     assertEquals(1, methodCallExprs.size());
 
                     MethodCallExpr methodCallExpr = methodCallExprs.get(0);
@@ -1409,7 +1427,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
 
                     List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
-                    System.out.println("methodCallExprs = " + methodCallExprs);
                     assertEquals(1, methodCallExprs.size());
 
                     MethodCallExpr methodCallExpr = methodCallExprs.get(0);
@@ -1429,7 +1446,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     IfStmt ifStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.STATEMENT).asIfStmt();
 
                     List<MethodCallExpr> methodCallExprs = ifStmt.findAll(MethodCallExpr.class);
-                    System.out.println("methodCallExprs = " + methodCallExprs);
                     assertEquals(1, methodCallExprs.size());
 
                     MethodCallExpr methodCallExpr = methodCallExprs.get(0);
@@ -1454,7 +1470,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
 
                     List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
-                    System.out.println("methodCallExprs = " + methodCallExprs);
                     assertEquals(2, methodCallExprs.size());
 
                     // The first one should resolve to the standard variable (the list)
@@ -1492,7 +1507,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
 
                     List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
-                    System.out.println("methodCallExprs = " + methodCallExprs);
                     assertEquals(4, methodCallExprs.size());
 
                     // The first one should resolve to the standard variable (the list)
@@ -1544,7 +1558,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     BlockStmt blockStmt = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, x, ParseStart.BLOCK).asBlockStmt();
 
                     List<MethodCallExpr> methodCallExprs = blockStmt.findAll(MethodCallExpr.class);
-                    System.out.println("methodCallExprs = " + methodCallExprs);
                     assertEquals(4, methodCallExprs.size());
 
                     // The first one should resolve to the standard variable (the list)

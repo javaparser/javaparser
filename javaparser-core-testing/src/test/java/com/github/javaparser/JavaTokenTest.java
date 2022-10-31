@@ -21,12 +21,6 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.expr.Expression;
-import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Field;
-import java.util.Iterator;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.JavaToken.Category.COMMENT;
 import static com.github.javaparser.JavaToken.Category.LITERAL;
@@ -37,6 +31,13 @@ import static com.github.javaparser.Range.range;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Field;
+import java.util.Iterator;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ast.expr.Expression;
 
 class JavaTokenTest {
 
@@ -108,10 +109,10 @@ class JavaTokenTest {
 
 
             // Optional printing -- for debugging purposes.
-            System.out.println(i + " - " +
-                    jpTokenName + " (" + jpTokenNumber + ") - " +
-                    javaCcTokenName + " (" + javaccTokenNumber + ")"
-            );
+//            System.out.println(i + " - " +
+//                    jpTokenName + " (" + jpTokenNumber + ") - " +
+//                    javaCcTokenName + " (" + javaccTokenNumber + ")"
+//            );
 
             assertEquals(jpTokenName, javaCcTokenName);
             assertEquals(

@@ -131,10 +131,8 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
         JavaParser javaParser = new JavaParser(configuration);
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
 
-        System.out.println(result.isSuccessful());
         result.ifSuccessful(compilationUnit -> {
             final List<MethodDeclaration> methodDeclarations = compilationUnit.findAll(MethodDeclaration.class);
-            System.out.println(methodDeclarations.size());
 
             methodDeclarations.forEach(methodDeclaration -> {
 

@@ -1,5 +1,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.StaticJavaParser;
@@ -13,6 +15,12 @@ public class Issue1634Test extends AbstractLexicalPreservingTest {
     public void testWithLexicalPreservationEnabled() {
 
         String actual = "package com.wangym.test;\nclass A{ }";
+        
+        String expected =
+                "package com.wangym.test;\n"
+                + "import lombok.Data;\n"
+                + "\n"
+                + "class A{ }";
 
         CompilationUnit cu = StaticJavaParser.parse(actual);
         LexicalPreservingPrinter.setup(cu);
@@ -21,6 +29,6 @@ public class Issue1634Test extends AbstractLexicalPreservingTest {
         String str = "lombok.Data";
         imports.add(new ImportDeclaration(str, false, false));
 
-        System.out.println(LexicalPreservingPrinter.print(cu));
+        assertEquals(expected, LexicalPreservingPrinter.print(cu));
     }
 }
