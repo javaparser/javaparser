@@ -1,13 +1,14 @@
 package com.github.javaparser.issues;
 
+import static com.github.javaparser.utils.TestParser.parseStatement;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.LineSeparator;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.utils.TestParser.parseStatement;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue3255Test {
 
@@ -26,7 +27,6 @@ public class Issue3255Test {
         assertEquals(0, parseResult.getProblems().size());
 
         CompilationUnit compilationUnit = parseResult.getResult().get();
-        System.out.println(compilationUnit);
     }
 
     @Test
@@ -42,7 +42,6 @@ public class Issue3255Test {
         assertEquals(0, parseResult.getProblems().size());
 
         CompilationUnit compilationUnit = parseResult.getResult().get();
-        System.out.println(compilationUnit);
     }
 
     @Test
@@ -62,7 +61,6 @@ public class Issue3255Test {
         assertEquals(0, parseResult.getProblems().size());
 
         CompilationUnit compilationUnit = parseResult.getResult().get();
-        System.out.println(compilationUnit);
     }
 
 }
