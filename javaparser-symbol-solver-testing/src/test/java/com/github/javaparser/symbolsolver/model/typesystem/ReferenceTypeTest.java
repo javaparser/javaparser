@@ -807,7 +807,6 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         // FIXME: Remove this temporary fix which varies the test based on the detected JDK which is running these tests.
         TestJdk currentJdk = TestJdk.getCurrentHostJdk();
-        System.out.println("currentJdk = " + currentJdk);
         if (currentJdk.getMajorVersion() < 12) {
             // JDK 12 introduced "java.lang.constant.Constable"
             assertThat(ancestors, containsInAnyOrder(
@@ -818,7 +817,6 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
             ));
         } else {
             // JDK 12 introduced "java.lang.constant.Constable"
-            System.out.println("ancestors = " + ancestors);
             assertThat(ancestors, containsInAnyOrder(
                     "java.lang.CharSequence",
                     "java.lang.Object",

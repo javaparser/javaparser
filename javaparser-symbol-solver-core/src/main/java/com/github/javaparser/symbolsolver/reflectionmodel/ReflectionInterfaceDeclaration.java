@@ -251,7 +251,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     @Override

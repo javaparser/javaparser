@@ -21,11 +21,7 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Providers;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -39,13 +35,10 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import java.time.Duration;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dominik Hardtke
@@ -76,7 +69,7 @@ class Issue1364Test extends AbstractResolutionTest {
                     return SymbolReference.solved(new JavaParserClassDeclaration(fakeObject, this));
                 }
 
-                return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+                return SymbolReference.unsolved();
             }
         };
 

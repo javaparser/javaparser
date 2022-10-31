@@ -1,5 +1,13 @@
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.Providers.provider;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -9,13 +17,6 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static com.github.javaparser.Providers.provider;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class Issue2595Test {
 
@@ -142,17 +143,9 @@ public class Issue2595Test {
         assumeTrue(result.getResult().isPresent());
 
         CompilationUnit cu = result.getResult().get();
-//        System.out.println(cu);
 
         List<MethodCallExpr> methodCalls = cu.findAll(MethodCallExpr.class);
         assumeFalse(methodCalls.isEmpty());
-        for (int i = methodCalls.size() - 1; i >= 0; i--) {
-            MethodCallExpr methodCallExpr = methodCalls.get(i);
-            System.out.println();
-            System.out.println("methodCallExpr = " + methodCallExpr);
-            System.out.println("methodCallExpr.resolve() = " + methodCallExpr.resolve());
-            System.out.println("methodCallExpr.calculateResolvedType() = " + methodCallExpr.calculateResolvedType());
-        }
     }
 
 }

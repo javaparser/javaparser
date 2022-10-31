@@ -39,17 +39,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> {
 
@@ -99,7 +90,7 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
         TypeSolver secondaryTypeSolver = mock(TypeSolver.class);
         when(secondaryTypeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, secondaryTypeSolver));
         when(secondaryTypeSolver.tryToSolveType(any(String.class)))
-                .thenReturn(SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
+                .thenReturn(SymbolReference.unsolved());
 
         try {
             new CombinedTypeSolver(filter, erroringTypeSolver, secondaryTypeSolver)
