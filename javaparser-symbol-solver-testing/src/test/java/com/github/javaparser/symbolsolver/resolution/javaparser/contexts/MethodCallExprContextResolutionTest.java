@@ -185,10 +185,7 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		for (MethodCallExpr expr : methodCallExpr) {
 			try {
 				ResolvedMethodDeclaration rd = expr.resolve();
-				System.out.println("\t Solved : " + rd.getQualifiedSignature());
 			} catch (UnsolvedSymbolException e) {
-				System.out.println("\t UNSOLVED: " + expr.toString());
-				e.printStackTrace();
 				errorCount++;
 			}
 		}

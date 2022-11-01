@@ -26,12 +26,7 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -96,7 +91,7 @@ public interface Context {
     default SymbolReference<ResolvedTypeDeclaration> solveTypeInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         // Delegate solving to the parent context.
@@ -118,7 +113,7 @@ public interface Context {
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         // Delegate solving to the parent context.
@@ -354,7 +349,7 @@ public interface Context {
     default SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         // Delegate solving to the parent context.

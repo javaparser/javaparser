@@ -18,6 +18,12 @@ on:
   # Enable manual triggering (important for contributors to enable a check on their fork)
   workflow_dispatch:
 
+# If a build is running in the current branch, and the branch is updated, we cancel the previous build and start
+# a new one with the updated changes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   maven_test:
     strategy:

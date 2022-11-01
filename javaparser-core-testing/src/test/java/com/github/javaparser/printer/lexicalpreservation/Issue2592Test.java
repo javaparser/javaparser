@@ -1,16 +1,16 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class Issue2592Test {
@@ -34,8 +34,6 @@ public class Issue2592Test {
         LexicalPreservingPrinter.setup(cu);
 
         //all parameters have parent nodes here
-        System.out.println("");
-        md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));
 
 
@@ -46,21 +44,17 @@ public class Issue2592Test {
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));
 
 
-        System.out.println("");
-        md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
+//        md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
         Parameter p1 = md.get().getParameter(0);
         Parameter p2 = new Parameter(p1.getModifiers(), p1.getType(), new SimpleName("a_renamed"));
 
         //here we replace a parameter
         boolean isReplaced = md.get().replace(p1, p2);
         assertTrue(isReplaced); //the replacement seemed to work
-        System.out.println("");
-        System.out.println(cu.toString()); //this looks right
 
 
         //...however when we replaced the parent nodes (for the replaced node AND the added node (after the replaced node) now null
-        System.out.println("");
-        md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
+//        md.get().getParameters().forEach(p -> System.out.println(p + " parent " + p.getParentNode().isPresent()));
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));
     }
 

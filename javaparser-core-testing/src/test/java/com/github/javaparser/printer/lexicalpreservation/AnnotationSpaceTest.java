@@ -23,12 +23,14 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import java.util.Optional;
-import org.junit.jupiter.api.Test;
 
 public class AnnotationSpaceTest {
     /** Tests that inserted annotations on types are followed by a space. */
@@ -45,7 +47,6 @@ public class AnnotationSpaceTest {
         Optional<ClassOrInterfaceType> type = cu.findFirst(ClassOrInterfaceType.class);
         type.get().addAnnotation(new MarkerAnnotationExpr("Nullable"));
         String result = LexicalPreservingPrinter.print(cu);
-        System.out.println(result);
         // Verify that there's a space between the annotation and the String type.
         assertTrue(result.contains("@Nullable String"));
     }
