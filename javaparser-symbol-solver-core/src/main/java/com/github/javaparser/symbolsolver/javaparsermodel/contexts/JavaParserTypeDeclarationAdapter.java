@@ -22,12 +22,15 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -65,53 +68,63 @@ public class JavaParserTypeDeclarationAdapter {
         this.context = context;
     }
 
+    /**
+     * @deprecated Consider using {@link #solveType(String, List)} to consider type arguments.
+     */
+    @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+        return solveType(name, null);
+    }
+
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
 
         // Internal classes
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-            if (member instanceof TypeDeclaration) {
-                TypeDeclaration<?> internalType = (TypeDeclaration<?>) member;
-                if (internalType.getName().getId().equals(name)) {
+            if (member.isTypeDeclaration()) {
+                TypeDeclaration<?> internalType = member.asTypeDeclaration();
+                if (internalType.getName().getId().equals(name) && compareTypeParameters(internalType, typeArguments)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
                 } else if (name.startsWith(wrappedNode.getName().getId() + "." + internalType.getName().getId())) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1));
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1), typeArguments);
                 } else if (name.startsWith(internalType.getName().getId() + ".")) {
-                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1));
+                    return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeArguments);
                 }
             }
         }
 
+        // Check if is a type parameter
         if (wrappedNode instanceof NodeWithTypeParameters) {
             NodeWithTypeParameters<?> nodeWithTypeParameters = (NodeWithTypeParameters<?>) wrappedNode;
             for (TypeParameter astTpRaw : nodeWithTypeParameters.getTypeParameters()) {
-                TypeParameter astTp = astTpRaw;
-                if (astTp.getName().getId().equals(name)) {
-                    return SymbolReference.solved(new JavaParserTypeParameter(astTp, typeSolver));
+                if (astTpRaw.getName().getId().equals(name)) {
+                    return SymbolReference.solved(new JavaParserTypeParameter(astTpRaw, typeSolver));
                 }
             }
         }
 
+        // Check if the node implements other types
         if (wrappedNode instanceof NodeWithImplements) {
             NodeWithImplements<?> nodeWithImplements = (NodeWithImplements<?>) wrappedNode;
             for (ClassOrInterfaceType implementedType : nodeWithImplements.getImplementedTypes()) {
                 if (implementedType.getName().getId().equals(name)) {
                     return context.getParent()
                         .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                        .solveType(implementedType.getNameWithScope());
+                        .solveType(implementedType.getNameWithScope(), typeArguments);
                 }
             }
         }
 
+        // Check if the node implements other types
         if (wrappedNode instanceof NodeWithExtends) {
             NodeWithExtends<?> nodeWithExtends = (NodeWithExtends<?>) wrappedNode;
             for (ClassOrInterfaceType extendedType : nodeWithExtends.getExtendedTypes()) {
-                if (extendedType.getName().getId().equals(name)) {
+                if (extendedType.getName().getId().equals(name) && compareTypeArguments(extendedType, typeArguments)) {
                     return context.getParent()
-                        .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                        .solveType(extendedType.getNameWithScope());
+                            .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                            .solveType(extendedType.getNameWithScope(), typeArguments);
                 }
             }
         }
@@ -125,7 +138,34 @@ public class JavaParserTypeDeclarationAdapter {
         // Else check parents
         return context.getParent()
                 .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name);
+                .solveType(name, typeArguments);
+    }
+
+    private <T extends NodeWithTypeArguments<?>> boolean compareTypes(List<? extends Type> types,
+                                                                      List<ResolvedType> resolvedTypeArguments) {
+        // If the user want's to solve the type without having prior knowledge of the type arguments.
+        if (resolvedTypeArguments == null) {
+            return true;
+        }
+
+        return types.size() == resolvedTypeArguments.size();
+    }
+
+    private <T extends NodeWithTypeArguments<?>> boolean compareTypeArguments(T type, List<ResolvedType> resolvedTypeArguments) {
+        return compareTypes(type.getTypeArguments().orElse(new NodeList<>()), resolvedTypeArguments);
+    }
+
+    private <T extends NodeWithTypeParameters<?>> boolean compareTypeParameters(T type,
+                                                                               List<ResolvedType> resolvedTypeArguments) {
+        return compareTypes(type.getTypeParameters(), resolvedTypeArguments);
+    }
+
+    private boolean compareTypeParameters(TypeDeclaration<?> typeDeclaration, List<ResolvedType> resolvedTypeArguments) {
+        if (typeDeclaration instanceof NodeWithTypeParameters) {
+            return compareTypeParameters((NodeWithTypeParameters<?>) typeDeclaration, resolvedTypeArguments);
+        } else {
+            return true;
+        }
     }
 
     /**
