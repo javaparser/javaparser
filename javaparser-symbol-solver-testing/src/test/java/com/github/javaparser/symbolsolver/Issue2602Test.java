@@ -1,5 +1,13 @@
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.Providers.provider;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -11,11 +19,6 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.Providers.provider;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class Issue2602Test extends AbstractSymbolResolutionTest {
 
@@ -47,8 +50,7 @@ public class Issue2602Test extends AbstractSymbolResolutionTest {
         );
 
 
-        System.out.println("parseResult = " + parseResult);
-        parseResult.getProblems().forEach(problem -> System.out.println("problem.getVerboseMessage() = " + problem.getVerboseMessage()));
+//        parseResult.getProblems().forEach(problem -> System.out.println("problem.getVerboseMessage() = " + problem.getVerboseMessage()));
 
         assertTrue(parseResult.isSuccessful());
         assertEquals(0, parseResult.getProblems().size(), "Expected zero errors when attempting to parse the input code.");

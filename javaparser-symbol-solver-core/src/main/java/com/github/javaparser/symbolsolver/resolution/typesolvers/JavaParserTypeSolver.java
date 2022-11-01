@@ -307,7 +307,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             }
         }
 
-        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
 }

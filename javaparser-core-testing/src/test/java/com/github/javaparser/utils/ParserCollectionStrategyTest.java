@@ -21,22 +21,20 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ParserConfiguration.LanguageLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.utils.CodeGenerationUtils.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 
 class ParserCollectionStrategyTest {
 
@@ -99,10 +97,10 @@ class ParserCollectionStrategyTest {
 
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
 
-        for (SourceRoot sourceRoot : sourceRoots) {
-            sourceRoot.getRoot().normalize().endsWith("with_module_info");
-            System.out.println(sourceRoot);
-        }
+//        for (SourceRoot sourceRoot : sourceRoots) {
+//            sourceRoot.getRoot().normalize().endsWith("with_module_info");
+//            System.out.println(sourceRoot);
+//        }
 
         assertEquals(3, sourceRoots.size());
     }

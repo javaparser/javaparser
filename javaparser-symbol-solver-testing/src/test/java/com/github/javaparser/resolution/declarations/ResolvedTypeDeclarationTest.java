@@ -67,6 +67,15 @@ public interface ResolvedTypeDeclarationTest extends ResolvedDeclarationTest {
     }
 
     @Test
+    default void whenDeclarationIsAReferenceTypeTheCallToTheMethodAsReferenceTypeShouldNotThrow() {
+        ResolvedTypeDeclaration resolvedDeclaration = createValue();
+        if (resolvedDeclaration.isReferenceType())
+            assertDoesNotThrow(resolvedDeclaration::asReferenceType);
+        else
+            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asReferenceType);
+    }
+
+    @Test
     default void qualifiedNameCantBeNull() {
         assertNotNull(createValue().getQualifiedName());
     }

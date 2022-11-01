@@ -21,6 +21,14 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest.adaptPath;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
@@ -31,13 +39,6 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.io.FileNotFoundException;
-import java.nio.file.Path;
-
-import static com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest.adaptPath;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * IndexOutOfBoundsException when attempting to resolve super() #1511
@@ -80,7 +81,6 @@ public class Issue1511Test {
 
         CompilationUnit foo = javaParser.parse("class A {}").getResult().orElseThrow(IllegalStateException::new);
         ResolvedReferenceType a = foo.getClassByName("A").orElseThrow(IllegalStateException::new).resolve().asClass().getSuperClass().get();
-        System.out.println("a = " + a);
 
         assertEquals("java.lang.Object", a.getQualifiedName());
     }

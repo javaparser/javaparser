@@ -21,6 +21,13 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -34,12 +41,6 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
@@ -443,10 +444,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         for (MethodCallExpr expr : methodCallExpr) {
             try {
                 ResolvedMethodDeclaration rd = expr.resolve();
-                System.out.println("\t Solved : " + rd.getQualifiedSignature());
             } catch (UnsolvedSymbolException e) {
-                System.out.println("\t UNSOLVED: " + expr.toString());
-                e.printStackTrace();
                 errorCount++;
             }
         }
@@ -482,7 +480,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
         for (MethodCallExpr expr : methodCallExpr) {
             ResolvedMethodDeclaration rd = expr.resolve();
-            System.out.println("\t Solved : " + rd.getQualifiedSignature());
         }
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
@@ -525,7 +522,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
         for (MethodCallExpr expr : methodCallExpr) {
             ResolvedMethodDeclaration rd = expr.resolve();
-            System.out.println("\t Solved : " + rd.getQualifiedSignature());
         }
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
@@ -560,10 +556,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         for (MethodReferenceExpr expr : methodeRefExpr) {
             try {
                 ResolvedMethodDeclaration md = expr.resolve();
-                System.out.println("\t Solved : " + md.getQualifiedSignature());
             } catch (UnsolvedSymbolException e) {
-                System.out.println("\t UNSOLVED: " + expr.toString());
-                e.printStackTrace();
                 errorCount++;
             }
         }

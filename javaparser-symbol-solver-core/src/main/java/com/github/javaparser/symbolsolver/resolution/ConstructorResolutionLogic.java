@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -34,6 +28,12 @@ import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Fred Lefévère-Laoide
@@ -164,7 +164,7 @@ public class ConstructorResolutionLogic {
             List<ResolvedConstructorDeclaration> constructors, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
         List<ResolvedConstructorDeclaration> applicableConstructors = constructors.stream().filter((m) -> isApplicable(m, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         if (applicableConstructors.isEmpty()) {
-            return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
+            return SymbolReference.unsolved();
         }
         if (applicableConstructors.size() == 1) {
             return SymbolReference.solved(applicableConstructors.get(0));

@@ -42,7 +42,6 @@ public class Issue2781Test extends AbstractResolutionTest {
             constructorDeclaration.findAll(MethodCallExpr.class).forEach(methodCallExpr -> {
                 //Exception in thread "main" java.lang.StackOverflowError
                 ResolvedMethodDeclaration rmd = methodCallExpr.resolve();
-                System.out.println(rmd.getQualifiedName());
             });
         });
 
