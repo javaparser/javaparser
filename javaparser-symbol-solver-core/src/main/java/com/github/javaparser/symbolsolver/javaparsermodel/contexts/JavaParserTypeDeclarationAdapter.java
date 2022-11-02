@@ -117,7 +117,7 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        // Check if the node implements other types
+        // Check if the node extends other types
         if (wrappedNode instanceof NodeWithExtends) {
             NodeWithExtends<?> nodeWithExtends = (NodeWithExtends<?>) wrappedNode;
             for (ClassOrInterfaceType extendedType : nodeWithExtends.getExtendedTypes()) {
