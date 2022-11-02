@@ -120,7 +120,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
 
         if (wrappedNode.getTypes() != null) {
             // Look for types in this compilation unit. For instance, if the given name is "A", there may be a class or
