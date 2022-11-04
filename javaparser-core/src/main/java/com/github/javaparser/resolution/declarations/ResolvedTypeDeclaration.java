@@ -99,6 +99,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     }
 
     /**
+     * Is this the declaration of a reference type?
+     */
+    default boolean isReferenceType() {
+        return false;
+    }
+
+    /**
      * Is this the declaration of a type parameter?
      */
     default boolean isTypeParameter() {

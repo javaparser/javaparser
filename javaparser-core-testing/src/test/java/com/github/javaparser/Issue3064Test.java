@@ -1,11 +1,12 @@
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.StringReader;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ast.CompilationUnit;
 
 public class Issue3064Test {
 
@@ -24,7 +25,6 @@ public class Issue3064Test {
         ParseResult<CompilationUnit> unitOpt = parser.parse(new StringReader(str));
         unitOpt.getProblems().stream().forEach(p -> System.err.println(p.toString()));
         CompilationUnit unit = unitOpt.getResult().orElseThrow(() -> new IllegalStateException("Could not parse file"));
-        System.out.println(unit.toString());
 
         assertEquals(str, unit.toString());
     }
