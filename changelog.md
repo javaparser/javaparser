@@ -3,11 +3,44 @@ Next Release (Version 3.24.8)
 [issues resolved](https://github.com/javaparser/javaparser/milestone/192?closed=1)
 
 ### Added
+
+* [Fixes #3099] Added ability to solve type with a list of expected type arguments (PR [#3213](https://github.com/javaparser/javaparser/pull/3213) by [@4everTheOne](https://github.com/4everTheOne))
+* [Suggestion] NonNull generator for parameters (PR [#3127](https://github.com/javaparser/javaparser/pull/3127) by [@4everTheOne](https://github.com/4everTheOne))
+
 ### Changed
-### Deprecated
-### Removed
+
+* Updated workflow to only run one job per PR (PR [#3744](https://github.com/javaparser/javaparser/pull/3744) by [@4everTheOne](https://github.com/4everTheOne))
+* Remove or comment system.out.println statement in unit tests (PR [#3741](https://github.com/javaparser/javaparser/pull/3741) by [@jlerbsc](https://github.com/jlerbsc))
+* Added Optional method in SymbolReference (PR [#3740](https://github.com/javaparser/javaparser/pull/3740) by [@4everTheOne](https://github.com/4everTheOne))
+* Centralized management of symbol solver exceptions to prevent exception type Erasion (PR [#3731](https://github.com/javaparser/javaparser/pull/3731) by [@jlerbsc](https://github.com/jlerbsc))
+
 ### Fixed
-### Security
+
+* Fix issue #3728 ParseProblemException (PR [#3743](https://github.com/javaparser/javaparser/pull/3743) by [@jlerbsc](https://github.com/jlerbsc))
+* Updated Badge for Build and Coverage (PR [#3742](https://github.com/javaparser/javaparser/pull/3742) by [@4everTheOne](https://github.com/4everTheOne))
+* Position (PR [#3734](https://github.com/javaparser/javaparser/pull/3734) by [@ameliagenova](https://github.com/ameliagenova))
+* Fix part of issue #3721 UnsupportedOperationException while trying to modify the type of a variable (PR [#3726](https://github.com/javaparser/javaparser/pull/3726) by [@jlerbsc](https://github.com/jlerbsc))
+* Implemented isReferenceType in `ResolvedTypeDeclaration` and isTypeParameter in `ResolvedTypeParameterDeclaration` (PR [#3206](https://github.com/javaparser/javaparser/pull/3206) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Developer Changes
+
+* chore(deps): bump versions-maven-plugin from 2.12.0 to 2.13.0 (PR [#3727](https://github.com/javaparser/javaparser/pull/3727) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Fix maven wrapper not found in generator scripts (PR [#3717](https://github.com/javaparser/javaparser/pull/3717) by [@PPazderski](https://github.com/PPazderski))
+* chore(deps): bump actions/checkout from 3.0.2 to 3.1.0 (PR [#3716](https://github.com/javaparser/javaparser/pull/3716) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Uncategorised
+
+* Change issue 1945 test to paramaterized (PR [#3739](https://github.com/javaparser/javaparser/pull/3739) by [@flanbino](https://github.com/flanbino))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@flanbino](https://github.com/flanbino)
+* [@PPazderski](https://github.com/PPazderski)
+* [@ameliagenova](https://github.com/ameliagenova)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@4everTheOne](https://github.com/4everTheOne)
 
 Next Release (Version 3.24.7)
 ------------------
