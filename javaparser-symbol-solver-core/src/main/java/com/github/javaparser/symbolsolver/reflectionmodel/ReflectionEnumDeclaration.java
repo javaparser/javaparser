@@ -213,7 +213,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
       ResolvedEnumConstantDeclaration enumConstant = getEnumConstant(name);
       return SymbolReference.solved(enumConstant);
     }
-    return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+    return SymbolReference.unsolved();
   }
 
   @Override

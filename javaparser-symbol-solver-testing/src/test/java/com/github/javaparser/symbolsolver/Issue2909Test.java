@@ -118,7 +118,6 @@ public class Issue2909Test extends AbstractResolutionTest {
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
         exprs.forEach(expr-> {
-            System.out.println(String.format("%s is resolved to %s", expr.toString(), expr.calculateResolvedType().describe()));
             assertEquals("test.Program.FarOuterClass.OuterClass",expr.calculateResolvedType().describe());
         });
     }

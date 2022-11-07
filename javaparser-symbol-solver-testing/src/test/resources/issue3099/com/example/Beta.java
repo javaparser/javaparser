@@ -19,22 +19,12 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.declarations;
+package com.example;
 
-import org.junit.jupiter.api.Test;
+class Beta implements Alpha.CustomInterface {
+  
+  public interface CustomInterface<T> {}
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public interface ResolvedTypeParameterDeclarationTest extends ResolvedTypeDeclarationTest {
-
-    @Override
-    ResolvedTypeParameterDeclaration createValue();
-
-    @Test
-    default void isTypeParameter_shouldBeTrue() {
-        assertTrue(createValue().isTypeParameter());
-    }
-
-    // TODO: Test ResolvedTypeParameterDeclaration
+  private final CustomInterface<Object> instanceOfBetaInnerClass;
 
 }
