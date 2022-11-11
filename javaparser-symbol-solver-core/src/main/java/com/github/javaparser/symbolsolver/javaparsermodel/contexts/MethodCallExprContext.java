@@ -29,6 +29,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -87,10 +88,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 if (ref.isSolved()) {
                     SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes);
                     if (m.isSolved()) {
-                        MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
-                        methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
-                        methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
-                        return Optional.of(methodUsage);
+                        ResolvedMethodDeclaration declaration = m.getCorrespondingDeclaration();
+                        if (declaration instanceof TypeVariableResolutionCapability) {
+                            MethodUsage methodUsage =
+                                ((TypeVariableResolutionCapability) declaration).resolveTypeVariables(this, argumentsTypes);
+                            return Optional.of(methodUsage);
+                        } else {
+                            MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
+                            methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
+                            methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
+                            return Optional.of(methodUsage);
+                        }
                     } else {
                         throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
                                 "Method '" + name + "' with parameterTypes " + argumentsTypes);
