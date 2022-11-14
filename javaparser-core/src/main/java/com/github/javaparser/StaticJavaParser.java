@@ -51,10 +51,7 @@ import java.nio.file.Path;
 public final class StaticJavaParser {
 
     // use ThreadLocal to resolve possible concurrency issues.
-    private static ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(() -> new ParserConfiguration());
-
-    private StaticJavaParser() {
-    }
+    private static final ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(ParserConfiguration::new);
 
     /**
      * Get the configuration for the parse... methods. Deprecated method.
@@ -80,10 +77,6 @@ public final class StaticJavaParser {
     public static void setConfiguration(@NotNull ParserConfiguration configuration) {
         Preconditions.checkNotNull(configuration, "Parameter configuration can't be null.");
         localConfiguration.set(configuration);
-    }
-
-    private static JavaParser newParser() {
-        return new JavaParser(getConfiguration());
     }
 
     /**
@@ -113,7 +106,7 @@ public final class StaticJavaParser {
      */
     public static CompilationUnit parse(@NotNull final InputStream in) {
         Preconditions.checkNotNull(in, "Parameter in can't be null.");
-        return handleResult(newParser().parse(in));
+        return newParserAdapted().parse(in);
     }
 
     /**
@@ -145,7 +138,7 @@ public final class StaticJavaParser {
      */
     public static CompilationUnit parse(@NotNull final File file) throws FileNotFoundException {
         Preconditions.checkNotNull(file, "Parameter file can't be null.");
-        return handleResult(newParser().parse(file));
+        return newParserAdapted().parse(file);
     }
 
     /**
@@ -177,7 +170,7 @@ public final class StaticJavaParser {
      */
     public static CompilationUnit parse(@NotNull final Path path) throws IOException {
         Preconditions.checkNotNull(path, "Parameter path can't be null.");
-        return handleResult(newParser().parse(path));
+        return newParserAdapted().parse(path);
     }
 
     /**
@@ -192,7 +185,7 @@ public final class StaticJavaParser {
      */
     public static CompilationUnit parseResource(@NotNull final String path) throws IOException {
         Preconditions.checkNotNull(path, "Parameter path can't be null.");
-        return handleResult(newParser().parseResource(path));
+        return newParserAdapted().parseResource(path);
     }
 
     /**
@@ -244,7 +237,7 @@ public final class StaticJavaParser {
      */
     public static CompilationUnit parse(@NotNull final Reader reader) {
         Preconditions.checkNotNull(reader, "Parameter reader can't be null.");
-        return handleResult(newParser().parse(reader));
+        return newParserAdapted().parse(reader);
     }
 
     /**
@@ -257,7 +250,7 @@ public final class StaticJavaParser {
      */
     public static CompilationUnit parse(@NotNull String code) {
         Preconditions.checkNotNull(code, "Parameter code can't be null.");
-        return handleResult(newParser().parse(code));
+        return newParserAdapted().parse(code);
     }
 
     /**
@@ -270,7 +263,7 @@ public final class StaticJavaParser {
      */
     public static BlockStmt parseBlock(@NotNull final String blockStatement) {
         Preconditions.checkNotNull(blockStatement, "Parameter blockStatement can't be null.");
-        return handleResult(newParser().parseBlock(blockStatement));
+        return newParserAdapted().parseBlock(blockStatement);
     }
 
     /**
@@ -283,14 +276,7 @@ public final class StaticJavaParser {
      */
     public static Statement parseStatement(@NotNull final String statement) {
         Preconditions.checkNotNull(statement, "Parameter statement can't be null.");
-        return handleResult(newParser().parseStatement(statement));
-    }
-
-    private static <T extends Node> T handleResult(ParseResult<T> result) {
-        if (result.isSuccessful()) {
-            return result.getResult().get();
-        }
-        throw new ParseProblemException(result.getProblems());
+        return newParserAdapted().parseStatement(statement);
     }
 
     /**
@@ -303,7 +289,7 @@ public final class StaticJavaParser {
      */
     public static ImportDeclaration parseImport(@NotNull final String importDeclaration) {
         Preconditions.checkNotNull(importDeclaration, "Parameter importDeclaration can't be null.");
-        return handleResult(newParser().parseImport(importDeclaration));
+        return newParserAdapted().parseImport(importDeclaration);
     }
 
     /**
@@ -316,7 +302,7 @@ public final class StaticJavaParser {
      */
     public static <T extends Expression> T parseExpression(@NotNull final String expression) {
         Preconditions.checkNotNull(expression, "Parameter expression can't be null.");
-        return handleResult(newParser().parseExpression(expression));
+        return newParserAdapted().parseExpression(expression);
     }
 
     /**
@@ -329,7 +315,7 @@ public final class StaticJavaParser {
      */
     public static AnnotationExpr parseAnnotation(@NotNull final String annotation) {
         Preconditions.checkNotNull(annotation, "Parameter annotation can't be null.");
-        return handleResult(newParser().parseAnnotation(annotation));
+        return newParserAdapted().parseAnnotation(annotation);
     }
 
     /**
@@ -342,7 +328,7 @@ public final class StaticJavaParser {
      */
     public static BodyDeclaration<?> parseAnnotationBodyDeclaration(@NotNull final String body) {
         Preconditions.checkNotNull(body, "Parameter body can't be null.");
-        return handleResult(newParser().parseAnnotationBodyDeclaration(body));
+        return newParserAdapted().parseAnnotationBodyDeclaration(body);
     }
 
     /**
@@ -355,7 +341,7 @@ public final class StaticJavaParser {
      */
     public static BodyDeclaration<?> parseBodyDeclaration(@NotNull String body) {
         Preconditions.checkNotNull(body, "Parameter body can't be null.");
-        return handleResult(newParser().parseBodyDeclaration(body));
+        return newParserAdapted().parseBodyDeclaration(body);
     }
 
     /**
@@ -367,7 +353,7 @@ public final class StaticJavaParser {
      */
     public static ClassOrInterfaceType parseClassOrInterfaceType(@NotNull String type) {
         Preconditions.checkNotNull(type, "Parameter type can't be null.");
-        return handleResult(newParser().parseClassOrInterfaceType(type));
+        return newParserAdapted().parseClassOrInterfaceType(type);
     }
 
     /**
@@ -379,7 +365,7 @@ public final class StaticJavaParser {
      */
     public static Type parseType(@NotNull String type) {
         Preconditions.checkNotNull(type, "Parameter type can't be null.");
-        return handleResult(newParser().parseType(type));
+        return newParserAdapted().parseType(type);
     }
 
     /**
@@ -392,7 +378,7 @@ public final class StaticJavaParser {
      */
     public static VariableDeclarationExpr parseVariableDeclarationExpr(@NotNull String declaration) {
         Preconditions.checkNotNull(declaration, "Parameter declaration can't be null.");
-        return handleResult(newParser().parseVariableDeclarationExpr(declaration));
+        return newParserAdapted().parseVariableDeclarationExpr(declaration);
     }
 
     /**
@@ -417,7 +403,7 @@ public final class StaticJavaParser {
      */
     public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(@NotNull String statement) {
         Preconditions.checkNotNull(statement, "Parameter statement can't be null.");
-        return handleResult(newParser().parseExplicitConstructorInvocationStmt(statement));
+        return newParserAdapted().parseExplicitConstructorInvocationStmt(statement);
     }
 
     /**
@@ -429,7 +415,7 @@ public final class StaticJavaParser {
      */
     public static Name parseName(@NotNull String qualifiedName) {
         Preconditions.checkNotNull(qualifiedName, "Parameter qualifiedName can't be null.");
-        return handleResult(newParser().parseName(qualifiedName));
+        return newParserAdapted().parseName(qualifiedName);
     }
 
     /**
@@ -441,7 +427,7 @@ public final class StaticJavaParser {
      */
     public static SimpleName parseSimpleName(@NotNull String name) {
         Preconditions.checkNotNull(name, "Parameter name can't be null.");
-        return handleResult(newParser().parseSimpleName(name));
+        return newParserAdapted().parseSimpleName(name);
     }
 
     /**
@@ -453,7 +439,7 @@ public final class StaticJavaParser {
      */
     public static Parameter parseParameter(@NotNull String parameter) {
         Preconditions.checkNotNull(parameter, "Parameter parameter can't be null.");
-        return handleResult(newParser().parseParameter(parameter));
+        return newParserAdapted().parseParameter(parameter);
     }
 
     /**
@@ -465,7 +451,7 @@ public final class StaticJavaParser {
      */
     public static PackageDeclaration parsePackageDeclaration(@NotNull String packageDeclaration) {
         Preconditions.checkNotNull(packageDeclaration, "Parameter packageDeclaration can't be null.");
-        return handleResult(newParser().parsePackageDeclaration(packageDeclaration));
+        return newParserAdapted().parsePackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -477,7 +463,7 @@ public final class StaticJavaParser {
      */
     public static TypeDeclaration<?> parseTypeDeclaration(@NotNull String typeDeclaration) {
         Preconditions.checkNotNull(typeDeclaration, "Parameter typeDeclaration can't be null.");
-        return handleResult(newParser().parseTypeDeclaration(typeDeclaration));
+        return newParserAdapted().parseTypeDeclaration(typeDeclaration);
     }
 
     /**
@@ -490,7 +476,7 @@ public final class StaticJavaParser {
      */
     public static ModuleDeclaration parseModuleDeclaration(@NotNull String moduleDeclaration) {
         Preconditions.checkNotNull(moduleDeclaration, "Parameter moduleDeclaration can't be null.");
-        return handleResult(newParser().parseModuleDeclaration(moduleDeclaration));
+        return newParserAdapted().parseModuleDeclaration(moduleDeclaration);
     }
 
     /**
@@ -503,7 +489,7 @@ public final class StaticJavaParser {
      */
     public static ModuleDirective parseModuleDirective(@NotNull String moduleDirective) {
         Preconditions.checkNotNull(moduleDirective, "Parameter moduleDirective can't be null.");
-        return handleResult(newParser().parseModuleDirective(moduleDirective));
+        return newParserAdapted().parseModuleDirective(moduleDirective);
     }
 
     /**
@@ -515,7 +501,7 @@ public final class StaticJavaParser {
      */
     public static TypeParameter parseTypeParameter(@NotNull String typeParameter) {
         Preconditions.checkNotNull(typeParameter, "Parameter typeParameter can't be null.");
-        return handleResult(newParser().parseTypeParameter(typeParameter));
+        return newParserAdapted().parseTypeParameter(typeParameter);
     }
 
     /**
@@ -528,6 +514,28 @@ public final class StaticJavaParser {
      */
     public static MethodDeclaration parseMethodDeclaration(@NotNull String methodDeclaration) {
         Preconditions.checkNotNull(methodDeclaration, "Parameter methodDeclaration can't be null.");
-        return handleResult(newParser().parseMethodDeclaration(methodDeclaration));
+        return newParserAdapted().parseMethodDeclaration(methodDeclaration);
     }
+
+    // Private methods
+
+    private static JavaParser newParser() {
+        return new JavaParser(getParserConfiguration());
+    }
+
+    private static JavaParserAdapter newParserAdapted() {
+        return new JavaParserAdapter(newParser());
+    }
+
+    @Deprecated
+    private static <T extends Node> T handleResult(ParseResult<T> result) {
+        if (result.isSuccessful()) {
+            return result.getResult().get();
+        }
+        throw new ParseProblemException(result.getProblems());
+    }
+
+    private StaticJavaParser() {
+    }
+
 }

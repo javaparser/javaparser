@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
@@ -45,6 +41,10 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.google.common.base.Preconditions;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A symbol resolution context for an object creation node.
@@ -122,7 +122,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   }
 
   @Override
-  public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+  public SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
     List<TypeDeclaration> typeDeclarations = myDeclaration.findMembersOfKind(TypeDeclaration.class);
 
     Optional<SymbolReference<ResolvedTypeDeclaration>> exactMatch =
@@ -193,7 +193,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       }
     }
 
-    return solveTypeInParentContext(name);
+    return solveTypeInParentContext(name, typeArguments);
   }
 
   @Override
