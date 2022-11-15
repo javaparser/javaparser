@@ -57,7 +57,8 @@ public class LambdaArgumentTypePlaceholder implements ResolvedType {
 
     @Override
     public String describe() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("describe function is not supported in LambdaArgumentTypePlaceholder " +
+                "class.");
     }
 
     @Override
@@ -71,7 +72,8 @@ public class LambdaArgumentTypePlaceholder implements ResolvedType {
 
     @Override
     public boolean isAssignableBy(ResolvedType other) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("isAssignableBy function is not supported in LambdaArgumentTypePlaceholder " +
+                "class.");
     }
 
 }

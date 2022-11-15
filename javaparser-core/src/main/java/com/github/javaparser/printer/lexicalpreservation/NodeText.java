@@ -137,7 +137,7 @@ class NodeText {
                             elements.remove(i);
                         }
                     } else {
-                        throw new UnsupportedOperationException();
+                        throw new UnsupportedOperationException("TextElement size is 0 or negative.");
                     }
                 }
                 return;

@@ -104,7 +104,7 @@ public class ResolvedWildcard implements ResolvedType {
         } else if (type == BoundType.EXTENDS) {
             return "? extends " + boundedType.describe();
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("The BoundType is not null, Super or Extends. BoundType is " + type.name());
         }
     }
 

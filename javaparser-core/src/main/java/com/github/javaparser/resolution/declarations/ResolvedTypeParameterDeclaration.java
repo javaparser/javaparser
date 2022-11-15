@@ -92,12 +92,14 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
 
             @Override
             public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("containerType method is unsupported in " +
+                        "ResolvedTypeParameterDeclaration class.");
             }
 
             @Override
             public ResolvedReferenceType object() {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("object method is unsupported in " +
+                        "ResolvedTypeParameterDeclaration class.");
             }
         };
     }
@@ -133,7 +135,8 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * This is unsupported because there is no package for a Type Parameter, only for its container.
      */
     default String getPackageName() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("getPackageName method is unsupported in " +
+                "ResolvedTypeParameterDeclaration class.");
     }
 
     /**
@@ -141,7 +144,8 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * This is unsupported because there is no class for a Type Parameter, only for its container.
      */
     default String getClassName() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("getClassName method is unsupported in " +
+                "ResolvedTypeParameterDeclaration class.");
     }
 
     /**
