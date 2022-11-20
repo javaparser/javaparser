@@ -533,7 +533,6 @@ public class Difference {
                 diffIndex++;
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
-                diffIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
