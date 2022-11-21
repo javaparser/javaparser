@@ -419,6 +419,10 @@ public class Difference {
             diffIndex++;
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
             originalIndex++;
+            // skip the newline token which may be generated unnecessarily by the concrete syntax pattern
+            if (removed.isNewLine()) { 
+            	diffIndex++;
+            }
         } else if (originalElement.isLiteral()) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
@@ -463,6 +467,11 @@ public class Difference {
                         // If the current element is not a space itself we remove the space in front of (before) it
                         nodeText.removeElement(originalIndex - 1);
                         originalIndex--;
+                    }
+                    // Remove remaining newline character if needed
+                    if (nodeText.getTextElement(originalIndex).isNewline()) {
+                    	nodeText.removeElement(originalIndex);
+                    	originalIndex = originalIndex > 0 ? originalIndex-- : 0;
                     }
                 }
             }
@@ -533,7 +542,6 @@ public class Difference {
                 diffIndex++;
             } else if (kept.isNewLine() && originalTextToken.isSpaceOrTab()) {
                 originalIndex++;
-                diffIndex++;
             } else if (kept.isWhiteSpaceOrComment()) {
                 diffIndex++;
             } else if (originalTextToken.isWhiteSpaceOrComment()) {
