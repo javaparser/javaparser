@@ -134,57 +134,103 @@ public class Difference {
     }
 
     /**
-     * If we are at the beginning of a line, with just spaces or tabs before us we should force the space to be
-     * the same as the indentation.
+     * If we are at the beginning of a line, with just spaces or tabs before/after the position of the deleted element
+     * we should force the space to be the same as the current indentation.
+     * This method handles the following case if we remove the modifier {@code public} ([ ] is an indent character)
+     * {@code 
+     * [ ][ ]public[ ][ ][ ]void[ ]m{}
+     * <-1-->      <---2--->
+     * 1/ current indentation
+     * 2/ these whitespaces must be removed
+     * }
+     * should produce
+     * {@code 
+     * [ ][ ]void[ ]m{} 
+     * }
      */
     private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
-        boolean hasOnlyWsBefore = hasOnlyWsBefore(nodeText, nodeTextIndex);
+        EnforcingIndentationContext enforcingIndentationContext = defineEnforcingIndentationContext(nodeText, nodeTextIndex);
         // the next position in the list (by default the current position)
         int res = nodeTextIndex;
-        if (hasOnlyWsBefore) {
-            res = removeExtraCharacters(nodeText, nodeTextIndex);
+        if (enforcingIndentationContext.extraCharacters > 0) {
+        	int extraCharacters = enforcingIndentationContext.extraCharacters > indentation.size() ? enforcingIndentationContext.extraCharacters - indentation.size() : 0;
+            res = removeExtraCharacters(nodeText, enforcingIndentationContext.start, extraCharacters);
+            // The next position must take into account the indentation
+            res = extraCharacters > 0 ? res + indentation.size() : res;
         }
         if (res < 0) {
             throw new IllegalStateException();
         }
         return res;
     }
+    
+    /*
+     * This data structure class hold the starting position of the first whitespace char 
+     * and the number of consecutive whitespace (or tab) characters
+     */
+    private class EnforcingIndentationContext {
+    	int start;
+    	int extraCharacters;
+    	public EnforcingIndentationContext(int start) {
+    		this.start=start;
+    		this.extraCharacters=0;
+    	}
+    }
 
     /**
+     * Remove excess white space after deleting element.
      * @param nodeText Contains a list of elements to analyze
      * @param nodeTextIndex Starting position in the input list
      * @return The current position in the list of the elements
      */
-    private int removeExtraCharacters(NodeText nodeText, int nodeTextIndex) {
+    private int removeExtraCharacters(NodeText nodeText, int nodeTextIndex, int extraCharacters) {
         int pos = nodeTextIndex;
-        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
+        int count = 0;
+        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements() && count < extraCharacters; i++) {
             if (nodeText.getTextElement(i).isNewline()) {
                 break;
             }
-            nodeText.removeElement(i);
-            pos = i;
+            nodeText.removeElement(pos);
+            count++;
         }
         return pos;
     }
 
     /**
-     * Tries to determine if there are only spaces between the previous end of line and the index
+     * Starting at {@code nodeTextIndex} this method tries to determine how many contiguous spaces there are between 
+     * the previous end of line and the next non whitespace (or tab) character
      * @param nodeText List of elements to analyze
      * @param nodeTextIndex Starting position in the input list
-     * @return
+     * @return EnforcingIndentationContext Data structure that hold the starting position of the first whitespace char and
+     * The number of consecutive whitespace (or tab) characters
      */
-    private boolean hasOnlyWsBefore(NodeText nodeText, int nodeTextIndex) {
-        boolean hasOnlyWsBefore = true;
-        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
-            if (nodeText.getTextElement(i).isNewline()) {
-                break;
-            }
-            if (!nodeText.getTextElement(i).isSpaceOrTab()) {
-                hasOnlyWsBefore = false;
-                break;
-            }
-        }
-        return hasOnlyWsBefore;
+    private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int nodeTextIndex) {
+    	EnforcingIndentationContext ctx = new EnforcingIndentationContext(nodeTextIndex);
+    	// compute space before nodeTextIndex value
+		if (nodeTextIndex < nodeText.numberOfElements()) {
+			for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
+				if (nodeText.getTextElement(i).isNewline()) {
+					break;
+				}
+				if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+					ctx = new EnforcingIndentationContext(nodeTextIndex);
+					break;
+				}
+				ctx.start = i;
+				ctx.extraCharacters++;
+			}
+			// compute space after nodeTextIndex value
+			if (nodeText.getTextElement(nodeTextIndex).isSpaceOrTab()) {
+				for (int i = nodeTextIndex + 1; i >= 0 && i < nodeText.numberOfElements(); i++) {
+					if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+						break;
+					}
+					ctx.extraCharacters++;
+				}
+			}
+		}
+        
+        return ctx;
     }
 
     /**
@@ -395,7 +441,12 @@ public class Difference {
                 }
             } else {
                 nodeText.removeElement(originalIndex);
-                if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded())) && !removedGroup.isACompleteLine()) {
+                // When we don't try to remove a complete line 
+                // and removing the element is not the first action of a replacement (removal followed by addition)
+                // (in the latter case we keep the indentation)
+                // then we want to enforce the indentation.
+                if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded())) 
+                		&& !removedGroup.isACompleteLine()) {
                     originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
                 }
                 // If in front we have one space and before also we had space let's drop one space
