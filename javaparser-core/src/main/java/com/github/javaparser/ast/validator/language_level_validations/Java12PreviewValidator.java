@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -30,12 +29,9 @@ public class Java12PreviewValidator extends Java12Validator {
 
     public Java12PreviewValidator() {
         super();
-
         // Incubator
         // No new incubator language features added within Java 12
-
         // Preview
-
         {
             /*
              * Switch Expressions (Preview) - first preview within Java 12 - https://openjdk.java.net/jeps/325
@@ -48,9 +44,7 @@ public class Java12PreviewValidator extends Java12Validator {
             remove(noSwitchExpressions);
             remove(onlyOneLabelInSwitchCase);
         }
-
         // 2nd Preview
         // No new 2nd preview language features added within Java 12
-
     }
 }

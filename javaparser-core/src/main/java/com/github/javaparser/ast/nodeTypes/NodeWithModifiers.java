@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -66,9 +65,7 @@ public interface NodeWithModifiers<N extends Node> {
     @SuppressWarnings("unchecked")
     default N removeModifier(Modifier.Keyword... modifiersToRemove) {
         List<Modifier.Keyword> modifiersToRemoveAsList = Arrays.asList(modifiersToRemove);
-        NodeList<Modifier> remaining = getModifiers().stream()
-                .filter(existingModifier -> !modifiersToRemoveAsList.contains(existingModifier.getKeyword()))
-                .collect(toNodeList());
+        NodeList<Modifier> remaining = getModifiers().stream().filter(existingModifier -> !modifiersToRemoveAsList.contains(existingModifier.getKeyword())).collect(toNodeList());
         setModifiers(remaining);
         return (N) this;
     }

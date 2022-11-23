@@ -1,6 +1,6 @@
-Next Release (Version 3.24.7)
+Next Release (Version 3.24.9)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/193?closed=1)
 
 ### Added
 ### Changed
@@ -9,8 +9,92 @@ Next Release (Version 3.24.7)
 ### Fixed
 ### Security
 
-Next Release (Version 3.24.6)
-------------------
+Version 3.24.8
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/192?closed=1)
+
+### Added
+
+* [Fixes #3099] Added ability to solve type with a list of expected type arguments (PR [#3213](https://github.com/javaparser/javaparser/pull/3213) by [@4everTheOne](https://github.com/4everTheOne))
+* [Suggestion] NonNull generator for parameters (PR [#3127](https://github.com/javaparser/javaparser/pull/3127) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Changed
+
+* Updated workflow to only run one job per PR (PR [#3744](https://github.com/javaparser/javaparser/pull/3744) by [@4everTheOne](https://github.com/4everTheOne))
+* Remove or comment system.out.println statement in unit tests (PR [#3741](https://github.com/javaparser/javaparser/pull/3741) by [@jlerbsc](https://github.com/jlerbsc))
+* Added Optional method in SymbolReference (PR [#3740](https://github.com/javaparser/javaparser/pull/3740) by [@4everTheOne](https://github.com/4everTheOne))
+* Centralized management of symbol solver exceptions to prevent exception type Erasion (PR [#3731](https://github.com/javaparser/javaparser/pull/3731) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix issue #1827 Issue resolving a constructor of a class using generics (PR [#3752](https://github.com/javaparser/javaparser/pull/3752) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3728 ParseProblemException (PR [#3743](https://github.com/javaparser/javaparser/pull/3743) by [@jlerbsc](https://github.com/jlerbsc))
+* Updated Badge for Build and Coverage (PR [#3742](https://github.com/javaparser/javaparser/pull/3742) by [@4everTheOne](https://github.com/4everTheOne))
+* Position (PR [#3734](https://github.com/javaparser/javaparser/pull/3734) by [@ameliagenova](https://github.com/ameliagenova))
+* Fix part of issue #3721 UnsupportedOperationException while trying to modify the type of a variable (PR [#3726](https://github.com/javaparser/javaparser/pull/3726) by [@jlerbsc](https://github.com/jlerbsc))
+* Implemented isReferenceType in `ResolvedTypeDeclaration` and isTypeParameter in `ResolvedTypeParameterDeclaration` (PR [#3206](https://github.com/javaparser/javaparser/pull/3206) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Developer Changes
+
+* chore(deps): bump versions-maven-plugin from 2.12.0 to 2.13.0 (PR [#3727](https://github.com/javaparser/javaparser/pull/3727) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Fix maven wrapper not found in generator scripts (PR [#3717](https://github.com/javaparser/javaparser/pull/3717) by [@PPazderski](https://github.com/PPazderski))
+* chore(deps): bump actions/checkout from 3.0.2 to 3.1.0 (PR [#3716](https://github.com/javaparser/javaparser/pull/3716) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Uncategorised
+
+* Change issue 1945 test to paramaterized (PR [#3739](https://github.com/javaparser/javaparser/pull/3739) by [@flanbino](https://github.com/flanbino))
+* More unit tests for JavaToken and CodeGenerationUtils (PR [#3736](https://github.com/javaparser/javaparser/pull/3736) by [@ameliagenova](https://github.com/ameliagenova))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@flanbino](https://github.com/flanbino)
+* [@PPazderski](https://github.com/PPazderski)
+* [@ameliagenova](https://github.com/ameliagenova)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@4everTheOne](https://github.com/4everTheOne)
+
+
+
+Version 3.24.7
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/191?closed=1)
+
+### Highlights
+
+* Issue #3415 (PR [#3722](https://github.com/javaparser/javaparser/pull/3722) by [@nelson-ng-96](https://github.com/nelson-ng-96))
+
+### Changed
+
+* Refactoring - use of existing methods (PR [#3697](https://github.com/javaparser/javaparser/pull/3697) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactoring adding convenient methods to know if a DifferenceElement is added, removed or kept (PR [#3695](https://github.com/javaparser/javaparser/pull/3695) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Deprecated
+
+* Issue #3415 (PR [#3722](https://github.com/javaparser/javaparser/pull/3722) by [@nelson-ng-96](https://github.com/nelson-ng-96))
+
+### Fixed
+
+* Fix for ReflectionAnnotationDeclaration getClassName() (PR [#3723](https://github.com/javaparser/javaparser/pull/3723) by [@Blackgen](https://github.com/Blackgen))
+* Fix some yield expressions not recognized (PR [#3714](https://github.com/javaparser/javaparser/pull/3714) by [@PPazderski](https://github.com/PPazderski))
+* Accept final in instanceof pattern (PR [#3713](https://github.com/javaparser/javaparser/pull/3713) by [@PPazderski](https://github.com/PPazderski))
+* [Fix] Avoid test failure due to line separator differences on windows host (PR [#3711](https://github.com/javaparser/javaparser/pull/3711) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3700 Removing last statement with LexicalPreservingPrinter results in loss of indendation (PR [#3704](https://github.com/javaparser/javaparser/pull/3704) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue #3678 Function accepts a configuration but it does not do anything (PR [#3692](https://github.com/javaparser/javaparser/pull/3692) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@PPazderski](https://github.com/PPazderski)
+* [@nelson-ng-96](https://github.com/nelson-ng-96)
+* [@Blackgen](https://github.com/Blackgen)
+* [@jlerbsc](https://github.com/jlerbsc)
+
+
+Version 3.24.6
+--------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
 
 ### API or Behaviour Change
@@ -87,8 +171,8 @@ Thank You to all contributors who worked on this release!
 * [@4everTheOne](https://github.com/4everTheOne)
 
 
-Next Release (Version 3.24.4) - Repeat of 3.24.3
-------------------
+Version 3.24.4 - Repeat of 3.24.3
+---------------------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
 
 GPG Fingerprint: `253E8E4C6FB28D11748115C1249DEE8E2C07A0A2`

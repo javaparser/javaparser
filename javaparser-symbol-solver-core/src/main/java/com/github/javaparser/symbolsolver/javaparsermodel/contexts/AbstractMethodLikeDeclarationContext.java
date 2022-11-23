@@ -97,7 +97,7 @@ public abstract class AbstractMethodLikeDeclarationContext
     }
 
     @Override
-    public final SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+    public final SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
         // TODO: Is null check required?
         if (wrappedNode.getTypeParameters() != null) {
             for (TypeParameter tp : wrappedNode.getTypeParameters()) {
@@ -119,7 +119,7 @@ public abstract class AbstractMethodLikeDeclarationContext
             }
         }
 
-        return solveTypeInParentContext(name);
+        return solveTypeInParentContext(name, typeArguments);
     }
 
     @Override

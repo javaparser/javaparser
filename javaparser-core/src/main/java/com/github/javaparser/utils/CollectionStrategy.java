@@ -18,20 +18,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
-
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.util.Optional;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.util.Optional;
 
 /**
  * A strategy for discovering the structure of a project.
@@ -47,8 +46,6 @@ public interface CollectionStrategy {
         try {
             final JavaParser javaParser = new JavaParser(getParserConfiguration());
             final ParseResult<CompilationUnit> parseResult = javaParser.parse(file);
-
-
             if (parseResult.isSuccessful()) {
                 if (parseResult.getResult().isPresent()) {
                     final Optional<CompilationUnit.Storage> storage = parseResult.getResult().flatMap(CompilationUnit::getStorage);

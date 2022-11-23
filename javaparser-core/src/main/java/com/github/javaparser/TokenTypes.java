@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.utils.LineSeparator;
@@ -29,6 +28,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  * Complements GeneratedJavaParserConstants
  */
 public class TokenTypes {
+
     public static boolean isWhitespace(int kind) {
         return getCategory(kind).isWhitespace();
     }
@@ -95,7 +95,7 @@ public class TokenTypes {
      * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.5">The JLS</a>.
      */
     public static JavaToken.Category getCategory(int kind) {
-        switch (kind) {
+        switch(kind) {
             case WINDOWS_EOL:
             case UNIX_EOL:
             case OLD_MAC_EOL:

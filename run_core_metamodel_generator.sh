@@ -12,7 +12,7 @@ fi
 pushd javaparser-core-metamodel-generator
 
 # Generate code
-./mvnw --errors --show-version -B clean package -P run-generators -DskipTests
+../mvnw --errors --show-version -B clean package -P run-generators -DskipTests
 
 # Go back to previous directory
 popd

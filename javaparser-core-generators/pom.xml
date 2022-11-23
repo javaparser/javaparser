@@ -3,7 +3,7 @@
     <parent>
         <artifactId>jmlparser-parent</artifactId>
         <groupId>io.github.wadoon</groupId>
-        <version>3.24.7-SNAPSHOT</version>
+        <version>3.24.9-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

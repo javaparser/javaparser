@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -30,9 +29,7 @@ public class Java12Validator extends Java11Validator {
 
     public Java12Validator() {
         super();
-
         // Released Language Features
         // No new released language features added within Java 12
-
     }
 }

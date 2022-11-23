@@ -18,10 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
-
-import com.github.javaparser.ast.Node;
 
 import java.util.Objects;
 
@@ -31,22 +28,25 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * A position in a source file. Lines and columns start counting at 1.
  */
 public class Position implements Comparable<Position> {
+
     public final int line;
+
     public final int column;
 
     /**
      * The first line -- note that it is 1-indexed (i.e. the first line is line 1, as opposed to 0)
      */
     public static final int FIRST_LINE = 1;
+
     /**
      * The first column -- note that it is 1-indexed (i.e. the first column is column 1, as opposed to 0)
      */
     public static final int FIRST_COLUMN = 1;
+
     /**
      * The first position in the file.
      */
     public static final Position HOME = new Position(FIRST_LINE, FIRST_COLUMN);
-
 
     /**
      * Line numbers must be positive, thus
@@ -55,20 +55,18 @@ public class Position implements Comparable<Position> {
 
     public static final int ABSOLUTE_END_LINE = -2;
 
-
     /**
      * TODO: Do we refer to the characters as columns,
      *  ...or the spaces between (thus also before/after) characters as columns?
      */
     public Position(int line, int column) {
         if (line < Position.ABSOLUTE_END_LINE) {
-            // TODO/FIXME: This doesn't read correctly due to use of the variable.
             throw new IllegalArgumentException("Can't position at line " + line);
         }
         if (column < -1) {
             // TODO: This allows/permits column 0, which seemingly contradicts first column being 1
-            //  ... (see also nextLine() which indicates 1 being the first column of the next line)
-            //  ... (see also valid() which requires a column > 0)
+            // ... (see also nextLine() which indicates 1 being the first column of the next line)
+            // ... (see also valid() which requires a column > 0)
             // TODO: Maybe we need an "ABSOLUTE_BEGIN_LINE" and "ABSOLUTE_END_LINE"?
             throw new IllegalArgumentException("Can't position at column " + column);
         }
@@ -115,12 +113,13 @@ public class Position implements Comparable<Position> {
     }
 
     /**
-     * Check if the position is usable.
+     * Check if the position is usable,
+     * also checks for special positions (ABSOLUTE_BEGIN_LINE and ABSOLUTE_END_LINE).
      * Does not know what it is pointing at, so it can't check if the position is after the end of the source.
+     * @return true if the position is usable or a special position.
      */
     public boolean valid() {
-        // TODO / FIXME: Perhaps allow use of the "special" positions e.g. ABSOLUTE_BEGIN_LINE and ABSOLUTE_END_LINE...?
-        return line >= FIRST_LINE && column >= FIRST_COLUMN;
+        return ABSOLUTE_END_LINE == line || ABSOLUTE_BEGIN_LINE == line || line >= FIRST_LINE && column >= FIRST_COLUMN;
     }
 
     /**
@@ -134,32 +133,26 @@ public class Position implements Comparable<Position> {
     /**
      * @return If this position is valid, this.
      *   Otherwise, if the alternativePosition is valid, return that.
-     *   Otherwise otherwise, just return this.
-     *   TODO: Simplify/clarify.
+     *   Otherwise, just return this.
      */
     public Position orIfInvalid(Position alternativePosition) {
         assertNotNull(alternativePosition);
-        // TODO: Why the || ?
-        //  ... It seems that if both this and the alternative are invalid, then we return this..?
-        if (valid() || alternativePosition.invalid()) {
+        if (this.valid()) {
             return this;
         }
-        return alternativePosition;
+        return alternativePosition.valid() ? alternativePosition : this;
     }
 
+    /**
+     * @param otherPosition the other position to compare to
+     * @return true if this position is after the given position
+     */
     public boolean isAfter(Position otherPosition) {
         assertNotNull(otherPosition);
-        if (otherPosition.line == Position.ABSOLUTE_BEGIN_LINE) {
-            // FIXME: What if both positions are on the same line but different columns..?
-            return true;
-        }
-        if (line > otherPosition.line) {
-            return true;
-        } else if (line == otherPosition.line) {
+        if (line == otherPosition.line) {
             return column > otherPosition.column;
         }
-        return false;
-
+        return line > otherPosition.line || otherPosition.line == Position.ABSOLUTE_BEGIN_LINE;
     }
 
     public boolean isAfterOrEqual(Position otherPosition) {
@@ -167,18 +160,16 @@ public class Position implements Comparable<Position> {
         return isAfter(otherPosition) || equals(otherPosition);
     }
 
+    /**
+     * @param otherPosition the other position to compare to
+     * @return true if this position is before the given position
+     */
     public boolean isBefore(Position otherPosition) {
         assertNotNull(otherPosition);
-        if (otherPosition.line == Position.ABSOLUTE_END_LINE) {
-            // FIXME: What if both positions are on the same line but different columns..?
-            return true;
-        }
-        if (line < otherPosition.line) {
-            return true;
-        } else if (line == otherPosition.line) {
+        if (line == otherPosition.line) {
             return column < otherPosition.column;
         }
-        return false;
+        return line < otherPosition.line || otherPosition.line == Position.ABSOLUTE_END_LINE;
     }
 
     public boolean isBeforeOrEqual(Position otherPosition) {
@@ -200,13 +191,12 @@ public class Position implements Comparable<Position> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Position otherPosition = (Position) o;
-
-        return Objects.equals(line, otherPosition.line)
-                && Objects.equals(column, otherPosition.column);
+        return Objects.equals(line, otherPosition.line) && Objects.equals(column, otherPosition.column);
     }
 
     @Override

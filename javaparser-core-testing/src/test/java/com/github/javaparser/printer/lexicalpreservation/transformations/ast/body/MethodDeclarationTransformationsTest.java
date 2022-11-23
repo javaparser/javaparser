@@ -239,7 +239,28 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol("class X {\n" +
                 "  @Test\n" +
-                "void testCase() {\n" +
+                "  void testCase() {\n" +
+                "  }\n" +
+                "}\n", result);
+    }
+    
+    @Test
+    void removingModifiersWithExistingAnnotations_withVariableNumberOfSeparator() {
+        considerCode(
+                "class X {" + SYSTEM_EOL +
+                        "  @Test" + SYSTEM_EOL +
+                        "  public      void testCase() {" + SYSTEM_EOL +
+                        "  }" + SYSTEM_EOL +
+                        "}" + SYSTEM_EOL
+        );
+
+        cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+        		"class X {\n" +
+                "  @Test\n" +
+                "  void testCase() {\n" +
                 "  }\n" +
                 "}\n", result);
     }

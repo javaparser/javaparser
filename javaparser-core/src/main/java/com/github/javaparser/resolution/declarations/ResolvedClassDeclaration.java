@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.Node;
@@ -29,14 +28,13 @@ import java.util.Optional;
 
 /**
  * Declaration of a Class (not an interface or an enum).
- *
+ * <p>
  * Note that it can be associated to a Node AST because anonymous class declarations return an incompatible
  * node type, compared to classic class declarations.
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration,
-        ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<Node> {
+public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<Node> {
 
     /**
      * This method should always return true.
@@ -77,9 +75,9 @@ public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclarati
      */
     List<ResolvedReferenceType> getAllInterfaces();
 
-    ///
-    /// Constructors
-    ///
+    // /
+    // / Constructors
+    // /
 
     /**
      * List of constructors available for the class.
@@ -87,5 +85,4 @@ public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclarati
      */
     @Override
     List<ResolvedConstructorDeclaration> getConstructors();
-
 }

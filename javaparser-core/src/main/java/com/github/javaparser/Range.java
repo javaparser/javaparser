@@ -18,14 +18,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 /**
  * A range of characters in a source file, from "begin" to "end", including the characters at "begin" and "end".
  */
 public class Range {
+
     public final Position begin;
+
     public final Position end;
 
     /**
@@ -44,7 +45,6 @@ public class Range {
         if (end == null) {
             throw new IllegalArgumentException("end can't be null");
         }
-
         // Force `begin` to be the position that is earliest within the document:
         if (begin.isBefore(end)) {
             this.begin = begin;
@@ -115,7 +115,6 @@ public class Range {
     public Range withEndLine(int endLine) {
         return range(begin, end.withLine(endLine));
     }
-
 
     /**
      * @param begin The value used to replace the current begin position.
@@ -191,8 +190,7 @@ public class Range {
      * Range 2:   CDE</pre>
      */
     public boolean overlapsWith(Range other) {
-        return (contains(other.begin) || contains(other.end)) ||
-                (other.contains(begin) || other.contains(end));
+        return (contains(other.begin) || contains(other.end)) || (other.contains(begin) || other.contains(end));
     }
 
     /**
@@ -229,9 +227,10 @@ public class Range {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Range range = (Range) o;
         return begin.equals(range.begin) && end.equals(range.end);
     }

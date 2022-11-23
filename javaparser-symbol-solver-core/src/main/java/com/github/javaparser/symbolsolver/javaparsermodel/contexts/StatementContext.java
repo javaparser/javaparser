@@ -21,11 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -44,6 +39,11 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
+
 /**
  * @author Federico Tomassetti
  */
@@ -56,7 +56,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     public static SymbolReference<? extends ResolvedValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
         Optional<Node> optionalParentNode = stmt.getParentNode();
         if(!optionalParentNode.isPresent()) {
-             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+             return SymbolReference.unsolved();
         }
 
         Node parentOfWrappedNode = optionalParentNode.get();
@@ -225,7 +225,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
         Optional<Node> optionalParentNode = wrappedNode.getParentNode();
         if(!optionalParentNode.isPresent()) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         Node parentOfWrappedNode = optionalParentNode.get();
@@ -246,7 +246,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             // Further below is a more detailed explanation for why we may want to disable this visitation of adjacent statements
             // to prevent revisiting the same contexts over and over again.
             if (!iterateAdjacentStmts) {
-                return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+                return SymbolReference.unsolved();
             }
 
             NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;

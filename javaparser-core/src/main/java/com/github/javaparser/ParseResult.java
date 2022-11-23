@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ast.comments.CommentsCollection;
@@ -33,8 +32,11 @@ import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
  * The results given when parsing with an instance of JavaParser.
  */
 public class ParseResult<T> {
+
     private final T result;
+
     private final List<Problem> problems;
+
     private final CommentsCollection commentsCollection;
 
     /**
@@ -104,5 +106,4 @@ public class ParseResult<T> {
         }
         return message.toString();
     }
-
 }

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -39,6 +38,12 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.quality.NotNull;
+import com.github.javaparser.quality.Preconditions;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -50,15 +55,22 @@ import java.nio.file.Path;
 public final class StaticJavaParser {
 
     // use ThreadLocal to resolve possible concurrency issues.
-    private static ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(() -> new ParserConfiguration());
+    private static final ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(ParserConfiguration::new);
 
-    private StaticJavaParser() {
+    /**
+     * Get the configuration for the parse... methods. Deprecated method.
+     *
+     * @deprecated use {@link #getParserConfiguration()} instead
+     */
+    @Deprecated
+    public static ParserConfiguration getConfiguration() {
+        return getParserConfiguration();
     }
 
     /**
      * Get the configuration for the parse... methods.
      */
-    public static ParserConfiguration getConfiguration() {
+    public static ParserConfiguration getParserConfiguration() {
         return localConfiguration.get();
     }
 
@@ -66,12 +78,9 @@ public final class StaticJavaParser {
      * Set the configuration for the static parse... methods.
      * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
      */
-    public static void setConfiguration(ParserConfiguration configuration) {
+    public static void setConfiguration(@NotNull ParserConfiguration configuration) {
+        Preconditions.checkNotNull(configuration, "Parameter configuration can't be null.");
         localConfiguration.set(configuration);
-    }
-
-    private static JavaParser newParser() {
-        return new JavaParser(getConfiguration());
     }
 
     /**
@@ -85,7 +94,9 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parse(final InputStream in, Charset encoding) {
+    public static CompilationUnit parse(@NotNull final InputStream in, @NotNull Charset encoding) {
+        Preconditions.checkNotNull(in, "Parameter in can't be null.");
+        Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");
         return handleResult(newParser().parse(in, encoding));
     }
 
@@ -97,8 +108,9 @@ public final class StaticJavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static CompilationUnit parse(final InputStream in) {
-        return handleResult(newParser().parse(in));
+    public static CompilationUnit parse(@NotNull final InputStream in) {
+        Preconditions.checkNotNull(in, "Parameter in can't be null.");
+        return newParserAdapted().parse(in);
     }
 
     /**
@@ -113,7 +125,9 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parse(final File file, final Charset encoding) throws FileNotFoundException {
+    public static CompilationUnit parse(@NotNull final File file, @NotNull final Charset encoding) throws FileNotFoundException {
+        Preconditions.checkNotNull(file, "Parameter file can't be null.");
+        Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");
         return handleResult(newParser().parse(file, encoding));
     }
 
@@ -126,8 +140,9 @@ public final class StaticJavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws FileNotFoundException the file was not found
      */
-    public static CompilationUnit parse(final File file) throws FileNotFoundException {
-        return handleResult(newParser().parse(file));
+    public static CompilationUnit parse(@NotNull final File file) throws FileNotFoundException {
+        Preconditions.checkNotNull(file, "Parameter file can't be null.");
+        return newParserAdapted().parse(file);
     }
 
     /**
@@ -142,7 +157,9 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parse(final Path path, final Charset encoding) throws IOException {
+    public static CompilationUnit parse(@NotNull final Path path, @NotNull final Charset encoding) throws IOException {
+        Preconditions.checkNotNull(path, "Parameter path can't be null.");
+        Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");
         return handleResult(newParser().parse(path, encoding));
     }
 
@@ -155,8 +172,9 @@ public final class StaticJavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException           the path could not be accessed
      */
-    public static CompilationUnit parse(final Path path) throws IOException {
-        return handleResult(newParser().parse(path));
+    public static CompilationUnit parse(@NotNull final Path path) throws IOException {
+        Preconditions.checkNotNull(path, "Parameter path can't be null.");
+        return newParserAdapted().parse(path);
     }
 
     /**
@@ -169,8 +187,9 @@ public final class StaticJavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException           the path could not be accessed
      */
-    public static CompilationUnit parseResource(final String path) throws IOException {
-        return handleResult(newParser().parseResource(path));
+    public static CompilationUnit parseResource(@NotNull final String path) throws IOException {
+        Preconditions.checkNotNull(path, "Parameter path can't be null.");
+        return newParserAdapted().parseResource(path);
     }
 
     /**
@@ -186,7 +205,9 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parseResource(final String path, Charset encoding) throws IOException {
+    public static CompilationUnit parseResource(@NotNull final String path, @NotNull Charset encoding) throws IOException {
+        Preconditions.checkNotNull(path, "Parameter path can't be null.");
+        Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");
         return handleResult(newParser().parseResource(path, encoding));
     }
 
@@ -203,7 +224,10 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parseResource(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
+    public static CompilationUnit parseResource(@NotNull final ClassLoader classLoader, @NotNull final String path, @NotNull Charset encoding) throws IOException {
+        Preconditions.checkNotNull(classLoader, "Parameter classLoader can't be null.");
+        Preconditions.checkNotNull(path, "Parameter path can't be null.");
+        Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");
         return handleResult(newParser().parseResource(classLoader, path, encoding));
     }
 
@@ -215,8 +239,9 @@ public final class StaticJavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static CompilationUnit parse(final Reader reader) {
-        return handleResult(newParser().parse(reader));
+    public static CompilationUnit parse(@NotNull final Reader reader) {
+        Preconditions.checkNotNull(reader, "Parameter reader can't be null.");
+        return newParserAdapted().parse(reader);
     }
 
     /**
@@ -227,8 +252,9 @@ public final class StaticJavaParser {
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static CompilationUnit parse(String code) {
-        return handleResult(newParser().parse(code));
+    public static CompilationUnit parse(@NotNull String code) {
+        Preconditions.checkNotNull(code, "Parameter code can't be null.");
+        return newParserAdapted().parse(code);
     }
 
     /**
@@ -239,8 +265,9 @@ public final class StaticJavaParser {
      * @return BlockStmt representing the Java block
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static BlockStmt parseBlock(final String blockStatement) {
-        return handleResult(newParser().parseBlock(blockStatement));
+    public static BlockStmt parseBlock(@NotNull final String blockStatement) {
+        Preconditions.checkNotNull(blockStatement, "Parameter blockStatement can't be null.");
+        return newParserAdapted().parseBlock(blockStatement);
     }
 
     /**
@@ -251,15 +278,9 @@ public final class StaticJavaParser {
      * @return Statement representing the Java statement
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static Statement parseStatement(final String statement) {
-        return handleResult(newParser().parseStatement(statement));
-    }
-
-    private static <T extends Node> T handleResult(ParseResult<T> result) {
-        if (result.isSuccessful()) {
-            return result.getResult().get();
-        }
-        throw new ParseProblemException(result.getProblems());
+    public static Statement parseStatement(@NotNull final String statement) {
+        Preconditions.checkNotNull(statement, "Parameter statement can't be null.");
+        return newParserAdapted().parseStatement(statement);
     }
 
     /**
@@ -270,8 +291,9 @@ public final class StaticJavaParser {
      * @return ImportDeclaration representing the Java import declaration
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static ImportDeclaration parseImport(final String importDeclaration) {
-        return handleResult(newParser().parseImport(importDeclaration));
+    public static ImportDeclaration parseImport(@NotNull final String importDeclaration) {
+        Preconditions.checkNotNull(importDeclaration, "Parameter importDeclaration can't be null.");
+        return newParserAdapted().parseImport(importDeclaration);
     }
 
     /**
@@ -282,8 +304,9 @@ public final class StaticJavaParser {
      * @return Expression representing the Java expression
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static <T extends Expression> T parseExpression(final String expression) {
-        return handleResult(newParser().parseExpression(expression));
+    public static <T extends Expression> T parseExpression(@NotNull final String expression) {
+        Preconditions.checkNotNull(expression, "Parameter expression can't be null.");
+        return newParserAdapted().parseExpression(expression);
     }
 
     /**
@@ -294,8 +317,9 @@ public final class StaticJavaParser {
      * @return AnnotationExpr representing the Java annotation
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static AnnotationExpr parseAnnotation(final String annotation) {
-        return handleResult(newParser().parseAnnotation(annotation));
+    public static AnnotationExpr parseAnnotation(@NotNull final String annotation) {
+        Preconditions.checkNotNull(annotation, "Parameter annotation can't be null.");
+        return newParserAdapted().parseAnnotation(annotation);
     }
 
     /**
@@ -306,8 +330,9 @@ public final class StaticJavaParser {
      * @return BodyDeclaration representing the Java annotation
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static BodyDeclaration<?> parseAnnotationBodyDeclaration(final String body) {
-        return handleResult(newParser().parseAnnotationBodyDeclaration(body));
+    public static BodyDeclaration<?> parseAnnotationBodyDeclaration(@NotNull final String body) {
+        Preconditions.checkNotNull(body, "Parameter body can't be null.");
+        return newParserAdapted().parseAnnotationBodyDeclaration(body);
     }
 
     /**
@@ -318,8 +343,9 @@ public final class StaticJavaParser {
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static BodyDeclaration<?> parseBodyDeclaration(String body) {
-        return handleResult(newParser().parseBodyDeclaration(body));
+    public static BodyDeclaration<?> parseBodyDeclaration(@NotNull String body) {
+        Preconditions.checkNotNull(body, "Parameter body can't be null.");
+        return newParserAdapted().parseBodyDeclaration(body);
     }
 
     /**
@@ -329,8 +355,9 @@ public final class StaticJavaParser {
      * @return ClassOrInterfaceType representing the type
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static ClassOrInterfaceType parseClassOrInterfaceType(String type) {
-        return handleResult(newParser().parseClassOrInterfaceType(type));
+    public static ClassOrInterfaceType parseClassOrInterfaceType(@NotNull String type) {
+        Preconditions.checkNotNull(type, "Parameter type can't be null.");
+        return newParserAdapted().parseClassOrInterfaceType(type);
     }
 
     /**
@@ -340,8 +367,9 @@ public final class StaticJavaParser {
      * @return ClassOrInterfaceType representing the type
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static Type parseType(String type) {
-        return handleResult(newParser().parseType(type));
+    public static Type parseType(@NotNull String type) {
+        Preconditions.checkNotNull(type, "Parameter type can't be null.");
+        return newParserAdapted().parseType(type);
     }
 
     /**
@@ -352,8 +380,9 @@ public final class StaticJavaParser {
      * @return VariableDeclarationExpr representing the type
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static VariableDeclarationExpr parseVariableDeclarationExpr(String declaration) {
-        return handleResult(newParser().parseVariableDeclarationExpr(declaration));
+    public static VariableDeclarationExpr parseVariableDeclarationExpr(@NotNull String declaration) {
+        Preconditions.checkNotNull(declaration, "Parameter declaration can't be null.");
+        return newParserAdapted().parseVariableDeclarationExpr(declaration);
     }
 
     /**
@@ -364,7 +393,8 @@ public final class StaticJavaParser {
      * @return Javadoc representing the content of the comment
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static Javadoc parseJavadoc(String content) {
+    public static Javadoc parseJavadoc(@NotNull String content) {
+        Preconditions.checkNotNull(content, "Parameter content can't be null.");
         return JavadocParser.parse(content);
     }
 
@@ -375,8 +405,9 @@ public final class StaticJavaParser {
      * @return the AST for the statement.
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
-        return handleResult(newParser().parseExplicitConstructorInvocationStmt(statement));
+    public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(@NotNull String statement) {
+        Preconditions.checkNotNull(statement, "Parameter statement can't be null.");
+        return newParserAdapted().parseExplicitConstructorInvocationStmt(statement);
     }
 
     /**
@@ -386,8 +417,9 @@ public final class StaticJavaParser {
      * @return the AST for the name
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static Name parseName(String qualifiedName) {
-        return handleResult(newParser().parseName(qualifiedName));
+    public static Name parseName(@NotNull String qualifiedName) {
+        Preconditions.checkNotNull(qualifiedName, "Parameter qualifiedName can't be null.");
+        return newParserAdapted().parseName(qualifiedName);
     }
 
     /**
@@ -397,8 +429,9 @@ public final class StaticJavaParser {
      * @return the AST for the name
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static SimpleName parseSimpleName(String name) {
-        return handleResult(newParser().parseSimpleName(name));
+    public static SimpleName parseSimpleName(@NotNull String name) {
+        Preconditions.checkNotNull(name, "Parameter name can't be null.");
+        return newParserAdapted().parseSimpleName(name);
     }
 
     /**
@@ -408,8 +441,9 @@ public final class StaticJavaParser {
      * @return the AST for the parameter
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static Parameter parseParameter(String parameter) {
-        return handleResult(newParser().parseParameter(parameter));
+    public static Parameter parseParameter(@NotNull String parameter) {
+        Preconditions.checkNotNull(parameter, "Parameter parameter can't be null.");
+        return newParserAdapted().parseParameter(parameter);
     }
 
     /**
@@ -419,8 +453,9 @@ public final class StaticJavaParser {
      * @return the AST for the parameter
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static PackageDeclaration parsePackageDeclaration(String packageDeclaration) {
-        return handleResult(newParser().parsePackageDeclaration(packageDeclaration));
+    public static PackageDeclaration parsePackageDeclaration(@NotNull String packageDeclaration) {
+        Preconditions.checkNotNull(packageDeclaration, "Parameter packageDeclaration can't be null.");
+        return newParserAdapted().parsePackageDeclaration(packageDeclaration);
     }
 
     /**
@@ -430,8 +465,9 @@ public final class StaticJavaParser {
      * @return the AST for the type declaration
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static TypeDeclaration<?> parseTypeDeclaration(String typeDeclaration) {
-        return handleResult(newParser().parseTypeDeclaration(typeDeclaration));
+    public static TypeDeclaration<?> parseTypeDeclaration(@NotNull String typeDeclaration) {
+        Preconditions.checkNotNull(typeDeclaration, "Parameter typeDeclaration can't be null.");
+        return newParserAdapted().parseTypeDeclaration(typeDeclaration);
     }
 
     /**
@@ -442,8 +478,9 @@ public final class StaticJavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @see ModuleDeclaration
      */
-    public static ModuleDeclaration parseModuleDeclaration(String moduleDeclaration) {
-        return handleResult(newParser().parseModuleDeclaration(moduleDeclaration));
+    public static ModuleDeclaration parseModuleDeclaration(@NotNull String moduleDeclaration) {
+        Preconditions.checkNotNull(moduleDeclaration, "Parameter moduleDeclaration can't be null.");
+        return newParserAdapted().parseModuleDeclaration(moduleDeclaration);
     }
 
     /**
@@ -454,10 +491,10 @@ public final class StaticJavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @see ModuleDirective
      */
-    public static ModuleDirective parseModuleDirective(String moduleDirective) {
-        return handleResult(newParser().parseModuleDirective(moduleDirective));
+    public static ModuleDirective parseModuleDirective(@NotNull String moduleDirective) {
+        Preconditions.checkNotNull(moduleDirective, "Parameter moduleDirective can't be null.");
+        return newParserAdapted().parseModuleDirective(moduleDirective);
     }
-
 
     /**
      * Parses a type parameter and returns it as a TypeParameter
@@ -466,8 +503,9 @@ public final class StaticJavaParser {
      * @return the AST for the type parameter
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static TypeParameter parseTypeParameter(String typeParameter) {
-        return handleResult(newParser().parseTypeParameter(typeParameter));
+    public static TypeParameter parseTypeParameter(@NotNull String typeParameter) {
+        Preconditions.checkNotNull(typeParameter, "Parameter typeParameter can't be null.");
+        return newParserAdapted().parseTypeParameter(typeParameter);
     }
 
     /**
@@ -478,8 +516,30 @@ public final class StaticJavaParser {
      * @throws ParseProblemException if the source code has parser errors
      * @see MethodDeclaration
      */
-    public static MethodDeclaration parseMethodDeclaration(String methodDeclaration) {
-        return handleResult(newParser().parseMethodDeclaration(methodDeclaration));
+    public static MethodDeclaration parseMethodDeclaration(@NotNull String methodDeclaration) {
+        Preconditions.checkNotNull(methodDeclaration, "Parameter methodDeclaration can't be null.");
+        return newParserAdapted().parseMethodDeclaration(methodDeclaration);
+    }
+
+    // Private methods
+
+    private static JavaParser newParser() {
+        return new JavaParser(getParserConfiguration());
+    }
+
+    private static JavaParserAdapter newParserAdapted() {
+        return new JavaParserAdapter(newParser());
+    }
+
+    @Deprecated
+    private static <T extends Node> T handleResult(ParseResult<T> result) {
+        if (result.isSuccessful()) {
+            return result.getResult().get();
+        }
+        throw new ParseProblemException(result.getProblems());
+    }
+
+    private StaticJavaParser() {
     }
 
     public static <T extends Expression> T parseJmlExpression(String expression) {

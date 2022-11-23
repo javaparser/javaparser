@@ -18,10 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
@@ -29,7 +26,10 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 public class CsmAttribute implements CsmElement {
+
     public ObservableProperty getProperty() {
         return property;
     }
@@ -58,7 +58,7 @@ public class CsmAttribute implements CsmElement {
                 return GeneratedJavaParserConstants.IDENTIFIER;
             case TYPE: {
                 String expectedImage = "\"" + text.toLowerCase() + "\"";
-                for (int i=0;i<GeneratedJavaParserConstants.tokenImage.length;i++) {
+                for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
                     if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
                         return i;
                     }
@@ -82,10 +82,9 @@ public class CsmAttribute implements CsmElement {
             case NAME:
                 return GeneratedJavaParserConstants.IDENTIFIER;
         }
-        throw new UnsupportedOperationException("getTokenType does not know how to handle property "
-                + property + " with text: " + text);
+        throw new UnsupportedOperationException("getTokenType does not know how to handle property " + property + " with text: " + text);
     }
-    
+
     @Override
     public String toString() {
         return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());

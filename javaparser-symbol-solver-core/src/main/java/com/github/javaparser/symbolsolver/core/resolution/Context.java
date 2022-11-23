@@ -25,13 +25,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -87,20 +83,71 @@ public interface Context {
      *
      * @param name For example, solving {@code List} or {@code java.util.List}.
      * @return The declaration associated with the given type name.
+     *
+     * @deprecated Consider using method {@link #solveType(String, List)} that also consider the type arguments.
+     *             If you want to keep to use the new function, but keep the same behavior consider passing type
+     *             arguments as {@code null}.
      */
+    @Deprecated
     default SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        // Default to solving within the parent context.
-        return solveTypeInParentContext(name);
+        return solveType(name, null);
     }
 
+    /**
+     * Method used to solve a name with an expected list of type arguments.
+     * <br>
+     * This method differs from {@link Context#solveType(String)} by taking the type arguments in consideration.
+     * For example, lets imagine that we have a project containing the following classes:
+     * <ul>
+     *     <li>com/example/Alpha.java</li>
+     *     <li>com/example/Beta.java</li>
+     * </ul>
+     * Where Alpha creates a inner interface called CustomInterface and Beta implements Alpha.CustomInterface and
+     * also declares a inner interface called CustomInterface with type arguments. Using this method we can
+     * specify which type arguments we are expecting and will be resolved with the type matching that declaration.
+     *
+     * @param name          The name to be solved.
+     * @param typeArguments The list of expected type arguments.
+     *
+     * @return The declaration associated with the given type name.
+     */
+    default SymbolReference<ResolvedTypeDeclaration> solveType(String name, @Nullable List<ResolvedType> typeArguments) {
+        // Default to solving within the parent context.
+        return solveTypeInParentContext(name, typeArguments);
+    }
+
+    /**
+     * Solve a name in the parent context.
+     *
+     * @param name The name to be solved.
+     *
+     * @return The declaration associated with the given type name.
+     *
+     * @deprecated Consider using method {@link #solveTypeInParentContext(String, List)} that also consider the type arguments.
+     *             If you want to keep to use the new function, but keep the same behavior consider passing type
+     *             arguments as {@code null}.
+     */
+    @Deprecated
     default SymbolReference<ResolvedTypeDeclaration> solveTypeInParentContext(String name) {
+        return solveTypeInParentContext(name, null);
+    }
+
+    /**
+     * Solve a name with type arguments in the parent context.
+     *
+     * @param name          The name to be solved.
+     * @param typeArguments The list of expected type arguments.
+     *
+     * @return The declaration associated with the given type name.
+     */
+    default SymbolReference<ResolvedTypeDeclaration> solveTypeInParentContext(String name, @Nullable List<ResolvedType> typeArguments) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         // Delegate solving to the parent context.
-        return optionalParentContext.get().solveType(name);
+        return optionalParentContext.get().solveType(name, typeArguments);
     }
 
     /* Symbol resolution */
@@ -118,7 +165,7 @@ public interface Context {
     default SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         // Delegate solving to the parent context.
@@ -354,7 +401,7 @@ public interface Context {
     default SymbolReference<ResolvedMethodDeclaration> solveMethodInParentContext(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         // Delegate solving to the parent context.
