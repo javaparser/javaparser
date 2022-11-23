@@ -624,7 +624,7 @@ public class Difference {
      */
     private int getArrayLevel(DifferenceElement element) {
         CsmElement csmElem = element.getElement();
-        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild && ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType) {
+        if (isArrayType(element)) {
             Node child = ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild();
             return ((ArrayType) child).getArrayLevel();
         }
@@ -945,17 +945,17 @@ public class Difference {
         List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
         WrappingRangeIterator piNext = new WrappingRangeIterator(previousOrderElements.size());
         for (int ni = 0; ni < nextOrderElements.size(); ni++) {
-            boolean found = false;
             CsmElement ne = nextOrderElements.get(ni);
-            for (int counter = 0; counter < previousOrderElements.size() && !found; counter++) {
+            for (int counter = 0; counter < previousOrderElements.size(); counter++) {
                 Integer pi = piNext.next();
                 CsmElement pe = previousOrderElements.get(pi);
                 if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi) && DifferenceElementCalculator.matching(ne, pe)) {
-                    found = true;
                     correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
+                    break;
                 }
             }
         }
+
         return correspondanceBetweenNextOrderAndPreviousOrder;
     }
 
