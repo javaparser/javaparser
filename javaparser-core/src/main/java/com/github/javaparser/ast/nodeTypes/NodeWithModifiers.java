@@ -94,7 +94,7 @@ public interface NodeWithModifiers<N extends Node> {
     /**
      * Creates a list of modifier nodes corresponding to the keywords passed, and set it.
      */
-    default N setModifiers(final Modifier.DefaultKeyword... modifiers) {
+    default N setModifiers(final Modifier.Keyword... modifiers) {
         return setModifiers(Arrays.stream(modifiers).map(Modifier::new).collect(toNodeList()));
     }
 

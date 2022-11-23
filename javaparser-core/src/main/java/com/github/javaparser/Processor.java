@@ -11,7 +11,7 @@ public class Processor {
     }
 
     /**
-     * Adds a pre-parsing step, which has access to the sourcecode through the innerProvider.
+     *  Adds a pre-parsing step, which has access to the sourcecode through the innerProvider.
      */
     public Provider preProcess(Provider innerProvider) {
         return innerProvider;

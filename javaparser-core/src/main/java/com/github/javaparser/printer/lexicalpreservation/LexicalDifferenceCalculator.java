@@ -142,7 +142,7 @@ class LexicalDifferenceCalculator {
     }
 
     /*
-     * Returns a new line token
+     * Returns a new line token 
      */
     private CsmElement getNewLineToken(LineSeparator lineSeparator) {
         return CsmElement.newline(lineSeparator);

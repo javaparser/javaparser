@@ -45,10 +45,6 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-
 /**
  * A simpler, static API than {@link JavaParser}.
  */
