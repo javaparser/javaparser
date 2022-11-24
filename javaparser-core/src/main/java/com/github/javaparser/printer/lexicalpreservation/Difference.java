@@ -939,24 +939,111 @@ public class Difference {
         return GeneratedJavaParserConstants.tokenImage[kind];
     }
 
-    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
-        Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-        List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
-        List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
-        WrappingRangeIterator piNext = new WrappingRangeIterator(previousOrderElements.size());
-        for (int ni = 0; ni < nextOrderElements.size(); ni++) {
-            CsmElement ne = nextOrderElements.get(ni);
-            for (int counter = 0; counter < previousOrderElements.size(); counter++) {
-                Integer pi = piNext.next();
-                CsmElement pe = previousOrderElements.get(pi);
-                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi) && DifferenceElementCalculator.matching(ne, pe)) {
-                    correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
-                    break;
-                }
-            }
-        }
+	/*
+	 * Considering that the lists of elements are ordered, We can find the common
+	 * elements by starting with the list before the modifications and, for each
+	 * element, by going through the list of elements containing the modifications.
+	 * 
+	 * We can find the common elements by starting with the list before the
+	 * modifications (L1) and, for each element, by going through the list of elements
+	 * containing the modifications (L2).
+	 * 
+	 * If element A in list L1 is not found in list L2, it is a deleted element. 
+	 * If element A of list L1 is found in list L2, it is a kept element. In this
+	 * case the search for the next element of the list L1 must start from the
+	 * position of the last element kept {@code syncNextIndex}.
+	 */
+	private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder,
+			CsmMix elementsFromNextOrder) {
+		Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
+		ReadOnlyListIterator<CsmElement> previousOrderElementsIterator = new ReadOnlyListIterator(
+				elementsFromPreviousOrder.getElements());
+		int syncNextIndex = 0;
+		while (previousOrderElementsIterator.hasNext()) {
+			CsmElement pe = previousOrderElementsIterator.next();
+			ReadOnlyListIterator<CsmElement> nextOrderElementsIterator = new ReadOnlyListIterator(
+					elementsFromNextOrder.getElements(), syncNextIndex);
+			while (nextOrderElementsIterator.hasNext()) {
+				CsmElement ne = nextOrderElementsIterator.next();
+				if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index())
+						&& DifferenceElementCalculator.matching(ne, pe)) {
+					correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(),
+							previousOrderElementsIterator.index());
+					// set the position to start on the next {@code nextOrderElementsIterator} iteration
+					syncNextIndex = nextOrderElementsIterator.index(); 
+					break;
+				}
+			}
+		}
+		return correspondanceBetweenNextOrderAndPreviousOrder;
+	}
+    
+    /*
+     * A list iterator which does not allow to modify the list 
+     * and which provides a method to know the current positioning 
+     */
+    private class ReadOnlyListIterator<T> implements ListIterator<T> {
+    	ListIterator<T> elements;
+    	public ReadOnlyListIterator(List<T> elements) {
+    		this(elements, 0);
+    	}
+    	
+    	public ReadOnlyListIterator(List<T> elements, int index) {
+    		this.elements = elements.listIterator(index);
+    	}
 
-        return correspondanceBetweenNextOrderAndPreviousOrder;
+		@Override
+		public boolean hasNext() {
+			return elements.hasNext();
+		}
+
+		@Override
+		public T next() {
+			return elements.next();
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return elements.hasPrevious();
+		}
+
+		@Override
+		public T previous() {
+			return elements.previous();
+		}
+
+		@Override
+		public int nextIndex() {
+			return elements.nextIndex();
+		}
+
+		@Override
+		public int previousIndex() {
+			return elements.previousIndex();
+		}
+		
+		/*
+		 * Returns the current index in the underlying list
+		 */
+		public int index() {
+			return elements.nextIndex() - 1;
+		}
+		
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void set(T e) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void add(T e) {
+			throw new UnsupportedOperationException();
+		}
+    	
     }
 
     /*
