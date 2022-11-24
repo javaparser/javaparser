@@ -927,7 +927,7 @@ public class Difference {
         if (addedTextElement.isNewline()) {
             boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
-            boolean nextIsNewLine = nodeText.getTextElement(originalIndex).isNewline();
+            boolean nextIsNewLine = originalElements.get(originalIndex).isNewline();
             if ((!nextIsNewLine && !nextIsRightBrace) || followedByUnindent) {
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
             }
