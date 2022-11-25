@@ -196,7 +196,7 @@ public class LexicalPreservingPrinter {
 
         private List<ChildTextElement> findChildTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<ChildTextElement> matchingChildElements;
-            matchingChildElements = nodeText.getElements().stream().filter(e -> e.isChild()).map(c -> (ChildTextElement) c).filter(c -> c.isComment()).filter(c -> ((Comment) c.getChild()).getContent().equals(oldValue.getContent())).collect(toList());
+			matchingChildElements = selectMatchingChildElements(oldValue, nodeText);
             if (matchingChildElements.size() > 1) {
                 // Duplicate child nodes found, refine the result
                 matchingChildElements = matchingChildElements.stream().filter(t -> isEqualRange(t.getChild().getRange(), oldValue.getRange())).collect(toList());
@@ -205,6 +205,30 @@ public class LexicalPreservingPrinter {
                 throw new IllegalStateException("The matching child text element for the comment to be removed could not be found.");
             }
             return matchingChildElements;
+        }
+        
+        private List<ChildTextElement> selectMatchingChildElements(Comment oldValue, NodeText nodeText) {
+        	List<ChildTextElement> result = new ArrayList<>();
+        	List<ChildTextElement> childTextElements = nodeText.getElements().stream().filter(e -> e.isChild())
+					.map(c -> (ChildTextElement) c).collect(toList());
+        	ListIterator<ChildTextElement> iterator = childTextElements.listIterator();
+        	while(iterator.hasNext()) {
+        		ChildTextElement textElement = iterator.next();
+        		if (textElement.isComment() && isSameComment(((Comment) textElement.getChild()), oldValue)) {
+        			result.add(textElement);
+        			continue;
+        		}
+        		Node node = textElement.getChild();
+        		if (node.getComment().isPresent() && isSameComment(node.getComment().get(), oldValue)) {
+        			result.add(textElement);
+        			continue;
+        		}
+        	}
+        	return result;
+        }
+        
+        private boolean isSameComment(Comment childValue, Comment oldValue) {
+        	return childValue.getContent().equals(oldValue.getContent());
         }
 
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
@@ -370,7 +394,9 @@ public class LexicalPreservingPrinter {
             if (node.getParentNode().get() instanceof VariableDeclarator) {
                 return tokensPreceeding(node.getParentNode().get());
             } else {
-                throw new IllegalArgumentException(String.format("I could not find child '%s' in parent '%s'. parentNodeText: %s", node, node.getParentNode().get(), parentNodeText));
+            	// comment node can be removed at this stage.
+            	return new TextElementIteratorsFactory.EmptyIterator<TokenTextElement>();
+//                throw new IllegalArgumentException(String.format("I could not find child '%s' in parent '%s'. parentNodeText: %s", node, node.getParentNode().get(), parentNodeText));
             }
         }
         return new TextElementIteratorsFactory.CascadingIterator<>(TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1), () -> tokensPreceeding(node.getParentNode().get()));
