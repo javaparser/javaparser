@@ -97,6 +97,55 @@ public class Difference {
         }
         return res;
     }
+    
+    /*
+     * Returns the position of the next element in the list starting from @{code fromIndex} which is a comment (Ignoring spaces)
+     * or -1 if it's not a comment.
+     */
+    private int posOfNextComment(int fromIndex, List<TextElement> elements) {
+        if (!isValidIndex(fromIndex, elements))
+            return -1;
+        ReadOnlyListIterator<TextElement> iterator = new ReadOnlyListIterator(elements, fromIndex);
+        // search for the next consecutive space characters
+        while (iterator.hasNext()) {
+            TextElement element = iterator.next();
+            if (element.isSpaceOrTab()) {
+                continue;
+            }
+            if (element.isComment()) {
+            	return iterator.index();
+            }
+            break;
+        }
+        return -1;
+    }
+    
+    /*
+     * Returns true if the next element in the list (starting from @{code fromIndex}) is a comment
+     */
+    private boolean isFollowedByComment(int fromIndex, List<TextElement> elements) {
+    	return posOfNextComment(fromIndex, elements) != -1;
+    }
+    
+    /*
+     * Removes all elements in the list starting from @{code fromIndex}) ending to @{code toIndex})
+     */
+    private void removeElements(int fromIndex, int toIndex, List<TextElement> elements) {
+    	if (!(isValidIndex(fromIndex, elements) && isValidIndex(toIndex, elements) && fromIndex <= toIndex))
+            return;
+        ListIterator<TextElement> iterator = elements.listIterator(fromIndex);
+        // removing elements
+        int count = fromIndex;
+        while (iterator.hasNext() && count <= toIndex) {
+        	TextElement element = iterator.next();
+            iterator.remove();
+            count++;
+        }
+    }
+    
+    private boolean isValidIndex(int index, List<?> elements) {
+    	return index >= 0 && index <= elements.size();
+    }
 
     /*
      * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement 
@@ -460,6 +509,12 @@ public class Difference {
                             originalElements.remove(originalIndex--);
                         }
                     }
+                }
+                // We need to know if, in the original list of elements, the deleted child node is immediately followed by a comment.
+                // If so, it should also be deleted.
+                if (isFollowedByComment(originalIndex, originalElements)) {
+                	int indexOfNextComment = posOfNextComment(originalIndex, originalElements);
+                	removeElements(originalIndex, indexOfNextComment, originalElements);
                 }
                 diffIndex++;
             }
