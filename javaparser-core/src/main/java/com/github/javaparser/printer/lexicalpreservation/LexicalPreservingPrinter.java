@@ -130,7 +130,7 @@ public class LexicalPreservingPrinter {
                 Optional<Node> parentNode = observedNode.getParentNode();
                 NodeText nodeText = parentNode.map(parent -> getOrCreateNodeText(parentNode.get())).// We're at the root node.
                 orElse(getOrCreateNodeText(observedNode));
-                if (oldValue == null) {
+                if (oldValue == null) { // this case corresponds to the addition of a comment
                     int index = parentNode.isPresent() ? // Find the position of the comment node and put in front of it the [...]
                     nodeText.findChild(observedNode) : // 
                     0;
@@ -139,18 +139,23 @@ public class LexicalPreservingPrinter {
                     LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                     nodeText.addElement(index, makeCommentToken((Comment) newValue));
                     nodeText.addToken(index + 1, eolTokenKind(lineSeparator), lineSeparator.asRawString());
-                } else if (newValue == null) {
+                } else if (newValue == null) { // this case corresponds to a deletion of a comment
                     if (oldValue instanceof Comment) {
                         if (((Comment) oldValue).isOrphan()) {
                             nodeText = getOrCreateNodeText(observedNode);
                         }
                         int index = getIndexOfComment((Comment) oldValue, nodeText);
                         nodeText.removeElement(index);
-                        if (nodeText.getElements().get(index).isNewline()) {
-                            nodeText.removeElement(index);
+                        if (isCompleteLine(nodeText.getElements(), index)) {
+                        	removeAllExtraCharacters(nodeText.getElements(), index);
+                        } else {
+                        	removeAllExtraCharactersStartingFrom(nodeText.getElements().listIterator(index));
                         }
+//                        if (nodeText.getElements().get(index).isNewline()) {
+//                            nodeText.removeElement(index);
+//                        }
                     } else {
-                        throw new UnsupportedOperationException();
+                        throw new UnsupportedOperationException("Trying to remove something that is not a comment!");
                     }
                 } else {
                     List<TokenTextElement> matchingTokens = findTokenTextElementForComment((Comment) oldValue, nodeText);
@@ -168,7 +173,68 @@ public class LexicalPreservingPrinter {
             }
             LEXICAL_DIFFERENCE_CALCULATOR.calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
         }
+        
+        private boolean isCompleteLine(List<TextElement> elements , int index) {
+        	if (index <= 0 || index >= elements.size()) return false;
+        	boolean isCompleteLine=true;
+        	ListIterator<TextElement> iterator = elements.listIterator(index);
+        	// verify if elements after the index are only spaces or tabs 
+        	while(iterator.hasNext()) {
+        		TextElement textElement = iterator.next();
+        		if (textElement.isNewline()) break;
+        		if (textElement.isSpaceOrTab()) continue;
+        		isCompleteLine=false;
+        		break;
+        	}
+        	// verify if elements before the index are only spaces or tabs 
+        	iterator = elements.listIterator(index);
+        	while(iterator.hasPrevious() && isCompleteLine) {
+        		TextElement textElement = iterator.previous();
+        		if (textElement.isNewline()) break;
+        		if (textElement.isSpaceOrTab()) continue;
+        		isCompleteLine=false;
+        	}
+        	
+        	return isCompleteLine;
+        }
+        
+        private void removeAllExtraCharacters(List<TextElement> elements , int index) {
+        	if (index < 0 || index >= elements.size()) return;
+        	removeAllExtraCharactersStartingFrom(elements.listIterator(index));
+        	removeAllExtraCharactersBeforePosition(elements.listIterator(index));
+        }
 
+        /*
+         * Removes all spaces,tabs characters before this position
+         */
+		private void removeAllExtraCharactersBeforePosition(ListIterator<TextElement> iterator) {
+        	while(iterator.hasPrevious()) {
+        		TextElement textElement = iterator.previous();
+        		if (textElement.isSpaceOrTab()) {
+        			iterator.remove();
+        			continue;
+        		}
+        		break;
+        	}
+		}
+
+		/*
+		 * Removes all spaces,tabs or new line characters starting from this position
+		 */
+		private void removeAllExtraCharactersStartingFrom(ListIterator<TextElement> iterator) {
+        	while(iterator.hasNext()) {
+        		TextElement textElement = iterator.next();
+        		if (textElement.isSpaceOrTab()) {
+        			iterator.remove();
+        			continue;
+        		}
+        		if (textElement.isNewline()) {
+        			iterator.remove();
+        		}
+        		break;
+        	}
+		}
+        
         private TokenTextElement makeCommentToken(Comment newComment) {
             if (newComment.isJavadocComment()) {
                 return new TokenTextElement(JAVADOC_COMMENT, "/**" + newComment.getContent() + "*/");
