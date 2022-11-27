@@ -5,10 +5,12 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.symbolsolver.JavaRefersToJmlException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
@@ -125,7 +127,8 @@ class NameResolutionTest {
         final ParserConfiguration configuration = new ParserConfiguration().setProcessJml(true);
         configuration.setSymbolResolver(new JavaSymbolSolver(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader())));
         JavaParser parser = new JavaParser(configuration);
-        final File file = new File("src/test/resources/com/github/jml/resolution/" + name).getAbsoluteFile();
+        final File file = new File("src/test/resources/com/github/jml/resolution/" + name)
+                .getAbsoluteFile();
         ParseResult<CompilationUnit> cu = parser.parse(file);
         if (!cu.isSuccessful()) {
             for (Problem problem : cu.getProblems()) {
@@ -139,9 +142,15 @@ class NameResolutionTest {
         cu.getResult().get().accept(v, null);
 
         Set<String> errorLines = Files.readAllLines(file.toPath()).stream()
-                .filter(it -> it.trim().startsWith("//!"))
+                .filter(it -> it.trim().startsWith("//?"))
                 .map(it -> it.trim().substring(4).trim())
                 .collect(Collectors.toSet());
+
+        errorLines.stream().sorted().forEach(errorLine ->
+                System.out.format("//? %s%n", errorLine));
+
+        v.messages.stream().sorted().forEach(errorLine ->
+                System.out.format("//? %s%n", errorLine));
 
         Truth.assertThat(v.messages).isEqualTo(errorLines);
     }
@@ -151,21 +160,30 @@ class NameResolutionTest {
 
         @Override
         public void visit(NameExpr n, Void arg) {
+            String pos = n.getRange().map(it -> it.begin.toString()).orElse("_");
             try {
-                n.resolve();
+                var rtype = n.resolve();
 
+                var t = ((AssociableToAST<Node>) rtype).toAst().get();
+                var target = t.getRange().map(it -> it.begin.toString()).orElse("_");
+
+                messages.add("name: %s@%s to %s@%s"
+                        .formatted(n.getNameAsString(), pos,
+                                rtype.getName(), target));
                 try {
                     n.calculateResolvedType();
+                    messages.add("type: %s@%s"
+                            .formatted(n.getNameAsString(), pos));
                 } catch (UnsolvedSymbolException e) {
-                    messages.add("type: " + n.getNameAsString() + " @ " +
-                            n.getRange().map(it -> it.begin.toString()).orElse("_"));
+                    messages.add("e type: %s@%s"
+                            .formatted(n.getNameAsString(), pos));
                 }
             } catch (JavaRefersToJmlException e) {
-                messages.add("java2jml: " + n.getNameAsString() + " @ " +
-                        n.getRange().map(it -> it.begin.toString()).orElse("_"));
+                messages.add("e java2jml: %s@%s"
+                        .formatted(n.getNameAsString(), pos));
             } catch (UnsolvedSymbolException e) {
-                messages.add("name: " + n.getNameAsString() + " @ " +
-                        n.getRange().map(it -> it.begin.toString()).orElse("_"));
+                messages.add("e name: %s@%s"
+                        .formatted(n.getNameAsString(), pos));
             }
         }
 

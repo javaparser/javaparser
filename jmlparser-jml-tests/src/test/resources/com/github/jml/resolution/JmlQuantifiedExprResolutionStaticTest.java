@@ -13,4 +13,18 @@ public class JmlQuantifiedExprResolutionTest {
 
 }
 
-// e: z @ (line 10, column 18)
+//? name: clazz@(line 10,col 25) to clazz@(line 9,col 5)
+//? name: clazz@(line 11,col 18) to clazz@(line 9,col 5)
+//? name: member@(line 12,col 25) to member@(line 8,col 5)
+//? name: member@(line 9,col 24) to member@(line 8,col 5)
+//? type: clazz@(line 10,col 25)
+//? type: clazz@(line 11,col 18)
+//? type: member@(line 9,col 24)
+//? name: clazz@(line 10,col 25) to clazz@(line 9,col 5)
+//? name: clazz@(line 11,col 18) to clazz@(line 9,col 5)
+//? name: member@(line 12,col 25) to member@(line 8,col 5)
+//? name: member@(line 9,col 24) to member@(line 8,col 5)
+//? type: clazz@(line 10,col 25)
+//? type: clazz@(line 11,col 18)
+//? type: member@(line 12,col 25)
+//? type: member@(line 9,col 24)
