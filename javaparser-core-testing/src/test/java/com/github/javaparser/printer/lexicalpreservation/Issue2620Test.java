@@ -21,6 +21,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -30,13 +38,6 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.utils.LineSeparator;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class Issue2620Test {
 
@@ -73,9 +74,9 @@ public class Issue2620Test {
         // FIXME: Indentation is bad here.
         String expected = "" +
                 "    public class Foo { //comment" + eol +
-                "    private String newField;" + eol +
-                "    " + eol +
-                "    private String a;" + eol +
+                "        private String newField;" + eol +
+                "        " + eol +
+                "        private String a;" + eol +
                 "        private String b;" + eol +
                 "        private String c;" + eol +
                 "        private String d;" + eol +
@@ -94,12 +95,12 @@ public class Issue2620Test {
         cd.get().getMembers().addFirst(fd);
 
         // should be printed like this
-        System.out.println("\n\nOriginal:\n" + original);
-        System.out.println("\n\nExpected:\n" + expected);
+//        System.out.println("\n\nOriginal:\n" + original);
+//        System.out.println("\n\nExpected:\n" + expected);
 
         // but the result is
         final String actual = LexicalPreservingPrinter.print(cu);
-        System.out.println("\n\nActual:\n" + actual);
+//        System.out.println("\n\nActual:\n" + actual);
 
         LineSeparator detectedLineSeparator = LineSeparator.detect(actual);
 

@@ -18,32 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.printer.lexicalpreservation;
 
-import java.util.Iterator;
+package com.example;
 
-public class WrappingRangeIterator implements Iterator<Integer> {
+class Beta implements Alpha.CustomInterface {
+  
+  public interface CustomInterface<T> {}
 
-    private final int limit;
+  private final CustomInterface<Object> instanceOfBetaInnerClass;
 
-    private int currentValue = 0;
-
-    public WrappingRangeIterator(int limit) {
-        this.limit = limit;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return true;
-    }
-
-    @Override
-    public Integer next() {
-        int valueToReturn = currentValue;
-        ++currentValue;
-        if (currentValue == limit) {
-            currentValue = 0;
-        }
-        return valueToReturn;
-    }
 }

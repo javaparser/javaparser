@@ -117,8 +117,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
         }
-        if (other instanceof ReferenceTypeImpl) {
-            ReferenceTypeImpl otherRef = (ReferenceTypeImpl) other;
+        if (other.isReferenceType()) {
+            ResolvedReferenceType otherRef =  other.asReferenceType();
             if (compareConsideringTypeParameters(otherRef)) {
                 return true;
             }

@@ -24,9 +24,12 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.List;
 
 /**
  * Limited version of ClassOrInterfaceDeclarationContext that only resolves type parameters for use by
@@ -38,13 +41,13 @@ public class ClassOrInterfaceDeclarationExtendsContext extends AbstractJavaParse
     }
 
     @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
         for (TypeParameter typeParameter : wrappedNode.getTypeParameters()) {
             if (typeParameter.getName().getId().equals(name)) {
                 return SymbolReference.solved(new JavaParserTypeParameter(typeParameter, typeSolver));
             }
         }
 
-        return super.solveType(name);
+        return super.solveType(name, typeArguments);
     }
 }

@@ -44,6 +44,11 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         return this;
     }
 
+    @Override
+    default boolean isReferenceType() {
+        return true;
+    }
+
     // /
     // / Ancestors
     // /
@@ -135,11 +140,11 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
             // init direct ancestors
-            Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<ResolvedReferenceType>(rrtd.getAncestors());
+            Deque<ResolvedReferenceType> queuedAncestors = new LinkedList<>(rrtd.getAncestors());
             ancestors.addAll(queuedAncestors);
             while (!queuedAncestors.isEmpty()) {
                 ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
-                queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<ResolvedReferenceType>(queuedAncestor.getDirectAncestors()).stream().forEach(ancestor -> {
+                queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(queuedAncestor.getDirectAncestors()).stream().forEach(ancestor -> {
                     // add this ancestor to the queue (for a deferred search)
                     queuedAncestors.add(ancestor);
                     // add this ancestor to the list of ancestors

@@ -35,7 +35,7 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
 
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         Context parentContext = optionalParentContext.get();

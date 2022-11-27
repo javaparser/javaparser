@@ -101,13 +101,13 @@ public class Added implements DifferenceElement {
      */
     @Override
     public DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
-        return isNewLineToken() ? new Added(lineSeparator) : this;
+        return isNewLine() ? new Added(lineSeparator) : this;
     }
 
     /*
      * Return true if the wrapped {@code CsmElement} is a new line token
      */
-    private boolean isNewLineToken() {
+    public boolean isNewLine() {
         return isToken() && ((CsmToken) element).isNewLine();
     }
 }

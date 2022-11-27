@@ -52,7 +52,12 @@ class DifferenceElementCalculator {
             // verify that the node content and the position are equal
             // because we can have nodes with the same content but in different lines
             // in this case we consider that nodes are not equals
-            return this.node.equals(cpi.node) && this.node.hasRange() && cpi.node.hasRange() && this.node.getRange().get().contains(cpi.node.getRange().get());
+            // If the nodes have no declared position they are considered equal.
+            return this.node.equals(cpi.node) 
+            		&& (this.node.hasRange() == false && cpi.node.hasRange() == false
+            			||	(this.node.hasRange() && cpi.node.hasRange() && this.node.getRange().get().contains(cpi.node.getRange().get())
+            			)
+            		);
         }
 
         @Override

@@ -161,7 +161,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void removingJavadoc() {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
         assertTrue(it.getJavadocComment().get().remove());
-        assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
+        assertTransformedToString("@interface AD { int foo(); }", it.getParentNode().get());
     }
 
     @Test
