@@ -179,4 +179,72 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         assertTrue(resolvedType.isReferenceType());
         assertEquals(clazz.getCanonicalName(), resolvedType.asReferenceType().getQualifiedName());
     }
+
+    // See issue 3725
+    @Test
+    void resolveVarTypeInForEachLoopFromArrayExpression() {
+        String sourceCode = "" +
+                "import java.util.Arrays;\n" +
+                "\n" +
+                "public class Main {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        for (var s:args) {\n" +
+                "            s.hashCode();\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+
+        Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
+
+        // Before fixing the bug the next line failed with
+        // "java.lang.IllegalStateException: Cannot resolve `var` which has no initializer."
+        ResolvedType resolvedType = toStringCallScope.calculateResolvedType();
+
+        assertEquals("java.lang.String", resolvedType.describe());
+    }
+
+    // See issue 3725
+    @Test
+    void resolveVarTypeInForEachLoopFromIterableExpression() {
+        String sourceCode = "" +
+                "import java.util.Arrays;\n" +
+                "\n" +
+                "public class Main {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        for (var s: Arrays.asList(args)) {\n" +
+                "            s.hashCode();\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+
+        Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
+
+        // Before fixing the bug the next line failed with
+        // "java.lang.IllegalStateException: Cannot resolve `var` which has no initializer."
+        ResolvedType resolvedType = toStringCallScope.calculateResolvedType();
+
+        assertEquals("java.lang.String", resolvedType.describe());
+    }
+
+    /**
+     * Private helper method that returns the scope of the first
+     * {@code hashCode} method call in the given sourceCode.
+     * <p>
+     * The sourceCode is processed with a Java 15 parser and a
+     * ReflectionTypeSolver.
+     */
+    private static Expression scopeOfFirstHashCodeCall(String sourceCode) {
+        // Parse the source code with Java 15 (and ReflectionTypeSolver)
+        JavaSymbolSolver symbolResolver =
+                new JavaSymbolSolver(new ReflectionTypeSolver());
+        JavaParser parser = new JavaParser(new ParserConfiguration()
+                .setSymbolResolver(symbolResolver)
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15));
+        CompilationUnit cu = parser.parse(sourceCode).getResult().get();
+
+        MethodCallExpr toStringCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(mce -> mce.getNameAsString().equals("hashCode"))
+                .findFirst().get();
+        return toStringCall.getScope().get();
+    }
 }

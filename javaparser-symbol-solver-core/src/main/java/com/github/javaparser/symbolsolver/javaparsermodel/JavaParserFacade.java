@@ -28,6 +28,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
@@ -72,9 +73,9 @@ public class JavaParserFacade {
     };
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
-    
+
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
      * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
@@ -115,11 +116,11 @@ public class JavaParserFacade {
     }
 
     // End of static class
-    
+
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final SymbolSolver symbolSolver;
-    
+
     private FailureHandler failureHandler;
 
     private JavaParserFacade(TypeSolver typeSolver) {
@@ -757,9 +758,47 @@ public class JavaParserFacade {
             throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
         }
         final VariableDeclarator variableDeclarator = (VariableDeclarator) parent;
-        return variableDeclarator.getInitializer()
+        Optional<Expression> initializer = variableDeclarator.getInitializer();
+        if (!initializer.isPresent()) {
+            // When a `var` type decl has no initializer it may be part of a
+            // for-each statement (e.g. `for(var i : expr)`).
+            Optional<ForEachStmt> forEachStmt = forEachStmtWithVariableDeclarator(variableDeclarator);
+            if (forEachStmt.isPresent()) {
+                Expression iterable = forEachStmt.get().getIterable();
+                ResolvedType iterType = iterable.calculateResolvedType();
+                if (iterType instanceof ResolvedArrayType) {
+                    // The type of a variable in a for-each loop with an array
+                    // is the component type of the array.
+                    return ((ResolvedArrayType)iterType).getComponentType();
+                }
+                if (iterType instanceof ResolvedReferenceType) {
+                    // The type of a variable in a for-each loop with an
+                    // Iterable is the same type as returned by the `next()`
+                    // method of its `iterator()`
+                    MethodCallExpr nextCall = new MethodCallExpr(
+                            new MethodCallExpr(iterable, "iterator"), "next");
+                    MethodUsage methodUsage = solveMethodAsUsage(nextCall);
+                    return methodUsage.returnType();
+                }
+            }
+        }
+        return initializer
                 .map(Expression::calculateResolvedType)
                 .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
+    }
+
+    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
+            VariableDeclarator variableDeclarator) {
+        Optional<Node> node = variableDeclarator.getParentNode();
+        if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {
+            return Optional.empty();
+        }
+        node = node.get().getParentNode();
+        if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
+            return Optional.empty();
+        } else {
+            return Optional.of((ForEachStmt)node.get());
+        }
     }
 
     public ResolvedType convert(Type type, Node node) {
