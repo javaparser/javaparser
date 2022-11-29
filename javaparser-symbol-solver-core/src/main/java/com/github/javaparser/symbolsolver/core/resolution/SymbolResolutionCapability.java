@@ -1,7 +1,7 @@
 package com.github.javaparser.symbolsolver.core.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**

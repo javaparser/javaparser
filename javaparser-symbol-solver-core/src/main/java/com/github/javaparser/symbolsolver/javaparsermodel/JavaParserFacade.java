@@ -34,12 +34,12 @@ import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDeclaration;
@@ -54,9 +54,9 @@ import com.github.javaparser.utils.Log;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.resolution.model.SymbolReference.solved;
+import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved;
-import static com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.

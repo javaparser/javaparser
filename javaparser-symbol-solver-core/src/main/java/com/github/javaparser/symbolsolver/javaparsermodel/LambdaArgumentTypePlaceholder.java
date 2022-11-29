@@ -22,8 +22,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 
 /**
  * Placeholder used to represent a lambda argument type while it is being

@@ -28,9 +28,9 @@ import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 
 import java.util.Collections;
