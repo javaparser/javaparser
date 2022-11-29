@@ -1,7 +1,8 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
@@ -53,9 +54,9 @@ abstract class AbstractTypeSolverTest<T extends TypeSolver> extends AbstractSymb
     }
 
     /**
-     * When a {@link com.github.javaparser.symbolsolver.model.resolution.TypeSolver} don't have a parent it should return
+     * When a {@link com.github.javaparser.resolution.TypeSolver} don't have a parent it should return
      * {@code null}.
-     * After setting a parent using {@link com.github.javaparser.symbolsolver.model.resolution.TypeSolver#setParent(TypeSolver)}
+     * After setting a parent using {@link com.github.javaparser.resolution.TypeSolver#setParent(TypeSolver)}
      * the method {@link TypeSolver#getParent()} should return the value set.
      */
     @Test
