@@ -24,7 +24,9 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -34,6 +36,7 @@ import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
@@ -273,6 +276,28 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                         .getTypeDeclaration()
                         .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
         );
+    }
+    
+    /**
+     * Similar to solveMethod but we return a MethodUsage.
+     * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
+     */
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
+        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
+        if (methodSolved.isSolved()) {
+            ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
+            if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {
+                throw new UnsupportedOperationException(String.format(
+                        "Resolved method declarations must implement %s.",
+                        TypeVariableResolutionCapability.class.getName()
+                ));
+            }
+
+            MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(this, argumentsTypes);
+            return Optional.of(methodUsage);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
