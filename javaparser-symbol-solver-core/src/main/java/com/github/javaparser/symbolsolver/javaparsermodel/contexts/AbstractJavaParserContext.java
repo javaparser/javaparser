@@ -275,6 +275,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         );
     }
 
+    @Override
     public N getWrappedNode() {
         return wrappedNode;
     }

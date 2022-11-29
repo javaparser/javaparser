@@ -44,6 +44,12 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public interface Context {
+	
+	/**
+	 * Returns the node wrapped in the context
+	 * 
+	 */
+	<N extends Node> N getWrappedNode();
 
     /**
      * @return The parent context, if there is one. For example, a method exists within a compilation unit.
@@ -273,7 +279,7 @@ public interface Context {
         }
 
         // First check if the variable is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Context parentContext = getParent().get();
         Optional<VariableDeclarator> localResolutionResults = parentContext
                 .localVariablesExposedToChild(wrappedNode)
@@ -296,7 +302,7 @@ public interface Context {
         }
 
         // First check if the parameter is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Context parentContext = getParent().get();
         Optional<Parameter> localResolutionResults = parentContext
                 .parametersExposedToChild(wrappedNode)
@@ -342,7 +348,7 @@ public interface Context {
         // FIXME: If there are multiple patterns, throw an error?
 
         // First check if the pattern is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Optional<PatternExpr> localResolutionResults = parentContext
                 .patternExprsExposedToChild(wrappedNode)
                 .stream()
@@ -363,7 +369,7 @@ public interface Context {
         }
         Context parentContext = getParent().get();
         // First check if the parameter is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Optional<ResolvedFieldDeclaration> localResolutionResults = parentContext
                 .fieldsExposedToChild(wrappedNode)
                 .stream()
