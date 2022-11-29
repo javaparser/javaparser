@@ -29,9 +29,9 @@ import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
 
 import java.util.Collections;
 import java.util.List;
