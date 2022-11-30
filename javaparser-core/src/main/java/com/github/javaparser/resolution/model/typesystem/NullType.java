@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.model.typesystem;
+package com.github.javaparser.resolution.model.typesystem;
 
 import com.github.javaparser.resolution.types.ResolvedType;
 
