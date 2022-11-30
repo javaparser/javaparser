@@ -23,6 +23,7 @@ package com.github.javaparser.resolution.types;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -62,12 +63,40 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         }
         throw new IllegalArgumentException("Name " + name);
     }
-
+    
+    /*
+     * Returns true if the specified type is a boxed type of a primitive type.
+     */
+    public static boolean isBoxType(ResolvedType type) {
+    	if (!type.getClass().isInstance(ResolvedReferenceType.class)) {
+    		return false;
+    	}
+        String qName = type.asReferenceType().getQualifiedName();
+        for (ResolvedPrimitiveType ptu : values()) {
+            if (ptu.getBoxTypeQName().equals(qName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /*
+     * Returns the primitive type corresponding to the specified boxed type canonical name.
+     */
+    public static Optional<ResolvedType> byBoxTypeQName(String qName) {
+        for (ResolvedPrimitiveType ptu : values()) {
+            if (ptu.getBoxTypeQName().equals(qName)) {
+                return Optional.of(ptu);
+            }
+        }
+        return Optional.empty();
+    }
+    
     /*
      * Returns an array containing all numeric types
      */
     public static ResolvedPrimitiveType[] getNumericPrimitiveTypes() {
-        return new ResolvedPrimitiveType[] { BYTE, SHORT, CHAR, INT, LONG, FLOAT, DOUBLE };
+        return new ResolvedPrimitiveType[] { BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, CHAR };
     }
 
     @Override
@@ -126,9 +155,16 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     public String getBoxTypeQName() {
         return boxTypeClass.getCanonicalName();
     }
+    
+    /*
+     * Returns the boxed class of the primitive type.
+     */
+    public Class getBoxTypeClass() {
+        return boxTypeClass;
+    }
 
     public boolean isNumeric() {
-        return this != BOOLEAN;
+        return Arrays.asList(getNumericPrimitiveTypes()).contains(this);
     }
 
     /**

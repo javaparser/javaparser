@@ -334,5 +334,17 @@ class PrimitiveTypeTest {
             assertEquals(false, ptu.isAssignableBy(arrayOfListOfA));
         }
     }
+    
+    @Test
+    void testIsNumeric() {
+    	assertFalse(ResolvedPrimitiveType.BOOLEAN.isNumeric());
+    	assertTrue(ResolvedPrimitiveType.CHAR.isNumeric());
+    	assertTrue(ResolvedPrimitiveType.BYTE.isNumeric());
+    	assertTrue(ResolvedPrimitiveType.SHORT.isNumeric());
+    	assertTrue(ResolvedPrimitiveType.INT.isNumeric());
+    	assertTrue(ResolvedPrimitiveType.LONG.isNumeric());
+    	assertTrue(ResolvedPrimitiveType.FLOAT.isNumeric());
+    	assertTrue(ResolvedPrimitiveType.DOUBLE.isNumeric());
+    }
 
 }

@@ -38,6 +38,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeTransformer;
@@ -101,13 +102,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             if (this.isJavaLangObject()) {
                 return true;
             }
+            
             // Check if 'other' can be boxed to match this type
             if (isCorrespondingBoxingType(other.describe())) return true;
-
-            // Resolve the boxed type and check if it can be assigned via widening reference conversion
-            SymbolReference<ResolvedReferenceTypeDeclaration> type = typeSolver
-                    .tryToSolveType(other.asPrimitive().getBoxTypeQName());
-            return type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration);
+            
+            // All numeric types extend Number
+            return other.isNumericType() && this.isReferenceType() && this.asReferenceType().getQualifiedName().equals(Number.class.getCanonicalName());
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
