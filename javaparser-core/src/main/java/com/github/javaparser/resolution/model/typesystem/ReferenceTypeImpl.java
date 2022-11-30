@@ -21,6 +21,7 @@
 
 package com.github.javaparser.resolution.model.typesystem;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -51,7 +53,7 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
 public class ReferenceTypeImpl extends ResolvedReferenceType {
-
+	
     private TypeSolver typeSolver;
 
     public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
@@ -229,23 +231,20 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
 
         // Avoid repetitions of Object -- remove them all and, if appropriate, add it back precisely once.
-        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
+//        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
 
         // Conditionally re-insert java.lang.Object as an ancestor.
         if(this.getTypeDeclaration().isPresent()) {
             ResolvedReferenceTypeDeclaration thisTypeDeclaration = this.getTypeDeclaration().get();
+            // The superclass of interfaces is always null
             if (thisTypeDeclaration.isClass()) {
                 Optional<ResolvedReferenceType> optionalSuperClass = thisTypeDeclaration.asClass().getSuperClass();
                 boolean superClassIsJavaLangObject = optionalSuperClass.isPresent() && optionalSuperClass.get().isJavaLangObject();
                 boolean thisIsJavaLangObject = thisTypeDeclaration.asClass().isJavaLangObject();
                 if (superClassIsJavaLangObject && !thisIsJavaLangObject) {
-                    ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
+//                    ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
+                	ancestors.add(optionalSuperClass.get());
                 }
-            } else {
-                // If this isn't a class (i.e. is enum or interface (or record?)), add java.lang.Object as a supertype
-                // TODO: Should we also add the implicit java.lang.Enum ancestor in the case of enums?
-                // TODO: getDirectAncestors() shouldn't be inserting implicit ancesters...? See also issue #2696
-                ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
             }
         }
 

@@ -742,23 +742,17 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         ResolvedReferenceType iterableOfString = new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(Iterable.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
-        assertEquals(1, iterableOfString.getDirectAncestors().size());
-        ResolvedReferenceType ancestor = iterableOfString.getDirectAncestors().get(0);
-        assertEquals("java.lang.Object", ancestor.getQualifiedName());
-        assertEquals(true, ancestor.getTypeParametersMap().isEmpty());
+        assertEquals(0, iterableOfString.getDirectAncestors().size());
     }
 
     @Test
     void testDirectAncestorsOfInterfaceExtendingInterface() {
-        assertEquals(2, collectionOfString.getDirectAncestors().size());
+        assertEquals(1, collectionOfString.getDirectAncestors().size());
         ResolvedReferenceType ancestor1 = collectionOfString.getDirectAncestors().get(0);
         assertEquals("java.lang.Iterable", ancestor1.getQualifiedName());
         assertEquals(1, ancestor1.getTypeParametersMap().size());
         assertEquals("T", ancestor1.getTypeParametersMap().get(0).a.getName());
         assertEquals("java.lang.String", ancestor1.getTypeParametersMap().get(0).b.describe());
-        ResolvedReferenceType ancestor2 = collectionOfString.getDirectAncestors().get(1);
-        assertEquals("java.lang.Object", ancestor2.getQualifiedName());
-        assertEquals(true, ancestor2.getTypeParametersMap().isEmpty());
     }
 
     @Test
