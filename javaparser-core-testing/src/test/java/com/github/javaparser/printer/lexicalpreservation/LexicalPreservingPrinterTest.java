@@ -1755,5 +1755,63 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertTransformedToString(expectedCode, cu);
 
     }
+    
+    // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
+    @Test
+    void removedIndentationLineCommentsPrinted() {
+		considerCode("public class Foo {\n" +
+    			"  //line \n" +
+    			"  void mymethod() {\n" +
+    			"  }\n" +
+    			"}");
+		String expected =
+				"public class Foo {\n" + 
+		    	"  void mymethod() {\n" +
+		    	"  }\n" +
+		    	"}";
+    	cu.getAllContainedComments().get(0).remove();
+    	System.out.println(LexicalPreservingPrinter.print(cu));
+    	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+    
+    // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
+    @Test
+    void removedIndentationBlockCommentsPrinted() {
+    	considerCode("public class Foo {\n" +
+    			"  /*\n" +
+    			"  *Block comment coming through\n" +
+    			"  */\n" +
+    			"  void mymethod() {\n" +
+    			"  }\n" +
+    			"}");
+    	String expected =
+    			"public class Foo {\n" +
+    	    	"  void mymethod() {\n" +
+    	    	"  }\n" +
+    	    	"}";
+    	cu.getAllContainedComments().get(0).remove();
+    	
+    	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+    
+ // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
+    @Test
+    void removedIndentationJavaDocCommentsPrinted() {
+        considerCode("public class Foo {\n" +
+                "  /**\n" +
+                "   *JavaDoc comment coming through\n" +
+                "   */\n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}");
+        String expected =
+        		"public class Foo {\n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}";
+        cu.getAllContainedComments().get(0).remove();
+
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+    }
 
 }
