@@ -29,27 +29,27 @@ import java.util.List;
  */
 public enum ResolvedPrimitiveType implements ResolvedType {
 
-    BYTE("byte", Byte.class.getCanonicalName(), Collections.emptyList()),
-    SHORT("short", Short.class.getCanonicalName(), Collections.singletonList(BYTE)),
-    CHAR("char", Character.class.getCanonicalName(), Collections.emptyList()),
-    INT("int", Integer.class.getCanonicalName(), Arrays.asList(BYTE, SHORT, CHAR)),
-    LONG("long", Long.class.getCanonicalName(), Arrays.asList(BYTE, SHORT, INT, CHAR)),
-    BOOLEAN("boolean", Boolean.class.getCanonicalName(), Collections.emptyList()),
-    FLOAT("float", Float.class.getCanonicalName(), Arrays.asList(LONG, INT, SHORT, BYTE, CHAR)),
-    DOUBLE("double", Double.class.getCanonicalName(), Arrays.asList(FLOAT, LONG, INT, SHORT, BYTE, CHAR));
+    BYTE("byte", Byte.class, Collections.emptyList()),
+    SHORT("short", Short.class, Collections.singletonList(BYTE)),
+    CHAR("char", Character.class, Collections.emptyList()),
+    INT("int", Integer.class, Arrays.asList(BYTE, SHORT, CHAR)),
+    LONG("long", Long.class, Arrays.asList(BYTE, SHORT, INT, CHAR)),
+    BOOLEAN("boolean", Boolean.class, Collections.emptyList()),
+    FLOAT("float", Float.class, Arrays.asList(LONG, INT, SHORT, BYTE, CHAR)),
+    DOUBLE("double", Double.class, Arrays.asList(FLOAT, LONG, INT, SHORT, BYTE, CHAR));
 
     // /
     // / Fields
     // /
     private String name;
 
-    private String boxTypeQName;
+    private Class boxTypeClass;
 
     private List<ResolvedPrimitiveType> promotionTypes;
 
-    ResolvedPrimitiveType(String name, String boxTypeQName, List<ResolvedPrimitiveType> promotionTypes) {
+    ResolvedPrimitiveType(String name, Class boxTypeClass, List<ResolvedPrimitiveType> promotionTypes) {
         this.name = name;
-        this.boxTypeQName = boxTypeQName;
+        this.boxTypeClass = boxTypeClass;
         this.promotionTypes = promotionTypes;
     }
 
@@ -109,11 +109,11 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         if (other.isPrimitive()) {
             return this == other || promotionTypes.contains(other);
         } else if (other.isReferenceType()) {
-            if (other.asReferenceType().getQualifiedName().equals(boxTypeQName)) {
+            if (other.asReferenceType().getQualifiedName().equals(getBoxTypeQName())) {
                 return true;
             }
             for (ResolvedPrimitiveType promotion : promotionTypes) {
-                if (other.asReferenceType().getQualifiedName().equals(promotion.boxTypeQName)) {
+                if (other.asReferenceType().getQualifiedName().equals(promotion.getBoxTypeQName())) {
                     return true;
                 }
             }
@@ -124,7 +124,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     }
 
     public String getBoxTypeQName() {
-        return boxTypeQName;
+        return boxTypeClass.getCanonicalName();
     }
 
     public boolean isNumeric() {
