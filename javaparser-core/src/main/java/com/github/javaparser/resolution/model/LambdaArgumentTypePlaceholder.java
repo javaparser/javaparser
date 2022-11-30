@@ -45,11 +45,6 @@ public class LambdaArgumentTypePlaceholder implements ResolvedType {
     }
 
     @Override
-    public boolean isPrimitive() {
-        return false;
-    }
-
-    @Override
     public boolean isReferenceType() {
         return false;
     }

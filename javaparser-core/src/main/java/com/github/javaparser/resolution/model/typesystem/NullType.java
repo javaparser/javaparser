@@ -41,11 +41,6 @@ public class NullType implements ResolvedType {
         return false;
     }
 
-    @Override
-    public boolean isPrimitive() {
-        return false;
-    }
-
     public boolean isNull() {
         return true;
     }
