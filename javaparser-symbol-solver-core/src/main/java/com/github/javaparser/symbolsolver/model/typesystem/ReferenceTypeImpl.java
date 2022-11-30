@@ -42,7 +42,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeTransformer;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 
 /**
@@ -82,11 +81,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public ResolvedTypeParameterDeclaration asTypeParameter() {
-        if (this.typeDeclaration instanceof JavaParserTypeVariableDeclaration) {
-            JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) this.typeDeclaration;
-            return javaParserTypeVariableDeclaration.asTypeParameter();
-        }
-        throw new UnsupportedOperationException(this.typeDeclaration.getClass().getCanonicalName());
+    	return this.typeDeclaration.asTypeParameter();
     }
 
     /**
