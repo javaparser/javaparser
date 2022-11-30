@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
