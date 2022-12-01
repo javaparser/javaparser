@@ -1,14 +1,9 @@
 package com.github.jmlparser.xpath;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.StaticJavaParser;
-import net.xqj.basex.local.BaseXXQDataSource;
-import net.xqj.core.xqitemtype.XQItemTypeFactory;
-import net.xqj.core.xqitemtype.XQItemTypeImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -16,8 +11,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.util.List;
-import javax.xml.xquery.*;
 
 
 /**
@@ -25,7 +18,7 @@ import javax.xml.xquery.*;
  * @version 1 (30.11.22)
  */
 public class Test {
-    public static void main(String[] args) throws XPathExpressionException, TransformerException, XQException {
+    public static void main(String[] args) throws XPathExpressionException, TransformerException {
         var node = StaticJavaParser.parse("class A { public void foo(int x) { var a = 2;} } class B { public void foo(); }");
         /*
         JavaParser jp = new JavaParser();

@@ -104,7 +104,6 @@ public class JPRootElement implements Element {
     @Override
     public NodeList getElementsByTagNameNS(String namespaceURI, String localName) throws DOMException {
         throw new IllegalStateException();
-        //return DocumentFactories.wrap(List.of());
     }
 
     @Override
