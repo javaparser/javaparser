@@ -102,7 +102,9 @@ class ReflectionMethodResolutionLogic {
 
         }
 
-        for(ResolvedReferenceType ancestor : scopeType.getAncestors()){
+        List<ResolvedReferenceType> ancestors = scopeType.getAncestors();
+        
+        for(ResolvedReferenceType ancestor : ancestors){
             if(ancestor.getTypeDeclaration().isPresent()) {
                 ResolvedReferenceTypeDeclaration ancestorTypeDeclaration = ancestor.getTypeDeclaration().get();
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, argumentsTypes);
@@ -114,7 +116,7 @@ class ReflectionMethodResolutionLogic {
             }
         }
 
-        if (scopeType.getAncestors().isEmpty()) {
+        if (ancestors.isEmpty()) {
             Optional<ResolvedReferenceTypeDeclaration> optionalObjectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).getTypeDeclaration();
             if (optionalObjectClass.isPresent()) {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(optionalObjectClass.get(), name, argumentsTypes);

@@ -33,6 +33,7 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.utils.Pair;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -200,6 +201,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * Return all ancestors, that means all superclasses and interfaces.
      * This list should always include Object (unless this is a reference to Object).
      * The type typeParametersValues should be expressed in terms of this type typeParametersValues.
+     * The default order of presenting ancestors corresponds to a search in depth.
      * <p>
      * For example, given:
      * <p>
@@ -210,7 +212,14 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * Foo&lt;Boolean, String&gt;.
      */
     public abstract List<ResolvedReferenceType> getAllAncestors();
-
+    
+    /**
+     * Return all ancestors, that means all superclasses and interfaces.
+     * This list should always include Object (unless this is a reference to Object).
+     * The type typeParametersValues should be expressed in terms of this type typeParametersValues.
+     */
+    public abstract List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser);
+    
     /**
      * Return direct ancestors, that means the superclasses and interfaces implemented directly.
      * This list should include Object if the class has no other superclass or the interface is not extending another interface.

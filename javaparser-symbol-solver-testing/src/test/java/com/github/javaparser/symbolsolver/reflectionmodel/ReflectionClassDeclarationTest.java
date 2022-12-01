@@ -304,10 +304,15 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.getA()"
         );
 
+        // Returns a list of all declared methods of this type declaration, whether declared or inherited.
+        // Note that it must not include overloaded methods. 
+        // Since the ReflectionTestObject class implicitly inherits from the Object class, 
+        // the list of methods also contains the methods of the Object class that we filter for more readability.
         Set<String> actual = testObject.getAllMethods()
                 .stream()
                 .map(MethodUsage::getQualifiedSignature)
                 .filter(s -> !"com.github.javaparser.symbolsolver.reflectionmodel.ReflectionTestObject.$jacocoInit()".equals(s)) // Ignore the methods injected via reflection by jacoco -- see also #1701 and #2637
+                .filter(s -> !s.startsWith("java.lang.Object"))
                 .collect(Collectors.toSet());
 
         assertEquals(expected, actual);

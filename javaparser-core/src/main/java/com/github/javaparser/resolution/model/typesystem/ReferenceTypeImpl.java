@@ -21,6 +21,7 @@
 
 package com.github.javaparser.resolution.model.typesystem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.resolution.MethodUsage;
@@ -149,8 +151,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return false;
         }
         if (other.isUnionType()) {
-            return other.asUnionType().getCommonAncestor()
-                    .map(ancestor -> isAssignableBy(ancestor)).orElse(false);
+        	Optional<ResolvedReferenceType> common = other.asUnionType().getCommonAncestor();
+            return common.map(ancestor -> isAssignableBy(ancestor)).orElse(false);
         }
         return false;
     }
@@ -203,23 +205,26 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         return result;
     }
 
+    /*
+     * Get all ancestors with the default traverser (depth first)
+     */
+    @Override
     public List<ResolvedReferenceType> getAllAncestors() {
+        return getAllAncestors(ResolvedReferenceTypeDeclaration.depthFirstFunc);
+    }
+    
+    public List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         // We need to go through the inheritance line and propagate the type parameters
 
-        List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors();
+        List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors(traverser);
 
         ancestors = ancestors.stream()
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
 
-        // Avoid repetitions of Object
-        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
-        ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
-        ancestors.add(create(objectType));
-
         return ancestors;
     }
-
+    
     public List<ResolvedReferenceType> getDirectAncestors() {
         // We need to go through the inheritance line and propagate the type parameters
 
@@ -228,10 +233,6 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         ancestors = ancestors.stream()
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
-
-
-        // Avoid repetitions of Object -- remove them all and, if appropriate, add it back precisely once.
-//        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
 
         // Conditionally re-insert java.lang.Object as an ancestor.
         if(this.getTypeDeclaration().isPresent()) {
@@ -242,7 +243,6 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 boolean superClassIsJavaLangObject = optionalSuperClass.isPresent() && optionalSuperClass.get().isJavaLangObject();
                 boolean thisIsJavaLangObject = thisTypeDeclaration.asClass().isJavaLangObject();
                 if (superClassIsJavaLangObject && !thisIsJavaLangObject) {
-//                    ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
                 	ancestors.add(optionalSuperClass.get());
                 }
             }

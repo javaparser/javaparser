@@ -378,12 +378,22 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void testGetAllAncestorsWithDepthFirstTraversalOrder() {
+        ResolvedReferenceTypeDeclaration integer = typeSolver.solveType(Integer.class.getCanonicalName());
+        List<ResolvedReferenceType> ancestors = integer.getAllAncestors();
+        assertEquals("java.lang.Number", ancestors.get(0).getQualifiedName());
+        assertEquals("java.lang.Object", ancestors.get(1).getQualifiedName());
+        assertEquals("java.io.Serializable", ancestors.get(2).getQualifiedName());
+        assertEquals("java.lang.Comparable", ancestors.get(3).getQualifiedName());
+    } 
+        
+    @Test
     void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         assertEquals(12, ancestors.size());
-
+        
         ResolvedReferenceType ancestor;
 
         ancestor = ancestors.get(0);
@@ -394,14 +404,14 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("com.github.javaparser.ast.Node", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(2);
+        assertEquals("java.lang.Object", ancestor.getQualifiedName());
+        
+        ancestor = ancestors.get(3);
         assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
-        ancestor = ancestors.get(3);
+        ancestor = ancestors.get(4);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.T").get().asReferenceType().getQualifiedName());
-
-        ancestor = ancestors.get(4);
-        assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc", ancestor.getQualifiedName());

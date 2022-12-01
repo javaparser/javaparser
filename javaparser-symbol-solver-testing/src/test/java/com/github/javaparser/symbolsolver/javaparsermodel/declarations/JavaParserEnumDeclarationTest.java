@@ -374,7 +374,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         
         assertEquals(12, ancestors.size());
-
+        
         ResolvedReferenceType ancestor;
 
         ancestor = ancestors.get(0);
@@ -384,15 +384,15 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
         ancestor = ancestors.get(1);
         assertEquals("com.github.javaparser.ast.Node", ancestor.getQualifiedName());
 
-        ancestor = ancestors.get(2);
+        ancestor = constructorDeclaration.getAllAncestors().get(2);
+        assertEquals("java.lang.Object", ancestor.getQualifiedName());
+        
+        ancestor = ancestors.get(3);
         assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
-        ancestor = ancestors.get(3);
+        ancestor = ancestors.get(4);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.T").get().asReferenceType().getQualifiedName());
-
-        ancestor = constructorDeclaration.getAllAncestors().get(4);
-        assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc", ancestor.getQualifiedName());
