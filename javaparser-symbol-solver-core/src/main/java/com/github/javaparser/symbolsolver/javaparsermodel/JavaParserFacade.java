@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
@@ -76,6 +77,8 @@ public class JavaParserFacade {
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
+    
+    private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
@@ -772,14 +775,18 @@ public class JavaParserFacade {
                     // is the component type of the array.
                     return ((ResolvedArrayType)iterType).getComponentType();
                 }
-                if (iterType instanceof ResolvedReferenceType) {
+                if (iterType.isReferenceType()) {
                     // The type of a variable in a for-each loop with an
-                    // Iterable is the same type as returned by the `next()`
-                    // method of its `iterator()`
-                    MethodCallExpr nextCall = new MethodCallExpr(
-                            new MethodCallExpr(iterable, "iterator"), "next");
-                    MethodUsage methodUsage = solveMethodAsUsage(nextCall);
-                    return methodUsage.returnType();
+                    // Iterable with parameter type
+                	List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
+					if (parametersType.isEmpty()) {
+						Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT)
+								.getDeclaration();
+						return oObjectDeclaration
+								.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
+								.orElseThrow(() -> new UnsupportedOperationException());
+					}
+                    return parametersType.get(0);
                 }
             }
         }
