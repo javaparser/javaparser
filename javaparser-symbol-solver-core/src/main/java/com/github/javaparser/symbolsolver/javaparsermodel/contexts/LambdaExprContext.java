@@ -122,7 +122,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         }
                     } else if (parentNode instanceof VariableDeclarator) {
                         VariableDeclarator variableDeclarator = (VariableDeclarator) parentNode;
-                        ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
+                        ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                         if (functionalMethod.isPresent()) {
                             ResolvedType lambdaType = functionalMethod.get().getParamType(index);

@@ -139,7 +139,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             }
         } else if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) demandParentNode(wrappedNode);
-            ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
+            ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
             Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
             if (functionalMethod.isPresent()) {
                 List<ResolvedType> resolvedTypes = new ArrayList<>();

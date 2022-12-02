@@ -32,6 +32,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -45,7 +46,6 @@ import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
@@ -83,9 +83,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(VariableDeclarator node, Boolean solveLambdas) {
         if (demandParentNode(node) instanceof FieldDeclaration) {
-            return facade.convertToUsageVariableType(node);
+            return facade.convertToUsage(node.getType());
         } else if (demandParentNode(node) instanceof VariableDeclarationExpr) {
-            return facade.convertToUsageVariableType(node);
+            return facade.convertToUsage(node.getType());
         }
         throw new UnsupportedOperationException(demandParentNode(node).getClass().getCanonicalName());
     }
@@ -450,7 +450,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (node.getVariables().size() != 1) {
             throw new UnsupportedOperationException();
         }
-        return facade.convertToUsageVariableType(node.getVariables().get(0));
+        return facade.convertToUsage(node.getVariables().get(0).getType());
     }
 
 
