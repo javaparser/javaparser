@@ -588,10 +588,10 @@ public class Difference {
 
     // note:
     // increment originalIndex if we want to keep the original element
-    // increment diffIndex if we don't want to skip the diff element
+    // increment diffIndex if we want to skip the diff element
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
-        if (originalElement.isComment()) {
-            originalIndex++;
+		if (originalElement.isComment()) {
+			originalIndex++;
         } else if (kept.isChild() && ((CsmChild) kept.getElement()).getChild() instanceof Comment) {
             diffIndex++;
         } else if (kept.isChild() && originalElementIsChild) {
@@ -936,7 +936,10 @@ public class Difference {
             boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
             boolean isFirstElement = originalIndex == 0;
             boolean previousIsWhiteSpace = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isWhiteSpace();
-            if (sufficientTokensRemainToSkip && currentIsAComment) {
+			boolean commentIsBeforeAddedElement = currentIsAComment && addedTextElement.getRange().isPresent()
+					&& nodeText.getTextElement(originalIndex).getRange()
+							.map(range -> range.isBefore(addedTextElement.getRange().get())).orElse(false);
+            if (sufficientTokensRemainToSkip && currentIsAComment && commentIsBeforeAddedElement) {
                 // Need to get behind the comment:
                 // FIXME: Why 2? This comment and the next newline?
                 originalIndex += 2;

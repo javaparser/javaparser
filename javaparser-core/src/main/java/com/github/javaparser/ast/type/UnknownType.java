@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.UnknownTypeMetaModel;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
@@ -134,4 +135,17 @@ public class UnknownType extends Type {
     public boolean isPhantom() {
         return true;
     }
+
+    /**
+     * A {@link UnknownType} cannot be convertible to {@link ResolvedType}.
+     *
+     * @param type      The type to be converted.
+     * @param context   The current context.
+     *
+     * @return The type resolved.
+     */
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		throw new IllegalArgumentException("Inferred lambda parameter type");
+	}
 }

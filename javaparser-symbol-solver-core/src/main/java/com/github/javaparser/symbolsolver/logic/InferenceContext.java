@@ -80,7 +80,11 @@ public class InferenceContext {
             if (!formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                 List<ResolvedReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
                 final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
-                List<ResolvedType> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+                // Interfaces do not extend the class Object, 
+                // which means that if the formal parameter is of type Object, all types can match.
+                List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ?
+                		ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()) :
+                		ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();

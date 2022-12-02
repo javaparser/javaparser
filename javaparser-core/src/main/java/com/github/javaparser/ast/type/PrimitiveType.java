@@ -33,7 +33,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -234,4 +237,9 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     public Optional<PrimitiveType> toPrimitiveType() {
         return Optional.of(this);
     }
+
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		return ResolvedPrimitiveType.byName(getType().name());
+	}
 }

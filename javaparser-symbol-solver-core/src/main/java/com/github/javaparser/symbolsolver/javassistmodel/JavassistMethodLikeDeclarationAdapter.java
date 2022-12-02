@@ -21,13 +21,14 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+
 import javassist.CtBehavior;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.ExceptionsAttribute;
@@ -111,7 +112,7 @@ public class JavassistMethodLikeDeclarationAdapter {
         }
 
         ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(exceptions[index]);
-        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList(), typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList());
     }
 
     public ResolvedType getReturnType() {

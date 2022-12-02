@@ -1,1 +1,4 @@
-0 problems in 0 files
+com/github/javaparser/symbolsolver/Issue232Test.java
+(line 25,col 66) Parse error. Found "<<", expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "record" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
+
+1 problems in 1 files

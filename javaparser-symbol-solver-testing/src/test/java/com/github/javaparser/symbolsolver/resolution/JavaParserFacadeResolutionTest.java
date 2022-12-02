@@ -31,23 +31,27 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
@@ -224,6 +228,54 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         ResolvedType resolvedType = toStringCallScope.calculateResolvedType();
 
         assertEquals("java.lang.String", resolvedType.describe());
+    }
+    
+    // See issue 3725
+    @Test
+    void resolveVarTypeInForEachLoopFromIterableExpression2() {
+        String sourceCode = "" +
+                "import java.util.ArrayList;\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "public class Main {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        List<String> list = new ArrayList<>();" +
+                "        for (var s: list) {\n" +
+                "            s.hashCode();\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+
+        Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
+
+        // Before fixing the bug the next line failed with
+        // "java.lang.IllegalStateException: Cannot resolve `var` which has no initializer."
+        ResolvedType resolvedType = toStringCallScope.calculateResolvedType();
+
+        assertEquals("java.lang.String", resolvedType.describe());
+    }
+    
+    // See issue 3725
+    @Test
+    void resolveVarTypeInForEachLoopFromIterableExpression_withRawType() {
+    		String sourceCode = "" +
+                    "import java.util.ArrayList;\n" +
+                    "import java.util.List;\n" +
+                    "\n" +
+                    "public class Main {\n" +
+                    "    public static void main(String[] args) {\n" +
+                    "        List list = new ArrayList();" +
+                    "        for (var s: list) {\n" +
+                    "            s.hashCode();\n" +
+                    "        }\n" +
+                    "    }\n" +
+                    "}";
+
+            Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
+
+            ResolvedType resolvedType = toStringCallScope.calculateResolvedType();
+            
+            assertEquals("java.lang.Object", resolvedType.describe());
     }
 
     /**

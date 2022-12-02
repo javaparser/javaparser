@@ -21,12 +21,12 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -56,8 +56,8 @@ class InferenceContextTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
+        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
         listOfString = listOf(string);
         tpE = mock(ResolvedTypeParameterDeclaration.class);
         when(tpE.getName()).thenReturn("T");
@@ -66,7 +66,7 @@ class InferenceContextTest {
     }
 
     private ResolvedReferenceType listOf(ResolvedType elementType) {
-        return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType), typeSolver);
+        return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType));
     }
 
     @Test

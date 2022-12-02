@@ -19,11 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.javaparsermodel;
+package com.github.javaparser.resolution.model;
 
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 
 /**
  * Placeholder used to represent a lambda argument type while it is being
@@ -42,11 +41,6 @@ public class LambdaArgumentTypePlaceholder implements ResolvedType {
 
     @Override
     public boolean isArray() {
-        return false;
-    }
-
-    @Override
-    public boolean isPrimitive() {
         return false;
     }
 

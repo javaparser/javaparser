@@ -32,22 +32,22 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
@@ -77,15 +77,15 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         this.typeSolver = typeSolver;
         this.facade = facade;
         //pre-calculate the String reference (optimization)
-        stringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING), typeSolver);
+        stringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING));
     }
 
     @Override
     public ResolvedType visit(VariableDeclarator node, Boolean solveLambdas) {
         if (demandParentNode(node) instanceof FieldDeclaration) {
-            return facade.convertToUsageVariableType(node);
+            return facade.convertToUsage(node.getType());
         } else if (demandParentNode(node) instanceof VariableDeclarationExpr) {
-            return facade.convertToUsageVariableType(node);
+            return facade.convertToUsage(node.getType());
         }
         throw new UnsupportedOperationException(demandParentNode(node).getClass().getCanonicalName());
     }
@@ -169,7 +169,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         // This implementation does not regard the actual type argument of the ClassExpr.
         Type astType = node.getType();
         ResolvedType jssType = facade.convertToUsage(astType, node.getType());
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType), typeSolver);
+        return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType));
     }
 
     /*
@@ -221,7 +221,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         } else if (parentType.hasField(node.getName().getId())) {
             return parentType.getField(node.getName().getId()).getType();
         } else if (parentType.hasInternalType(node.getName().getId())) {
-            return new ReferenceTypeImpl(parentType.getInternalType(node.getName().getId()), typeSolver);
+            return new ReferenceTypeImpl(parentType.getInternalType(node.getName().getId()));
         } else {
             throw new UnsolvedSymbolException(node.getName().getId());
         }
@@ -266,7 +266,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // We should solve for the type declaration inside this package.
             SymbolReference<ResolvedReferenceTypeDeclaration> sref = typeSolver.tryToSolveType(node.toString());
             if (sref.isSolved()) {
-                return new ReferenceTypeImpl(sref.getCorrespondingDeclaration(), typeSolver);
+                return new ReferenceTypeImpl(sref.getCorrespondingDeclaration());
             }
         }
         if (value.isPresent()) {
@@ -355,7 +355,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 .getContext(classOrInterfaceType, typeSolver)
                 .solveType(nameWithScope);
         if (typeDeclarationSymbolReference.isSolved()) {
-            return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType(), typeSolver);
+            return new ReferenceTypeImpl(typeDeclarationSymbolReference.getCorrespondingDeclaration().asReferenceType());
         }
 
         // JLS 15.13 - ExpressionName :: [TypeArguments] Identifier
@@ -382,18 +382,17 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // first try a buttom/up approach
             try {
                 return new ReferenceTypeImpl(
-                        facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)),
-                        typeSolver);
+                        facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node, className)));
             } catch (IllegalStateException e) {
                 // trying another approach from type solver
                 Optional<CompilationUnit> cu = node.findAncestor(CompilationUnit.class);
                 SymbolReference<ResolvedReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
                 if (clazz.isSolved()) {
-                    return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
+                    return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration());
                 }
             }
         }
-        return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node)), typeSolver);
+        return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node)));
     }
 
     @Override
@@ -406,7 +405,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 // Cfr JLS $15.12.1
                 ResolvedTypeDeclaration resolvedTypeName = resolvedTypeNameRef.getCorrespondingDeclaration();
                 if (resolvedTypeName.isInterface()) {
-                    return new ReferenceTypeImpl(resolvedTypeName.asInterface(), typeSolver);
+                    return new ReferenceTypeImpl(resolvedTypeName.asInterface());
                 } else if (resolvedTypeName.isClass()) {
                     // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
                     return resolvedTypeName.asClass().getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
@@ -451,7 +450,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (node.getVariables().size() != 1) {
             throw new UnsupportedOperationException();
         }
-        return facade.convertToUsageVariableType(node.getVariables().get(0));
+        return facade.convertToUsage(node.getVariables().get(0).getType());
     }
 
 
@@ -538,7 +537,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // At this point parameterType
             // if Function<T=? super Stream.T, ? extends map.R>
             // we should replace Stream.T
-            ResolvedType functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
+            ResolvedType functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType());
 
             lambdaCtx.addPair(result, functionalInterfaceType);
 

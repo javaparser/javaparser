@@ -21,16 +21,16 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
@@ -192,12 +192,12 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         void whenSameClassButWithDifferentTypeParametersIsProvided() {
             ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
 
-            ReferenceTypeImpl javaLangObject = new ReferenceTypeImpl(reflectionTypeSolver.getSolvedJavaLangObject(), typeSolver);
+            ReferenceTypeImpl javaLangObject = new ReferenceTypeImpl(reflectionTypeSolver.getSolvedJavaLangObject());
             ResolvedWildcard wildCard = ResolvedWildcard.extendsBound(javaLangObject);
 
             JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) typeSolver.solveType(CLASS_TO_SOLVE);
-            ResolvedType typeA = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(wildCard), typeSolver);
-            ResolvedType typeB = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(javaLangObject), typeSolver);
+            ResolvedType typeA = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(wildCard));
+            ResolvedType typeB = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(javaLangObject));
 
             assertFalse(typeB.isAssignableBy(typeA), "This should not be allowed:" +
                     " NodeWithImplements<Object> node = new NodeWithImplements<? extends Object>()");

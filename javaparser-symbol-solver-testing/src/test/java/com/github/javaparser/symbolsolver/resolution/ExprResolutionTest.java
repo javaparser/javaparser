@@ -23,10 +23,10 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     @BeforeEach
     void setup() {
         ts = new ReflectionTypeSolver();
-        stringType = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
+        stringType = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()));
     }
 
     // JLS 5.6.2. Binary Numeric Promotion
