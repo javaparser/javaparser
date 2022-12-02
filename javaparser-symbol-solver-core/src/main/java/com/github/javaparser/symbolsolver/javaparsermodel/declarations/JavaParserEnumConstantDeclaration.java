@@ -44,7 +44,7 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
 
     @Override
     public ResolvedType getType() {
-        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(wrappedNode), typeSolver), typeSolver);
+        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(wrappedNode), typeSolver));
     }
 
     @Override

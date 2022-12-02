@@ -96,7 +96,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override
@@ -243,6 +243,6 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     
     @Override
     public ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 }

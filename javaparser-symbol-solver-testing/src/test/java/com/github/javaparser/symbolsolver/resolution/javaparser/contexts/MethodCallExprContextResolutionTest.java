@@ -134,7 +134,7 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		ResolvedReferenceTypeDeclaration stringType = typeSolver.solveType("java.lang.String");
 
 		List<ResolvedType> argumentsTypes = new ArrayList<>();
-		argumentsTypes.add(new ReferenceTypeImpl(stringType, typeSolver));
+		argumentsTypes.add(new ReferenceTypeImpl(stringType));
 
 		Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes);
 		assertTrue(ref.isPresent());

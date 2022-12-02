@@ -74,8 +74,7 @@ public class JavassistTypeDeclarationAdapter {
                 // Compiled classes have generic types erased, but can be made available for reflection via getGenericSignature().
                 // If it is absent, then no further work is needed and we can return a reference type without generics.
                 return Optional.of(new ReferenceTypeImpl(
-                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass())),
-                        typeSolver
+                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass()))
                 ));
             } else {
                 // If there is a generic signature present, solve the types and return it.
@@ -104,7 +103,7 @@ public class JavassistTypeDeclarationAdapter {
                 for (String interfaceType : ctClass.getClassFile().getInterfaces()) {
                     try {
                         ResolvedReferenceTypeDeclaration declaration = typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(interfaceType));
-                        interfaces.add(new ReferenceTypeImpl(declaration, typeSolver));
+                        interfaces.add(new ReferenceTypeImpl(declaration));
                     } catch (UnsolvedSymbolException e) {
                         if (!acceptIncompleteList) {
                             throw e;
@@ -211,11 +210,11 @@ public class JavassistTypeDeclarationAdapter {
             return typeDeclaration.isFunctionalInterface();
         }
 
-        return other.isAssignableBy(new ReferenceTypeImpl(typeDeclaration, typeSolver));
+        return other.isAssignableBy(new ReferenceTypeImpl(typeDeclaration));
     }
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     /**

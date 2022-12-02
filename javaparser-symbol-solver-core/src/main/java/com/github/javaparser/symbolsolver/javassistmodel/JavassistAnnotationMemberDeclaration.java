@@ -91,7 +91,7 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
             SignatureAttribute.MethodSignature signature = SignatureAttribute.toMethodSignature(descriptor);
             SymbolReference<ResolvedReferenceTypeDeclaration> returnType = typeSolver.tryToSolveType(signature.getReturnType().jvmTypeName());
             if (returnType.isSolved()) {
-                return new ReferenceTypeImpl(returnType.getCorrespondingDeclaration(), typeSolver);
+                return new ReferenceTypeImpl(returnType.getCorrespondingDeclaration());
             }
         } catch (BadBytecode e) {
             // We don't expect this to happen, but we handle it anyway.

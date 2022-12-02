@@ -40,17 +40,17 @@ class FunctionInterfaceLogicTest {
     @Test
     void testGetFunctionalMethodNegativeCaseOnClass() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
         assertEquals(false, FunctionalInterfaceLogic.getFunctionalMethod(string).isPresent());
     }
 
     @Test
     void testGetFunctionalMethodPositiveCasesOnInterfaces() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        ResolvedType function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Function.class, typeSolver), typeSolver);
+        ResolvedType function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Function.class, typeSolver));
         assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
         assertEquals("apply", FunctionalInterfaceLogic.getFunctionalMethod(function).get().getName());
-        ResolvedType consumer = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Consumer.class, typeSolver), typeSolver);
+        ResolvedType consumer = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Consumer.class, typeSolver));
         assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(consumer).isPresent());
         assertEquals("accept", FunctionalInterfaceLogic.getFunctionalMethod(consumer).get().getName());
     }
@@ -58,7 +58,7 @@ class FunctionInterfaceLogicTest {
     @Test
     void testGetFunctionalMethodWith2AbstractMethodsInHierarcy() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        ResolvedType function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Foo.class, typeSolver), typeSolver);
+        ResolvedType function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Foo.class, typeSolver));
         assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
         assertEquals("foo", FunctionalInterfaceLogic.getFunctionalMethod(function).get().getName());
     }

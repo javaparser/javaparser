@@ -83,8 +83,8 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
         // Since List is an interface, Object cannot be an ancestor of List
         ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(list.getTypeParameters().get(0));
-        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.util.Collection"));
-        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.lang.Iterable"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(typeVariable)), ancestors.get("java.util.Collection"));
+        assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(typeVariable)), ancestors.get("java.lang.Iterable"));
     }
     
 	@Test
@@ -96,9 +96,9 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
 		ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(list.getTypeParameters().get(0));
 		assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver),
-				ImmutableList.of(typeVariable), typeResolver), ancestors.get(0));
+				ImmutableList.of(typeVariable)), ancestors.get(0));
 		assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver),
-				ImmutableList.of(typeVariable), typeResolver), ancestors.get(1));
+				ImmutableList.of(typeVariable)), ancestors.get(1));
 	}
 	
 	@Test
@@ -108,18 +108,18 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 		List<ResolvedReferenceType> ancestors = obj.getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc);
 		assertEquals(6, ancestors.size());
 
-		assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Buffer.class, typeResolver), typeResolver),
+		assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Buffer.class, typeResolver)),
 				ancestors.get(0));
 		assertEquals(
-				new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Appendable.class, typeResolver), typeResolver),
+				new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Appendable.class, typeResolver)),
 				ancestors.get(2));
 		assertEquals(
-				new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(CharSequence.class, typeResolver), typeResolver),
+				new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(CharSequence.class, typeResolver)),
 				ancestors.get(3));
 		assertEquals(
-				new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Readable.class, typeResolver), typeResolver),
+				new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Readable.class, typeResolver)),
 				ancestors.get(4));
-		assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver),
+		assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver)),
 				ancestors.get(5));
 	}
 

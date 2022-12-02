@@ -715,7 +715,7 @@ public class BoundSet {
 
                     boolean throwsBound = bounds.stream().anyMatch(b -> b.isThrowsBoundOn(alphaI));
                     if (Ti == null && throwsBound && properUpperBoundsAreAtMostExceptionThrowableAndObject(alphaI)) {
-                        Ti = new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_RUNTIME_EXCEPTION), typeSolver);
+                        Ti = new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_RUNTIME_EXCEPTION));
                     }
 
                     //   - Otherwise, where αi has proper upper bounds U1, ..., Uk, Ti = glb(U1, ..., Uk) (§5.1.10).

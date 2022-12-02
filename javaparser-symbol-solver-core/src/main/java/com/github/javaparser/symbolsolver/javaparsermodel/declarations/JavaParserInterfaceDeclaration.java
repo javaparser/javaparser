@@ -141,7 +141,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
         List<ResolvedReferenceType> interfaces = new ArrayList<>();
         for (ClassOrInterfaceType t : wrappedNode.getExtendedTypes()) {
             interfaces.add(new ReferenceTypeImpl(
-                    solveType(t.getName().getId()).getCorrespondingDeclaration().asInterface(), typeSolver));
+                    solveType(t.getName().getId()).getCorrespondingDeclaration().asInterface()));
         }
         return interfaces;
     }
@@ -408,11 +408,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
-            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
+            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
         }
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
                 .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                 .collect(Collectors.toList());
-        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
+        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
     }
 }

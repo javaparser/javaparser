@@ -192,12 +192,12 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         void whenSameClassButWithDifferentTypeParametersIsProvided() {
             ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
 
-            ReferenceTypeImpl javaLangObject = new ReferenceTypeImpl(reflectionTypeSolver.getSolvedJavaLangObject(), typeSolver);
+            ReferenceTypeImpl javaLangObject = new ReferenceTypeImpl(reflectionTypeSolver.getSolvedJavaLangObject());
             ResolvedWildcard wildCard = ResolvedWildcard.extendsBound(javaLangObject);
 
             JavassistInterfaceDeclaration nodeWithImplements = (JavassistInterfaceDeclaration) typeSolver.solveType(CLASS_TO_SOLVE);
-            ResolvedType typeA = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(wildCard), typeSolver);
-            ResolvedType typeB = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(javaLangObject), typeSolver);
+            ResolvedType typeA = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(wildCard));
+            ResolvedType typeB = new ReferenceTypeImpl(nodeWithImplements, Collections.singletonList(javaLangObject));
 
             assertFalse(typeB.isAssignableBy(typeA), "This should not be allowed:" +
                     " NodeWithImplements<Object> node = new NodeWithImplements<? extends Object>()");

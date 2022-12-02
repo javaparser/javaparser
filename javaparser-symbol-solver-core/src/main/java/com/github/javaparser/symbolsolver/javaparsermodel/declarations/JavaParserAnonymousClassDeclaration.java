@@ -118,7 +118,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
     @Override
     protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 
     @Override
@@ -127,7 +127,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
         if (superRRTD == null) {
             return Optional.empty();
         }
-        return Optional.of(new ReferenceTypeImpl(superRRTD, typeSolver));
+        return Optional.of(new ReferenceTypeImpl(superRRTD));
     }
 
     @Override

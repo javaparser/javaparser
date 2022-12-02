@@ -446,7 +446,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     @Override
     protected ResolvedReferenceType object() {
         ResolvedReferenceTypeDeclaration solvedJavaLangObject = typeSolver.getSolvedJavaLangObject();
-        return new ReferenceTypeImpl(solvedJavaLangObject, typeSolver);
+        return new ReferenceTypeImpl(solvedJavaLangObject);
     }
 
     @Override
@@ -486,7 +486,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         }
 
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
-            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
+            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
         }
 
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
@@ -494,6 +494,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
                 .map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                 .collect(Collectors.toList());
 
-        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
+        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
     }
 }

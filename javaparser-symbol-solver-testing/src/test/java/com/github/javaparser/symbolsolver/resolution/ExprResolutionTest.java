@@ -45,7 +45,7 @@ class ExprResolutionTest extends AbstractResolutionTest {
     @BeforeEach
     void setup() {
         ts = new ReflectionTypeSolver();
-        stringType = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
+        stringType = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()));
     }
 
     // JLS 5.6.2. Binary Numeric Promotion

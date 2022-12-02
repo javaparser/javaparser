@@ -172,7 +172,7 @@ public class TypeHelper {
     // get the resolved boxed type of the specified primitive type
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver ) {
         SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration =  typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
-        return new ReferenceTypeImpl(typeDeclaration.getCorrespondingDeclaration(), typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration.getCorrespondingDeclaration());
     }
 
     public static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
@@ -353,7 +353,7 @@ public class TypeHelper {
         // Let P1...Pn be the type parameters of I with corresponding bounds B1...Bn. For all i (1 ≤ i ≤ n),
         // Ti is derived according to the form of Ai:
 
-        ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+        ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
 
         for (int i=0;i<AIs.size();i++) {
             ResolvedType Ai = AIs.get(i);
@@ -405,7 +405,7 @@ public class TypeHelper {
             TIs.add(Ti);
         }
 
-        return new ReferenceTypeImpl(originalTypeDeclaration, TIs, typeSolver);
+        return new ReferenceTypeImpl(originalTypeDeclaration, TIs);
     }
 
     public static MethodType getFunctionType(ResolvedType type) {

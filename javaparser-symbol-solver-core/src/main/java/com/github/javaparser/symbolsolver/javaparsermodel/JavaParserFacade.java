@@ -355,7 +355,7 @@ public class JavaParserFacade {
                         .solveType(nameExpr.getNameAsString());
                 if (typeDeclaration.isSolved() && typeDeclaration.getCorrespondingDeclaration() instanceof ResolvedReferenceTypeDeclaration) {
                     ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = (ResolvedReferenceTypeDeclaration) typeDeclaration.getCorrespondingDeclaration();
-                    return ReferenceTypeImpl.undeterminedParameters(resolvedReferenceTypeDeclaration, typeSolver);
+                    return ReferenceTypeImpl.undeterminedParameters(resolvedReferenceTypeDeclaration);
                 }
             }
             throw failureHandler.handle(e);
@@ -694,7 +694,7 @@ public class JavaParserFacade {
         if (typeDeclaration.isTypeParameter()) {
             return new ResolvedTypeVariable(typeDeclaration.asTypeParameter());
         } else {
-            return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters, typeSolver);
+            return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters);
         }
     }
 
@@ -852,15 +852,15 @@ public class JavaParserFacade {
     public ResolvedType getTypeOfThisIn(Node node) {
         // TODO consider static methods
         if (node instanceof ClassOrInterfaceDeclaration) {
-            return new ReferenceTypeImpl(getTypeDeclaration((ClassOrInterfaceDeclaration) node), typeSolver);
+            return new ReferenceTypeImpl(getTypeDeclaration((ClassOrInterfaceDeclaration) node));
         }
         if (node instanceof EnumDeclaration) {
             JavaParserEnumDeclaration enumDeclaration = new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
-            return new ReferenceTypeImpl(enumDeclaration, typeSolver);
+            return new ReferenceTypeImpl(enumDeclaration);
         }
         if (node instanceof ObjectCreationExpr && ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
             JavaParserAnonymousClassDeclaration anonymousDeclaration = new JavaParserAnonymousClassDeclaration((ObjectCreationExpr) node, typeSolver);
-            return new ReferenceTypeImpl(anonymousDeclaration, typeSolver);
+            return new ReferenceTypeImpl(anonymousDeclaration);
         }
         return getTypeOfThisIn(demandParentNode(node));
     }
@@ -891,7 +891,7 @@ public class JavaParserFacade {
         } else {
             declaration = new ReflectionClassDeclaration(clazz, typeSolver);
         }
-        return new ReferenceTypeImpl(declaration, typeSolver);
+        return new ReferenceTypeImpl(declaration);
     }
 
 }

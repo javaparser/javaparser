@@ -91,7 +91,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             lambdaType.asReferenceType().getTypeDeclaration().ifPresent(typeDeclaration -> {
                                 inferenceContext.addPair(
                                         lambdaType,
-                                        new ReferenceTypeImpl(typeDeclaration, typeSolver)
+                                        new ReferenceTypeImpl(typeDeclaration)
                                 );
                             });
 

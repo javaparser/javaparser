@@ -56,8 +56,8 @@ class InferenceContextTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
+        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
         listOfString = listOf(string);
         tpE = mock(ResolvedTypeParameterDeclaration.class);
         when(tpE.getName()).thenReturn("T");
@@ -66,7 +66,7 @@ class InferenceContextTest {
     }
 
     private ResolvedReferenceType listOf(ResolvedType elementType) {
-        return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType), typeSolver);
+        return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType));
     }
 
     @Test

@@ -61,21 +61,21 @@ class PrimitiveTypeTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
+        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
         arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
         arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList())))));
 
-        booleanBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
-        characterBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
-        byteBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
-        shortBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
-        integerBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
-        longBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
-        floatBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
-        doubleBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
+        booleanBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver));
+        characterBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Character.class, typeSolver));
+        byteBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Byte.class, typeSolver));
+        shortBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Short.class, typeSolver));
+        integerBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver));
+        longBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Long.class, typeSolver));
+        floatBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Float.class, typeSolver));
+        doubleBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver));
 
     }
 

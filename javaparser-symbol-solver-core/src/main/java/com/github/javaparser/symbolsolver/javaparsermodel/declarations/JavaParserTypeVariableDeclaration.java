@@ -61,7 +61,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration i
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override

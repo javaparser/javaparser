@@ -54,17 +54,17 @@ class ArrayTypeTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
+        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
         arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
         arrayOfStrings = new ResolvedArrayType(STRING);
         tpA = ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
         arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ResolvedTypeVariable(tpA)), typeSolver));
+                ImmutableList.of(new ResolvedTypeVariable(tpA))));
         arrayOfListOfStrings = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver));
+                ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver)))));
     }
 
     @Test
@@ -144,7 +144,7 @@ class ArrayTypeTest {
         assertEquals(arrayOfListOfStrings, arrayOfListOfStrings.replaceTypeVariables(tpA, OBJECT));
         ResolvedArrayType arrayOfListOfObjects = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(OBJECT), typeSolver));
+                ImmutableList.of(OBJECT)));
         assertTrue(arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).isArray());
         assertEquals(ImmutableList.of(OBJECT),
                 arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType()
@@ -154,7 +154,7 @@ class ArrayTypeTest {
                         .asReferenceType().getTypeDeclaration().get());
         assertEquals(new ReferenceTypeImpl(
                         new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                        ImmutableList.of(OBJECT), typeSolver),
+                        ImmutableList.of(OBJECT)),
                 arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType());
         assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceTypeVariables(tpA, STRING));

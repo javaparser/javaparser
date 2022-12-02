@@ -80,7 +80,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     public ResolvedType getUsage(Node node) {
-        return new ReferenceTypeImpl(this, typeSolver);
+        return new ReferenceTypeImpl(this);
     }
 
     @Override
@@ -285,7 +285,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     public List<ResolvedReferenceType> getInterfacesExtended() {
         List<ResolvedReferenceType> res = new ArrayList<>();
         for (Class i : clazz.getInterfaces()) {
-            res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
+            res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver)));
         }
         return res;
     }

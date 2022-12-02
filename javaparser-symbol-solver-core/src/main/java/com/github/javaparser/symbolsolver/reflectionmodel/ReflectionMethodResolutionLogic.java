@@ -68,7 +68,7 @@ class ReflectionMethodResolutionLogic {
         }
 
         if (scopeType.getAncestors().isEmpty()){
-            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
             objectClass.getTypeDeclaration().ifPresent(objectTypeDeclaration -> {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectTypeDeclaration, name, parameterTypes, staticOnly);
                 if (ref.isSolved()) {
@@ -88,7 +88,7 @@ class ReflectionMethodResolutionLogic {
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
                 for (int i = 0; i < scopeType.getTypeParameters().size(); i++) {
-                    typeParameterValues.add(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
+                    typeParameterValues.add(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)));
                 }
             }
         }
@@ -117,7 +117,7 @@ class ReflectionMethodResolutionLogic {
         }
 
         if (ancestors.isEmpty()) {
-            Optional<ResolvedReferenceTypeDeclaration> optionalObjectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).getTypeDeclaration();
+            Optional<ResolvedReferenceTypeDeclaration> optionalObjectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)).getTypeDeclaration();
             if (optionalObjectClass.isPresent()) {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(optionalObjectClass.get(), name, argumentsTypes);
                 if (ref.isSolved()) {

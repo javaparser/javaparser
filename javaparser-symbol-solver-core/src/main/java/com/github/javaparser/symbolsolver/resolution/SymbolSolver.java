@@ -118,7 +118,7 @@ public class SymbolSolver {
             return genericType.get();
         }
         ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(name);
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration);
     }
 
     /**

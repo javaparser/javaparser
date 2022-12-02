@@ -51,6 +51,6 @@ public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDe
     public ResolvedType getType() {
         Class<?> enumClass = enumConstant.getDeclaringClass();
         ResolvedReferenceTypeDeclaration typeDeclaration = new ReflectionEnumDeclaration(enumClass, typeSolver);
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration);
     }
 }

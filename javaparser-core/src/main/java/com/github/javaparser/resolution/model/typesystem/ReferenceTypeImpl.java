@@ -21,8 +21,6 @@
 
 package com.github.javaparser.resolution.model.typesystem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -34,15 +32,12 @@ import java.util.stream.Collectors;
 
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
-import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeTransformer;
@@ -52,36 +47,30 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 /**
  * @author Federico Tomassetti
  */
-// TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
-//      and to get the Object type declaration
 public class ReferenceTypeImpl extends ResolvedReferenceType {
 	
-    private TypeSolver typeSolver;
-
-    public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
                 ResolvedTypeVariable::new
-        ).collect(Collectors.toList()), typeSolver);
+        ).collect(Collectors.toList()));
     }
 
     @Override
     protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParametersCorrected) {
-        return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected);
     }
 
     @Override
     protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration) {
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration);
     }
 
-    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration) {
         super(typeDeclaration);
-        this.typeSolver = typeSolver;
     }
 
-    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments) {
         super(typeDeclaration, typeArguments);
-        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -177,7 +166,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         if (this.isRawType()) {
             return this;
         }
-        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList(), typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList());
     }
 
     @Override

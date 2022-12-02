@@ -118,7 +118,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
 
                     // Resolve each type variable of the lambda, and use this later to infer the type of each
                     // implicit parameter
-                    inferenceContext.addPair(new ReferenceTypeImpl(functionalMethod.declaringType(), typeSolver), lambdaType);
+                    inferenceContext.addPair(new ReferenceTypeImpl(functionalMethod.declaringType()), lambdaType);
 
                     // Now resolve the argument type using the inference context
                     ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(type));

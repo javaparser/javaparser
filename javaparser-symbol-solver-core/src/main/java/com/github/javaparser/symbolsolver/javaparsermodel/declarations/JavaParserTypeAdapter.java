@@ -74,7 +74,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         List<ResolvedReferenceType> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
+        ancestorsOfOther.add(new ReferenceTypeImpl(other));
         for (ResolvedReferenceType ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;

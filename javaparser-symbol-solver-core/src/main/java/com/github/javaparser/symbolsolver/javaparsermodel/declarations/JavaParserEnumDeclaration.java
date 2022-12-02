@@ -266,7 +266,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                     .getTypeParameters()
                     .get(0);
             enumClass = enumClass.deriveTypeParameters(new ResolvedTypeParametersMap.Builder()
-                    .setValue(eTypeParameter, new ReferenceTypeImpl(this, typeSolver))
+                    .setValue(eTypeParameter, new ReferenceTypeImpl(this))
                     .build());
             ancestors.add(enumClass);
         } else {
@@ -300,12 +300,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
-            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
+            return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType());
         }
         List<ResolvedType> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
                 .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                 .collect(Collectors.toList());
-        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
+        return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
     }
 
     /**
@@ -380,7 +380,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public ResolvedType getReturnType() {
-            return new ResolvedArrayType(new ReferenceTypeImpl(enumDeclaration, typeSolver));
+            return new ResolvedArrayType(new ReferenceTypeImpl(enumDeclaration));
         }
 
         @Override
@@ -474,7 +474,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public ResolvedType getReturnType() {
-            return new ReferenceTypeImpl(enumDeclaration, typeSolver);
+            return new ReferenceTypeImpl(enumDeclaration);
         }
 
         @Override
@@ -493,7 +493,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
                     @Override
                     public ResolvedType getType() {
-                        return new ReferenceTypeImpl(typeSolver.solveType("java.lang.String"), typeSolver);
+                        return new ReferenceTypeImpl(typeSolver.solveType("java.lang.String"));
                     }
 
                     @Override

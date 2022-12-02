@@ -41,7 +41,7 @@ public class MyObjectProvider implements ObjectProvider {
 
     @Override
     public ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, new ReflectionTypeSolver()), new ReflectionTypeSolver());
+        return new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, new ReflectionTypeSolver()));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MyObjectProvider implements ObjectProvider {
         if (!typeDeclaration.getTypeParameters().isEmpty()) {
             throw new UnsupportedOperationException();
         }
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration);
     }
 
 }

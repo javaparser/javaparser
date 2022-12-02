@@ -137,6 +137,6 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
     
     @Override
     public ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 }

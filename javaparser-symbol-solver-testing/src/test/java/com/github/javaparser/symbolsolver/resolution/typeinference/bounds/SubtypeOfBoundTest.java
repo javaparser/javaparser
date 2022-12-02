@@ -42,11 +42,11 @@ import static org.mockito.Mockito.mock;
 class SubtypeOfBoundTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
-    private ResolvedReferenceType iterableType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Iterable.class.getCanonicalName()), typeSolver);
-    private ResolvedReferenceType listType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(List.class.getCanonicalName()), typeSolver);
-    private ResolvedType integerType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Integer.class.getCanonicalName()), typeSolver);
-    private ResolvedType doubleType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Double.class.getCanonicalName()), typeSolver);
-    private ResolvedType objectType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Object.class.getCanonicalName()), typeSolver);
+    private ResolvedReferenceType iterableType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Iterable.class.getCanonicalName()));
+    private ResolvedReferenceType listType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(List.class.getCanonicalName()));
+    private ResolvedType integerType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Integer.class.getCanonicalName()));
+    private ResolvedType doubleType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Double.class.getCanonicalName()));
+    private ResolvedType objectType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Object.class.getCanonicalName()));
 
     @Test
     void recognizeProperLowerBound1() {
@@ -92,8 +92,8 @@ class SubtypeOfBoundTest {
 
         InferenceVariable alpha = new InferenceVariable("α", typeParameterDeclaration1);
         InferenceVariable beta = new InferenceVariable("β", typeParameterDeclaration2);
-        ResolvedType iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration().get(), Arrays.asList(ResolvedWildcard.UNBOUNDED), typeSolver);
-        ResolvedType listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration().get(), Arrays.asList(beta), typeSolver);
+        ResolvedType iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration().get(), Arrays.asList(ResolvedWildcard.UNBOUNDED));
+        ResolvedType listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration().get(), Arrays.asList(beta));
 
         Bound bound1 = new SubtypeOfBound(alpha, iterableOfWildcard);
         Bound bound2 = new SubtypeOfBound(beta, objectType);

@@ -73,9 +73,9 @@ class ReflectionClassAdapter {
             List<ResolvedType> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                     .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                     .collect(Collectors.toList());
-            return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver));
+            return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters));
         }
-        return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver));
+        return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver)));
     }
 
     public List<ResolvedReferenceType> getInterfaces() {
@@ -86,9 +86,9 @@ class ReflectionClassAdapter {
                 List<ResolvedType> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                         .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                         .collect(Collectors.toList());
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) ((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters, typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) ((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters));
             } else {
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) superInterface, typeSolver), typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) superInterface, typeSolver)));
             }
         }
         return interfaces;
@@ -103,7 +103,7 @@ class ReflectionClassAdapter {
 			} else {
 				// Inject the implicitly added extends java.lang.Object
 				ReferenceTypeImpl object = new ReferenceTypeImpl(
-						new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+						new ReflectionClassDeclaration(Object.class, typeSolver));
 				ancestors.add(object);
 			}
 		}

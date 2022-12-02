@@ -80,7 +80,7 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         }
         SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
         if (rrtd.isSolved()) {
-            return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration(), typeSolver);
+            return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration());
         }
         throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
     }

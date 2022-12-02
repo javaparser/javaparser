@@ -61,9 +61,9 @@ class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
         typeSolver = combinedTypeSolverNewCode;
 
         TypeSolver ts = new ReflectionTypeSolver();
-        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
-        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()), ts);
-        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
+        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()));
+        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()));
+        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC));
     }
 
     @Test

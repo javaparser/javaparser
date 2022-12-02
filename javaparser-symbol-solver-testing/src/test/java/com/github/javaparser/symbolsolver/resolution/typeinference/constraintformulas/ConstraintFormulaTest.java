@@ -39,7 +39,7 @@ import static org.mockito.Mockito.mock;
 class ConstraintFormulaTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
-    private ResolvedType stringType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
+    private ResolvedType stringType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()));
 
     /**
      * From JLS 18.1.2

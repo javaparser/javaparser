@@ -53,9 +53,9 @@ class LazyTypeTest extends AbstractSymbolResolutionTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
-        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
-        baz = new ReferenceTypeImpl(new ReflectionClassDeclaration(Baz.class, typeSolver), typeSolver);
+        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver));
+        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver));
+        baz = new ReferenceTypeImpl(new ReflectionClassDeclaration(Baz.class, typeSolver));
         lazyFoo = lazy(foo);
         lazyBar = lazy(bar);
         lazyBaz = lazy(baz);

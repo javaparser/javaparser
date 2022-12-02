@@ -45,7 +45,7 @@ class TypeVariableUsageTest {
         tpA = new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
         
         typeSolver = new ReflectionTypeSolver();
-        tpString = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        tpString = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
     }
 
     @Test

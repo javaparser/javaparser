@@ -62,7 +62,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        ancestors.add(new ReferenceTypeImpl(typeSolver.solveType("java.lang.annotation.Annotation"), typeSolver));
+        ancestors.add(new ReferenceTypeImpl(typeSolver.solveType("java.lang.annotation.Annotation")));
         return ancestors;
     }
 

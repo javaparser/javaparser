@@ -112,7 +112,7 @@ public class JavassistMethodLikeDeclarationAdapter {
         }
 
         ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(exceptions[index]);
-        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList(), typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList());
     }
 
     public ResolvedType getReturnType() {

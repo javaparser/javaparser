@@ -145,7 +145,7 @@ class JavassistUtils {
             List<ResolvedType> typeArguments = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
             ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
                     removeTypeArguments(internalNameToCanonicalName(getTypeName(classType))));
-            return new ReferenceTypeImpl(typeDeclaration, typeArguments, typeSolver);
+            return new ReferenceTypeImpl(typeDeclaration, typeArguments);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
             SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable) signatureType;
             Optional<ResolvedTypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
@@ -208,8 +208,7 @@ class JavassistUtils {
     private static ResolvedType getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable, TypeSolver typeSolver) {
         Optional<ResolvedType> type = typeParametrizable.findTypeParameter(typeName).map(ResolvedTypeVariable::new);
         return type.orElseGet(() -> new ReferenceTypeImpl(
-                typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName))),
-                typeSolver));
+                typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName)))));
     }
 
     private static ResolvedType typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {

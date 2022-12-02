@@ -63,7 +63,7 @@ class VarTypeTest {
 
         ResolvedType resolvedType = varType.resolve();
 
-        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver), resolvedType);
+        assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver)), resolvedType);
     }
 
     @Test

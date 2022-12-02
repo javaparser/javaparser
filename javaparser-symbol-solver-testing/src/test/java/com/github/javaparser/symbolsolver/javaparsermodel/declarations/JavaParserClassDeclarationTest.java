@@ -99,9 +99,9 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         typeSolverNewCode = combinedTypeSolverNewCode;
 
         TypeSolver ts = new ReflectionTypeSolver();
-        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
-        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()), ts);
-        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
+        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()));
+        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()));
+        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC));
         
         // init parser
         ParserConfiguration configuration = new ParserConfiguration()
@@ -541,7 +541,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals(3, classDeclaration.getAllFields().size());
 
-        ReferenceTypeImpl rtClassDeclaration = new ReferenceTypeImpl(classDeclaration, typeSolver);
+        ReferenceTypeImpl rtClassDeclaration = new ReferenceTypeImpl(classDeclaration);
 
         assertEquals("s", classDeclaration.getAllFields().get(0).getName());
         assertEquals(string, classDeclaration.getAllFields().get(0).getType());
@@ -1003,7 +1003,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         CompilationUnit tree = treeOf(lines);
         List<ResolvedType> results = Lists.newLinkedList();
         for (ClassOrInterfaceDeclaration classTree : tree.findAll(ClassOrInterfaceDeclaration.class)) {
-            results.add(new ReferenceTypeImpl(classTree.resolve(), typeSolver));
+            results.add(new ReferenceTypeImpl(classTree.resolve()));
         }
         return results;
     }

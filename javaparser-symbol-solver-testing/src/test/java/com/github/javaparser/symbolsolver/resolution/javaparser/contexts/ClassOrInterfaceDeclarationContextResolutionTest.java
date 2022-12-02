@@ -402,7 +402,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
 
         SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), false);
         assertEquals(true, ref.isSolved());
@@ -482,7 +482,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
                                                                  new ReflectionTypeSolver());
 
-        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo4", ImmutableList.of(stringType));
         assertEquals(true, ref.isPresent());

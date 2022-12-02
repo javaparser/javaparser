@@ -90,7 +90,7 @@ public class ReflectionFactory {
             } else if (c.isArray()) {
                 return new ResolvedArrayType(typeUsageFor(c.getComponentType(), typeSolver));
             } else {
-                return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver), typeSolver);
+                return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver));
             }
         } else if (type instanceof GenericArrayType) {
             GenericArrayType genericArrayType = (GenericArrayType) type;

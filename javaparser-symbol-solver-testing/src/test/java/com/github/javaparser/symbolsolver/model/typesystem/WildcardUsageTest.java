@@ -64,10 +64,10 @@ class WildcardUsageTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
-        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
-        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver));
+        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver));
+        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
+        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
         superFoo = ResolvedWildcard.superBound(foo);
         superBar = ResolvedWildcard.superBound(bar);
         extendsFoo = ResolvedWildcard.extendsBound(foo);

@@ -65,7 +65,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
 
         if (s.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            ResolvedType sFirst = new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()), typeSolver);
+            ResolvedType sFirst = new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()));
             return ReductionResult.oneConstraint(new TypeCompatibleWithType(typeSolver, sFirst, t));
         }
 
@@ -73,7 +73,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
 
         if (t.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            ResolvedType tFirst = new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()), typeSolver);
+            ResolvedType tFirst = new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()));
             return ReductionResult.oneConstraint(new TypeSameAsType(s, tFirst));
         }
 
