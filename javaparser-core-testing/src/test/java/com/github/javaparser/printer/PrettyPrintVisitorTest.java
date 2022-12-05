@@ -381,7 +381,7 @@ class PrettyPrintVisitorTest extends TestParser {
 
         assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
-                "    // line1\n" +
+                "    //   line1\n" +
                 "    void abc() {\n" +
                 "    }\n" +
                 "}\n", cu.toString());
@@ -402,8 +402,8 @@ class PrettyPrintVisitorTest extends TestParser {
         assertEqualsStringIgnoringEol("class A {\n" +
                 "\n" +
                 "    public void helloWorld(String greeting, String name) {\n" +
-                "        // sdfsdfsdf\n" +
-                "        // sdfds\n" +
+                "        //sdfsdfsdf\n" +
+                "        //sdfds\n" +
                 "        /*\n" +
                 "                            dgfdgfdgfdgfdgfd\n" +
                 "         */\n" +
