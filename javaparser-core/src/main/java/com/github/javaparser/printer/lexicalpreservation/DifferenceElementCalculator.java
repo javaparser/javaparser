@@ -173,6 +173,8 @@ class DifferenceElementCalculator {
         int originalIndex = 0;
         int afterIndex = 0;
         int commonChildrenIndex = 0;
+        int posOfNextChildInOriginal = -1; // undefined
+        int posOfNextChildInAfter = -1; // undefined
         // The algorithm is based on common child elements. 
         // It first analyzes the elements preceding this child. 
         // Then it keeps the common element and continues the analysis between the element 
@@ -180,9 +182,19 @@ class DifferenceElementCalculator {
         while (commonChildrenIndex < commonChildren.size()) {
             ChildPositionInfo child = commonChildren.get(commonChildrenIndex++);
             // search the position of the node "child" in the original list of cms element
-            int posOfNextChildInOriginal = childrenInOriginal.stream().filter(i -> i.equals(child)).map(i -> i.position).findFirst().get();
+            final int currentPosOfNextChildInOriginal = posOfNextChildInOriginal;
+            final int currentPosOfNextChildInAfter = posOfNextChildInAfter;
+            posOfNextChildInOriginal = childrenInOriginal.stream()
+            		.filter(i -> i.equals(child))
+            		.map(i -> i.position)
+            		.filter(position -> position > currentPosOfNextChildInOriginal)
+            		.findFirst().orElse(posOfNextChildInOriginal);
             // search the position of the node "child" in the modified list of cms element
-            int posOfNextChildInAfter = childrenInAfter.stream().filter(i -> i.equals(child)).map(i -> i.position).findFirst().get();
+            posOfNextChildInAfter = childrenInAfter.stream()
+            		.filter(i -> i.equals(child))
+            		.map(i -> i.position)
+            		.filter(position -> position > currentPosOfNextChildInAfter)
+            		.findFirst().orElse(posOfNextChildInAfter);
             // Imagine that the common elements has been moved, for example in the case where the parameters of a method are reversed
 			// In this case the afterIndex will be greater than the position of the child in
 			// the list
@@ -201,8 +213,11 @@ class DifferenceElementCalculator {
                 elements.addAll(calculateImpl(originalSub, afterSub));
             }
             if (afterIndex <= posOfNextChildInAfter) {
+            	// we need to keep the current common node
             	elements.add(new Kept(new CsmChild(child.node)));
             } else {
+            	// In this case the current node was not found in the list after change
+            	// so we need to remove it.
             	elements.add(new Removed(new CsmChild(child.node)));
             }
             originalIndex = originalIndex <= posOfNextChildInOriginal ? posOfNextChildInOriginal + 1 : originalIndex;
