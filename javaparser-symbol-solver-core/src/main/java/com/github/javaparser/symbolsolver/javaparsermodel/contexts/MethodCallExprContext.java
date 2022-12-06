@@ -21,9 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -358,6 +360,24 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
                 // match only the varargs type
                 matchTypeParameters(expectedType, actualType, matchedTypeParameters);
+            } else if (methodUsage.getDeclaration().getNumberOfParams() == 1) {
+            	// In this case the method declares only one parameter which is a variadic parameter.
+            	// At this stage we can consider that the actual parameters all have the same type.
+                ResolvedType expectedType =
+                    methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
+                // the varargs corresponding type can not be an Array<T> because of the assumption
+//                ResolvedType actualType = new ResolvedArrayType(actualParamTypes.get(actualParamTypes.size() - 1));
+                ResolvedType actualType = actualParamTypes.get(actualParamTypes.size() - 1);
+                if (!expectedType.isAssignableBy(actualType)) {
+                    throw new UnsupportedOperationException(
+                    		String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                            expectedType,
+                            actualType,
+                            methodUsage.getDeclaration(),
+                            methodUsage));
+                }
+                matchTypeParameters(expectedType, actualType, matchedTypeParameters);
+                return replaceTypeParameter(methodUsage, matchedTypeParameters);
             } else {
                 return methodUsage;
             }
@@ -372,11 +392,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             ResolvedType actualType = actualParamTypes.get(i);
             matchTypeParameters(expectedType, actualType, matchedTypeParameters);
         }
-        for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
-            methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
-        }
+        methodUsage = replaceTypeParameter(methodUsage, matchedTypeParameters);
         return methodUsage;
     }
+
+	private MethodUsage replaceTypeParameter(MethodUsage methodUsage,
+			Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
+		for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
+            methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
+        }
+		return methodUsage;
+	}
 
     private void matchTypeParameters(ResolvedType expectedType, ResolvedType actualType, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
