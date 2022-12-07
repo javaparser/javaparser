@@ -44,7 +44,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Type extends Node implements Resolvable<ResolvedType> {
+public abstract class Type extends Node implements Resolvable<ResolvedType>, ConvertibleToUsage {
 
     private NodeList<AnnotationExpr> annotations;
 

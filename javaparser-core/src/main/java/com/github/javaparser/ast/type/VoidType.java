@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.VoidTypeMetaModel;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -126,4 +128,9 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
     public Optional<VoidType> toVoidType() {
         return Optional.of(this);
     }
+
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		return ResolvedVoidType.INSTANCE;
+	}
 }

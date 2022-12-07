@@ -19,10 +19,10 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.model.resolution;
+package com.github.javaparser.resolution;
 
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 
 /**
  * An element able to find TypeDeclaration from their name.

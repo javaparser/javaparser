@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.logic;
+package com.github.javaparser.resolution.logic;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

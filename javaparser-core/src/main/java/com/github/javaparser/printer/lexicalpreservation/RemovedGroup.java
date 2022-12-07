@@ -159,7 +159,7 @@ final class RemovedGroup implements Iterable<Removed> {
             }
         } else if (startElement.isToken()) {
             CsmToken token = (CsmToken) startElement.getElement();
-            if (TokenTypes.isEndOfLineToken(token.getTokenType())) {
+            if (token.isNewLine()) {
                 hasOnlyWhitespace = true;
             }
         }

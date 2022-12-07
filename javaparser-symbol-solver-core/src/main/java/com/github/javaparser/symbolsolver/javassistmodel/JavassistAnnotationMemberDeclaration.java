@@ -28,12 +28,13 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.LongLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+
 import javassist.CtMethod;
 import javassist.bytecode.AnnotationDefaultAttribute;
 import javassist.bytecode.BadBytecode;
@@ -90,7 +91,7 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
             SignatureAttribute.MethodSignature signature = SignatureAttribute.toMethodSignature(descriptor);
             SymbolReference<ResolvedReferenceTypeDeclaration> returnType = typeSolver.tryToSolveType(signature.getReturnType().jvmTypeName());
             if (returnType.isSolved()) {
-                return new ReferenceTypeImpl(returnType.getCorrespondingDeclaration(), typeSolver);
+                return new ReferenceTypeImpl(returnType.getCorrespondingDeclaration());
             }
         } catch (BadBytecode e) {
             // We don't expect this to happen, but we handle it anyway.

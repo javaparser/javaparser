@@ -50,6 +50,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.AssociableToASTTest;
@@ -59,6 +60,7 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -66,8 +68,6 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapabilityTest;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -374,7 +374,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         
         assertEquals(12, ancestors.size());
-
+        
         ResolvedReferenceType ancestor;
 
         ancestor = ancestors.get(0);
@@ -384,15 +384,15 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
         ancestor = ancestors.get(1);
         assertEquals("com.github.javaparser.ast.Node", ancestor.getQualifiedName());
 
-        ancestor = ancestors.get(2);
+        ancestor = constructorDeclaration.getAllAncestors().get(2);
+        assertEquals("java.lang.Object", ancestor.getQualifiedName());
+        
+        ancestor = ancestors.get(3);
         assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
-        ancestor = ancestors.get(3);
+        ancestor = ancestors.get(4);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.T").get().asReferenceType().getQualifiedName());
-
-        ancestor = constructorDeclaration.getAllAncestors().get(4);
-        assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc", ancestor.getQualifiedName());

@@ -23,6 +23,8 @@ package com.github.javaparser.resolution.types;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
 /**
  * A union type is defined in java as list of types separates by pipes.
  *
@@ -40,7 +42,10 @@ public class ResolvedUnionType implements ResolvedType {
     }
 
     public Optional<ResolvedReferenceType> getCommonAncestor() {
-        Optional<List<ResolvedReferenceType>> reduce = elements.stream().map(ResolvedType::asReferenceType).map(ResolvedReferenceType::getAllAncestors).reduce((a, b) -> {
+        Optional<List<ResolvedReferenceType>> reduce = elements.stream()
+        		.map(ResolvedType::asReferenceType)
+        		.map(rt -> rt. getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc))
+        		.reduce((a, b) -> {
             ArrayList<ResolvedReferenceType> common = new ArrayList<>(a);
             common.retainAll(b);
             return common;

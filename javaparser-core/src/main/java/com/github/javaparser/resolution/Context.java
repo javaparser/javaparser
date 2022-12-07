@@ -19,19 +19,17 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.core.resolution;
+package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.quality.Nullable;
-import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +42,12 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public interface Context {
+	
+	/**
+	 * Returns the node wrapped in the context
+	 * 
+	 */
+	<N extends Node> N getWrappedNode();
 
     /**
      * @return The parent context, if there is one. For example, a method exists within a compilation unit.
@@ -273,7 +277,7 @@ public interface Context {
         }
 
         // First check if the variable is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Context parentContext = getParent().get();
         Optional<VariableDeclarator> localResolutionResults = parentContext
                 .localVariablesExposedToChild(wrappedNode)
@@ -296,7 +300,7 @@ public interface Context {
         }
 
         // First check if the parameter is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Context parentContext = getParent().get();
         Optional<Parameter> localResolutionResults = parentContext
                 .parametersExposedToChild(wrappedNode)
@@ -342,7 +346,7 @@ public interface Context {
         // FIXME: If there are multiple patterns, throw an error?
 
         // First check if the pattern is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Optional<PatternExpr> localResolutionResults = parentContext
                 .patternExprsExposedToChild(wrappedNode)
                 .stream()
@@ -363,7 +367,7 @@ public interface Context {
         }
         Context parentContext = getParent().get();
         // First check if the parameter is directly declared within this context.
-        Node wrappedNode = ((AbstractJavaParserContext) this).getWrappedNode();
+        Node wrappedNode = getWrappedNode();
         Optional<ResolvedFieldDeclaration> localResolutionResults = parentContext
                 .fieldsExposedToChild(wrappedNode)
                 .stream()
@@ -412,22 +416,6 @@ public interface Context {
      * Similar to solveMethod but we return a MethodUsage.
      * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
-        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
-        if (methodSolved.isSolved()) {
-            ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
-            if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {
-                throw new UnsupportedOperationException(String.format(
-                        "Resolved method declarations must implement %s.",
-                        TypeVariableResolutionCapability.class.getName()
-                ));
-            }
-
-            MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(this, argumentsTypes);
-            return Optional.of(methodUsage);
-        } else {
-            return Optional.empty();
-        }
-    }
+    Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes);
 
 }

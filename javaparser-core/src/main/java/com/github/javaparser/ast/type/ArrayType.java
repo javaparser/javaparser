@@ -33,7 +33,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.Pair;
 
 import java.util.ArrayList;
@@ -312,4 +314,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public int getArrayLevel() {
         return 1 + this.getComponentType().getArrayLevel();
     }
+
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		return new ResolvedArrayType(getComponentType().convertToUsage(context));
+	}
 }

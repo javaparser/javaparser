@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.model.typesystem;
+package com.github.javaparser.resolution.model.typesystem;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,66 +27,55 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeTransformer;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 /**
  * @author Federico Tomassetti
  */
-// TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
-//      and to get the Object type declaration
 public class ReferenceTypeImpl extends ResolvedReferenceType {
-
-    private TypeSolver typeSolver;
-
-    public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+	
+    public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
                 ResolvedTypeVariable::new
-        ).collect(Collectors.toList()), typeSolver);
+        ).collect(Collectors.toList()));
     }
 
     @Override
     protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParametersCorrected) {
-        return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected);
     }
 
     @Override
     protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration) {
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration);
     }
 
-    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration) {
         super(typeDeclaration);
-        this.typeSolver = typeSolver;
     }
 
-    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments) {
         super(typeDeclaration, typeArguments);
-        this.typeSolver = typeSolver;
     }
 
     @Override
     public ResolvedTypeParameterDeclaration asTypeParameter() {
-        if (this.typeDeclaration instanceof JavaParserTypeVariableDeclaration) {
-            JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) this.typeDeclaration;
-            return javaParserTypeVariableDeclaration.asTypeParameter();
-        }
-        throw new UnsupportedOperationException(this.typeDeclaration.getClass().getCanonicalName());
+    	return this.typeDeclaration.asTypeParameter();
     }
 
     /**
@@ -106,13 +95,12 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             if (this.isJavaLangObject()) {
                 return true;
             }
+            
             // Check if 'other' can be boxed to match this type
             if (isCorrespondingBoxingType(other.describe())) return true;
-
-            // Resolve the boxed type and check if it can be assigned via widening reference conversion
-            SymbolReference<ResolvedReferenceTypeDeclaration> type = typeSolver
-                    .tryToSolveType(other.asPrimitive().getBoxTypeQName());
-            return type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration);
+            
+            // All numeric types extend Number
+            return other.isNumericType() && this.isReferenceType() && this.asReferenceType().getQualifiedName().equals(Number.class.getCanonicalName());
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
@@ -152,8 +140,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return false;
         }
         if (other.isUnionType()) {
-            return other.asUnionType().getCommonAncestor()
-                    .map(ancestor -> isAssignableBy(ancestor)).orElse(false);
+        	Optional<ResolvedReferenceType> common = other.asUnionType().getCommonAncestor();
+            return common.map(ancestor -> isAssignableBy(ancestor)).orElse(false);
         }
         return false;
     }
@@ -178,7 +166,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         if (this.isRawType()) {
             return this;
         }
-        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList(), typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration, Collections.emptyList());
     }
 
     @Override
@@ -206,23 +194,26 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         return result;
     }
 
+    /*
+     * Get all ancestors with the default traverser (depth first)
+     */
+    @Override
     public List<ResolvedReferenceType> getAllAncestors() {
+        return getAllAncestors(ResolvedReferenceTypeDeclaration.depthFirstFunc);
+    }
+    
+    public List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         // We need to go through the inheritance line and propagate the type parameters
 
-        List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors();
+        List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors(traverser);
 
         ancestors = ancestors.stream()
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
 
-        // Avoid repetitions of Object
-        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
-        ResolvedReferenceTypeDeclaration objectType = typeSolver.getSolvedJavaLangObject();
-        ancestors.add(create(objectType));
-
         return ancestors;
     }
-
+    
     public List<ResolvedReferenceType> getDirectAncestors() {
         // We need to go through the inheritance line and propagate the type parameters
 
@@ -232,25 +223,17 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
                 .collect(Collectors.toList());
 
-
-        // Avoid repetitions of Object -- remove them all and, if appropriate, add it back precisely once.
-        ancestors.removeIf(ResolvedReferenceType::isJavaLangObject);
-
         // Conditionally re-insert java.lang.Object as an ancestor.
         if(this.getTypeDeclaration().isPresent()) {
             ResolvedReferenceTypeDeclaration thisTypeDeclaration = this.getTypeDeclaration().get();
+            // The superclass of interfaces is always null
             if (thisTypeDeclaration.isClass()) {
                 Optional<ResolvedReferenceType> optionalSuperClass = thisTypeDeclaration.asClass().getSuperClass();
                 boolean superClassIsJavaLangObject = optionalSuperClass.isPresent() && optionalSuperClass.get().isJavaLangObject();
                 boolean thisIsJavaLangObject = thisTypeDeclaration.asClass().isJavaLangObject();
                 if (superClassIsJavaLangObject && !thisIsJavaLangObject) {
-                    ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
+                	ancestors.add(optionalSuperClass.get());
                 }
-            } else {
-                // If this isn't a class (i.e. is enum or interface (or record?)), add java.lang.Object as a supertype
-                // TODO: Should we also add the implicit java.lang.Enum ancestor in the case of enums?
-                // TODO: getDirectAncestors() shouldn't be inserting implicit ancesters...? See also issue #2696
-                ancestors.add(create(typeSolver.getSolvedJavaLangObject()));
             }
         }
 

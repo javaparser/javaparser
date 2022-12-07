@@ -39,6 +39,7 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
@@ -50,6 +51,8 @@ import static java.util.stream.Collectors.joining;
  * Outputs the AST as formatted Java source code.
  */
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
+	
+	private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected final PrinterConfiguration configuration;
 
@@ -1609,7 +1612,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
             return;
         }
-        printer.print("// ").println(normalizeEolInTextBlock(n.getContent(), "").trim());
+        printer.print("//").println(normalizeEolInTextBlock(RTRIM.matcher(n.getContent()).replaceAll(""), ""));
     }
 
     @Override

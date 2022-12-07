@@ -47,12 +47,15 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -60,9 +63,6 @@ import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -99,9 +99,9 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         typeSolverNewCode = combinedTypeSolverNewCode;
 
         TypeSolver ts = new ReflectionTypeSolver();
-        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
-        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()), ts);
-        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
+        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()));
+        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()));
+        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC));
         
         // init parser
         ParserConfiguration configuration = new ParserConfiguration()
@@ -378,12 +378,22 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void testGetAllAncestorsWithDepthFirstTraversalOrder() {
+        ResolvedReferenceTypeDeclaration integer = typeSolver.solveType(Integer.class.getCanonicalName());
+        List<ResolvedReferenceType> ancestors = integer.getAllAncestors();
+        assertEquals("java.lang.Number", ancestors.get(0).getQualifiedName());
+        assertEquals("java.lang.Object", ancestors.get(1).getQualifiedName());
+        assertEquals("java.io.Serializable", ancestors.get(2).getQualifiedName());
+        assertEquals("java.lang.Comparable", ancestors.get(3).getQualifiedName());
+    } 
+        
+    @Test
     void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         assertEquals(12, ancestors.size());
-
+        
         ResolvedReferenceType ancestor;
 
         ancestor = ancestors.get(0);
@@ -394,14 +404,14 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("com.github.javaparser.ast.Node", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(2);
+        assertEquals("java.lang.Object", ancestor.getQualifiedName());
+        
+        ancestor = ancestors.get(3);
         assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
-        ancestor = ancestors.get(3);
+        ancestor = ancestors.get(4);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.T").get().asReferenceType().getQualifiedName());
-
-        ancestor = ancestors.get(4);
-        assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc", ancestor.getQualifiedName());
@@ -531,7 +541,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals(3, classDeclaration.getAllFields().size());
 
-        ReferenceTypeImpl rtClassDeclaration = new ReferenceTypeImpl(classDeclaration, typeSolver);
+        ReferenceTypeImpl rtClassDeclaration = new ReferenceTypeImpl(classDeclaration);
 
         assertEquals("s", classDeclaration.getAllFields().get(0).getName());
         assertEquals(string, classDeclaration.getAllFields().get(0).getType());
@@ -993,7 +1003,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         CompilationUnit tree = treeOf(lines);
         List<ResolvedType> results = Lists.newLinkedList();
         for (ClassOrInterfaceDeclaration classTree : tree.findAll(ClassOrInterfaceDeclaration.class)) {
-            results.add(new ReferenceTypeImpl(classTree.resolve(), typeSolver));
+            results.add(new ReferenceTypeImpl(classTree.resolve()));
         }
         return results;
     }

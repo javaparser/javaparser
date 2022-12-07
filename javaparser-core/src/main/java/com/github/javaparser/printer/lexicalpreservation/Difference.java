@@ -97,6 +97,55 @@ public class Difference {
         }
         return res;
     }
+    
+    /*
+     * Returns the position of the next element in the list starting from @{code fromIndex} which is a comment (Ignoring spaces)
+     * or -1 if it's not a comment.
+     */
+    private int posOfNextComment(int fromIndex, List<TextElement> elements) {
+        if (!isValidIndex(fromIndex, elements))
+            return -1;
+        ReadOnlyListIterator<TextElement> iterator = new ReadOnlyListIterator(elements, fromIndex);
+        // search for the next consecutive space characters
+        while (iterator.hasNext()) {
+            TextElement element = iterator.next();
+            if (element.isSpaceOrTab()) {
+                continue;
+            }
+            if (element.isComment()) {
+            	return iterator.index();
+            }
+            break;
+        }
+        return -1;
+    }
+    
+    /*
+     * Returns true if the next element in the list (starting from @{code fromIndex}) is a comment
+     */
+    private boolean isFollowedByComment(int fromIndex, List<TextElement> elements) {
+    	return posOfNextComment(fromIndex, elements) != -1;
+    }
+    
+    /*
+     * Removes all elements in the list starting from @{code fromIndex}) ending to @{code toIndex})
+     */
+    private void removeElements(int fromIndex, int toIndex, List<TextElement> elements) {
+    	if (!(isValidIndex(fromIndex, elements) && isValidIndex(toIndex, elements) && fromIndex <= toIndex))
+            return;
+        ListIterator<TextElement> iterator = elements.listIterator(fromIndex);
+        // removing elements
+        int count = fromIndex;
+        while (iterator.hasNext() && count <= toIndex) {
+        	TextElement element = iterator.next();
+            iterator.remove();
+            count++;
+        }
+    }
+    
+    private boolean isValidIndex(int index, List<?> elements) {
+    	return index >= 0 && index <= elements.size();
+    }
 
     /*
      * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement 
@@ -134,57 +183,103 @@ public class Difference {
     }
 
     /**
-     * If we are at the beginning of a line, with just spaces or tabs before us we should force the space to be
-     * the same as the indentation.
+     * If we are at the beginning of a line, with just spaces or tabs before/after the position of the deleted element
+     * we should force the space to be the same as the current indentation.
+     * This method handles the following case if we remove the modifier {@code public} ([ ] is an indent character)
+     * {@code 
+     * [ ][ ]public[ ][ ][ ]void[ ]m{}
+     * <-1-->      <---2--->
+     * 1/ current indentation
+     * 2/ these whitespaces must be removed
+     * }
+     * should produce
+     * {@code 
+     * [ ][ ]void[ ]m{} 
+     * }
      */
     private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
-        boolean hasOnlyWsBefore = hasOnlyWsBefore(nodeText, nodeTextIndex);
+        EnforcingIndentationContext enforcingIndentationContext = defineEnforcingIndentationContext(nodeText, nodeTextIndex);
         // the next position in the list (by default the current position)
         int res = nodeTextIndex;
-        if (hasOnlyWsBefore) {
-            res = removeExtraCharacters(nodeText, nodeTextIndex);
+        if (enforcingIndentationContext.extraCharacters > 0) {
+        	int extraCharacters = enforcingIndentationContext.extraCharacters > indentation.size() ? enforcingIndentationContext.extraCharacters - indentation.size() : 0;
+            res = removeExtraCharacters(nodeText, enforcingIndentationContext.start, extraCharacters);
+            // The next position must take into account the indentation
+            res = extraCharacters > 0 ? res + indentation.size() : res;
         }
         if (res < 0) {
             throw new IllegalStateException();
         }
         return res;
     }
+    
+    /*
+     * This data structure class hold the starting position of the first whitespace char 
+     * and the number of consecutive whitespace (or tab) characters
+     */
+    private class EnforcingIndentationContext {
+    	int start;
+    	int extraCharacters;
+    	public EnforcingIndentationContext(int start) {
+    		this.start=start;
+    		this.extraCharacters=0;
+    	}
+    }
 
     /**
+     * Remove excess white space after deleting element.
      * @param nodeText Contains a list of elements to analyze
      * @param nodeTextIndex Starting position in the input list
      * @return The current position in the list of the elements
      */
-    private int removeExtraCharacters(NodeText nodeText, int nodeTextIndex) {
+    private int removeExtraCharacters(NodeText nodeText, int nodeTextIndex, int extraCharacters) {
         int pos = nodeTextIndex;
-        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
+        int count = 0;
+        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements() && count < extraCharacters; i++) {
             if (nodeText.getTextElement(i).isNewline()) {
                 break;
             }
-            nodeText.removeElement(i);
-            pos = i;
+            nodeText.removeElement(pos);
+            count++;
         }
         return pos;
     }
 
     /**
-     * Tries to determine if there are only spaces between the previous end of line and the index
+     * Starting at {@code nodeTextIndex} this method tries to determine how many contiguous spaces there are between 
+     * the previous end of line and the next non whitespace (or tab) character
      * @param nodeText List of elements to analyze
      * @param nodeTextIndex Starting position in the input list
-     * @return
+     * @return EnforcingIndentationContext Data structure that hold the starting position of the first whitespace char and
+     * The number of consecutive whitespace (or tab) characters
      */
-    private boolean hasOnlyWsBefore(NodeText nodeText, int nodeTextIndex) {
-        boolean hasOnlyWsBefore = true;
-        for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
-            if (nodeText.getTextElement(i).isNewline()) {
-                break;
-            }
-            if (!nodeText.getTextElement(i).isSpaceOrTab()) {
-                hasOnlyWsBefore = false;
-                break;
-            }
-        }
-        return hasOnlyWsBefore;
+    private EnforcingIndentationContext defineEnforcingIndentationContext(NodeText nodeText, int nodeTextIndex) {
+    	EnforcingIndentationContext ctx = new EnforcingIndentationContext(nodeTextIndex);
+    	// compute space before nodeTextIndex value
+		if (nodeTextIndex < nodeText.numberOfElements()) {
+			for (int i = nodeTextIndex; i >= 0 && i < nodeText.numberOfElements(); i--) {
+				if (nodeText.getTextElement(i).isNewline()) {
+					break;
+				}
+				if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+					ctx = new EnforcingIndentationContext(nodeTextIndex);
+					break;
+				}
+				ctx.start = i;
+				ctx.extraCharacters++;
+			}
+			// compute space after nodeTextIndex value
+			if (nodeText.getTextElement(nodeTextIndex).isSpaceOrTab()) {
+				for (int i = nodeTextIndex + 1; i >= 0 && i < nodeText.numberOfElements(); i++) {
+					if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+						break;
+					}
+					ctx.extraCharacters++;
+				}
+			}
+		}
+        
+        return ctx;
     }
 
     /**
@@ -395,7 +490,12 @@ public class Difference {
                 }
             } else {
                 nodeText.removeElement(originalIndex);
-                if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded())) && !removedGroup.isACompleteLine()) {
+                // When we don't try to remove a complete line 
+                // and removing the element is not the first action of a replacement (removal followed by addition)
+                // (in the latter case we keep the indentation)
+                // then we want to enforce the indentation.
+                if ((diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded())) 
+                		&& !removedGroup.isACompleteLine()) {
                     originalIndex = considerEnforcingIndentation(nodeText, originalIndex);
                 }
                 // If in front we have one space and before also we had space let's drop one space
@@ -409,6 +509,12 @@ public class Difference {
                             originalElements.remove(originalIndex--);
                         }
                     }
+                }
+                // We need to know if, in the original list of elements, the deleted child node is immediately followed by a comment.
+                // If so, it should also be deleted.
+                if (isFollowedByComment(originalIndex, originalElements)) {
+                	int indexOfNextComment = posOfNextComment(originalIndex, originalElements);
+                	removeElements(originalIndex, indexOfNextComment, originalElements);
                 }
                 diffIndex++;
             }
@@ -482,10 +588,10 @@ public class Difference {
 
     // note:
     // increment originalIndex if we want to keep the original element
-    // increment diffIndex if we don't want to skip the diff element
+    // increment diffIndex if we want to skip the diff element
     private void applyKeptDiffElement(Kept kept, TextElement originalElement, boolean originalElementIsChild, boolean originalElementIsToken) {
-        if (originalElement.isComment()) {
-            originalIndex++;
+		if (originalElement.isComment()) {
+			originalIndex++;
         } else if (kept.isChild() && ((CsmChild) kept.getElement()).getChild() instanceof Comment) {
             diffIndex++;
         } else if (kept.isChild() && originalElementIsChild) {
@@ -573,7 +679,7 @@ public class Difference {
      */
     private int getArrayLevel(DifferenceElement element) {
         CsmElement csmElem = element.getElement();
-        if (csmElem instanceof LexicalDifferenceCalculator.CsmChild && ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild() instanceof ArrayType) {
+        if (isArrayType(element)) {
             Node child = ((LexicalDifferenceCalculator.CsmChild) csmElem).getChild();
             return ((ArrayType) child).getArrayLevel();
         }
@@ -830,7 +936,10 @@ public class Difference {
             boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
             boolean isFirstElement = originalIndex == 0;
             boolean previousIsWhiteSpace = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isWhiteSpace();
-            if (sufficientTokensRemainToSkip && currentIsAComment) {
+			boolean commentIsBeforeAddedElement = currentIsAComment && addedTextElement.getRange().isPresent()
+					&& nodeText.getTextElement(originalIndex).getRange()
+							.map(range -> range.isBefore(addedTextElement.getRange().get())).orElse(false);
+            if (sufficientTokensRemainToSkip && currentIsAComment && commentIsBeforeAddedElement) {
                 // Need to get behind the comment:
                 // FIXME: Why 2? This comment and the next newline?
                 originalIndex += 2;
@@ -876,7 +985,7 @@ public class Difference {
         if (addedTextElement.isNewline()) {
             boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
-            boolean nextIsNewLine = nodeText.getTextElement(originalIndex).isNewline();
+            boolean nextIsNewLine = originalElements.get(originalIndex).isNewline();
             if ((!nextIsNewLine && !nextIsRightBrace) || followedByUnindent) {
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
             }
@@ -888,24 +997,111 @@ public class Difference {
         return GeneratedJavaParserConstants.tokenImage[kind];
     }
 
-    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
-        Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-        List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
-        List<CsmElement> previousOrderElements = elementsFromPreviousOrder.getElements();
-        WrappingRangeIterator piNext = new WrappingRangeIterator(previousOrderElements.size());
-        for (int ni = 0; ni < nextOrderElements.size(); ni++) {
-            boolean found = false;
-            CsmElement ne = nextOrderElements.get(ni);
-            for (int counter = 0; counter < previousOrderElements.size() && !found; counter++) {
-                Integer pi = piNext.next();
-                CsmElement pe = previousOrderElements.get(pi);
-                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi) && DifferenceElementCalculator.matching(ne, pe)) {
-                    found = true;
-                    correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
-                }
-            }
-        }
-        return correspondanceBetweenNextOrderAndPreviousOrder;
+	/*
+	 * Considering that the lists of elements are ordered, We can find the common
+	 * elements by starting with the list before the modifications and, for each
+	 * element, by going through the list of elements containing the modifications.
+	 * 
+	 * We can find the common elements by starting with the list before the
+	 * modifications (L1) and, for each element, by going through the list of elements
+	 * containing the modifications (L2).
+	 * 
+	 * If element A in list L1 is not found in list L2, it is a deleted element. 
+	 * If element A of list L1 is found in list L2, it is a kept element. In this
+	 * case the search for the next element of the list L1 must start from the
+	 * position of the last element kept {@code syncNextIndex}.
+	 */
+	private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder,
+			CsmMix elementsFromNextOrder) {
+		Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
+		ReadOnlyListIterator<CsmElement> previousOrderElementsIterator = new ReadOnlyListIterator(
+				elementsFromPreviousOrder.getElements());
+		int syncNextIndex = 0;
+		while (previousOrderElementsIterator.hasNext()) {
+			CsmElement pe = previousOrderElementsIterator.next();
+			ReadOnlyListIterator<CsmElement> nextOrderElementsIterator = new ReadOnlyListIterator(
+					elementsFromNextOrder.getElements(), syncNextIndex);
+			while (nextOrderElementsIterator.hasNext()) {
+				CsmElement ne = nextOrderElementsIterator.next();
+				if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index())
+						&& DifferenceElementCalculator.matching(ne, pe)) {
+					correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(),
+							previousOrderElementsIterator.index());
+					// set the position to start on the next {@code nextOrderElementsIterator} iteration
+					syncNextIndex = nextOrderElementsIterator.index(); 
+					break;
+				}
+			}
+		}
+		return correspondanceBetweenNextOrderAndPreviousOrder;
+	}
+    
+    /*
+     * A list iterator which does not allow to modify the list 
+     * and which provides a method to know the current positioning 
+     */
+    private class ReadOnlyListIterator<T> implements ListIterator<T> {
+    	ListIterator<T> elements;
+    	public ReadOnlyListIterator(List<T> elements) {
+    		this(elements, 0);
+    	}
+    	
+    	public ReadOnlyListIterator(List<T> elements, int index) {
+    		this.elements = elements.listIterator(index);
+    	}
+
+		@Override
+		public boolean hasNext() {
+			return elements.hasNext();
+		}
+
+		@Override
+		public T next() {
+			return elements.next();
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return elements.hasPrevious();
+		}
+
+		@Override
+		public T previous() {
+			return elements.previous();
+		}
+
+		@Override
+		public int nextIndex() {
+			return elements.nextIndex();
+		}
+
+		@Override
+		public int previousIndex() {
+			return elements.previousIndex();
+		}
+		
+		/*
+		 * Returns the current index in the underlying list
+		 */
+		public int index() {
+			return elements.nextIndex() - 1;
+		}
+		
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void set(T e) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void add(T e) {
+			throw new UnsupportedOperationException();
+		}
+    	
     }
 
     /*

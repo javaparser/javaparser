@@ -35,6 +35,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeParameterMetaModel;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -240,4 +242,9 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
     public Optional<TypeParameter> toTypeParameter() {
         return Optional.of(this);
     }
+
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		throw new UnsupportedOperationException(getClass().getCanonicalName());
+	}
 }
