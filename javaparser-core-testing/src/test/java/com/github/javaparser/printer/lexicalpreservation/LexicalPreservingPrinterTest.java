@@ -36,6 +36,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+import com.github.javaparser.*;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.*;
+
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
@@ -64,12 +72,17 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
+
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+
+
+
 import com.github.javaparser.utils.TestUtils;
+
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     private NodeText getTextForNode(Node node) {
@@ -480,6 +493,40 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 + "}", LexicalPreservingPrinter.print(cu));
     }
 
+    @Test
+    void printASimpleMethodRemovingAStatementWithLineEndComment() {
+        String code = "class A {" + EOL
+                + "\t"      +  "foo() {" + EOL
+                + "\t\t"    + "int result = 53; // comment" + EOL
+                + "\t\t"    + "return 53;" + EOL
+                + "\t"      + "}" + EOL
+                + "}";
+        
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        ExpressionStmt stmt = cu.findAll(ExpressionStmt.class).get(0);
+        stmt.remove();
+        
+        assertEquals("class A {" + EOL
+                + "\t"      +  "foo() {" + EOL
+                + "\t\t"    + "// comment" + EOL
+                + "\t\t"    + "return 53;" + EOL
+                + "\t"      + "}" + EOL
+                + "}", LexicalPreservingPrinter.print(cu));
+    }
+    
+    @Test
+    void printASimpleMethodRemovingALineEndComment() {
+        String code = "class A { foo() { int result = 0; // comment" + EOL + "return 0; }}";
+        
+        CompilationUnit cu = parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        Comment comment = cu.findFirst(ExpressionStmt.class).get().getComment().get();
+        comment.remove();
+        
+        assertEquals("class A { foo() { int result = 0; " + EOL + "return 0; }}", LexicalPreservingPrinter.print(cu));
+    }
+    
     @Test
     void printASimpleImport() {
         String code = "import a.b.c.D;";
