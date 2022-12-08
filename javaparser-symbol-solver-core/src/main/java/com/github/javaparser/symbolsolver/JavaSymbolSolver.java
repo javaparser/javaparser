@@ -278,7 +278,7 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     @Override
     public <T> T toResolvedType(Type javaparserType, Class<T> resultClass) {
-        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(javaparserType, javaparserType);
+        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(javaparserType);
         if (resultClass.isInstance(resolvedType)) {
             return resultClass.cast(resolvedType);
         }

@@ -40,7 +40,7 @@ class TypeInClassWithAnnotationAncestorTest extends AbstractResolutionTest {
 		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassWithAnnotationAncestor");
 		MethodDeclaration method = Navigator.demandMethod(clazz, "testMethod");
 		ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver())
-				                    .convertToUsage(method.getType(), method.getType());
+				                    .convertToUsage(method.getType());
 		assertFalse(type.isTypeVariable());
 		assertEquals("java.lang.String", type.describe());
 	}

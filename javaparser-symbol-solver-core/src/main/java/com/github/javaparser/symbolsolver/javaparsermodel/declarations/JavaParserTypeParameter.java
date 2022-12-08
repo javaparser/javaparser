@@ -156,7 +156,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     private Bound toBound(ClassOrInterfaceType classOrInterfaceType, TypeSolver typeSolver) {
-        ResolvedType type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
+        ResolvedType type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType);
         return Bound.extendsBound(type);
     }
 
