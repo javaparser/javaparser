@@ -129,7 +129,7 @@ public class JavaParserFacade {
     private JavaParserFacade(TypeSolver typeSolver) {
         this.typeSolver = typeSolver.getRoot();
         this.symbolSolver = new SymbolSolver(typeSolver);
-        this.typeExtractor = new TypeExtractor(typeSolver, this);
+        this.typeExtractor = new TypeExtractor(this.typeSolver, this);
         this.failureHandler = new FailureHandler();
     }
 
