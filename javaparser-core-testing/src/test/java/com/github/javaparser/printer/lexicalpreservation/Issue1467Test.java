@@ -37,22 +37,20 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.utils.TestUtils;
 
-public class Issue1467Test {
+public class Issue1467Test extends AbstractLexicalPreservingTest {
     
     @Test
     public void test() {
-        String before = 
+        considerCode(
                 "public class Bar {\n" + 
                         "    public void foo() {\n" + 
                         "        System.out.print(\"Hello\");\n" + 
                         "    }\n" + 
-                        "}";
+                        "}");
         String expected = 
                 "public void f() {\n" + 
                 "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" +
                 "    }" ;
-        CompilationUnit cu = StaticJavaParser.parse(before);
-        LexicalPreservingPrinter.setup(cu);
         // add method declaration
         MethodDeclaration decl = cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Keyword.PUBLIC);
         // create body 

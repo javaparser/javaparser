@@ -37,14 +37,14 @@ public class Issue3387Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test3387() {
-        String input = new StringJoiner("\n")
+        considerCode(new StringJoiner("\n")
                 .add("class A {")
                 .add("")
                 .add("\tpublic void setTheNumber(int number) {")
                 .add("\t\tnumber = number;")
                 .add("\t}")
                 .add("")
-                .add("}").toString();
+                .add("}").toString());
         
         String expected = "class A {\n" + 
                 "\n" + 
@@ -56,9 +56,6 @@ public class Issue3387Test extends AbstractLexicalPreservingTest {
                 "\t}\n" + 
                 "\n" + 
                 "}";
-
-            CompilationUnit cu = StaticJavaParser.parse(input);
-            LexicalPreservingPrinter.setup(cu);
 
             MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
             // create new javadoc comment

@@ -37,9 +37,10 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 
-class ModifierVisitorTest {
+class ModifierVisitorTest extends AbstractLexicalPreservingTest {
     @Test
     void makeSureParentListsCanBeModified() {
         NodeList<StringLiteralExpr> list = new NodeList<>();
@@ -133,13 +134,12 @@ class ModifierVisitorTest {
     @Test
     void issue2124() {
         ModifierVisitor<Void> modifier = new ModifierVisitor<>();
-        CompilationUnit cu = StaticJavaParser.parse("\n" +
+        considerCode("\n" +
                 "public class ModifierVisitorTest {\n" +
                 "    private void causesException() {\n" +
                 "        String[] listWithExtraCommaAndEqualElements = {\"a\", \"a\",};\n" +
                 "    }\n" +
                 "}");
-        LexicalPreservingPrinter.setup(cu);
         cu.accept(modifier, null);
         //there should be no exception
         LexicalPreservingPrinter.print(cu);

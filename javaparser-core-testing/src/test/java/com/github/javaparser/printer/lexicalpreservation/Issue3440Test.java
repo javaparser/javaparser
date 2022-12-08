@@ -33,7 +33,6 @@ public class Issue3440Test extends AbstractLexicalPreservingTest {
     void test3440() {
         considerCode("public class Foo { public void bar() { switch(1) {case 1: break; } } }");
         String expected = "public class Foo { public void bar() { switch(1) {case 1:  } } }";
-        LexicalPreservingPrinter.setup(cu);
         SwitchEntry entry = cu.findFirst(SwitchEntry.class).get();
         entry.setStatements(new NodeList<>());
         TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));

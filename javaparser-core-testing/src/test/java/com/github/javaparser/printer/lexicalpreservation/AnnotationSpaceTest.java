@@ -32,17 +32,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
-public class AnnotationSpaceTest {
+public class AnnotationSpaceTest extends AbstractLexicalPreservingTest {
     /** Tests that inserted annotations on types are followed by a space. */
     @Test
     public void test() {
-        CompilationUnit cu =
-                StaticJavaParser.parse(
-                        "public class Foo {\n" +
+        considerCode("public class Foo {\n" +
                         "    void myMethod(String param);\n" +
-                        "}"
-                        );
-        LexicalPreservingPrinter.setup(cu);
+                        "}");
         // Insert the annotation onto the String parameter type.
         Optional<ClassOrInterfaceType> type = cu.findFirst(ClassOrInterfaceType.class);
         type.get().addAnnotation(new MarkerAnnotationExpr("Nullable"));

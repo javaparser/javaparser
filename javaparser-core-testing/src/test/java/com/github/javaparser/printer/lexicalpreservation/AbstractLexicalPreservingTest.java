@@ -34,11 +34,13 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.Statement;
 
 public abstract class AbstractLexicalPreservingTest {
 
     protected CompilationUnit cu;
     protected Expression expression;
+    protected Statement statement;
     
     @AfterAll
     public static void tearDown() {
@@ -55,6 +57,10 @@ public abstract class AbstractLexicalPreservingTest {
 
     protected void considerExpression(String code) {
         expression = LexicalPreservingPrinter.setup(StaticJavaParser.parseExpression(code));
+    }
+    
+    protected void considerStatement(String code) {
+        statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(code));
     }
 
     protected void considerVariableDeclaration(String code) {
