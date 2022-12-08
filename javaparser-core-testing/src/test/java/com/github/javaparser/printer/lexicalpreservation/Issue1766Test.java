@@ -33,7 +33,7 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
     @Test
     public void testWithLexicalPreservationEnabled() {
         
-        String actual = 
+        considerCode(
                 "public class SimpleTestClass {\n" + 
                 "  public SimpleTestClass() {\n" + 
                 "    // nothing\n" + 
@@ -42,7 +42,7 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                 "  void bubber() {\n" + 
                 "    // nothing\n" + 
                 "  }\n" +
-                "}";
+                "}");
         
         String expected = 
                 "public class SimpleTestClass {\n" + 
@@ -55,18 +55,13 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                 "  }\n" + 
                 "}";
         
-        final ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setLexicalPreservationEnabled(true);
-        StaticJavaParser.setConfiguration(parserConfiguration);
-      
-        CompilationUnit cu = StaticJavaParser.parse(actual);
-        TestUtils.assertEqualsStringIgnoringEol(expected, actual);
+        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
     
     @Test
     public void testWithLexicalPreservingPrinterSetup() {
         
-        String actual = 
+        considerCode( 
                 "public class SimpleTestClass {\n" + 
                 "  public SimpleTestClass() {\n" + 
                 "    // nothing\n" + 
@@ -75,7 +70,7 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                 "  void bubber() {\n" + 
                 "    // nothing\n" + 
                 "  }\n" +
-                "}";
+                "}");
         
         String expected = 
                 "public class SimpleTestClass {\n" + 
@@ -88,11 +83,6 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                 "  }\n" + 
                 "}";
         
-        final ParserConfiguration parserConfiguration = new ParserConfiguration();
-        StaticJavaParser.setConfiguration(parserConfiguration);
-      
-        CompilationUnit cu = StaticJavaParser.parse(actual);
-        LexicalPreservingPrinter.setup(cu);
-        TestUtils.assertEqualsStringIgnoringEol(expected, actual);
+        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }

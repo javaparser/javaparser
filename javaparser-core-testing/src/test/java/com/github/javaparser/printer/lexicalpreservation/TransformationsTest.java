@@ -174,10 +174,10 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
 
     @Test
     void issue2099AddingStatementAfterTraillingComment1() {
-        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+        considerStatement(
                 "    if(value != null) {" + SYSTEM_EOL +
                 "        value.value();" + SYSTEM_EOL +
-                "    }"));
+                "    }");
 
         BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + SYSTEM_EOL +
                 "       value1();" + SYSTEM_EOL +
@@ -198,10 +198,10 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
 
     @Test
     void issue2099AddingStatementAfterTraillingComment2() {
-        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+        considerStatement(
                 "    if(value != null) {" + SYSTEM_EOL +
                 "        value.value();" + SYSTEM_EOL +
-                "    }"));
+                "    }");
 
         BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + SYSTEM_EOL +
                 "       value1();" + SYSTEM_EOL +
@@ -223,10 +223,10 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
 
     @Test
     void addingStatement1() {
-        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+        considerStatement(
                 "        if(value != null) {" + SYSTEM_EOL +
                         "            value.value();" + SYSTEM_EOL +
-                        "        }"));
+                        "        }");
 
         CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + SYSTEM_EOL +
                 "    public void method() {" + SYSTEM_EOL +
@@ -253,10 +253,10 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
 
     @Test
     void addingStatement2() {
-        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+        considerStatement(
                 "        if(value != null) {" + SYSTEM_EOL +
                         "            value.value();" + SYSTEM_EOL +
-                        "        }"));
+                        "        }");
 
         CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + SYSTEM_EOL +
                 "    public void method() {" + SYSTEM_EOL +
@@ -283,10 +283,10 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
 
     @Test
     void addingStatement3() {
-        Statement statement = LexicalPreservingPrinter.setup(StaticJavaParser.parseStatement(
+        considerStatement(
                 "        if(value != null) {" + SYSTEM_EOL +
                         "            value.value();" + SYSTEM_EOL +
-                        "        }"));
+                        "        }");
 
         CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + SYSTEM_EOL +
                 "    public void method() {" + SYSTEM_EOL +

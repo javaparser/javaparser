@@ -38,20 +38,14 @@ public class Issue2290Test extends AbstractLexicalPreservingTest  {
     @Test
     public void test() {
 
-        ParserConfiguration config = new ParserConfiguration()
-                .setLexicalPreservationEnabled(true)
-                .setStoreTokens(true);
-        StaticJavaParser.setConfiguration(config);
-
-        String s = 
+        considerCode( 
                 "public class Clone1 {\n" + 
                 "  public static void main(String[] args) {\n" + 
                 "    System.out.println(\"I'm a clone10\");\n" +
                 "    System.out.println(\"I'm not a clone!\");\n" + 
                 "    System.out.println(\"I'm a clone10\");\n" + 
                 "  }\n" + 
-                "}";
-        CompilationUnit cu = StaticJavaParser.parse(s);
+                "}");
         List<ExpressionStmt> exprs = cu.findAll(ExpressionStmt.class);
         ExpressionStmt es = exprs.get(exprs.size()-1);
         es.getParentNode().get().remove(es);

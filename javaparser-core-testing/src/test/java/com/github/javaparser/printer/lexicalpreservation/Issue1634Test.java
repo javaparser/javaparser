@@ -14,16 +14,13 @@ public class Issue1634Test extends AbstractLexicalPreservingTest {
     @Test
     public void testWithLexicalPreservationEnabled() {
 
-        String actual = "package com.wangym.test;\nclass A{ }";
+        considerCode("package com.wangym.test;\nclass A{ }");
         
         String expected =
                 "package com.wangym.test;\n"
                 + "import lombok.Data;\n"
                 + "\n"
                 + "class A{ }";
-
-        CompilationUnit cu = StaticJavaParser.parse(actual);
-        LexicalPreservingPrinter.setup(cu);
 
         NodeList<ImportDeclaration> imports = cu.getImports();
         String str = "lombok.Data";

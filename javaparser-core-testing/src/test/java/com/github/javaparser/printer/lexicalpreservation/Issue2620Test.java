@@ -39,7 +39,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.utils.LineSeparator;
 
-public class Issue2620Test {
+public class Issue2620Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void testWithCr() {
@@ -62,13 +62,13 @@ public class Issue2620Test {
      */
     public void doTest(LineSeparator eol) {
 
-        final String original = "" +
+        considerCode("" +
                 "    public class Foo { //comment" + eol +
                 "        private String a;" + eol +
                 "        private String b;" + eol +
                 "        private String c;" + eol +
                 "        private String d;" + eol +
-                "    }";
+                "    }");
 
         // Note: Expect the platform's EOL character when printing
         // FIXME: Indentation is bad here.
@@ -82,9 +82,6 @@ public class Issue2620Test {
                 "        private String d;" + eol +
                 "    }";
 
-
-        CompilationUnit cu = StaticJavaParser.parse(original);
-        LexicalPreservingPrinter.setup(cu);
 
         // create a new field declaration
         VariableDeclarator variable = new VariableDeclarator(new ClassOrInterfaceType("String"), "newField");

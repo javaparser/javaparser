@@ -38,10 +38,9 @@ public class Issue3296Test extends AbstractLexicalPreservingTest  {
     
     @Test
     public void test() {
-        String code = "public class Test { String[][] allTest; }";
+        considerCode("public class Test { String[][] allTest; }");
         String expected = "public class Test { @Nullable\n" + 
                 "String[][] allTest; }";
-        CompilationUnit cu = LexicalPreservingPrinter.setup(StaticJavaParser.parse(code));
         Optional<ClassOrInterfaceDeclaration> clazzOptional = cu.getClassByName("Test");
         assertTrue(clazzOptional.isPresent());
         ClassOrInterfaceDeclaration clazz = clazzOptional.get();
@@ -58,7 +57,6 @@ public class Issue3296Test extends AbstractLexicalPreservingTest  {
                                         }
                                     }
                                 }));
-        String changed = LexicalPreservingPrinter.print(cu);
-        assertEqualsStringIgnoringEol(changed, expected);
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }
