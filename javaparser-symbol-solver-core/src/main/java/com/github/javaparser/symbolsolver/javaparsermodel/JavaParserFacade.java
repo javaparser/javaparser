@@ -631,24 +631,12 @@ public class JavaParserFacade {
     /**
      * Convert a {@link Type} into the corresponding {@link ResolvedType}.
      *
-     * @param type      The type to be converted.
-     * @param context   The current context.
-     *
-     * @return The type resolved.
-     */
-    public ResolvedType convertToUsage(Type type, Node context) {
-        return convertToUsage(type, JavaParserFactory.getContext(context, typeSolver));
-    }
-
-    /**
-     * Convert a {@link Type} into the corresponding {@link ResolvedType}.
-     *
      * @param type The type to be converted.
      *
      * @return The type resolved.
      */
     public ResolvedType convertToUsage(Type type) {
-        return convertToUsage(type, type);
+    	return convertToUsage(type, JavaParserFactory.getContext(type, typeSolver));
     }
 
     private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(

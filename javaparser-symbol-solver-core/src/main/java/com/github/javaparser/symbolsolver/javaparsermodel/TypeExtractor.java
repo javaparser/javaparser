@@ -95,7 +95,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (node.getType() instanceof UnknownType) {
             throw new IllegalStateException("Parameter has unknown type: " + node);
         }
-        return facade.convertToUsage(node.getType(), node);
+        return facade.convertToUsage(node.getType());
     }
 
 
@@ -167,8 +167,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(ClassExpr node, Boolean solveLambdas) {
         // This implementation does not regard the actual type argument of the ClassExpr.
-        Type astType = node.getType();
-        ResolvedType jssType = facade.convertToUsage(astType, node.getType());
+        ResolvedType jssType = facade.convertToUsage(node.getType());
         return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType));
     }
 
@@ -369,7 +368,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(ObjectCreationExpr node, Boolean solveLambdas) {
-        return facade.convertToUsage(node.getType(), node);
+        return facade.convertToUsage(node.getType());
     }
 
     @Override
