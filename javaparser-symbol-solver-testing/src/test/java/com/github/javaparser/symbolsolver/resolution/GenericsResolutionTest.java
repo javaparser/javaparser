@@ -32,6 +32,7 @@ import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -57,7 +58,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         VariableDeclarator fieldS = Navigator.demandField(clazz, "s");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("s", fieldS);
 
         assertEquals(true, symbolReference.isPresent());
@@ -74,7 +75,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         VariableDeclarator fieldS = Navigator.demandField(clazz, "g");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("g", fieldS);
 
         assertEquals(true, symbolReference.isPresent());
@@ -91,7 +92,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         VariableDeclarator fieldS = Navigator.demandField(clazz, "i");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("i", fieldS);
 
         assertEquals(true, symbolReference.isPresent());
@@ -108,7 +109,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
         VariableDeclarator field = Navigator.demandField(clazz, "a");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("a", field);
 
         assertEquals(true, symbolReference.isPresent());
@@ -125,7 +126,7 @@ class GenericsResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
         VariableDeclarator field = Navigator.demandField(clazz, "as");
 
-        SymbolSolver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         Optional<Value> symbolReference = symbolSolver.solveSymbolAsValue("as", field);
 
         assertEquals(true, symbolReference.isPresent());

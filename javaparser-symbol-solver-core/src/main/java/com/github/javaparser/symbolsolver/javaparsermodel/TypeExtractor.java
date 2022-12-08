@@ -34,6 +34,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -643,7 +644,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
     }
 
-    protected SymbolSolver createSolver() {
+    protected Solver createSolver() {
         return new SymbolSolver(typeSolver);
     }
 }

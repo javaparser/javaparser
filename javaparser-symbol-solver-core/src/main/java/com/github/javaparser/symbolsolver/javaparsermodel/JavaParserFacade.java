@@ -33,6 +33,7 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -121,7 +122,7 @@ public class JavaParserFacade {
 
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
-    private final SymbolSolver symbolSolver;
+    private final Solver symbolSolver;
 
     private FailureHandler failureHandler;
 
@@ -136,7 +137,7 @@ public class JavaParserFacade {
         return typeSolver;
     }
 
-    public SymbolSolver getSymbolSolver() {
+    public Solver getSymbolSolver() {
         return symbolSolver;
     }
 
