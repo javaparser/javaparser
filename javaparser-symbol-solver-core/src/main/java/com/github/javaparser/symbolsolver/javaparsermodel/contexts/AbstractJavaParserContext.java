@@ -42,7 +42,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.*;
@@ -227,11 +226,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                                     .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
                     );
                 } else {
-                    return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
+                    return singletonList(typeSolver.getSolvedJavaLangObject());
                 }
             } else if (typeOfScope.isArray()) {
                 // method call on array are Object methods
-                return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
+                return singletonList(typeSolver.getSolvedJavaLangObject());
             } else if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
