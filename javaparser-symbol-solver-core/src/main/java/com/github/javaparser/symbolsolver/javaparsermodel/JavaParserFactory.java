@@ -21,7 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;

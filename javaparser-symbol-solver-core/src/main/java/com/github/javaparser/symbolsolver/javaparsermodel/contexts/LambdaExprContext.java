@@ -48,13 +48,13 @@ import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti

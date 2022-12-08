@@ -29,9 +29,9 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 
-import java.util.Optional;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti

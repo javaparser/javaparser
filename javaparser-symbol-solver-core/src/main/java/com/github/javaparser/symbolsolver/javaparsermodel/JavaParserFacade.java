@@ -57,9 +57,9 @@ import com.github.javaparser.utils.Log;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static com.github.javaparser.resolution.model.SymbolReference.solved;
 import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.

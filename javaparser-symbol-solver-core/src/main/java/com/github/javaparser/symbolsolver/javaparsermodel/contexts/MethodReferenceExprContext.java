@@ -42,9 +42,9 @@ import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
-import java.util.*;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import java.util.*;
 
 public class MethodReferenceExprContext extends AbstractJavaParserContext<MethodReferenceExpr> {
 

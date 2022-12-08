@@ -35,11 +35,11 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti

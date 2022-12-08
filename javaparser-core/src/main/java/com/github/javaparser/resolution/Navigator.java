@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.javaparser;
+package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;

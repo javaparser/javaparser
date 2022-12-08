@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Comparator.comparing;
 
 /**

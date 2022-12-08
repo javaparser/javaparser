@@ -23,7 +23,7 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;

@@ -29,7 +29,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
