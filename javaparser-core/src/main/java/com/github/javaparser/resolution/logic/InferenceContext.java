@@ -36,8 +36,6 @@ import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
-import com.github.javaparser.symbolsolver.logic.InferenceVariableType;
 
 /**
  * @author Federico Tomassetti
