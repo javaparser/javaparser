@@ -54,7 +54,6 @@ public class InferenceVariableType implements ResolvedType {
     }
 
     private Set<ResolvedType> equivalentTypes = new HashSet<>();
-    private ObjectProvider objectProvider;
     private TypeSolver typeSolver;
 
     public void registerEquivalentType(ResolvedType type) {
@@ -79,26 +78,9 @@ public class InferenceVariableType implements ResolvedType {
 
     private Set<ResolvedType> superTypes = new HashSet<>();
 
-    public InferenceVariableType(int id, ObjectProvider objectProvider) {
-        this.id = id;
-        this.objectProvider = objectProvider;
-    }
-    
     public InferenceVariableType(int id, TypeSolver typeSolver) {
     	this.id = id;
         this.typeSolver = typeSolver;
-    }
-
-    public static InferenceVariableType fromWildcard(ResolvedWildcard wildcard, int id, ObjectProvider objectProvider) {
-        InferenceVariableType inferenceVariableType = new InferenceVariableType(id, objectProvider);
-        if (wildcard.isExtends()) {
-            inferenceVariableType.superTypes.add(wildcard.getBoundedType());
-        }
-        if (wildcard.isSuper()) {
-            // I am not sure about this one...
-            inferenceVariableType.superTypes.add(wildcard.getBoundedType());
-        }
-        return inferenceVariableType;
     }
 
     @Override
