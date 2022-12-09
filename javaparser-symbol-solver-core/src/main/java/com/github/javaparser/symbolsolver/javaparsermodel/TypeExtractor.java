@@ -51,7 +51,6 @@ import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
@@ -169,7 +168,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(ClassExpr node, Boolean solveLambdas) {
         // This implementation does not regard the actual type argument of the ClassExpr.
         ResolvedType jssType = facade.convertToUsage(node.getType());
-        return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType));
+        return new ReferenceTypeImpl(typeSolver.solveType(Class.class.getCanonicalName()), ImmutableList.of(jssType));
     }
 
     /*
