@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -50,7 +51,6 @@ import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
@@ -455,7 +455,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
         if (demandParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
-            int pos = JavaParserSymbolDeclaration.getParamPos(node);
+            int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
@@ -585,7 +585,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(MethodReferenceExpr node, Boolean solveLambdas) {
         if (demandParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
-            int pos = JavaParserSymbolDeclaration.getParamPos(node);
+            int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
@@ -639,6 +639,17 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             return node.getVariables().get(0).accept(this, solveLambdas);
         }
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
+    }
+    
+    private static int getParamPos(Node node) {
+        if (demandParentNode(node) instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
+            for (int i = 0; i < call.getArguments().size(); i++) {
+                if (call.getArguments().get(i) == node) return i;
+            }
+            throw new IllegalStateException();
+        }
+        throw new IllegalArgumentException();
     }
 
     protected Solver createSolver() {

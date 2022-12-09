@@ -67,17 +67,6 @@ public final class JavaParserSymbolDeclaration {
         return pos;
     }
 
-    public static int getParamPos(Node node) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
-            for (int i = 0; i < call.getArguments().size(); i++) {
-                if (call.getArguments().get(i) == node) return i;
-            }
-            throw new IllegalStateException();
-        }
-        throw new IllegalArgumentException();
-    }
-
     private JavaParserSymbolDeclaration() {
         // This private constructor is used to hide the public one
     }
