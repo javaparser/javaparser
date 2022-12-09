@@ -37,7 +37,6 @@ import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
@@ -410,14 +409,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             ResolvedType type = actualType;
             // in case of primitive type, the expected type must be compared with the boxed type of the actual type
             if (type.isPrimitive()) {
-                type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
+            	ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(type.asPrimitive().getBoxTypeQName());
+                type = new ReferenceTypeImpl(resolvedTypedeclaration);
             }
             /*
              * "a value of the null type (the null reference is the only such value) may be assigned to any reference type, resulting in a null reference of that type"
              * https://docs.oracle.com/javase/specs/jls/se15/html/jls-5.html#jls-5.2
              */
             if (type.isNull()) {
-                type = MyObjectProvider.INSTANCE.object();
+                ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.getSolvedJavaLangObject();
+                type = new ReferenceTypeImpl(resolvedTypedeclaration);
             }
             if (!type.isTypeVariable() && !type.isReferenceType()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());

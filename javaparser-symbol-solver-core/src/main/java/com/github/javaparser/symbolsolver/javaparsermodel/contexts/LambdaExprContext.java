@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -46,7 +45,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
@@ -84,7 +82,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
                         if (functionalMethodOpt.isPresent()){
                             MethodUsage functionalMethod = functionalMethodOpt.get();
-                            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                            InferenceContext inferenceContext = new InferenceContext(typeSolver);
 
                             // Resolve each type variable of the lambda, and use this later to infer the type of each
                             // implicit parameter

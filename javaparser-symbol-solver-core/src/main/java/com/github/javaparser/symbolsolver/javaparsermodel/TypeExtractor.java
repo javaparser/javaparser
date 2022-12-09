@@ -30,7 +30,6 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -50,7 +49,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
@@ -530,8 +528,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (functionalMethod.isPresent()) {
             LambdaExpr lambdaExpr = node;
 
-            InferenceContext lambdaCtx = new InferenceContext(MyObjectProvider.INSTANCE);
-            InferenceContext funcInterfaceCtx = new InferenceContext(MyObjectProvider.INSTANCE);
+            InferenceContext lambdaCtx = new InferenceContext(typeSolver);
+            InferenceContext funcInterfaceCtx = new InferenceContext(typeSolver);
 
             // At this point parameterType
             // if Function<T=? super Stream.T, ? extends map.R>
@@ -623,7 +621,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes()).returnType();
                     ResolvedType formalType = functionalMethod.returnType();
 
-                    InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                    InferenceContext inferenceContext = new InferenceContext(typeSolver);
                     inferenceContext.addPair(formalType, actualType);
                     result = inferenceContext.resolve(inferenceContext.addSingle(result));
                 }

@@ -39,7 +39,6 @@ import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
@@ -114,7 +113,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                 List<ResolvedType> resolvedTypes = new ArrayList<>();
 
                 for (ResolvedType type : functionalMethod.getParamTypes()) {
-                    InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                    InferenceContext inferenceContext = new InferenceContext(typeSolver);
 
                     // Resolve each type variable of the lambda, and use this later to infer the type of each
                     // implicit parameter

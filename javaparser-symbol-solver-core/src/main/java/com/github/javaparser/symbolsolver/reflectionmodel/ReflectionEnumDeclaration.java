@@ -181,7 +181,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
             typeParameterValues, this, clazz);
     if (res.isPresent()) {
         // We have to replace method type typeParametersValues here
-        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+        InferenceContext inferenceContext = new InferenceContext(typeSolver);
         MethodUsage methodUsage = res.get();
         int i = 0;
         List<ResolvedType> parameters = new LinkedList<>();
