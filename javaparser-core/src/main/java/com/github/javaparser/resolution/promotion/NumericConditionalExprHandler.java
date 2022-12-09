@@ -1,4 +1,4 @@
-package com.github.javaparser.symbolsolver.resolution.promotion;
+package com.github.javaparser.resolution.promotion;
 
 import java.util.Arrays;
 import java.util.HashMap;
