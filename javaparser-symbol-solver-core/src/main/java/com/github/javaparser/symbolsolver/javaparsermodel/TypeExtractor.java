@@ -41,6 +41,7 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
@@ -68,7 +69,7 @@ import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacad
 public class TypeExtractor extends DefaultVisitorAdapter {
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    private final ReferenceTypeImpl stringReferenceType;
+    private final ResolvedType stringReferenceType;
 
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
@@ -77,8 +78,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
         this.facade = facade;
-        //pre-calculate the String reference (optimization)
-        stringReferenceType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(JAVA_LANG_STRING));
+        // pre-calculate the String reference (optimization)
+        // consider a LazyType to avoid having to systematically declare a ReflectionTypeSolver
+        stringReferenceType = new LazyType(v -> new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_STRING)));
     }
 
     @Override

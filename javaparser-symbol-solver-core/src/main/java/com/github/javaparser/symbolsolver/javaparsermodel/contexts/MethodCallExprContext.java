@@ -33,6 +33,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -475,6 +476,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
         if (type instanceof ResolvedReferenceType) {
             return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext);
+        } else if (type instanceof LazyType) {
+            return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedTypeVariable) {
             return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedWildcard) {

@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Note this issue number refers to the archived `javasymbolsolver` repository,
@@ -58,7 +59,7 @@ class Issue343Test extends AbstractResolutionTest {
 
     @Test
     void resolveStringLiteralOutsideAST() {
-        assertEquals(javaParserFacade.classToResolvedType(String.class), getExpressionType(typeResolver, new StringLiteralExpr("")));
+        assertTrue(javaParserFacade.classToResolvedType(String.class).equals(getExpressionType(typeResolver, new StringLiteralExpr(""))));
     }
 
     @Test
@@ -79,7 +80,7 @@ class Issue343Test extends AbstractResolutionTest {
 
     @Test
     void resolveMethodCallOnStringLiteralOutsideAST() {
-        assertEquals(javaParserFacade.classToResolvedType(int.class), getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length")));
+    	assertTrue(javaParserFacade.classToResolvedType(int.class).equals(getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length"))));
     }
 
     @Test
