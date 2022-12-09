@@ -100,24 +100,6 @@ public class JavaParserFacade {
         instances.clear();
     }
 
-    protected static ResolvedType solveGenericTypes(ResolvedType type, Context context) {
-        if (type.isTypeVariable()) {
-            return context.solveGenericType(type.describe()).orElse(type);
-        }
-        if (type.isWildcard()) {
-            if (type.asWildcard().isExtends() || type.asWildcard().isSuper()) {
-                ResolvedWildcard wildcardUsage = type.asWildcard();
-                ResolvedType boundResolved = solveGenericTypes(wildcardUsage.getBoundedType(), context);
-                if (wildcardUsage.isExtends()) {
-                    return ResolvedWildcard.extendsBound(boundResolved);
-                } else {
-                    return ResolvedWildcard.superBound(boundResolved);
-                }
-            }
-        }
-        return type;
-    }
-
     // End of static class
 
     private final TypeSolver typeSolver;

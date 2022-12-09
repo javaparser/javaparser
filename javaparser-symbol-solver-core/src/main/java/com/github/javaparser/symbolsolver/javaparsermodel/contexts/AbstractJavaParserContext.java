@@ -46,6 +46,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 
 import java.util.*;
 
+import com.github.javaparser.resolution.Context;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Collections.singletonList;
 

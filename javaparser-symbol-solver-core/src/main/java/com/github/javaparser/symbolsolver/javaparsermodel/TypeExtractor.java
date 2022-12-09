@@ -55,7 +55,6 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
@@ -64,7 +63,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
-import static com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveGenericTypes;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
@@ -524,7 +522,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     private ResolvedType resolveLambda(LambdaExpr node, ResolvedType result) {
         // We need to replace the type variables
         Context ctx = JavaParserFactory.getContext(node, typeSolver);
-        result = solveGenericTypes(result, ctx);
+        result = result.solveGenericTypes(ctx);
 
         //We should find out which is the functional method (e.g., apply) and replace the params of the
         //solveLambdas with it, to derive so the values. We should also consider the value returned by the
@@ -601,7 +599,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 ResolvedType result = usage.getParamType(pos);
                 // We need to replace the type variables
                 Context ctx = JavaParserFactory.getContext(node, typeSolver);
-                result = solveGenericTypes(result, ctx);
+                result = result.solveGenericTypes(ctx);
 
                 //We should find out which is the functional method (e.g., apply) and replace the params of the
                 //solveLambdas with it, to derive so the values. We should also consider the value returned by the
