@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParameterValueProvider;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
@@ -87,14 +88,26 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (o == null || (!isLazyType(o) && getClass() != o.getClass()) 
+        		|| (isLazyType(o) && !this.equals(asResolvedReferenceType(o))))
             return false;
-        ResolvedReferenceType that = (ResolvedReferenceType) o;
+        ResolvedReferenceType that = asResolvedReferenceType(o);
         if (!typeDeclaration.equals(that.typeDeclaration))
             return false;
         if (!typeParametersMap.equals(that.typeParametersMap))
             return false;
         return true;
+    }
+    
+    private boolean isLazyType(Object type) {
+    	return type !=null && type instanceof LazyType; 
+    }
+    
+    private ResolvedReferenceType asResolvedReferenceType(Object o) {
+    	if (isLazyType(o)) {
+    		return ((LazyType) o).asReferenceType();
+    	}
+    	return ResolvedReferenceType.class.cast(o);
     }
 
     @Override
