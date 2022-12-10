@@ -5,8 +5,6 @@
 
 	<!-- Based on documentation: https://github.com/javaparser/javaparser/wiki/Coding-Guidelines -->
 
-	<!-- Just a warning, not mandatory -->
-	<property name="severity" value="warning"/>
 	<property name="fileExtensions" value="java"/>
 
 	<!-- Wrap lines at 120 characters -->
