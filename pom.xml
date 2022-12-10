@@ -346,6 +346,7 @@
                     <configuration>
                         <configLocation>dev-files/JavaParser-CheckStyle.xml</configLocation>
                         <logViolationsToConsole>true</logViolationsToConsole>
+                        <consoleOutput>true</consoleOutput>
                     </configuration>
                     <dependencies>
                         <dependency>
