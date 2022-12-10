@@ -345,6 +345,7 @@
                     <version>3.1.2</version>
                     <configuration>
                         <configLocation>dev-files/JavaParser-CheckStyle.xml</configLocation>
+                        <logViolationsToConsole>true</logViolationsToConsole>
                     </configuration>
                     <dependencies>
                         <dependency>
