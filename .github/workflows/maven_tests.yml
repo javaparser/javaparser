@@ -117,5 +117,5 @@ jobs:
         with:
           java-version: '11'
           distribution: 'zulu'
-      - name: Build with Maven
+      - name: Validate Project Checkstyle
         run: ./mvnw -B checkstyle:check
