@@ -21,15 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import javassist.CtField;
 import javassist.bytecode.AccessFlag;
-
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -73,11 +71,6 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
                 "ctField=" + ctField.getName() +
                 ", typeSolver=" + typeSolver +
                 '}';
-    }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
     }
 
 }

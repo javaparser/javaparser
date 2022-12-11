@@ -21,7 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -29,12 +33,8 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import javassist.bytecode.SignatureAttribute;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import javassist.bytecode.SignatureAttribute;
 
 /**
  * @author Federico Tomassetti
@@ -128,14 +128,9 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
         }
         return Optional.empty();
     }
-
+    
     @Override
     public ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
-    }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
     }
 }

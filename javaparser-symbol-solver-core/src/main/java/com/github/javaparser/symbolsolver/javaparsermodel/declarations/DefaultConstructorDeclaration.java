@@ -87,8 +87,4 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
         throw new UnsupportedOperationException("The default constructor does not throw exceptions");
     }
 
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
 }

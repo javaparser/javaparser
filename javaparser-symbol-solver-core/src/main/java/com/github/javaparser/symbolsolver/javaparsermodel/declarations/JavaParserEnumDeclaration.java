@@ -440,7 +440,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public Optional<Node> toAst() {
-            return Optional.of(enumDeclaration.getWrappedNode());
+            return enumDeclaration.toAst();
         }
     }
 
@@ -501,7 +501,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
                     @Override
                     public Optional<Node> toAst() {
-                        return Optional.of(enumDeclaration.getWrappedNode());
+                        return enumDeclaration.toAst();
                     }
 
                 };
@@ -561,7 +561,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public Optional<Node> toAst() {
-            return Optional.of(enumDeclaration.getWrappedNode());
+            return enumDeclaration.toAst();
         }
     }
 

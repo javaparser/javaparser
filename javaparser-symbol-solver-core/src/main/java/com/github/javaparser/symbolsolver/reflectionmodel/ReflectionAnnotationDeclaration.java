@@ -205,11 +205,6 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(final String name,
                                                     final List<ResolvedType> parameterTypes,
                                                     final Context invokationContext,

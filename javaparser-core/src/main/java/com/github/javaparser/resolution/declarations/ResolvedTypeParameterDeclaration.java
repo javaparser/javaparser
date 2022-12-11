@@ -101,10 +101,6 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
                 throw new UnsupportedOperationException();
             }
 
-            @Override
-            public Optional<Node> toAst() {
-                return Optional.empty();
-            }
         };
     }
 

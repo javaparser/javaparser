@@ -21,19 +21,18 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.lang.reflect.Modifier;
+
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import javassist.CtField;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
-
-import java.lang.reflect.Modifier;
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -65,7 +64,7 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     public boolean isStatic() {
         return Modifier.isStatic(ctField.getModifiers());
     }
-
+    
     @Override
     public boolean isVolatile() {
         return Modifier.isVolatile(ctField.getModifiers());
@@ -99,10 +98,5 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public ResolvedTypeDeclaration declaringType() {
         return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
-    }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
     }
 }

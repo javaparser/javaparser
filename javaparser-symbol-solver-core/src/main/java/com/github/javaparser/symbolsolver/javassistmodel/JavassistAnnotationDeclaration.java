@@ -161,11 +161,6 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
-
-    @Override
     public boolean isInheritable() {
         try {
             return ctClass.getAnnotation(Inherited.class) != null;

@@ -111,8 +111,4 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
         return methodLikeAdaper.getSpecifiedException(index);
     }
 
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
 }

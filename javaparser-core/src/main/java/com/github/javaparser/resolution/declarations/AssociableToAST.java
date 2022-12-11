@@ -50,7 +50,9 @@ public interface AssociableToAST {
      * In these cases getWrappedNode is particularly nice because it returns the right type of AST node,
      * not just a Node.
      */
-    Optional<Node> toAst();
+    default Optional<Node> toAst() {
+        return Optional.empty();
+    }
 
     /**
      * If the declaration is associated to an AST node and the type matches the expected {@link Class} return it,

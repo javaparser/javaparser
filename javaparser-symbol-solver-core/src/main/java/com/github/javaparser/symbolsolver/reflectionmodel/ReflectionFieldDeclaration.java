@@ -21,16 +21,14 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -72,7 +70,7 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     public boolean isStatic() {
         return Modifier.isStatic(field.getModifiers());
     }
-
+    
     @Override
     public boolean isVolatile() {
         return Modifier.isVolatile(field.getModifiers());
@@ -105,10 +103,5 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(field.getModifiers());
-    }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
     }
 }

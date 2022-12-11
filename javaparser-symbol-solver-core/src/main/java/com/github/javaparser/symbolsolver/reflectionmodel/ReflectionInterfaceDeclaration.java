@@ -338,8 +338,4 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         return Collections.emptyList();
     }
 
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
 }

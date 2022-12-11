@@ -21,13 +21,11 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -118,10 +116,5 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     @Override
     public int hashCode() {
         return Objects.hash(type, genericType, typeSolver, variadic, name);
-    }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
     }
 }

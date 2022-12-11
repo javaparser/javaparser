@@ -37,7 +37,6 @@ import javassist.CtMethod;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -142,11 +141,6 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     @Override
     public ResolvedType getSpecifiedException(int index) {
         return methodLikeAdaper.getSpecifiedException(index);
-    }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
     }
 
 }

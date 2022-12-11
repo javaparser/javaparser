@@ -21,7 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.DoubleLiteralExpr;
@@ -35,6 +34,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import javassist.CtMethod;
 import javassist.bytecode.AnnotationDefaultAttribute;
 import javassist.bytecode.BadBytecode;
@@ -49,7 +49,6 @@ import javassist.bytecode.annotation.StringMemberValue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -105,10 +104,4 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
     public String getName() {
         return annotationMember.getName();
     }
-
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
-
 }

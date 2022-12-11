@@ -158,8 +158,4 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         return ReflectionFactory.typeUsageFor(this.method.getExceptionTypes()[index], typeSolver);
     }
 
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
 }
