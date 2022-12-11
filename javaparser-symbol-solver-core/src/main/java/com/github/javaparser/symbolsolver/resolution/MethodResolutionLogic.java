@@ -25,10 +25,10 @@ import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
