@@ -16,13 +16,16 @@
 	<module name="TreeWalker">
 
 		<!-- Indent with four spaces  -->
-		<module name="Indentation"/>
+		<module name="Indentation">
+			<property name="severity" value="warning" />
+		</module>
 
 		<!-- Type and Method annotations go on a separate line -->
 		<module name="AnnotationLocation">
 			<property name="allowSamelineMultipleAnnotations" value="false"/>
 			<property name="allowSamelineSingleParameterlessAnnotation" value="false"/>
 			<property name="allowSamelineParameterizedAnnotation" value="false"/>
+			<property name="severity" value="warning" />
 		</module>
 
 		<!-- Avoid star import -->
@@ -35,6 +38,7 @@
 			<property name="customImportOrderRules"
 			          value="THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE###STATIC"/>
 			<property name="sortImportsInGroupAlphabetically" value="true"/>
+			<property name="severity" value="warning" />
 		</module>
 
 	</module>
