@@ -29,24 +29,29 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public interface AssociableToASTTest<T extends Node> {
+public interface AssociableToASTTest {
 
     /**
      * Helper method to cast the instance to the correct {@link Class}.
      *
      * @param instance  The instance to be casted.
      * @param clazz     The expected {@link Class}.
-     * @param <R>       The expected type.
+     * @param <T>       The expected type.
      *
      * @return The instance casted as the correct type.
      */
-    default <R extends AssociableToAST<T>> R safeCast(AssociableToAST<?> instance, Class<R> clazz) {
+    default <T extends AssociableToAST> T safeCast(AssociableToAST instance, Class<T> clazz) {
         if (clazz.isInstance(instance))
             return clazz.cast(instance);
         throw new UnsupportedOperationException(String.format("Unable to cast %s into %s.", instance.getClass().getName(), clazz.getName()));
     }
 
-    AssociableToAST<T> createValue();
+    /**
+     * Create a new instance of {@link AssociableToAST} to be used for testing.
+     *
+     * @return The created instance.
+     */
+    AssociableToAST createValue();
 
     /**
      * Get the node that can be associated with an AST.
@@ -55,16 +60,27 @@ public interface AssociableToASTTest<T extends Node> {
      *
      * @return The node being wrapped.
      */
-    Optional<T> getWrappedDeclaration(AssociableToAST<T> associableToAST);
+    Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST);
 
     @Test
     default void checkThatToASTMatchesTheCorrectWrappedNode() {
-        AssociableToAST<T> associableToAST = createValue();
-        Optional<T> wrappedNode = getWrappedDeclaration(associableToAST);
+        AssociableToAST associableToAST = createValue();
+        Optional<Node> wrappedNode = getWrappedDeclaration(associableToAST);
         if (wrappedNode.isPresent())
             assertEquals(wrappedNode, associableToAST.toAst());
         else
             assertFalse(associableToAST.toAst().isPresent());
+    }
+
+    @Test
+    default void checkThatToASTWithCorrectTypeMatchesTheCorrectWrappedNode() {
+        AssociableToAST associableToAST = createValue();
+        Optional<Node> wrappedNode = getWrappedDeclaration(associableToAST);
+        if (wrappedNode.isPresent())
+            assertEquals(wrappedNode, associableToAST.toAst(wrappedNode.get().getClass()));
+        else
+            assertFalse(associableToAST.toAst().isPresent());
+
     }
 
 }

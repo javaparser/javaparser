@@ -21,13 +21,11 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest,
-        AssociableToASTTest<FieldDeclaration> {
+public interface ResolvedFieldDeclarationTest extends ResolvedValueDeclarationTest, HasAccessSpecifierTest {
 
     /**
      * Create a new non-static {@link ResolvedFieldDeclaration}.

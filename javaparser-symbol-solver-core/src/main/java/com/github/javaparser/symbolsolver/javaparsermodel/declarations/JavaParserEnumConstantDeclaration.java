@@ -21,11 +21,14 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
@@ -59,6 +62,11 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
      */
     public com.github.javaparser.ast.body.EnumConstantDeclaration getWrappedNode() {
         return wrappedNode;
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.of(wrappedNode);
     }
 
 }

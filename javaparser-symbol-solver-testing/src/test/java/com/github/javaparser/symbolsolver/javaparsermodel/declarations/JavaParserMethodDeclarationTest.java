@@ -22,21 +22,20 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.AssociableToASTTest;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclarationTest;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapabilityTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import java.util.Optional;
 
-class JavaParserMethodDeclarationTest implements ResolvedMethodDeclarationTest, TypeVariableResolutionCapabilityTest,
-        AssociableToASTTest<MethodDeclaration> {
+class JavaParserMethodDeclarationTest implements ResolvedMethodDeclarationTest, TypeVariableResolutionCapabilityTest {
 
     @Override
-    public Optional<MethodDeclaration> getWrappedDeclaration(AssociableToAST<MethodDeclaration> associableToAST) {
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
                 safeCast(associableToAST, JavaParserMethodDeclaration.class).getWrappedNode()
         );

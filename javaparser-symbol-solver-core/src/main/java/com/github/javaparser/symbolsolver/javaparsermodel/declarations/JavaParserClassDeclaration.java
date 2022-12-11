@@ -21,18 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
@@ -57,6 +49,13 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -144,7 +143,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
                                 public boolean isStatic() {
                                     return f.isStatic();
                                 }
-                                
+
                                 @Override
                                 public boolean isVolatile() {
                                     return f.isVolatile();
@@ -156,7 +155,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
                                 }
                                 
                                 @Override
-                                public Optional<FieldDeclaration> toAst() {
+                                public Optional<Node> toAst() {
                                     return f.toAst();
                                 }
                             });
@@ -346,7 +345,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         if (this.isJavaLangObject()) {
             return ancestors;
         }
-        
+
         Optional<String> qualifiedName = wrappedNode.getFullyQualifiedName();
         if (!qualifiedName.isPresent()) {
             return ancestors;
