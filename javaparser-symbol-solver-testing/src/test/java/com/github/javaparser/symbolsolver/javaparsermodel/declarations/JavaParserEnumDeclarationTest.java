@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.ast.Node;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -959,7 +960,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     }
 
     @Override
-    public Optional<EnumDeclaration> getWrappedDeclaration(AssociableToAST associableToAST) {
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
                 safeCast(associableToAST, JavaParserEnumDeclaration.class).getWrappedNode()
         );
