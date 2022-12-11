@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,20 +23,23 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.PatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.PatternExprMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * <h1>The instanceof statement</h1>
@@ -72,27 +75,30 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class PatternExpr extends Expression implements NodeWithSimpleName<PatternExpr>, NodeWithType<PatternExpr, ReferenceType> {
+public class PatternExpr extends Expression implements NodeWithSimpleName<PatternExpr>, NodeWithType<PatternExpr, ReferenceType>, NodeWithFinalModifier<PatternExpr> {
+
+    private NodeList<Modifier> modifiers;
 
     private SimpleName name;
 
     private ReferenceType type;
 
     public PatternExpr() {
-        this(null, new ClassOrInterfaceType(), new SimpleName());
+        this(null, new NodeList<>(), new ClassOrInterfaceType(), new SimpleName());
     }
 
     @AllFieldsConstructor
-    public PatternExpr(final ReferenceType type, SimpleName name) {
-        this(null, type, name);
+    public PatternExpr(final NodeList<Modifier> modifiers, final ReferenceType type, SimpleName name) {
+        this(null, modifiers, type, name);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PatternExpr(TokenRange tokenRange, ReferenceType type, SimpleName name) {
+    public PatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, ReferenceType type, SimpleName name) {
         super(tokenRange);
+        setModifiers(modifiers);
         setType(type);
         setName(name);
         customInitialization();
@@ -124,7 +130,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     public PatternExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (PatternExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -138,7 +144,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     public PatternExpr setType(final ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (PatternExpr) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
@@ -166,24 +172,24 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
         return Optional.of(this);
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPatternExpr(Consumer<PatternExpr> action) {
         action.accept(this);
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
+        }
         if (node == name) {
             setName((SimpleName) replacementNode);
             return true;
@@ -205,5 +211,39 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public PatternExprMetaModel getMetaModel() {
         return JavaParserMetaModel.patternExprMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Modifier> getModifiers() {
+        return modifiers;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public PatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+        assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
+        this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }

@@ -21,35 +21,28 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -108,7 +101,7 @@ public class SymbolSolver {
 
             // FIXME should call typesolver here!
 
-            String name = ((ClassOrInterfaceType) type).getName().getId();
+            String name = ((ClassOrInterfaceType) type).getNameWithScope();
             SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver).toString(), name);
@@ -125,7 +118,7 @@ public class SymbolSolver {
             return genericType.get();
         }
         ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(name);
-        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        return new ReferenceTypeImpl(typeDeclaration);
     }
 
     /**
@@ -135,38 +128,10 @@ public class SymbolSolver {
      * It should contain its own private fields but not inherited private fields.
      */
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name) {
-        if (typeDeclaration instanceof JavaParserClassDeclaration) {
-            Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
-            return ctx.solveSymbol(name);
+        if (typeDeclaration instanceof SymbolResolutionCapability) {
+            return ((SymbolResolutionCapability) typeDeclaration).solveSymbol(name, typeSolver);
         }
-        if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
-            Context ctx = ((JavaParserInterfaceDeclaration) typeDeclaration).getContext();
-            return ctx.solveSymbol(name);
-        }
-        if (typeDeclaration instanceof JavaParserEnumDeclaration) {
-            Context ctx = ((JavaParserEnumDeclaration) typeDeclaration).getContext();
-            return ctx.solveSymbol(name);
-        }
-        if (typeDeclaration instanceof ReflectionClassDeclaration) {
-            return ((ReflectionClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-            return ((ReflectionInterfaceDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof ReflectionEnumDeclaration) {
-            ResolvedEnumConstantDeclaration  red = ((ReflectionEnumDeclaration) typeDeclaration).getEnumConstant(name);
-            return SymbolReference.solved(red);
-        }
-        if (typeDeclaration instanceof JavassistClassDeclaration) {
-            return ((JavassistClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof JavassistEnumDeclaration) {
-            return ((JavassistEnumDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
-            return ((JavassistInterfaceDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
-        }
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     /**
@@ -183,6 +148,6 @@ public class SymbolSolver {
         if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
             return ((JavaParserInterfaceDeclaration) typeDeclaration).solveType(name);
         }
-        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+        return SymbolReference.unsolved();
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,23 +20,23 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A do-while.
@@ -96,7 +96,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     public DoStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
-            return (DoStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
@@ -110,7 +110,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     public DoStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
-            return (DoStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         if (this.condition != null)
@@ -118,14 +118,6 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
     }
 
     @Override
@@ -143,8 +135,9 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         if (node == body) {
             setBody((Statement) replacementNode);
             return true;
@@ -168,6 +161,7 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifDoStmt(Consumer<DoStmt> action) {
         action.accept(this);

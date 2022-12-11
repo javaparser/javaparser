@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
 import com.github.javaparser.ast.Node;
@@ -31,6 +30,10 @@ import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
  */
 public interface NodeWithStaticModifier<N extends Node> extends NodeWithModifiers<N> {
 
+    /**
+     * @return true, if the modifier {@code static} is explicitly added to this node. If the node is implicitly static
+     * without an explicit modifier (e.g. nested records), this method should be overridden.
+     */
     default boolean isStatic() {
         return hasModifier(STATIC);
     }
@@ -39,5 +42,4 @@ public interface NodeWithStaticModifier<N extends Node> extends NodeWithModifier
     default N setStatic(boolean set) {
         return setModifier(STATIC, set);
     }
-
 }

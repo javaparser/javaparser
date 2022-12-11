@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import java.io.IOException;
@@ -34,10 +33,12 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * See <a href="http://javaparser.org/javaparsers-logging-framework-in-one-file/">a blog about this</a>
  */
 public class Log {
+
     /**
      * This adapter logs to standard out and standard error.
      */
     public static class StandardOutStandardErrorAdapter implements Adapter {
+
         @Override
         public void info(Supplier<String> messageSupplier) {
             System.out.println(messageSupplier.get());
@@ -64,7 +65,8 @@ public class Log {
         }
 
         private void printStackTrace(Throwable throwable) {
-            try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw)) {
+            try (StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw)) {
                 throwable.printStackTrace(pw);
                 trace(sw::toString);
             } catch (IOException e) {
@@ -77,6 +79,7 @@ public class Log {
      * This adapter logs nothing.
      */
     public static class SilentAdapter implements Adapter {
+
         @Override
         public void info(Supplier<String> messageSupplier) {
         }
@@ -129,7 +132,6 @@ public class Log {
         };
     }
 
-
     /**
      * For logging things that are nice to see scrolling by.
      */
@@ -142,7 +144,7 @@ public class Log {
      * For drawing attention to an error.
      */
     public static void error(Throwable throwable) {
-        CURRENT_ADAPTER.error(() -> throwable, null);
+        CURRENT_ADAPTER.error(() -> throwable, () -> null);
     }
 
     /**

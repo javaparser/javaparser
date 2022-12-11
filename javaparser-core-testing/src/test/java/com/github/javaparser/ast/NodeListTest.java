@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -45,7 +46,7 @@ import java.util.Optional;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.jupiter.api.Assertions.*;
 
-class NodeListTest {
+class NodeListTest extends AbstractLexicalPreservingTest {
 
     @Test
     void replace() {
@@ -283,20 +284,16 @@ class NodeListTest {
             @Test
             void usageTest() {
                 final String REFERENCE_TO_BE_DELETED = "bad";
-                String original = "" +
+                considerCode("" +
                         "@MyAnnotation(myElements = {\"good\", \"bad\", \"ugly\"})\n" +
                         "public final class MyClass {\n" +
-                        "}";
+                        "}");
                 String expected = "" +
                         "@MyAnnotation(myElements = {\"good\", \"ugly\"})\n" +
                         "public final class MyClass {\n" +
                         "}";
 
-                JavaParser javaParser = new JavaParser();
-                javaParser.getParserConfiguration().setLexicalPreservationEnabled(true);
-
-                CompilationUnit compilationUnit = javaParser.parse(original).getResult().get();
-                List<NormalAnnotationExpr> annotations = compilationUnit.findAll(NormalAnnotationExpr.class);
+                List<NormalAnnotationExpr> annotations = cu.findAll(NormalAnnotationExpr.class);
 
                 annotations.forEach(annotation -> {
                     // testcase, per https://github.com/javaparser/javaparser/issues/2936#issuecomment-731370505
@@ -316,7 +313,7 @@ class NodeListTest {
                     }
                 });
 
-                assertEquals(expected, LexicalPreservingPrinter.print(compilationUnit));
+                assertEquals(expected, LexicalPreservingPrinter.print(cu));
             }
         }
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -91,14 +91,6 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
     /**
      * @return the literal value as an integer while respecting different number representations
      * @deprecated This function has issues with corner cases, such as 2147483648, so please use {@link
@@ -171,14 +163,6 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
-            return false;
-        return super.replace(node, replacementNode);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isIntegerLiteralExpr() {
         return true;
@@ -190,6 +174,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIntegerLiteralExpr(Consumer<IntegerLiteralExpr> action) {
         action.accept(this);

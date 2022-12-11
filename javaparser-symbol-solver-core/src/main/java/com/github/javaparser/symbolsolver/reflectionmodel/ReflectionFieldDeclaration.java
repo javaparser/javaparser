@@ -23,10 +23,10 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -71,6 +71,11 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public boolean isStatic() {
         return Modifier.isStatic(field.getModifiers());
+    }
+
+    @Override
+    public boolean isVolatile() {
+        return Modifier.isVolatile(field.getModifiers());
     }
 
     @Override

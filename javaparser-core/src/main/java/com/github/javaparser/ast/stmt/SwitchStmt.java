@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,23 +20,23 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import java.util.function.Consumer;
+import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import java.util.Optional;
-import com.github.javaparser.ast.Generated;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>The switch statement</h1>
@@ -131,7 +131,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
     public SwitchStmt setEntries(final NodeList<SwitchEntry> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
-            return (SwitchStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         if (this.entries != null)
@@ -145,7 +145,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
     public SwitchStmt setSelector(final Expression selector) {
         assertNotNull(selector);
         if (selector == this.selector) {
-            return (SwitchStmt) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
         if (this.selector != null)
@@ -158,8 +158,9 @@ public class SwitchStmt extends Statement implements SwitchNode {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < entries.size(); i++) {
             if (entries.get(i) == node) {
                 entries.remove(i);
@@ -184,8 +185,9 @@ public class SwitchStmt extends Statement implements SwitchNode {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < entries.size(); i++) {
             if (entries.get(i) == node) {
                 entries.set(i, (SwitchEntry) replacementNode);
@@ -211,6 +213,7 @@ public class SwitchStmt extends Statement implements SwitchNode {
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchStmt(Consumer<SwitchStmt> action) {
         action.accept(this);

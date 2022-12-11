@@ -23,41 +23,34 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.comparators.MethodComparator;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionClassDeclaration extends AbstractClassDeclaration implements MethodUsageResolutionCapability {
+public class ReflectionClassDeclaration extends AbstractClassDeclaration
+        implements MethodUsageResolutionCapability, SymbolResolutionCapability {
 
     ///
     /// Fields
@@ -201,7 +194,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
         // MethodResolutionLogic.findMostApplicable method returns very early 
         // when candidateSolvedMethods is empty.
         if (candidateSolvedMethods.isEmpty()) {
-            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+            return SymbolReference.unsolved();
         }
         return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver);
     }
@@ -215,7 +208,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
 
     public ResolvedType getUsage(Node node) {
 
-        return new ReferenceTypeImpl(this, typeSolver);
+        return new ReferenceTypeImpl(this);
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, Context invokationContext, List<ResolvedType> typeParameterValues) {
@@ -303,14 +296,14 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
         return reflectionClassAdapter.getAllFields();
     }
 
-    @Deprecated
+    @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : clazz.getFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     @Override
@@ -325,7 +318,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override
@@ -409,6 +402,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration impleme
 
     @Override
     protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 }

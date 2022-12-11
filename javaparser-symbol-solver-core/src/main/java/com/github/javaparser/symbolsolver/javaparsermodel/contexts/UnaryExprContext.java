@@ -1,10 +1,10 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
             // Avoid infinite loop
             if(!this.equals(innerContext)) {
                 // Note that `UnaryExpr.Operator.LOGICAL_COMPLEMENT` is `!`
-                // Previously negated pattern expressions are now now available (double negatives) -- e.g. if(!!("a" instanceof String s)) {}
+                // Previously negated pattern expressions are now available (double negatives) -- e.g. if(!!("a" instanceof String s)) {}
                 results.addAll(innerContext.negatedPatternExprsExposedFromChildren());
             }
         }

@@ -24,14 +24,25 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
-import java.util.*;
+import java.lang.annotation.Inherited;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -41,23 +52,32 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     private com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
     private TypeSolver typeSolver;
+    private JavaParserTypeAdapter<AnnotationDeclaration> javaParserTypeAdapter;
 
     public JavaParserAnnotationDeclaration(AnnotationDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
     }
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
-        ancestors.add(new ReferenceTypeImpl(typeSolver.solveType("java.lang.annotation.Annotation"), typeSolver));
+        ancestors.add(new ReferenceTypeImpl(typeSolver.solveType("java.lang.annotation.Annotation")));
         return ancestors;
     }
 
     @Override
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+        return javaParserTypeAdapter.internalTypes();
+    }
+
+    @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-        // TODO #1837
-        throw new UnsupportedOperationException();
+         return wrappedNode.getFields().stream()
+                .flatMap(field -> field.getVariables().stream())
+                .map(var -> new JavaParserFieldDeclaration(var, typeSolver))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -135,6 +155,11 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean isInheritable() {
+        return wrappedNode.getAnnotationByClass(Inherited.class).isPresent();
     }
 
     @Override

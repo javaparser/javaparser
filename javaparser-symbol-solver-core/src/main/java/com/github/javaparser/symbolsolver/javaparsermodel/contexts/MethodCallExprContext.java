@@ -21,41 +21,27 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.ResolvedArrayType;
-import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.resolution.types.ResolvedUnionType;
-import com.github.javaparser.resolution.types.ResolvedWildcard;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
+
+import java.util.*;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -180,7 +166,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
         }
 
-        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     ///
@@ -335,6 +321,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         if (source.isNull()) {
             return;
         }
+        
+        if (target.isReferenceType()) {
+            ResolvedReferenceType formalTypeAsReference = target.asReferenceType();
+            if (formalTypeAsReference.isJavaLangObject()) {
+                return;
+            }
+        }
         throw new RuntimeException(source.describe() + " " + target.describe());
     }
 
@@ -367,6 +360,24 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
                 // match only the varargs type
                 matchTypeParameters(expectedType, actualType, matchedTypeParameters);
+            } else if (methodUsage.getDeclaration().getNumberOfParams() == 1) {
+            	// In this case the method declares only one parameter which is a variadic parameter.
+            	// At this stage we can consider that the actual parameters all have the same type.
+                ResolvedType expectedType =
+                    methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
+                // the varargs corresponding type can not be an Array<T> because of the assumption
+//                ResolvedType actualType = new ResolvedArrayType(actualParamTypes.get(actualParamTypes.size() - 1));
+                ResolvedType actualType = actualParamTypes.get(actualParamTypes.size() - 1);
+                if (!expectedType.isAssignableBy(actualType)) {
+                    throw new UnsupportedOperationException(
+                    		String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                            expectedType,
+                            actualType,
+                            methodUsage.getDeclaration(),
+                            methodUsage));
+                }
+                matchTypeParameters(expectedType, actualType, matchedTypeParameters);
+                return replaceTypeParameter(methodUsage, matchedTypeParameters);
             } else {
                 return methodUsage;
             }
@@ -381,11 +392,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             ResolvedType actualType = actualParamTypes.get(i);
             matchTypeParameters(expectedType, actualType, matchedTypeParameters);
         }
-        for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
-            methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
-        }
+        methodUsage = replaceTypeParameter(methodUsage, matchedTypeParameters);
         return methodUsage;
     }
+
+	private MethodUsage replaceTypeParameter(MethodUsage methodUsage,
+			Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
+		for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
+            methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
+        }
+		return methodUsage;
+	}
 
     private void matchTypeParameters(ResolvedType expectedType, ResolvedType actualType, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
@@ -467,14 +484,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else if (wildcardUsage.isExtends()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else {
-                return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, invokationContext);
+                return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)), name, argumentsTypes, invokationContext);
             }
         } else if (type instanceof ResolvedLambdaConstraintType){
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
-            return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, invokationContext);
+            return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedUnionType) {
             Optional<ResolvedReferenceType> commonAncestor = type.asUnionType().getCommonAncestor();
             if (commonAncestor.isPresent()) {

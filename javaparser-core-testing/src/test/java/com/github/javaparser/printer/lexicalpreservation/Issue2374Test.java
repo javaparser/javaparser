@@ -32,19 +32,18 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
 
-public class Issue2374Test {
+public class Issue2374Test extends AbstractLexicalPreservingTest {
     
     @Test
     public void test() {
         String lineComment = "Example comment";
-        CompilationUnit cu = StaticJavaParser.parse(
+        considerCode(
                 "public class Bar {\n" + 
                 "    public void foo() {\n" + 
                 "        System.out.print(\"Hello\");\n" + 
                 "    }\n" + 
                 "}"
                 );
-        LexicalPreservingPrinter.setup(cu); 
         // contruct a statement with a comment
         Statement stmt = StaticJavaParser.parseStatement("System.out.println(\"World!\");");
         stmt.setLineComment(lineComment);

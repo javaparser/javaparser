@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -35,10 +34,9 @@ import java.util.Set;
  */
 public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
 
-    ///
-    /// Containment
-    ///
-
+    // /
+    // / Containment
+    // /
     /**
      * Get the list of types defined inside the current type.
      */
@@ -51,10 +49,8 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * (Does not include internal types inside internal types).
      */
     default ResolvedReferenceTypeDeclaration getInternalType(String name) {
-        Optional<ResolvedReferenceTypeDeclaration> type =
-                this.internalTypes().stream().filter(f -> f.getName().equals(name)).findFirst();
-        return type.orElseThrow(() ->
-                new UnsolvedSymbolException("Internal type not found: " + name));
+        Optional<ResolvedReferenceTypeDeclaration> type = this.internalTypes().stream().filter(f -> f.getName().equals(name)).findFirst();
+        return type.orElseThrow(() -> new UnsolvedSymbolException("Internal type not found: " + name));
     }
 
     /**
@@ -70,10 +66,9 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      */
     Optional<ResolvedReferenceTypeDeclaration> containerType();
 
-    ///
-    /// Misc
-    ///
-
+    // /
+    // / Misc
+    // /
     /**
      * Is this the declaration of a class?
      * Note that an Enum is not considered a Class in this case.
@@ -93,6 +88,20 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * Is this the declaration of an enum?
      */
     default boolean isEnum() {
+        return false;
+    }
+
+    /**
+     * Is this the declaration of an annotation?
+     */
+    default boolean isAnnotation() {
+        return false;
+    }
+
+    /**
+     * Is this the declaration of a reference type?
+     */
+    default boolean isReferenceType() {
         return false;
     }
 
@@ -158,6 +167,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     }
 
     /**
+     * Return this as a AnnotationDeclaration or throw UnsupportedOperationException.
+     */
+    default ResolvedAnnotationDeclaration asAnnotation() {
+        throw new UnsupportedOperationException(String.format("%s is not an annotation", this));
+    }
+
+    /**
      * Return this as a TypeParameterDeclaration or throw UnsupportedOperationException.
      */
     default ResolvedTypeParameterDeclaration asTypeParameter() {
@@ -194,5 +210,4 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
         }
         return qname;
     }
-
 }

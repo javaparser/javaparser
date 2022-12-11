@@ -42,11 +42,11 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ControlFlowLogic;
@@ -244,7 +244,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                             // FEDERICO: Added - Start
                             for (int i=0;i<lambdaExpr.getParameters().size();i++) {
                                 ResolvedType paramType = targetFunctionType.getFormalArgumentTypes().get(i);
-                                TypeInferenceCache.record(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
+                                TypeInferenceCache.addRecord(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
                             }
                             // FEDERICO: Added - End
                             Expression e = ((ExpressionStmt)lambdaExpr.getBody()).getExpression();

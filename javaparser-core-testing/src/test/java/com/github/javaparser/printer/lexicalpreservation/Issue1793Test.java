@@ -31,7 +31,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
-class Issue1793Test {
+class Issue1793Test extends AbstractLexicalPreservingTest {
     
     @AfterEach
     public void reset() {
@@ -40,7 +40,7 @@ class Issue1793Test {
 
     @Test
     void importIsAddedOnTheSameLine() {
-        String src = 
+        considerCode( 
                 "public class Test {\n" + 
                 "  public void foo(Bar x, Bar y) {\n" + 
                 "    x.barf(); // expected to be wrapped\n" + 
@@ -48,10 +48,7 @@ class Issue1793Test {
                 "    y.barf(); // expected to be wrapped\n" + 
                 "    y.bark(); // expected to be wrapped\n" + 
                 "  }\n" + 
-                "}";
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setLexicalPreservationEnabled(true));
-        CompilationUnit cu = StaticJavaParser.parse(src);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
         assertEquals(LexicalPreservingPrinter.print(cu), LexicalPreservingPrinter.print(cu.clone()));
     }
 

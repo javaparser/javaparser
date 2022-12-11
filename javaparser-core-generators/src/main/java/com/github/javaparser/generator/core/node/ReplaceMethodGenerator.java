@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -43,12 +43,13 @@ public class ReplaceMethodGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         MethodDeclaration replaceNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean replace(Node node, Node replacementNode) {}");
         nodeCu.addImport(Node.class);
-        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(replaceNodeMethod));
+        annotateWhenOverridden(nodeMetaModel, replaceNodeMethod);
 
         final BlockStmt body = replaceNodeMethod.getBody().get();
 
-        body.addStatement("if (node == null) return false;");
+        body.addStatement("if (node == null) { return false; }");
 
+        int numberPropertiesDeclared = 0;
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             if (!property.isNode()) {
                 continue;
@@ -63,14 +64,19 @@ public class ReplaceMethodGenerator extends NodeGenerator {
                 check = f("if (%s != null) { %s }", property.getName(), check);
             }
             body.addStatement(check);
+            numberPropertiesDeclared++;
         }
         if (nodeMetaModel.getSuperNodeMetaModel().isPresent()) {
             body.addStatement("return super.replace(node, replacementNode);");
         } else {
             body.addStatement("return false;");
         }
-        
-        addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
+
+        if (!nodeMetaModel.isRootNode() && numberPropertiesDeclared == 0) {
+            removeMethodWithSameSignature(nodeCoid, replaceNodeMethod);
+        } else {
+            addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
+        }
     }
 
     private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {

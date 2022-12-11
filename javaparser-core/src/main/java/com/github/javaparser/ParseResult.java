@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,10 +18,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.CommentsCollection;
 
 import java.util.List;
@@ -34,8 +32,11 @@ import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
  * The results given when parsing with an instance of JavaParser.
  */
 public class ParseResult<T> {
+
     private final T result;
+
     private final List<Problem> problems;
+
     private final CommentsCollection commentsCollection;
 
     /**
@@ -104,12 +105,5 @@ public class ParseResult<T> {
             message.append(problem.toString()).append(SYSTEM_EOL);
         }
         return message.toString();
-    }
-
-    /**
-     * A post processor that can be added to ParserConfiguration to add some processing right after parsing.
-     */
-    public interface PostProcessor {
-        void process(ParseResult<? extends Node> result, ParserConfiguration configuration);
     }
 }

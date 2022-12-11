@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,9 +27,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -45,12 +45,12 @@ public class RemoveMethodGenerator extends NodeGenerator {
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         MethodDeclaration removeNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean remove(Node node) {}");
         nodeCu.addImport(Node.class);
-        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(removeNodeMethod));
+        annotateWhenOverridden(nodeMetaModel, removeNodeMethod);
 
         final BlockStmt body = removeNodeMethod.getBody().get();
 
-        body.addStatement("if (node == null) return false;");
-
+        body.addStatement("if (node == null) { return false; }");
+        int numberPropertiesDeclared = 0;
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             if (!property.isNode()) {
                 continue;
@@ -69,14 +69,19 @@ public class RemoveMethodGenerator extends NodeGenerator {
                 check = f("if (%s != null) { %s }", property.getName(), check);
             }
             body.addStatement(check);
+            numberPropertiesDeclared++;
         }
         if (nodeMetaModel.getSuperNodeMetaModel().isPresent()) {
             body.addStatement("return super.remove(node);");
         } else {
             body.addStatement("return false;");
         }
-        
-        addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
+
+        if (!nodeMetaModel.isRootNode() && numberPropertiesDeclared == 0) {
+            removeMethodWithSameSignature(nodeCoid, removeNodeMethod);
+        } else {
+            addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
+        }
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {

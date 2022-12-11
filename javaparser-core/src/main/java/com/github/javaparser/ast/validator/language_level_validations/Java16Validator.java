@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -30,9 +29,14 @@ public class Java16Validator extends Java15Validator {
 
     public Java16Validator() {
         super();
-
         // Released Language Features
-        remove(noPatternMatchingInstanceOf); // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
-        // TODO: remove(noRecordDeclaration); // Records released within Java 16 - https://openjdk.java.net/jeps/395
+        // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305
+        remove(noPatternMatchingInstanceOf);
+        {
+            // Records released within Java 16 - https://openjdk.java.net/jeps/395
+            remove(noRecordDeclaration);
+            add(recordAsTypeIdentifierNotAllowed);
+            add(recordDeclarationValidator);
+        }
     }
 }

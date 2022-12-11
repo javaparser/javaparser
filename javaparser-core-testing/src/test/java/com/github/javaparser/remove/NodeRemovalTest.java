@@ -28,8 +28,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import com.github.javaparser.utils.TestParser;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,21 +38,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-class NodeRemovalTest {
-	private final CompilationUnit cu = new CompilationUnit();
+class NodeRemovalTest extends  AbstractLexicalPreservingTest{
+	
+	private final CompilationUnit compilationUnit = new CompilationUnit();
 
 	@Test
 	void testRemoveClassFromCompilationUnit() {
-		ClassOrInterfaceDeclaration testClass = cu.addClass("test");
-		assertEquals(1, cu.getTypes().size());
+		ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
+		assertEquals(1, compilationUnit.getTypes().size());
 		boolean remove = testClass.remove();
 		assertTrue(remove);
-		assertEquals(0, cu.getTypes().size());
+		assertEquals(0, compilationUnit.getTypes().size());
 	}
 
 	@Test
 	void testRemoveFieldFromClass() {
-		ClassOrInterfaceDeclaration testClass = cu.addClass("test");
+		ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
 
 		FieldDeclaration addField = testClass.addField(String.class, "test");
 		assertEquals(1, testClass.getMembers().size());
@@ -63,7 +64,7 @@ class NodeRemovalTest {
 
 	@Test
 	void testRemoveStatementFromMethodBody() {
-		ClassOrInterfaceDeclaration testClass = cu.addClass("testC");
+		ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("testC");
 
 		MethodDeclaration addMethod = testClass.addMethod("testM");
 		BlockStmt methodBody = addMethod.createBody();
@@ -76,12 +77,11 @@ class NodeRemovalTest {
 
 	@Test
 	void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
-		String sample = "{\r\n" + "    log.error(\"context\", e);\r\n" +
+		considerStatement("{\r\n" + "    log.error(\"context\", e);\r\n" +
 				"    log.error(\"context\", e);\r\n" +
-				"    throw new ApplicationException(e);\r\n" + "}\r\n";
-		BlockStmt bstmt = TestParser.parseStatement(sample).asBlockStmt();
-		BlockStmt stmt = LexicalPreservingPrinter.setup(bstmt);
-		List<Node> children = stmt.getChildNodes();
+				"    throw new ApplicationException(e);\r\n" + "}\r\n");
+		BlockStmt bstmt = statement.asBlockStmt();
+		List<Node> children = bstmt.getChildNodes();
 		remove(children.get(0));
 		assertTrue(children.size() == 2);
 		remove(children.get(0));

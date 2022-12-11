@@ -21,9 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -65,7 +65,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
 
         if (s.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            ResolvedType sFirst = new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()), typeSolver);
+            ResolvedType sFirst = new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()));
             return ReductionResult.oneConstraint(new TypeCompatibleWithType(typeSolver, sFirst, t));
         }
 
@@ -73,7 +73,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
 
         if (t.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            ResolvedType tFirst = new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()), typeSolver);
+            ResolvedType tFirst = new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()));
             return ReductionResult.oneConstraint(new TypeSameAsType(s, tFirst));
         }
 

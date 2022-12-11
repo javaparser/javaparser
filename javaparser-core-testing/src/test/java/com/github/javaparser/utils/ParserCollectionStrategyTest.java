@@ -21,30 +21,30 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 
 class ParserCollectionStrategyTest {
 
-    private static final ParserConfiguration parserConfig_java8 = new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_8);
-    private static final ParserConfiguration parserConfig_java9 = new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_9);
+    private final ParserCollectionStrategy parserCollectionStrategy = new ParserCollectionStrategy(
+            new ParserConfiguration().setLanguageLevel(JAVA_9));
 
     @Test
     void getSourceRoots() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(ParserCollectionStrategyTest.class).resolve("").getParent();
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final Path root = mavenModuleRoot(ParserCollectionStrategyTest.class).resolve("").getParent();
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         assertThat(projectRoot.getSourceRoots()).isNotEmpty();
         assertThat(projectRoot.getSourceRoot(root.resolve("javaparser-core/src/main/java"))).isNotEmpty();
@@ -56,51 +56,51 @@ class ParserCollectionStrategyTest {
 
     @Test
     void rootAreFound_singleJavaFileInPackage() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/without_module_info");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/without_module_info");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         sourceRoots.forEach(System.out::println);
 
-        assertEquals(1, sourceRoots.size());
-        assertTrue(sourceRoots.get(0).getRoot().normalize().endsWith("without_module_info"));
+        assertThat(sourceRoots).map(SourceRoot::getRoot).extracting(Path::getFileName).map(Path::getFileName).map(Path::toString)
+                .containsExactly("without_module_info");
     }
 
     @Test
     void rootsAreFound_withModuleInfoAndJavaFileInPackage() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         sourceRoots.forEach(System.out::println);
 
-        assertEquals(1, sourceRoots.size());
-        assertTrue(sourceRoots.get(0).getRoot().normalize().endsWith("with_module_info"));
+        assertThat(sourceRoots).map(SourceRoot::getRoot).extracting(Path::getFileName).map(Path::getFileName).map(Path::toString)
+                .containsExactly("with_module_info");
     }
 
     @Test
     void rootsAreFound_withModuleInfoInRootAndJavaFileInPackage() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info_in_root");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info_in_root");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         sourceRoots.forEach(System.out::println);
 
-        assertEquals(1, sourceRoots.size());
-        assertTrue(sourceRoots.get(0).getRoot().normalize().endsWith("with_module_info_in_root"));
+        assertThat(sourceRoots).map(SourceRoot::getRoot).extracting(Path::getFileName).map(Path::getFileName).map(Path::toString)
+                .containsExactly("with_module_info_in_root");
     }
 
     @Test
     void rootsAreFound_parentOfMultipleSourceRootsWithAndWithoutModuleInfo() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
 
-        for (SourceRoot sourceRoot : sourceRoots) {
-            sourceRoot.getRoot().normalize().endsWith("with_module_info");
-            System.out.println(sourceRoot);
-        }
+//        for (SourceRoot sourceRoot : sourceRoots) {
+//            sourceRoot.getRoot().normalize().endsWith("with_module_info");
+//            System.out.println(sourceRoot);
+//        }
 
         assertEquals(3, sourceRoots.size());
     }
@@ -108,13 +108,14 @@ class ParserCollectionStrategyTest {
 
     @Test
     void manualInspectionOfSystemOut_callbackOnSourceRootParse_parentOfMultipleSourceRootsWithAndWithoutModuleInfo() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         Callback cb = new Callback();
 
         final List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        assertEquals(3, sourceRoots.size());
+        assertThat(sourceRoots).map(SourceRoot::getRoot).extracting(Path::getFileName).map(Path::getFileName).map(Path::toString)
+                .containsExactlyInAnyOrder("with_module_info_in_root", "without_module_info", "with_module_info");
 
         sourceRoots.forEach(sourceRoot -> {
             try {
@@ -123,19 +124,18 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
     @Test
     void manualInspectionOfSystemOut_callbackOnSourceRootParse_singleJavaFileInPackage() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/without_module_info");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/without_module_info");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         Callback cb = new Callback();
 
         final List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        assertEquals(1, sourceRoots.size());
+        assertThat(sourceRoots).map(SourceRoot::getRoot).extracting(Path::getFileName).map(Path::getFileName).map(Path::toString)
+                .containsExactlyInAnyOrder("without_module_info");
 
         sourceRoots.forEach(sourceRoot -> {
             try {
@@ -144,19 +144,18 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
     @Test
     void manualInspectionOfSystemOut_callbackOnSourceRootParse_withModuleInfoAndJavaFileInPackage() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy().collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         Callback cb = new Callback();
 
         final List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        assertEquals(1, sourceRoots.size());
+        assertThat(sourceRoots).map(SourceRoot::getRoot).extracting(Path::getFileName).map(Path::getFileName).map(Path::toString)
+                .containsExactlyInAnyOrder("with_module_info");
 
         sourceRoots.forEach(sourceRoot -> {
             try {
@@ -165,19 +164,18 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
     @Test
     void manualInspectionOfSystemOut_callbackOnSourceRootParse_withModuleInfoInRootAndJavaFileInPackage() {
-        final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info_in_root");
-        final ProjectRoot projectRoot = new ParserCollectionStrategy(parserConfig_java9).collect(root);
+        final Path root = mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/projectroot/issue2615/with_module_info_in_root");
+        final ProjectRoot projectRoot = parserCollectionStrategy.collect(root);
 
         Callback cb = new Callback();
 
         final List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        assertEquals(1, sourceRoots.size());
+        assertThat(sourceRoots).map(SourceRoot::getRoot).extracting(Path::getFileName).map(Path::getFileName).map(Path::toString)
+                .containsExactlyInAnyOrder("with_module_info_in_root");
 
         sourceRoots.forEach(sourceRoot -> {
             try {
@@ -186,8 +184,6 @@ class ParserCollectionStrategyTest {
                 System.err.println("IOException: " + e);
             }
         });
-
-
     }
 
 

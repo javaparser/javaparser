@@ -43,9 +43,7 @@ public class Issue2740Test extends AbstractResolutionTest {
         CompilationUnit cu = StaticJavaParser.parse(code);
         List<MethodCallExpr> methodCallExpr = cu.findAll(MethodCallExpr.class);
         for (MethodCallExpr expr : methodCallExpr) {
-            System.out.println("trying to solde " + expr.toString());
             ResolvedMethodDeclaration rd = expr.resolve();
-            System.out.println(String.format("%s solved to %s", expr.toString(), rd.getQualifiedSignature()));
         }
     }
     

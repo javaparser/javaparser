@@ -41,7 +41,6 @@ class PrettyPrinterIssue2351Test extends AbstractLexicalPreservingTest  {
         considerCode(def2);
         Optional<EnumDeclaration> decl = cu.findFirst(EnumDeclaration.class);
         if (decl.isPresent()) decl.get().addEnumConstant("SOMETHING");
-        System.out.println(LexicalPreservingPrinter.print(cu));
         assertTrue(decl.get().getEntries().size() == 2);
     }
 

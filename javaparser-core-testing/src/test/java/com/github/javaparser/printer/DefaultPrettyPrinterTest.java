@@ -189,7 +189,6 @@ class DefaultPrettyPrinterTest {
                 "";
         
         String printed = getDefaultPrinter(configuration).print(parse(code));
-        System.out.println(printed);
 
         assertEquals(expected, printed);
     }
@@ -520,7 +519,6 @@ class DefaultPrettyPrinterTest {
         TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
         assertEquals(2, td.getAllContainedComments().size());
         td.setPublic(true); // --- simple AST change -----
-        System.out.println(cu.toString()); // orphan and /*orphan*/ must be printed
         assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
     }
     
@@ -575,5 +573,36 @@ class DefaultPrettyPrinterTest {
         indentation.setType(IndentType.TABS);
         assertTrue(indentation.getType() == IndentType.TABS);
         assertEquals("\t\t", indentation.getIndent());
+    }
+    
+    @Test
+    public void testIssue3317() {
+
+        String code = "public class Test {\n" + 
+                "  protected void someMethod() {\n" + 
+                "    // Before\n" + 
+                "    System.out\n"+
+                "    // Middle Comment\n" + 
+                "    .println(\"\");\n" + 
+                "    // After\n" + 
+                "  }\n" +
+                "}";
+        
+        String expected = "public class Test {\n" + 
+                "\n" + 
+                "    protected void someMethod() {\n" + 
+                "        // Before\n" + 
+                "        System.out.// Middle Comment\n" + 
+                "        println(\"\");\n" + 
+                "        // After\n" + 
+                "    }\n" + 
+                "}\n";
+
+        StaticJavaParser.setConfiguration(new ParserConfiguration());
+
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        
+        assertEqualsStringIgnoringEol(expected, cu.toString());
+
     }
 }

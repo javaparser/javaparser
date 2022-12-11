@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -42,11 +41,15 @@ import com.github.javaparser.ast.type.TypeParameter;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.function.Supplier;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
-import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Providers.resourceProvider;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Parse Java source code and creates Abstract Syntax Trees.
@@ -55,6 +58,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see StaticJavaParser
  */
 public final class JavaParser {
+
     private final ParserConfiguration configuration;
 
     private GeneratedJavaParser astParser = null;
@@ -90,10 +94,9 @@ public final class JavaParser {
         }
         astParser.setTabSize(configuration.getTabSize());
         astParser.setStoreTokens(configuration.isStoreTokens());
-
         ParserConfiguration.LanguageLevel languageLevel = configuration.getLanguageLevel();
         if (languageLevel != null) {
-            if(languageLevel.isYieldSupported()) {
+            if (languageLevel.isYieldSupported()) {
                 astParser.setYieldSupported();
             }
         }
@@ -113,22 +116,18 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
-
-        for (PreProcessor preProcessor : configuration.getPreProcessors()) {
-            provider = preProcessor.process(provider);
+        List<Processor> processors = configuration.getProcessors().stream().map(Supplier::get).collect(toList());
+        for (Processor processor : processors) {
+            provider = processor.preProcess(provider);
         }
-
         final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
             N resultNode = start.parse(parser);
             ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getCommentsCollection());
-
-            configuration.getPostProcessors()
-                    .forEach(postProcessor -> postProcessor.process(result, configuration));
-
-            result.getProblems()
-                    .sort(PROBLEM_BY_BEGIN_POSITION);
-
+            for (Processor processor : processors) {
+                processor.postProcess(result, configuration);
+            }
+            result.getProblems().sort(PROBLEM_BY_BEGIN_POSITION);
             return result;
         } catch (Exception e) {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
@@ -516,7 +515,6 @@ public final class JavaParser {
         return parse(MODULE_DIRECTIVE, provider(moduleDirective));
     }
 
-
     /**
      * Parses a type parameter and returns it as a TypeParameter
      *
@@ -539,5 +537,4 @@ public final class JavaParser {
     public ParseResult<MethodDeclaration> parseMethodDeclaration(String methodDeclaration) {
         return parse(METHOD_DECLARATION, provider(methodDeclaration));
     }
-
 }

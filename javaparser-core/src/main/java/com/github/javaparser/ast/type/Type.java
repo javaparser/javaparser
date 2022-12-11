@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2021 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,12 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -39,12 +33,18 @@ import com.github.javaparser.metamodel.TypeMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.types.ResolvedType;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * Base class for types.
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Type extends Node implements Resolvable<ResolvedType> {
+public abstract class Type extends Node implements Resolvable<ResolvedType>, ConvertibleToUsage {
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -84,7 +84,7 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (Type) this;
+            return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -100,20 +100,16 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
      * In "{@code int[] a[];}", the element type is int.
      */
     public Type getElementType() {
-        if (this instanceof ArrayType) {
-            return ((ArrayType) this).getComponentType().getElementType();
-        }
         return this;
     }
 
+    /*
+     * returns the array level that is 0 for non array type.
+     */
     public int getArrayLevel() {
-        if (this instanceof ArrayType) {
-            return 1 + ((ArrayType) this).getComponentType().getArrayLevel();
-        } else {
-            return 0;
-        }
+        return 0;
     }
-    
+
     public String toDescriptor() {
         return "";
     }
@@ -121,8 +117,9 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.remove(i);
@@ -149,8 +146,9 @@ public abstract class Type extends Node implements Resolvable<ResolvedType> {
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
         for (int i = 0; i < annotations.size(); i++) {
             if (annotations.get(i) == node) {
                 annotations.set(i, (AnnotationExpr) replacementNode);

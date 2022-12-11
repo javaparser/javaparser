@@ -34,11 +34,11 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.CapturesBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.FalseBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SameAsBound;
@@ -51,10 +51,12 @@ import com.github.javaparser.utils.Pair;
  * @author Federico Tomassetti
  */
 public class BoundSet {
+    
+    private static String JAVA_LANG_RUNTIME_EXCEPTION = RuntimeException.class.getCanonicalName();
+    
+    private static final BoundSet EMPTY = new BoundSet();
 
     private List<Bound> bounds = new LinkedList<>();
-
-    private static final BoundSet EMPTY = new BoundSet();
 
     @Override
     public boolean equals(Object o) {
@@ -713,7 +715,7 @@ public class BoundSet {
 
                     boolean throwsBound = bounds.stream().anyMatch(b -> b.isThrowsBoundOn(alphaI));
                     if (Ti == null && throwsBound && properUpperBoundsAreAtMostExceptionThrowableAndObject(alphaI)) {
-                        Ti = new ReferenceTypeImpl(typeSolver.solveType(RuntimeException.class.getCanonicalName()), typeSolver);
+                        Ti = new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_RUNTIME_EXCEPTION));
                     }
 
                     //   - Otherwise, where αi has proper upper bounds U1, ..., Uk, Ti = glb(U1, ..., Uk) (§5.1.10).

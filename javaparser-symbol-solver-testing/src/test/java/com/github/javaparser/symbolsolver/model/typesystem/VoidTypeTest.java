@@ -21,12 +21,14 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -37,7 +39,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VoidTypeTest {
@@ -51,12 +54,12 @@ class VoidTypeTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
+        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
         arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
         arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList())))));
     }
 
     @Test
@@ -116,36 +119,11 @@ class VoidTypeTest {
 
     @Test
     void testIsAssignableBy() {
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(NullType.INSTANCE));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(OBJECT));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(STRING));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
-        try {
-            assertEquals(false, ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedVoidType.INSTANCE));
-            fail();
-        } catch (UnsupportedOperationException e) {
-
-        }
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(NullType.INSTANCE));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(OBJECT));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(STRING));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
+        assertFalse(ResolvedVoidType.INSTANCE.isAssignableBy(ResolvedVoidType.INSTANCE));
     }
 
 }

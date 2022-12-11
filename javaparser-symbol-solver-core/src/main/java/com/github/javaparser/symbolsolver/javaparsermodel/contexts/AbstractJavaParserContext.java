@@ -21,39 +21,34 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-import static java.util.Collections.singletonList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+
+import java.util.*;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static java.util.Collections.singletonList;
 
 /**
  * @author Federico Tomassetti
@@ -77,7 +72,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 return SymbolReference.solved(decl);
             }
         }
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     ///
@@ -157,7 +152,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInParentContext(String name) {
         Optional<Context> optionalParentContext = getParent();
         if (!optionalParentContext.isPresent()) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         // First check if there are any pattern expressions available to this node.
@@ -282,7 +277,30 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                         .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
         );
     }
+    
+    /**
+     * Similar to solveMethod but we return a MethodUsage.
+     * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
+     */
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
+        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
+        if (methodSolved.isSolved()) {
+            ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
+            if (!(methodDeclaration instanceof TypeVariableResolutionCapability)) {
+                throw new UnsupportedOperationException(String.format(
+                        "Resolved method declarations must implement %s.",
+                        TypeVariableResolutionCapability.class.getName()
+                ));
+            }
 
+            MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(this, argumentsTypes);
+            return Optional.of(methodUsage);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public N getWrappedNode() {
         return wrappedNode;
     }

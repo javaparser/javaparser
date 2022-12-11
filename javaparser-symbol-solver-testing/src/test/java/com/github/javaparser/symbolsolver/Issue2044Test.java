@@ -40,9 +40,9 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
@@ -131,10 +131,8 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
         JavaParser javaParser = new JavaParser(configuration);
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
 
-        System.out.println(result.isSuccessful());
         result.ifSuccessful(compilationUnit -> {
             final List<MethodDeclaration> methodDeclarations = compilationUnit.findAll(MethodDeclaration.class);
-            System.out.println(methodDeclarations.size());
 
             methodDeclarations.forEach(methodDeclaration -> {
 

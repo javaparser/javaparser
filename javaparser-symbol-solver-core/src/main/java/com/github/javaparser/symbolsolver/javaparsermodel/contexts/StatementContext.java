@@ -28,15 +28,15 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.Collections;
@@ -56,7 +56,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     public static SymbolReference<? extends ResolvedValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
         Optional<Node> optionalParentNode = stmt.getParentNode();
         if(!optionalParentNode.isPresent()) {
-             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+             return SymbolReference.unsolved();
         }
 
         Node parentOfWrappedNode = optionalParentNode.get();
@@ -174,8 +174,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             }
         }
 
-        // If nothing is found we should ask the parent context.
-        return solveSymbolAsValueInParentContext(name);
+        // If nothing is found we should ask the grand parent context.
+         return parentContext.getParent().map(context -> context.solveSymbolAsValue(name)).orElse(Optional.empty());
     }
 
     @Override
@@ -189,6 +189,16 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        return solveSymbol(name, true);
+    }
+
+    /**
+     * Used where a symbol is being used (e.g. solving {@code x} when used as an argument {@code doubleThis(x)}, or calculation {@code return x * 2;}).
+     * @param name the variable / reference / identifier used.
+     * @param iterateAdjacentStmts flag to iterate adjacent statements, should be set to {@code true} except when calling itself in order to prevent revisiting already visited symbols.
+     * @return // FIXME: Better documentation on how this is different to solveSymbolAsValue()
+     */
+    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, boolean iterateAdjacentStmts) {
 
         /*
          * If we're in a variable declaration line.
@@ -201,7 +211,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             return symbolReference;
         }
 
-         /*
+        /*
          * If we're in a statement that contains a pattern expression.
          * Example: {@code double x = a instanceof String s;}
          */
@@ -215,7 +225,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
         Optional<Node> optionalParentNode = wrappedNode.getParentNode();
         if(!optionalParentNode.isPresent()) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         Node parentOfWrappedNode = optionalParentNode.get();
@@ -228,6 +238,17 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         } else if (parentOfWrappedNode instanceof LambdaExpr) {
             return solveSymbolInParentContext(name);
         } else if (parentOfWrappedNode instanceof NodeWithStatements) {
+            // If we choose to not solve adjacent statements abort the solution process here.
+            // In the calling context (the context that calls this) we will attempt to
+            // resolve all prior adjacent statements, and then the common parent as the fallback.
+            // Then the common parent will check all of its prior adjacent statements, etc.
+
+            // Further below is a more detailed explanation for why we may want to disable this visitation of adjacent statements
+            // to prevent revisiting the same contexts over and over again.
+            if (!iterateAdjacentStmts) {
+                return SymbolReference.unsolved();
+            }
+
             NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
 
             // Assuming the wrapped node exists within the parent's collection of statements...
@@ -239,14 +260,47 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             // Start at the current node and work backwards...
             ListIterator<Statement> statementListIterator = nodeWithStmt.getStatements().listIterator(position);
             while(statementListIterator.hasPrevious()) {
-                symbolReference = JavaParserFactory.getContext(statementListIterator.previous(), typeSolver).solveSymbol(name);
+                Context prevContext = JavaParserFactory.getContext(statementListIterator.previous(), typeSolver);
+                if (prevContext instanceof BlockStmtContext) {
+                    // Issue #3631
+                    // We have an explicit check for "BlockStmtContext" to avoid resolving the variable x with the
+                    // declaration defined in the block preceding the use of the variable
+                    // For example consider the following:
+                    //
+                    // int x = 0;
+                    // void method() {
+                    // {
+                    // var x = 1;
+                    // System.out.println(x); // prints 1
+                    // }
+                    // System.out.println(x); // prints 0
+                    // }
+                    continue;
+                }
+                if (prevContext instanceof StatementContext) {
+                    // We have an explicit check for "StatementContext" to prevent a factorial increase of visited statements.
+                    //
+                    // For example consider the following:
+                    //   String a = "a";
+                    //   String b = "b";
+                    //   String c = get();
+                    //
+                    // If we simply call "prevContext.solveSymbol(name)" we will call the current method with the adjacent statement "prevContext".
+                    // Then "prevContext" will look at its previous adjacent statement. And so on and so forth.
+                    // When there are no more previous statements in this chain of method calls, we come back to here...
+                    // Then we look at the next "prevContext" which causes the entire process to start again.
+                    // This is how we get a factorial increase in calls to "solveSymbol".
+                    //
+                    // So what we do instead with this check is we pass in a flag to say "Do not look at previous adjacent statements".
+                    // Since each visited "prevContext" does not look at its adjacent statements we only visit each statement once in this while loop.
+                    symbolReference = ((StatementContext<?>)prevContext).solveSymbol(name, false);
+                } else {
+                    symbolReference = prevContext.solveSymbol(name);
+                }
                 if (symbolReference.isSolved()) {
                     return symbolReference;
                 }
             }
-
-            // If nothing is found, attempt to solve within the parent context
-            return solveSymbolInParentContext(name);
         }
 
         // If nothing is found, attempt to solve within the parent context

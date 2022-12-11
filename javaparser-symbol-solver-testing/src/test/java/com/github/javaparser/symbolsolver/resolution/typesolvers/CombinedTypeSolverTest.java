@@ -21,20 +21,25 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.symbolsolver.cache.Cache;
+import com.github.javaparser.symbolsolver.cache.InMemoryCache;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver.ExceptionHandlers;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> {
@@ -85,7 +90,7 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
         TypeSolver secondaryTypeSolver = mock(TypeSolver.class);
         when(secondaryTypeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, secondaryTypeSolver));
         when(secondaryTypeSolver.tryToSolveType(any(String.class)))
-                .thenReturn(SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
+                .thenReturn(SymbolReference.unsolved());
 
         try {
             new CombinedTypeSolver(filter, erroringTypeSolver, secondaryTypeSolver)
@@ -99,4 +104,86 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
 
         verify(secondaryTypeSolver, times(expectForward ? 1 : 0)).tryToSolveType(any(String.class));
     }
+
+    @Test
+    public void testConstructorWithList() {
+        List<TypeSolver> typeSolverList = new ArrayList<>();
+        typeSolverList.add(new ReflectionTypeSolver());
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(typeSolverList);
+
+        SymbolReference<ResolvedReferenceTypeDeclaration> resolved = combinedTypeSolver.tryToSolveType(Integer.class.getCanonicalName());
+        assertTrue(resolved.isSolved());
+    }
+
+    @Test
+    public void testConstructorWithArray() {
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(
+                new ReflectionTypeSolver()
+        );
+
+        SymbolReference<ResolvedReferenceTypeDeclaration> resolved = combinedTypeSolver.tryToSolveType(Integer.class.getCanonicalName());
+        assertTrue(resolved.isSolved());
+    }
+
+    @Test
+    void testConstructorWithNullCache_ShouldThrowNPE() {
+        List<TypeSolver> childSolvers = Collections.singletonList(
+                new ReflectionTypeSolver()
+        );
+        assertThrows(NullPointerException.class, () ->
+                new CombinedTypeSolver(ExceptionHandlers.IGNORE_NONE, childSolvers, null));
+    }
+
+    /**
+     * 1. Given a fresh combined type solver, a type is searched in cache and since it doesn't
+     *    exist, a new entry should be registered.
+     *
+     * 2. Given a cache with a cached value, that values should be used.
+     */
+    @Test
+    void testCacheIsUsed_WhenTypeIsRequested() {
+
+        List<TypeSolver> childSolvers = Collections.singletonList(
+                new ReflectionTypeSolver()
+        );
+        Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> cache = spy(InMemoryCache.create());
+        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(ExceptionHandlers.IGNORE_NONE, childSolvers, cache);
+        SymbolReference<ResolvedReferenceTypeDeclaration> reference;
+
+        // 1.
+        reference = combinedSolver.tryToSolveType("java.lang.String");
+        assertTrue(reference.isSolved());
+
+        verify(cache).get("java.lang.String");
+        verify(cache).put("java.lang.String", reference);
+        verifyNoMoreInteractions(cache);
+
+        // Reset the interaction counter for the mock, keeping the
+        // cached data unchanged.
+        Mockito.reset((Object) cache);
+
+        // 2.
+        reference = combinedSolver.tryToSolveType("java.lang.String");
+        assertTrue(reference.isSolved());
+        verify(cache).get("java.lang.String");
+        verifyNoMoreInteractions(cache);
+    }
+
+    /**
+     * 1. When a new type solver is registered, the cache should be reset.
+     */
+    @Test
+    void testUserAddsNewTypeSolver_CacheShouldBeReset() {
+        List<TypeSolver> childSolvers = Collections.singletonList(
+                new ReflectionTypeSolver()
+        );
+        Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> cache = spy(InMemoryCache.create());
+        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(ExceptionHandlers.IGNORE_NONE, childSolvers, cache);
+
+        // Try to solve it
+        combinedSolver.add(new ReflectionTypeSolver());
+        verify(cache).removeAll();
+        verifyNoMoreInteractions(cache);
+    }
+
 }

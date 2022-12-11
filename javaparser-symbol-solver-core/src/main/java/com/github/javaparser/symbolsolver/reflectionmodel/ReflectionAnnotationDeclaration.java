@@ -22,20 +22,32 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import java.util.*;
+import java.lang.annotation.Inherited;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -84,7 +96,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     public String getClassName() {
         String qualifiedName = getQualifiedName();
         if(qualifiedName.contains(".")) {
-            return qualifiedName.substring(qualifiedName.lastIndexOf("."), qualifiedName.length());
+            return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1);
         } else {
             return qualifiedName;
         }
@@ -135,8 +147,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-        // TODO #1837
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getAllFields();
     }
 
     @Override
@@ -239,5 +250,10 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
                                                                   final boolean staticOnly) {
         return ReflectionMethodResolutionLogic.solveMethod(name, argumentsTypes, staticOnly,
             typeSolver,this, clazz);
+    }
+
+    @Override
+    public boolean isInheritable() {
+        return clazz.getAnnotation(Inherited.class) != null;
     }
 }
