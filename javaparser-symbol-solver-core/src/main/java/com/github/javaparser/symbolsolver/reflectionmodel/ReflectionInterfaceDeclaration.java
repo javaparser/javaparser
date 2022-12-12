@@ -26,6 +26,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
@@ -42,9 +45,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -161,7 +161,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
                 typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
-            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+            InferenceContext inferenceContext = new InferenceContext(typeSolver);
             MethodUsage methodUsage = res.get();
             int i = 0;
             List<ResolvedType> parameters = new LinkedList<>();

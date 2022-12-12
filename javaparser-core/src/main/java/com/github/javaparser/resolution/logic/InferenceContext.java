@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.logic;
+package com.github.javaparser.resolution.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -40,17 +43,17 @@ import com.github.javaparser.resolution.types.ResolvedWildcard;
 public class InferenceContext {
 
     private int nextInferenceVariableId = 0;
-    private ObjectProvider objectProvider;
+    private TypeSolver typeSolver;
     private List<InferenceVariableType> inferenceVariableTypes = new ArrayList<>();
     private Map<String, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
-    public InferenceContext(ObjectProvider objectProvider) {
-        this.objectProvider = objectProvider;
+    public InferenceContext(TypeSolver typeSolver) {
+        this.typeSolver = typeSolver;
     }
 
     private InferenceVariableType inferenceVariableTypeForTp(ResolvedTypeParameterDeclaration tp) {
         if (!inferenceVariableTypeMap.containsKey(tp.getName())) {
-            InferenceVariableType inferenceVariableType = new InferenceVariableType(nextInferenceVariableId++, objectProvider);
+            InferenceVariableType inferenceVariableType = new InferenceVariableType(nextInferenceVariableId++, typeSolver);
             inferenceVariableTypes.add(inferenceVariableType);
             inferenceVariableType.setCorrespondingTp(tp);
             inferenceVariableTypeMap.put(tp.getName(), inferenceVariableType);
@@ -162,12 +165,14 @@ public class InferenceContext {
             if (formalType.isPrimitive()) {
                 // nothing to do
             } else {
-                registerCorrespondance(formalType, objectProvider.byName(actualType.asPrimitive().getBoxTypeQName()));
+            	ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(actualType.asPrimitive().getBoxTypeQName());
+                registerCorrespondance(formalType, new ReferenceTypeImpl(resolvedTypedeclaration));
             }
         } else if (actualType.isReferenceType()) {
             if (formalType.isPrimitive()) {
                 if (formalType.asPrimitive().getBoxTypeQName().equals(actualType.describe())) {
-                    registerCorrespondance(objectProvider.byName(formalType.asPrimitive().getBoxTypeQName()), actualType);
+                	ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(formalType.asPrimitive().getBoxTypeQName());
+                	registerCorrespondance(new ReferenceTypeImpl(resolvedTypedeclaration), actualType);
                 } else {
                     // nothing to do
                 }

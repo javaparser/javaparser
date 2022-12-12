@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -44,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SymbolSolverTest extends AbstractSymbolResolutionTest {
 
     private TypeSolver typeSolverNewCode;
-    private SymbolSolver symbolSolver;
+    private Solver symbolSolver;
 
     @BeforeEach
     void setup() {

@@ -31,15 +31,17 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
@@ -175,9 +177,8 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     @Test
     void classToResolvedTypeViaReflection() {
         Class<?> clazz = this.getClass();
-        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
-        JavaParserFacade facade = JavaParserFacade.get(reflectionTypeSolver);
-        ResolvedType resolvedType = facade.classToResolvedType(clazz);
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        ResolvedType resolvedType = symbolSolver.classToResolvedType(clazz);
 
         assertNotNull(resolvedType);
         assertTrue(resolvedType.isReferenceType());

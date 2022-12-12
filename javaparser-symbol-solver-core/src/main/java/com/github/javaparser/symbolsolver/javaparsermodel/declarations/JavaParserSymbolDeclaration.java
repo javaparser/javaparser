@@ -21,7 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
@@ -65,17 +65,6 @@ public final class JavaParserSymbolDeclaration {
             }
         }
         return pos;
-    }
-
-    public static int getParamPos(Node node) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
-            for (int i = 0; i < call.getArguments().size(); i++) {
-                if (call.getArguments().get(i) == node) return i;
-            }
-            throw new IllegalStateException();
-        }
-        throw new IllegalArgumentException();
     }
 
     private JavaParserSymbolDeclaration() {

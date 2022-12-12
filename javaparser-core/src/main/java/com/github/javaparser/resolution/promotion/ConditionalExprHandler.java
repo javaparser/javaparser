@@ -1,4 +1,4 @@
-package com.github.javaparser.symbolsolver.resolution.promotion;
+package com.github.javaparser.resolution.promotion;
 
 import com.github.javaparser.resolution.types.ResolvedType;
 

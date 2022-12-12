@@ -21,24 +21,21 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.utils.Pair;
 
 import java.util.*;
@@ -409,14 +406,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             ResolvedType type = actualType;
             // in case of primitive type, the expected type must be compared with the boxed type of the actual type
             if (type.isPrimitive()) {
-                type = MyObjectProvider.INSTANCE.byName(type.asPrimitive().getBoxTypeQName());
+            	ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(type.asPrimitive().getBoxTypeQName());
+                type = new ReferenceTypeImpl(resolvedTypedeclaration);
             }
             /*
              * "a value of the null type (the null reference is the only such value) may be assigned to any reference type, resulting in a null reference of that type"
              * https://docs.oracle.com/javase/specs/jls/se15/html/jls-5.html#jls-5.2
              */
             if (type.isNull()) {
-                type = MyObjectProvider.INSTANCE.object();
+                ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.getSolvedJavaLangObject();
+                type = new ReferenceTypeImpl(resolvedTypedeclaration);
             }
             if (!type.isTypeVariable() && !type.isReferenceType()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());
@@ -458,8 +457,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // and make everything generate like <T extends Object> instead of <T>
             // https://github.com/javaparser/javaparser/issues/2044
             bounds = Collections.singletonList(
-                    ResolvedTypeParameterDeclaration.Bound.extendsBound(
-                            JavaParserFacade.get(typeSolver).classToResolvedType(Object.class)));
+                    ResolvedTypeParameterDeclaration.Bound.extendsBound(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject())));
+            ;
         }
 
         for (ResolvedTypeParameterDeclaration.Bound bound : bounds) {
@@ -475,6 +474,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
         if (type instanceof ResolvedReferenceType) {
             return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext);
+        } else if (type instanceof LazyType) {
+            return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedTypeVariable) {
             return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedWildcard) {
@@ -484,14 +485,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else if (wildcardUsage.isExtends()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else {
-                return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)), name, argumentsTypes, invokationContext);
+                return solveMethodAsUsage(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()), name, argumentsTypes, invokationContext);
             }
         } else if (type instanceof ResolvedLambdaConstraintType){
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
-            return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)), name, argumentsTypes, invokationContext);
+            return solveMethodAsUsage(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedUnionType) {
             Optional<ResolvedReferenceType> commonAncestor = type.asUnionType().getCommonAncestor();
             if (commonAncestor.isPresent()) {
