@@ -24,9 +24,9 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.AssociableToASTTest;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<TypeParameter> {
+class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Override
     public JavaParserTypeVariableDeclaration createValue() {
@@ -54,7 +54,7 @@ class JavaParserTypeVariableDeclarationTest extends AbstractTypeDeclarationTest 
     }
 
     @Override
-    public Optional<TypeParameter> getWrappedDeclaration(AssociableToAST<TypeParameter> associableToAST) {
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
                 safeCast(associableToAST, JavaParserTypeVariableDeclaration.class).getWrappedNode()
         );

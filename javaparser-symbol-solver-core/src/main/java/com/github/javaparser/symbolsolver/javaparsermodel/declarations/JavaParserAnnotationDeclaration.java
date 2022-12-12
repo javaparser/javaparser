@@ -21,14 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.lang.annotation.Inherited;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
@@ -43,6 +36,14 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+
+import java.lang.annotation.Inherited;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -157,12 +158,12 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public Optional<AnnotationDeclaration> toAst() {
-        return Optional.of(wrappedNode);
-    }
-    
-    @Override
     public boolean isInheritable() {
         return wrappedNode.getAnnotationByClass(Inherited.class).isPresent();
+    }
+
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.of(wrappedNode);
     }
 }

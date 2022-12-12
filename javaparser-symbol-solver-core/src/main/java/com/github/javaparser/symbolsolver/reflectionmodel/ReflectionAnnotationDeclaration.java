@@ -21,17 +21,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import java.lang.annotation.Inherited;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -50,6 +40,16 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
+
+import java.lang.annotation.Inherited;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Malte Skoruppa
@@ -205,11 +205,6 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public Optional<AnnotationDeclaration> toAst() {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(final String name,
                                                     final List<ResolvedType> parameterTypes,
                                                     final Context invokationContext,
@@ -251,7 +246,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
         return ReflectionMethodResolutionLogic.solveMethod(name, argumentsTypes, staticOnly,
             typeSolver,this, clazz);
     }
-    
+
     @Override
     public boolean isInheritable() {
         return clazz.getAnnotation(Inherited.class) != null;

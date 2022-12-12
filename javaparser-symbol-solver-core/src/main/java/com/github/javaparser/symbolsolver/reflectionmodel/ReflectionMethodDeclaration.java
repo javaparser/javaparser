@@ -22,7 +22,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -158,8 +158,4 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         return ReflectionFactory.typeUsageFor(this.method.getExceptionTypes()[index], typeSolver);
     }
 
-    @Override
-    public Optional<MethodDeclaration> toAst() {
-        return Optional.empty();
-    }
 }

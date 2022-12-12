@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
@@ -99,6 +100,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
             public ResolvedReferenceType object() {
                 throw new UnsupportedOperationException();
             }
+
         };
     }
 

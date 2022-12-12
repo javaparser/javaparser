@@ -21,32 +21,29 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.AssociableToASTTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclarationTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
 
-class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest,
-        AssociableToASTTest<VariableDeclarationExpr> {
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest {
 
     @Override
-    public Optional<VariableDeclarationExpr> getWrappedDeclaration(AssociableToAST<VariableDeclarationExpr> associableToAST) {
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
                 safeCast(associableToAST, JavaParserVariableDeclaration.class).getWrappedNode()
         );
@@ -65,7 +62,7 @@ class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest,
     public String getCanonicalNameOfExpectedType(ResolvedValueDeclaration resolvedDeclaration) {
         return String.class.getCanonicalName();
     }
-    
+
     @Test
     void test3631() {
         String code = ""
@@ -91,9 +88,9 @@ class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest,
 
         List<NameExpr> names = cu.findAll(NameExpr.class);
         ResolvedValueDeclaration rvd = names.get(3).resolve();
-        
+
         String decl = rvd.asField().toAst().get().toString();
-        
+
         assertTrue("int x = 0;".equals(decl));
     }
 
