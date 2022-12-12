@@ -21,27 +21,16 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
@@ -68,13 +57,22 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * @author Federico Tomassetti
  */
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
-        SymbolResolutionCapability, AssociableToAST<EnumDeclaration> {
-    
+        SymbolResolutionCapability {
+
     private static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
     private static String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
     private static String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
@@ -352,7 +350,6 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                 .collect(Collectors.toList());
     }
 
-
     /**
      * Needed by ContextHelper
      *
@@ -442,8 +439,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
 
         @Override
-        public Optional<MethodDeclaration> toAst() {
-            return Optional.empty();
+        public Optional<Node> toAst() {
+            return enumDeclaration.toAst();
         }
     }
 
@@ -486,6 +483,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         public ResolvedParameterDeclaration getParam(int i) {
             if (i == 0) {
                 return new ResolvedParameterDeclaration() {
+
                     @Override
                     public String getName() {
                         return "name";
@@ -500,6 +498,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                     public boolean isVariadic() {
                         return false;
                     }
+
+                    @Override
+                    public Optional<Node> toAst() {
+                        return enumDeclaration.toAst();
+                    }
+
                 };
             }
 
@@ -556,8 +560,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
 
         @Override
-        public Optional<MethodDeclaration> toAst() {
-            return Optional.empty();
+        public Optional<Node> toAst() {
+            return enumDeclaration.toAst();
         }
     }
 
@@ -582,7 +586,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public Optional<EnumDeclaration> toAst() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
 

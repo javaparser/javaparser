@@ -43,6 +43,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -70,7 +71,7 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest implements AssociableToASTTest<ClassOrInterfaceDeclaration> {
+class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
 
     private TypeSolver typeSolver;
 
@@ -920,7 +921,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest imp
     }
 
     @Override
-    public Optional<ClassOrInterfaceDeclaration> getWrappedDeclaration(AssociableToAST<ClassOrInterfaceDeclaration> associableToAST) {
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
                 safeCast(associableToAST, JavaParserInterfaceDeclaration.class).getWrappedNode()
         );

@@ -21,25 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -54,10 +39,23 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
 
@@ -466,9 +464,9 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     @Test
     void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavassistClassDeclaration constructorDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        
+
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
-        
+
         assertEquals(12, ancestors.size());
 
         ResolvedReferenceType ancestor;
@@ -482,7 +480,7 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
 
         ancestor = ancestors.get(2);
         assertEquals("java.lang.Object", ancestor.getQualifiedName());
-        
+
         ancestor = ancestors.get(3);
         assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
@@ -564,6 +562,11 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
         } catch (NotFoundException e) {
             throw new RuntimeException("Unexpected error.", e);
         }
+    }
+
+    @Override
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.empty();
     }
 
     @Override

@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -34,11 +33,10 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
-
 import javassist.CtMethod;
 
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.List;
 
 /**
  * @author Federico Tomassetti
@@ -143,11 +141,6 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     @Override
     public ResolvedType getSpecifiedException(int index) {
         return methodLikeAdaper.getSpecifiedException(index);
-    }
-
-    @Override
-    public Optional<MethodDeclaration> toAst() {
-        return Optional.empty();
     }
 
 }
