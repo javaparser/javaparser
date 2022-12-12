@@ -32,9 +32,14 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.quality, \
     com.github.javaparser.resolution, \
     com.github.javaparser.resolution.declarations, \
+    com.github.javaparser.resolution.logic, \
+    com.github.javaparser.resolution.model, \
+    com.github.javaparser.resolution.model.typesystem, \
+    com.github.javaparser.resolution.promotion, \
     com.github.javaparser.resolution.types, \
     com.github.javaparser.resolution.types.parametrization, \
     com.github.javaparser.utils
+
 
 # Don't use the project's version for the packages
 # We prefer not setting a version as we don't follow OSGi version semantics
