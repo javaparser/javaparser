@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 import java.util.ArrayList;

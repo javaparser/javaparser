@@ -36,6 +36,7 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
@@ -66,6 +67,9 @@ public class TypeHelper {
         if (type instanceof ResolvedReferenceType) {
             ResolvedReferenceType referenceType = (ResolvedReferenceType) type;
             return referenceType.typeParametersValues().stream().allMatch(it -> isProperType(it));
+        }
+        if (type instanceof LazyType) {
+            return type.asReferenceType().typeParametersValues().stream().allMatch(it -> isProperType(it));
         }
         if (type instanceof ResolvedWildcard) {
             ResolvedWildcard wildcard = (ResolvedWildcard)type;

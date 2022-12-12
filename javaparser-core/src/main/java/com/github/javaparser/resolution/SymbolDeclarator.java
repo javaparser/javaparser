@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.resolution;
+package com.github.javaparser.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 

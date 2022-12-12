@@ -62,6 +62,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
@@ -70,7 +72,6 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
@@ -98,7 +99,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertTrue(symbolReference.isSolved());
@@ -114,7 +115,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         ExpressionStmt stmt = (ExpressionStmt) method1.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) stmt.getExpression();
 
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("i", assignExpr.getTarget());
 
         assertTrue(symbolReference.isSolved());
@@ -129,7 +130,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "aMethod");
         NameExpr foo = Navigator.findNameExpression(method1, "foo").get();
 
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("foo", foo);
 
         assertTrue(symbolReference.isSolved());
@@ -152,7 +153,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
@@ -177,7 +178,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
@@ -201,7 +202,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("my.packagez.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
@@ -226,7 +227,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         when(typeSolver.getRoot()).thenReturn(typeSolver);
         when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         when(typeSolver.tryToSolveType("java.lang.String")).thenReturn(SymbolReference.solved(stringDecl));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
 
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("String", param);
 
@@ -244,7 +245,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
 
         MethodUsage ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes);
 
@@ -263,7 +264,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream);
 
         assertEquals("stream", ref.getName());
@@ -279,7 +280,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
         Path src = adaptPath("src/test/resources");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim);
 
         assertEquals("trim", ref.getName());
@@ -336,7 +337,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
         MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
+        Solver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("isEmpty", Collections.emptyList(), call);
 
         assertEquals("isEmpty", ref.getName());

@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.resolution;
+package com.github.javaparser.resolution.logic;
 
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.TypeSolver;

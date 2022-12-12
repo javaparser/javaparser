@@ -19,9 +19,11 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.logic;
+package com.github.javaparser.resolution.logic;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
@@ -52,7 +54,7 @@ public class InferenceVariableType implements ResolvedType {
     }
 
     private Set<ResolvedType> equivalentTypes = new HashSet<>();
-    private ObjectProvider objectProvider;
+    private TypeSolver typeSolver;
 
     public void registerEquivalentType(ResolvedType type) {
         this.equivalentTypes.add(type);
@@ -76,21 +78,9 @@ public class InferenceVariableType implements ResolvedType {
 
     private Set<ResolvedType> superTypes = new HashSet<>();
 
-    public InferenceVariableType(int id, ObjectProvider objectProvider) {
-        this.id = id;
-        this.objectProvider = objectProvider;
-    }
-
-    public static InferenceVariableType fromWildcard(ResolvedWildcard wildcard, int id, ObjectProvider objectProvider) {
-        InferenceVariableType inferenceVariableType = new InferenceVariableType(id, objectProvider);
-        if (wildcard.isExtends()) {
-            inferenceVariableType.superTypes.add(wildcard.getBoundedType());
-        }
-        if (wildcard.isSuper()) {
-            // I am not sure about this one...
-            inferenceVariableType.superTypes.add(wildcard.getBoundedType());
-        }
-        return inferenceVariableType;
+    public InferenceVariableType(int id, TypeSolver typeSolver) {
+    	this.id = id;
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -120,7 +110,7 @@ public class InferenceVariableType implements ResolvedType {
         Set<ResolvedType> concreteEquivalent = concreteEquivalentTypesAlsoIndirectly(new HashSet<>(), this);
         if (concreteEquivalent.isEmpty()) {
             if (correspondingTp == null) {
-                return objectProvider.object();
+                return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
             } else {
                 return new ResolvedTypeVariable(correspondingTp);
             }

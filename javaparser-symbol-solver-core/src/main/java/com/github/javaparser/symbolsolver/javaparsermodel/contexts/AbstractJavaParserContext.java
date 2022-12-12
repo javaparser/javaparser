@@ -26,6 +26,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -42,12 +43,11 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.*;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import com.github.javaparser.resolution.Context;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Collections.singletonList;
 
 /**
@@ -227,11 +227,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                                     .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
                     );
                 } else {
-                    return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
+                    return singletonList(typeSolver.getSolvedJavaLangObject());
                 }
             } else if (typeOfScope.isArray()) {
                 // method call on array are Object methods
-                return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
+                return singletonList(typeSolver.getSolvedJavaLangObject());
             } else if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {

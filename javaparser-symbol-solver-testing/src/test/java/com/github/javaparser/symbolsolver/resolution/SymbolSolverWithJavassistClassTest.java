@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -40,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SymbolSolverWithJavassistClassTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver;
-    private SymbolSolver symbolSolver;
+    private Solver symbolSolver;
     private JavassistClassDeclaration classDeclarationConcreteClass;
     private JavassistClassDeclaration classDeclarationSubClassOwnJar;
     private JavassistClassDeclaration classDeclarationInterfaceUserOwnJar;

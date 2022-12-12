@@ -33,9 +33,12 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.ConstructorResolutionLogic;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -48,17 +51,16 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDe
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static com.github.javaparser.resolution.model.SymbolReference.solved;
 import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
@@ -99,36 +101,18 @@ public class JavaParserFacade {
         instances.clear();
     }
 
-    protected static ResolvedType solveGenericTypes(ResolvedType type, Context context) {
-        if (type.isTypeVariable()) {
-            return context.solveGenericType(type.describe()).orElse(type);
-        }
-        if (type.isWildcard()) {
-            if (type.asWildcard().isExtends() || type.asWildcard().isSuper()) {
-                ResolvedWildcard wildcardUsage = type.asWildcard();
-                ResolvedType boundResolved = solveGenericTypes(wildcardUsage.getBoundedType(), context);
-                if (wildcardUsage.isExtends()) {
-                    return ResolvedWildcard.extendsBound(boundResolved);
-                } else {
-                    return ResolvedWildcard.superBound(boundResolved);
-                }
-            }
-        }
-        return type;
-    }
-
     // End of static class
 
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
-    private final SymbolSolver symbolSolver;
+    private final Solver symbolSolver;
 
     private FailureHandler failureHandler;
 
     private JavaParserFacade(TypeSolver typeSolver) {
         this.typeSolver = typeSolver.getRoot();
         this.symbolSolver = new SymbolSolver(typeSolver);
-        this.typeExtractor = new TypeExtractor(typeSolver, this);
+        this.typeExtractor = new TypeExtractor(this.typeSolver, this);
         this.failureHandler = new FailureHandler();
     }
 
@@ -136,7 +120,7 @@ public class JavaParserFacade {
         return typeSolver;
     }
 
-    public SymbolSolver getSymbolSolver() {
+    public Solver getSymbolSolver() {
         return symbolSolver;
     }
 
@@ -726,23 +710,13 @@ public class JavaParserFacade {
      * @param clazz The class to be converted.
      *
      * @return The class resolved.
+     * 
+     * @deprecated instead consider SymbolSolver.classToResolvedType(Class<?> clazz)
      */
+    @Deprecated
     public ResolvedType classToResolvedType(Class<?> clazz) {
-        if (clazz.isPrimitive()) {
-            return ResolvedPrimitiveType.byName(clazz.getName());
-        }
-
-        ResolvedReferenceTypeDeclaration declaration;
-        if (clazz.isAnnotation()) {
-            declaration = new ReflectionAnnotationDeclaration(clazz, typeSolver);
-        } else if (clazz.isEnum()) {
-            declaration = new ReflectionEnumDeclaration(clazz, typeSolver);
-        } else if (clazz.isInterface()) {
-            declaration = new ReflectionInterfaceDeclaration(clazz, typeSolver);
-        } else {
-            declaration = new ReflectionClassDeclaration(clazz, typeSolver);
-        }
-        return new ReferenceTypeImpl(declaration);
+    	Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+    	return symbolSolver.classToResolvedType(clazz);
     }
 
 }

@@ -23,11 +23,12 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.InferenceVariableType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -71,20 +72,20 @@ class InferenceContextTest {
 
     @Test
     void noVariablesArePlacedWhenNotNeeded() {
-        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(object, string);
+        ResolvedType result = new InferenceContext(typeSolver).addPair(object, string);
         assertEquals(object, result);
     }
 
     @Test
     void placingASingleVariableTopLevel() {
-        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(new ResolvedTypeVariable(tpE), listOfString);
-        assertEquals(new InferenceVariableType(0, MyObjectProvider.INSTANCE), result);
+        ResolvedType result = new InferenceContext(typeSolver).addPair(new ResolvedTypeVariable(tpE), listOfString);
+        assertEquals(new InferenceVariableType(0, typeSolver), result);
     }
 
     @Test
     void placingASingleVariableInside() {
-        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(listOfE, listOfString);
-        assertEquals(listOf(new InferenceVariableType(0, MyObjectProvider.INSTANCE)), result);
+        ResolvedType result = new InferenceContext(typeSolver).addPair(listOfE, listOfString);
+        assertEquals(listOf(new InferenceVariableType(0, typeSolver)), result);
     }
 
 }
