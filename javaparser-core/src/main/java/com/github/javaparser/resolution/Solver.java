@@ -49,5 +49,14 @@ public interface Solver {
 	 * and do not be specific to JavaParser classes like in this case.
 	 */
 	SymbolReference<ResolvedTypeDeclaration> solveTypeInType(ResolvedTypeDeclaration typeDeclaration, String name);
+	
+	/**
+     * Convert a {@link Class} into the corresponding {@link ResolvedType}.
+     *
+     * @param clazz The class to be converted.
+     *
+     * @return The class resolved.
+     */
+	ResolvedType classToResolvedType(Class<?> clazz);
 
 }

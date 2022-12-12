@@ -22,11 +22,13 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class Issue343Test extends AbstractResolutionTest {
 
     private TypeSolver typeResolver;
-    private JavaParserFacade javaParserFacade;
+    private Solver symbolSolver;
 
     private ResolvedType getExpressionType(TypeSolver typeSolver, Expression expression) {
         return JavaParserFacade.get(typeSolver).getType(expression);
@@ -54,17 +56,17 @@ class Issue343Test extends AbstractResolutionTest {
     @BeforeEach
     void setup() {
         typeResolver = new ReflectionTypeSolver();
-        javaParserFacade = JavaParserFacade.get(typeResolver);
+        symbolSolver = new SymbolSolver(typeResolver);
     }
 
     @Test
     void resolveStringLiteralOutsideAST() {
-        assertTrue(javaParserFacade.classToResolvedType(String.class).equals(getExpressionType(typeResolver, new StringLiteralExpr(""))));
+        assertTrue(symbolSolver.classToResolvedType(String.class).equals(getExpressionType(typeResolver, new StringLiteralExpr(""))));
     }
 
     @Test
     void resolveIntegerLiteralOutsideAST() {
-        assertEquals(javaParserFacade.classToResolvedType(int.class), getExpressionType(typeResolver, new IntegerLiteralExpr(2)));
+        assertEquals(symbolSolver.classToResolvedType(int.class), getExpressionType(typeResolver, new IntegerLiteralExpr(2)));
     }
 
     @Test
@@ -80,7 +82,7 @@ class Issue343Test extends AbstractResolutionTest {
 
     @Test
     void resolveMethodCallOnStringLiteralOutsideAST() {
-    	assertTrue(javaParserFacade.classToResolvedType(int.class).equals(getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length"))));
+    	assertTrue(symbolSolver.classToResolvedType(int.class).equals(getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length"))));
     }
 
     @Test

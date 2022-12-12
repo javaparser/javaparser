@@ -23,6 +23,7 @@ package com.github.javaparser.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * An element able to find TypeDeclaration from their name.
@@ -83,4 +84,5 @@ public interface TypeSolver {
     default boolean hasType(String name) {
         return tryToSolveType(name).isSolved();
     }
+    
 }

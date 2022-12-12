@@ -36,11 +36,16 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 
 import java.util.List;
 import java.util.Optional;
@@ -162,5 +167,30 @@ public class SymbolSolver implements Solver {
             return ((JavaParserInterfaceDeclaration) typeDeclaration).solveType(name);
         }
         return SymbolReference.unsolved();
+    }
+    
+    /**
+     * Convert a {@link Class} into the corresponding {@link ResolvedType}.
+     *
+     * @param clazz The class to be converted.
+     *
+     * @return The class resolved.
+     */
+    public ResolvedType classToResolvedType(Class<?> clazz) {
+        if (clazz.isPrimitive()) {
+            return ResolvedPrimitiveType.byName(clazz.getName());
+        }
+
+        ResolvedReferenceTypeDeclaration declaration;
+        if (clazz.isAnnotation()) {
+            declaration = new ReflectionAnnotationDeclaration(clazz, typeSolver);
+        } else if (clazz.isEnum()) {
+            declaration = new ReflectionEnumDeclaration(clazz, typeSolver);
+        } else if (clazz.isInterface()) {
+            declaration = new ReflectionInterfaceDeclaration(clazz, typeSolver);
+        } else {
+            declaration = new ReflectionClassDeclaration(clazz, typeSolver);
+        }
+        return new ReferenceTypeImpl(declaration);
     }
 }

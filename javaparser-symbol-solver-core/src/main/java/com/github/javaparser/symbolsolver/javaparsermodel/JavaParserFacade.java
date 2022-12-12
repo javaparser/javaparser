@@ -52,6 +52,7 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 
 import java.util.*;
@@ -709,23 +710,13 @@ public class JavaParserFacade {
      * @param clazz The class to be converted.
      *
      * @return The class resolved.
+     * 
+     * @deprecated instead consider SymbolSolver.classToResolvedType(Class<?> clazz)
      */
+    @Deprecated
     public ResolvedType classToResolvedType(Class<?> clazz) {
-        if (clazz.isPrimitive()) {
-            return ResolvedPrimitiveType.byName(clazz.getName());
-        }
-
-        ResolvedReferenceTypeDeclaration declaration;
-        if (clazz.isAnnotation()) {
-            declaration = new ReflectionAnnotationDeclaration(clazz, typeSolver);
-        } else if (clazz.isEnum()) {
-            declaration = new ReflectionEnumDeclaration(clazz, typeSolver);
-        } else if (clazz.isInterface()) {
-            declaration = new ReflectionInterfaceDeclaration(clazz, typeSolver);
-        } else {
-            declaration = new ReflectionClassDeclaration(clazz, typeSolver);
-        }
-        return new ReferenceTypeImpl(declaration);
+    	Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+    	return symbolSolver.classToResolvedType(clazz);
     }
 
 }

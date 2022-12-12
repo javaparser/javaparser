@@ -133,9 +133,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration i
             // Every type variable declared as a type parameter has a bound.
             // If no bound is declared for a type variable, Object is assumed.
             // https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4
-            return Collections.singletonList(
-                    JavaParserFacade.get(typeSolver).classToResolvedType(Object.class).asReferenceType()
-            );
+            return Collections.singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
         } else {
             List<ResolvedReferenceType> ancestors = new ArrayList<>();
             for (ClassOrInterfaceType type : wrappedNode.getTypeBound()) {

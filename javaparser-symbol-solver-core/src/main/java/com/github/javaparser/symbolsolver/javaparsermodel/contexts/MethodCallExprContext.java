@@ -21,11 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -38,7 +36,6 @@ import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.utils.Pair;
 
 import java.util.*;
@@ -460,8 +457,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // and make everything generate like <T extends Object> instead of <T>
             // https://github.com/javaparser/javaparser/issues/2044
             bounds = Collections.singletonList(
-                    ResolvedTypeParameterDeclaration.Bound.extendsBound(
-                            JavaParserFacade.get(typeSolver).classToResolvedType(Object.class)));
+                    ResolvedTypeParameterDeclaration.Bound.extendsBound(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject())));
+            ;
         }
 
         for (ResolvedTypeParameterDeclaration.Bound bound : bounds) {
@@ -488,14 +485,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else if (wildcardUsage.isExtends()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
             } else {
-                return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)), name, argumentsTypes, invokationContext);
+                return solveMethodAsUsage(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()), name, argumentsTypes, invokationContext);
             }
         } else if (type instanceof ResolvedLambdaConstraintType){
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
-            return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)), name, argumentsTypes, invokationContext);
+            return solveMethodAsUsage(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()), name, argumentsTypes, invokationContext);
         } else if (type instanceof ResolvedUnionType) {
             Optional<ResolvedReferenceType> commonAncestor = type.asUnionType().getCommonAncestor();
             if (commonAncestor.isPresent()) {
