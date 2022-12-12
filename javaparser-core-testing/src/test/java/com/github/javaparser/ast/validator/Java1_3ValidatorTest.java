@@ -28,7 +28,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_1_3;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 

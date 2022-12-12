@@ -21,7 +21,11 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.Provider;
+import com.github.javaparser.Providers;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.jupiter.api.Test;

@@ -21,8 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.naming;
 
-import com.github.javaparser.*;
-
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;

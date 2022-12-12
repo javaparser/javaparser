@@ -21,9 +21,10 @@
 
 package com.github.javaparser.utils;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
+import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,11 +32,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
-import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VisitorSetTest {
 

@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
@@ -34,6 +28,12 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVari
 import com.github.javaparser.symbolsolver.resolution.typeinference.ProperLowerBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ProperUpperBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * S &lt;: T, where at least one of S or T is an inference variable: S is a subtype of T

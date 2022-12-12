@@ -1,12 +1,20 @@
 package japa.bdd.samples;
 
 import com.github.javaparser.JavaParser;
-import japa.parser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import japa.parser.ParseException;
 import org.junit.Ignore;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @Ignore
 @Deprecated

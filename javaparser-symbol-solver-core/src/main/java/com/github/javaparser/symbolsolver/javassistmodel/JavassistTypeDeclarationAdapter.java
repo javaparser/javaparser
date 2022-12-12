@@ -32,7 +32,6 @@ import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;

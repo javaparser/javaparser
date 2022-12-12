@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -31,7 +30,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This represents the default constructor added by the compiler for objects not declaring one.

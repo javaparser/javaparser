@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
@@ -32,7 +31,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import javassist.CtConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Fred Lefévère-Laoide

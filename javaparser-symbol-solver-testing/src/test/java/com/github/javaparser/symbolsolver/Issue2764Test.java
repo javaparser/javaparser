@@ -8,22 +8,13 @@ import com.github.javaparser.Providers;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.utils.Utils.EOL;
-import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.BeforeEach;
 
 public class Issue2764Test {
     private JavaParser javaParser;

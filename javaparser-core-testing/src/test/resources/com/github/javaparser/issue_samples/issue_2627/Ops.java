@@ -17,8 +17,6 @@
 //
 package org.tensorflow.op;
 
-import java.nio.charset.Charset;
-import java.util.List;
 import org.tensorflow.DataType;
 import org.tensorflow.EagerSession;
 import org.tensorflow.ExecutionEnvironment;
@@ -272,6 +270,9 @@ import org.tensorflow.types.TString;
 import org.tensorflow.types.TUint8;
 import org.tensorflow.types.family.TNumber;
 import org.tensorflow.types.family.TType;
+
+import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * An API for building operations as {@link Op Op}s

@@ -45,9 +45,11 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.RecordDeclarationMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;

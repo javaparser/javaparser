@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertExpressionValid;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MethodReferenceExprTest {
 

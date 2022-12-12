@@ -41,9 +41,15 @@ import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import java.util.*;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class MethodReferenceExprContext extends AbstractJavaParserContext<MethodReferenceExpr> {
 

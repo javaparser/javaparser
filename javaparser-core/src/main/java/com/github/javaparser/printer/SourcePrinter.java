@@ -21,9 +21,13 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.Position;
-import com.github.javaparser.printer.configuration.*;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.Utils;
 
 import java.util.Deque;

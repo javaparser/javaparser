@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.EXPRESSION;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.STATEMENT_GROUP;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SwitchStmtTest {
     @Test

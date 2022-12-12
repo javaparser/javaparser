@@ -20,11 +20,11 @@
  */
 package com.github.javaparser;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test case for {@link UnicodeEscapeProcessingProvider}.

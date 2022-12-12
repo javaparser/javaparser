@@ -37,10 +37,10 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 

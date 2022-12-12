@@ -27,7 +27,6 @@ import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
-
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_12;

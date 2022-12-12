@@ -21,19 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.glb;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.leastUpperBound;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -46,6 +33,17 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.Subtyp
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSameAsType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSubtypeOfType;
 import com.github.javaparser.utils.Pair;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.*;
 
 /**
  * @author Federico Tomassetti

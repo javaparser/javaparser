@@ -34,7 +34,6 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import javassist.CtMethod;
 import javassist.bytecode.AnnotationDefaultAttribute;
 import javassist.bytecode.BadBytecode;

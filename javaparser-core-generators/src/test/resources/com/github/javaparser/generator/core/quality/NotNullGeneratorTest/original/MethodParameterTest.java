@@ -20,7 +20,6 @@
  */
 
 import com.github.javaparser.quality.NotNull;
-import com.github.javaparser.quality.Preconditions;
 
 class A {
 
