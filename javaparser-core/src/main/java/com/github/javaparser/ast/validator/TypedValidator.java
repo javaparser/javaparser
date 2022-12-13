@@ -20,9 +20,7 @@
  */
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Processor;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
 
 import java.util.function.BiConsumer;

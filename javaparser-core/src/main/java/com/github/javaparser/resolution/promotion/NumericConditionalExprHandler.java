@@ -3,10 +3,7 @@ package com.github.javaparser.resolution.promotion;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /*
  * Numeric conditional expressions are standalone expressions (§15.2).

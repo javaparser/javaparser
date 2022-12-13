@@ -23,27 +23,12 @@ package com.github.javaparser.ast;
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.Observable;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.visitor.*;
 import com.github.javaparser.metamodel.InternalProperty;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
-import java.util.Spliterator;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * A list of nodes.

@@ -23,10 +23,7 @@ package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.javadoc.description.JavadocDescription;
-import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
-import com.github.javaparser.javadoc.description.JavadocInlineTag;
-import com.github.javaparser.javadoc.description.JavadocSnippet;
+import com.github.javaparser.javadoc.description.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

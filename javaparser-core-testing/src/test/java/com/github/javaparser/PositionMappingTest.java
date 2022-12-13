@@ -24,9 +24,7 @@ import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.process;
 import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.provider;

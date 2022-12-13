@@ -22,9 +22,7 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * A validator that will call a collection of validators.

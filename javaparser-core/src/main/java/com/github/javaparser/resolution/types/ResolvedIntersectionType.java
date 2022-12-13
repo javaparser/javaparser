@@ -22,11 +22,7 @@ package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

@@ -24,9 +24,7 @@ package com.github.javaparser.symbolsolver.utils;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.utils.Log;
-import com.github.javaparser.utils.ProjectRoot;
-import com.github.javaparser.utils.SourceRoot;
+import com.github.javaparser.utils.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

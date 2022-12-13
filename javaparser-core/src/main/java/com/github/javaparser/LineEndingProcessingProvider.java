@@ -23,9 +23,7 @@ package com.github.javaparser;
 import com.github.javaparser.utils.LineSeparator;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * {@link Provider} un-escaping unicode escape sequences in the input sequence.

@@ -20,9 +20,7 @@
  */
 package com.github.javaparser.ast.validator.language_level_validations.chunks;
 
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.LiteralStringValueExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 

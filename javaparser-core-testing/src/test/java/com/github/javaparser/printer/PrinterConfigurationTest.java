@@ -1,10 +1,7 @@
 package com.github.javaparser.printer;
 
-import com.github.javaparser.printer.configuration.ConfigurationOption;
-import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
-import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.*;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.Utils;
 import org.junit.jupiter.api.Test;
 

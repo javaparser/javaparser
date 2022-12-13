@@ -21,46 +21,16 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.printer.Stringable;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmAttribute;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmChar;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmComment;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmList;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmNone;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmOrphanCommentsEnding;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmSequence;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmSingleReference;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmString;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
-import com.github.javaparser.printer.lexicalpreservation.changes.Change;
-import com.github.javaparser.printer.lexicalpreservation.changes.ListAdditionChange;
-import com.github.javaparser.printer.lexicalpreservation.changes.ListRemovalChange;
-import com.github.javaparser.printer.lexicalpreservation.changes.ListReplacementChange;
-import com.github.javaparser.printer.lexicalpreservation.changes.NoChange;
-import com.github.javaparser.printer.lexicalpreservation.changes.PropertyChange;
+import com.github.javaparser.printer.*;
+import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.lexicalpreservation.changes.*;
 import com.github.javaparser.utils.LineSeparator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 

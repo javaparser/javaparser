@@ -20,43 +20,24 @@
  */
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.Position;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.metamodel.CompilationUnitMetaModel;
-import com.github.javaparser.metamodel.InternalProperty;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
-import com.github.javaparser.utils.ClassUtils;
-import com.github.javaparser.utils.CodeGenerationUtils;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.utils.*;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.nio.file.*;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

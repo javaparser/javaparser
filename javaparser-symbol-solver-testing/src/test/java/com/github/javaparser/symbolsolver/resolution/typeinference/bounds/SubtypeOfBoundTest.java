@@ -24,19 +24,12 @@ package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.resolution.types.ResolvedWildcard;
-import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
-import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
-import com.github.javaparser.symbolsolver.resolution.typeinference.ProperLowerBound;
-import com.github.javaparser.symbolsolver.resolution.typeinference.ProperUpperBound;
+import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 import static org.junit.jupiter.api.Assertions.assertEquals;

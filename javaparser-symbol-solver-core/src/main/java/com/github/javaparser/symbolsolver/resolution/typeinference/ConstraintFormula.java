@@ -21,9 +21,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Constraint formulas are assertions of compatibility or subtyping that may involve inference variables.

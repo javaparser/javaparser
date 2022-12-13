@@ -20,9 +20,7 @@
  */
 package com.github.javaparser.utils;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.function.Supplier;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;

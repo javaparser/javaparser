@@ -21,19 +21,13 @@
 
 package com.github.javaparser.symbolsolver.declarations.common;
 
-import com.github.javaparser.resolution.Context;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.*;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Federico Tomassetti

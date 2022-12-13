@@ -28,9 +28,7 @@ import com.github.javaparser.utils.CodeGenerationUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 public abstract class AbstractSymbolResolutionTest {
     

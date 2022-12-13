@@ -1,11 +1,7 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

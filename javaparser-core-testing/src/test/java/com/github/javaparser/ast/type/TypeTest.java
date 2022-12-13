@@ -21,10 +21,7 @@
 
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.language_level_validations.Java5Validator;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,6 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.observer.AstObserver;
-import com.github.javaparser.ast.observer.AstObserverAdapter;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.observer.*;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
 

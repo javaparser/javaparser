@@ -21,9 +21,7 @@
 package com.github.javaparser;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * {@link Provider} un-escaping unicode escape sequences in the input sequence.

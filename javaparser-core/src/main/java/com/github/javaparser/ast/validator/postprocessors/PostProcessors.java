@@ -20,14 +20,10 @@
  */
 package com.github.javaparser.ast.validator.postprocessors;
 
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Processor;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * A post processor that will call a collection of post processors.

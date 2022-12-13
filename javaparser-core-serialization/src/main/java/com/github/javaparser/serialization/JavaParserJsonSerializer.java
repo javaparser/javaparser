@@ -20,14 +20,10 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.JavaToken;
-import com.github.javaparser.Range;
-import com.github.javaparser.TokenRange;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.metamodel.*;
 import com.github.javaparser.utils.Log;
 
 import javax.json.stream.JsonGenerator;
