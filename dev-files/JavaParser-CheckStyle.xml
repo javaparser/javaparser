@@ -28,11 +28,6 @@
 			<property name="severity" value="warning" />
 		</module>
 
-		<!-- Avoid star import -->
-		<module name="AvoidStarImport">
-			<property name="severity" value="warning" />
-		</module>
-
 		<!-- Import order -->
 		<module name="CustomImportOrder">
 			<property name="customImportOrderRules"
