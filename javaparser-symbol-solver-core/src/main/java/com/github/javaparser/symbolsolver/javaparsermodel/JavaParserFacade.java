@@ -91,7 +91,7 @@ public class JavaParserFacade {
      * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
      */
     public static synchronized JavaParserFacade get(TypeSolver typeSolver) {
-        return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
+        return instances.computeIfAbsent(typeSolver.getRoot(), JavaParserFacade::new);
     }
 
     /**
