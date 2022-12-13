@@ -27,6 +27,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -70,6 +71,7 @@ public abstract class AbstractResolutionTest extends AbstractSymbolResolutionTes
     }
 
     protected JavaParser createParserWithResolver(TypeSolver typeSolver) {
-        return new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver)));
+        return new JavaParser(new ParserConfiguration().setSymbolResolver(symbolResolver(typeSolver)));
     }
+    
 }
