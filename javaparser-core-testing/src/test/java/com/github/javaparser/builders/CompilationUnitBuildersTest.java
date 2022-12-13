@@ -23,12 +23,16 @@ package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.ElementType;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;

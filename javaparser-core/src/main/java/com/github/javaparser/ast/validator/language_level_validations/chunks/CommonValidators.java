@@ -24,7 +24,10 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.validator.*;
+import com.github.javaparser.ast.validator.SimpleValidator;
+import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
+import com.github.javaparser.ast.validator.TreeVisitorValidator;
+import com.github.javaparser.ast.validator.Validators;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 

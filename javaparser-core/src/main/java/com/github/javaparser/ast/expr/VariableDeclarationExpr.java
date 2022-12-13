@@ -28,8 +28,12 @@ import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.visitor.*;
-import com.github.javaparser.metamodel.*;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.metamodel.VariableDeclarationExprMetaModel;
 
 import java.util.Arrays;
 import java.util.Optional;

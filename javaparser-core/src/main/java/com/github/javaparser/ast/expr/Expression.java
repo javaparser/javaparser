@@ -21,7 +21,9 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.visitor.CloneVisitor;

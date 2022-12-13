@@ -20,7 +20,9 @@
  */
 package com.github.javaparser.utils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
 

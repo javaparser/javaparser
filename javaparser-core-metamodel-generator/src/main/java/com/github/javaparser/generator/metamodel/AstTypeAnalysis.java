@@ -23,7 +23,10 @@ package com.github.javaparser.generator.metamodel;
 
 import com.github.javaparser.ast.NodeList;
 
-import java.lang.reflect.*;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.Optional;
 
 import static java.lang.reflect.Modifier.isAbstract;

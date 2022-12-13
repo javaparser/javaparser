@@ -21,10 +21,14 @@
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.*;
+import com.github.javaparser.metamodel.CommentMetaModel;
+import com.github.javaparser.metamodel.InternalProperty;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 import java.util.Optional;
 import java.util.function.Consumer;

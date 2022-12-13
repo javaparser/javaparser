@@ -23,7 +23,10 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast;
 
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.utils.Utils;
 import org.junit.jupiter.api.Test;

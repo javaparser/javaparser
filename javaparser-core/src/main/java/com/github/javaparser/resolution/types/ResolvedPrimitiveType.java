@@ -20,7 +20,10 @@
  */
 package com.github.javaparser.resolution.types;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti

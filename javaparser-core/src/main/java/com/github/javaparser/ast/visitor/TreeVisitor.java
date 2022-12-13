@@ -22,7 +22,9 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.Node;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Iterate over all the nodes in (a part of) the AST. In contrast to the visit methods in Node, these methods are

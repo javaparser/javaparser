@@ -5,7 +5,9 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;

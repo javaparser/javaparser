@@ -20,13 +20,17 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 

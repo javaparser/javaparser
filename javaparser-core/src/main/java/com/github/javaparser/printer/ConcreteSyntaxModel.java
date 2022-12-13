@@ -30,7 +30,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 
 import java.util.*;
 import java.util.stream.Collectors;

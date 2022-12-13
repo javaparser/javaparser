@@ -23,7 +23,10 @@ package com.github.javaparser.modules;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.jupiter.api.Test;

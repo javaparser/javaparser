@@ -23,8 +23,13 @@ package com.github.javaparser.symbolsolver.utils;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
-import com.github.javaparser.utils.*;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.CollectionStrategy;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.ProjectRoot;
 
 import java.io.IOException;
 import java.nio.file.*;

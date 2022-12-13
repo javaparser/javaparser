@@ -27,7 +27,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.utils.*;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.Pair;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.util.Arrays;
 

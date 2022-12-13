@@ -21,8 +21,13 @@
 
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;

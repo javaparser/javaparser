@@ -29,7 +29,10 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import javassist.CtClass;
 
 import java.lang.annotation.Inherited;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

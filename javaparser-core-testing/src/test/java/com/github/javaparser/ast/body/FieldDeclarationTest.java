@@ -21,8 +21,10 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Modifier.Keyword;
+import com.github.javaparser.ast.NodeList;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;

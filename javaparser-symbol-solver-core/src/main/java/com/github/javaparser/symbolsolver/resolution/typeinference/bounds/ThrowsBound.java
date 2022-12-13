@@ -21,7 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
-import com.github.javaparser.symbolsolver.resolution.typeinference.*;
+import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariableSubstitution;
 
 import java.util.HashSet;
 import java.util.Set;

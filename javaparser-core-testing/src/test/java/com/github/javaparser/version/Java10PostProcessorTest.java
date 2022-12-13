@@ -21,7 +21,9 @@
 
 package com.github.javaparser.version;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.VarType;
 import org.junit.jupiter.api.Test;

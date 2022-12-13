@@ -21,9 +21,13 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.resolution.*;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.logic.*;
+import com.github.javaparser.resolution.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;

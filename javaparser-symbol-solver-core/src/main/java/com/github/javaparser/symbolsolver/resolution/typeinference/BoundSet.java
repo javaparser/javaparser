@@ -26,7 +26,10 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.*;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.CapturesBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.FalseBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SameAsBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSameAsType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSubtypeOfType;
 import com.github.javaparser.utils.Pair;

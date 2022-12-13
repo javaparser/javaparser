@@ -30,7 +30,10 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.validator.*;
-import com.github.javaparser.ast.validator.language_level_validations.chunks.*;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.CommonValidators;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.ModifierValidator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.NoBinaryIntegerLiteralsValidator;
+import com.github.javaparser.ast.validator.language_level_validations.chunks.NoUnderscoresInIntegerLiteralsValidator;
 
 /**
  * This validator validates according to Java 1.0 syntax rules.

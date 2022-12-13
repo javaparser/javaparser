@@ -22,7 +22,9 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.resolution.*;
+import com.github.javaparser.resolution.Solver;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;

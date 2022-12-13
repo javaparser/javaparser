@@ -24,7 +24,9 @@ package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 

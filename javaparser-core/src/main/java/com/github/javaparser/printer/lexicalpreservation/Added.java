@@ -20,7 +20,10 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
 public class Added implements DifferenceElement {
 

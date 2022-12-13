@@ -23,7 +23,10 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;

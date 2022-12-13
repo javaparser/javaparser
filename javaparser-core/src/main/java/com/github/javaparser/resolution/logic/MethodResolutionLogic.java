@@ -21,7 +21,9 @@
 
 package com.github.javaparser.resolution.logic;
 
-import com.github.javaparser.resolution.*;
+import com.github.javaparser.resolution.MethodAmbiguityException;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;

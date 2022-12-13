@@ -21,9 +21,14 @@
 package com.github.javaparser.utils;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

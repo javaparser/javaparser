@@ -21,7 +21,9 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

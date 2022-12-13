@@ -21,13 +21,18 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.TestUtils;

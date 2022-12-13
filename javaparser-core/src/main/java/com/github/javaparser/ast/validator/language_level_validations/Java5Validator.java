@@ -27,7 +27,10 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.validator.*;
+import com.github.javaparser.ast.validator.ReservedKeywordValidator;
+import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
+import com.github.javaparser.ast.validator.TreeVisitorValidator;
+import com.github.javaparser.ast.validator.Validator;
 
 import java.util.Optional;
 

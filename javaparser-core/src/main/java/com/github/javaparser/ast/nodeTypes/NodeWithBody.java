@@ -21,7 +21,9 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.EmptyStmt;
+import com.github.javaparser.ast.stmt.Statement;
 
 public interface NodeWithBody<N extends Node> {
 

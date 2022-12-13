@@ -21,12 +21,18 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalLabel;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.visitor.*;
-import com.github.javaparser.metamodel.*;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.ContinueStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 import java.util.Optional;
 import java.util.function.Consumer;

@@ -22,7 +22,10 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
@@ -32,7 +35,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.utils.Pair;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;

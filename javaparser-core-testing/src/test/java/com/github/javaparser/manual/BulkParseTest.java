@@ -23,14 +23,22 @@ package com.github.javaparser.manual;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import com.github.javaparser.utils.*;
-import org.junit.jupiter.api.*;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.SourceRoot;
+import com.github.javaparser.utils.SourceZip;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;

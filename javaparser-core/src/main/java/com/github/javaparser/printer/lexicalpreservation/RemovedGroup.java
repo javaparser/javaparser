@@ -20,11 +20,15 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaToken;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

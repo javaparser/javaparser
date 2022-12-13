@@ -22,12 +22,19 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
-import com.github.javaparser.ast.observer.*;
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
@@ -35,8 +42,12 @@ import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;

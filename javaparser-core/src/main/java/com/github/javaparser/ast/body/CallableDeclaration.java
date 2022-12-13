@@ -27,9 +27,14 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.nodeTypes.modifiers.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.*;
+import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 import java.util.List;
 import java.util.Optional;

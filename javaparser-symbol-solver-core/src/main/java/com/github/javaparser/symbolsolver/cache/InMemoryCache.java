@@ -21,7 +21,9 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.WeakHashMap;
 
 /**
  * A cache implementation that stores the information in memory.

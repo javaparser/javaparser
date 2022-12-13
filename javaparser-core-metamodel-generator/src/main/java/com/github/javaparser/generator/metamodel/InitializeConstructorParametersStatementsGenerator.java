@@ -21,7 +21,9 @@
 
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.Statement;
 
 import java.lang.annotation.Annotation;

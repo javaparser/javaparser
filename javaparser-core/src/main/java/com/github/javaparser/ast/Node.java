@@ -20,21 +20,37 @@
  */
 package com.github.javaparser.ast;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.nodeTypes.*;
-import com.github.javaparser.ast.observer.*;
-import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.HasParentNode;
+import com.github.javaparser.Position;
+import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
+import com.github.javaparser.ast.nodeTypes.NodeWithRange;
+import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.EqualsVisitor;
+import com.github.javaparser.ast.visitor.HashCodeVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.metamodel.*;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
-import com.github.javaparser.printer.configuration.*;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 

@@ -21,11 +21,17 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.printer.*;
+import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
 import com.github.javaparser.utils.LineSeparator;

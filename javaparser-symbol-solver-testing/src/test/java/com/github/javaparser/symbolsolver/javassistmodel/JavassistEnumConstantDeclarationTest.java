@@ -23,9 +23,14 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclarationTest;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import javassist.*;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.NotFoundException;
 
 import java.util.Optional;
 

@@ -1,7 +1,9 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Nested;

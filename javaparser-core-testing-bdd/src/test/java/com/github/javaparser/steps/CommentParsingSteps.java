@@ -33,7 +33,10 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
-import org.jbehave.core.annotations.*;
+import org.jbehave.core.annotations.Alias;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
 import org.jbehave.core.steps.Parameters;
 

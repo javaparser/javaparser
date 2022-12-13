@@ -21,7 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.type.VarType;
 import com.github.javaparser.resolution.TypeSolver;
