@@ -23,6 +23,7 @@ package com.github.javaparser.utils;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -137,5 +138,42 @@ class VisitorSetTest {
         set.addAll(list);
         for (CompilationUnit u : set.toArray(new CompilationUnit[2]))
             assertTrue(set.contains(u));
+    }
+
+    @Test
+    void visitorSetContainsOnlyPart() {
+        List<CompilationUnit> list = new ArrayList<>();
+        list.add(parse("class X{}"));
+        list.add(parse("class X{}"));
+
+        Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
+                new ObjectIdentityEqualsVisitor());
+        assertTrue(set.isEmpty());
+
+        set.addAll(list);
+        list.add(parse("class X{}"));
+        assertFalse(set.containsAll(list));
+    }
+
+    @Test
+    void visitorSetToString() {
+        Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
+                new ObjectIdentityEqualsVisitor());
+        assertEquals("[]", set.toString());
+
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+        CompilationUnit x3 = parse("class Z{}");
+
+        set.add(x1);
+        set.add(x2);
+        set.add(x3);
+
+        Set<CompilationUnit> hSet = new HashSet<>();
+        hSet.add(x1);
+        hSet.add(x2);
+        hSet.add(x3);
+
+        assertEquals(hSet.toString(), set.toString());
     }
 }

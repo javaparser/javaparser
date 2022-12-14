@@ -26,11 +26,11 @@ import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -97,5 +97,79 @@ class VisitorMapTest {
         map.remove(x1);
         
         assertFalse(map.containsKey(x1));
+    }
+
+    @Test
+    void visitorMapKeySet() {
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+        CompilationUnit x3 = parse("class Z{}");
+
+        Set<CompilationUnit> cuSet = new HashSet<>();
+        Collections.addAll(cuSet, x1, x2);
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 2);
+        map.put(x3, 3);
+
+        assertEquals(3, map.keySet().size());
+        assertNotEquals(cuSet, map.keySet());
+
+        cuSet.add(x3);
+        assertEquals(cuSet, map.keySet());
+    }
+
+    @Test
+    void visitorMapValues() {
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+
+        Set<Integer> valueSet = new HashSet<>();
+        valueSet.add(1);
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 2);
+
+        assertEquals(2, map.values().size());
+
+        Set<Integer> set = new HashSet<>(map.values());
+        assertNotEquals(valueSet, set);
+
+        valueSet.add(2);
+        set.clear();
+        set.addAll(map.values());
+        assertEquals(valueSet, set);
+    }
+
+    @Test
+    void visitorMapEntrySet() {
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+
+        HashMap<CompilationUnit, Integer> regularMap = new HashMap<>();
+        regularMap.put(x1, 1);
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 2);
+
+        assertEquals(2, map.entrySet().size());
+        assertNotEquals(regularMap.entrySet(), map.entrySet());
+
+        regularMap.put(x2, 2);
+        assertEquals(regularMap.entrySet(), map.entrySet());
+    }
+
+    @Test
+    void visitorMapContainsValue() {
+        CompilationUnit x1 = parse("class X{}");
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+
+        assertTrue(map.containsValue(1));
+        assertFalse(map.containsValue(2));
     }
 }
