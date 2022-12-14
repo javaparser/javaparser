@@ -37,7 +37,6 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.*;
@@ -156,7 +155,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return wrappedNode
                 .getParentNode()
-                .map(node -> JavaParserFactory.toTypeDeclaration(node, typeSolver));
+                .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
     }
     
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {

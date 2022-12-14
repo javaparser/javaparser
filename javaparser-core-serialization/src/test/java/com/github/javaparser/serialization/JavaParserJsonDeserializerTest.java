@@ -31,6 +31,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.AfterAll;
@@ -196,6 +197,11 @@ class JavaParserJsonDeserializerTest {
             public ResolvedType calculateType(Expression expression) {
                 return null;
             }
+
+			@Override
+			public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
+				return null;
+			}
         };
         StaticJavaParser.getConfiguration().setSymbolResolver(stubResolver);
         CompilationUnit cu = parse("public class X{} class Z{}");
