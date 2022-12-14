@@ -26,7 +26,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.cache.Cache;
-import com.github.javaparser.symbolsolver.cache.NoCache;
+import com.github.javaparser.symbolsolver.cache.InMemoryCache;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -72,7 +72,7 @@ public class CombinedTypeSolver implements TypeSolver {
 
     /** @see #exceptionHandler */
     public CombinedTypeSolver(Predicate<Exception> exceptionHandler, Iterable<TypeSolver> elements) {
-        this(exceptionHandler, elements, NoCache.create());
+        this(exceptionHandler, elements, InMemoryCache.create());
     }
 
     /**

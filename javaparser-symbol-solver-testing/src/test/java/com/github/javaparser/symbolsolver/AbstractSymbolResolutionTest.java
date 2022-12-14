@@ -23,7 +23,10 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -38,7 +41,7 @@ public abstract class AbstractSymbolResolutionTest {
     public void reset() {
         // reset configuration to not potentially disturb others tests.
         // So we have to set specific configuration between each test.
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
+        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(symbolResolver(defaultTypeSolver())));
     }
 
     @AfterAll
@@ -142,5 +145,13 @@ public abstract class AbstractSymbolResolutionTest {
 
     protected static Path adaptPath(String path) {
         return adaptPath(Paths.get(path));
+    }
+    
+    protected SymbolResolver symbolResolver(TypeSolver typeSolver) {
+    	return new JavaSymbolSolver(typeSolver);
+    }
+    
+    protected TypeSolver defaultTypeSolver() {
+    	return new ReflectionTypeSolver();
     }
 }

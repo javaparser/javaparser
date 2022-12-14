@@ -26,12 +26,14 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -70,7 +72,14 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
             ObjectCreationExpr parentNode = (ObjectCreationExpr) demandParentNode(wrappedNode);
             return new JavaParserAnonymousClassDeclaration(parentNode, typeSolver);
         }
-        return JavaParserFactory.toTypeDeclaration(demandParentNode(wrappedNode), typeSolver);
+        // TODO Fix: to use getSymbolResolver() we have to fix many unit tests 
+        // that throw IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration"
+        // return wrappedNode.getSymbolResolver().toTypeDeclaration(wrappedNode);
+        return symbolResolver(typeSolver).toTypeDeclaration(demandParentNode(wrappedNode));
+    }
+    
+    private SymbolResolver symbolResolver(TypeSolver typeSolver) {
+    	return new JavaSymbolSolver(typeSolver);
     }
 
     @Override

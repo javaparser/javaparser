@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
@@ -82,7 +83,7 @@ public class JavaParserFacade {
      * @see <a href="https://github.com/javaparser/javaparser/issues/2671">https://github.com/javaparser/javaparser/issues/2671</a>
      */
     public static synchronized JavaParserFacade get(TypeSolver typeSolver) {
-        return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
+        return instances.computeIfAbsent(typeSolver.getRoot(), JavaParserFacade::new);
     }
 
     /**
@@ -97,6 +98,7 @@ public class JavaParserFacade {
     private final TypeSolver typeSolver;
     private final TypeExtractor typeExtractor;
     private final Solver symbolSolver;
+    private final SymbolResolver symbolResolver;
 
     private FailureHandler failureHandler;
 
@@ -105,6 +107,7 @@ public class JavaParserFacade {
         this.symbolSolver = new SymbolSolver(typeSolver);
         this.typeExtractor = new TypeExtractor(this.typeSolver, this);
         this.failureHandler = new FailureHandler();
+        this.symbolResolver = new JavaSymbolSolver(this.typeSolver);
     }
 
     public TypeSolver getTypeSolver() {
@@ -669,7 +672,7 @@ public class JavaParserFacade {
     }
 
     public ResolvedReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
-        return JavaParserFactory.toTypeDeclaration(classOrInterfaceDeclaration, typeSolver);
+        return symbolResolver.toTypeDeclaration(classOrInterfaceDeclaration);
     }
 
     /**
@@ -692,7 +695,7 @@ public class JavaParserFacade {
     }
 
     public ResolvedReferenceTypeDeclaration getTypeDeclaration(TypeDeclaration<?> typeDeclaration) {
-        return JavaParserFactory.toTypeDeclaration(typeDeclaration, typeSolver);
+        return symbolResolver.toTypeDeclaration(typeDeclaration);
     }
 
     /**

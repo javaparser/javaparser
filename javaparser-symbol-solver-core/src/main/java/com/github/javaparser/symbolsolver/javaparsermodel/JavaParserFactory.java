@@ -27,13 +27,10 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.*;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
@@ -161,25 +158,4 @@ public class JavaParserFactory {
         return new NoSymbolDeclarator<>(node, typeSolver);
     }
 
-    public static ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            if (((ClassOrInterfaceDeclaration) node).isInterface()) {
-                return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-            }
-            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-        }
-        if (node instanceof TypeParameter) {
-            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
-        }
-        if (node instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
-        }
-        if (node instanceof AnnotationDeclaration) {
-            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
-        }
-        if (node instanceof EnumConstantDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
-        }
-        throw new IllegalArgumentException(node.getClass().getCanonicalName());
-    }
 }
