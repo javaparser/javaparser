@@ -20,7 +20,10 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.*;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Range;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
