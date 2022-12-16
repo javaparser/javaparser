@@ -30,12 +30,11 @@ import com.github.javaparser.ast.validator.language_level_validations.Java5Valid
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TypeTest {
     @Test

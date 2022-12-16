@@ -21,16 +21,13 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AnnotationSpaceTest extends AbstractLexicalPreservingTest {
     /** Tests that inserted annotations on types are followed by a space. */

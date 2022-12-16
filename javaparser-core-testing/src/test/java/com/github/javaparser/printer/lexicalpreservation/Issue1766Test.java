@@ -21,12 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
 
 public class Issue1766Test extends AbstractLexicalPreservingTest  {
     
