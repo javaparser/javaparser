@@ -236,7 +236,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
 
-        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        String result = LexicalPreservingPrinter.print(cu);
         assertEqualsStringIgnoringEol("class X {\n" +
                 "  @Test\n" +
                 "  void testCase() {\n" +
