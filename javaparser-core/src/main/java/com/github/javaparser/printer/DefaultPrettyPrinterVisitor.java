@@ -27,7 +27,10 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithTraversableScope;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
@@ -35,7 +38,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.ConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.ImportOrderingStrategy;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.printer.configuration.imports.DefaultImportOrderingStrategy;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -44,7 +49,6 @@ import java.util.regex.Pattern;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
-import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -207,10 +211,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (n.getPackageDeclaration().isPresent()) {
             n.getPackageDeclaration().get().accept(this, arg);
         }
-        n.getImports().accept(this, arg);
-        if (!n.getImports().isEmpty()) {
-            printer.println();
-        }
+
+        printImports(n.getImports(), arg);
+
         for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext(); ) {
             i.next().accept(this, arg);
             printer.println();
@@ -1690,17 +1693,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(NodeList n, Void arg) {
-        if (getOption(ConfigOption.ORDER_IMPORTS).isPresent() && n.size() > 0 && n.get(0) instanceof ImportDeclaration) {
-            // noinspection unchecked
-            NodeList<ImportDeclaration> modifiableList = new NodeList<>(n);
-            modifiableList.sort(comparingInt((ImportDeclaration i) -> i.isStatic() ? 0 : 1).thenComparing(NodeWithName::getNameAsString));
-            for (Object node : modifiableList) {
-                ((Node) node).accept(this, arg);
-            }
-        } else {
-            for (Object node : n) {
-                ((Node) node).accept(this, arg);
-            }
+        for (Object node : n) {
+            ((Node) node).accept(this, arg);
         }
     }
 
@@ -1775,6 +1769,35 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(UnparsableStmt n, Void arg) {
         printer.print("???;");
+    }
+
+    private void printImports(NodeList<ImportDeclaration> imports, Void arg) {
+
+        ImportOrderingStrategy strategy = new DefaultImportOrderingStrategy();
+
+        // Get Import strategy from configuration
+        Optional<ConfigurationOption> optionalStrategy = getOption(ConfigOption.SORT_IMPORTS_STRATEGY);
+        if (optionalStrategy.isPresent()) {
+            ConfigurationOption strategyOption = optionalStrategy.get();
+            if (strategyOption.hasValue()) {
+                strategy = strategyOption.asValue();
+            }
+        }
+
+        // Keep retro-compatibility with option ORDER_IMPORTS.
+        Optional<ConfigurationOption> orderImportsOption = getOption(ConfigOption.ORDER_IMPORTS);
+        if (orderImportsOption.isPresent()) {
+            strategy.setSortImportsAlphabetically(true);
+        }
+
+        // Sort the imports according to the strategy
+        List<NodeList<ImportDeclaration>> groupOrderedImports = strategy.sortImports(imports);
+        for (NodeList<ImportDeclaration> importGroup : groupOrderedImports) {
+            importGroup.accept(this, arg);
+            if (!importGroup.isEmpty()) {
+                printer.println();
+            }
+        }
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {
