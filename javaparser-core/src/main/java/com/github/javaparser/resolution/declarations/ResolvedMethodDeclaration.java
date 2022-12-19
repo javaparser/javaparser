@@ -49,4 +49,12 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
      * Is this method static?
      */
     boolean isStatic();
+
+    /*
+     * Returns the method descriptor (https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3)
+     * The method descriptor for the method: {@code Object m(int i, double d, Thread t) {...}}
+     * is {@code (IDLjava/lang/Thread;)Ljava/lang/Object;}
+     * Note that the internal forms of the binary names of Thread and Object are used.
+     */
+    String toDescriptor();
 }
