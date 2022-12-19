@@ -35,6 +35,9 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.printer.configuration.imports.EclipseImportOrderingStrategy;
+import com.github.javaparser.printer.configuration.imports.IntelliJImportOrderingStrategy;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +50,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DefaultPrettyPrinterTest {
+
+    private final JavaParser javaParser = new JavaParser();
+
+    private final JavaParserAdapter parserAdapter = JavaParserAdapter.of(javaParser);
+
+    private final PrinterConfiguration printerConfiguration = new DefaultPrinterConfiguration();
     
     private Printer getDefaultPrinter() {
         PrinterConfiguration configuration = new DefaultPrinterConfiguration();
@@ -598,4 +607,59 @@ class DefaultPrettyPrinterTest {
         assertEqualsStringIgnoringEol(expected, cu.toString());
 
     }
+
+    @Test
+    void testPrinterWithIntelliJImportOrdering() {
+
+        String expectedCode = "package com.github.javaparser.printer;\n" +
+                            "\n" +
+                            "import com.github.javaparser.ast.Node;\n" +
+                            "\n" +
+                            "import java.util.Optional;\n" +
+                            "import java.util.List;\n" +
+                            "\n" +
+                            "public interface TestClass {\n" +
+                            "\n" +
+                            "    Node getRoot();\n" +
+                            "\n" +
+                            "    List<Node> getChildern();\n" +
+                            "}\n";
+
+        IntelliJImportOrderingStrategy strategy = new IntelliJImportOrderingStrategy();
+        printerConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.SORT_IMPORTS_STRATEGY, strategy));
+
+        CompilationUnit cu = parserAdapter.parse(expectedCode);
+        Printer printer = getDefaultPrinter(printerConfiguration);
+        String actualCode = printer.print(cu);
+
+        assertEqualsStringIgnoringEol(expectedCode, actualCode);
+    }
+
+    @Test
+    void testPrinterWithEclipseImportOrdering() {
+
+        String expectedCode = "package com.github.javaparser.printer;\n" +
+                "\n" +
+                "import java.util.Optional;\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "import com.github.javaparser.ast.Node;\n" +
+                "\n" +
+                "public interface TestClass {\n" +
+                "\n" +
+                "    Node getRoot();\n" +
+                "\n" +
+                "    List<Node> getChildern();\n" +
+                "}\n";
+
+        EclipseImportOrderingStrategy strategy = new EclipseImportOrderingStrategy();
+        printerConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.SORT_IMPORTS_STRATEGY, strategy));
+
+        CompilationUnit cu = parserAdapter.parse(expectedCode);
+        Printer printer = getDefaultPrinter(printerConfiguration);
+        String actualCode = printer.print(cu);
+
+        assertEqualsStringIgnoringEol(expectedCode, actualCode);
+    }
+
 }
