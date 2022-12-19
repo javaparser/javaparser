@@ -20,17 +20,17 @@
  */
 package com.github.javaparser;
 
-import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.*;
-import static org.junit.jupiter.api.Assertions.*;
+import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
+import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.process;
+import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.provider;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test case for {@link PositionMapping}.
