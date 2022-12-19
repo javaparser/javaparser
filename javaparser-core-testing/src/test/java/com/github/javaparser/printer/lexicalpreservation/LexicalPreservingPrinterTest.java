@@ -339,7 +339,9 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(0);
+        // This rendering is probably caused by the concret syntax model
         assertEquals("class /*a comment*/ A {\t\t" + SYSTEM_EOL +
+        		SYSTEM_EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}", LexicalPreservingPrinter.print(c));
     }
 
@@ -1668,7 +1670,6 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 		    	"  }\n" +
 		    	"}";
     	cu.getAllContainedComments().get(0).remove();
-    	System.out.println(LexicalPreservingPrinter.print(cu));
     	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
     
