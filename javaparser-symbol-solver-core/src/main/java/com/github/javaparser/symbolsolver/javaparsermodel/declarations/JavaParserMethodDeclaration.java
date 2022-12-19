@@ -53,7 +53,8 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
     private com.github.javaparser.ast.body.MethodDeclaration wrappedNode;
     private TypeSolver typeSolver;
 
-    public JavaParserMethodDeclaration(com.github.javaparser.ast.body.MethodDeclaration wrappedNode, TypeSolver typeSolver) {
+    public JavaParserMethodDeclaration(com.github.javaparser.ast.body.MethodDeclaration wrappedNode,
+                                       TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
@@ -72,14 +73,15 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
             ObjectCreationExpr parentNode = (ObjectCreationExpr) demandParentNode(wrappedNode);
             return new JavaParserAnonymousClassDeclaration(parentNode, typeSolver);
         }
-        // TODO Fix: to use getSymbolResolver() we have to fix many unit tests 
-        // that throw IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration"
+        // TODO Fix: to use getSymbolResolver() we have to fix many unit tests
+        // that throw IllegalStateException("Symbol resolution not configured: to configure consider setting a
+        // SymbolResolver in the ParserConfiguration"
         // return wrappedNode.getSymbolResolver().toTypeDeclaration(wrappedNode);
         return symbolResolver(typeSolver).toTypeDeclaration(demandParentNode(wrappedNode));
     }
-    
+
     private SymbolResolver symbolResolver(TypeSolver typeSolver) {
-    	return new JavaSymbolSolver(typeSolver);
+        return new JavaSymbolSolver(typeSolver);
     }
 
     @Override
@@ -95,7 +97,8 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
     @Override
     public ResolvedParameterDeclaration getParam(int i) {
         if (i < 0 || i >= getNumberOfParams()) {
-            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
+            throw new IllegalArgumentException(
+                    String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
         return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i), typeSolver);
     }
@@ -124,7 +127,8 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
 
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
+        return this.wrappedNode.getTypeParameters().stream()
+                .map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
 
     @Override
