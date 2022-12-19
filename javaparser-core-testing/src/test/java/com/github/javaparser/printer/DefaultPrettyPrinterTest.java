@@ -37,6 +37,7 @@ import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.imports.EclipseImportOrderingStrategy;
 import com.github.javaparser.printer.configuration.imports.IntelliJImportOrderingStrategy;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

@@ -21,14 +21,6 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-
-import java.io.IOException;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -40,9 +32,15 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * These tests are more "high level" than the ones in LexicalPreservingPrinterTest.
