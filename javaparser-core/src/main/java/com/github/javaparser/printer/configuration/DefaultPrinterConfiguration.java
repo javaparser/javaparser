@@ -40,6 +40,10 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          */
         ORDER_IMPORTS(Boolean.class),
         /**
+         * The logic to be used when ordering the imports.
+         */
+        SORT_IMPORTS_STRATEGY(ImportOrderingStrategy.class),
+        /**
          * Print comments only. It can be combined with {@code PRINT_JAVADOC} to print regular comments and javadoc.
          */
         PRINT_COMMENTS(Boolean.class),
