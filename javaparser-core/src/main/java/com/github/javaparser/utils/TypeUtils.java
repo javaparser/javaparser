@@ -22,8 +22,8 @@ package com.github.javaparser.utils;
 
 import java.lang.reflect.Method;
 
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 
 public class TypeUtils {
 
@@ -49,21 +49,21 @@ public class TypeUtils {
             if (currentClass == Void.TYPE) {
                 descriptor = new VoidType().toDescriptor();
             } else if (currentClass == Integer.TYPE) {
-                descriptor = Primitive.INT.toDescriptor();
+                descriptor = PrimitiveType.intType().toDescriptor();
             } else if (currentClass == Boolean.TYPE) {
-                descriptor = Primitive.BOOLEAN.toDescriptor();
+                descriptor = PrimitiveType.booleanType().toDescriptor();
             } else if (currentClass == Byte.TYPE) {
-                descriptor = Primitive.BYTE.toDescriptor();
+                descriptor = PrimitiveType.byteType().toDescriptor();
             } else if (currentClass == Character.TYPE) {
-                descriptor = Primitive.CHAR.toDescriptor();
+                descriptor = PrimitiveType.charType().toDescriptor();
             } else if (currentClass == Short.TYPE) {
-                descriptor = Primitive.SHORT.toDescriptor();
+                descriptor = PrimitiveType.shortType().toDescriptor();
             } else if (currentClass == Double.TYPE) {
-                descriptor = Primitive.DOUBLE.toDescriptor();
+                descriptor = PrimitiveType.doubleType().toDescriptor();
             } else if (currentClass == Float.TYPE) {
-                descriptor = Primitive.FLOAT.toDescriptor();
+                descriptor = PrimitiveType.floatType().toDescriptor();
             } else if (currentClass == Long.TYPE) {
-                descriptor = Primitive.LONG.toDescriptor();
+                descriptor = PrimitiveType.longType().toDescriptor();
             } else {
                 throw new AssertionError("Unknown primitive: " + currentClass.getName());
             }
