@@ -22,7 +22,8 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -38,7 +39,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -157,6 +157,53 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
             throw new IllegalArgumentException();
         }
         return ReflectionFactory.typeUsageFor(this.method.getExceptionTypes()[index], typeSolver);
+    }
+
+    @Override
+    public String toDescriptor() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        for (Class<?> parameter : method.getParameterTypes()) {
+            appendDescriptor(parameter, stringBuilder);
+        }
+        stringBuilder.append(")");
+        appendDescriptor(method.getReturnType(), stringBuilder);
+        return stringBuilder.toString();
+    }
+
+    private static void appendDescriptor(final Class<?> clazz, final StringBuilder stringBuilder) {
+        Class<?> currentClass = clazz;
+        while (currentClass.isArray()) {
+            stringBuilder.append("[");
+            currentClass = currentClass.getComponentType();
+        }
+        if (currentClass.isPrimitive()) {
+            String descriptor;
+            if (currentClass == Void.TYPE) {
+                descriptor = new VoidType().toDescriptor();
+            } else if (currentClass == Integer.TYPE) {
+                descriptor = Primitive.INT.toDescriptor();
+            } else if (currentClass == Boolean.TYPE) {
+                descriptor = Primitive.BOOLEAN.toDescriptor();
+            } else if (currentClass == Byte.TYPE) {
+                descriptor = Primitive.BYTE.toDescriptor();
+            } else if (currentClass == Character.TYPE) {
+                descriptor = Primitive.CHAR.toDescriptor();
+            } else if (currentClass == Short.TYPE) {
+                descriptor = Primitive.SHORT.toDescriptor();
+            } else if (currentClass == Double.TYPE) {
+                descriptor = Primitive.DOUBLE.toDescriptor();
+            } else if (currentClass == Float.TYPE) {
+                descriptor = Primitive.FLOAT.toDescriptor();
+            } else if (currentClass == Long.TYPE) {
+                descriptor = Primitive.LONG.toDescriptor();
+            } else {
+                throw new AssertionError("Unknown primitive: " + currentClass.getName());
+            }
+            stringBuilder.append(descriptor);
+        } else {
+            stringBuilder.append("L").append(currentClass.getName().replace(".", "/")).append(";");
+        }
     }
 
 }

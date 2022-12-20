@@ -109,6 +109,10 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
             return codeRepresentation;
         }
 
+        public String toDescriptor() {
+            return descriptor;
+        }
+
         Primitive(String nameOfBoxedType, String descriptor) {
             this.nameOfBoxedType = nameOfBoxedType;
             this.codeRepresentation = name().toLowerCase();
