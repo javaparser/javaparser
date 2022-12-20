@@ -122,6 +122,14 @@ final class RemovedGroup implements Iterable<Removed> {
     final Removed getLastElement() {
         return removedList.get(removedList.size() - 1);
     }
+    
+    /**
+     * Returns true if the specified element is the last element of this RemovedGroup
+     *
+     */
+    final boolean isLastElement(Removed element) {
+        return getLastElement().equals(element);
+    }
 
     /**
      * Returns true if the RemovedGroup equates to a complete line

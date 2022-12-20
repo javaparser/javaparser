@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import org.junit.jupiter.api.Test;
 

@@ -24,8 +24,6 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;

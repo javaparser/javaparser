@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
