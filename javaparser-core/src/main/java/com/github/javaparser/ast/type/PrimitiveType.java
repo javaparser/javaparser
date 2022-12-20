@@ -23,7 +23,6 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -238,8 +237,8 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return Optional.of(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		return ResolvedPrimitiveType.byName(getType().name());
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return ResolvedPrimitiveType.byName(getType().name());
+    }
 }
