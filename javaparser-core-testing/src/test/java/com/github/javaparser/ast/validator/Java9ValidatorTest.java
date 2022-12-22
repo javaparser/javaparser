@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;

@@ -21,7 +21,10 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier;
@@ -33,6 +36,7 @@ import com.github.javaparser.metamodel.AnnotationDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 

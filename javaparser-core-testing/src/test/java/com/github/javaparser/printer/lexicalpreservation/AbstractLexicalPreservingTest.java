@@ -21,20 +21,19 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.utils.TestUtils.assertEqualsString;
-import static com.github.javaparser.utils.TestUtils.readResource;
-
-import java.io.IOException;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+
+import java.io.IOException;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsString;
+import static com.github.javaparser.utils.TestUtils.readResource;
 
 public abstract class AbstractLexicalPreservingTest {
 
