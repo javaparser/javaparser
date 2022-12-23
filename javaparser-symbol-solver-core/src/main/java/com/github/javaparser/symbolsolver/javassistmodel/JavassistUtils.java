@@ -21,14 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -40,25 +32,17 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.resolution.types.ResolvedArrayType;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.resolution.types.ResolvedVoidType;
-import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
-
 import javassist.CtBehavior;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.Modifier;
-import javassist.bytecode.AccessFlag;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-import javassist.bytecode.MethodInfo;
-import javassist.bytecode.SignatureAttribute;
-import javassist.bytecode.SyntheticAttribute;
+import javassist.bytecode.*;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti

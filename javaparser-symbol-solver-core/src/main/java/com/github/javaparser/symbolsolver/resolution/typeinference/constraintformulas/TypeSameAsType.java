@@ -21,14 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-
-import java.util.List;
-
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SameAsBound;
+
+import java.util.List;
+
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * A type S is the same as a type T (§4.3.4), or a type argument S is the same as type argument T

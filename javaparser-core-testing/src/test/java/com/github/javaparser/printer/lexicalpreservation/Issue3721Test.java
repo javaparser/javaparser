@@ -1,7 +1,3 @@
-package com.github.javaparser.printer.lexicalpreservation;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2019 The JavaParser Team.
@@ -23,9 +19,12 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEo
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.body.VariableDeclarator;
+import org.junit.jupiter.api.Test;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 public class Issue3721Test extends AbstractLexicalPreservingTest {
 

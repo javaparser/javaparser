@@ -21,20 +21,34 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.stmt.IfStmt;
-import org.junit.jupiter.api.Test;
-
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Issue2393Test extends AbstractLexicalPreservingTest {
+import java.util.List;
 
-    @Test
-    public void test() {
-        considerCode("public class Test { public void foo() { int i = 0;\nif(i == 5) { System.out.println(i); } } }");
-        IfStmt ifStmt = cu.findFirst(IfStmt.class).orElseThrow(() -> new IllegalStateException("Expected if"));
-        ifStmt.setCondition(StaticJavaParser.parseExpression("i > 0"));
-        assertEquals("i > 0", ifStmt.getCondition().toString());
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.ast.body.FieldDeclaration;
+
+public class Issue3796Test extends AbstractLexicalPreservingTest {
+
+	@Test
+    void test() {
+		considerCode(
+				"public class MyClass {\n"
+				+ "	/** Comment */ \n"
+				+ "	@Rule String s0; \n"
+				+ "}");
+		String expected = 
+				"public class MyClass {\n" +
+				"\n" +
+				"}";
+
+		List<FieldDeclaration> fields = cu.findAll(FieldDeclaration.class);
+		FieldDeclaration field = fields.get(0);
+
+		field.remove();
+
+		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-
 }

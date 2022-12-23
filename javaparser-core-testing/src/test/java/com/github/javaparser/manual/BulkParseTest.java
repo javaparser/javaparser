@@ -23,7 +23,6 @@ package com.github.javaparser.manual;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.utils.SourceZip;
@@ -42,8 +41,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
-import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
 import static com.github.javaparser.utils.TestUtils.download;
 import static com.github.javaparser.utils.TestUtils.temporaryDirectory;

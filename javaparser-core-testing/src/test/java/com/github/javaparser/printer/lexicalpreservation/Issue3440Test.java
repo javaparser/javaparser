@@ -21,11 +21,10 @@ package com.github.javaparser.printer.lexicalpreservation;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
 
 public class Issue3440Test extends AbstractLexicalPreservingTest {
 

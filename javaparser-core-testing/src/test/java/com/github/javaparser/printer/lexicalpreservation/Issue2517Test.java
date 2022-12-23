@@ -1,9 +1,3 @@
-package com.github.javaparser.printer.lexicalpreservation;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-
-import java.util.StringJoiner;
-
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2019 The JavaParser Team.
@@ -25,16 +19,14 @@ import java.util.StringJoiner;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
+package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.javadoc.Javadoc;
-import com.github.javaparser.javadoc.description.JavadocDescription;
+import org.junit.jupiter.api.Test;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 public class Issue2517Test extends AbstractLexicalPreservingTest {
 

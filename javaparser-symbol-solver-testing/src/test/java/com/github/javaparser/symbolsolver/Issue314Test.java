@@ -22,7 +22,8 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
