@@ -98,7 +98,8 @@ public class ResolvedArrayType implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced,
+                                             Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         ResolvedType baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
         if (baseTypeReplaced == baseType) {
             return this;
@@ -114,5 +115,13 @@ public class ResolvedArrayType implements ResolvedType {
     @Override
     public ResolvedType erasure() {
         return new ResolvedArrayType(baseType.erasure());
+    }
+
+    @Override
+    public String toDescriptor() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        sb.append(baseType.toDescriptor());
+        return sb.toString();
     }
 }

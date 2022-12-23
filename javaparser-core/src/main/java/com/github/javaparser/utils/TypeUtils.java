@@ -45,31 +45,36 @@ public class TypeUtils {
             currentClass = currentClass.getComponentType();
         }
         if (currentClass.isPrimitive()) {
-            String descriptor;
-            if (currentClass == Void.TYPE) {
-                descriptor = new VoidType().toDescriptor();
-            } else if (currentClass == Integer.TYPE) {
-                descriptor = PrimitiveType.intType().toDescriptor();
-            } else if (currentClass == Boolean.TYPE) {
-                descriptor = PrimitiveType.booleanType().toDescriptor();
-            } else if (currentClass == Byte.TYPE) {
-                descriptor = PrimitiveType.byteType().toDescriptor();
-            } else if (currentClass == Character.TYPE) {
-                descriptor = PrimitiveType.charType().toDescriptor();
-            } else if (currentClass == Short.TYPE) {
-                descriptor = PrimitiveType.shortType().toDescriptor();
-            } else if (currentClass == Double.TYPE) {
-                descriptor = PrimitiveType.doubleType().toDescriptor();
-            } else if (currentClass == Float.TYPE) {
-                descriptor = PrimitiveType.floatType().toDescriptor();
-            } else if (currentClass == Long.TYPE) {
-                descriptor = PrimitiveType.longType().toDescriptor();
-            } else {
-                throw new AssertionError("Unknown primitive: " + currentClass.getName());
-            }
+            String descriptor = getPrimitiveTypeDescriptor(currentClass);
             stringBuilder.append(descriptor);
         } else {
             stringBuilder.append("L").append(currentClass.getName().replace(".", "/")).append(";");
         }
+    }
+
+    public static String getPrimitiveTypeDescriptor(final Class<?> clazz) {
+        String descriptor;
+        if (clazz == Void.TYPE) {
+            descriptor = new VoidType().toDescriptor();
+        } else if (clazz == Integer.TYPE) {
+            descriptor = PrimitiveType.intType().toDescriptor();
+        } else if (clazz == Boolean.TYPE) {
+            descriptor = PrimitiveType.booleanType().toDescriptor();
+        } else if (clazz == Byte.TYPE) {
+            descriptor = PrimitiveType.byteType().toDescriptor();
+        } else if (clazz == Character.TYPE) {
+            descriptor = PrimitiveType.charType().toDescriptor();
+        } else if (clazz == Short.TYPE) {
+            descriptor = PrimitiveType.shortType().toDescriptor();
+        } else if (clazz == Double.TYPE) {
+            descriptor = PrimitiveType.doubleType().toDescriptor();
+        } else if (clazz == Float.TYPE) {
+            descriptor = PrimitiveType.floatType().toDescriptor();
+        } else if (clazz == Long.TYPE) {
+            descriptor = PrimitiveType.longType().toDescriptor();
+        } else {
+            throw new AssertionError("Unknown primitive: " + clazz.getName());
+        }
+        return descriptor;
     }
 }
