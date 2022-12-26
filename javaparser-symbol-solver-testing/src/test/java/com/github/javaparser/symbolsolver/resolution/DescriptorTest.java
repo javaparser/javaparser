@@ -46,7 +46,7 @@ class DescriptorTest extends AbstractResolutionTest {
                 "  }\n" +
                 "}";
 
-        Path javassistJar = adaptPath("src/test/resources/javassistmethoddecl/javassistmethoddecl.jar");
+        Path javassistJar = adaptPath("src/test/resources/issue3808/javassist-3.29.2-GA.jar");
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(
                 new CombinedTypeSolver(new ReflectionTypeSolver(),
