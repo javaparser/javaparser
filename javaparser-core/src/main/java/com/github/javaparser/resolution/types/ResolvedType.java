@@ -29,24 +29,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * A resolved type.
- * </p>
+ * <p>A resolved type.</p>
  * <ul>
- * <li>
- * It could be a primitive type or a reference type (enum, class, interface).
- * In the latter case, it could take type typeParametersValues (other {@code TypeUsages}).
- * </p>
- * </li>
- * <li>
- * It could also be a {@code TypeVariable}, like in: {@code class A<B> {} } where {@code B} is a {@code TypeVariable}.
- * </li>
- * <li>
- * It could also be {@code Wildcard} Type, possibly with constraints.
- * </li>
- * <li>
- * It could also be a {@code TypeVariable}, like in: {@code class A<B> {}}.
- * </li>
+ *     <li>
+ *         It could be a primitive type or a reference type (enum, class, interface).
+ *         In the latter case, it could take type typeParametersValues (other {@code TypeUsages}).</p>
+ *     </li>
+ *     <li>
+ *         It could also be a {@code TypeVariable}, like in: {@code class A<B> {} } where {@code B} is a {@code TypeVariable}.
+ *     </li>
+ *     <li>
+ *         It could also be {@code Wildcard} Type, possibly with constraints.
+ *     </li>
+ *     <li>
+ *         It could also be a {@code TypeVariable}, like in: {@code class A<B> {}}.
+ *     </li>
  * </ul>
  *
  * @author Federico Tomassetti
