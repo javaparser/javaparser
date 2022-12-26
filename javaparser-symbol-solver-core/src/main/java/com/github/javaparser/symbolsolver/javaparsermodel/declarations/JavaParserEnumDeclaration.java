@@ -437,7 +437,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public String toDescriptor() {
-            return String.format("()[%s", getReturnType().toDescriptor());
+            return String.format("()%s", getReturnType().toDescriptor());
         }
     }
 
