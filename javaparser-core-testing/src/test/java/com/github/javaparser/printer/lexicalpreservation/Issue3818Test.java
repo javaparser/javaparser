@@ -52,7 +52,6 @@ public class Issue3818Test extends AbstractLexicalPreservingTest {
 		Parameter paramExpr = new Parameter(p.getModifiers(), p.getAnnotations(), p.getType(),
 				p.isVarArgs(), p.getVarArgsAnnotations(), new SimpleName("b"));
 		md.replace(p, paramExpr);
-		System.out.println(LexicalPreservingPrinter.print(cu));
 		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }
