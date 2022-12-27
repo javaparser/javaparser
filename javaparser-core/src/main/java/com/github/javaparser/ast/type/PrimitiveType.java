@@ -238,8 +238,8 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return Optional.of(this);
     }
 
-    @Override
-    public ResolvedType convertToUsage(Context context) {
-        return ResolvedPrimitiveType.byName(getType().name());
-    }
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		return ResolvedPrimitiveType.byName(getType().name());
+	}
 }

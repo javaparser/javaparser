@@ -65,14 +65,14 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         }
         throw new IllegalArgumentException("Name " + name);
     }
-
+    
     /*
      * Returns true if the specified type is a boxed type of a primitive type.
      */
     public static boolean isBoxType(ResolvedType type) {
-        if (!type.getClass().isInstance(ResolvedReferenceType.class)) {
-            return false;
-        }
+    	if (!type.getClass().isInstance(ResolvedReferenceType.class)) {
+    		return false;
+    	}
         String qName = type.asReferenceType().getQualifiedName();
         for (ResolvedPrimitiveType ptu : values()) {
             if (ptu.getBoxTypeQName().equals(qName)) {
@@ -81,7 +81,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         }
         return false;
     }
-
+    
     /*
      * Returns the primitive type corresponding to the specified boxed type canonical name.
      */
@@ -93,7 +93,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         }
         return Optional.empty();
     }
-
+    
     /*
      * Returns an array containing all numeric types
      */
@@ -157,7 +157,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     public String getBoxTypeQName() {
         return boxTypeClass.getCanonicalName();
     }
-
+    
     /*
      * Returns the boxed class of the primitive type.
      */
@@ -200,25 +200,17 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      */
     public static ResolvedType unp(ResolvedType type) {
         boolean isUnboxable = type.isReferenceType() && type.asReferenceType().isUnboxable();
-        // If the operand is of compile-time type Byte, Short, Character, or Integer, it is subjected to unboxing
-        // conversion (§5.1.8).
-        // The result is then promoted to a value of type int by a widening primitive conversion (§5.1.2) or an
-        // identity conversion (§5.1.1).
-        if (isUnboxable && type.asReferenceType().toUnboxedType().get()
-                .in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT,
-                        ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.INT })) {
+        // If the operand is of compile-time type Byte, Short, Character, or Integer, it is subjected to unboxing conversion (§5.1.8).
+        // The result is then promoted to a value of type int by a widening primitive conversion (§5.1.2) or an identity conversion (§5.1.1).
+        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.INT })) {
             return ResolvedPrimitiveType.INT;
         }
-        // Otherwise, if the operand is of compile-time type Long, Float, or Double, it is subjected to unboxing
-        // conversion (§5.1.8).
-        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] {
-                ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.DOUBLE })) {
+        // Otherwise, if the operand is of compile-time type Long, Float, or Double, it is subjected to unboxing conversion (§5.1.8).
+        if (isUnboxable && type.asReferenceType().toUnboxedType().get().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.DOUBLE })) {
             return type.asReferenceType().toUnboxedType().get();
         }
-        // Otherwise, if the operand is of compile-time type byte, short, or char, it is promoted to a value of type
-        // int by a widening primitive conversion (§5.1.2).
-        if (type.isPrimitive() && type.asPrimitive().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE,
-                ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.SHORT })) {
+        // Otherwise, if the operand is of compile-time type byte, short, or char, it is promoted to a value of type int by a widening primitive conversion (§5.1.2).
+        if (type.isPrimitive() && type.asPrimitive().in(new ResolvedPrimitiveType[] { ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.CHAR, ResolvedPrimitiveType.SHORT })) {
             return ResolvedPrimitiveType.INT;
         }
         // Otherwise, a unary numeric operand remains as is and is not converted.

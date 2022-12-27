@@ -67,8 +67,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     private EnumDeclaration wrappedNode;
     private JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
 
-    public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode,
-                                     TypeSolver typeSolver) {
+    public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
         this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
@@ -86,8 +85,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         Set<ResolvedMethodDeclaration> methods = new HashSet<>();
         for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
-                methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration) member,
-                        typeSolver));
+                methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
             }
         }
         return methods;
@@ -216,8 +214,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
         if (name.equals("valueOf") && argumentsTypes.size() == 1) {
             ResolvedType argument = argumentsTypes.get(0);
-            if (argument.isReferenceType()
-                    && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
+            if (argument.isReferenceType() && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver));
             }
         }
@@ -236,8 +233,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         this.getAncestors().forEach(a -> fields.addAll(a.getAllFieldsVisibleToInheritors()));
 
         this.wrappedNode.getMembers().stream().filter(m -> m instanceof FieldDeclaration).forEach(m -> {
-            FieldDeclaration fd = (FieldDeclaration) m;
-            fd.getVariables().forEach(v -> fields.add(new JavaParserFieldDeclaration(v, typeSolver)));
+                FieldDeclaration fd = (FieldDeclaration)m;
+                fd.getVariables().forEach(v -> fields.add(new JavaParserFieldDeclaration(v, typeSolver)));
         });
 
         return fields;
@@ -248,7 +245,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         List<ResolvedReferenceType> ancestors = new ArrayList<>();
 
         ResolvedReferenceType enumClass = ReflectionFactory.typeUsageFor(Enum.class, typeSolver).asReferenceType();
-        if (enumClass.getTypeDeclaration().isPresent()) {
+        if(enumClass.getTypeDeclaration().isPresent()) {
             ResolvedTypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().get()
                     .getTypeParameters()
                     .get(0);
@@ -345,12 +342,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
      * An implicitly declared method {@code public static E[] values()}, which returns an array containing the
      * enum constants of {@code E}, in the same order as they appear in the body of the declaration of E.
      *
-     * @see <a href=
-     *      "https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
-     * @see <a href=
-     *      "https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
-     * @see <a href=
-     *      "https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
      */
     public static class ValuesMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
@@ -446,12 +440,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
      * An implicitly declared method {@code public static E valueOf(String name)}, which returns the
      * enum constant of {@code E} with the specified name.
      *
-     * @see <a href=
-     *      "https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
-     * @see <a href=
-     *      "https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
-     * @see <a href=
-     *      "https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2">https://docs.oracle.com/javase/specs/jls/se7/html/jls-8.html#jls-8.9.2</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.3</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3">https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-8.9.3</a>
      */
     public static class ValueOfMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
 
