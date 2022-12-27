@@ -115,4 +115,12 @@ public class ResolvedArrayType implements ResolvedType {
     public ResolvedType erasure() {
         return new ResolvedArrayType(baseType.erasure());
     }
+
+    @Override
+    public String toDescriptor() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        sb.append(baseType.toDescriptor());
+        return sb.toString();
+    }
 }

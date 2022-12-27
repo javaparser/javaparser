@@ -238,4 +238,8 @@ public interface ResolvedType {
     default ResolvedType solveGenericTypes(Context context) {
     	return this;
     }
+
+    default String toDescriptor() {
+        return "";
+    }
 }

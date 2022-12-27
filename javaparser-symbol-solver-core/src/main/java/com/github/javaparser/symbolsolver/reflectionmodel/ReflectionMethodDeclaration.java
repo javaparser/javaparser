@@ -32,6 +32,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
+import com.github.javaparser.utils.TypeUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -156,4 +157,8 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         return ReflectionFactory.typeUsageFor(this.method.getExceptionTypes()[index], typeSolver);
     }
 
+    @Override
+    public String toDescriptor() {
+        return TypeUtils.getMethodDescriptor(method);
+    }
 }
