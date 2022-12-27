@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>A resolved type.</p>
+ * <p>A resolved type. </p>
  * <ul>
  *     <li>
  *         It could be a primitive type or a reference type (enum, class, interface).
@@ -62,8 +62,7 @@ public interface ResolvedType {
 
     /**
      * @return The level of nesting that this type is present at.
-     *         For example, int[][] would have an array level of 2, and int would have an array level of 0 (not an
-     *         array).
+     * For example, int[][] would have an array level of 2, and int would have an array level of 0 (not an array).
      */
     default int arrayLevel() {
         if (isArray()) {
@@ -180,14 +179,12 @@ public interface ResolvedType {
      * By replacing these values I could also infer some type equivalence.
      * Those would be collected in the given map.
      */
-    default ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced,
-                                              Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    default ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         return this;
     }
 
     /**
-     * This is like ({@link #replaceTypeVariables(ResolvedTypeParameterDeclaration, ResolvedType, Map)} but ignores the
-     * inferred values.
+     * This is like ({@link #replaceTypeVariables(ResolvedTypeParameterDeclaration, ResolvedType, Map)} but ignores the inferred values.
      */
     default ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced) {
         return replaceTypeVariables(tp, replaced, new HashMap<>());
@@ -212,8 +209,7 @@ public interface ResolvedType {
      * Returns true if the ResolvedType is a numeric
      */
     default boolean isNumericType() {
-        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes())
-                .anyMatch(rpt -> rpt.isAssignableBy(this));
+        return Arrays.stream(ResolvedPrimitiveType.getNumericPrimitiveTypes()).anyMatch(rpt -> rpt.isAssignableBy(this));
     }
 
     // /
@@ -222,25 +218,25 @@ public interface ResolvedType {
     // Type erasure is a mapping from types (possibly including parameterized types and type variables) to types (that
     // / are never parameterized types or type variables). We write |T| for the erasure of type T. The erasure mapping
     // / is defined as follows:
-    //
+    // 
     // The erasure of a parameterized type (§4.5) G<T1,...,Tn> is |G|.
-    //
+    // 
     // The erasure of a nested type T.C is |T|.C.
-    //
+    // 
     // The erasure of an array type T[] is |T|[].
-    //
+    // 
     // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
-    //
+    // 
     // The erasure of every other type is the type itself.
     default ResolvedType erasure() {
         return this;
     }
-
+    
     /*
      * Returns the resolved type for a type variable or the bounded resolved type or the type itself.
      */
     default ResolvedType solveGenericTypes(Context context) {
-        return this;
+    	return this;
     }
 
     default String toDescriptor() {
