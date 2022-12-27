@@ -76,8 +76,7 @@ public class ResolvedTypeVariable implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced,
-                                             Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
@@ -129,7 +128,7 @@ public class ResolvedTypeVariable implements ResolvedType {
     // / Erasure
     // /
     // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
-    //
+    // 
     @Override
     public ResolvedType erasure() {
         if (typeParameter.isBounded()) {
@@ -137,13 +136,13 @@ public class ResolvedTypeVariable implements ResolvedType {
         }
         return typeParameter.object();
     }
-
+    
     /*
      * Returns the resolved type for a type variable.
      */
     @Override
     public ResolvedType solveGenericTypes(Context context) {
-        return context.solveGenericType(describe()).orElse(this);
+    	return context.solveGenericType(describe()).orElse(this);
     }
 
     @Override
