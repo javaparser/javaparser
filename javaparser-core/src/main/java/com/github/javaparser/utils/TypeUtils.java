@@ -21,9 +21,12 @@
 package com.github.javaparser.utils;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
-import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 public class TypeUtils {
 
@@ -59,28 +62,36 @@ public class TypeUtils {
     }
 
     public static String getPrimitiveTypeDescriptor(final Class<?> clazz) {
-        String descriptor;
-        if (clazz == Void.TYPE) {
-            descriptor = new VoidType().toDescriptor();
-        } else if (clazz == Integer.TYPE) {
-            descriptor = PrimitiveType.intType().toDescriptor();
-        } else if (clazz == Boolean.TYPE) {
-            descriptor = PrimitiveType.booleanType().toDescriptor();
-        } else if (clazz == Byte.TYPE) {
-            descriptor = PrimitiveType.byteType().toDescriptor();
-        } else if (clazz == Character.TYPE) {
-            descriptor = PrimitiveType.charType().toDescriptor();
-        } else if (clazz == Short.TYPE) {
-            descriptor = PrimitiveType.shortType().toDescriptor();
-        } else if (clazz == Double.TYPE) {
-            descriptor = PrimitiveType.doubleType().toDescriptor();
-        } else if (clazz == Float.TYPE) {
-            descriptor = PrimitiveType.floatType().toDescriptor();
-        } else if (clazz == Long.TYPE) {
-            descriptor = PrimitiveType.longType().toDescriptor();
-        } else {
-            throw new AssertionError("Unknown primitive: " + clazz.getName());
+        if (clazz == Void.TYPE || clazz == Void.class) {
+            return new VoidType().toDescriptor();
         }
-        return descriptor;
+        String className = clazz.getCanonicalName();
+        Optional<Primitive> prim = getPrimitive(className);
+        if (prim.isPresent()) {
+            return prim.get().toDescriptor();
+        }
+        Optional<ResolvedType> rt = ResolvedPrimitiveType.byBoxTypeQName(className);
+        if (rt.isPresent()) {
+            return getResolvedPrimitiveTypeDescriptor(rt);
+        }
+        throw new IllegalArgumentException("Unknown primitive: " + className);
+    }
+
+    private static String getResolvedPrimitiveTypeDescriptor(Optional<ResolvedType> rt) throws AssertionError {
+        String typeName = rt.get().asPrimitive().describe();
+        Optional<Primitive> prim = getPrimitive(typeName);
+        return prim.map(p -> p.toDescriptor())
+                .orElseThrow(() -> new AssertionError(
+                        String.format(
+                                "ResolvedPrimitiveType name \"%s\" does not match any Primitive enum constant identifier.",
+                                typeName.toUpperCase())));
+    }
+
+    private static Optional<Primitive> getPrimitive(String name) {
+        try {
+            return Optional.of(Primitive.valueOf(name.toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
     }
 }
