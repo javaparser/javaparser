@@ -25,8 +25,6 @@ import java.util.Optional;
 
 import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
-import com.github.javaparser.resolution.types.ResolvedType;
 
 public class TypeUtils {
 
@@ -65,33 +63,14 @@ public class TypeUtils {
         if (clazz == Void.TYPE || clazz == Void.class) {
             return new VoidType().toDescriptor();
         }
-        String className = clazz.getCanonicalName();
-        Optional<Primitive> prim = getPrimitive(className);
+        String className = clazz.getSimpleName();
+        Optional<Primitive> prim = Primitive.byTypeName(className);
         if (prim.isPresent()) {
             return prim.get().toDescriptor();
         }
-        Optional<ResolvedType> rt = ResolvedPrimitiveType.byBoxTypeQName(className);
-        if (rt.isPresent()) {
-            return getResolvedPrimitiveTypeDescriptor(rt);
-        }
-        throw new IllegalArgumentException("Unknown primitive: " + className);
-    }
-
-    private static String getResolvedPrimitiveTypeDescriptor(Optional<ResolvedType> rt) throws AssertionError {
-        String typeName = rt.get().asPrimitive().describe();
-        Optional<Primitive> prim = getPrimitive(typeName);
-        return prim.map(p -> p.toDescriptor())
-                .orElseThrow(() -> new AssertionError(
-                        String.format(
-                                "ResolvedPrimitiveType name \"%s\" does not match any Primitive enum constant identifier.",
-                                typeName.toUpperCase())));
-    }
-
-    private static Optional<Primitive> getPrimitive(String name) {
-        try {
-            return Optional.of(Primitive.valueOf(name.toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            return Optional.empty();
-        }
+        prim = Primitive.byBoxedTypeName(className);
+        return prim.map(pType -> pType.toDescriptor())
+                .orElseThrow(
+                        () -> new IllegalArgumentException(String.format("Unknown primitive type \"%s\"", className)));
     }
 }
