@@ -1712,5 +1712,17 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
+    
+    // issue 3800 determine whether active
+    @Test
+    void checkLPPIsAvailableOnNode() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
+        LexicalPreservingPrinter.setup(md);
+        
+        assertTrue(LexicalPreservingPrinter.isAvailableOn(md));
+        assertFalse(LexicalPreservingPrinter.isAvailableOn(cu));
+    }
 
 }

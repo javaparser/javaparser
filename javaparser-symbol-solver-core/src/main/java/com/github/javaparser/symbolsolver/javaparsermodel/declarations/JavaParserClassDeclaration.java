@@ -306,7 +306,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             return ref;
         }
 
-        String prefix = wrappedNode.getName() + ".";
+        String prefix = wrappedNode.getName().asString() + ".";
         if (name.startsWith(prefix) && name.length() > prefix.length()) {
             return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()));
         }
