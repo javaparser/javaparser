@@ -270,7 +270,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             return ref;
         }
 
-        String prefix = wrappedNode.getName() + ".";
+        String prefix = wrappedNode.getName().asString() + ".";
         if (name.startsWith(prefix) && name.length() > prefix.length()) {
             return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()));
         }
