@@ -23,7 +23,7 @@ import java.util.List;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DescriptorTest extends AbstractResolutionTest {
+class MethodDescriptorTest extends AbstractResolutionTest {
 
     private static String code =
             "public class A {\n" +
