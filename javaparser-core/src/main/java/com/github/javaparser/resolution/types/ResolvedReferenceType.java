@@ -582,4 +582,9 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     private boolean isJavaObject(ResolvedType rt) {
         return rt.isReferenceType() && rt.asReferenceType().isJavaLangObject();
     }
+
+    @Override
+    public String toDescriptor() {
+        return String.format("L%s;", getQualifiedName().replace(".", "/"));
+    }
 }

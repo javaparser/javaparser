@@ -428,8 +428,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         public Optional<Node> toAst() {
             return enumDeclaration.toAst();
         }
-    }
 
+        @Override
+        public String toDescriptor() {
+            return String.format("()%s", getReturnType().toDescriptor());
+        }
+    }
 
     /**
      * Needed by ContextHelper
@@ -548,6 +552,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         @Override
         public Optional<Node> toAst() {
             return enumDeclaration.toAst();
+        }
+
+        @Override
+        public String toDescriptor() {
+            return String.format("(Ljava/lang/String;)%s", getReturnType().toDescriptor());
         }
     }
 

@@ -143,4 +143,8 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
         return methodLikeAdaper.getSpecifiedException(index);
     }
 
+    @Override
+    public String toDescriptor() {
+        return ctMethod.getMethodInfo().getDescriptor();
+    }
 }
