@@ -107,6 +107,13 @@ public class LexicalPreservingPrinter {
         });
         return node;
     }
+    
+    /*
+     * Returns true if the lexical preserving printer is initialized on the node
+     */
+    public static boolean isAvailableOn(Node node) {
+    	return node.containsData(NODE_TEXT_DATA);
+    }
 
     // 
     // Constructor and setup
