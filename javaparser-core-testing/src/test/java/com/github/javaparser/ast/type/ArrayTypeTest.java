@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -190,4 +191,10 @@ class ArrayTypeTest {
         FieldDeclaration fd2 = parseBodyDeclaration("int[][] a;").asFieldDeclaration();
         assertEquals(2, fd2.getVariable(0).getType().getArrayLevel());
     }
+    
+    @Test
+	void range() {
+		Type type = parseType("Long[][]");
+		assertEquals(8, type.getRange().get().end.column);
+	}
 }
