@@ -25,6 +25,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
@@ -1400,6 +1401,34 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
     }
+    
+    @Test
+	void testTextBlockSupport() {
+		String code = 
+				"String html = \"\"\"\n" +
+                "  <html>\n" +
+                "    <body>\n" +
+                "      <p>Hello, world</p>\n" +
+                "    </body>\n" +
+                "  </html>\n" +
+                "\"\"\";";
+		String expected =
+				"String html = \"\"\"\r\n"
+				+ "  <html>\r\n"
+				+ "    <body>\r\n"
+				+ "      <p>Hello, world</p>\r\n"
+				+ "    </body>\r\n"
+				+ "  </html>\r\n"
+				+ "\"\"\";";
+		final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+                        .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15)
+        );
+		Statement stmt = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+		LexicalPreservingPrinter.setup(stmt);
+		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(stmt));
+	}
 
     @Test
     void testArrayPreservation_WithSingleLanguageStyle() {
