@@ -22,6 +22,7 @@
 package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -37,6 +38,7 @@ import java.util.Map;
 
 import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -252,8 +254,9 @@ class CompilationUnitBuildersTest {
   }
 
   @Test
-  void testAddRecord() {
-    RecordDeclaration myRecordDeclaration = cu.addRecord("test");
+  void testAddTypeWithRecordDeclaration() {
+    RecordDeclaration myRecordDeclaration = new RecordDeclaration(Modifier.createModifierList(PUBLIC), "test");
+    cu.addType(myRecordDeclaration);
     assertEquals(1, cu.getTypes().size());
     assertEquals("test", cu.getType(0).getNameAsString());
     assertTrue(myRecordDeclaration.isPublic());
@@ -283,6 +286,7 @@ class CompilationUnitBuildersTest {
 
   @Test
   void testGetRecordByName() {
-    assertEquals(cu.addRecord("test"), cu.getRecordByName("test").get());
+    assertEquals(cu.addType(new RecordDeclaration(Modifier.createModifierList(), "test")).getType(0),
+            cu.getRecordByName("test").get());
   }
 }

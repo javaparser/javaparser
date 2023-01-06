@@ -522,29 +522,6 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Add a public record to the types of this compilation unit
-     *
-     * @param name the record name
-     * @return the newly created record
-     */
-    public RecordDeclaration addRecord(String name) {
-        return addRecord(name, Modifier.Keyword.PUBLIC);
-    }
-
-    /**
-     * Add a record to the types of this compilation unit
-     *
-     * @param name the record name
-     * @param modifiers the modifiers (like {@link Modifier.Keyword#PUBLIC})
-     * @return the newly created record
-     */
-    public RecordDeclaration addRecord(String name, Modifier.Keyword... modifiers) {
-        RecordDeclaration recordDeclaration = new RecordDeclaration(createModifierList(modifiers), name);
-        getTypes().add(recordDeclaration);
-        return recordDeclaration;
-    }
-
-    /**
      * Try to get a top level class declaration by its name
      *
      * @param className the class name (case-sensitive)
