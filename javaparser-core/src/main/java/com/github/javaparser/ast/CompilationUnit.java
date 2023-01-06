@@ -21,10 +21,7 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.*;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
@@ -525,6 +522,29 @@ public class CompilationUnit extends Node {
     }
 
     /**
+     * Add a public record to the types of this compilation unit
+     *
+     * @param name the record name
+     * @return the newly created record
+     */
+    public RecordDeclaration addRecord(String name) {
+        return addRecord(name, Modifier.Keyword.PUBLIC);
+    }
+
+    /**
+     * Add a record to the types of this compilation unit
+     *
+     * @param name the record name
+     * @param modifiers the modifiers (like {@link Modifier.Keyword#PUBLIC})
+     * @return the newly created record
+     */
+    public RecordDeclaration addRecord(String name, Modifier.Keyword... modifiers) {
+        RecordDeclaration recordDeclaration = new RecordDeclaration(createModifierList(modifiers), name);
+        getTypes().add(recordDeclaration);
+        return recordDeclaration;
+    }
+
+    /**
      * Try to get a top level class declaration by its name
      *
      * @param className the class name (case-sensitive)
@@ -584,6 +604,15 @@ public class CompilationUnit extends Node {
      */
     public Optional<AnnotationDeclaration> getAnnotationDeclarationByName(String annotationName) {
         return getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName) && type instanceof AnnotationDeclaration).findFirst().map(t -> (AnnotationDeclaration) t);
+    }
+
+    /**
+     * Try to get a top level record declaration by its name
+     *
+     * @param recordName the enum name (case-sensitive)
+     */
+    public Optional<RecordDeclaration> getRecordByName(String recordName) {
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(recordName) && type instanceof RecordDeclaration).findFirst().map(t -> (RecordDeclaration) t);
     }
 
     @Override

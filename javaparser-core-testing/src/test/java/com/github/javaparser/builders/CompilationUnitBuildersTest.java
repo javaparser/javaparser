@@ -26,6 +26,7 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import org.junit.jupiter.api.Test;
 
@@ -251,6 +252,16 @@ class CompilationUnitBuildersTest {
   }
 
   @Test
+  void testAddRecord() {
+    RecordDeclaration myRecordDeclaration = cu.addRecord("test");
+    assertEquals(1, cu.getTypes().size());
+    assertEquals("test", cu.getType(0).getNameAsString());
+    assertTrue(myRecordDeclaration.isPublic());
+    assertTrue(myRecordDeclaration.isFinal());
+    assertEquals(RecordDeclaration.class, cu.getType(0).getClass());
+  }
+
+  @Test
   void testGetClassByName() {
     assertEquals(cu.addClass("test"), cu.getClassByName("test").get());
   }
@@ -268,5 +279,10 @@ class CompilationUnitBuildersTest {
   @Test
   void testGetAnnotationDeclarationByName() {
     assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test").get());
+  }
+
+  @Test
+  void testGetRecordByName() {
+    assertEquals(cu.addRecord("test"), cu.getRecordByName("test").get());
   }
 }
