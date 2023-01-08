@@ -33,8 +33,12 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
@@ -60,7 +64,7 @@ public class Difference {
 
     private int diffIndex = 0;
 
-    private final List<TokenTextElement> indentation;
+    private final List<TextElement> indentation;
 
     private boolean addedIndentation = false;
 
@@ -78,26 +82,42 @@ public class Difference {
     /*
      * Returns the indentation used after the last line break
      */
-    private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
-        List<TextElement> res = new LinkedList<>(indentation);
-        int index = lastIndexOfEol(prevElements);
-        // no EOL found
-        if (index < 0)
-            return res;
-        // initialize previous indentation
-        res.clear();
-        // search for consecutive space characters
-        for (int i = (index + 1); i < prevElements.size(); i++) {
-            TextElement elem = prevElements.get(i);
-            if (elem.isWhiteSpace()) {
-                res.add(elem);
+    private List<TextElement> processIndentation(List<TextElement> indentation, List<TextElement> prevElements) {
+        int eolIndex = lastIndexOfEol(prevElements);
+        // Return "indentation" as is if no EOL element was found
+        if (eolIndex < 0)
+            return indentation;
+        // Find consecutive space characters after the EOL element
+        indentation = takeWhile(prevElements.subList(eolIndex + 1, prevElements.size()), element -> element.isWhiteSpace());
+        return indentation;
+    }
+    
+    /*
+     * returns only the elements that match the given predicate.
+     * takeWhile takes elements from the initial stream while the predicate holds true.
+     * Meaning that when an element is encountered that does not match the predicate, the rest of the list is discarded. 
+     */
+    List<TextElement> takeWhile(List<TextElement> prevElements, Predicate<TextElement> predicate) {
+    	List<TextElement> spaces = new ArrayList<>();
+    	for (TextElement element : prevElements) {
+    		if (predicate.test(element)) {
+    			spaces.add(element);
                 continue;
             }
             break;
-        }
-        return res;
+    	}
+    	return spaces;
     }
     
+    
+    int lastIndexOfEol(List<TextElement> source) {
+        return IntStream.range(0, source.size())
+                       .map(i -> source.size() - i - 1)
+                       .filter(i -> source.get(i).isNewline())
+                       .findFirst()
+                       .orElse(-1);
+    }
+
     /*
      * Returns the position of the next element in the list starting from @{code fromIndex} which is a comment (Ignoring spaces)
      * or -1 if it's not a comment.
@@ -150,7 +170,7 @@ public class Difference {
     /*
      * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement 
      */
-    int lastIndexOfEol(List<TextElement> source) {
+    int lastIndexOfEolWithoutGPT(List<TextElement> source) {
         ListIterator listIterator = source.listIterator(source.size());
         int lastIndex = source.size() - 1;
         while (listIterator.hasPrevious()) {
@@ -1245,7 +1265,7 @@ public class Difference {
         return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken) csmElement).isWhiteSpace();
     }
 
-    private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
+    private int adjustIndentation(List<TextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
         List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
         if (nodeTextIndex < nodeText.numberOfElements() && nodeText.getTextElement(nodeTextIndex).isToken(RBRACE)) {
             indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTATION_SIZE, indentationAdj.size()));

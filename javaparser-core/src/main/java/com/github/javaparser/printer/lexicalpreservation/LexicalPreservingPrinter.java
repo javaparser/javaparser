@@ -563,7 +563,7 @@ public class LexicalPreservingPrinter {
      */
     private static NodeText interpret(Node node, CsmElement csm, NodeText nodeText) {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
-        List<TokenTextElement> indentation = findIndentation(node);
+        List<TextElement> indentation = findIndentation(node);
         boolean pendingIndentation = false;
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
@@ -627,8 +627,8 @@ public class LexicalPreservingPrinter {
     }
 
     // Visible for testing
-    static List<TokenTextElement> findIndentation(Node node) {
-        List<TokenTextElement> followingNewlines = new LinkedList<>();
+    static List<TextElement> findIndentation(Node node) {
+        List<TextElement> followingNewlines = new LinkedList<>();
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
             TokenTextElement tte = it.next();

@@ -275,18 +275,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     void findIndentationForAnnotationMemberDeclarationWithoutComment() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(4);
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
+        List<TextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
         assertEquals(Arrays.asList(" ", " ", " "),
-                indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
+                indentation.stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
     @Test
     void findIndentationForAnnotationMemberDeclarationWithComment() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
+        List<TextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
         assertEquals(Arrays.asList(" ", " ", " "),
-                indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
+                indentation.stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
     //
