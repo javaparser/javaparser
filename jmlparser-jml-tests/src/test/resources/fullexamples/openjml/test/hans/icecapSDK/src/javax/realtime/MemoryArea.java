@@ -27,12 +27,11 @@
 package javax.realtime;
 
 import icecaptools.IcecapCompileMe;
+import reflect.ObjectInfo;
+import vm.Memory;
 
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
-
-import reflect.ObjectInfo;
-import vm.Memory;
 
 /**
  * All allocation contexts are implemented by memory areas. This is the

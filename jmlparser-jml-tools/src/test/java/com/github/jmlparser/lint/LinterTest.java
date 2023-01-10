@@ -1,7 +1,6 @@
 package com.github.jmlparser.lint;
 
 import com.github.jmlparser.TestWithJavaParser;
-import org.junit.Assume;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 

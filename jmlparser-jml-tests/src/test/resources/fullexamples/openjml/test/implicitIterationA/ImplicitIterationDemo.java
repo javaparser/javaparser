@@ -1,4 +1,4 @@
-import java.util.stream.*;
+import java.util.stream.Stream;
 
 public class ImplicitIterationDemo {
 

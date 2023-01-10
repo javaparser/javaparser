@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.analysis.interpolation;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.NonMonotonicSequenceException;
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
+
+import java.io.Serializable;
 
 /**
  * Implements the <a href="http://mathworld.wolfram.com/NevillesAlgorithm.html">

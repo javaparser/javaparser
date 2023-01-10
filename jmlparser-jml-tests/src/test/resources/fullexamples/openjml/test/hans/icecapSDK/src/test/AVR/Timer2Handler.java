@@ -1,9 +1,9 @@
 package test.AVR;
 
-import vm.InterruptDispatcher;
-import vm.InterruptHandler;
 import devices.AVR.ATMega2560.ATMega2560InterruptDispatcher;
 import devices.AVR.ATMega2560.Port;
+import vm.InterruptDispatcher;
+import vm.InterruptHandler;
 
 public class Timer2Handler implements InterruptHandler {
     private Port portA;

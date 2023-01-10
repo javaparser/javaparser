@@ -5,7 +5,6 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.Behavior;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -15,9 +14,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlContractMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl

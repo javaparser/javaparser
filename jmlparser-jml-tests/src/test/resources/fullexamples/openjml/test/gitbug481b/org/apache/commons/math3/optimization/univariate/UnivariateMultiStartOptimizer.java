@@ -17,17 +17,17 @@
 
 package org.apache.commons.math3.optimization.univariate;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.optimization.GoalType;
 import org.apache.commons.math3.optimization.ConvergenceChecker;
+import org.apache.commons.math3.optimization.GoalType;
+import org.apache.commons.math3.random.RandomGenerator;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Special implementation of the {@link UnivariateOptimizer} interface

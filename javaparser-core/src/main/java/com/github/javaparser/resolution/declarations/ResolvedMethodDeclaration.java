@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
@@ -28,7 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration, AssociableToAST<MethodDeclaration> {
+public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration {
 
     /**
      * The type of the value returned by the current method. This method can also be invoked
@@ -50,4 +49,12 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
      * Is this method static?
      */
     boolean isStatic();
+
+    /*
+     * Returns the method descriptor (https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3)
+     * The method descriptor for the method: {@code Object m(int i, double d, Thread t) {...}}
+     * is {@code (IDLjava/lang/Thread;)Ljava/lang/Object;}
+     * Note that the internal forms of the binary names of Thread and Object are used.
+     */
+    String toDescriptor();
 }

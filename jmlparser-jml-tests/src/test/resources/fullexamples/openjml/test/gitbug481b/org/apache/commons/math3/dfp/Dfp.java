@@ -17,11 +17,11 @@
 
 package org.apache.commons.math3.dfp;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.util.FastMath;
+
+import java.util.Arrays;
 
 /**
  *  Decimal floating point library for Java

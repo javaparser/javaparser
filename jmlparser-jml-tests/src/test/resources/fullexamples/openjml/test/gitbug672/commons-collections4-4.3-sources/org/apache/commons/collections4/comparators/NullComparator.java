@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.comparators;
 
+import org.apache.commons.collections4.ComparatorUtils;
+
 import java.io.Serializable;
 import java.util.Comparator;
-
-import org.apache.commons.collections4.ComparatorUtils;
 
 /**
  * A Comparator that will compare nulls to be either lower or higher than

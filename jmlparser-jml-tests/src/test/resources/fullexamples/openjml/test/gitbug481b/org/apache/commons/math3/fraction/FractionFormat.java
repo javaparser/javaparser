@@ -17,14 +17,14 @@
 
 package org.apache.commons.math3.fraction;
 
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
+import org.apache.commons.math3.exception.MathParseException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
-
-import org.apache.commons.math3.exception.MathIllegalArgumentException;
-import org.apache.commons.math3.exception.MathParseException;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**
  * Formats a Fraction number in proper format or improper format.  The number

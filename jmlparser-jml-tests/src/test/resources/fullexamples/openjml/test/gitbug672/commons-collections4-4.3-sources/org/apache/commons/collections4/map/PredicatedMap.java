@@ -16,14 +16,14 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.Predicate;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Decorates another <code>Map</code> to validate that additions

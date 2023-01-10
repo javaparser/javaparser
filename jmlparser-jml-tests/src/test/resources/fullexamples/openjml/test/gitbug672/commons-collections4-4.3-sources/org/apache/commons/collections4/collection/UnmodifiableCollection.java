@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.collection;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.apache.commons.collections4.Unmodifiable;
 import org.apache.commons.collections4.iterators.UnmodifiableIterator;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Decorates another {@link Collection} to ensure it can't be altered.

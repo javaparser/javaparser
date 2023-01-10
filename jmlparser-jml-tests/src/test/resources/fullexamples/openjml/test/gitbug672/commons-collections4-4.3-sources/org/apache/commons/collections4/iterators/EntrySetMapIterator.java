@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.ResettableIterator;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Implements a <code>MapIterator</code> using a Map entrySet.

@@ -16,13 +16,13 @@
  */
 package org.apache.commons.collections4.functors;
 
-import static org.apache.commons.collections4.functors.FunctorUtils.coerce;
-import static org.apache.commons.collections4.functors.FunctorUtils.validate;
-import static org.apache.commons.collections4.functors.TruePredicate.truePredicate;
+import org.apache.commons.collections4.Predicate;
 
 import java.util.Collection;
 
-import org.apache.commons.collections4.Predicate;
+import static org.apache.commons.collections4.functors.FunctorUtils.coerce;
+import static org.apache.commons.collections4.functors.FunctorUtils.validate;
+import static org.apache.commons.collections4.functors.TruePredicate.truePredicate;
 
 /**
  * Predicate implementation that returns true if all the

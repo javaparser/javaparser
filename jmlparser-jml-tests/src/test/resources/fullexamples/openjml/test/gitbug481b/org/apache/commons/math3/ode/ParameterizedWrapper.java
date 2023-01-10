@@ -16,11 +16,11 @@
  */
 package org.apache.commons.math3.ode;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /** Wrapper class enabling {@link FirstOrderDifferentialEquations basic simple}
  *  ODE instances to be used when processing {@link JacobianMatrices}.

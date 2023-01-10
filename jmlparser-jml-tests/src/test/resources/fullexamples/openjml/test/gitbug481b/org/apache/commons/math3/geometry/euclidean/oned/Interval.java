@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.geometry.euclidean.oned;
 
-import org.apache.commons.math3.geometry.partitioning.Region.Location;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.geometry.partitioning.Region.Location;
 
 
 /** This class represents a 1D interval.

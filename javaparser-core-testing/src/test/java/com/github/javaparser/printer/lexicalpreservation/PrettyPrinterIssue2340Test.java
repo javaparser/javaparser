@@ -21,17 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Optional;
-
+import com.github.javaparser.ast.Modifier;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Modifier.Keyword;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
 

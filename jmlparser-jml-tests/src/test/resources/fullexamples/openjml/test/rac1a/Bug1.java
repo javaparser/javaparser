@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.List;
 
 // Simplified version of test rac1
 // Still need to sort out whether \elemtype can return null

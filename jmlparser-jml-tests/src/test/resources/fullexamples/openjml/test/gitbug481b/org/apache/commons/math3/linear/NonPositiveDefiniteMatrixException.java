@@ -17,8 +17,8 @@
 package org.apache.commons.math3.linear;
 
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.exception.util.ExceptionContext;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**
  * Exception to be thrown when a positive definite matrix is expected.

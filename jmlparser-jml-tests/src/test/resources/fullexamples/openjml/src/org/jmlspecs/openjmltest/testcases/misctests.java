@@ -1,7 +1,6 @@
 package org.jmlspecs.openjmltest.testcases;
 
 import org.jmlspecs.models.JMLByte;
-
 import org.junit.Test;
 
 // Tests that the models are present

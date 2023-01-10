@@ -26,10 +26,10 @@
 
 package javax.safetycritical;
 
-import javax.safetycritical.ScjProcess.State;
-
-import vm.InterruptHandler;
 import icecaptools.IcecapCompileMe;
+import vm.InterruptHandler;
+
+import javax.safetycritical.ScjProcess.State;
 
 final class Monitor extends vm.Monitor {
 	int ceiling;

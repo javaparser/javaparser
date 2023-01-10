@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LogTest {
     private static class TestAdapter implements Log.Adapter {

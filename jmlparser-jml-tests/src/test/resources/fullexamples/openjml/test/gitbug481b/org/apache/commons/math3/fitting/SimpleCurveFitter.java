@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.fitting;
 
-import java.util.Collection;
-
 import org.apache.commons.math3.analysis.ParametricUnivariateFunction;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresProblem;
 import org.apache.commons.math3.linear.DiagonalMatrix;
+
+import java.util.Collection;
 
 /**
  * Fits points to a user-defined {@link ParametricUnivariateFunction function}.

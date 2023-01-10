@@ -16,13 +16,13 @@
  */
 package org.apache.commons.math3.stat.descriptive.moment;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.io.Serializable;
 
 
 /**

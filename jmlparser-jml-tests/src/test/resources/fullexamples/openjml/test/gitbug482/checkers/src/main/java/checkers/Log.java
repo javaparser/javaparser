@@ -1,7 +1,7 @@
 package checkers;
-import java.awt.Font;
 
-import javax.swing.JTextArea;
+import javax.swing.*;
+import java.awt.*;
 
 public class Log extends JTextArea implements BoardListener
 {

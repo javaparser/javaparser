@@ -3,9 +3,8 @@ package vm;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 
-import java.util.ArrayList;
-
 import javax.realtime.MemoryArea;
+import java.util.ArrayList;
 
 public class Memory {
 	private int base;

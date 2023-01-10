@@ -17,30 +17,21 @@
 
 package org.apache.commons.math3.optimization.direct;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.math3.analysis.MultivariateFunction;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.OutOfRangeException;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
-import org.apache.commons.math3.optimization.OptimizationData;
-import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.MultivariateOptimizer;
-import org.apache.commons.math3.optimization.PointValuePair;
-import org.apache.commons.math3.optimization.SimpleValueChecker;
+import org.apache.commons.math3.optimization.*;
 import org.apache.commons.math3.random.MersenneTwister;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathArrays;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>An implementation of the active Covariance Matrix Adaptation Evolution Strategy (CMA-ES)

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.geometry.enclosing;
 
-import java.util.List;
-
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.Space;
+
+import java.util.List;
 
 /** Interface for generating balls based on support points.
  * <p>

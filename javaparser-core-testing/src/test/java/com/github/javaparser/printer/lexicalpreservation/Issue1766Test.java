@@ -21,28 +21,24 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
 
 public class Issue1766Test extends AbstractLexicalPreservingTest  {
     
     @Test
     public void testWithLexicalPreservationEnabled() {
-        
-        String actual = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" +
-                "}";
+
+        considerCode(
+                "public class SimpleTestClass {\n" +
+                        "  public SimpleTestClass() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "  @Override\n" +
+                        "  void bubber() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "}");
         
         String expected = 
                 "public class SimpleTestClass {\n" + 
@@ -54,28 +50,23 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                 "    // nothing\n" + 
                 "  }\n" + 
                 "}";
-        
-        final ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setLexicalPreservationEnabled(true);
-        StaticJavaParser.setConfiguration(parserConfiguration);
-      
-        CompilationUnit cu = StaticJavaParser.parse(actual);
-        TestUtils.assertEqualsStringIgnoringEol(expected, actual);
+
+        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
     
     @Test
     public void testWithLexicalPreservingPrinterSetup() {
-        
-        String actual = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" +
-                "}";
+
+        considerCode(
+                "public class SimpleTestClass {\n" +
+                        "  public SimpleTestClass() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "  @Override\n" +
+                        "  void bubber() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "}");
         
         String expected = 
                 "public class SimpleTestClass {\n" + 
@@ -87,12 +78,7 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                 "    // nothing\n" + 
                 "  }\n" + 
                 "}";
-        
-        final ParserConfiguration parserConfiguration = new ParserConfiguration();
-        StaticJavaParser.setConfiguration(parserConfiguration);
-      
-        CompilationUnit cu = StaticJavaParser.parse(actual);
-        LexicalPreservingPrinter.setup(cu);
-        TestUtils.assertEqualsStringIgnoringEol(expected, actual);
+
+        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }

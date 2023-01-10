@@ -16,29 +16,14 @@
  */
 package org.apache.commons.collections4;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.collections4.bag.HashBag;
-import org.apache.commons.collections4.collection.PredicatedCollection;
-import org.apache.commons.collections4.collection.SynchronizedCollection;
-import org.apache.commons.collections4.collection.TransformedCollection;
-import org.apache.commons.collections4.collection.UnmodifiableBoundedCollection;
-import org.apache.commons.collections4.collection.UnmodifiableCollection;
+import org.apache.commons.collections4.collection.*;
 import org.apache.commons.collections4.functors.TruePredicate;
 import org.apache.commons.collections4.iterators.CollatingIterator;
 import org.apache.commons.collections4.iterators.PermutationIterator;
+
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Provides utility methods and decorators for {@link Collection} instances.

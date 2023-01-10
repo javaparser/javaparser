@@ -16,17 +16,13 @@
  */
 package org.apache.commons.math3.genetics;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.util.FastMath;
+
+import java.util.*;
 
 /**
  * Order 1 Crossover [OX1] builds offspring from <b>ordered</b> chromosomes by copying a

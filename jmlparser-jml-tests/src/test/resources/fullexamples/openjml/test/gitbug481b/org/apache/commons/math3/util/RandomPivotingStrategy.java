@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.util;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.random.RandomGenerator;
+
+import java.io.Serializable;
 
 
 /**

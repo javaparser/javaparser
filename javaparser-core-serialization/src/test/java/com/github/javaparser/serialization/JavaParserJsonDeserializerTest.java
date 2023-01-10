@@ -20,7 +20,10 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.*;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Range;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -31,6 +34,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.AfterAll;
@@ -194,6 +198,11 @@ class JavaParserJsonDeserializerTest {
 
             @Override
             public ResolvedType calculateType(Expression expression) {
+                return null;
+            }
+
+            @Override
+            public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
                 return null;
             }
         };

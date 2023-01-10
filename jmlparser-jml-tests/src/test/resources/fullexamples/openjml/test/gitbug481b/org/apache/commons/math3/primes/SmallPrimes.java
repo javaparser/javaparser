@@ -17,11 +17,11 @@
 package org.apache.commons.math3.primes;
 
 
+import org.apache.commons.math3.util.FastMath;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.math3.util.FastMath;
 
 /**
  * Utility methods to work on primes within the <code>int</code> range.

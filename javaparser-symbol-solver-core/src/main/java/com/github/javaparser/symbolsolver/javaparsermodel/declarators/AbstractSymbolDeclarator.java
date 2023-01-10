@@ -22,8 +22,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarators;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+import com.github.javaparser.resolution.SymbolDeclarator;
+import com.github.javaparser.resolution.TypeSolver;
 
 /**
  * @author Federico Tomassetti

@@ -16,16 +16,12 @@
  */
 package org.apache.commons.math3.linear;
 
-import java.io.Serializable;
-
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.NumberIsTooLargeException;
-import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
 import org.apache.commons.math3.util.Precision;
+
+import java.io.Serializable;
 
 /**
  * Implementation of a diagonal matrix.

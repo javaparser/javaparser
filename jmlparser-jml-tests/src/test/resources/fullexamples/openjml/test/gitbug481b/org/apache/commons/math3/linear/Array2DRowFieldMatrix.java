@@ -17,20 +17,14 @@
 
 package org.apache.commons.math3.linear;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.exception.NoDataException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.MathIllegalStateException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.MathArrays;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.io.Serializable;
 
 /**
  * Implementation of FieldMatrix<T> using a {@link FieldElement}[][] array to store entries.

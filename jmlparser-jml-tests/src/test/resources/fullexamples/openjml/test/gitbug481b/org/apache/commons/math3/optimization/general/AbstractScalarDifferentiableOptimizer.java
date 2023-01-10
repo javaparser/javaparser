@@ -18,12 +18,12 @@
 package org.apache.commons.math3.optimization.general;
 
 import org.apache.commons.math3.analysis.DifferentiableMultivariateFunction;
-import org.apache.commons.math3.analysis.MultivariateVectorFunction;
 import org.apache.commons.math3.analysis.FunctionUtils;
+import org.apache.commons.math3.analysis.MultivariateVectorFunction;
 import org.apache.commons.math3.analysis.differentiation.MultivariateDifferentiableFunction;
+import org.apache.commons.math3.optimization.ConvergenceChecker;
 import org.apache.commons.math3.optimization.DifferentiableMultivariateOptimizer;
 import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
 import org.apache.commons.math3.optimization.PointValuePair;
 import org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer;
 

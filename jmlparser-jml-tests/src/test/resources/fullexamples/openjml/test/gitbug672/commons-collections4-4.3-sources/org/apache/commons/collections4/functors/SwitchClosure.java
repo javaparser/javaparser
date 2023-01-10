@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.Predicate;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Closure implementation calls the closure whose predicate returns true,

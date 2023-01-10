@@ -1,11 +1,10 @@
 package org.jmlspecs.openjmltest.testcases;
 
+import com.sun.tools.javac.tree.JCTree.*;
 import org.jmlspecs.openjml.JmlTree.*;
 import org.jmlspecs.openjml.ext.RecommendsClause;
 import org.jmlspecs.openjmltest.ParseBase;
 import org.junit.Test;
-
-import com.sun.tools.javac.tree.JCTree.*;
 
 
 /** Tests that the parser creates the correct tokens for some simple

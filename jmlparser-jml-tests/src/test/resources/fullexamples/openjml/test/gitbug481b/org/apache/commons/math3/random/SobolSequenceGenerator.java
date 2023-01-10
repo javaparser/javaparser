@@ -16,6 +16,9 @@
  */
 package org.apache.commons.math3.random;
 
+import org.apache.commons.math3.exception.*;
+import org.apache.commons.math3.util.FastMath;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,13 +27,6 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
-import org.apache.commons.math3.exception.MathInternalError;
-import org.apache.commons.math3.exception.MathParseException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.OutOfRangeException;
-import org.apache.commons.math3.util.FastMath;
 
 /**
  * Implementation of a Sobol sequence.

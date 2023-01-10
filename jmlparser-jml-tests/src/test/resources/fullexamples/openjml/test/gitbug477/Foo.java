@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class Foo {
 
 	public static void foo(){

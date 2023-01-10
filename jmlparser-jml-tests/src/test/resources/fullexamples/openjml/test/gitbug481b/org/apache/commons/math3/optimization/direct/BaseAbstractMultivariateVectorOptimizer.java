@@ -17,21 +17,14 @@
 
 package org.apache.commons.math3.optimization.direct;
 
-import org.apache.commons.math3.util.Incrementor;
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.analysis.MultivariateVectorFunction;
-import org.apache.commons.math3.optimization.OptimizationData;
-import org.apache.commons.math3.optimization.InitialGuess;
-import org.apache.commons.math3.optimization.Target;
-import org.apache.commons.math3.optimization.Weight;
-import org.apache.commons.math3.optimization.BaseMultivariateVectorOptimizer;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
-import org.apache.commons.math3.optimization.PointVectorValuePair;
-import org.apache.commons.math3.optimization.SimpleVectorValueChecker;
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MaxCountExceededException;
+import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.exception.TooManyEvaluationsException;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.optimization.*;
+import org.apache.commons.math3.util.Incrementor;
 
 /**
  * Base class for implementing optimizers for multivariate scalar functions.

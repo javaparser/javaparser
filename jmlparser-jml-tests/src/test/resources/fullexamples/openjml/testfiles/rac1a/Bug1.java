@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.List;
 
 // This used to compare a \TYPE to null - which is no longer allowed - but still need to sort out whether \elemtype can return null
 public class Bug1 {

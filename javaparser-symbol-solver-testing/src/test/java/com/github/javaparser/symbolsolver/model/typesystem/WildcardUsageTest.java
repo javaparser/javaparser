@@ -21,10 +21,11 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,9 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class WildcardUsageTest {
 
@@ -63,10 +62,10 @@ class WildcardUsageTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
-        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
-        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver));
+        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver));
+        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
+        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
         superFoo = ResolvedWildcard.superBound(foo);
         superBar = ResolvedWildcard.superBound(bar);
         extendsFoo = ResolvedWildcard.extendsBound(foo);

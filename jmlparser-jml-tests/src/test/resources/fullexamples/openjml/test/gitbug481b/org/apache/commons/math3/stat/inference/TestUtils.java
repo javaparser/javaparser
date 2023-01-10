@@ -16,21 +16,11 @@
  */
 package org.apache.commons.math3.stat.inference;
 
-import java.util.Collection;
-
 import org.apache.commons.math3.distribution.RealDistribution;
-import org.apache.commons.math3.exception.ConvergenceException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.InsufficientDataException;
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.NoDataException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.OutOfRangeException;
-import org.apache.commons.math3.exception.ZeroException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
+
+import java.util.Collection;
 
 /**
  * A collection of static methods to create inference test instances or to

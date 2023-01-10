@@ -1,7 +1,8 @@
 // This was partly a problem with inadequate specs, but then also a problem with the
 // library specs for Collection, ArrayList, List
-import java.util.Random;
+
 import java.util.ArrayList;
+import java.util.Random;
 
 public class buggyRandomNumber{
 

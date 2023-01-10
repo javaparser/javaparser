@@ -17,12 +17,7 @@
 package org.apache.commons.math3.stat.inference;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
-import org.apache.commons.math3.exception.ConvergenceException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.NoDataException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.stat.ranking.NaNStrategy;
 import org.apache.commons.math3.stat.ranking.NaturalRanking;
 import org.apache.commons.math3.stat.ranking.TiesStrategy;

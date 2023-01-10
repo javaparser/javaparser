@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.Iterator;
-
 import org.apache.commons.collections4.Unmodifiable;
+
+import java.util.Iterator;
 
 /**
  * Decorates an iterator such that it cannot be modified.

@@ -1,11 +1,11 @@
 package vm;
 
-import javax.scj.util.Const;
-
-import icecaptools.IcecapCVar;
-import icecaptools.IcecapCompileMe;
 import devices.CR16C.KT4585.CR16CInterruptDispatcher;
 import devices.i86.I86InterruptDispatcher;
+import icecaptools.IcecapCVar;
+import icecaptools.IcecapCompileMe;
+
+import javax.scj.util.Const;
 
 /* Add setScheduler(Scheduler sch)  */
 public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {

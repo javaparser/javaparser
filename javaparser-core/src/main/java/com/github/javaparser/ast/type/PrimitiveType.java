@@ -23,7 +23,6 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -33,10 +32,14 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -99,12 +102,37 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
 
         private final String codeRepresentation;
 
+        /*
+         * Returns the Primitive constant corresponding to the specified type name (e.g. "boolean", "int",
+         * "long").
+         */
+        public static Optional<Primitive> byTypeName(String name) {
+            for (Primitive primitive : values()) {
+                if (primitive.name().toLowerCase().equals(name)) {
+                    return Optional.of(primitive);
+                }
+            }
+            return Optional.empty();
+        }
+
+        /*
+         * Returns the Primitive constant corresponding to the specified boxed type name (e.g. "Boolean", "Integer",
+         * "Long").
+         */
+        public static Optional<Primitive> byBoxedTypeName(String simpleName) {
+            return Optional.ofNullable(unboxMap.getOrDefault(simpleName, null));
+        }
+
         public ClassOrInterfaceType toBoxedType() {
             return parseClassOrInterfaceType(nameOfBoxedType);
         }
 
         public String asString() {
             return codeRepresentation;
+        }
+
+        public String toDescriptor() {
+            return descriptor;
         }
 
         Primitive(String nameOfBoxedType, String descriptor) {
@@ -170,7 +198,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
 
     @Override
     public String toDescriptor() {
-        return type.descriptor;
+        return type.toDescriptor();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -233,5 +261,10 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<PrimitiveType> toPrimitiveType() {
         return Optional.of(this);
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return ResolvedPrimitiveType.byName(getType().name());
     }
 }

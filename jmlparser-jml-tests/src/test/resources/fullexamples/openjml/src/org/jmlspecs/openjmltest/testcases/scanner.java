@@ -1,31 +1,21 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import static com.sun.tools.javac.parser.Tokens.*;
-import static com.sun.tools.javac.parser.Tokens.TokenKind.*;
-import static org.jmlspecs.openjml.JmlTokenKind.*;
-
+import com.sun.tools.javac.parser.JmlScanner;
+import com.sun.tools.javac.parser.Scanner;
+import com.sun.tools.javac.parser.ScannerFactory;
+import com.sun.tools.javac.util.Log;
+import com.sun.tools.javac.util.Options;
 import org.jmlspecs.openjml.JmlTokenKind;
 import org.jmlspecs.openjmltest.JmlTestCase;
 import org.jmlspecs.openjmltest.TestJavaFileObject;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.sun.tools.javac.parser.JmlParser;
-import com.sun.tools.javac.parser.JmlScanner;
-import com.sun.tools.javac.parser.JmlToken;
-import com.sun.tools.javac.parser.ParserFactory;
-import com.sun.tools.javac.parser.Scanner;
-import com.sun.tools.javac.parser.ScannerFactory;
-import com.sun.tools.javac.parser.Tokens;
-import com.sun.tools.javac.util.Log;
-import com.sun.tools.javac.util.Options;
-
-import static org.junit.Assert.*;
-
-import java.util.Locale;
-
-import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
+import static com.sun.tools.javac.parser.Tokens.Token;
+import static com.sun.tools.javac.parser.Tokens.TokenKind;
+import static com.sun.tools.javac.parser.Tokens.TokenKind.*;
+import static org.jmlspecs.openjml.JmlTokenKind.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 // TODO - should test unicode, especially with multiple backslashes
 // TODO - should test errPos for error tokens (is endPos set?)

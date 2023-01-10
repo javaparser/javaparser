@@ -17,10 +17,10 @@
 
 package org.apache.commons.math3.geometry.spherical.twod;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.spherical.oned.Sphere1D;
+
+import java.io.Serializable;
 
 /**
  * This class implements a two-dimensional sphere (i.e. the regular sphere).

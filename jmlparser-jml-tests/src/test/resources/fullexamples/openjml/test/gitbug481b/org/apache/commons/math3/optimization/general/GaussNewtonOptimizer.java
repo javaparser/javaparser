@@ -18,19 +18,13 @@
 package org.apache.commons.math3.optimization.general;
 
 import org.apache.commons.math3.exception.ConvergenceException;
-import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.MathInternalError;
+import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.BlockRealMatrix;
-import org.apache.commons.math3.linear.DecompositionSolver;
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.QRDecomposition;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.SingularMatrixException;
+import org.apache.commons.math3.linear.*;
 import org.apache.commons.math3.optimization.ConvergenceChecker;
-import org.apache.commons.math3.optimization.SimpleVectorValueChecker;
 import org.apache.commons.math3.optimization.PointVectorValuePair;
+import org.apache.commons.math3.optimization.SimpleVectorValueChecker;
 
 /**
  * Gauss-Newton least-squares solver.

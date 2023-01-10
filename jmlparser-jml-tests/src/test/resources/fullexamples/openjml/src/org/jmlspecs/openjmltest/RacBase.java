@@ -1,28 +1,24 @@
 package org.jmlspecs.openjmltest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.tools.JavaFileObject;
-
+import com.sun.tools.javac.util.ListBuffer;
+import com.sun.tools.javac.util.Log;
+import com.sun.tools.javac.util.Options;
 import org.jmlspecs.openjml.JmlSpecs;
 import org.jmlspecs.openjml.Strings;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import com.sun.tools.javac.util.ListBuffer;
-import com.sun.tools.javac.util.Log;
-import com.sun.tools.javac.util.Options;
+import javax.tools.JavaFileObject;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /** This is a base class for unit test files that exercise the RAC.
  * It inherits from JmlTestCase the diagnostic collector implementation

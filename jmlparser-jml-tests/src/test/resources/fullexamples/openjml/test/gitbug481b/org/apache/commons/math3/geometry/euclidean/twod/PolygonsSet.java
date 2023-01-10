@@ -16,25 +16,18 @@
  */
 package org.apache.commons.math3.geometry.euclidean.twod;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.euclidean.oned.Euclidean1D;
 import org.apache.commons.math3.geometry.euclidean.oned.Interval;
 import org.apache.commons.math3.geometry.euclidean.oned.IntervalsSet;
 import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
-import org.apache.commons.math3.geometry.partitioning.AbstractRegion;
-import org.apache.commons.math3.geometry.partitioning.AbstractSubHyperplane;
-import org.apache.commons.math3.geometry.partitioning.BSPTree;
-import org.apache.commons.math3.geometry.partitioning.BSPTreeVisitor;
-import org.apache.commons.math3.geometry.partitioning.BoundaryAttribute;
-import org.apache.commons.math3.geometry.partitioning.Hyperplane;
-import org.apache.commons.math3.geometry.partitioning.Side;
-import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
+import org.apache.commons.math3.geometry.partitioning.*;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.Precision;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /** This class represents a 2D region: a set of polygons.
  * @since 3.0

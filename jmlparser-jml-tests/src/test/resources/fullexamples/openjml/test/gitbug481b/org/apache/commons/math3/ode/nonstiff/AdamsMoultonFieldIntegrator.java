@@ -17,8 +17,6 @@
 
 package org.apache.commons.math3.ode.nonstiff;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.exception.DimensionMismatchException;
@@ -32,6 +30,8 @@ import org.apache.commons.math3.ode.FieldODEState;
 import org.apache.commons.math3.ode.FieldODEStateAndDerivative;
 import org.apache.commons.math3.util.MathArrays;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.util.Arrays;
 
 
 /**

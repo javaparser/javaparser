@@ -16,12 +16,12 @@
  */
 package org.apache.commons.collections4.collection;
 
-import java.util.Collection;
-import java.util.HashMap;
-
 import org.apache.commons.collections4.MultiMap;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.collections4.map.MultiValueMap;
+
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * An IndexedCollection is a Map-like view onto a Collection. It accepts a

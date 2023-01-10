@@ -16,17 +16,17 @@
  */
 package org.apache.commons.collections4.multiset;
 
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.Unmodifiable;
+import org.apache.commons.collections4.iterators.UnmodifiableIterator;
+import org.apache.commons.collections4.set.UnmodifiableSet;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.apache.commons.collections4.MultiSet;
-import org.apache.commons.collections4.Unmodifiable;
-import org.apache.commons.collections4.iterators.UnmodifiableIterator;
-import org.apache.commons.collections4.set.UnmodifiableSet;
 
 /**
  * Decorates another {@link MultiSet} to ensure it can't be altered.

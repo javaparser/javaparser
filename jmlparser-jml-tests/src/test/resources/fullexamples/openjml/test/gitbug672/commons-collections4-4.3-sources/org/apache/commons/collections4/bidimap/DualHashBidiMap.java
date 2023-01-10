@@ -16,14 +16,14 @@
  */
 package org.apache.commons.collections4.bidimap;
 
+import org.apache.commons.collections4.BidiMap;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.collections4.BidiMap;
 
 /**
  * Implementation of {@link BidiMap} that uses two {@link HashMap} instances.

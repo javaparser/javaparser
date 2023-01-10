@@ -16,18 +16,12 @@
  */
 package org.apache.commons.collections4;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.collections4.functors.EqualPredicate;
 import org.apache.commons.collections4.iterators.LazyIteratorChain;
 import org.apache.commons.collections4.iterators.ReverseListIterator;
 import org.apache.commons.collections4.iterators.UniqueFilterIterator;
+
+import java.util.*;
 
 /**
  * Provides utility methods and decorators for {@link Iterable} instances.

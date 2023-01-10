@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.exception;
 
-import org.apache.commons.math3.exception.util.Localizable;
 import org.apache.commons.math3.exception.util.ExceptionContext;
 import org.apache.commons.math3.exception.util.ExceptionContextProvider;
+import org.apache.commons.math3.exception.util.Localizable;
 
 /**
  * As of release 4.0, all exceptions thrown by the Commons Math code (except

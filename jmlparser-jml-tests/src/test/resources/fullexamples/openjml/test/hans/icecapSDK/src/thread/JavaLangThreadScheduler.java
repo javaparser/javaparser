@@ -1,7 +1,6 @@
 package thread;
 
 import vm.Monitor;
-import vm.Process;
 import vm.Scheduler;
 
 public class JavaLangThreadScheduler implements Scheduler {

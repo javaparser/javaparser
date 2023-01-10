@@ -16,11 +16,6 @@
  */
 package org.apache.commons.collections4.multimap;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.MultiValuedMap;
@@ -30,6 +25,11 @@ import org.apache.commons.collections4.iterators.UnmodifiableMapIterator;
 import org.apache.commons.collections4.map.UnmodifiableMap;
 import org.apache.commons.collections4.multiset.UnmodifiableMultiSet;
 import org.apache.commons.collections4.set.UnmodifiableSet;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Decorates another {@link MultiValuedMap} to ensure it can't be altered.

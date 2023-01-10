@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.util.Collection;
-
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
+
+import java.util.Collection;
 
 /**
  * Internal utilities for functors.

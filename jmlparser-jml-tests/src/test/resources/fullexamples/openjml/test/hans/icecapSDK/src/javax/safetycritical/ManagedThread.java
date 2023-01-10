@@ -25,20 +25,14 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.realtime.AbsoluteTime;
-//import javax.realtime.Clock;
-import javax.realtime.HighResolutionTime;
-import javax.realtime.MemoryArea;
-import javax.realtime.RealtimeThread;
-import javax.realtime.PriorityParameters;
-import javax.realtime.RelativeTime;
+import vm.ClockInterruptHandler;
+import vm.Memory;
+
+import javax.realtime.*;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.annotate.SCJRestricted;
-
-import vm.ClockInterruptHandler;
-import vm.Memory;
 
 /**
  * This class enables a mission to keep track of all the no-heap realtime 

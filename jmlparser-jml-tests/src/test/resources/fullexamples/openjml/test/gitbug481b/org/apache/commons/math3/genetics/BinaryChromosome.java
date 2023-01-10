@@ -16,9 +16,10 @@
  */
 package org.apache.commons.math3.genetics;
 
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 
 /**

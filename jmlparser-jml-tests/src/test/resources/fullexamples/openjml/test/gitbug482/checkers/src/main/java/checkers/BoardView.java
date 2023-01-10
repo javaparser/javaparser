@@ -1,15 +1,9 @@
 package checkers;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
-
-import javax.swing.JPanel;
 
 /**
  *  Component displaying state of the board

@@ -16,14 +16,14 @@
  */
 package org.apache.commons.collections4.list;
 
+import org.apache.commons.collections4.Unmodifiable;
+import org.apache.commons.collections4.iterators.UnmodifiableIterator;
+import org.apache.commons.collections4.iterators.UnmodifiableListIterator;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import org.apache.commons.collections4.Unmodifiable;
-import org.apache.commons.collections4.iterators.UnmodifiableIterator;
-import org.apache.commons.collections4.iterators.UnmodifiableListIterator;
 
 /**
  * Decorates another <code>List</code> to ensure it can't be altered.

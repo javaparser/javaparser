@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.set;
 
+import org.apache.commons.collections4.Predicate;
+
 import java.util.Comparator;
 import java.util.SortedSet;
-
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Decorates another <code>SortedSet</code> to validate that all additions

@@ -16,8 +16,6 @@
  */
 package org.apache.commons.math3.geometry.euclidean.twod;
 
-import java.awt.geom.AffineTransform;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.geometry.Point;
@@ -33,6 +31,8 @@ import org.apache.commons.math3.geometry.partitioning.Transform;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathArrays;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.awt.geom.AffineTransform;
 
 /** This class represents an oriented line in the 2D plane.
 

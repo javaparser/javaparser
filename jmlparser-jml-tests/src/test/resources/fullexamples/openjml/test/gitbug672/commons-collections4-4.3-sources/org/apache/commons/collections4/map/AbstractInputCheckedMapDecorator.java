@@ -16,14 +16,14 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
+import org.apache.commons.collections4.keyvalue.AbstractMapEntryDecorator;
+import org.apache.commons.collections4.set.AbstractSetDecorator;
+
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
-import org.apache.commons.collections4.keyvalue.AbstractMapEntryDecorator;
-import org.apache.commons.collections4.set.AbstractSetDecorator;
 
 /**
  * An abstract base class that simplifies the task of creating map decorators.

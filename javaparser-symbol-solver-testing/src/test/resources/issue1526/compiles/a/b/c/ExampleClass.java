@@ -1,6 +1,6 @@
 package a.b.c;
 
-import d.e.f.DataObjectFactory; // Resolving imports takes precedence over within-the-same-package (commenting this line causes a compilation error!).
+import d.e.f.DataObjectFactory;
 
 public class ExampleClass {
 

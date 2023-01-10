@@ -26,7 +26,6 @@
 package javax.realtime;
 
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.scj.util.Priorities;
 
 /**
  * This class is restricted relative to the RTSJ so that it allows the 

@@ -17,11 +17,11 @@
 
 package org.apache.commons.math3.util;
 
-import java.math.BigDecimal;
-
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+
+import java.math.BigDecimal;
 
 /**
  * Utilities for comparing numbers.

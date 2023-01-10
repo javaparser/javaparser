@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.Factory;
+
+import java.io.Serializable;
 
 /**
  * Factory implementation that returns the same constant each time.

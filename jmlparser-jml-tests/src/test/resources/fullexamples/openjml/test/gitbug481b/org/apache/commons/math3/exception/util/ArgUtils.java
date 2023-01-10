@@ -16,8 +16,8 @@
  */
 package org.apache.commons.math3.exception.util;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class for transforming the list of arguments passed to

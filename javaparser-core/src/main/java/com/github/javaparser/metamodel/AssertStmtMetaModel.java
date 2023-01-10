@@ -20,9 +20,10 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.stmt.AssertStmt;
+
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:

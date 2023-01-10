@@ -16,19 +16,13 @@
  */
 package org.apache.commons.math3.ml.clustering;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.util.*;
 
 /**
  * DBSCAN (density-based spatial clustering of applications with noise) algorithm.

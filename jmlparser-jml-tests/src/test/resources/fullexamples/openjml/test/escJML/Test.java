@@ -1,5 +1,4 @@
-
-import org.jmlspecs.annotation.*; // FIXME - this should be able to go away
+import org.jmlspecs.annotation.*;
 public class Test {
 	
 	Object f;

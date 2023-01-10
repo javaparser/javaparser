@@ -1,24 +1,8 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import static org.junit.Assert.fail;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.jmlspecs.openjml.Utils;
 import org.jmlspecs.openjmltest.EscBase;
-import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized.Parameters;
 import org.openjml.runners.*;
 
 /** These tests check running ESC on files in the file system, comparing the

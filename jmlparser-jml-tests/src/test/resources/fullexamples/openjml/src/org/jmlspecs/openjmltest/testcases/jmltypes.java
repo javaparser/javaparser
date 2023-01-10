@@ -1,7 +1,6 @@
 package org.jmlspecs.openjmltest.testcases;
 
 import org.jmlspecs.openjmltest.TCBase;
-import org.junit.Assert;
 import org.junit.Test;
 
 

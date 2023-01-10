@@ -17,11 +17,7 @@
 package org.apache.commons.math3.stat.inference;
 
 import org.apache.commons.math3.distribution.BinomialDistribution;
-import org.apache.commons.math3.exception.MathIllegalArgumentException;
-import org.apache.commons.math3.exception.MathInternalError;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**

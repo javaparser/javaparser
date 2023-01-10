@@ -1,18 +1,9 @@
 package com.github.jmlparser.jml2java;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.jmlparser.TestWithJavaParser;
-import com.github.jmlparser.smt.SMTFacade;
-import com.github.jmlparser.smt.SmtQuery;
-import com.github.jmlparser.smt.model.SExpr;
 import com.google.common.truth.Truth;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -20,8 +11,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;

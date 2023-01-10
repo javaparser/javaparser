@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
+
 public interface MethodResolutionCapabilityTest {
 
     MethodResolutionCapability createValue();

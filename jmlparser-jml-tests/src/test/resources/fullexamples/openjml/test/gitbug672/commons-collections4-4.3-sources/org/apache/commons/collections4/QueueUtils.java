@@ -16,13 +16,13 @@
  */
 package org.apache.commons.collections4;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import org.apache.commons.collections4.queue.PredicatedQueue;
 import org.apache.commons.collections4.queue.SynchronizedQueue;
 import org.apache.commons.collections4.queue.TransformedQueue;
 import org.apache.commons.collections4.queue.UnmodifiableQueue;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Provides utility methods and decorators for {@link Queue} instances.

@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.stat.descriptive.moment;
 
-import java.io.Serializable;
-import java.util.Arrays;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+
+import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Returns the covariance matrix of the available vectors.

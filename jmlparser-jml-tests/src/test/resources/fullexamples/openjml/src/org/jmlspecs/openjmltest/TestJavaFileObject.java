@@ -1,10 +1,10 @@
 package org.jmlspecs.openjmltest;
-import java.net.URI;
+
+import org.jmlspecs.openjml.Utils;
 
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
-
-import org.jmlspecs.openjml.Utils;
+import java.net.URI;
 
 /** This class makes a mock JavaFileObject.  It holds a String as its content
  * and is given a pseudo-filename to use, but does not represent an actual file in 

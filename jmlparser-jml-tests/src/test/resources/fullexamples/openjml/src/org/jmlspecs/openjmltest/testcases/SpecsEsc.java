@@ -1,18 +1,17 @@
 package org.jmlspecs.openjmltest.testcases;
 
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.jmlspecs.openjml.JmlOption;
 import org.jmlspecs.openjml.Strings;
 import org.jmlspecs.openjmltest.EscBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.openjml.runners.ParameterizedWithNames;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)

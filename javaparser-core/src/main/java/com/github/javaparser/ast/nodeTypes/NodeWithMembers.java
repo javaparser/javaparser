@@ -33,8 +33,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.StaticJavaParser.parseType;
-import static com.github.javaparser.ast.Modifier.Keyword;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
+import static com.github.javaparser.ast.Modifier.Keyword;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;

@@ -16,12 +16,12 @@
  */
 package org.apache.commons.collections4.collection;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.apache.commons.collections4.BoundedCollection;
 import org.apache.commons.collections4.Unmodifiable;
 import org.apache.commons.collections4.iterators.UnmodifiableIterator;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * {@link UnmodifiableBoundedCollection} decorates another

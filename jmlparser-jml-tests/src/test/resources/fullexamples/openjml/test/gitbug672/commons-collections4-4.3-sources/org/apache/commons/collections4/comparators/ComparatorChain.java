@@ -17,11 +17,7 @@
 package org.apache.commons.collections4.comparators;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * A ComparatorChain is a Comparator that wraps one or more Comparators in

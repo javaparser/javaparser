@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.commons.collections4.Factory;
 import org.apache.commons.collections4.FunctorException;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Factory implementation that creates a new object instance by reflection.

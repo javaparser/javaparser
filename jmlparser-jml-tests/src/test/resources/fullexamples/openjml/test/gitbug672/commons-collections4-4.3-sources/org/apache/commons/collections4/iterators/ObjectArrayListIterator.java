@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.NoSuchElementException;
-
 import org.apache.commons.collections4.ResettableListIterator;
+
+import java.util.NoSuchElementException;
 
 /**
  * Implements a {@link java.util.ListIterator} over an array of objects.

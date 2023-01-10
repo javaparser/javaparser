@@ -17,21 +17,10 @@
 
 package org.apache.commons.math3.optimization.direct;
 
-import org.apache.commons.math3.util.Incrementor;
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
 import org.apache.commons.math3.analysis.MultivariateFunction;
-import org.apache.commons.math3.optimization.BaseMultivariateOptimizer;
-import org.apache.commons.math3.optimization.OptimizationData;
-import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.InitialGuess;
-import org.apache.commons.math3.optimization.SimpleBounds;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
-import org.apache.commons.math3.optimization.PointValuePair;
-import org.apache.commons.math3.optimization.SimpleValueChecker;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.*;
+import org.apache.commons.math3.optimization.*;
+import org.apache.commons.math3.util.Incrementor;
 
 /**
  * Base class for implementing optimizers for multivariate scalar functions.

@@ -8,7 +8,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlCallableClauseMetaModel;
-import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl

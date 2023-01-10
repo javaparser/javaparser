@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.list;
 
+import org.apache.commons.collections4.collection.AbstractCollectionDecorator;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
-
-import org.apache.commons.collections4.collection.AbstractCollectionDecorator;
 
 /**
  * Decorates another {@link List} to provide additional behaviour.

@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 import java.util.Arrays;
@@ -232,5 +233,16 @@ public interface ResolvedType {
     // The erasure of every other type is the type itself.
     default ResolvedType erasure() {
         return this;
+    }
+
+    /*
+     * Returns the resolved type for a type variable or the bounded resolved type or the type itself.
+     */
+    default ResolvedType solveGenericTypes(Context context) {
+        return this;
+    }
+
+    default String toDescriptor() {
+        return "";
     }
 }

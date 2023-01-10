@@ -1,10 +1,9 @@
 package devices;
 
 import icecaptools.IcecapCompileMe;
+import sun.security.action.GetPropertyAction;
 
 import java.security.PrivilegedAction;
-
-import sun.security.action.GetPropertyAction;
 
 public class AccessController {
 

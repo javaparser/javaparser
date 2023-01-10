@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.iterators;
 
+import org.apache.commons.collections4.ResettableListIterator;
+
 import java.util.List;
 import java.util.ListIterator;
-
-import org.apache.commons.collections4.ResettableListIterator;
 
 /**
  * Iterates backwards through a List, starting with the last element

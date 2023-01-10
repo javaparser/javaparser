@@ -15,11 +15,11 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * An {@link Iterator} over a {@link NodeList}.

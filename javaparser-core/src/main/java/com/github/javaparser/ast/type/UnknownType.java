@@ -23,7 +23,6 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -31,8 +30,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.UnknownTypeMetaModel;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -133,5 +134,17 @@ public class UnknownType extends Type {
     @Override
     public boolean isPhantom() {
         return true;
+    }
+
+    /**
+     * A {@link UnknownType} cannot be convertible to {@link ResolvedType}.
+     *
+     * @param type    The type to be converted.
+     * @param context The current context.
+     * @return The type resolved.
+     */
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        throw new IllegalArgumentException("Inferred lambda parameter type");
     }
 }

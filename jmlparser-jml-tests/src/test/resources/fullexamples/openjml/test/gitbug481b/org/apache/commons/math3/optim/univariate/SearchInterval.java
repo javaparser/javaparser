@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.optim.univariate;
 
-import org.apache.commons.math3.optim.OptimizationData;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.optim.OptimizationData;
 
 /**
  * Search interval and (optional) start value.

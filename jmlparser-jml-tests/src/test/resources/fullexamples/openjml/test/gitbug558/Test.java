@@ -1,6 +1,6 @@
+import javax.crypto.interfaces.DHPublicKey;
 import java.math.BigInteger;
 import java.security.KeyPair;
-import javax.crypto.interfaces.DHPublicKey;
 
 //@ non_null_by_default
 public class Test {

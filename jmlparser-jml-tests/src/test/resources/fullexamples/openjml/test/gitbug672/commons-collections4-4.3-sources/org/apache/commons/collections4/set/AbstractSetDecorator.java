@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.set;
 
-import java.util.Set;
-
 import org.apache.commons.collections4.collection.AbstractCollectionDecorator;
+
+import java.util.Set;
 
 /**
  * Decorates another <code>Set</code> to provide additional behaviour.

@@ -1,10 +1,9 @@
 package vm;
 
+import devices.CR16C.KT4585.CR16CRealtimeClock;
 import icecaptools.IcecapCompileMe;
 
 import javax.realtime.AbsoluteTime;
-
-import devices.CR16C.KT4585.CR16CRealtimeClock;
 
 public abstract class RealtimeClock {
 	private static RealtimeClock instance;

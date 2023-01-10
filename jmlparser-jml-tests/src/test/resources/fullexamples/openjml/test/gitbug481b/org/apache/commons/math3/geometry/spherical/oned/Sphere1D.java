@@ -17,11 +17,11 @@
 
 package org.apache.commons.math3.geometry.spherical.oned;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathUnsupportedOperationException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.geometry.Space;
+
+import java.io.Serializable;
 
 /**
  * This class implements a one-dimensional sphere (i.e. a circle).

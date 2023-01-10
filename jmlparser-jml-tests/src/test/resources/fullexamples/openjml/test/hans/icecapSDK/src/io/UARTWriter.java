@@ -1,15 +1,14 @@
 package io;
 
+import devices.CR16C.KT4585.CR16CInterruptDispatcher;
+import devices.CR16C.KT4585.DeviceRegShort;
 import icecaptools.IcecapCompileMe;
-
-import java.io.IOException;
-
 import test.CR16C.DeviceRegByte;
 import util.CircularBuffer;
 import vm.InterruptDispatcher;
 import vm.InterruptHandler;
-import devices.CR16C.KT4585.CR16CInterruptDispatcher;
-import devices.CR16C.KT4585.DeviceRegShort;
+
+import java.io.IOException;
 
 public class UARTWriter implements InterruptHandler {
 

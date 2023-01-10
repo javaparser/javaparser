@@ -17,11 +17,11 @@
 package org.apache.commons.math3.optim.univariate;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.exception.TooManyEvaluationsException;
 import org.apache.commons.math3.optim.BaseOptimizer;
+import org.apache.commons.math3.optim.ConvergenceChecker;
 import org.apache.commons.math3.optim.OptimizationData;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
-import org.apache.commons.math3.optim.ConvergenceChecker;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
 
 /**
  * Base class for a univariate scalar function optimizer.

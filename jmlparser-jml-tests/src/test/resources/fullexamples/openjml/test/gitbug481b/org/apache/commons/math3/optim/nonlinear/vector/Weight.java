@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.optim.nonlinear.vector;
 
-import org.apache.commons.math3.optim.OptimizationData;
-import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.DiagonalMatrix;
 import org.apache.commons.math3.linear.NonSquareMatrixException;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.optim.OptimizationData;
 
 /**
  * Weight matrix of the residuals between model and observations.

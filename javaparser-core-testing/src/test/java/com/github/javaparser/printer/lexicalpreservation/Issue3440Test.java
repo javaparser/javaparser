@@ -21,11 +21,10 @@ package com.github.javaparser.printer.lexicalpreservation;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
 
 public class Issue3440Test extends AbstractLexicalPreservingTest {
 
@@ -33,7 +32,6 @@ public class Issue3440Test extends AbstractLexicalPreservingTest {
     void test3440() {
         considerCode("public class Foo { public void bar() { switch(1) {case 1: break; } } }");
         String expected = "public class Foo { public void bar() { switch(1) {case 1:  } } }";
-        LexicalPreservingPrinter.setup(cu);
         SwitchEntry entry = cu.findFirst(SwitchEntry.class).get();
         entry.setStatements(new NodeList<>());
         TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));

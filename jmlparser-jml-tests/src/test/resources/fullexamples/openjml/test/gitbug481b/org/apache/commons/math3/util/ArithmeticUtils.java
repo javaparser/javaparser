@@ -16,13 +16,13 @@
  */
 package org.apache.commons.math3.util;
 
-import java.math.BigInteger;
-
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.util.Localizable;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+
+import java.math.BigInteger;
 
 /**
  * Some useful, arithmetics related, additions to the built-in functions in

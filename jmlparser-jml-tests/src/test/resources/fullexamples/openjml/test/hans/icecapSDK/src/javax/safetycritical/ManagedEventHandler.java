@@ -25,17 +25,13 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.realtime.AbsoluteTime;
-import javax.realtime.BoundAsyncEventHandler;
-import javax.realtime.MemoryArea;
-import javax.realtime.PriorityParameters;
-import javax.realtime.ReleaseParameters;
+import vm.Memory;
+
+import javax.realtime.*;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.annotate.SCJRestricted;
-
-import vm.Memory;
 
 /**
  * <code>ManagedEventHandler</code> is the base class for all SCJ handlers.

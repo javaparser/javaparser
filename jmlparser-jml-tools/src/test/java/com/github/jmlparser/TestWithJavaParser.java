@@ -8,8 +8,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 
-import java.io.InputStream;
-
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**

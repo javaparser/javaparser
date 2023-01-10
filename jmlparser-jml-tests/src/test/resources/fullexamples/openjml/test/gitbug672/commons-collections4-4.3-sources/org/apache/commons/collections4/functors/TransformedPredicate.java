@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
+
+import java.io.Serializable;
 
 /**
  * Predicate implementation that transforms the given object before invoking

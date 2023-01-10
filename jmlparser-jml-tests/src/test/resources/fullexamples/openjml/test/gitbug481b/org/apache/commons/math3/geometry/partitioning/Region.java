@@ -16,8 +16,8 @@
  */
 package org.apache.commons.math3.geometry.partitioning;
 
-import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Point;
+import org.apache.commons.math3.geometry.Space;
 
 /** This interface represents a region of a space as a partition.
 

@@ -17,15 +17,6 @@
 
 package org.apache.commons.math3.ode;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.apache.commons.math3.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.apache.commons.math3.analysis.solvers.UnivariateSolver;
 import org.apache.commons.math3.exception.DimensionMismatchException;
@@ -40,6 +31,8 @@ import org.apache.commons.math3.ode.sampling.StepHandler;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.IntegerSequence;
 import org.apache.commons.math3.util.Precision;
+
+import java.util.*;
 
 /**
  * Base class managing common boilerplate for all integrators.

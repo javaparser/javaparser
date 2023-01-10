@@ -17,10 +17,10 @@
 
 package org.apache.commons.math3.geometry.euclidean.threed;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
+
+import java.io.Serializable;
 
 /**
  * This class implements a three-dimensional space.

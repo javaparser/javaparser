@@ -17,22 +17,14 @@
 
 package org.apache.commons.math3.ml.neuralnet;
 
-import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.util.NoSuchElementException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Comparator;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathIllegalStateException;
+
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Neural network, composed of {@link Neuron} instances and the links

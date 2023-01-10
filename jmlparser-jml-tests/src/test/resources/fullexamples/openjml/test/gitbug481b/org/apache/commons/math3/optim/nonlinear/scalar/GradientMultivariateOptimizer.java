@@ -17,10 +17,10 @@
 package org.apache.commons.math3.optim.nonlinear.scalar;
 
 import org.apache.commons.math3.analysis.MultivariateVectorFunction;
+import org.apache.commons.math3.exception.TooManyEvaluationsException;
 import org.apache.commons.math3.optim.ConvergenceChecker;
 import org.apache.commons.math3.optim.OptimizationData;
 import org.apache.commons.math3.optim.PointValuePair;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
 
 /**
  * Base class for implementing optimizers for multivariate scalar

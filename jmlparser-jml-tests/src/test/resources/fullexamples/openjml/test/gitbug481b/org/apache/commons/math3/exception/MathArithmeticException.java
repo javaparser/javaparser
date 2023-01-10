@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.exception;
 
-import org.apache.commons.math3.exception.util.Localizable;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.exception.util.ExceptionContext;
 import org.apache.commons.math3.exception.util.ExceptionContextProvider;
+import org.apache.commons.math3.exception.util.Localizable;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**
  * Base class for arithmetic exceptions.

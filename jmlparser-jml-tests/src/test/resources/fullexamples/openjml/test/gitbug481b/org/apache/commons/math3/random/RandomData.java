@@ -16,12 +16,13 @@
  */
 
 package org.apache.commons.math3.random;
-import java.util.Collection;
 
 import org.apache.commons.math3.exception.NotANumberException;
 import org.apache.commons.math3.exception.NotFiniteNumberException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
+
+import java.util.Collection;
 
 /**
  * Random data generation utilities.

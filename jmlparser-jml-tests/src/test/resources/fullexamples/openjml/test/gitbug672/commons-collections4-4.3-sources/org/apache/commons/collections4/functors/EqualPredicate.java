@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.Equator;
 import org.apache.commons.collections4.Predicate;
+
+import java.io.Serializable;
 
 /**
  * Predicate implementation that returns true if the input is the same object

@@ -16,18 +16,14 @@
  */
 package org.apache.commons.math3.stat.inference;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.apache.commons.math3.distribution.FDistribution;
-import org.apache.commons.math3.exception.ConvergenceException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Implements one-way ANOVA (analysis of variance) statistics.

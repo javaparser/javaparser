@@ -16,16 +16,9 @@
  */
 package org.apache.commons.collections4.list;
 
-import java.util.AbstractList;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-
 import org.apache.commons.collections4.OrderedIterator;
+
+import java.util.*;
 
 /**
  * A <code>List</code> implementation that is optimised for fast insertions and

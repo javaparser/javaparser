@@ -16,17 +16,7 @@
  */
 package org.apache.commons.collections4;
 
-import org.apache.commons.collections4.bag.CollectionBag;
-import org.apache.commons.collections4.bag.HashBag;
-import org.apache.commons.collections4.bag.PredicatedBag;
-import org.apache.commons.collections4.bag.PredicatedSortedBag;
-import org.apache.commons.collections4.bag.SynchronizedBag;
-import org.apache.commons.collections4.bag.SynchronizedSortedBag;
-import org.apache.commons.collections4.bag.TransformedBag;
-import org.apache.commons.collections4.bag.TransformedSortedBag;
-import org.apache.commons.collections4.bag.TreeBag;
-import org.apache.commons.collections4.bag.UnmodifiableBag;
-import org.apache.commons.collections4.bag.UnmodifiableSortedBag;
+import org.apache.commons.collections4.bag.*;
 
 /**
  * Provides utility methods and decorators for {@link Bag} and {@link SortedBag} instances.

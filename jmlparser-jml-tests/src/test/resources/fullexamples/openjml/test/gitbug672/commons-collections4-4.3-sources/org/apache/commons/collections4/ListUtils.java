@@ -16,24 +16,14 @@
  */
 package org.apache.commons.collections4;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.collections4.functors.DefaultEquator;
-import org.apache.commons.collections4.list.FixedSizeList;
-import org.apache.commons.collections4.list.LazyList;
-import org.apache.commons.collections4.list.PredicatedList;
-import org.apache.commons.collections4.list.TransformedList;
-import org.apache.commons.collections4.list.UnmodifiableList;
+import org.apache.commons.collections4.list.*;
 import org.apache.commons.collections4.sequence.CommandVisitor;
 import org.apache.commons.collections4.sequence.EditScript;
 import org.apache.commons.collections4.sequence.SequencesComparator;
+
+import java.util.*;
 
 /**
  * Provides utility methods and decorators for {@link List} instances.

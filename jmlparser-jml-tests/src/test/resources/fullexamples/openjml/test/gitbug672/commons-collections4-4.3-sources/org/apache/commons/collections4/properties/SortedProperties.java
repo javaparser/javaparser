@@ -17,14 +17,9 @@
 
 package org.apache.commons.collections4.properties;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.commons.collections4.iterators.IteratorEnumeration;
+
+import java.util.*;
 
 /**
  * A drop-in replacement for {@link Properties} for sorting keys.

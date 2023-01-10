@@ -16,28 +16,9 @@
  */
 package org.apache.commons.collections4;
 
-import java.util.AbstractSet;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.NavigableSet;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import org.apache.commons.collections4.set.*;
 
-import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.collections4.set.PredicatedNavigableSet;
-import org.apache.commons.collections4.set.PredicatedSet;
-import org.apache.commons.collections4.set.PredicatedSortedSet;
-import org.apache.commons.collections4.set.TransformedNavigableSet;
-import org.apache.commons.collections4.set.TransformedSet;
-import org.apache.commons.collections4.set.TransformedSortedSet;
-import org.apache.commons.collections4.set.UnmodifiableNavigableSet;
-import org.apache.commons.collections4.set.UnmodifiableSet;
-import org.apache.commons.collections4.set.UnmodifiableSortedSet;
+import java.util.*;
 
 /**
  * Provides utility methods and decorators for

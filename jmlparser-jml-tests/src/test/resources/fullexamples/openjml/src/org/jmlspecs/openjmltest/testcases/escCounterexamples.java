@@ -1,14 +1,9 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.jmlspecs.openjml.JmlOption;
 import org.jmlspecs.openjmltest.EscBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 import org.openjml.runners.ParameterizedWithNames;
 
 // FIXME - there is nothing checking that these give correct results

@@ -1,18 +1,17 @@
 package org.jmlspecs.openjmltest;
-import java.net.URI;
-
-import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
-
-import org.jmlspecs.openjml.JmlOption;
-import org.jmlspecs.openjml.JmlSpecs;
 
 import com.sun.tools.javac.comp.JmlAttr;
 import com.sun.tools.javac.comp.JmlEnter;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Log;
+import org.jmlspecs.openjml.JmlOption;
+import org.jmlspecs.openjml.JmlSpecs;
 
-import static org.junit.Assert.*;
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /** This is a base class for all tests that parse and typecheck a

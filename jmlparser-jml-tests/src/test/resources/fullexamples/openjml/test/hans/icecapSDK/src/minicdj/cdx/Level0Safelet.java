@@ -23,17 +23,16 @@
 package minicdj.cdx;
 
 import icecaptools.IcecapCompileMe;
+import minicdj.cdx.unannotated.NanoClock;
 import minicdj.simulator.immortal.Simulator;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
 import javax.realtime.RelativeTime;
-import javax.safetycritical.Frame;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
+import javax.safetycritical.Frame;
 import javax.safetycritical.PeriodicEventHandler;
-
-import minicdj.cdx.unannotated.NanoClock;
 
 /*@javax.safetycritical.annotate.Scope("immortal")*/
 public class Level0Safelet extends CyclicExecutive {

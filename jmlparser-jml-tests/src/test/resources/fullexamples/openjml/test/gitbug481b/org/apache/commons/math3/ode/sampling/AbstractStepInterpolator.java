@@ -17,12 +17,12 @@
 
 package org.apache.commons.math3.ode.sampling;
 
+import org.apache.commons.math3.exception.MaxCountExceededException;
+import org.apache.commons.math3.ode.EquationsMapper;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.ode.EquationsMapper;
 
 /** This abstract class represents an interpolator over the last step
  * during an ODE integration.

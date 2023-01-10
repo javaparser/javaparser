@@ -21,12 +21,14 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -59,21 +61,21 @@ class PrimitiveTypeTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
+        OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
+        STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
         arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
         arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList())))));
 
-        booleanBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver), typeSolver);
-        characterBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Character.class, typeSolver), typeSolver);
-        byteBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Byte.class, typeSolver), typeSolver);
-        shortBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Short.class, typeSolver), typeSolver);
-        integerBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver), typeSolver);
-        longBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Long.class, typeSolver), typeSolver);
-        floatBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Float.class, typeSolver), typeSolver);
-        doubleBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver), typeSolver);
+        booleanBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Boolean.class, typeSolver));
+        characterBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Character.class, typeSolver));
+        byteBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Byte.class, typeSolver));
+        shortBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Short.class, typeSolver));
+        integerBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver));
+        longBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Long.class, typeSolver));
+        floatBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Float.class, typeSolver));
+        doubleBox = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver));
 
     }
 
@@ -331,6 +333,18 @@ class PrimitiveTypeTest {
             assertEquals(false, ptu.isAssignableBy(arrayOfBooleans));
             assertEquals(false, ptu.isAssignableBy(arrayOfListOfA));
         }
+    }
+
+    @Test
+    void testIsNumeric() {
+        assertFalse(ResolvedPrimitiveType.BOOLEAN.isNumeric());
+        assertTrue(ResolvedPrimitiveType.CHAR.isNumeric());
+        assertTrue(ResolvedPrimitiveType.BYTE.isNumeric());
+        assertTrue(ResolvedPrimitiveType.SHORT.isNumeric());
+        assertTrue(ResolvedPrimitiveType.INT.isNumeric());
+        assertTrue(ResolvedPrimitiveType.LONG.isNumeric());
+        assertTrue(ResolvedPrimitiveType.FLOAT.isNumeric());
+        assertTrue(ResolvedPrimitiveType.DOUBLE.isNumeric());
     }
 
 }

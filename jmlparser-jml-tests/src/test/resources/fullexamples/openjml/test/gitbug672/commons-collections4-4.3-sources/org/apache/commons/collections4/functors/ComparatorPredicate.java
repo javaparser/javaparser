@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
+import org.apache.commons.collections4.Predicate;
+
 import java.io.Serializable;
 import java.util.Comparator;
-
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Predicate that compares the input object with the one stored in the predicate using a comparator.

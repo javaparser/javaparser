@@ -16,19 +16,13 @@
  */
 package org.apache.commons.collections4.list;
 
+import org.apache.commons.collections4.OrderedIterator;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-
-import org.apache.commons.collections4.OrderedIterator;
+import java.util.*;
 
 /**
  * An abstract implementation of a linked list which provides numerous points for

@@ -28,7 +28,6 @@ import com.github.javaparser.ast.NodeList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 
 /**

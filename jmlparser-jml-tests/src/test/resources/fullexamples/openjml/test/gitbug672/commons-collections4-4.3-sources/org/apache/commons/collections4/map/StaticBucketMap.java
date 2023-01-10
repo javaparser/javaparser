@@ -16,16 +16,9 @@
  */
 package org.apache.commons.collections4.map;
 
-import java.util.AbstractCollection;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
 import org.apache.commons.collections4.KeyValue;
+
+import java.util.*;
 
 /**
  * A StaticBucketMap is an efficient, thread-safe implementation of

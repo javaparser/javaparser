@@ -1,17 +1,7 @@
 package test.CR16C;
 
-import javax.realtime.AperiodicParameters;
-import javax.realtime.Clock;
-import javax.realtime.PeriodicParameters;
-import javax.realtime.PriorityParameters;
-import javax.realtime.RelativeTime;
-import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
-import javax.safetycritical.Mission;
-import javax.safetycritical.MissionSequencer;
-import javax.safetycritical.PeriodicEventHandler;
-import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.realtime.*;
+import javax.safetycritical.*;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 

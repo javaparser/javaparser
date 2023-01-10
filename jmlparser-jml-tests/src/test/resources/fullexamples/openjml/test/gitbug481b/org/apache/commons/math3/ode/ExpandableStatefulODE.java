@@ -16,11 +16,11 @@
  */
 package org.apache.commons.math3.ode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

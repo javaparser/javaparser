@@ -23,21 +23,21 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.comparators.MethodComparator;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -208,7 +208,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
 
     public ResolvedType getUsage(Node node) {
 
-        return new ReferenceTypeImpl(this, typeSolver);
+        return new ReferenceTypeImpl(this);
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, Context invokationContext, List<ResolvedType> typeParameterValues) {
@@ -318,7 +318,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override
@@ -391,17 +391,12 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
                 .collect(Collectors.toSet());
     }
 
-    @Override
-    public Optional<Node> toAst() {
-        return Optional.empty();
-    }
-
     ///
     /// Protected methods
     ///
 
     @Override
     protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject(), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 }

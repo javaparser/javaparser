@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.util.Collection;
-
 import org.apache.commons.collections4.Predicate;
+
+import java.util.Collection;
 
 /**
  * Predicate implementation that returns true if none of the

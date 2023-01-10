@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.ml.clustering;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Base class for clustering algorithms.

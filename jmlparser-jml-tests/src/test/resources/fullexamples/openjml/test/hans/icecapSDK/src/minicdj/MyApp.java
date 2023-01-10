@@ -17,18 +17,14 @@
 
 package minicdj;
 
-import javax.realtime.PriorityParameters;
-import javax.safetycritical.Launcher;
-import javax.safetycritical.Mission;
-import javax.safetycritical.MissionSequencer;
-import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
-import javax.scj.util.Const;
-import javax.scj.util.Priorities;
-
 import minicdj.cdx.Constants;
 import minicdj.cdx.Level0Safelet;
 import minicdj.utils.Utils;
+
+import javax.realtime.PriorityParameters;
+import javax.safetycritical.*;
+import javax.scj.util.Const;
+import javax.scj.util.Priorities;
 
 @SuppressWarnings("rawtypes")
 public class MyApp implements Safelet {

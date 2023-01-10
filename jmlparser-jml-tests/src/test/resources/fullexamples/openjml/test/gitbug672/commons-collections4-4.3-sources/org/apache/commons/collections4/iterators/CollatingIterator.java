@@ -16,15 +16,9 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.apache.commons.collections4.list.UnmodifiableList;
+
+import java.util.*;
 
 
 /**

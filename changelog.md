@@ -1,13 +1,157 @@
-Next Release (Version 3.24.9)
+Next Release (Version 3.24.11)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/193?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/195?closed=1)
 
 ### Added
+
 ### Changed
+
 ### Deprecated
+
 ### Removed
+
 ### Fixed
+
 ### Security
+
+Version 3.24.10
+---------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/194?closed=1)
+
+### Added
+
+* Add a method in LexicalPreservingPrinter to know if LPP is available/activated on the specified node (
+  PR [#3823](https://github.com/javaparser/javaparser/pull/3823) by [@jlerbsc](https://github.com/jlerbsc))
+* Handle nested records (PR [#3814](https://github.com/javaparser/javaparser/pull/3814)
+  by [@mernst](https://github.com/mernst))
+* Source printer import ordering strategy (PR [#3807](https://github.com/javaparser/javaparser/pull/3807)
+  by [@4everTheOne](https://github.com/4everTheOne))
+
+### Changed
+
+* chore(deps): bump versions-maven-plugin from 2.14.1 to 2.14.2 (
+  PR [#3817](https://github.com/javaparser/javaparser/pull/3817)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Enabled import validation (PR [#3812](https://github.com/javaparser/javaparser/pull/3812)
+  by [@4everTheOne](https://github.com/4everTheOne))
+* Part 5 | Import organization (PR [#3805](https://github.com/javaparser/javaparser/pull/3805)
+  by [@4everTheOne](https://github.com/4everTheOne))
+* Part 4 | Import organization (PR [#3804](https://github.com/javaparser/javaparser/pull/3804)
+  by [@4everTheOne](https://github.com/4everTheOne))
+* Part 3 | Import organization (PR [#3803](https://github.com/javaparser/javaparser/pull/3803)
+  by [@4everTheOne](https://github.com/4everTheOne))
+* Part 2 | Import organization (PR [#3802](https://github.com/javaparser/javaparser/pull/3802)
+  by [@4everTheOne](https://github.com/4everTheOne))
+* Part 1 | Import organization (PR [#3801](https://github.com/javaparser/javaparser/pull/3801)
+  by [@4everTheOne](https://github.com/4everTheOne))
+* Checkstyle configuration tweaks (PR [#3799](https://github.com/javaparser/javaparser/pull/3799)
+  by [@4everTheOne](https://github.com/4everTheOne))
+* chore(deps): bump versions-maven-plugin from 2.13.0 to 2.14.1 (
+  PR [#3797](https://github.com/javaparser/javaparser/pull/3797)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 3.1.0 to 3.2.0 (PR [#3789](https://github.com/javaparser/javaparser/pull/3789)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 8.45.1 to 10.5.0 (PR [#3788](https://github.com/javaparser/javaparser/pull/3788)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Fixed
+
+* explicit use asString for performance (PR [#3821](https://github.com/javaparser/javaparser/pull/3821)
+  by [@dencat](https://github.com/dencat))
+* Fix: issue #3818 Wrong range calculation on ArrayType with multiple d… (
+  PR [#3820](https://github.com/javaparser/javaparser/pull/3820) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Lexical Preserving Fails To Remove Comment (PR [#3810](https://github.com/javaparser/javaparser/pull/3810)
+  by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump versions-maven-plugin from 2.13.0 to 2.14.0 (
+  PR [#3794](https://github.com/javaparser/javaparser/pull/3794)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Basic CheckStyle validation (PR [#3781](https://github.com/javaparser/javaparser/pull/3781)
+  by [@4everTheOne](https://github.com/4everTheOne))
+
+### Uncategorised
+
+* Fix: 3412 Remove walkmod again (PR [#3806](https://github.com/javaparser/javaparser/pull/3806)
+  by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@dencat](https://github.com/dencat)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@mernst](https://github.com/mernst)
+* [@4everTheOne](https://github.com/4everTheOne)
+
+Version 3.24.9
+---------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/193?closed=1)
+
+### Highlights
+
+* Remove "executable" bit from code files (PR [#3755](https://github.com/javaparser/javaparser/pull/3755)
+  by [@icmdaf](https://github.com/icmdaf))
+
+### Added
+
+* Created TypeSolverBuilder (PR [#3421](https://github.com/javaparser/javaparser/pull/3421)
+  by [@4everTheOne](https://github.com/4everTheOne))
+
+### Changed
+
+* Changing, in test classes, the initialization of the lexical preserva… (
+  PR [#3779](https://github.com/javaparser/javaparser/pull/3779) by [@jlerbsc](https://github.com/jlerbsc))
+* chore(deps): bump maven-dependency-plugin from 3.3.0 to 3.4.0 (
+  PR [#3770](https://github.com/javaparser/javaparser/pull/3770)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-install-plugin from 3.0.1 to 3.1.0 (
+  PR [#3756](https://github.com/javaparser/javaparser/pull/3756)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Fixed
+
+* Fix: #3195 Resolved methods in outer classes not inferred correcly (
+  PR [#3778](https://github.com/javaparser/javaparser/pull/3778) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3681 LineComment alwaysing trimming content (PR [#3777](https://github.com/javaparser/javaparser/pull/3777)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3773 Replacing nodes causes error in lexical preserving printer… (
+  PR [#3776](https://github.com/javaparser/javaparser/pull/3776) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #2517 Modifying some nodes with the lexicalPreservation enabled … (
+  PR [#3775](https://github.com/javaparser/javaparser/pull/3775) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3725 JavaParserFacade var type in for-each loop cannot be resolved (
+  PR [#3768](https://github.com/javaparser/javaparser/pull/3768) by [@abego](https://github.com/abego))
+* Fix: #3216 LexicalPreservingPrinter add Wrong indentation when removing comments (
+  PR [#3766](https://github.com/javaparser/javaparser/pull/3766) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3472 Line comment removal causes IllegalStateException with LexicalPreservingPrinter (
+  PR [#3765](https://github.com/javaparser/javaparser/pull/3765) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3441 LexicalPreservingPrinter prints wrong output with line com… (
+  PR [#3764](https://github.com/javaparser/javaparser/pull/3764) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #2137 ClassOrInterfaceDeclaration addMember using index (
+  PR [#3763](https://github.com/javaparser/javaparser/pull/3763) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3761 Lexical preserving corrupts source when adding a modifier in first position (
+  PR [#3762](https://github.com/javaparser/javaparser/pull/3762) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3693 Removing modifiers from method declaration results in loss… (
+  PR [#3760](https://github.com/javaparser/javaparser/pull/3760) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: #3750 Lexical preserving corrupts source (PR [#3759](https://github.com/javaparser/javaparser/pull/3759)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Fix the indentation generated by the LexicalPreservingPrinter wh… (
+  PR [#3758](https://github.com/javaparser/javaparser/pull/3758) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Security
+
+* Remove "executable" bit from code files (PR [#3755](https://github.com/javaparser/javaparser/pull/3755)
+  by [@icmdaf](https://github.com/icmdaf))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@abego](https://github.com/abego)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@icmdaf](https://github.com/icmdaf)
+* [@4everTheOne](https://github.com/4everTheOne)
 
 Version 3.24.8
 --------------
@@ -15,8 +159,10 @@ Version 3.24.8
 
 ### Added
 
-* [Fixes #3099] Added ability to solve type with a list of expected type arguments (PR [#3213](https://github.com/javaparser/javaparser/pull/3213) by [@4everTheOne](https://github.com/4everTheOne))
-* [Suggestion] NonNull generator for parameters (PR [#3127](https://github.com/javaparser/javaparser/pull/3127) by [@4everTheOne](https://github.com/4everTheOne))
+* [Fixes #3099] Added ability to solve type with a list of expected type arguments (
+  PR [#3213](https://github.com/javaparser/javaparser/pull/3213) by [@4everTheOne](https://github.com/4everTheOne))
+* [Suggestion] NonNull generator for parameters (PR [#3127](https://github.com/javaparser/javaparser/pull/3127)
+  by [@4everTheOne](https://github.com/4everTheOne))
 
 ### Changed
 

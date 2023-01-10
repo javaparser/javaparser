@@ -17,8 +17,6 @@
 
 package org.apache.commons.math3.ode;
 
-import java.util.Collection;
-
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.apache.commons.math3.exception.MaxCountExceededException;
@@ -26,6 +24,8 @@ import org.apache.commons.math3.exception.NoBracketingException;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.ode.events.FieldEventHandler;
 import org.apache.commons.math3.ode.sampling.FieldStepHandler;
+
+import java.util.Collection;
 
 /** This interface represents a first order integrator for
  * differential equations.

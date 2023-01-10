@@ -17,11 +17,11 @@
 
 package org.apache.commons.math3.ml.neuralnet.twod.util;
 
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
+import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.ml.neuralnet.MapUtils;
 import org.apache.commons.math3.ml.neuralnet.Neuron;
 import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
-import org.apache.commons.math3.ml.distance.DistanceMeasure;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
 
 /**
  * Visualization of high-dimensional data projection on a 2D-map.

@@ -16,19 +16,14 @@
  */
 package org.apache.commons.collections4.set;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.iterators.EmptyIterator;
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.collections4.list.UnmodifiableList;
+
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Decorates a set of other sets to provide a single unified view.

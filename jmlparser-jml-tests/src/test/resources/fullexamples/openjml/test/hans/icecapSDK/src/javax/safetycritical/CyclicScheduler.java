@@ -26,13 +26,12 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
+import vm.Monitor;
+import vm.Process;
 
 import javax.realtime.Scheduler;
 import javax.safetycritical.MissionSequencer.State;
 import javax.scj.util.Const;
-
-import vm.Monitor;
-import vm.Process;
 
 /**
  * 

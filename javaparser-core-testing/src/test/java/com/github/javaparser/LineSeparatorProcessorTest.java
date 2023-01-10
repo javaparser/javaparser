@@ -1,14 +1,5 @@
 package com.github.javaparser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -16,10 +7,16 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.LineSeparator;
+import org.junit.jupiter.api.Test;
 
-public class LineSeparatorProcessorTest {
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class LineSeparatorProcessorTest extends AbstractLexicalPreservingTest {
 
     // TODO: Add more tests outside the "happy path" (e.g. mixed EOL, no EOL, etc.)
 
@@ -29,13 +26,13 @@ public class LineSeparatorProcessorTest {
     public void doTest(LineSeparator lineSeparator) {
         String eol = lineSeparator.asRawString();
 
-        final String original = "" +
+        considerCode("" +
                 "    public class Foo { //comment" + eol +
                 "        private String a;" + eol +
                 "        private String b;" + eol +
                 "        private String c;" + eol +
                 "        private String d;" + eol +
-                "    }";
+                "    }");
 
         // Note: Expect the platform's EOL character when printing
         String expected = "" +
@@ -48,9 +45,6 @@ public class LineSeparatorProcessorTest {
                 "        private String d;" + eol +
                 "    }";
 
-
-        CompilationUnit cu = StaticJavaParser.parse(original);
-        LexicalPreservingPrinter.setup(cu);
 
         // create a new field declaration
         VariableDeclarator variable = new VariableDeclarator(new ClassOrInterfaceType("String"), "newField");

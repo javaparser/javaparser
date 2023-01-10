@@ -14,11 +14,6 @@ package org.openjml.runners;
  *  in the ParameterizedWithNames constructor, so we have to copy all the methods from Parameterized
  *  into this class.
  */
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.internal.AssumptionViolatedException;
@@ -27,12 +22,18 @@ import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.Suite;
 import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Suite;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.junit.runners.model.TestClass;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ParameterizedWithNames extends Suite
 {

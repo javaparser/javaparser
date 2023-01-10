@@ -17,13 +17,13 @@
 
 package org.apache.commons.math3.geometry;
 
+import org.apache.commons.math3.exception.MathParseException;
+import org.apache.commons.math3.util.CompositeFormat;
+
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
-
-import org.apache.commons.math3.util.CompositeFormat;
-import org.apache.commons.math3.exception.MathParseException;
 
 /**
  * Formats a vector in components list format "{x; y; ...}".

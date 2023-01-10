@@ -17,14 +17,14 @@
 
 package org.apache.commons.math3.ode.nonstiff;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.linear.Array2DRowFieldMatrix;
 import org.apache.commons.math3.ode.FieldEquationsMapper;
 import org.apache.commons.math3.ode.FieldODEStateAndDerivative;
 import org.apache.commons.math3.ode.sampling.AbstractFieldStepInterpolator;
 import org.apache.commons.math3.util.MathArrays;
+
+import java.util.Arrays;
 
 /**
  * This class implements an interpolator for Adams integrators using Nordsieck representation.

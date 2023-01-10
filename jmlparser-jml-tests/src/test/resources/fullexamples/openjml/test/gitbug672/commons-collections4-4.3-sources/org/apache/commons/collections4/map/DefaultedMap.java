@@ -16,17 +16,17 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
+import org.apache.commons.collections4.functors.FactoryTransformer;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.collections4.Factory;
-import org.apache.commons.collections4.Transformer;
-import org.apache.commons.collections4.functors.ConstantTransformer;
-import org.apache.commons.collections4.functors.FactoryTransformer;
 
 /**
  * Decorates another <code>Map</code> returning a default value if the map

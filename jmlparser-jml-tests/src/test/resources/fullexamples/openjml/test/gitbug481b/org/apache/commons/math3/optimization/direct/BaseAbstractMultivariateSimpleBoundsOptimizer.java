@@ -18,13 +18,7 @@
 package org.apache.commons.math3.optimization.direct;
 
 import org.apache.commons.math3.analysis.MultivariateFunction;
-import org.apache.commons.math3.optimization.BaseMultivariateOptimizer;
-import org.apache.commons.math3.optimization.BaseMultivariateSimpleBoundsOptimizer;
-import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.InitialGuess;
-import org.apache.commons.math3.optimization.SimpleBounds;
-import org.apache.commons.math3.optimization.PointValuePair;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
+import org.apache.commons.math3.optimization.*;
 
 /**
  * Base class for implementing optimizers for multivariate scalar functions,

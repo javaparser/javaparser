@@ -1,20 +1,14 @@
 package icecaptools;
 
+import org.apache.bcel.Constants;
+import org.apache.bcel.classfile.*;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
-
-import org.apache.bcel.Constants;
-import org.apache.bcel.classfile.AnnotationEntry;
-import org.apache.bcel.classfile.Attribute;
-import org.apache.bcel.classfile.ConstantPool;
-import org.apache.bcel.classfile.ElementValue;
-import org.apache.bcel.classfile.ElementValuePair;
-import org.apache.bcel.classfile.RuntimeInvisibleAnnotations;
-import org.apache.bcel.classfile.Visitor;
 
 public class AnnotationsAttribute extends Attribute {
 	/**

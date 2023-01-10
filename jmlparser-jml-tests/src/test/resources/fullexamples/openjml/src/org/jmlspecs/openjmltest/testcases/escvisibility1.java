@@ -3,7 +3,6 @@ package org.jmlspecs.openjmltest.testcases;
 import org.jmlspecs.openjmltest.EscBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.openjml.runners.ParameterizedWithNames;
 
 // Tests the rules about which visibility of identifiers can be used in specification constructs

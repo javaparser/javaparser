@@ -24,20 +24,8 @@ import org.apache.commons.math3.analysis.differentiation.MultivariateDifferentia
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.DiagonalMatrix;
-import org.apache.commons.math3.linear.DecompositionSolver;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.QRDecomposition;
-import org.apache.commons.math3.linear.EigenDecomposition;
-import org.apache.commons.math3.optimization.OptimizationData;
-import org.apache.commons.math3.optimization.InitialGuess;
-import org.apache.commons.math3.optimization.Target;
-import org.apache.commons.math3.optimization.Weight;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
-import org.apache.commons.math3.optimization.DifferentiableMultivariateVectorOptimizer;
-import org.apache.commons.math3.optimization.PointVectorValuePair;
+import org.apache.commons.math3.linear.*;
+import org.apache.commons.math3.optimization.*;
 import org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateVectorOptimizer;
 import org.apache.commons.math3.util.FastMath;
 

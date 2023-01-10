@@ -1,4 +1,4 @@
-import java.util.stream.*;
+import java.util.stream.Stream;
 
 //@ nullable_by_default
 public class ImplicitIterationDemo {

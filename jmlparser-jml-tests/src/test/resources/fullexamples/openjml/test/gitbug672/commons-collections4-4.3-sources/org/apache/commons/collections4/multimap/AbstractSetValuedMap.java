@@ -16,12 +16,12 @@
  */
 package org.apache.commons.collections4.multimap;
 
+import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.collections4.SetValuedMap;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections4.SetUtils;
-import org.apache.commons.collections4.SetValuedMap;
 
 /**
  * Abstract implementation of the {@link SetValuedMap} interface to simplify the

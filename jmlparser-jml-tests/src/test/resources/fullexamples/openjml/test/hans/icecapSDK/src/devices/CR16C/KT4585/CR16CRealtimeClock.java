@@ -1,11 +1,10 @@
 package devices.CR16C.KT4585;
 
 import icecaptools.IcecapCompileMe;
-
-import javax.realtime.AbsoluteTime;
-
 import vm.InterruptDispatcher;
 import vm.InterruptHandler;
+
+import javax.realtime.AbsoluteTime;
 
 
 public class CR16CRealtimeClock extends vm.RealtimeClock implements InterruptHandler {

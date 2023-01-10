@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.geometry.hull;
 
-import java.util.Collection;
-
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.Space;
+
+import java.util.Collection;
 
 /**
  * Interface for convex hull generators.

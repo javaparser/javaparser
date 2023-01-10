@@ -1,11 +1,10 @@
 package test.CR16C;
 
+import devices.CR16C.KT4585.LED;
+import devices.CR16C.KT4585.WatchdogFreeze;
 import io.UARTWriter;
 
 import java.io.IOException;
-
-import devices.CR16C.KT4585.LED;
-import devices.CR16C.KT4585.WatchdogFreeze;
 
 public class TestUARTWriter {
 

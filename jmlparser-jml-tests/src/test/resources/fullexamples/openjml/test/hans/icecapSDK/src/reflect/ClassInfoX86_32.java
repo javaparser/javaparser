@@ -1,9 +1,9 @@
 package reflect;
 
-import vm.Address;
-import vm.Address32Bit;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
+import vm.Address;
+import vm.Address32Bit;
 
 public class ClassInfoX86_32 extends ClassInfo {
 	@IcecapCVar(expression = "classes", requiredIncludes = "#include \"types.h\"\n#include \"classes.h\"\nextern const ClassInfo *classes;\n")

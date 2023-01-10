@@ -17,18 +17,13 @@
 
 package org.apache.commons.math3.linear;
 
-import java.io.Serializable;
-import java.util.Arrays;
-
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NoDataException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Cache-friendly implementation of RealMatrix using a flat arrays to store

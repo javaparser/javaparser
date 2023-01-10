@@ -1,4 +1,4 @@
-import java.util.function.*;
+import java.util.function.Function;
 
 //@ non_null_by_default
 public class SpecificationInterfaceDemo {

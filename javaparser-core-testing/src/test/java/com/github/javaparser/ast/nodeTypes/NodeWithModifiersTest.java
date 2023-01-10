@@ -32,10 +32,7 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.SYNCHRONIZED;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

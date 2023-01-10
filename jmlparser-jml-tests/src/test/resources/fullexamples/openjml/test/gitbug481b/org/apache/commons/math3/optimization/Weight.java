@@ -17,9 +17,9 @@
 
 package org.apache.commons.math3.optimization;
 
-import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.DiagonalMatrix;
 import org.apache.commons.math3.linear.NonSquareMatrixException;
+import org.apache.commons.math3.linear.RealMatrix;
 
 /**
  * Weight matrix of the residuals between model and observations.

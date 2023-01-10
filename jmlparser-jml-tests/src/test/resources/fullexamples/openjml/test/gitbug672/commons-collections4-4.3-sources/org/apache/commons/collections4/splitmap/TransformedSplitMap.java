@@ -16,15 +16,15 @@
  */
 package org.apache.commons.collections4.splitmap;
 
+import org.apache.commons.collections4.Put;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.map.LinkedMap;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
-
-import org.apache.commons.collections4.Put;
-import org.apache.commons.collections4.Transformer;
-import org.apache.commons.collections4.map.LinkedMap;
 
 /**
  * Decorates another {@link Map} to transform objects that are added.

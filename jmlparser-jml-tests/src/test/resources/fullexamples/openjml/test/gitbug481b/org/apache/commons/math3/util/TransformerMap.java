@@ -16,13 +16,13 @@
  */
 package org.apache.commons.math3.util;
 
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.math3.exception.MathIllegalArgumentException;
 
 /**
  * This TansformerMap automates the transformation of mixed object types.

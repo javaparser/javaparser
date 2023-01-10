@@ -17,9 +17,9 @@
 
 package org.apache.commons.math3.random;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
+
+import java.util.Arrays;
 
 /**
  * A {@link RandomVectorGenerator} that generates vectors with uncorrelated

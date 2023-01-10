@@ -1,6 +1,4 @@
-
-import org.jmlspecs.annotation.Nullable; // FIXME - should be able to get rid of this
-public final class StorageParameters 
+public final class StorageParameters
 {
 	public long[] configurationSizes;
 	

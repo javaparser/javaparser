@@ -15,8 +15,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClauseLabelMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl

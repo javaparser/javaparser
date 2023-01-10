@@ -16,25 +16,14 @@
  */
 package org.apache.commons.collections4.bidimap;
 
+import org.apache.commons.collections4.*;
+import org.apache.commons.collections4.map.AbstractSortedMapDecorator;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.OrderedBidiMap;
-import org.apache.commons.collections4.OrderedMap;
-import org.apache.commons.collections4.OrderedMapIterator;
-import org.apache.commons.collections4.ResettableIterator;
-import org.apache.commons.collections4.SortedBidiMap;
-import org.apache.commons.collections4.map.AbstractSortedMapDecorator;
+import java.util.*;
 
 /**
  * Implementation of {@link BidiMap} that uses two {@link TreeMap} instances.

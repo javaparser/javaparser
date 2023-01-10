@@ -1,5 +1,6 @@
 package checkers;
-import java.awt.Point;
+
+import java.awt.*;
 
 public class Move
 {

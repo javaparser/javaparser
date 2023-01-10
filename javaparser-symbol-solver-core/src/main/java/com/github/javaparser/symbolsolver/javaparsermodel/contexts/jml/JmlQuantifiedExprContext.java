@@ -2,16 +2,14 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.util;
 
-import java.io.PrintStream;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
+
+import java.io.PrintStream;
 
 /** Class used to compute the classical functions tables.
  * @since 3.0

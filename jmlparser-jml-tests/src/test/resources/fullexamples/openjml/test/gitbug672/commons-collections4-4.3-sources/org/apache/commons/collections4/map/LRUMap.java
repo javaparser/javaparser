@@ -16,13 +16,13 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.BoundedMap;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
-
-import org.apache.commons.collections4.BoundedMap;
 
 /**
  * A <code>Map</code> implementation with a fixed maximum size which removes

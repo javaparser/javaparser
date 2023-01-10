@@ -21,22 +21,7 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.utils.TestParser.parseBodyDeclaration;
-import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
-import static com.github.javaparser.utils.TestParser.parseExpression;
-import static com.github.javaparser.utils.TestParser.parseStatement;
-import static com.github.javaparser.utils.TestParser.parseVariableDeclarationExpr;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Optional;
-
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.utils.TestParser;
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -52,6 +37,15 @@ import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.utils.TestParser;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PrettyPrintVisitorTest extends TestParser {
 
@@ -381,7 +375,7 @@ class PrettyPrintVisitorTest extends TestParser {
 
         assertEqualsStringIgnoringEol("public class X {\n" +
                 "\n" +
-                "    // line1\n" +
+                "    //   line1\n" +
                 "    void abc() {\n" +
                 "    }\n" +
                 "}\n", cu.toString());
@@ -402,8 +396,8 @@ class PrettyPrintVisitorTest extends TestParser {
         assertEqualsStringIgnoringEol("class A {\n" +
                 "\n" +
                 "    public void helloWorld(String greeting, String name) {\n" +
-                "        // sdfsdfsdf\n" +
-                "        // sdfds\n" +
+                "        //sdfsdfsdf\n" +
+                "        //sdfds\n" +
                 "        /*\n" +
                 "                            dgfdgfdgfdgfdgfd\n" +
                 "         */\n" +

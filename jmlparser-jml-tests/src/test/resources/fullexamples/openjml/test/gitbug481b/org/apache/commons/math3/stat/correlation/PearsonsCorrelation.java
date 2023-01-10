@@ -17,12 +17,12 @@
 package org.apache.commons.math3.stat.correlation;
 
 import org.apache.commons.math3.distribution.TDistribution;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.linear.BlockRealMatrix;
+import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.apache.commons.math3.util.FastMath;
 

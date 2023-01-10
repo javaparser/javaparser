@@ -17,9 +17,6 @@
 
 package org.apache.commons.math3.optimization.fitting;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.analysis.DifferentiableMultivariateVectorFunction;
 import org.apache.commons.math3.analysis.MultivariateMatrixFunction;
 import org.apache.commons.math3.analysis.ParametricUnivariateFunction;
@@ -28,6 +25,9 @@ import org.apache.commons.math3.analysis.differentiation.MultivariateDifferentia
 import org.apache.commons.math3.optimization.DifferentiableMultivariateVectorOptimizer;
 import org.apache.commons.math3.optimization.MultivariateDifferentiableVectorOptimizer;
 import org.apache.commons.math3.optimization.PointVectorValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Fitter for parametric univariate real functions y = f(x).
  * <br/>

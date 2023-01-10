@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.queue;
 
-import java.util.Queue;
-
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.collection.PredicatedCollection;
+
+import java.util.Queue;
 
 /**
  * Decorates another {@link Queue} to validate that additions

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.util;
 
+import org.apache.commons.math3.exception.NullArgumentException;
+
 import java.io.Serializable;
 import java.util.Arrays;
-
-import org.apache.commons.math3.exception.NullArgumentException;
 
 
 /**

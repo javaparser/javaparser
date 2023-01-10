@@ -17,20 +17,12 @@
 
 package org.apache.commons.math3.ode.nonstiff;
 
+import org.apache.commons.math3.fraction.BigFraction;
+import org.apache.commons.math3.linear.*;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.math3.fraction.BigFraction;
-import org.apache.commons.math3.linear.Array2DRowFieldMatrix;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.ArrayFieldVector;
-import org.apache.commons.math3.linear.FieldDecompositionSolver;
-import org.apache.commons.math3.linear.FieldLUDecomposition;
-import org.apache.commons.math3.linear.FieldMatrix;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.QRDecomposition;
-import org.apache.commons.math3.linear.RealMatrix;
 
 /** Transformer to Nordsieck vectors for Adams integrators.
  * <p>This class is used by {@link AdamsBashforthIntegrator Adams-Bashforth} and

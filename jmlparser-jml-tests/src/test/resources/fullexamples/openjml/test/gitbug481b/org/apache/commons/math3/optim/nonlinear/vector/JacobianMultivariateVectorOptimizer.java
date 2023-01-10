@@ -17,11 +17,11 @@
 package org.apache.commons.math3.optim.nonlinear.vector;
 
 import org.apache.commons.math3.analysis.MultivariateMatrixFunction;
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.TooManyEvaluationsException;
 import org.apache.commons.math3.optim.ConvergenceChecker;
 import org.apache.commons.math3.optim.OptimizationData;
 import org.apache.commons.math3.optim.PointVectorValuePair;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
 
 /**
  * Base class for implementing optimizers for multivariate vector

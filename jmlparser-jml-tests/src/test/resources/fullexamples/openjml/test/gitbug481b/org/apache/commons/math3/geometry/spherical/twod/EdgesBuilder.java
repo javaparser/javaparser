@@ -16,11 +16,6 @@
  */
 package org.apache.commons.math3.geometry.spherical.twod;
 
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
@@ -30,6 +25,11 @@ import org.apache.commons.math3.geometry.partitioning.BoundaryAttribute;
 import org.apache.commons.math3.geometry.spherical.oned.Arc;
 import org.apache.commons.math3.geometry.spherical.oned.ArcsSet;
 import org.apache.commons.math3.geometry.spherical.oned.S1Point;
+
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
 
 /** Visitor building edges.
  * @since 3.3

@@ -21,29 +21,30 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
 
-  @Test
-  void anonymousClassAsMethodArgument() {
-    CompilationUnit cu = parseSample("AnonymousClassDeclarations");
-    ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
-    MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar1");
-    MethodCallExpr methodCall = Navigator.findMethodCall(method, "of").get();
+    @Test
+    void anonymousClassAsMethodArgument() {
+        CompilationUnit cu = parseSample("AnonymousClassDeclarations");
+        ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
+        MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar1");
+        MethodCallExpr methodCall = Navigator.findMethodCall(method, "of").get();
 
     CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
     combinedTypeSolver.add(new ReflectionTypeSolver());

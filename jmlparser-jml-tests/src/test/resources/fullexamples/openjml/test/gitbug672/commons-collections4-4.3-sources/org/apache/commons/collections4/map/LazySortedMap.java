@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.map;
 
-import java.util.Comparator;
-import java.util.SortedMap;
-
 import org.apache.commons.collections4.Factory;
 import org.apache.commons.collections4.Transformer;
+
+import java.util.Comparator;
+import java.util.SortedMap;
 
 /**
  * Decorates another <code>SortedMap</code> to create objects in the map on demand.

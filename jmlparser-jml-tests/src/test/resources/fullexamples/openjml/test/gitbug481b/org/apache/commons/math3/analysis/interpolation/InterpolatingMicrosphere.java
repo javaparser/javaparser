@@ -16,16 +16,13 @@
  */
 package org.apache.commons.math3.analysis.interpolation;
 
-import java.util.List;
-import java.util.ArrayList;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.random.UnitSphereRandomVectorGenerator;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathArrays;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class for the {@link MicrosphereProjectionInterpolator} algorithm.

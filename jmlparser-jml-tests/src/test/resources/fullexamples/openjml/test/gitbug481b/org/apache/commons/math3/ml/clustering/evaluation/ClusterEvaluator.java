@@ -17,14 +17,14 @@
 
 package org.apache.commons.math3.ml.clustering.evaluation;
 
-import java.util.List;
-
 import org.apache.commons.math3.ml.clustering.CentroidCluster;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 import org.apache.commons.math3.ml.clustering.DoublePoint;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
+
+import java.util.List;
 
 /**
  * Base class for cluster evaluation methods.

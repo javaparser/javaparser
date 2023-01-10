@@ -1,7 +1,7 @@
 package vm;
 
-import reflect.ObjectInfo;
 import icecaptools.IcecapCompileMe;
+import reflect.ObjectInfo;
 
 public class Process {
 	private ProcessLogic logic;

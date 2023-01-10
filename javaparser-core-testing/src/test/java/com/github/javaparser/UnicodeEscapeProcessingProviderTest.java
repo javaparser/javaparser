@@ -20,21 +20,21 @@
  */
 package com.github.javaparser;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test case for {@link UnicodeEscapeProcessingProvider}.
  */
 public class UnicodeEscapeProcessingProviderTest {
 
-	@Test
-	void testUnicodeEscape() throws IOException {
-		assertEquals("13" + '\u12aA' + "98", new String(read("13\\u12aA98")));
-	}
+    @Test
+    void testUnicodeEscape() throws IOException {
+        assertEquals("13" + '\u12aA' + "98", new String(read("13\\u12aA98")));
+    }
 
 	@Test
 	void testEscapedUnicodeEscape() throws IOException {

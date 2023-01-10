@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.NoSuchElementException;
-
 import org.apache.commons.collections4.ResettableListIterator;
+
+import java.util.NoSuchElementException;
 
 /**
  * <code>SingletonIterator</code> is an {@link java.util.ListIterator} over a single

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.iterators;
 
+import org.apache.commons.collections4.Predicate;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Decorates another {@link Iterator} using a predicate to filter elements.

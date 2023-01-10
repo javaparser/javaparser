@@ -16,28 +16,16 @@
  */
 package org.apache.commons.math3.geometry.spherical.twod;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.geometry.enclosing.EnclosingBall;
 import org.apache.commons.math3.geometry.enclosing.WelzlEncloser;
-import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D;
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
-import org.apache.commons.math3.geometry.euclidean.threed.SphereGenerator;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.geometry.partitioning.AbstractRegion;
-import org.apache.commons.math3.geometry.partitioning.BSPTree;
-import org.apache.commons.math3.geometry.partitioning.BoundaryProjection;
-import org.apache.commons.math3.geometry.partitioning.RegionFactory;
-import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
+import org.apache.commons.math3.geometry.euclidean.threed.*;
+import org.apache.commons.math3.geometry.partitioning.*;
 import org.apache.commons.math3.geometry.spherical.oned.Sphere1D;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.util.*;
 
 /** This class represents a region on the 2-sphere: a set of spherical polygons.
  * @since 3.3

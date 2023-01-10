@@ -1,8 +1,5 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import static org.junit.Assert.*;
-
-import org.jmlspecs.openjml.JmlOption;
 import org.jmlspecs.openjmltest.TCBase;
 import org.junit.Test;
 

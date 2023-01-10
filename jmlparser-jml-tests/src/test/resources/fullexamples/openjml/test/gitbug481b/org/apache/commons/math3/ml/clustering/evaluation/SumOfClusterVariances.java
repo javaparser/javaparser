@@ -17,12 +17,12 @@
 
 package org.apache.commons.math3.ml.clustering.evaluation;
 
-import java.util.List;
-
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.Clusterable;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
+
+import java.util.List;
 
 /**
  * Computes the sum of intra-cluster distance variances according to the formula:

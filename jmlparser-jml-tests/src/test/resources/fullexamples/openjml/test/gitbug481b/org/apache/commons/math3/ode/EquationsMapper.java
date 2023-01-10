@@ -17,9 +17,9 @@
 
 package org.apache.commons.math3.ode;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
+
+import java.io.Serializable;
 
 /**
  * Class mapping the part of a complete state or derivative that pertains

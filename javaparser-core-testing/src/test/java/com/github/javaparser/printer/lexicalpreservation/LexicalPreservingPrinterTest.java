@@ -21,55 +21,34 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
-import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
+import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     private NodeText getTextForNode(Node node) {
@@ -295,18 +274,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     void findIndentationForAnnotationMemberDeclarationWithoutComment() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(4);
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
+        List<TextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
         assertEquals(Arrays.asList(" ", " ", " "),
-                indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
+                indentation.stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
     @Test
     void findIndentationForAnnotationMemberDeclarationWithComment() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
+        List<TextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
         assertEquals(Arrays.asList(" ", " ", " "),
-                indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
+                indentation.stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
     //
@@ -360,7 +339,9 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(0);
+        // This rendering is probably caused by the concret syntax model
         assertEquals("class /*a comment*/ A {\t\t" + SYSTEM_EOL +
+                SYSTEM_EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}", LexicalPreservingPrinter.print(c));
     }
 
@@ -461,15 +442,13 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     private void printASimpleMethodRemovingAStatement(String eol) {
-        String code = "class A {" + eol
+        considerCode("class A {" + eol
                 + "\t" + "foo(int a, int b) {" + eol
                 + "\t\t" + "int result = a * b;" + eol
                 + "\t\t" + "return a * b;" + eol
                 + "\t" + "}" + eol
-                + "}";
+                + "}");
 
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
         ExpressionStmt stmt = cu.findAll(ExpressionStmt.class).get(0);
         stmt.remove();
 
@@ -634,16 +613,13 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #855
     @Test
     void handleOverrideAnnotation() {
-        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+        considerCode("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   @Override" + SYSTEM_EOL +
                 "   protected void initializePage() {}" + SYSTEM_EOL +
-                "}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
 
         cu.getTypes()
                 .forEach(type -> type.getMembers()
@@ -901,15 +877,12 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #866
     @Test
     void moveOverrideAnnotations() {
-        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+        considerCode("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected @Override void initializePage() {}" + SYSTEM_EOL +
-                "}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
 
         cu.getTypes()
                 .forEach(type -> type.getMembers()
@@ -936,15 +909,12 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #866
     @Test
     void moveOrAddOverrideAnnotations() {
-        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+        considerCode("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected @Override void initializePage() {}" + SYSTEM_EOL +
-                "}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
 
         cu.getTypes()
                 .forEach(type -> type.getMembers()
@@ -974,16 +944,13 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #865
     @Test
     void handleAddingMarkerAnnotation() {
-        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+        considerCode("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   @Override" + SYSTEM_EOL +
                 "   protected void initializePage() {}" + SYSTEM_EOL +
-                "}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
 
         cu.getTypes()
                 .forEach(type -> type.getMembers()
@@ -1008,15 +975,12 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #865
     @Test
     void handleOverrideMarkerAnnotation() {
-        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+        considerCode("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void initializePage() {}" + SYSTEM_EOL +
-                "}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
 
         cu.getTypes()
                 .forEach(type -> type.getMembers()
@@ -1035,15 +999,12 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue #865
     @Test
     void handleOverrideAnnotationAlternative() {
-        String code = "public class TestPage extends Page {" + SYSTEM_EOL +
+        considerCode("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   protected void initializePage() {}" + SYSTEM_EOL +
-                "}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
 
         cu.getTypes()
                 .forEach(type -> type.getMembers()
@@ -1061,22 +1022,17 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void invokeModifierVisitor() {
-        String code = "class A {" + SYSTEM_EOL
+        considerCode("class A {" + SYSTEM_EOL
                 + "  Object f() {" + SYSTEM_EOL
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); "
                 + SYSTEM_EOL
-                + "}}";
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                + "}}");
         cu.accept(new ModifierVisitor<>(), null);
     }
 
     @Test
     void handleDeprecatedAnnotationFinalClass() {
-        String code = "public final class A {}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+        considerCode("public final class A {}");
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
@@ -1087,10 +1043,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void handleDeprecatedAnnotationAbstractClass() {
-        String code = "public abstract class A {}";
-
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+        considerCode("public abstract class A {}");
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
@@ -1100,11 +1053,9 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void issue1244() {
-        String code = "public class Foo {" + SYSTEM_EOL + SYSTEM_EOL
+        considerCode("public class Foo {" + SYSTEM_EOL + SYSTEM_EOL
                 + "// Some comment" + SYSTEM_EOL + SYSTEM_EOL // does work with only one \n
-                + "public void writeExternal() {}" + SYSTEM_EOL + "}";
-        CompilationUnit originalCu = parse(code);
-        CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
+                + "public void writeExternal() {}" + SYSTEM_EOL + "}");
 
         cu.findAll(ClassOrInterfaceDeclaration.class).forEach(c -> {
             List<MethodDeclaration> methods = c.getMethodsByName("writeExternal");
@@ -1128,15 +1079,13 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue 1277
     @Test
     void testInvokeModifierVisitor() {
-        String code = "class A {" + SYSTEM_EOL +
+        considerCode("class A {" + SYSTEM_EOL +
                 "  public String message = \"hello\";" + SYSTEM_EOL +
                 "   void bar() {" + SYSTEM_EOL +
                 "     System.out.println(\"hello\");" + SYSTEM_EOL +
                 "   }" + SYSTEM_EOL +
-                "}";
+                "}");
 
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
         cu.accept(new AddFooCallModifierVisitor(), null);
     }
 
@@ -1150,24 +1099,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void invokeModifierVisitorIssue1297() {
-        String code = "class A {" + SYSTEM_EOL +
+        considerCode("class A {" + SYSTEM_EOL +
                 "   public void bar() {" + SYSTEM_EOL +
                 "     System.out.println(\"hello\");" + SYSTEM_EOL +
                 "     System.out.println(\"hello\");" + SYSTEM_EOL +
                 "     // comment" + SYSTEM_EOL +
                 "   }" + SYSTEM_EOL +
-                "}";
+                "}");
 
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
         cu.accept(new CallModifierVisitor(), null);
     }
 
     @Test
     void addedBlockCommentsPrinted() {
-        String code = "public class Foo { }";
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+        considerCode("public class Foo { }");
 
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
@@ -1181,9 +1126,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void addedLineCommentsPrinted() {
-        String code = "public class Foo { }";
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+        considerCode("public class Foo { }");
 
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
@@ -1197,13 +1140,11 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void removedLineCommentsPrinted() {
-        String code = "public class Foo {" + SYSTEM_EOL +
+        considerCode("public class Foo {" + SYSTEM_EOL +
                 "//line" + SYSTEM_EOL +
                 "void mymethod() {" + SYSTEM_EOL +
                 "}" + SYSTEM_EOL +
-                "}";
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
         cu.getAllContainedComments().get(0).remove();
 
         assertEqualsStringIgnoringEol("public class Foo {" + SYSTEM_EOL +
@@ -1215,13 +1156,11 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // Checks if comments get removed properly with Unix style line endings
     @Test
     void removedLineCommentsPrintedUnix() {
-        String code = "public class Foo {" + "\n" +
+        considerCode("public class Foo {" + "\n" +
                 "//line" + "\n" +
                 "void mymethod() {" + "\n" +
                 "}" + "\n" +
-                "}";
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
         cu.getAllContainedComments().get(0).remove();
 
         assertEquals("public class Foo {" + "\n" +
@@ -1232,15 +1171,13 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void removedBlockCommentsPrinted() {
-        String code = "public class Foo {" + SYSTEM_EOL +
+        considerCode("public class Foo {" + SYSTEM_EOL +
                 "/*" + SYSTEM_EOL +
                 "Block comment coming through" + SYSTEM_EOL +
                 "*/" + SYSTEM_EOL +
                 "void mymethod() {" + SYSTEM_EOL +
                 "}" + SYSTEM_EOL +
-                "}";
-        CompilationUnit cu = parse(code);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
         cu.getAllContainedComments().get(0).remove();
 
         assertEqualsStringIgnoringEol("public class Foo {" + SYSTEM_EOL +
@@ -1252,21 +1189,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void testFixIndentOfMovedNode() {
         try {
-            CompilationUnit compilationUnit = parse(readExample("FixIndentOfMovedNode"));
-            LexicalPreservingPrinter.setup(compilationUnit);
+            considerExample("FixIndentOfMovedNode");
 
-            compilationUnit.getClassByName("ThisIsASampleClass").get()
+            cu.getClassByName("ThisIsASampleClass").get()
                     .getMethodsByName("longerMethod")
                     .get(0)
                     .setBlockComment("Lorem ipsum dolor sit amet, consetetur sadipscing elitr.");
 
-            compilationUnit.getClassByName("Foo").get()
+            cu.getClassByName("Foo").get()
                     .getFieldByName("myFoo")
                     .get()
                     .setLineComment("sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat");
 
             String expectedCode = readExample("FixIndentOfMovedNodeExpected");
-            assertEquals(expectedCode, LexicalPreservingPrinter.print(compilationUnit));
+            assertEquals(expectedCode, LexicalPreservingPrinter.print(cu));
         } catch (IOException ex) {
             fail("Could not read test code", ex);
         }
@@ -1274,32 +1210,27 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void issue1321() {
-        CompilationUnit compilationUnit = parse("class X { X() {} private void testme() {} }");
-        LexicalPreservingPrinter.setup(compilationUnit);
+        considerCode("class X { X() {} private void testme() {} }");
 
-        ClassOrInterfaceDeclaration type = compilationUnit.getClassByName("X").get();
+        ClassOrInterfaceDeclaration type = cu.getClassByName("X").get();
         type.getConstructors().get(0).setBody(new BlockStmt().addStatement("testme();"));
 
         assertEqualsStringIgnoringEol("class X { X() {\n    testme();\n} private void testme() {} }",
-                LexicalPreservingPrinter.print(compilationUnit));
+                LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void issue2001() {
-        CompilationUnit compilationUnit = parse("class X {void blubb(){X.p(\"blaubb04\");}}");
-        LexicalPreservingPrinter.setup(compilationUnit);
+        considerCode("class X {void blubb(){X.p(\"blaubb04\");}}");
 
-        compilationUnit
-                .findAll(MethodCallExpr.class)
-                .forEach(Node::removeForced);
+        cu.findAll(MethodCallExpr.class).forEach(Node::removeForced);
 
-        assertEqualsStringIgnoringEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(compilationUnit));
+        assertEqualsStringIgnoringEol("class X {void blubb(){}}", LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void testIndentOfCodeBlocks() throws IOException {
-        CompilationUnit compilationUnit = parse(considerExample("IndentOfInsertedCodeBlocks"));
-        LexicalPreservingPrinter.setup(compilationUnit);
+        considerExample("IndentOfInsertedCodeBlocks");
 
         IfStmt ifStmt = new IfStmt();
         ifStmt.setCondition(StaticJavaParser.parseExpression("name.equals(\"foo\")"));
@@ -1313,15 +1244,14 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         ifStmt.setThenStmt(blockStmt);
         ifStmt.setElseStmt(new BlockStmt());
 
-        compilationUnit.findFirst(BlockStmt.class).get().addStatement(ifStmt);
+        cu.findFirst(BlockStmt.class).get().addStatement(ifStmt);
         String expected = considerExample("IndentOfInsertedCodeBlocksExpected");
-        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(compilationUnit));
+        TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void commentAddedAtTopLevel() {
-        JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-        CompilationUnit cu = javaParser.parse("package x;class X{}").getResult().get();
+        considerCode("package x;class X{}");
 
         cu.setComment(new LineComment("Bla"));
         assertEqualsStringIgnoringEol("//Bla\npackage x;class X{}", LexicalPreservingPrinter.print(cu));
@@ -1335,147 +1265,117 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     public void testReplaceStringLiteral() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        final String code = "\"asd\"";
+        considerExpression("\"asd\"");
         final String expected = "\"REPLACEMENT\"";
 
-        final Expression b = javaParser.parseExpression(code).getResult().orElseThrow(AssertionError::new);
-
-        assertTrue(b.isStringLiteralExpr());
-        StringLiteralExpr sle = (StringLiteralExpr) b;
+        assertTrue(expression.isStringLiteralExpr());
+        StringLiteralExpr sle = (StringLiteralExpr) expression;
         sle.setValue("REPLACEMENT");
 
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(expression);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testReplaceStringLiteralWithinStatement() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        String code = "String str = \"aaa\";";
+        considerStatement("String str = \"aaa\";");
         String expected = "String str = \"REPLACEMENT\";";
 
-        Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-        b.findAll(StringLiteralExpr.class).forEach(stringLiteralExpr -> {
+        statement.findAll(StringLiteralExpr.class).forEach(stringLiteralExpr -> {
             stringLiteralExpr.setValue("REPLACEMENT");
         });
 
-        assertEquals(expected, LexicalPreservingPrinter.print(b));
-        assertEquals(expected, b.toString());
+        assertEquals(expected, LexicalPreservingPrinter.print(statement));
+        assertEquals(expected, statement.toString());
     }
 
     @Test
     public void testReplaceClassName() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
+        considerCode("class A {}");
 
-        final String code = "class A {}";
-        final CompilationUnit b = javaParser.parse(code).getResult().orElseThrow(AssertionError::new);
-        LexicalPreservingPrinter.setup(b);
-
-        assertEquals(1, b.findAll(ClassOrInterfaceDeclaration.class).size());
-        b.findAll(ClassOrInterfaceDeclaration.class).forEach(coid -> coid.setName("B"));
+        assertEquals(1, cu.findAll(ClassOrInterfaceDeclaration.class).size());
+        cu.findAll(ClassOrInterfaceDeclaration.class).forEach(coid -> coid.setName("B"));
 
         final String expected = "class B {}";
 
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(cu);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testReplaceIntLiteral() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        final String code = "5";
+        considerExpression("5");
         final String expected = "10";
 
-        final Expression b = javaParser.parseExpression(code).getResult().orElseThrow(AssertionError::new);
+        assertTrue(expression.isIntegerLiteralExpr());
+        ((IntegerLiteralExpr) expression).setValue("10");
 
-        assertTrue(b.isIntegerLiteralExpr());
-        ((IntegerLiteralExpr) b).setValue("10");
-
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(expression);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testReplaceLongLiteral() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        String code = "long x = 5L;";
+        considerStatement("long x = 5L;");
         String expected = "long x = 10L;";
 
-        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-        b.findAll(LongLiteralExpr.class).forEach(longLiteralExpr -> {
+        statement.findAll(LongLiteralExpr.class).forEach(longLiteralExpr -> {
             longLiteralExpr.setValue("10L");
         });
 
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(statement);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testReplaceBooleanLiteral() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        String code = "boolean x = true;";
+        considerStatement("boolean x = true;");
         String expected = "boolean x = false;";
 
-        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-        b.findAll(BooleanLiteralExpr.class).forEach(booleanLiteralExpr -> {
+        statement.findAll(BooleanLiteralExpr.class).forEach(booleanLiteralExpr -> {
             booleanLiteralExpr.setValue(false);
         });
 
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(statement);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testReplaceDoubleLiteral() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        String code = "double x = 5.0D;";
+        considerStatement("double x = 5.0D;");
         String expected = "double x = 10.0D;";
 
-        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-        b.findAll(DoubleLiteralExpr.class).forEach(doubleLiteralExpr -> {
+        statement.findAll(DoubleLiteralExpr.class).forEach(doubleLiteralExpr -> {
             doubleLiteralExpr.setValue("10.0D");
         });
 
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(statement);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testReplaceCharLiteral() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        String code = "char x = 'a';";
+        considerStatement("char x = 'a';");
         String expected = "char x = 'b';";
 
-        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-        b.findAll(CharLiteralExpr.class).forEach(charLiteralExpr -> {
+        statement.findAll(CharLiteralExpr.class).forEach(charLiteralExpr -> {
             charLiteralExpr.setValue("b");
         });
 
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(statement);
         assertEquals(expected, actual);
     }
 
     @Test
     public void testReplaceCharLiteralUnicode() {
-        final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-
-        String code = "char x = 'a';";
+        considerStatement("char x = 'a';");
         String expected = "char x = '\\u0000';";
 
-        final Statement b = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-        b.findAll(CharLiteralExpr.class).forEach(charLiteralExpr -> {
+        statement.findAll(CharLiteralExpr.class).forEach(charLiteralExpr -> {
             charLiteralExpr.setValue("\\u0000");
         });
 
-        final String actual = LexicalPreservingPrinter.print(b);
+        final String actual = LexicalPreservingPrinter.print(statement);
         assertEquals(expected, actual);
     }
 
@@ -1502,12 +1402,40 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
+    void testTextBlockSupport() {
+        String code =
+                "String html = \"\"\"\n" +
+                        "  <html>\n" +
+                        "    <body>\n" +
+                        "      <p>Hello, world</p>\n" +
+                        "    </body>\n" +
+                        "  </html>\n" +
+                        "\"\"\";";
+        String expected =
+                "String html = \"\"\"\r\n"
+                        + "  <html>\r\n"
+                        + "    <body>\r\n"
+                        + "      <p>Hello, world</p>\r\n"
+                        + "    </body>\r\n"
+                        + "  </html>\r\n"
+                        + "\"\"\";";
+        final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+                        .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15)
+        );
+        Statement stmt = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        LexicalPreservingPrinter.setup(stmt);
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(stmt));
+    }
+
+    @Test
     void testArrayPreservation_WithSingleLanguageStyle() {
 
         // Given
         considerCode("class Test {\n" +
-                    "  int[] foo;\n" +
-                    "}");
+                "  int[] foo;\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
@@ -1770,7 +1698,6 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 		    	"  }\n" +
 		    	"}";
     	cu.getAllContainedComments().get(0).remove();
-    	System.out.println(LexicalPreservingPrinter.print(cu));
     	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
     
@@ -1805,13 +1732,25 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "  }\n" +
                 "}");
         String expected =
-        		"public class Foo {\n" +
-                "  void mymethod() {\n" +
-                "  }\n" +
-                "}";
+                "public class Foo {\n" +
+                        "  void mymethod() {\n" +
+                        "  }\n" +
+                        "}";
         cu.getAllContainedComments().get(0).remove();
 
         assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+
+    // issue 3800 determine whether active
+    @Test
+    void checkLPPIsAvailableOnNode() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
+        LexicalPreservingPrinter.setup(md);
+
+        assertTrue(LexicalPreservingPrinter.isAvailableOn(md));
+        assertFalse(LexicalPreservingPrinter.isAvailableOn(cu));
     }
 
 }

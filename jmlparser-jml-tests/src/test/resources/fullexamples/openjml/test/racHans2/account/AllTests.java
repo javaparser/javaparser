@@ -1,15 +1,12 @@
 package account;
 
-import java.util.Enumeration;
-
-//import javax.scj.util.Const;
-
 import org.jmlspecs.utils.JmlAssertionError;
-
 import unitTest.TestCase;
 import unitTest.TestFailure;
 import unitTest.TestResult;
 import unitTest.TestSuite;
+
+import java.util.Enumeration;
 
 public class AllTests
 {

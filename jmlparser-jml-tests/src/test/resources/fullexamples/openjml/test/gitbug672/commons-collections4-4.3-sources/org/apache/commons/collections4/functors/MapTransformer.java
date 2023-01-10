@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
+import org.apache.commons.collections4.Transformer;
+
 import java.io.Serializable;
 import java.util.Map;
-
-import org.apache.commons.collections4.Transformer;
 
 /**
  * Transformer implementation that returns the value held in a specified map

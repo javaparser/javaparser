@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.bag;
 
-import java.util.Set;
-
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.collection.AbstractCollectionDecorator;
+
+import java.util.Set;
 
 /**
  * Decorates another <code>Bag</code> to provide additional behaviour.

@@ -21,30 +21,29 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ConstPool;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
         implements ResolvedAnnotationDeclarationTest {
@@ -58,6 +57,11 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
         } catch (NotFoundException e) {
             throw new RuntimeException("Unexpected error.", e);
         }
+    }
+
+    @Override
+    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
+        return Optional.empty();
     }
 
     @Override
@@ -110,23 +114,23 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
     @Test
     void isAnnotationNotInheritable() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        
+
         ClassPool classPool = new ClassPool(true);
         CtClass annotation = classPool.makeAnnotation("com.example.Foo");
-        
+
         JavassistAnnotationDeclaration fooAnnotationDeclaration = new JavassistAnnotationDeclaration(annotation, typeSolver);
         // An annotation that does not declare an @Inherited annotation is not inheritable
         assertFalse(fooAnnotationDeclaration.isInheritable());
     }
-    
+
     @Test
     void isAnnotationInheritable() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        
+
         ClassPool classPool = new ClassPool(true);
         CtClass ctClass = classPool.makeAnnotation("com.example.Foo");
         addAnnotation(ctClass, "java.lang.annotation.Inherited");
-        
+
         JavassistAnnotationDeclaration fooAnnotationDeclaration = new JavassistAnnotationDeclaration(ctClass, typeSolver);
         // An annotation that declares an @Inherited annotation is inheritable
         assertTrue(fooAnnotationDeclaration.isInheritable());

@@ -16,14 +16,14 @@
  */
 package org.apache.commons.math3.complex;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.exception.ZeroException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.FastMath;
+
+import java.io.Serializable;
 
 /**
  * A helper class for the computation and caching of the {@code n}-th roots of

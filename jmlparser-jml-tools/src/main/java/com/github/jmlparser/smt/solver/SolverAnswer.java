@@ -2,7 +2,6 @@ package com.github.jmlparser.smt.solver;
 
 import com.github.jmlparser.smt.model.SAtom;
 import com.github.jmlparser.smt.model.SExpr;
-import com.github.jmlparser.smt.model.SList;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

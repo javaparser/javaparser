@@ -27,12 +27,11 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
+import vm.Memory;
 
 import javax.realtime.MemoryArea;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
-
-import vm.Memory;
 
 /**
  * Managed memory is a scoped memory area that is managed by a mission.

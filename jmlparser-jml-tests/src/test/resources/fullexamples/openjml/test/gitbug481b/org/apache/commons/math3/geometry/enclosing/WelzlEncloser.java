@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.geometry.enclosing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.exception.MathInternalError;
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.Space;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Class implementing Emo Welzl algorithm to find the smallest enclosing ball in linear time.
  * <p>

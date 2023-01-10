@@ -16,15 +16,16 @@
  */
 package org.apache.commons.math3.optim.nonlinear.vector.jacobian;
 
-import java.util.Arrays;
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.MathUnsupportedOperationException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.optim.PointVectorValuePair;
-import org.apache.commons.math3.optim.ConvergenceChecker;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.util.Precision;
+import org.apache.commons.math3.optim.ConvergenceChecker;
+import org.apache.commons.math3.optim.PointVectorValuePair;
 import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.Precision;
+
+import java.util.Arrays;
 
 
 /**

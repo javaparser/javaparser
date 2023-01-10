@@ -21,24 +21,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.glb;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.leastUpperBound;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.CapturesBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.FalseBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SameAsBound;
@@ -47,13 +34,19 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.constraintfor
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.TypeSubtypeOfType;
 import com.github.javaparser.utils.Pair;
 
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.*;
+
 /**
  * @author Federico Tomassetti
  */
 public class BoundSet {
-    
+
     private static String JAVA_LANG_RUNTIME_EXCEPTION = RuntimeException.class.getCanonicalName();
-    
+
     private static final BoundSet EMPTY = new BoundSet();
 
     private List<Bound> bounds = new LinkedList<>();
@@ -715,7 +708,7 @@ public class BoundSet {
 
                     boolean throwsBound = bounds.stream().anyMatch(b -> b.isThrowsBoundOn(alphaI));
                     if (Ti == null && throwsBound && properUpperBoundsAreAtMostExceptionThrowableAndObject(alphaI)) {
-                        Ti = new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_RUNTIME_EXCEPTION), typeSolver);
+                        Ti = new ReferenceTypeImpl(typeSolver.solveType(JAVA_LANG_RUNTIME_EXCEPTION));
                     }
 
                     //   - Otherwise, where αi has proper upper bounds U1, ..., Uk, Ti = glb(U1, ..., Uk) (§5.1.10).

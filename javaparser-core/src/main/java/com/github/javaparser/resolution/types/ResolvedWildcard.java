@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 import java.util.List;
@@ -176,5 +177,21 @@ public class ResolvedWildcard implements ResolvedType {
     public enum BoundType {
 
         SUPER, EXTENDS
+    }
+
+    /*
+     * Returns the bounded resolved type.
+     */
+    @Override
+    public ResolvedType solveGenericTypes(Context context) {
+        if (isExtends() || isSuper()) {
+            ResolvedType boundResolved = getBoundedType().solveGenericTypes(context);
+            if (isExtends()) {
+                return ResolvedWildcard.extendsBound(boundResolved);
+            } else {
+                return ResolvedWildcard.superBound(boundResolved);
+            }
+        }
+        return this;
     }
 }

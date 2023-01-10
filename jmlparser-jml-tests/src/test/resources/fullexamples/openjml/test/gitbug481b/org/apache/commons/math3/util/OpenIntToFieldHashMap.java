@@ -16,15 +16,15 @@
  */
 package org.apache.commons.math3.util;
 
+import org.apache.commons.math3.Field;
+import org.apache.commons.math3.FieldElement;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
-
-import org.apache.commons.math3.Field;
-import org.apache.commons.math3.FieldElement;
 
 /**
  * Open addressed map from int to FieldElement.

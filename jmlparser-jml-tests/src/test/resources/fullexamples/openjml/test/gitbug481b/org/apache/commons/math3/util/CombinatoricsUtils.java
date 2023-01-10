@@ -16,13 +16,13 @@
  */
 package org.apache.commons.math3.util;
 
-import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+
+import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Combinatorial utilities.

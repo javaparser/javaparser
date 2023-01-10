@@ -4,7 +4,6 @@ import icecaptools.IcecapCompileMe;
 import reflect.ClassInfo;
 import reflect.ObjectInfo;
 import thread.Semaphore;
-import thread.Thread;
 import util.LiveSet;
 import util.ReferenceIterator;
 import vm.HVMHeap;

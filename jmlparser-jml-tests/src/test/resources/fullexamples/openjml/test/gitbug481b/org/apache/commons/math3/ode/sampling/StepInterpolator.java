@@ -17,9 +17,9 @@
 
 package org.apache.commons.math3.ode.sampling;
 
-import java.io.Externalizable;
-
 import org.apache.commons.math3.exception.MaxCountExceededException;
+
+import java.io.Externalizable;
 
 /** This interface represents an interpolator over the last step
  * during an ODE integration.

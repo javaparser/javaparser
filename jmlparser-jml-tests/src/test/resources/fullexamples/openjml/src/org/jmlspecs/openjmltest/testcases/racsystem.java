@@ -1,14 +1,8 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.jmlspecs.openjmltest.RacBase;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 // These tests are run for both new and custom translations.
 

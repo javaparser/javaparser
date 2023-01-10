@@ -16,8 +16,6 @@
  */
 package org.apache.commons.math3.geometry.euclidean.oned;
 
-import java.text.NumberFormat;
-
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.geometry.Point;
@@ -25,6 +23,8 @@ import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.text.NumberFormat;
 
 /** This class represents a 1D vector.
  * <p>Instances of this class are guaranteed to be immutable.</p>

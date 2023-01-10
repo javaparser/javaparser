@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.FunctorException;
 import org.apache.commons.collections4.Predicate;
+
+import java.io.Serializable;
 
 /**
  * Predicate implementation that always throws an exception.

@@ -16,13 +16,13 @@
  */
 package org.apache.commons.collections4.splitmap;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.collections4.IterableGet;
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.map.EntrySetToMapIteratorAdapter;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * {@link IterableGet} that uses a {@link Map}&lt;K, V&gt; for the

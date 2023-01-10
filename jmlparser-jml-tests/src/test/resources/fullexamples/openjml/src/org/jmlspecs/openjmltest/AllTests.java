@@ -1,16 +1,11 @@
 package org.jmlspecs.openjmltest;
 
-import org.junit.jupiter.api.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite.SuiteClasses;
-import org.openjml.runners.*;
-
 import junit.framework.TestSuite;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.Arrays;
-
-import org.jmlspecs.openjmltest.testcases.*;
 
 // @RunWith(JUnitPlatform.class)
 // @SelectPackages({"org.jmlspecs.openjmltest.testcases"})

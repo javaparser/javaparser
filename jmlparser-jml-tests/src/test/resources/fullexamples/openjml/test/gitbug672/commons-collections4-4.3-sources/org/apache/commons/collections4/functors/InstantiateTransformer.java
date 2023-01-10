@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.commons.collections4.FunctorException;
 import org.apache.commons.collections4.Transformer;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Transformer implementation that creates a new object instance by reflection.

@@ -27,10 +27,10 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.doc.JmlDoc;
 import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
 import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
@@ -46,6 +46,7 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
@@ -65,6 +66,8 @@ import static java.util.stream.Collectors.joining;
  */
 @Deprecated
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
+
+    private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected PrettyPrinterConfiguration configuration;
 
@@ -1811,7 +1814,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) {
             return;
         }
-        printer.print("// ").println(normalizeEolInTextBlock(n.getContent(), "").trim());
+        printer.print("//").println(normalizeEolInTextBlock(RTRIM.matcher(n.getContent()).replaceAll(""), ""));
     }
 
     @Override

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.set;
 
+import org.apache.commons.collections4.Transformer;
+
 import java.util.Comparator;
 import java.util.SortedSet;
-
-import org.apache.commons.collections4.Transformer;
 
 /**
  * Decorates another <code>SortedSet</code> to transform objects that are added.

@@ -17,9 +17,6 @@
 
 package org.apache.commons.math3.distribution;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
@@ -32,6 +29,9 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.FieldMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.util.FastMath;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Implementation of the Kolmogorov-Smirnov distribution.

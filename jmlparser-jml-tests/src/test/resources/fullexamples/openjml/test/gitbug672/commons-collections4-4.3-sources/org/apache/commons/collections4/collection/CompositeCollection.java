@@ -16,17 +16,13 @@
  */
 package org.apache.commons.collections4.collection;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.collections4.iterators.EmptyIterator;
 import org.apache.commons.collections4.iterators.IteratorChain;
 import org.apache.commons.collections4.list.UnmodifiableList;
+
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Decorates a collection of other collections to provide a single unified view.

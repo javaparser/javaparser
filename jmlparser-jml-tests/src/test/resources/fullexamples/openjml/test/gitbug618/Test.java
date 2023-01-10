@@ -1,5 +1,3 @@
-import java.util.Optional;
-
 // The reported errors are using Optional<>
 // They are replicated with Opt1.
 // The requires aspect is being a function 

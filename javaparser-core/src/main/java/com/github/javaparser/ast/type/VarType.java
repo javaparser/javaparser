@@ -25,13 +25,23 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.VarTypeMetaModel;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -44,6 +54,8 @@ import java.util.function.Consumer;
  * </ol>
  */
 public class VarType extends Type {
+
+    private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     @AllFieldsConstructor
     public VarType() {
@@ -120,5 +132,59 @@ public class VarType extends Type {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVarType(Consumer<VarType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        Node parent = getParentNode().get();
+        if (!(parent instanceof VariableDeclarator)) {
+            throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
+        }
+        final VariableDeclarator variableDeclarator = (VariableDeclarator) parent;
+        Optional<Expression> initializer = variableDeclarator.getInitializer();
+        if (!initializer.isPresent()) {
+            // When a `var` type decl has no initializer it may be part of a
+            // for-each statement (e.g. `for(var i : expr)`).
+            Optional<ForEachStmt> forEachStmt = forEachStmtWithVariableDeclarator(variableDeclarator);
+            if (forEachStmt.isPresent()) {
+                Expression iterable = forEachStmt.get().getIterable();
+                ResolvedType iterType = iterable.calculateResolvedType();
+                if (iterType instanceof ResolvedArrayType) {
+                    // The type of a variable in a for-each loop with an array
+                    // is the component type of the array.
+                    return ((ResolvedArrayType) iterType).getComponentType();
+                }
+                if (iterType.isReferenceType()) {
+                    // The type of a variable in a for-each loop with an
+                    // Iterable with parameter type
+                    List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
+                    if (parametersType.isEmpty()) {
+                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT)
+                                .getDeclaration();
+                        return oObjectDeclaration
+                                .map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
+                                .orElseThrow(() -> new UnsupportedOperationException());
+                    }
+                    return parametersType.get(0);
+                }
+            }
+        }
+        return initializer
+                .map(Expression::calculateResolvedType)
+                .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
+    }
+
+    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
+            VariableDeclarator variableDeclarator) {
+        Optional<Node> node = variableDeclarator.getParentNode();
+        if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {
+            return Optional.empty();
+        }
+        node = node.get().getParentNode();
+        if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
+            return Optional.empty();
+        } else {
+            return Optional.of((ForEachStmt) node.get());
+        }
     }
 }

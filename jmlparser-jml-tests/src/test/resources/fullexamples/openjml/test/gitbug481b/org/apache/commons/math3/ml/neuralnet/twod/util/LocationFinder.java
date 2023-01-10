@@ -17,11 +17,12 @@
 
 package org.apache.commons.math3.ml.neuralnet.twod.util;
 
-import java.util.Map;
-import java.util.HashMap;
+import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.ml.neuralnet.Neuron;
 import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
-import org.apache.commons.math3.exception.MathIllegalStateException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Helper class to find the grid coordinates of a neuron.

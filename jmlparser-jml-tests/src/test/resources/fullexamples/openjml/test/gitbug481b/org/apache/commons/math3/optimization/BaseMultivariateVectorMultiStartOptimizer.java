@@ -17,9 +17,6 @@
 
 package org.apache.commons.math3.optimization;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 import org.apache.commons.math3.analysis.MultivariateVectorFunction;
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.MathIllegalStateException;
@@ -27,6 +24,9 @@ import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.random.RandomVectorGenerator;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Base class for all implementations of a multi-start optimizer.

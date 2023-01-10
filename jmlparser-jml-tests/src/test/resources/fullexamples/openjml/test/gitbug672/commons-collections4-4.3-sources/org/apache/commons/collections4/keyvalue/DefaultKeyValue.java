@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.keyvalue;
 
-import java.util.Map;
-
 import org.apache.commons.collections4.KeyValue;
+
+import java.util.Map;
 
 /**
  * A mutable <code>KeyValue</code> pair that does not implement

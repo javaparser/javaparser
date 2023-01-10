@@ -21,16 +21,16 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Are meta-variables for types - that is, they are special names that allow abstract reasoning about types.
  * To distinguish them from type variables, inference variables are represented with Greek letters, principally α.
- *
+ * <p>
  * See JLS 18
  *
  * @author Federico Tomassetti

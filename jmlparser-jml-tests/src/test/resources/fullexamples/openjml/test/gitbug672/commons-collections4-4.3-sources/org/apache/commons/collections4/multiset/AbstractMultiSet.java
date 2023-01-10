@@ -16,18 +16,14 @@
  */
 package org.apache.commons.collections4.multiset;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.AbstractCollection;
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.Transformer;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.*;
 
 /**
  * Abstract implementation of the {@link MultiSet} interface to simplify the

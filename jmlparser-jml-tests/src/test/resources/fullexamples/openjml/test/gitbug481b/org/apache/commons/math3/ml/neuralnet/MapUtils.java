@@ -17,17 +17,12 @@
 
 package org.apache.commons.math3.ml.neuralnet;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Comparator;
-
 import org.apache.commons.math3.exception.NoDataException;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
 import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.apache.commons.math3.util.Pair;
+
+import java.util.*;
 
 /**
  * Utilities for network maps.

@@ -17,8 +17,8 @@
 
 package org.apache.commons.math3.optim;
 
-import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * Simple implementation of the {@link ConvergenceChecker} interface using

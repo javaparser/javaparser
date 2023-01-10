@@ -18,8 +18,8 @@ package org.apache.commons.math3.genetics;
 
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
 
 /**
  * Implementation of a genetic algorithm. All factors that govern the operation

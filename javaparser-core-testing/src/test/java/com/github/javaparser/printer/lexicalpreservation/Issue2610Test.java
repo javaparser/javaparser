@@ -21,36 +21,34 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import org.junit.jupiter.api.Test;
 
-public class Issue2610Test {
-    
+import java.util.Optional;
+
+public class Issue2610Test extends AbstractLexicalPreservingTest {
+
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
     @Test
     public void test() {
-      
-        CompilationUnit cu = StaticJavaParser.parse(
-                "public class Bar {\n" + 
-                "    public void foo() {\n" + 
-                "          // comment\n" +
-                "          System.out.print(\"error\");\n" +
-                "    }\n" +
-                "}"
-                );
-        LexicalPreservingPrinter.setup(cu);
+
+        considerCode(
+                "public class Bar {\n" +
+                        "    public void foo() {\n" +
+                        "          // comment\n" +
+                        "          System.out.print(\"error\");\n" +
+                        "    }\n" +
+                        "}"
+        );
         // contruct a statement with a comment
         Expression expr = StaticJavaParser.parseExpression("System.out.println(\"warning\")");
         // Replace the method expression
         Optional<MethodCallExpr> mce = cu.findFirst(MethodCallExpr.class);
         mce.get().getParentNode().get().replace(mce.get(), expr);
+        // TODO assert something
     }
 }

@@ -16,19 +16,15 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.Unmodifiable;
+import org.apache.commons.collections4.collection.UnmodifiableCollection;
+import org.apache.commons.collections4.set.UnmodifiableSet;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-
-import org.apache.commons.collections4.Unmodifiable;
-import org.apache.commons.collections4.collection.UnmodifiableCollection;
-import org.apache.commons.collections4.set.UnmodifiableSet;
+import java.util.*;
 
 /**
  * Decorates another <code>SortedMap</code> to ensure it can't be altered.

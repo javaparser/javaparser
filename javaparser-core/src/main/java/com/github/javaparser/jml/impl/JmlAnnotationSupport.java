@@ -1,6 +1,9 @@
 package com.github.javaparser.jml.impl;
 
-import com.github.javaparser.*;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
+import com.github.javaparser.Processor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;

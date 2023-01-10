@@ -16,17 +16,18 @@
  */
 package org.apache.commons.math3.optim.nonlinear.scalar.noderiv;
 
-import java.util.Comparator;
 import org.apache.commons.math3.analysis.MultivariateFunction;
-import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.MathUnsupportedOperationException;
+import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.ConvergenceChecker;
+import org.apache.commons.math3.optim.OptimizationData;
 import org.apache.commons.math3.optim.PointValuePair;
 import org.apache.commons.math3.optim.SimpleValueChecker;
-import org.apache.commons.math3.optim.OptimizationData;
+import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateOptimizer;
+
+import java.util.Comparator;
 
 /**
  * This class implements simplex-based direct search optimization.

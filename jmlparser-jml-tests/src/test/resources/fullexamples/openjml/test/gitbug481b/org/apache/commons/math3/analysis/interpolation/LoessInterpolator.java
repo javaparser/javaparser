@@ -16,21 +16,15 @@
  */
 package org.apache.commons.math3.analysis.interpolation;
 
-import java.io.Serializable;
-import java.util.Arrays;
-
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NoDataException;
-import org.apache.commons.math3.exception.NonMonotonicSequenceException;
-import org.apache.commons.math3.exception.NotFiniteNumberException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathArrays;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Implements the <a href="http://en.wikipedia.org/wiki/Local_regression">

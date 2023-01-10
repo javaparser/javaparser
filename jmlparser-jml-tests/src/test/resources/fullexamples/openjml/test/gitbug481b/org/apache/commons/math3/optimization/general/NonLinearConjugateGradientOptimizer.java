@@ -17,15 +17,15 @@
 
 package org.apache.commons.math3.optimization.general;
 
-import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.solvers.BrentSolver;
 import org.apache.commons.math3.analysis.solvers.UnivariateSolver;
+import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.optimization.ConvergenceChecker;
 import org.apache.commons.math3.optimization.GoalType;
 import org.apache.commons.math3.optimization.PointValuePair;
 import org.apache.commons.math3.optimization.SimpleValueChecker;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
 import org.apache.commons.math3.util.FastMath;
 
 /**

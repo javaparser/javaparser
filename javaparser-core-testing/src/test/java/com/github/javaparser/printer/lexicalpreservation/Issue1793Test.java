@@ -22,17 +22,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue1793Test {
-    
+class Issue1793Test extends AbstractLexicalPreservingTest {
+
     @AfterEach
     public void reset() {
         StaticJavaParser.setConfiguration(new ParserConfiguration());
@@ -40,18 +38,15 @@ class Issue1793Test {
 
     @Test
     void importIsAddedOnTheSameLine() {
-        String src = 
-                "public class Test {\n" + 
-                "  public void foo(Bar x, Bar y) {\n" + 
-                "    x.barf(); // expected to be wrapped\n" + 
-                "    x.bark(); // expected to be wrapped\n" + 
-                "    y.barf(); // expected to be wrapped\n" + 
-                "    y.bark(); // expected to be wrapped\n" + 
-                "  }\n" + 
-                "}";
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setLexicalPreservationEnabled(true));
-        CompilationUnit cu = StaticJavaParser.parse(src);
-        LexicalPreservingPrinter.setup(cu);
+        considerCode(
+                "public class Test {\n" +
+                        "  public void foo(Bar x, Bar y) {\n" +
+                        "    x.barf(); // expected to be wrapped\n" +
+                        "    x.bark(); // expected to be wrapped\n" +
+                        "    y.barf(); // expected to be wrapped\n" +
+                        "    y.bark(); // expected to be wrapped\n" +
+                        "  }\n" +
+                        "}");
         assertEquals(LexicalPreservingPrinter.print(cu), LexicalPreservingPrinter.print(cu.clone()));
     }
 

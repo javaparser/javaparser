@@ -1,6 +1,5 @@
 package com.github.jmlparser.wd;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlMultiExprClause;

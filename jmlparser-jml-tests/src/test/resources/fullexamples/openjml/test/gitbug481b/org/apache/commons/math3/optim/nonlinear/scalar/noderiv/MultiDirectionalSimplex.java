@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.optim.nonlinear.scalar.noderiv;
 
-import java.util.Comparator;
-
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.optim.PointValuePair;
+
+import java.util.Comparator;
 
 /**
  * This class implements the multi-directional direct search method.

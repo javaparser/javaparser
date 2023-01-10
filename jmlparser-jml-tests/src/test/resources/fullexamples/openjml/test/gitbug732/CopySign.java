@@ -1,4 +1,3 @@
-import java.lang.Math;
 public class CopySign {
 	public static void copySign_test1() {
 		double a = Math.copySign(64.0, -128.0);

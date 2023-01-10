@@ -16,15 +16,15 @@
  */
 package org.apache.commons.collections4.bidimap;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.Unmodifiable;
 import org.apache.commons.collections4.iterators.UnmodifiableMapIterator;
 import org.apache.commons.collections4.map.UnmodifiableEntrySet;
 import org.apache.commons.collections4.set.UnmodifiableSet;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Decorates another {@link BidiMap} to ensure it can't be altered.

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
+
+import java.io.Serializable;
 
 /**
  * Transformer implementation that will call one of two closures based on whether a predicate evaluates

@@ -1,13 +1,13 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import java.io.ByteArrayOutputStream;
-
-import java.io.PrintStream;
-
 import org.junit.*;
 import org.junit.rules.TestName;
 
-import static org.junit.Assert.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /** This class contains tests of the jmldoc functionality.  It calls the actual

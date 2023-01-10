@@ -1,6 +1,5 @@
 import org.jmlspecs.annotation.NonNullByDefault;
 import org.jmlspecs.annotation.Nullable;
-import org.jmlspecs.annotation.Pure;
 
 
 @NonNullByDefault

@@ -17,15 +17,15 @@
 
 package org.apache.commons.math3.geometry.euclidean.threed;
 
-import java.io.Serializable;
-import java.text.NumberFormat;
-
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathArrays;
+
+import java.io.Serializable;
+import java.text.NumberFormat;
 
 /**
  * This class is a re-implementation of {@link Vector3D} using {@link RealFieldElement}.

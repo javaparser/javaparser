@@ -5,8 +5,8 @@ import icecaptools.IcecapCompileMe;
 import util.ReferenceIterator;
 import vm.Address;
 import vm.Address32Bit;
-import vm.Machine;
 import vm.HardwareObject;
+import vm.Machine;
 
 public abstract class ClassInfo extends HardwareObject {
 

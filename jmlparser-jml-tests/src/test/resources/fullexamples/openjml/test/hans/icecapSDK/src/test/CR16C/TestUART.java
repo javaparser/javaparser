@@ -1,11 +1,11 @@
 package test.CR16C;
 
-import vm.InterruptDispatcher;
-import vm.InterruptHandler;
 import devices.CR16C.KT4585.CR16CInterruptDispatcher;
 import devices.CR16C.KT4585.DeviceRegShort;
 import devices.CR16C.KT4585.LED;
 import devices.CR16C.KT4585.WatchdogFreeze;
+import vm.InterruptDispatcher;
+import vm.InterruptHandler;
 
 public class TestUART {
 

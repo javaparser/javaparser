@@ -30,8 +30,6 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;

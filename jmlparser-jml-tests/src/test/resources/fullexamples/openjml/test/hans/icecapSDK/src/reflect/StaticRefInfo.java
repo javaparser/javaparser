@@ -1,11 +1,7 @@
 package reflect;
 
 import icecaptools.IcecapCompileMe;
-import vm.Address;
-import vm.Address32Bit;
-import vm.Address64Bit;
-import vm.Machine;
-import vm.HardwareObject;
+import vm.*;
 
 public class StaticRefInfo {
 

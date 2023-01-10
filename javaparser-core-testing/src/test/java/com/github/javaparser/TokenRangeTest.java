@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TokenRangeTest {
     @Test

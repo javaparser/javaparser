@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.stat.descriptive.summary;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.io.Serializable;
 
 /**
  * Returns the sum of the squares of the available values.

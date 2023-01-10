@@ -137,7 +137,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * In the example above, this method returns B,C,D,E
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
-        Set<ResolvedReferenceType> ancestors = new HashSet<>();
+    	List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
             // init direct ancestors
@@ -149,11 +149,13 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
                     // add this ancestor to the queue (for a deferred search)
                     queuedAncestors.add(ancestor);
                     // add this ancestor to the list of ancestors
-                    ancestors.add(ancestor);
+                    if (!ancestors.contains(ancestor)) {
+                        ancestors.add(ancestor);
+                    }
                 }));
             }
         }
-        return new ArrayList(ancestors);
+        return ancestors;
     };
 
     // /

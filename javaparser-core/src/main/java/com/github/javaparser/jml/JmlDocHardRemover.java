@@ -2,7 +2,6 @@ package com.github.javaparser.jml;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Problem;
 import com.github.javaparser.Processor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -11,7 +10,6 @@ import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
 import com.github.javaparser.ast.jml.doc.JmlDocModifier;
 import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
-import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 

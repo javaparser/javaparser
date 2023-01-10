@@ -1,11 +1,11 @@
 package com.github.javaparser.symbolsolver.utils;
 
-import java.io.File;
-
 import com.github.javaparser.utils.Utils;
 
+import java.io.File;
+
 public class FileUtils {
-    
+
     /*
      * returns true if the filename exists otherwise return false
      */

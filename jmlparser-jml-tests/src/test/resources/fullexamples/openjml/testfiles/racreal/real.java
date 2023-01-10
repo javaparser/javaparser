@@ -1,7 +1,3 @@
-import java.util.LinkedList;
-import java.util.List;
-import java.math.BigInteger;
-
 public class real {
 
     // FIXME - what about ++, --, conversion to \real, op=

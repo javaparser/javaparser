@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
+import org.apache.commons.collections4.Closure;
+
 import java.io.Serializable;
 import java.util.Collection;
-
-import org.apache.commons.collections4.Closure;
 
 /**
  * Closure implementation that chains the specified closures together.

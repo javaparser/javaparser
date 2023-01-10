@@ -22,10 +22,10 @@
  */
 package minicdj.cdx.unannotated;
 
+import minicdj.cdx.Constants;
+
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
-
-import minicdj.cdx.Constants;
 
 public class NanoClock {
 

@@ -21,8 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -33,27 +31,18 @@ import com.github.javaparser.ast.jml.expr.JmlLetExpr;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.SymbolDeclarator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlContractContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlLetExprContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlQuantifiedExprContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlSignalsClauseContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarators.PatternSymbolDeclarator;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarators.*;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -190,25 +179,4 @@ public class JavaParserFactory {
         return new NoSymbolDeclarator<>(node, typeSolver);
     }
 
-    public static ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            if (((ClassOrInterfaceDeclaration) node).isInterface()) {
-                return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-            }
-            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-        }
-        if (node instanceof TypeParameter) {
-            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
-        }
-        if (node instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
-        }
-        if (node instanceof AnnotationDeclaration) {
-            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
-        }
-        if (node instanceof EnumConstantDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(node), typeSolver);
-        }
-        throw new IllegalArgumentException(node.getClass().getCanonicalName());
-    }
 }

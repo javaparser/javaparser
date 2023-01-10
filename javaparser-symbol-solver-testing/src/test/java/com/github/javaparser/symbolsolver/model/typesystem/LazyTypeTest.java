@@ -21,16 +21,17 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LazyTypeTest extends AbstractSymbolResolutionTest {
 
@@ -51,9 +52,9 @@ class LazyTypeTest extends AbstractSymbolResolutionTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver), typeSolver);
-        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
-        baz = new ReferenceTypeImpl(new ReflectionClassDeclaration(Baz.class, typeSolver), typeSolver);
+        foo = new ReferenceTypeImpl(new ReflectionClassDeclaration(Foo.class, typeSolver));
+        bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver));
+        baz = new ReferenceTypeImpl(new ReflectionClassDeclaration(Baz.class, typeSolver));
         lazyFoo = lazy(foo);
         lazyBar = lazy(bar);
         lazyBaz = lazy(baz);

@@ -16,17 +16,13 @@
  */
 package org.apache.commons.collections4;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.apache.commons.collections4.multimap.TransformedMultiValuedMap;
 import org.apache.commons.collections4.multimap.UnmodifiableMultiValuedMap;
+
+import java.util.*;
 
 /**
  * Provides utility methods and decorators for {@link MultiValuedMap} instances.

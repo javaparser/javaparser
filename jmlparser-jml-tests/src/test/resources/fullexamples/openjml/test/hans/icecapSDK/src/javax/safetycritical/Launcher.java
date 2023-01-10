@@ -31,10 +31,10 @@
  *************************************************************************/
 package javax.safetycritical;
 
+import vm.Memory;
+
 import javax.realtime.MemoryArea;
 import javax.scj.util.Const;
-
-import vm.Memory;
 
 /**
  * This class is used by an application class to launch a Level 0 or a Level 1

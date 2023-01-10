@@ -17,9 +17,9 @@
 
 package org.apache.commons.math3.ml.neuralnet.sofm;
 
+import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.ml.neuralnet.sofm.util.ExponentialDecayFunction;
 import org.apache.commons.math3.ml.neuralnet.sofm.util.QuasiSigmoidDecayFunction;
-import org.apache.commons.math3.exception.OutOfRangeException;
 
 /**
  * Factory for creating instances of {@link LearningFactorFunction}.

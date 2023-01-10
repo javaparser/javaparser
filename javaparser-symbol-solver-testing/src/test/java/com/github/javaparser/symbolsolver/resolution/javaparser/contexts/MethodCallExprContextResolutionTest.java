@@ -21,44 +21,38 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import org.junit.jupiter.api.Test;
+
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Malte Langkabel
@@ -134,7 +128,7 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 		ResolvedReferenceTypeDeclaration stringType = typeSolver.solveType("java.lang.String");
 
 		List<ResolvedType> argumentsTypes = new ArrayList<>();
-		argumentsTypes.add(new ReferenceTypeImpl(stringType, typeSolver));
+        argumentsTypes.add(new ReferenceTypeImpl(stringType));
 
 		Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes);
 		assertTrue(ref.isPresent());
@@ -182,14 +176,37 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 
 		int errorCount = 0;
 
-		for (MethodCallExpr expr : methodCallExpr) {
-			try {
-				ResolvedMethodDeclaration rd = expr.resolve();
-			} catch (UnsolvedSymbolException e) {
-				errorCount++;
-			}
-		}
+        for (MethodCallExpr expr : methodCallExpr) {
+            try {
+                ResolvedMethodDeclaration rd = expr.resolve();
+            } catch (UnsolvedSymbolException e) {
+                errorCount++;
+            }
+        }
 
-		assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
-	}
+        assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
+    }
+
+    @Test
+    void solveVariadicStaticGenericMethodCallCanInferFromArguments() {
+        ParserConfiguration config = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", "variadicStaticGenericMethod");
+
+        ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
+        assertEquals("java.lang.String", resolvedType.describe());
+    }
+
+    // Related to issue #3195
+    @Test
+    void solveVariadicStaticGenericMethodCallCanInferFromArguments2() {
+        ParserConfiguration config = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+        StaticJavaParser.setConfiguration(config);
+        MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", "asList");
+
+        ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
+        assertEquals("java.util.List<java.lang.String>", resolvedType.describe());
+    }
 }

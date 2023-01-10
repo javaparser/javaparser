@@ -16,13 +16,13 @@
  */
 package org.apache.commons.math3.geometry.euclidean.twod.hull;
 
-import java.util.Collection;
-
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.geometry.hull.ConvexHullGenerator;
+
+import java.util.Collection;
 
 /**
  * Interface for convex hull generators in the two-dimensional euclidean space.

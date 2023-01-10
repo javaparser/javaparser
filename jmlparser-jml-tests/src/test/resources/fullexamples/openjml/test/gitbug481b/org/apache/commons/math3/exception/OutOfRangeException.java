@@ -16,8 +16,8 @@
  */
 package org.apache.commons.math3.exception;
 
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.exception.util.Localizable;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**
  * Exception to be thrown when some argument is out of range.

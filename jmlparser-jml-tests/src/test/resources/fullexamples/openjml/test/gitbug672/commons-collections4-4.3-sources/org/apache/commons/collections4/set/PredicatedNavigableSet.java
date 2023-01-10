@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.set;
 
+import org.apache.commons.collections4.Predicate;
+
 import java.util.Iterator;
 import java.util.NavigableSet;
-
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Decorates another <code>NavigableSet</code> to validate that all additions

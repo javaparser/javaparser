@@ -1,5 +1,4 @@
 import org.jmlspecs.models.JMLValueSequence;
-import org.jmlspecs.models.JMLByte;
 
 public class SequenceUtilities {
     public static JMLValueSequence makeSequence() {

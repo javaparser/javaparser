@@ -17,10 +17,10 @@
 
 package org.apache.commons.math3.complex;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
+
+import java.io.Serializable;
 
 /**
  * Representation of the complex numbers field.

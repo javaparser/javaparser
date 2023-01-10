@@ -1,14 +1,5 @@
 package org.jmlspecs.openjmltest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import org.jmlspecs.openjml.vistors.IJmlVisitor;
-import org.jmlspecs.openjml.vistors.JmlTreeScanner;
-
 import com.sun.tools.javac.comp.JmlAttr;
 import com.sun.tools.javac.comp.JmlEnter;
 import com.sun.tools.javac.parser.JmlFactory;
@@ -18,6 +9,14 @@ import com.sun.tools.javac.parser.ScannerFactory;
 import com.sun.tools.javac.parser.Tokens.TokenKind;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.Log;
+import org.jmlspecs.openjml.vistors.IJmlVisitor;
+import org.jmlspecs.openjml.vistors.JmlTreeScanner;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /** This class is the base class for test suites that just are exercising the parser,
  * without doing any further typechecking.  FOr this purpose the parser can be

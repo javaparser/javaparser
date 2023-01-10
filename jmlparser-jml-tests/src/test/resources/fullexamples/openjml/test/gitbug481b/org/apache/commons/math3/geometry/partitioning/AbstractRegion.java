@@ -16,17 +16,11 @@
  */
 package org.apache.commons.math3.geometry.partitioning;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeSet;
-
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
+
+import java.util.*;
 
 /** Abstract class for all regions, independently of geometry type or dimension.
 

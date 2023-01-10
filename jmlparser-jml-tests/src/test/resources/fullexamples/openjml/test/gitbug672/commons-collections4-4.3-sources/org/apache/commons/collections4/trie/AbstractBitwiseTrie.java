@@ -16,12 +16,11 @@
  */
 package org.apache.commons.collections4.trie;
 
+import org.apache.commons.collections4.Trie;
+
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.collections4.Trie;
 
 /**
  * This class provides some basic {@link Trie} functionality and

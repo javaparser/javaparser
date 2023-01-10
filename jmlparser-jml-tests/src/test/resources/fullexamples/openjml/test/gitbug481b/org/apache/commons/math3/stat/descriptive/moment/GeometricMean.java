@@ -16,8 +16,6 @@
  */
 package org.apache.commons.math3.stat.descriptive.moment;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.exception.NullArgumentException;
@@ -27,6 +25,8 @@ import org.apache.commons.math3.stat.descriptive.StorelessUnivariateStatistic;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfLogs;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.io.Serializable;
 
 /**
  * Returns the <a href="http://www.xycoon.com/geometric_mean.htm">

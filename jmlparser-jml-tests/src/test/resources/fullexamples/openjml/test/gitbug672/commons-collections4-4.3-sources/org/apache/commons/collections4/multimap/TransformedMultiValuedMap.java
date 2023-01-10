@@ -16,13 +16,13 @@
  */
 package org.apache.commons.collections4.multimap;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.FluentIterable;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.Transformer;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Decorates another <code>MultiValuedMap</code> to transform objects that are added.

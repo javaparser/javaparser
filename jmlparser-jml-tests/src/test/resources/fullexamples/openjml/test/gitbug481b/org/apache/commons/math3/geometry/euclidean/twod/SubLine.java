@@ -16,22 +16,14 @@
  */
 package org.apache.commons.math3.geometry.euclidean.twod;
 
+import org.apache.commons.math3.geometry.Point;
+import org.apache.commons.math3.geometry.euclidean.oned.*;
+import org.apache.commons.math3.geometry.partitioning.*;
+import org.apache.commons.math3.geometry.partitioning.Region.Location;
+import org.apache.commons.math3.util.FastMath;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.math3.geometry.Point;
-import org.apache.commons.math3.geometry.euclidean.oned.Euclidean1D;
-import org.apache.commons.math3.geometry.euclidean.oned.Interval;
-import org.apache.commons.math3.geometry.euclidean.oned.IntervalsSet;
-import org.apache.commons.math3.geometry.euclidean.oned.OrientedPoint;
-import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
-import org.apache.commons.math3.geometry.partitioning.AbstractSubHyperplane;
-import org.apache.commons.math3.geometry.partitioning.BSPTree;
-import org.apache.commons.math3.geometry.partitioning.Hyperplane;
-import org.apache.commons.math3.geometry.partitioning.Region;
-import org.apache.commons.math3.geometry.partitioning.Region.Location;
-import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
-import org.apache.commons.math3.util.FastMath;
 
 /** This class represents a sub-hyperplane for {@link Line}.
  * @since 3.0

@@ -16,12 +16,12 @@
  */
 package org.apache.commons.collections4.set;
 
+import org.apache.commons.collections4.Unmodifiable;
+import org.apache.commons.collections4.iterators.UnmodifiableIterator;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.apache.commons.collections4.Unmodifiable;
-import org.apache.commons.collections4.iterators.UnmodifiableIterator;
 
 /**
  * Decorates another <code>Set</code> to ensure it can't be altered.

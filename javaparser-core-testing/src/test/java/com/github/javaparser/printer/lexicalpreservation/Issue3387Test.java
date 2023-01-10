@@ -1,9 +1,3 @@
-package com.github.javaparser.printer.lexicalpreservation;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-
-import java.util.StringJoiner;
-
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2019 The JavaParser Team.
@@ -25,26 +19,29 @@ import java.util.StringJoiner;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
+package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import org.junit.jupiter.api.Test;
+
+import java.util.StringJoiner;
+
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 public class Issue3387Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test3387() {
-        String input = new StringJoiner("\n")
+        considerCode(new StringJoiner("\n")
                 .add("class A {")
                 .add("")
                 .add("\tpublic void setTheNumber(int number) {")
                 .add("\t\tnumber = number;")
                 .add("\t}")
                 .add("")
-                .add("}").toString();
+                .add("}").toString());
         
         String expected = "class A {\n" + 
                 "\n" + 
@@ -56,9 +53,6 @@ public class Issue3387Test extends AbstractLexicalPreservingTest {
                 "\t}\n" + 
                 "\n" + 
                 "}";
-
-            CompilationUnit cu = StaticJavaParser.parse(input);
-            LexicalPreservingPrinter.setup(cu);
 
             MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
             // create new javadoc comment

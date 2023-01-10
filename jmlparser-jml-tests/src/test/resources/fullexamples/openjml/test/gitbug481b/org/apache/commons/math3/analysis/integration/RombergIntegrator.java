@@ -16,11 +16,7 @@
  */
 package org.apache.commons.math3.analysis.integration;
 
-import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.NumberIsTooLargeException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
+import org.apache.commons.math3.exception.*;
 import org.apache.commons.math3.util.FastMath;
 
 /**

@@ -16,11 +16,11 @@
  */
 package org.apache.commons.math3.geometry.partitioning;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.exception.MathInternalError;
 import org.apache.commons.math3.geometry.Space;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Cut sub-hyperplanes characterization with respect to inside/outside cells.
  * @see BoundaryBuilder

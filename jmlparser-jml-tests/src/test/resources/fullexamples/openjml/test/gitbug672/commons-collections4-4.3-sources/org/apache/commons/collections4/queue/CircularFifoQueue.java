@@ -16,18 +16,13 @@
  */
 package org.apache.commons.collections4.queue;
 
+import org.apache.commons.collections4.BoundedCollection;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.AbstractCollection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Queue;
-
-import org.apache.commons.collections4.BoundedCollection;
+import java.util.*;
 
 /**
  * CircularFifoQueue is a first-in first-out queue with a fixed size that

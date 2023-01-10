@@ -1,8 +1,5 @@
 package banking_example2;
 
-import banking_example.*;
-
-
 /**
  *
  * @author christoph

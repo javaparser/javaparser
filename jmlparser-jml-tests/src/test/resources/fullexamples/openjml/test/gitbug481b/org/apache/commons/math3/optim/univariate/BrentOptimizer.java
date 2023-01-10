@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.optim.univariate;
 
-import org.apache.commons.math3.util.Precision;
-import org.apache.commons.math3.util.FastMath;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.optim.ConvergenceChecker;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
+import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.Precision;
 
 /**
  * For a function defined on some interval {@code (lo, hi)}, this class

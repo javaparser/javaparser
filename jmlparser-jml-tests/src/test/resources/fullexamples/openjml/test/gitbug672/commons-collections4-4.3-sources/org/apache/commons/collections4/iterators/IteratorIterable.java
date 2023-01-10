@@ -13,9 +13,9 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.Iterator;
-
 import org.apache.commons.collections4.ResettableIterator;
+
+import java.util.Iterator;
 
 /**
  * Adapter to make an {@link Iterator Iterator} instance appear to be an

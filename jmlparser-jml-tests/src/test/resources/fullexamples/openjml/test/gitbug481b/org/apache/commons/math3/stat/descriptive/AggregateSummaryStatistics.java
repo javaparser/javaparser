@@ -17,11 +17,11 @@
 
 package org.apache.commons.math3.stat.descriptive;
 
+import org.apache.commons.math3.exception.NullArgumentException;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.commons.math3.exception.NullArgumentException;
 
 /**
  * <p>

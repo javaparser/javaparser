@@ -99,6 +99,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
             public ResolvedReferenceType object() {
                 throw new UnsupportedOperationException();
             }
+
         };
     }
 

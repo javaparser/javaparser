@@ -1,10 +1,10 @@
 package icecaptools;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-
 import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.ConstantPool;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 public class AnnotationsAttributeReader implements org.apache.bcel.classfile.AttributeReader {
 	public Attribute createAttribute(int nameIndex, int length, DataInputStream in, ConstantPool constantPool) {

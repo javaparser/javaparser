@@ -13,9 +13,6 @@
 
 package paycard;
 
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -16,8 +16,6 @@
  */
 package org.apache.commons.math3.transform;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.analysis.FunctionUtils;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.complex.Complex;
@@ -25,6 +23,8 @@ import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.ArithmeticUtils;
 import org.apache.commons.math3.util.FastMath;
+
+import java.io.Serializable;
 
 /**
  * Implements the Fast Sine Transform for transformation of one-dimensional real

@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 import java.util.List;
@@ -71,11 +72,6 @@ public class ResolvedTypeVariable implements ResolvedType {
 
     @Override
     public boolean isArray() {
-        return false;
-    }
-
-    @Override
-    public boolean isPrimitive() {
         return false;
     }
 
@@ -139,5 +135,18 @@ public class ResolvedTypeVariable implements ResolvedType {
             return typeParameter.getBounds().get(0).getType();
         }
         return typeParameter.object();
+    }
+
+    /*
+     * Returns the resolved type for a type variable.
+     */
+    @Override
+    public ResolvedType solveGenericTypes(Context context) {
+        return context.solveGenericType(describe()).orElse(this);
+    }
+
+    @Override
+    public String toDescriptor() {
+        return String.format("L%s;", qualifiedName());
     }
 }

@@ -17,10 +17,10 @@
 
 package org.apache.commons.math3.analysis.solvers;
 
-import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.MathInternalError;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * Base class for all bracketing <em>Secant</em>-based methods for root-finding

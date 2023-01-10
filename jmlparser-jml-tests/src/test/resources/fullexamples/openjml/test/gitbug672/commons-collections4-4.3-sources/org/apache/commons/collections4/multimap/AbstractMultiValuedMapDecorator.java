@@ -16,15 +16,15 @@
  */
 package org.apache.commons.collections4.multimap;
 
+import org.apache.commons.collections4.MapIterator;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.MultiValuedMap;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.MultiSet;
-import org.apache.commons.collections4.MultiValuedMap;
 
 /**
  * Decorates another <code>MultiValuedMap</code> to provide additional behaviour.

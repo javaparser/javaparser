@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.bag;
 
-import java.util.Set;
-
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.collection.PredicatedCollection;
+
+import java.util.Set;
 
 /**
  * Decorates another {@link Bag} to validate that additions

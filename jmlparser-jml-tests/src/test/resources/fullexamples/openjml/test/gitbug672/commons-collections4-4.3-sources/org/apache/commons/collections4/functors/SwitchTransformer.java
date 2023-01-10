@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Transformer implementation calls the transformer whose predicate returns true,

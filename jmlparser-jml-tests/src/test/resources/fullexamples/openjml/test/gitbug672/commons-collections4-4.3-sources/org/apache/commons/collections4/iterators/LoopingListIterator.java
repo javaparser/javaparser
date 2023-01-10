@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.iterators;
 
+import org.apache.commons.collections4.ResettableListIterator;
+
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
-
-import org.apache.commons.collections4.ResettableListIterator;
 
 /**
  * A ListIterator that restarts when it reaches the end or when it

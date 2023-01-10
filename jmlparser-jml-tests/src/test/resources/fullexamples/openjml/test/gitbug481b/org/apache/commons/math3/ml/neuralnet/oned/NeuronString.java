@@ -17,12 +17,13 @@
 
 package org.apache.commons.math3.ml.neuralnet.oned;
 
-import java.io.Serializable;
-import java.io.ObjectInputStream;
-import org.apache.commons.math3.ml.neuralnet.Network;
-import org.apache.commons.math3.ml.neuralnet.FeatureInitializer;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.ml.neuralnet.FeatureInitializer;
+import org.apache.commons.math3.ml.neuralnet.Network;
+
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 
 /**
  * Neural network with the topology of a one-dimensional line.

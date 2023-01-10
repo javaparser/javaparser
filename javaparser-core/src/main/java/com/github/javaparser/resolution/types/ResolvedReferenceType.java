@@ -27,12 +27,14 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParameterValueProvider;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -86,14 +88,26 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (o == null || (!isLazyType(o) && getClass() != o.getClass())
+                || (isLazyType(o) && !this.equals(asResolvedReferenceType(o))))
             return false;
-        ResolvedReferenceType that = (ResolvedReferenceType) o;
+        ResolvedReferenceType that = asResolvedReferenceType(o);
         if (!typeDeclaration.equals(that.typeDeclaration))
             return false;
         if (!typeParametersMap.equals(that.typeParametersMap))
             return false;
         return true;
+    }
+
+    private boolean isLazyType(Object type) {
+        return type != null && type instanceof LazyType;
+    }
+
+    private ResolvedReferenceType asResolvedReferenceType(Object o) {
+        if (isLazyType(o)) {
+            return ((LazyType) o).asReferenceType();
+        }
+        return ResolvedReferenceType.class.cast(o);
     }
 
     @Override
@@ -203,6 +217,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * Return all ancestors, that means all superclasses and interfaces.
      * This list should always include Object (unless this is a reference to Object).
      * The type typeParametersValues should be expressed in terms of this type typeParametersValues.
+     * The default order of presenting ancestors corresponds to a search in depth.
      * <p>
      * For example, given:
      * <p>
@@ -213,6 +228,13 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * Foo&lt;Boolean, String&gt;.
      */
     public abstract List<ResolvedReferenceType> getAllAncestors();
+
+    /**
+     * Return all ancestors, that means all superclasses and interfaces.
+     * This list should always include Object (unless this is a reference to Object).
+     * The type typeParametersValues should be expressed in terms of this type typeParametersValues.
+     */
+    public abstract List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser);
 
     /**
      * Return direct ancestors, that means the superclasses and interfaces implemented directly.
@@ -564,5 +586,10 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
 
     private boolean isJavaObject(ResolvedType rt) {
         return rt.isReferenceType() && rt.asReferenceType().isJavaLangObject();
+    }
+
+    @Override
+    public String toDescriptor() {
+        return String.format("L%s;", getQualifiedName().replace(".", "/"));
     }
 }

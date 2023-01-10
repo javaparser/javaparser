@@ -17,8 +17,8 @@
 package org.apache.commons.math3.optim;
 
 import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
 
 /**
  * Base class for implementing optimizers for multivariate functions.

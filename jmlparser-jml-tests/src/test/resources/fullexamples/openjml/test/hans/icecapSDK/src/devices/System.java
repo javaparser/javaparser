@@ -1,17 +1,15 @@
 package devices;
 
 import icecaptools.IcecapCompileMe;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-
-import javax.realtime.AbsoluteTime;
-
 import vm.Address;
 import vm.Address32Bit;
 import vm.HardwareObject;
 import vm.RealtimeClock;
+
+import javax.realtime.AbsoluteTime;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class System {
 	

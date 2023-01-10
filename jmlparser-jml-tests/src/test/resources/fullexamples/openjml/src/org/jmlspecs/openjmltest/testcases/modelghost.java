@@ -1,14 +1,13 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.jmlspecs.openjmltest.TCBase;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.openjml.runners.ParameterizedWithNames;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /** These tests check various improper declarations of model and ghost
  * methods and fields.

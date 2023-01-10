@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.trie;
 
-import java.util.Map;
-
 import org.apache.commons.collections4.trie.analyzer.StringKeyAnalyzer;
+
+import java.util.Map;
 
 /**
  * Implementation of a PATRICIA Trie (Practical Algorithm to Retrieve Information

@@ -3,8 +3,8 @@ package reflect;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 import vm.Address;
-import vm.Machine;
 import vm.HardwareObject;
+import vm.Machine;
 
 public abstract class MethodInfo extends HardwareObject {
 	public short classIndex;

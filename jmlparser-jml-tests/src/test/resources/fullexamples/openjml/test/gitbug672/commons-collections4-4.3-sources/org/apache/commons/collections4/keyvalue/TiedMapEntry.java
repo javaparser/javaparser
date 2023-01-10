@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.keyvalue;
 
+import org.apache.commons.collections4.KeyValue;
+
 import java.io.Serializable;
 import java.util.Map;
-
-import org.apache.commons.collections4.KeyValue;
 
 /**
  * A {@link java.util.Map.Entry Map.Entry} tied to a map underneath.

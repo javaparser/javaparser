@@ -16,19 +16,15 @@
  */
 package org.apache.commons.collections4.bag;
 
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.set.UnmodifiableSet;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.set.UnmodifiableSet;
 
 /**
  * Abstract implementation of the {@link Bag} interface to simplify the creation

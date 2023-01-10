@@ -16,14 +16,14 @@
  */
 package org.apache.commons.math3.analysis.polynomials;
 
+import org.apache.commons.math3.fraction.BigFraction;
+import org.apache.commons.math3.util.CombinatoricsUtils;
+import org.apache.commons.math3.util.FastMath;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.math3.fraction.BigFraction;
-import org.apache.commons.math3.util.CombinatoricsUtils;
-import org.apache.commons.math3.util.FastMath;
 
 /**
  * A collection of static methods that operate on or return polynomials.

@@ -3,15 +3,13 @@ package vm;
 import gc.BitMap;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
-
-import java.util.Iterator;
-
 import reflect.ClassInfo;
 import reflect.ObjectInfo;
 import reflect.StaticRefInfo;
-import thread.Thread;
 import thread.ThreadManager;
 import util.ReferenceIterator;
+
+import java.util.Iterator;
 
 public class HVMHeap implements Heap {
 

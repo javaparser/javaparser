@@ -18,13 +18,13 @@
 package org.apache.commons.math3.linear;
 
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.MathUnsupportedOperationException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.util.Precision;
 import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.Precision;
 
 /**
  * Calculates the eigen decomposition of a real matrix.

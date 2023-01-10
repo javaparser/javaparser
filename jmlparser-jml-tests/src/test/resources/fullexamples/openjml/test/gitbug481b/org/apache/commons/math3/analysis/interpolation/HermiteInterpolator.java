@@ -16,10 +16,6 @@
  */
 package org.apache.commons.math3.analysis.interpolation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
 import org.apache.commons.math3.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
@@ -28,6 +24,10 @@ import org.apache.commons.math3.exception.NoDataException;
 import org.apache.commons.math3.exception.ZeroException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.CombinatoricsUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /** Polynomial interpolator using both sample values and sample derivatives.
  * <p>

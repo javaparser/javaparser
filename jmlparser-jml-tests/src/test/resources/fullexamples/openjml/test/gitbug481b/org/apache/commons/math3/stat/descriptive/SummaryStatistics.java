@@ -16,8 +16,6 @@
  */
 package org.apache.commons.math3.stat.descriptive;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
@@ -30,9 +28,11 @@ import org.apache.commons.math3.stat.descriptive.rank.Min;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfLogs;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfSquares;
+import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
 import org.apache.commons.math3.util.Precision;
-import org.apache.commons.math3.util.FastMath;
+
+import java.io.Serializable;
 
 /**
  * <p>

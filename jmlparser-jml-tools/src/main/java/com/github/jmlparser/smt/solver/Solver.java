@@ -1,8 +1,9 @@
 package com.github.jmlparser.smt.solver;
 
-import com.github.jmlparser.smt.SmtQuery;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 

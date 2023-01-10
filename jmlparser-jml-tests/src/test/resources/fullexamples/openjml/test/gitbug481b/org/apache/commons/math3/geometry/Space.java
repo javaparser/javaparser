@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.geometry;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathUnsupportedOperationException;
+
+import java.io.Serializable;
 
 /** This interface represents a generic space, with affine and vectorial counterparts.
  * @see Vector

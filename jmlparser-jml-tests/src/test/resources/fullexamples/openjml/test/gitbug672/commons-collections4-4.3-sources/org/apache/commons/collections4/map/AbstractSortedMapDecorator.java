@@ -16,16 +16,11 @@
  */
 package org.apache.commons.collections4.map;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-
 import org.apache.commons.collections4.IterableSortedMap;
 import org.apache.commons.collections4.OrderedMapIterator;
 import org.apache.commons.collections4.iterators.ListIteratorWrapper;
+
+import java.util.*;
 
 /**
  * Provides a base decorator that enables additional functionality to be added

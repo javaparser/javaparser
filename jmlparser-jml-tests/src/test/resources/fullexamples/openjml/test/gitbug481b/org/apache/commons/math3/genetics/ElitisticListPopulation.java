@@ -16,15 +16,15 @@
  */
 package org.apache.commons.math3.genetics;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.FastMath;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Population of chromosomes which uses elitism (certain percentage of the best

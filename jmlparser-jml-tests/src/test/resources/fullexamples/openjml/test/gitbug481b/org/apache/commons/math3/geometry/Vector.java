@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.geometry;
 
-import java.text.NumberFormat;
-
 import org.apache.commons.math3.exception.MathArithmeticException;
+
+import java.text.NumberFormat;
 
 /** This interface represents a generic vector in a vectorial space or a point in an affine space.
  * @param <S> Type of the space.

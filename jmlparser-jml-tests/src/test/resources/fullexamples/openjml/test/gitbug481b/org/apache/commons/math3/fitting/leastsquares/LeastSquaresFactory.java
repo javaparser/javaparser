@@ -16,17 +16,12 @@
  */
 package org.apache.commons.math3.fitting.leastsquares;
 
-import org.apache.commons.math3.exception.MathIllegalStateException;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.analysis.MultivariateMatrixFunction;
 import org.apache.commons.math3.analysis.MultivariateVectorFunction;
+import org.apache.commons.math3.exception.MathIllegalStateException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresProblem.Evaluation;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.DiagonalMatrix;
-import org.apache.commons.math3.linear.EigenDecomposition;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.linear.*;
 import org.apache.commons.math3.optim.AbstractOptimizationProblem;
 import org.apache.commons.math3.optim.ConvergenceChecker;
 import org.apache.commons.math3.optim.PointVectorValuePair;

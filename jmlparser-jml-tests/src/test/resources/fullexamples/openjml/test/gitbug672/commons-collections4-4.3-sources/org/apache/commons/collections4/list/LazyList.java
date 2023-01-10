@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.list;
 
-import java.util.List;
-
 import org.apache.commons.collections4.Factory;
+
+import java.util.List;
 
 /**
  * Decorates another <code>List</code> to create objects in the list on demand.

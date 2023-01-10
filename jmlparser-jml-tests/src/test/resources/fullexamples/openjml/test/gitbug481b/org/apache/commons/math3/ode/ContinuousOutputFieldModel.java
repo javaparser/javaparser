@@ -17,9 +17,6 @@
 
 package org.apache.commons.math3.ode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
@@ -28,6 +25,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.ode.sampling.FieldStepHandler;
 import org.apache.commons.math3.ode.sampling.FieldStepInterpolator;
 import org.apache.commons.math3.util.FastMath;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class stores all information provided by an ODE integrator

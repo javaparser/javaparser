@@ -16,17 +16,13 @@
  */
 package org.apache.commons.math3.analysis.interpolation;
 
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.NoDataException;
-import org.apache.commons.math3.exception.NonMonotonicSequenceException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.exception.*;
+import org.apache.commons.math3.fitting.PolynomialFitter;
+import org.apache.commons.math3.optim.SimpleVectorValueChecker;
+import org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizer;
 import org.apache.commons.math3.util.MathArrays;
 import org.apache.commons.math3.util.Precision;
-import org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizer;
-import org.apache.commons.math3.fitting.PolynomialFitter;
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.apache.commons.math3.optim.SimpleVectorValueChecker;
 
 /**
  * Generates a bicubic interpolation function.

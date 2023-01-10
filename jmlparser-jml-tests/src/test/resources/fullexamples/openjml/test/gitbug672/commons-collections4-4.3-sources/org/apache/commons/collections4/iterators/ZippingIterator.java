@@ -16,12 +16,12 @@
  */
 package org.apache.commons.collections4.iterators;
 
+import org.apache.commons.collections4.FluentIterable;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import org.apache.commons.collections4.FluentIterable;
 
 /**
  * Provides an interleaved iteration over the elements contained in a

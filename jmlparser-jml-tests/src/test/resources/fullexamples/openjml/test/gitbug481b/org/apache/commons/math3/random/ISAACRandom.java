@@ -17,9 +17,9 @@
 
 package org.apache.commons.math3.random;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.util.FastMath;
+
+import java.io.Serializable;
 
 /**
  * <a href="http://burtleburtle.net/bob/rand/isaacafa.html">

@@ -21,21 +21,18 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.stmt.IfStmt;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.stmt.IfStmt;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue2393Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test() {
-        CompilationUnit compilationUnit = StaticJavaParser.parse("public class Test { public void foo() { int i = 0;\nif(i == 5) { System.out.println(i); } } }");
-        LexicalPreservingPrinter.setup(compilationUnit);
-        IfStmt ifStmt = compilationUnit.findFirst(IfStmt.class).orElseThrow(() -> new IllegalStateException("Expected if"));
+        considerCode("public class Test { public void foo() { int i = 0;\nif(i == 5) { System.out.println(i); } } }");
+        IfStmt ifStmt = cu.findFirst(IfStmt.class).orElseThrow(() -> new IllegalStateException("Expected if"));
         ifStmt.setCondition(StaticJavaParser.parseExpression("i > 0"));
         assertEquals("i > 0", ifStmt.getCondition().toString());
     }

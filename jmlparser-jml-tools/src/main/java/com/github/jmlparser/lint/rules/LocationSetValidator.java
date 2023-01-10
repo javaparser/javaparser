@@ -1,7 +1,5 @@
 package com.github.jmlparser.lint.rules;
 
-import com.github.javaparser.ast.validator.VisitorValidator;
-import com.github.jmlparser.lint.LintRule;
 import com.github.jmlparser.lint.LintRuleVisitor;
 
 /**

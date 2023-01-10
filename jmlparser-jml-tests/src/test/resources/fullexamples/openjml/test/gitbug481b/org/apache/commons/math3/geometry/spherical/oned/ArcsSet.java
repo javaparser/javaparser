@@ -16,25 +16,17 @@
  */
 package org.apache.commons.math3.geometry.spherical.oned;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.MathInternalError;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.geometry.Point;
-import org.apache.commons.math3.geometry.partitioning.AbstractRegion;
-import org.apache.commons.math3.geometry.partitioning.BSPTree;
-import org.apache.commons.math3.geometry.partitioning.BoundaryProjection;
-import org.apache.commons.math3.geometry.partitioning.Side;
-import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
+import org.apache.commons.math3.geometry.partitioning.*;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
 import org.apache.commons.math3.util.Precision;
+
+import java.util.*;
 
 /** This class represents a region of a circle: a set of arcs.
  * <p>

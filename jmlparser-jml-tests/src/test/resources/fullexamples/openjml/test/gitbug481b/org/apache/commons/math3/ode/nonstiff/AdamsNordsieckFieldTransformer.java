@@ -17,18 +17,14 @@
 
 package org.apache.commons.math3.ode.nonstiff;
 
+import org.apache.commons.math3.Field;
+import org.apache.commons.math3.RealFieldElement;
+import org.apache.commons.math3.linear.*;
+import org.apache.commons.math3.util.MathArrays;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.math3.Field;
-import org.apache.commons.math3.RealFieldElement;
-import org.apache.commons.math3.linear.Array2DRowFieldMatrix;
-import org.apache.commons.math3.linear.ArrayFieldVector;
-import org.apache.commons.math3.linear.FieldDecompositionSolver;
-import org.apache.commons.math3.linear.FieldLUDecomposition;
-import org.apache.commons.math3.linear.FieldMatrix;
-import org.apache.commons.math3.util.MathArrays;
 
 /** Transformer to Nordsieck vectors for Adams integrators.
  * <p>This class is used by {@link AdamsBashforthIntegrator Adams-Bashforth} and

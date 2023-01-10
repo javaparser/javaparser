@@ -24,11 +24,7 @@
  package minicdj.cdx;
 
 import minicdj.collision.Vector3d;
-import minicdj.util.HashMap;
-import minicdj.util.HashSet;
-import minicdj.util.Iterator;
-import minicdj.util.LinkedList;
-import minicdj.util.List;
+import minicdj.util.*;
 
 /**
  * The constructor runs and the instance lives in the persistent detector scope.

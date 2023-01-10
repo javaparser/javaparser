@@ -16,18 +16,13 @@
  */
 package org.apache.commons.collections4.trie;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-
 import org.apache.commons.collections4.OrderedMapIterator;
 import org.apache.commons.collections4.Trie;
 import org.apache.commons.collections4.Unmodifiable;
 import org.apache.commons.collections4.iterators.UnmodifiableOrderedMapIterator;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * An unmodifiable {@link Trie}.

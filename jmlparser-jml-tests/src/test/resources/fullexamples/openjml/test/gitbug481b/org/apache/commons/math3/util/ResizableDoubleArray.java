@@ -16,16 +16,11 @@
  */
 package org.apache.commons.math3.util;
 
+import org.apache.commons.math3.exception.*;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+
 import java.io.Serializable;
 import java.util.Arrays;
-
-import org.apache.commons.math3.exception.MathIllegalArgumentException;
-import org.apache.commons.math3.exception.MathIllegalStateException;
-import org.apache.commons.math3.exception.MathInternalError;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**
  * <p>

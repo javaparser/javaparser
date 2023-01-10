@@ -16,11 +16,6 @@
  */
 package org.apache.commons.math3.geometry.euclidean.threed;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
@@ -30,16 +25,13 @@ import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.PolygonsSet;
 import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.apache.commons.math3.geometry.partitioning.AbstractRegion;
-import org.apache.commons.math3.geometry.partitioning.BSPTree;
-import org.apache.commons.math3.geometry.partitioning.BSPTreeVisitor;
-import org.apache.commons.math3.geometry.partitioning.BoundaryAttribute;
-import org.apache.commons.math3.geometry.partitioning.Hyperplane;
-import org.apache.commons.math3.geometry.partitioning.Region;
-import org.apache.commons.math3.geometry.partitioning.RegionFactory;
-import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
-import org.apache.commons.math3.geometry.partitioning.Transform;
+import org.apache.commons.math3.geometry.partitioning.*;
 import org.apache.commons.math3.util.FastMath;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /** This class represents a 3D region: a set of polyhedrons.
  * @since 3.0

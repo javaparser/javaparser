@@ -23,14 +23,13 @@
 package minicdj.cdx;
 
 import icecaptools.IcecapCompileMe;
+import minicdj.cdx.unannotated.NanoClock;
 
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.Mission;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.StorageParameters;
 import javax.scj.util.Priorities;
-
-import minicdj.cdx.unannotated.NanoClock;
 
 /*@javax.safetycritical.annotate.Scope("cdx.Level0Safelet")*/
 /*@javax.safetycritical.annotate.RunsIn("cdx.CollisionDetectorHandler")*/

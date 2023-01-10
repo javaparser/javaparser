@@ -17,16 +17,11 @@
 
 package org.apache.commons.math3.optimization.direct;
 
-import java.util.Comparator;
-
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
-import org.apache.commons.math3.optimization.PointValuePair;
-import org.apache.commons.math3.optimization.SimpleValueChecker;
-import org.apache.commons.math3.optimization.MultivariateOptimizer;
-import org.apache.commons.math3.optimization.OptimizationData;
+import org.apache.commons.math3.optimization.*;
+
+import java.util.Comparator;
 
 /**
  * This class implements simplex-based direct search optimization.

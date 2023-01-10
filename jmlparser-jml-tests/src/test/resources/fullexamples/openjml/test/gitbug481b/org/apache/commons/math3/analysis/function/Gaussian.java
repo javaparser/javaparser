@@ -17,19 +17,19 @@
 
 package org.apache.commons.math3.analysis.function;
 
-import java.util.Arrays;
-
-import org.apache.commons.math3.analysis.FunctionUtils;
-import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.DifferentiableUnivariateFunction;
+import org.apache.commons.math3.analysis.FunctionUtils;
 import org.apache.commons.math3.analysis.ParametricUnivariateFunction;
+import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
 import org.apache.commons.math3.analysis.differentiation.UnivariateDifferentiableFunction;
+import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.Precision;
+
+import java.util.Arrays;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Gaussian_function">

@@ -16,13 +16,13 @@
  */
 package org.apache.commons.math3.ode;
 
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MaxCountExceededException;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.MaxCountExceededException;
 
 /** Wrapper class to compute Jacobian matrices by finite differences for ODE
  *  which do not compute them by themselves.

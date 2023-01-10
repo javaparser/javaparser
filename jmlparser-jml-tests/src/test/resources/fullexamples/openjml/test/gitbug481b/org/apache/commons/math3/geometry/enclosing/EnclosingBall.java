@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.geometry.enclosing;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.Space;
+
+import java.io.Serializable;
 
 /** This class represents a ball enclosing some points.
  * @param <S> Space type.

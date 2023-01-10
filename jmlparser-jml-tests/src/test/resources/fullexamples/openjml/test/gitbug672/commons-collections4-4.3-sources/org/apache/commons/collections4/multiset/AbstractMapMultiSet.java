@@ -16,6 +16,9 @@
  */
 package org.apache.commons.collections4.multiset;
 
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,9 +26,6 @@ import java.lang.reflect.Array;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.commons.collections4.MultiSet;
-import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
 
 /**
  * Abstract implementation of the {@link MultiSet} interface to simplify the

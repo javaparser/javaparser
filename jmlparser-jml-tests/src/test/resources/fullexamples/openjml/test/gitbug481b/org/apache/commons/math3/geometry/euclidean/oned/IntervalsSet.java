@@ -16,18 +16,14 @@
  */
 package org.apache.commons.math3.geometry.euclidean.oned;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.partitioning.AbstractRegion;
 import org.apache.commons.math3.geometry.partitioning.BSPTree;
 import org.apache.commons.math3.geometry.partitioning.BoundaryProjection;
 import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
 import org.apache.commons.math3.util.Precision;
+
+import java.util.*;
 
 /** This class represents a 1D region: a set of intervals.
  * @since 3.0

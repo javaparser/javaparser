@@ -1,21 +1,14 @@
 package org.jmlspecs.openjmltest;
 
-import static org.junit.Assert.*;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import javax.tools.Diagnostic;
-import javax.tools.DiagnosticCollector;
-import javax.tools.JavaFileObject;
-
 import org.jmlspecs.openjmltest.JmlTestCase.DiagnosticListenerX;
 import org.junit.Assert;
+
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+import java.io.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class OutputCompare {
 

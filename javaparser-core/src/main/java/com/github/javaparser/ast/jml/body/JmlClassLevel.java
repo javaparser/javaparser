@@ -4,13 +4,12 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Jmlish;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.jml.NodeWithJmlTags;
-import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.JmlClassLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.JmlClassLevelMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 

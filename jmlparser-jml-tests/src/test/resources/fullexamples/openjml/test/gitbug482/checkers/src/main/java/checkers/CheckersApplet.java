@@ -1,5 +1,6 @@
 package checkers;
-import javax.swing.JApplet;
+
+import javax.swing.*;
 
 /**
  * Main game applet

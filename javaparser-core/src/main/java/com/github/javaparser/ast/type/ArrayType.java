@@ -33,7 +33,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.Pair;
 
 import java.util.ArrayList;
@@ -132,23 +134,38 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
      */
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
+        TokenRange outerMostTokenRange = null;
         for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
             final List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    TokenRange tokenRange = null;
                     if (type.getTokenRange().isPresent() && pair.getTokenRange().isPresent()) {
-                        tokenRange = new TokenRange(type.getTokenRange().get().getBegin(), pair.getTokenRange().get().getEnd());
+                        TokenRange currentTokenRange = new TokenRange(type.getTokenRange().get().getBegin(), pair.getTokenRange().get().getEnd());
+                        // The end range must be equals to the last array bracket pair in the list
+                        // in the example below:
+                        // Long[][]
+                        //        ^
+                        //        |
+                        // this is the outermost range for the ArrayType
+                        outerMostTokenRange = getOuterMostTokenRange(currentTokenRange, outerMostTokenRange);
                     }
-                    type = new ArrayType(tokenRange, type, pair.getOrigin(), pair.getAnnotations());
-                    if (tokenRange != null) {
-                        type.setRange(tokenRange.toRange().get());
-                    }
+                    type = new ArrayType(outerMostTokenRange, type, pair.getOrigin(), pair.getAnnotations());
                 }
             }
         }
         return type;
+    }
+
+    /*
+     * Returns a {@code TokenRange} with the outermost ending token
+     */
+    private static TokenRange getOuterMostTokenRange(TokenRange tokenRange1, TokenRange tokenRange2) {
+        if (tokenRange2 == null) return tokenRange1;
+        if (tokenRange1.getEnd().getRange().get().isAfter(tokenRange2.getEnd().getRange().get())) {
+            return tokenRange1;
+        }
+        return new TokenRange(tokenRange1.getBegin(), tokenRange2.getEnd());
     }
 
     /**
@@ -311,5 +328,10 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     public int getArrayLevel() {
         return 1 + this.getComponentType().getArrayLevel();
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return new ResolvedArrayType(getComponentType().convertToUsage(context));
     }
 }

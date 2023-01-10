@@ -18,8 +18,8 @@
 package org.apache.commons.math3.analysis.solvers;
 
 import org.apache.commons.math3.analysis.DifferentiableUnivariateFunction;
-import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.exception.TooManyEvaluationsException;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  * Implements <a href="http://mathworld.wolfram.com/NewtonsMethod.html">

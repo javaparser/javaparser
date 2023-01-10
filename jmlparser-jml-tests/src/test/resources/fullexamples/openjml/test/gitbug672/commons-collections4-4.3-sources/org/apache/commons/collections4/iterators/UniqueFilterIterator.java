@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.util.Iterator;
-
 import org.apache.commons.collections4.functors.UniquePredicate;
+
+import java.util.Iterator;
 
 /**
  * A FilterIterator which only returns "unique" Objects.  Internally,

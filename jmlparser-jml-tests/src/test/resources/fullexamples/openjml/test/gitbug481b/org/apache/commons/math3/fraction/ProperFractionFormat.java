@@ -16,14 +16,14 @@
  */
 package org.apache.commons.math3.fraction;
 
+import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.MathUtils;
+
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
-
-import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.util.FastMath;
-import org.apache.commons.math3.util.MathUtils;
 
 /**
  * Formats a Fraction number in proper format.  The number format for each of

@@ -16,15 +16,15 @@
  */
 package org.apache.commons.math3.optimization.general;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.optimization.PointVectorValuePair;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.util.Precision;
+import org.apache.commons.math3.optimization.ConvergenceChecker;
+import org.apache.commons.math3.optimization.PointVectorValuePair;
 import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.Precision;
+
+import java.util.Arrays;
 
 
 /**

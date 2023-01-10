@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.comparators;
 
+import org.apache.commons.collections4.ComparatorUtils;
+
 import java.io.Serializable;
 import java.util.Comparator;
-
-import org.apache.commons.collections4.ComparatorUtils;
 
 /**
  * Reverses the order of another comparator by reversing the arguments

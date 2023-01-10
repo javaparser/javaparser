@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.Predicate;
+
 import java.util.Comparator;
 import java.util.SortedMap;
-
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Decorates another <code>SortedMap</code> to validate that additions

@@ -21,42 +21,28 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
-import static java.util.stream.Collectors.toList;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typeinference.*;
+import com.github.javaparser.utils.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
-import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
-import com.github.javaparser.symbolsolver.resolution.typeinference.ControlFlowLogic;
-import com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper;
-import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
-import com.github.javaparser.symbolsolver.resolution.typeinference.MethodType;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeInference;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeInferenceCache;
-import com.github.javaparser.utils.Pair;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+import static java.util.stream.Collectors.toList;
 
 /**
  * An expression is compatible in a loose invocation context with type T

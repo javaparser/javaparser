@@ -28,16 +28,15 @@ import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.*;
@@ -74,7 +73,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         List<ResolvedReferenceType> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
+        ancestorsOfOther.add(new ReferenceTypeImpl(other));
         for (ResolvedReferenceType ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
@@ -118,7 +117,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
-                String prefix = internalType.getName() + ".";
+                String prefix = internalType.getName().asString() + ".";
                 if (internalType.getName().getId().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
@@ -156,7 +155,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return wrappedNode
                 .getParentNode()
-                .map(node -> JavaParserFactory.toTypeDeclaration(node, typeSolver));
+                .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
     }
     
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {

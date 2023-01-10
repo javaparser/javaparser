@@ -33,19 +33,14 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
-
-import javax.realtime.AbsoluteTime;
-import javax.realtime.Clock;
-import javax.realtime.PeriodicParameters;
-import javax.realtime.PriorityParameters;
-import javax.realtime.RelativeTime;
-import javax.safetycritical.ManagedMemory.ImmortalMemory;
-import javax.scj.util.Const;
-import javax.scj.util.Priorities;
-
 import vm.Memory;
 import vm.ProcessLogic;
 import vm.RealtimeClock;
+
+import javax.realtime.*;
+import javax.safetycritical.ManagedMemory.ImmortalMemory;
+import javax.scj.util.Const;
+import javax.scj.util.Priorities;
 
 /**
  * Defines the VM process context for an executing Java program.

@@ -16,14 +16,10 @@
  */
 package org.apache.commons.collections4.iterators;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-
 import org.apache.commons.collections4.ResettableListIterator;
+
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * Converts an {@link Iterator} into a {@link ResettableListIterator}.

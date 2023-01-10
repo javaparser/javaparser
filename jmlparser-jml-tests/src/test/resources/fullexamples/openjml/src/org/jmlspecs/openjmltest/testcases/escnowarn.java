@@ -1,11 +1,8 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import org.jmlspecs.openjml.Utils;
 import org.jmlspecs.openjmltest.EscBase;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.openjml.runners.ParameterizedWithNames;
 
 /** This class of JUnit tests checks that nowarn works for esc tests.

@@ -22,11 +22,11 @@
  */
 package minicdj.cdx;
 
+import minicdj.collision.Vector3d;
 import minicdj.util.ArrayList;
 import minicdj.util.HashMap;
 import minicdj.util.Iterator;
 import minicdj.util.LinkedList;
-import minicdj.collision.Vector3d;
 
 /**
  * Reduces the set of possible collisions by using a voxel drawing algorithm.

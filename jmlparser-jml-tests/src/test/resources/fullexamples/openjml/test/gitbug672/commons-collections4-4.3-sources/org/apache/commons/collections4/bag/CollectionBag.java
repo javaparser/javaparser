@@ -16,13 +16,13 @@
  */
 package org.apache.commons.collections4.bag;
 
+import org.apache.commons.collections4.Bag;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.commons.collections4.Bag;
 
 /**
  * Decorates another {@link Bag} to comply with the Collection contract.

@@ -21,28 +21,23 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-public class AnnotationSpaceTest {
-    /** Tests that inserted annotations on types are followed by a space. */
+public class AnnotationSpaceTest extends AbstractLexicalPreservingTest {
+    /**
+     * Tests that inserted annotations on types are followed by a space.
+     */
     @Test
     public void test() {
-        CompilationUnit cu =
-                StaticJavaParser.parse(
-                        "public class Foo {\n" +
-                        "    void myMethod(String param);\n" +
-                        "}"
-                        );
-        LexicalPreservingPrinter.setup(cu);
+        considerCode("public class Foo {\n" +
+                "    void myMethod(String param);\n" +
+                "}");
         // Insert the annotation onto the String parameter type.
         Optional<ClassOrInterfaceType> type = cu.findFirst(ClassOrInterfaceType.class);
         type.get().addAnnotation(new MarkerAnnotationExpr("Nullable"));

@@ -16,15 +16,6 @@
  */
 package org.apache.commons.collections4.collection;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.Predicate;
@@ -36,6 +27,8 @@ import org.apache.commons.collections4.multiset.HashMultiSet;
 import org.apache.commons.collections4.multiset.PredicatedMultiSet;
 import org.apache.commons.collections4.queue.PredicatedQueue;
 import org.apache.commons.collections4.set.PredicatedSet;
+
+import java.util.*;
 
 /**
  * Decorates another {@link Collection} to validate that additions

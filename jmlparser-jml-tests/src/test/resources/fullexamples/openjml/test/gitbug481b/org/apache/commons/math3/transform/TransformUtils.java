@@ -16,12 +16,12 @@
  */
 package org.apache.commons.math3.transform;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+
+import java.util.Arrays;
 
 /**
  * Useful functions for the implementation of various transforms.

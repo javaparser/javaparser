@@ -17,11 +17,12 @@
 
 package org.apache.commons.math3.ml.neuralnet.twod.util;
 
-import java.util.Collection;
-import org.apache.commons.math3.ml.neuralnet.Neuron;
-import org.apache.commons.math3.ml.neuralnet.Network;
-import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.apache.commons.math3.ml.distance.DistanceMeasure;
+import org.apache.commons.math3.ml.neuralnet.Network;
+import org.apache.commons.math3.ml.neuralnet.Neuron;
+import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
+
+import java.util.Collection;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/U-Matrix">U-Matrix</a>

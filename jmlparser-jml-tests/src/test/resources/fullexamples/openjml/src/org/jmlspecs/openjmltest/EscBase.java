@@ -1,17 +1,7 @@
 package org.jmlspecs.openjmltest;
 
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
-
-import javax.tools.JavaFileObject;
-
+import com.sun.tools.javac.util.List;
+import com.sun.tools.javac.util.Log;
 import org.jmlspecs.openjml.JmlOption;
 import org.jmlspecs.openjml.JmlSpecs;
 import org.jmlspecs.openjml.esc.MethodProverSMT;
@@ -21,8 +11,16 @@ import org.junit.rules.TestName;
 import org.junit.rules.Timeout;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Log;
+import javax.tools.JavaFileObject;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.fail;
 
 
 public abstract class EscBase extends JmlTestCase {

@@ -1,37 +1,27 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class Issue2592Test {
+public class Issue2592Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void testLPP() {
 
-//        // Either do this before parsing, or manually pass the node to `LexicalPreservingPrinter.setup(node);`
-//        StaticJavaParser.getConfiguration().setLexicalPreservationEnabled(true);
-
-        String s = "public class A {" +
+        considerCode("public class A {" +
                 "  public void m(final int a_original, int b) {" +
                 "  }" +
-                "} ";
-        CompilationUnit cu = StaticJavaParser.parse(s);
+                "} ");
         Optional<MethodDeclaration> md = cu.findFirst(MethodDeclaration.class);
         //all parameters have parent nodes here
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));
-
-        //this seems to be doing nasty things to parent nodes (after a change happens)
-        LexicalPreservingPrinter.setup(cu);
 
         //all parameters have parent nodes here
         assertTrue(md.get().getParameters().stream().allMatch(p -> p.getParentNode().isPresent()));

@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.multiset;
 
-import java.util.Set;
-
 import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.collection.PredicatedCollection;
+
+import java.util.Set;
 
 /**
  * Decorates another {@link MultiSet} to validate that additions

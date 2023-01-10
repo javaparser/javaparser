@@ -16,8 +16,9 @@
  */
 package org.apache.commons.math3.optim;
 
-import java.io.Serializable;
 import org.apache.commons.math3.util.Pair;
+
+import java.io.Serializable;
 
 /**
  * This class holds a point and the vectorial value of an objective function at

@@ -1,22 +1,14 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.jmlspecs.openjmltest.EscBase;
 import org.jmlspecs.openjmltest.StrongarmBase;
-import org.jmlspecs.openjmltest.TCBase;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.openjml.runners.ParameterizedWithNames;
+
+import java.util.Collection;
 
 @Ignore // FIXME - Strongarm is broken - disabling tests
 @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)

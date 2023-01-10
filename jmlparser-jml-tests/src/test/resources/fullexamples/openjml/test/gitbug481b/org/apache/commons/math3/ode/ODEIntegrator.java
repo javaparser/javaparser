@@ -17,11 +17,11 @@
 
 package org.apache.commons.math3.ode;
 
-import java.util.Collection;
-
 import org.apache.commons.math3.analysis.solvers.UnivariateSolver;
 import org.apache.commons.math3.ode.events.EventHandler;
 import org.apache.commons.math3.ode.sampling.StepHandler;
+
+import java.util.Collection;
 
 /**
  * This interface defines the common parts shared by integrators

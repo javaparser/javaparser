@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.functors;
 
+import org.apache.commons.collections4.Predicate;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Predicate implementation that returns true the first time an object is

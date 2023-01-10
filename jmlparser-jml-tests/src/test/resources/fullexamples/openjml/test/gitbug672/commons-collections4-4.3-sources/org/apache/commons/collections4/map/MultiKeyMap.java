@@ -16,14 +16,14 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.MapIterator;
+import org.apache.commons.collections4.keyvalue.MultiKey;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
-
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.keyvalue.MultiKey;
 
 /**
  * A <code>Map</code> implementation that uses multiple keys to map the value.

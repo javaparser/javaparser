@@ -16,8 +16,8 @@
  */
 package org.apache.commons.math3.util;
 
-import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.Field;
+import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 
 /**

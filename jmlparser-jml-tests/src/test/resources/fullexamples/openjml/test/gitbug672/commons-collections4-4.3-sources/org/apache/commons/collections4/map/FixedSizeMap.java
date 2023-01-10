@@ -16,6 +16,10 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.BoundedMap;
+import org.apache.commons.collections4.collection.UnmodifiableCollection;
+import org.apache.commons.collections4.set.UnmodifiableSet;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,10 +27,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections4.BoundedMap;
-import org.apache.commons.collections4.collection.UnmodifiableCollection;
-import org.apache.commons.collections4.set.UnmodifiableSet;
 
 /**
  * Decorates another <code>Map</code> to fix the size, preventing add/remove.

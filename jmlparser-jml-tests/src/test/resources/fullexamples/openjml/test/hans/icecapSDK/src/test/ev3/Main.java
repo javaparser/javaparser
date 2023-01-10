@@ -1,10 +1,6 @@
 package test.ev3;
 
-import devices.ev3.EV3;
-import devices.ev3.Motor;
-import devices.ev3.MotorPort;
-import devices.ev3.SensorPort;
-import devices.ev3.UltraSonicSensor;
+import devices.ev3.*;
 import devices.ev3.Motor.Direction;
 import devices.ev3.MotorPort.MotorPortID;
 import devices.ev3.SensorPort.SensorPortID;

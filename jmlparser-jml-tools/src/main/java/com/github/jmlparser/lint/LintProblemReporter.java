@@ -5,7 +5,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 
 import java.util.function.Consumer;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**

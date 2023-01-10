@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.genetics;
 
-import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Stops after a fixed amount of time has elapsed.

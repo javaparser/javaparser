@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.util;
 
+import org.apache.commons.math3.exception.MaxCountExceededException;
+
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.apache.commons.math3.exception.MaxCountExceededException;
 
 /**
  * This abstract class provides a general framework for managing iterative

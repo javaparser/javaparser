@@ -1,30 +1,25 @@
 package org.jmlspecs.openjmltest.testcases;
-import java.util.List;
-
-import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
-
-import org.jmlspecs.openjml.JmlTree.JmlBinary;
-import org.jmlspecs.openjml.JmlTree.JmlMethodInvocation;
-import org.jmlspecs.openjml.JmlTree.JmlQuantifiedExpr;
-import org.jmlspecs.openjml.JmlTree.JmlSingleton;
-import org.jmlspecs.openjml.JmlTree.JmlVariableDecl;
-import org.jmlspecs.openjmltest.IgnoreFalseAssumptions;
-import org.jmlspecs.openjmltest.ParseBase;
-import org.jmlspecs.openjmltest.TestJavaFileObject;
-import org.junit.Assume;
-import org.junit.Test;
 
 import com.sun.tools.javac.parser.JmlFactory;
 import com.sun.tools.javac.parser.JmlParser;
 import com.sun.tools.javac.parser.Parser;
 import com.sun.tools.javac.parser.Tokens.TokenKind;
-import com.sun.tools.javac.tree.*;
+import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.*;
 import com.sun.tools.javac.util.JCDiagnostic;
 import com.sun.tools.javac.util.Log;
+import org.jmlspecs.openjml.JmlTree.*;
+import org.jmlspecs.openjmltest.IgnoreFalseAssumptions;
+import org.jmlspecs.openjmltest.ParseBase;
+import org.jmlspecs.openjmltest.TestJavaFileObject;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /** These test the AST structure produced by parsing various expressions -
  * checking the node type and position.

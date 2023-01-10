@@ -16,14 +16,14 @@
  */
 package org.apache.commons.collections4.list;
 
+import org.apache.commons.collections4.BoundedCollection;
+import org.apache.commons.collections4.iterators.AbstractListIteratorDecorator;
+import org.apache.commons.collections4.iterators.UnmodifiableIterator;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import org.apache.commons.collections4.BoundedCollection;
-import org.apache.commons.collections4.iterators.AbstractListIteratorDecorator;
-import org.apache.commons.collections4.iterators.UnmodifiableIterator;
 
 /**
  * Decorates another <code>List</code> to fix the size preventing add/remove.

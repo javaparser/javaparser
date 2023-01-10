@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.stat.descriptive.moment;
 
+import org.apache.commons.math3.exception.DimensionMismatchException;
+
 import java.io.Serializable;
 import java.util.Arrays;
-
-import org.apache.commons.math3.exception.DimensionMismatchException;
 
 /**
  * Returns the arithmetic mean of the available vectors.

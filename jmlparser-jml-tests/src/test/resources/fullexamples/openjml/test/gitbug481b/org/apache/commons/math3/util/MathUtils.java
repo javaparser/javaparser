@@ -17,14 +17,14 @@
 
 package org.apache.commons.math3.util;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.NotFiniteNumberException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.exception.util.Localizable;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+
+import java.util.Arrays;
 
 /**
  * Miscellaneous utility functions.

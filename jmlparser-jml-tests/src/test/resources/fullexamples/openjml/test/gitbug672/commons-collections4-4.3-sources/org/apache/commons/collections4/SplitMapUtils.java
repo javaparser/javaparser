@@ -16,15 +16,15 @@
  */
 package org.apache.commons.collections4;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.collections4.collection.UnmodifiableCollection;
 import org.apache.commons.collections4.iterators.UnmodifiableMapIterator;
 import org.apache.commons.collections4.map.EntrySetToMapIteratorAdapter;
 import org.apache.commons.collections4.map.UnmodifiableEntrySet;
 import org.apache.commons.collections4.set.UnmodifiableSet;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Utilities for working with "split maps:" objects that implement {@link Put}

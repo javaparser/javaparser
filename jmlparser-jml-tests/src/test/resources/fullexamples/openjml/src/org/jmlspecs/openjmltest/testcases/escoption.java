@@ -1,14 +1,14 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import java.util.Collection;
-
 import org.jmlspecs.openjml.JmlOption;
 import org.jmlspecs.openjmltest.EscBase;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.openjml.runners.ParameterizedWithNames;
+
+import java.util.Collection;
 
 @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)
 @RunWith(ParameterizedWithNames.class)

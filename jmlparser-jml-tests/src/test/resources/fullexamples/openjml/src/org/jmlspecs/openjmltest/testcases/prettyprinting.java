@@ -1,17 +1,15 @@
 package org.jmlspecs.openjmltest.testcases;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.jmlspecs.openjml.JmlPretty;
-import org.jmlspecs.openjmltest.ParseBase;
-import org.jmlspecs.openjmltest.TestJavaFileObject;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.sun.tools.javac.parser.Parser;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.Log;
+import org.jmlspecs.openjml.JmlPretty;
+import org.jmlspecs.openjmltest.ParseBase;
+import org.jmlspecs.openjmltest.TestJavaFileObject;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /** This set of tests test that the pretty printer outputs properly.  The test
  * checks this by comparing the input code to the output code; before comparison,

@@ -31,8 +31,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -115,6 +118,17 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
         return this;
     }
 
+    /*
+     * A requires static directive indicates that a module is required at compile time, but is optional at runtime.
+     */
+    public boolean isStatic() {
+        return hasModifier(STATIC);
+    }
+
+    /*
+     * Requires transitive—implied readability.
+     * To specify a dependency on another module and to ensure that other modules reading your module also read that dependency
+     */
     public boolean isTransitive() {
         return hasModifier(TRANSITIVE);
     }

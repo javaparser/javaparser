@@ -16,34 +16,18 @@
  */
 package org.apache.commons.collections4.multimap;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.IteratorUtils;
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.MultiSet;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.Transformer;
-import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
-import org.apache.commons.collections4.iterators.EmptyMapIterator;
-import org.apache.commons.collections4.iterators.IteratorChain;
-import org.apache.commons.collections4.iterators.LazyIteratorChain;
-import org.apache.commons.collections4.iterators.TransformIterator;
+import org.apache.commons.collections4.*;
+import org.apache.commons.collections4.iterators.*;
 import org.apache.commons.collections4.keyvalue.AbstractMapEntry;
 import org.apache.commons.collections4.keyvalue.UnmodifiableMapEntry;
 import org.apache.commons.collections4.multiset.AbstractMultiSet;
 import org.apache.commons.collections4.multiset.UnmodifiableMultiSet;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Abstract implementation of the {@link MultiValuedMap} interface to simplify

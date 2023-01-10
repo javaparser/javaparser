@@ -1,7 +1,5 @@
 package account;
 
-import org.jmlspecs.utils.JmlAssertionError;
-
 import unitTest.TestCase;
 
 public class TestConcreteAccount extends TestCase

@@ -16,27 +16,18 @@
  */
 package org.apache.commons.collections4.bidimap;
 
-import static org.apache.commons.collections4.bidimap.TreeBidiMap.DataElement.KEY;
-import static org.apache.commons.collections4.bidimap.TreeBidiMap.DataElement.VALUE;
+import org.apache.commons.collections4.*;
+import org.apache.commons.collections4.iterators.EmptyOrderedMapIterator;
+import org.apache.commons.collections4.keyvalue.UnmodifiableMapEntry;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
-import org.apache.commons.collections4.KeyValue;
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.OrderedBidiMap;
-import org.apache.commons.collections4.OrderedIterator;
-import org.apache.commons.collections4.OrderedMapIterator;
-import org.apache.commons.collections4.iterators.EmptyOrderedMapIterator;
-import org.apache.commons.collections4.keyvalue.UnmodifiableMapEntry;
+import static org.apache.commons.collections4.bidimap.TreeBidiMap.DataElement.KEY;
+import static org.apache.commons.collections4.bidimap.TreeBidiMap.DataElement.VALUE;
 
 /**
  * Red-Black tree-based implementation of BidiMap where all objects added

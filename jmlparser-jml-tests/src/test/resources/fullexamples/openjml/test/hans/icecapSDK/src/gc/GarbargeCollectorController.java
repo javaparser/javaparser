@@ -1,9 +1,8 @@
 package gc;
 
 // test
-import thread.Semaphore;
-import thread.Thread;
 
+import thread.Semaphore;
 import vm.HVMHeap;
 import vm.Heap;
 

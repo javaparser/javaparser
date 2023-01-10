@@ -1,17 +1,14 @@
 package org.jmlspecs.openjmltest.testcases;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+
+import org.jmlspecs.openjmltest.JmlTestCase;
+import org.junit.*;
+import org.junit.rules.TestName;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.jmlspecs.openjmltest.JmlTestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /** Tests running the tool as if from the command-line (for typechecking);
  * includes erroneous command-line argument combinations and combinations

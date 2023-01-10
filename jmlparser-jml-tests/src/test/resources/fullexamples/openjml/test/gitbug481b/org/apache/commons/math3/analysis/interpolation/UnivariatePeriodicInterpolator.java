@@ -17,11 +17,11 @@
 package org.apache.commons.math3.analysis.interpolation;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.util.MathUtils;
-import org.apache.commons.math3.util.MathArrays;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.NonMonotonicSequenceException;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
+import org.apache.commons.math3.util.MathArrays;
+import org.apache.commons.math3.util.MathUtils;
 
 /**
  * Adapter for classes implementing the {@link UnivariateInterpolator}

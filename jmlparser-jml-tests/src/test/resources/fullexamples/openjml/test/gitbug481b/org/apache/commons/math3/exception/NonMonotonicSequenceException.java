@@ -16,8 +16,8 @@
  */
 package org.apache.commons.math3.exception;
 
-import org.apache.commons.math3.util.MathArrays;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.util.MathArrays;
 
 /**
  * Exception to be thrown when the a sequence of values is not monotonically

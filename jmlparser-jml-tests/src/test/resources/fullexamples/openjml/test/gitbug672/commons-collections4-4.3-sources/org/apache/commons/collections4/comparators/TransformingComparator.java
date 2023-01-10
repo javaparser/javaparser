@@ -16,11 +16,11 @@
  */
 package org.apache.commons.collections4.comparators;
 
-import java.io.Serializable;
-import java.util.Comparator;
-
 import org.apache.commons.collections4.ComparatorUtils;
 import org.apache.commons.collections4.Transformer;
+
+import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * Decorates another Comparator with transformation behavior. That is, the

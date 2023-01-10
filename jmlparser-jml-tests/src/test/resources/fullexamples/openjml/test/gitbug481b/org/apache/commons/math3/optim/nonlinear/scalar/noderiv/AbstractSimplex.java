@@ -17,19 +17,14 @@
 
 package org.apache.commons.math3.optim.nonlinear.scalar.noderiv;
 
+import org.apache.commons.math3.analysis.MultivariateFunction;
+import org.apache.commons.math3.exception.*;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.optim.OptimizationData;
+import org.apache.commons.math3.optim.PointValuePair;
+
 import java.util.Arrays;
 import java.util.Comparator;
-
-import org.apache.commons.math3.analysis.MultivariateFunction;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.ZeroException;
-import org.apache.commons.math3.exception.OutOfRangeException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.MathIllegalArgumentException;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.optim.PointValuePair;
-import org.apache.commons.math3.optim.OptimizationData;
 
 /**
  * This class implements the simplex concept.

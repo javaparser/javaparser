@@ -1,9 +1,9 @@
 package reflect;
 
+import icecaptools.IcecapCompileMe;
 import vm.Address;
 import vm.Address32Bit;
 import vm.HardwareObject;
-import icecaptools.IcecapCompileMe;
 
 public class ReferencesArray extends HardwareObject {
 	private short value;

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.Predicate;
+
+import java.io.Serializable;
 
 /**
  * Closure implementation acts as an if statement calling one or other closure

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.FunctorException;
+
+import java.io.Serializable;
 
 /**
  * Closure implementation that always throws an exception.

@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.functors;
 
-import java.io.Serializable;
-
 import org.apache.commons.collections4.Predicate;
+
+import java.io.Serializable;
 
 /**
  * Abstract base class for quantification predicates, e.g. All, Any, None.

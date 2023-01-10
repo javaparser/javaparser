@@ -119,6 +119,10 @@ public class CsmToken implements CsmElement {
         return TokenTypes.isWhitespace(tokenType);
     }
 
+    public boolean isWhiteSpaceNotEol() {
+        return isWhiteSpace() && !isNewLine();
+    }
+
     public boolean isNewLine() {
         return TokenTypes.isEndOfLineToken(tokenType);
     }

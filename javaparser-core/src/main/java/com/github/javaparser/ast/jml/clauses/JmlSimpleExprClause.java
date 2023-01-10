@@ -13,11 +13,12 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JmlDefaultClauseMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.JmlSimpleExprClauseMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
+
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Alexander Weigl

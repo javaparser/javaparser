@@ -21,30 +21,21 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -73,9 +64,9 @@ class ReflectionClassAdapter {
             List<ResolvedType> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                     .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                     .collect(Collectors.toList());
-            return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters, typeSolver));
+            return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeParameters));
         }
-        return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver), typeSolver));
+        return Optional.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver)));
     }
 
     public List<ResolvedReferenceType> getInterfaces() {
@@ -86,9 +77,9 @@ class ReflectionClassAdapter {
                 List<ResolvedType> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                         .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                         .collect(Collectors.toList());
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) ((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters, typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) ((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters));
             } else {
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) superInterface, typeSolver), typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) superInterface, typeSolver)));
             }
         }
         return interfaces;
@@ -96,22 +87,18 @@ class ReflectionClassAdapter {
 
     public List<ResolvedReferenceType> getAncestors() {
         List<ResolvedReferenceType> ancestors = new LinkedList<>();
-        if (getSuperClass().isPresent()) {
-            ReferenceTypeImpl superClass = getSuperClass().get();
-            ancestors.add(superClass);
-        } else {
-            // Inject the implicitly added extends java.lang.Object
-            ReferenceTypeImpl object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-            ancestors.add(object);
-        }
-        ancestors.addAll(getInterfaces());
-        for (int i = 0; i < ancestors.size(); i++) {
-            ResolvedReferenceType ancestor = ancestors.get(i);
-            if (ancestor.hasName() && ancestor.isJavaLangObject()) {
-                ancestors.remove(i);
-                i--;
+        if (typeDeclaration.isClass() && !Object.class.getCanonicalName().equals(clazz.getCanonicalName())) {
+            if (getSuperClass().isPresent()) {
+                ReferenceTypeImpl superClass = getSuperClass().get();
+                ancestors.add(superClass);
+            } else {
+                // Inject the implicitly added extends java.lang.Object
+                ReferenceTypeImpl object = new ReferenceTypeImpl(
+                        new ReflectionClassDeclaration(Object.class, typeSolver));
+                ancestors.add(object);
             }
         }
+        ancestors.addAll(getInterfaces());
         return ancestors;
     }
 

@@ -1,7 +1,6 @@
 package org.jmlspecs.openjmltest.testcases;
 
 import org.jmlspecs.openjmltest.RacBase;
-import org.junit.Assert;
 import org.junit.Test;
 
 /** These tests exercise the RAC checking.  They compile a test class 

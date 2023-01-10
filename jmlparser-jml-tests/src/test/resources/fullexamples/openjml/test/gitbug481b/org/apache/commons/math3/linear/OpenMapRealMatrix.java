@@ -17,13 +17,13 @@
 
 package org.apache.commons.math3.linear;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.util.OpenIntToDoubleHashMap;
+
+import java.io.Serializable;
 
 /**
  * Sparse matrix implementation based on an open addressed map.

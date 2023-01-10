@@ -1,5 +1,4 @@
 import java.io.Reader;
-import java.io.Reader;
 
 public class GetValue {
 

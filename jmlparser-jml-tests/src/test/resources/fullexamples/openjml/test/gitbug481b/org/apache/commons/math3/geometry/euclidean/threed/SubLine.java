@@ -16,9 +16,6 @@
  */
 package org.apache.commons.math3.geometry.euclidean.threed;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.euclidean.oned.Euclidean1D;
@@ -26,6 +23,9 @@ import org.apache.commons.math3.geometry.euclidean.oned.Interval;
 import org.apache.commons.math3.geometry.euclidean.oned.IntervalsSet;
 import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
 import org.apache.commons.math3.geometry.partitioning.Region.Location;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** This class represents a subset of a {@link Line}.
  * @since 3.0

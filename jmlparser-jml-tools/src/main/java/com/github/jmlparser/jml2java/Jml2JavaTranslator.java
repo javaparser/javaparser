@@ -1,6 +1,5 @@
 package com.github.jmlparser.jml2java;
 
-import com.beust.ah.A;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;

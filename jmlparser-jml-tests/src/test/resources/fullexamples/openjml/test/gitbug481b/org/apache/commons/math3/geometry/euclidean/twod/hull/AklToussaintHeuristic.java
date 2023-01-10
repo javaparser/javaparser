@@ -16,11 +16,11 @@
  */
 package org.apache.commons.math3.geometry.euclidean.twod.hull;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 /**
  * A simple heuristic to improve the performance of convex hull algorithms.

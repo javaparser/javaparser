@@ -16,19 +16,13 @@
  */
 package org.apache.commons.collections4.set;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.OrderedIterator;
 import org.apache.commons.collections4.functors.UniquePredicate;
 import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
 import org.apache.commons.collections4.list.UnmodifiableList;
+
+import java.util.*;
 
 /**
  * Decorates another <code>Set</code> to ensure that the order of addition is

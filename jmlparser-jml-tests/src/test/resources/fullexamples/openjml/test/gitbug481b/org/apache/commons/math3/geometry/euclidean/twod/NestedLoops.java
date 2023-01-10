@@ -16,10 +16,6 @@
  */
 package org.apache.commons.math3.geometry.euclidean.twod;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.geometry.Point;
@@ -27,6 +23,10 @@ import org.apache.commons.math3.geometry.euclidean.oned.IntervalsSet;
 import org.apache.commons.math3.geometry.partitioning.Region;
 import org.apache.commons.math3.geometry.partitioning.RegionFactory;
 import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /** This class represent a tree of nested 2D boundary loops.
 

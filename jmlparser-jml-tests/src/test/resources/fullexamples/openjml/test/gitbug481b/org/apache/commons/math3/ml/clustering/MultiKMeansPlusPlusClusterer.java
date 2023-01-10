@@ -17,13 +17,13 @@
 
 package org.apache.commons.math3.ml.clustering;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.commons.math3.exception.ConvergenceException;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.ml.clustering.evaluation.ClusterEvaluator;
 import org.apache.commons.math3.ml.clustering.evaluation.SumOfClusterVariances;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A wrapper around a k-means++ clustering algorithm which performs multiple trials

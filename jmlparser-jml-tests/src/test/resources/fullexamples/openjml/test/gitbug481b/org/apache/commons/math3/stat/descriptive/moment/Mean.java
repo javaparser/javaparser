@@ -16,14 +16,14 @@
  */
 package org.apache.commons.math3.stat.descriptive.moment;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.apache.commons.math3.stat.descriptive.WeightedEvaluation;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.apache.commons.math3.util.MathUtils;
+
+import java.io.Serializable;
 
 /**
  * <p>Computes the arithmetic mean of a set of values. Uses the definitional

@@ -16,9 +16,6 @@
  */
 package org.apache.commons.math3.geometry.partitioning;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.exception.MathIllegalStateException;
 import org.apache.commons.math3.exception.MathInternalError;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
@@ -26,6 +23,9 @@ import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.Space;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.util.FastMath;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** This class represent a Binary Space Partition tree.
 

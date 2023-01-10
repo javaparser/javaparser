@@ -8,7 +8,6 @@ import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlSimpleExprClause;
 import com.github.javaparser.ast.jml.stmt.JmlExpressionStmt;
-import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.jmlparser.lint.LintProblemReporter;
 import com.github.jmlparser.lint.LintRuleVisitor;

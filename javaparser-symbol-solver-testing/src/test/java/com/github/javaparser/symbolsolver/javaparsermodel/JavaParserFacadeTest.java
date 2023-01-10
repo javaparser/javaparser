@@ -21,8 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
@@ -30,35 +31,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavaParserFacadeTest {
 
-    private final TypeSolver typeSolver = new ReflectionTypeSolver();
+    private final Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
 
     @Test
     void classToResolvedType_givenPrimitiveShouldBeAReflectionPrimitiveDeclaration() {
-        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).classToResolvedType(int.class);
+        ResolvedType resolvedType = symbolSolver.classToResolvedType(int.class);
         assertEquals(int.class.getCanonicalName(), resolvedType.describe());
     }
 
     @Test
     void classToResolvedType_givenClassShouldBeAReflectionClassDeclaration() {
-        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).classToResolvedType(String.class);
+        ResolvedType resolvedType = symbolSolver.classToResolvedType(String.class);
         assertEquals(String.class.getCanonicalName(), resolvedType.describe());
     }
 
     @Test
     void classToResolvedType_givenClassShouldBeAReflectionInterfaceDeclaration() {
-        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).classToResolvedType(String.class);
+        ResolvedType resolvedType = symbolSolver.classToResolvedType(String.class);
         assertEquals(String.class.getCanonicalName(), resolvedType.describe());
     }
 
     @Test
     void classToResolvedType_givenEnumShouldBeAReflectionEnumDeclaration() {
-        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).classToResolvedType(TestEnum.class);
+        ResolvedType resolvedType = symbolSolver.classToResolvedType(TestEnum.class);
         assertEquals(TestEnum.class.getCanonicalName(), resolvedType.describe());
     }
 
     @Test
     void classToResolvedType_givenAnnotationShouldBeAReflectionAnnotationDeclaration() {
-        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).classToResolvedType(Override.class);
+        ResolvedType resolvedType = symbolSolver.classToResolvedType(Override.class);
         assertEquals(Override.class.getCanonicalName(), resolvedType.describe());
     }
 

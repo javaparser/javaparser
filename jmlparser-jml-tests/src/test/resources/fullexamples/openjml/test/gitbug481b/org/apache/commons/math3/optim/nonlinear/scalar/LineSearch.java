@@ -16,15 +16,9 @@
  */
 package org.apache.commons.math3.optim.nonlinear.scalar;
 
-import org.apache.commons.math3.optim.univariate.UnivariateOptimizer;
-import org.apache.commons.math3.optim.univariate.BrentOptimizer;
-import org.apache.commons.math3.optim.univariate.BracketFinder;
-import org.apache.commons.math3.optim.univariate.UnivariatePointValuePair;
-import org.apache.commons.math3.optim.univariate.SimpleUnivariateValueChecker;
-import org.apache.commons.math3.optim.univariate.SearchInterval;
-import org.apache.commons.math3.optim.univariate.UnivariateObjectiveFunction;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.optim.MaxEval;
+import org.apache.commons.math3.optim.univariate.*;
 
 /**
  * Class for finding the minimum of the objective function along a given

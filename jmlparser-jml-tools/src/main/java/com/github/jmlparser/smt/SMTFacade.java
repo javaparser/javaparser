@@ -1,9 +1,7 @@
 package com.github.jmlparser.smt;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.jmlparser.smt.model.SExpr;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Alexander Weigl

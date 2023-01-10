@@ -17,8 +17,9 @@
 
 package org.apache.commons.math3.ml.neuralnet.sofm;
 
-import java.util.Iterator;
 import org.apache.commons.math3.ml.neuralnet.Network;
+
+import java.util.Iterator;
 
 /**
  * Trainer for Kohonen's Self-Organizing Map.

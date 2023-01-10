@@ -21,35 +21,23 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import java.lang.annotation.Inherited;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.lang.annotation.Inherited;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Malte Skoruppa
@@ -205,11 +193,6 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public Optional<AnnotationDeclaration> toAst() {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(final String name,
                                                     final List<ResolvedType> parameterTypes,
                                                     final Context invokationContext,
@@ -218,7 +201,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
             typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
-            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+            InferenceContext inferenceContext = new InferenceContext(typeSolver);
             MethodUsage methodUsage = res.get();
             int i = 0;
             List<ResolvedType> parameters = new LinkedList<>();
@@ -251,7 +234,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
         return ReflectionMethodResolutionLogic.solveMethod(name, argumentsTypes, staticOnly,
             typeSolver,this, clazz);
     }
-    
+
     @Override
     public boolean isInheritable() {
         return clazz.getAnnotation(Inherited.class) != null;

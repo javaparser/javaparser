@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.ml.distance;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
+
+import java.io.Serializable;
 
 /**
  * Interface for distance measures of n-dimensional vectors.

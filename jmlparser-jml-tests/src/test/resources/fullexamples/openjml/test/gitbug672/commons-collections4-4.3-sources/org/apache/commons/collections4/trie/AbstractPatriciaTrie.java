@@ -16,23 +16,12 @@
  */
 package org.apache.commons.collections4.trie;
 
+import org.apache.commons.collections4.OrderedMapIterator;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedMap;
-
-import org.apache.commons.collections4.OrderedMapIterator;
+import java.util.*;
 
 /**
  * This class implements the base PATRICIA algorithm and everything that

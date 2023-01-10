@@ -1,24 +1,13 @@
 package gui;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
 import core.ExamDataBase;
 import core.ExamDataBaseException;
 import core.ExamDataBaseImpl;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo
@@ -60,7 +49,7 @@ public class ExamDialog extends javax.swing.JDialog {
     	stepTextField.setText("3");
     	maxPointsTextField.setText("60");
     	examTableModel.setColumnCount(7);
-    	examTableModel.setColumnIdentifiers(new String[]{"Matrikelnr.", "Vorname", "Nachname", "Punkte", "Bonus", "Rücktritt", "Note"});
+    	examTableModel.setColumnIdentifiers(new String[]{"Matrikelnr.", "Vorname", "Nachname", "Punkte", "Bonus", "Rï¿½cktritt", "Note"});
     	examTableModel.setRowCount(0);
     	examTableModel.addRow(new String[]{"123456", "Erwin", "Mustermann", "26.5", "6", "false", "?"});
     	examTableModel.addRow(new String[]{"0001", "The", "Hoff", "20", "1.5", "false", "?"});
@@ -133,7 +122,7 @@ public class ExamDialog extends javax.swing.JDialog {
                 edb.setBackedOut(matrNr, backedOut);
 
                 if(backedOut) {
-                    examTableModel.setValueAt("zurückgetreten", i, 6);
+                    examTableModel.setValueAt("zurï¿½ckgetreten", i, 6);
                 } else if(points==-1){
                     examTableModel.setValueAt("nk", i, 6);
                 } else {

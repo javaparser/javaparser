@@ -5,8 +5,6 @@ import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author Alexander Weigl
  * @version 1 (11.10.22)

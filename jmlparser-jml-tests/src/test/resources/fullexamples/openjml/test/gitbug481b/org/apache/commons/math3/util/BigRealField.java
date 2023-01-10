@@ -17,10 +17,10 @@
 
 package org.apache.commons.math3.util;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
+
+import java.io.Serializable;
 
 /**
  * Representation of real numbers with arbitrary precision field.

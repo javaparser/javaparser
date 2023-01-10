@@ -16,24 +16,10 @@
  */
 package org.apache.commons.collections4;
 
+import org.apache.commons.collections4.functors.*;
+
 import java.util.Collection;
 import java.util.Map;
-
-import org.apache.commons.collections4.functors.ChainedTransformer;
-import org.apache.commons.collections4.functors.CloneTransformer;
-import org.apache.commons.collections4.functors.ClosureTransformer;
-import org.apache.commons.collections4.functors.ConstantTransformer;
-import org.apache.commons.collections4.functors.EqualPredicate;
-import org.apache.commons.collections4.functors.ExceptionTransformer;
-import org.apache.commons.collections4.functors.FactoryTransformer;
-import org.apache.commons.collections4.functors.IfTransformer;
-import org.apache.commons.collections4.functors.InstantiateTransformer;
-import org.apache.commons.collections4.functors.InvokerTransformer;
-import org.apache.commons.collections4.functors.MapTransformer;
-import org.apache.commons.collections4.functors.NOPTransformer;
-import org.apache.commons.collections4.functors.PredicateTransformer;
-import org.apache.commons.collections4.functors.StringValueTransformer;
-import org.apache.commons.collections4.functors.SwitchTransformer;
 
 /**
  * <code>TransformerUtils</code> provides reference implementations and

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.math3.util;
 
-import java.io.PrintStream;
-
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
+
+import java.io.PrintStream;
 
 /**
  * Faster, more accurate, portable alternative to {@link Math} and

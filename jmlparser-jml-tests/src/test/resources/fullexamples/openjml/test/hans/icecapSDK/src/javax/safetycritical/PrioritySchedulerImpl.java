@@ -25,8 +25,6 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import vm.Process;
-
 final class PrioritySchedulerImpl implements vm.Scheduler {
 	
 	PrioritySchedulerImpl() {		

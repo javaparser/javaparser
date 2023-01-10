@@ -1,9 +1,11 @@
 // Calculator-JML program by Pushkar Ogale
 // CS 5374 Fall 2013
 // NOTE: Added as a test case because it crashed (with RAC) under 12/12 release
-import java.io.*;
-import java.util.*;
-import java.math.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
 
 //import java.lang.*;
 

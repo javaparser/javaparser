@@ -17,8 +17,6 @@
 
 package org.apache.commons.math3.ode.nonstiff;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
 import org.apache.commons.math3.exception.NoBracketingException;
@@ -29,6 +27,8 @@ import org.apache.commons.math3.ode.EquationsMapper;
 import org.apache.commons.math3.ode.ExpandableStatefulODE;
 import org.apache.commons.math3.ode.sampling.NordsieckStepInterpolator;
 import org.apache.commons.math3.util.FastMath;
+
+import java.util.Arrays;
 
 
 /**

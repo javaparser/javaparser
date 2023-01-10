@@ -27,8 +27,8 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.PointValuePair;
 import org.apache.commons.math3.optimization.MultivariateOptimizer;
+import org.apache.commons.math3.optimization.PointValuePair;
 import org.apache.commons.math3.util.FastMath;
 
 /**

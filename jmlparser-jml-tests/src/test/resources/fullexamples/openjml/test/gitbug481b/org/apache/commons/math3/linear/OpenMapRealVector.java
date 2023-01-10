@@ -16,8 +16,6 @@
  */
 package org.apache.commons.math3.linear;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.exception.NotPositiveException;
@@ -26,6 +24,8 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.OpenIntToDoubleHashMap;
 import org.apache.commons.math3.util.OpenIntToDoubleHashMap.Iterator;
+
+import java.io.Serializable;
 
 /**
  * This class implements the {@link RealVector} interface with a

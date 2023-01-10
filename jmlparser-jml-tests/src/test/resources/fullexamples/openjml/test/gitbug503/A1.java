@@ -1,7 +1,3 @@
-import java.io.FilterReader;
-import java.util.Collection;
-import java.util.List;
-
 public class A1<T> {
     //@ @org.jmlspecs.annotation.Options("-checkFeasibility=none")
     public int h() {

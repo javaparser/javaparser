@@ -16,6 +16,13 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.OrderedMap;
+import org.apache.commons.collections4.OrderedMapIterator;
+import org.apache.commons.collections4.Unmodifiable;
+import org.apache.commons.collections4.collection.UnmodifiableCollection;
+import org.apache.commons.collections4.iterators.UnmodifiableOrderedMapIterator;
+import org.apache.commons.collections4.set.UnmodifiableSet;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,13 +30,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections4.OrderedMap;
-import org.apache.commons.collections4.OrderedMapIterator;
-import org.apache.commons.collections4.Unmodifiable;
-import org.apache.commons.collections4.collection.UnmodifiableCollection;
-import org.apache.commons.collections4.iterators.UnmodifiableOrderedMapIterator;
-import org.apache.commons.collections4.set.UnmodifiableSet;
 
 /**
  * Decorates another <code>OrderedMap</code> to ensure it can't be altered.

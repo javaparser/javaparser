@@ -1,4 +1,4 @@
-import java.io.*;
+import java.io.IOException;
 
 public class Test2 {
     public static class Foo implements Comparable {

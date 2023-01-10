@@ -3,9 +3,6 @@
  */
 package com.foo;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
@@ -15,6 +12,9 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+
+import java.io.File;
+import java.io.IOException;
 
 public class Widget extends com.foo.base.Widget {
     private static final String PROJECT_ROOT = "/Users/peloquina/dev/javasymbolsolver-issue";

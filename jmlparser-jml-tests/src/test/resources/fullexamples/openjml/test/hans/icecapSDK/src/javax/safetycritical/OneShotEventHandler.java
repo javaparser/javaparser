@@ -25,12 +25,7 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.realtime.AbsoluteTime;
-import javax.realtime.AperiodicParameters;
-import javax.realtime.Clock;
-import javax.realtime.HighResolutionTime;
-import javax.realtime.PriorityParameters;
-import javax.realtime.RelativeTime;
+import javax.realtime.*;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;

@@ -21,16 +21,15 @@
 
 package com.github.javaparser.symbolsolver.declarations.common;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class MethodDeclarationCommonLogic {
         // We now look at the type parameter for the method which we can derive from the parameter types
         // and then we replace them in the return type
         // Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
-        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+        InferenceContext inferenceContext = new InferenceContext(typeSolver);
         for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
             ResolvedParameterDeclaration formalParamDecl = methodDeclaration.getParam(i);
             ResolvedType formalParamType = formalParamDecl.getType();

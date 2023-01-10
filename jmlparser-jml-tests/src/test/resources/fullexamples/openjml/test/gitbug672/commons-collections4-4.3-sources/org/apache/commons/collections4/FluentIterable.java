@@ -16,14 +16,9 @@
  */
 package org.apache.commons.collections4;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.collections4.iterators.SingletonIterator;
+
+import java.util.*;
 
 /**
  * A FluentIterable provides a powerful yet simple API for manipulating

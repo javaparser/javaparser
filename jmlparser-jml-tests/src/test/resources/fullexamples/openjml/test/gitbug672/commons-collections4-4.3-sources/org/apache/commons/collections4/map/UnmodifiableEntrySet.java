@@ -16,16 +16,16 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.Unmodifiable;
+import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
+import org.apache.commons.collections4.keyvalue.AbstractMapEntryDecorator;
+import org.apache.commons.collections4.set.AbstractSetDecorator;
+
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections4.Unmodifiable;
-import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
-import org.apache.commons.collections4.keyvalue.AbstractMapEntryDecorator;
-import org.apache.commons.collections4.set.AbstractSetDecorator;
 
 /**
  * Decorates a map entry <code>Set</code> to ensure it can't be altered.

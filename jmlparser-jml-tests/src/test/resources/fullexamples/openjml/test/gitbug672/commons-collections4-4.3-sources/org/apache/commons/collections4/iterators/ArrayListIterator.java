@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.iterators;
 
+import org.apache.commons.collections4.ResettableListIterator;
+
 import java.lang.reflect.Array;
 import java.util.NoSuchElementException;
-
-import org.apache.commons.collections4.ResettableListIterator;
 
 /**
  * Implements a {@link java.util.ListIterator} over an array.

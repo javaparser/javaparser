@@ -17,16 +17,16 @@
 
 package org.apache.commons.math3.fraction;
 
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
+import org.apache.commons.math3.exception.MathParseException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
-
-import org.apache.commons.math3.exception.MathIllegalArgumentException;
-import org.apache.commons.math3.exception.MathParseException;
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 /**
  * Formats a BigFraction number in proper format or improper format.

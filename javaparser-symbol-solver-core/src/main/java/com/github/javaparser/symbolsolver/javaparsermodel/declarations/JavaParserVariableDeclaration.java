@@ -21,22 +21,22 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.Optional;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserVariableDeclaration implements ResolvedValueDeclaration, AssociableToAST<VariableDeclarationExpr> {
+public class JavaParserVariableDeclaration implements ResolvedValueDeclaration {
 
     private VariableDeclarator variableDeclarator;
     private VariableDeclarationExpr wrappedNode;
@@ -88,7 +88,8 @@ public class JavaParserVariableDeclaration implements ResolvedValueDeclaration, 
     }
 
     @Override
-    public Optional<VariableDeclarationExpr> toAst() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
+
 }

@@ -16,20 +16,13 @@
  */
 package org.apache.commons.collections4.list;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.iterators.AbstractIteratorDecorator;
 import org.apache.commons.collections4.iterators.AbstractListIteratorDecorator;
 import org.apache.commons.collections4.set.UnmodifiableSet;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * Decorates a <code>List</code> to ensure that no duplicates are present much

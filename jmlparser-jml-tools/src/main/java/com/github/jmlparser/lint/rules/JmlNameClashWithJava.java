@@ -1,6 +1,5 @@
 package com.github.jmlparser.lint.rules;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlForallClause;
 import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
 import com.github.javaparser.ast.jml.clauses.JmlSimpleExprClause;

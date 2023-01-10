@@ -16,12 +16,12 @@
  */
 package org.apache.commons.collections4;
 
+import org.apache.commons.collections4.iterators.EnumerationIterator;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import org.apache.commons.collections4.iterators.EnumerationIterator;
 
 /**
  * Provides utility methods for {@link Enumeration} instances.

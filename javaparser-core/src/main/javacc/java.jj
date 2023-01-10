@@ -1640,13 +1640,14 @@ ModifierHolder ModifiersReq():
  * Also note that JavaParser handles the hierarchy/specialisations of classes, interfaces, and enums differently to the JLS.
  * <ul>
  *   <li>This {@code ClassOrInterfaceDeclaration} refers to the {@code NormalClassDeclaration} and {@code NormalInterfaceDeclaration},</li>
- *   <li>while {@code AnnotationTypeDeclaration} and {@code EnumDeclaration} are handled separately within this grammar.</li>
+ *   <li>while {@code AnnotationTypeDeclaration}, {@code EnumDeclaration}, and {@code RecordDeclaration} are handled separately within this grammar.</li>
  * </ul>
- * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1
+ * https://docs.oracle.com/javase/specs/jls/se17/html/jls-8.html#jls-8.1
  * <pre>{@code
  *     ClassDeclaration:
  *         NormalClassDeclaration
  *         EnumDeclaration
+ *         RecordDeclaration
  *     NormalClassDeclaration:
  *         {ClassModifier} class TypeIdentifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
  * }</pre>
@@ -1687,11 +1688,11 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
 }
 
 /**
- * https://openjdk.java.net/jeps/395#Java-grammar
+ * https://docs.oracle.com/javase/specs/jls/se17/html/jls-8.html#jls-8.10
  * <pre>{@code
  *     RecordDeclaration:
  *        {ClassModifier} `record` TypeIdentifier [TypeParameters]
- *          RecordHeader [SuperInterfaces] RecordBody
+ *          RecordHeader [ClassImplements] RecordBody
  *
  *      RecordHeader:
  *       `(` [RecordComponentList] `)`
@@ -1700,11 +1701,14 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
  *       RecordComponent { `,` RecordComponent}
  *
  *      RecordComponent:
- *       {Annotation} UnannType Identifier
+ *       {RecordComponentModifier} UnannType Identifier
  *       VariableArityRecordComponent
  *
  *      VariableArityRecordComponent:
- *       {Annotation} UnannType {Annotation} `...` Identifier
+ *       {RecordComponentModifier} UnannType {Annotation} `...` Identifier
+ *
+ *      RecordComponentModifier:
+ *       Annotation
  *
  *      RecordBody:
  *        `{` {RecordBodyDeclaration} `}`
@@ -2134,6 +2138,9 @@ BodyDeclaration<?> RecordBodyDeclaration():
          |
             LOOKAHEAD("enum")
             ret = EnumDeclaration(modifiers)
+         |
+            LOOKAHEAD("record")
+            ret = RecordDeclaration(modifiers)
          |
             LOOKAHEAD("@" "interface")
             ret = AnnotationTypeDeclaration(modifiers)

@@ -16,6 +16,9 @@
  */
 package org.apache.commons.collections4.map;
 
+import org.apache.commons.collections4.MapIterator;
+import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,17 +26,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
+import java.util.*;
 
 /**
  * An abstract implementation of a hash-based map that allows the entries to

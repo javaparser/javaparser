@@ -16,8 +16,6 @@
  */
 package org.apache.commons.math3.analysis.differentiation;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.UnivariateMatrixFunction;
 import org.apache.commons.math3.analysis.UnivariateVectorFunction;
@@ -26,6 +24,8 @@ import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.commons.math3.util.FastMath;
+
+import java.io.Serializable;
 
 /** Univariate functions differentiator using finite differences.
  * <p>

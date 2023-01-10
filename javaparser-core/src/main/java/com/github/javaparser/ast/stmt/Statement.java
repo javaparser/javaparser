@@ -20,18 +20,20 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.StatementMetaModel;
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Generated;
-import java.util.function.Consumer;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A base class for all statements.

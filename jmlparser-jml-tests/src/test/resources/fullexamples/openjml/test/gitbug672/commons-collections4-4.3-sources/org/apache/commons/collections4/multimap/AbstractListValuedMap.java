@@ -16,14 +16,10 @@
  */
 package org.apache.commons.collections4.multimap;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.ListValuedMap;
+
+import java.util.*;
 
 /**
  * Abstract implementation of the {@link ListValuedMap} interface to simplify

@@ -1,11 +1,10 @@
 package test.CR16C;
 
+import devices.CR16C.KT4585.CR16CRealtimeClock;
+import devices.CR16C.KT4585.LED;
 import io.UARTWriter;
 
 import java.io.IOException;
-
-import devices.CR16C.KT4585.CR16CRealtimeClock;
-import devices.CR16C.KT4585.LED;
 
 public class TestRealtimeClock {
 

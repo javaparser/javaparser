@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.multiset;
 
-import java.util.Set;
-
 import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.collection.AbstractCollectionDecorator;
+
+import java.util.Set;
 
 /**
  * Decorates another <code>MultSet</code> to provide additional behaviour.

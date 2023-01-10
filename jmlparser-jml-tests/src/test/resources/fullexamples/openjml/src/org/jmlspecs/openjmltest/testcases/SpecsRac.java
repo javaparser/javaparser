@@ -1,39 +1,16 @@
 package org.jmlspecs.openjmltest.testcases;
 
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.tools.JavaFileObject;
-
 import org.jmlspecs.openjml.JmlOption;
-import org.jmlspecs.openjml.JmlSpecs;
-import org.jmlspecs.openjml.JmlSpecs.Dir;
 import org.jmlspecs.openjmltest.RacBase;
-import org.jmlspecs.openjmltest.TCBase;
-import org.jmlspecs.openjmltest.TestJavaFileObject;
-import org.jmlspecs.openjml.Main;
-import org.jmlspecs.openjml.Utils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized.Parameters;
 import org.openjml.runners.ParameterizedWithNames;
 
-import com.sun.tools.javac.file.JavacFileManager;
-import com.sun.tools.javac.util.Context;
-import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Log;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)

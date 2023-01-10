@@ -16,19 +16,10 @@
  */
 package org.apache.commons.collections4;
 
+import org.apache.commons.collections4.functors.*;
+
 import java.util.Collection;
 import java.util.Map;
-
-import org.apache.commons.collections4.functors.ChainedClosure;
-import org.apache.commons.collections4.functors.EqualPredicate;
-import org.apache.commons.collections4.functors.ExceptionClosure;
-import org.apache.commons.collections4.functors.ForClosure;
-import org.apache.commons.collections4.functors.IfClosure;
-import org.apache.commons.collections4.functors.InvokerTransformer;
-import org.apache.commons.collections4.functors.NOPClosure;
-import org.apache.commons.collections4.functors.SwitchClosure;
-import org.apache.commons.collections4.functors.TransformerClosure;
-import org.apache.commons.collections4.functors.WhileClosure;
 
 /**
  * <code>ClosureUtils</code> provides reference implementations and utilities

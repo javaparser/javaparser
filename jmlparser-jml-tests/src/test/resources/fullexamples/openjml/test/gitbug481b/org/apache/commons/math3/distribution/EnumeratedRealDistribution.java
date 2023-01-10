@@ -16,21 +16,16 @@
  */
 package org.apache.commons.math3.distribution;
 
+import org.apache.commons.math3.exception.*;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.Well19937c;
+import org.apache.commons.math3.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.MathArithmeticException;
-import org.apache.commons.math3.exception.NotANumberException;
-import org.apache.commons.math3.exception.NotFiniteNumberException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.OutOfRangeException;
-import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.random.Well19937c;
-import org.apache.commons.math3.util.Pair;
 
 /**
  * <p>Implementation of a real-valued {@link EnumeratedDistribution}.

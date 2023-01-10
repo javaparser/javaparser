@@ -16,12 +16,9 @@
  */
 package org.apache.commons.math3.stat.descriptive;
 
-import java.io.Serializable;
-import java.util.Arrays;
-
-import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MathIllegalStateException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
@@ -31,10 +28,13 @@ import org.apache.commons.math3.stat.descriptive.rank.Min;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfLogs;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfSquares;
-import org.apache.commons.math3.util.MathUtils;
-import org.apache.commons.math3.util.MathArrays;
-import org.apache.commons.math3.util.Precision;
 import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.MathArrays;
+import org.apache.commons.math3.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
+
+import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * <p>Computes summary statistics for a stream of n-tuples added using the

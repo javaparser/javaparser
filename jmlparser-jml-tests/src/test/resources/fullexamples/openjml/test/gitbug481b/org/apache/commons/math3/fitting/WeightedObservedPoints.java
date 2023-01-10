@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.fitting;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Simple container for weighted observed points used

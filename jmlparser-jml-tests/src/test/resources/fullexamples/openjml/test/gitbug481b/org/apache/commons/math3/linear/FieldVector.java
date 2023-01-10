@@ -18,11 +18,7 @@ package org.apache.commons.math3.linear;
 
 import org.apache.commons.math3.Field;
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.exception.MathArithmeticException;
-import org.apache.commons.math3.exception.NotPositiveException;
-import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.*;
 
 /**
  * Interface defining a field-valued vector with basic algebraic operations.

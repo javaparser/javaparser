@@ -5,15 +5,14 @@
  * (do not modify this comment, it is used by JMLUnitNG clean-up routines)
  */
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.jmlspecs.jmlunitng.iterator.InstantiationIterator;
-import org.jmlspecs.jmlunitng.iterator.IteratorAdapter;
 import org.jmlspecs.jmlunitng.iterator.NonNullMultiIterator;
 import org.jmlspecs.jmlunitng.iterator.ObjectArrayIterator;
 import org.jmlspecs.jmlunitng.iterator.RepeatedAccessIterator;
 import org.jmlspecs.jmlunitng.strategy.ObjectStrategy;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Test data strategy for Add. Provides

@@ -18,11 +18,7 @@
 package org.apache.commons.math3.ode.events;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.analysis.solvers.AllowedSolution;
-import org.apache.commons.math3.analysis.solvers.BracketedUnivariateSolver;
-import org.apache.commons.math3.analysis.solvers.PegasusSolver;
-import org.apache.commons.math3.analysis.solvers.UnivariateSolver;
-import org.apache.commons.math3.analysis.solvers.UnivariateSolverUtils;
+import org.apache.commons.math3.analysis.solvers.*;
 import org.apache.commons.math3.exception.MaxCountExceededException;
 import org.apache.commons.math3.exception.NoBracketingException;
 import org.apache.commons.math3.ode.EquationsMapper;

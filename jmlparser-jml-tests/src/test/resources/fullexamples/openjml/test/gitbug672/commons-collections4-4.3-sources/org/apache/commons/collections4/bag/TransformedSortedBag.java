@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.bag;
 
-import java.util.Comparator;
-
 import org.apache.commons.collections4.SortedBag;
 import org.apache.commons.collections4.Transformer;
+
+import java.util.Comparator;
 
 /**
  * Decorates another {@link SortedBag} to transform objects that are added.

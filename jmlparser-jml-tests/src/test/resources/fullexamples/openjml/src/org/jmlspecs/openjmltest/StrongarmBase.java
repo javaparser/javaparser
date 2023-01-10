@@ -1,20 +1,15 @@
 package org.jmlspecs.openjmltest;
 
-import static org.junit.Assert.fail;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-import org.junit.runners.Parameterized.Parameters;
+import static org.junit.Assert.fail;
 
 public class StrongarmBase extends EscBase {
 

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.collections4.queue;
 
-import java.util.Queue;
-
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.collections4.collection.TransformedCollection;
+
+import java.util.Queue;
 
 /**
  * Decorates another {@link Queue} to transform objects that are added.

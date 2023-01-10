@@ -16,15 +16,16 @@
  */
 package org.apache.commons.math3.optim.nonlinear.scalar;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.exception.NullArgumentException;
-import org.apache.commons.math3.random.RandomVectorGenerator;
 import org.apache.commons.math3.optim.BaseMultiStartMultivariateOptimizer;
 import org.apache.commons.math3.optim.PointValuePair;
+import org.apache.commons.math3.random.RandomVectorGenerator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Multi-start optimizer.

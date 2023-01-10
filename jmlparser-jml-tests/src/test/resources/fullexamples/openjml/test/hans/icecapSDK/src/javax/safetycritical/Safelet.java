@@ -25,7 +25,6 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.realtime.MemoryArea;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;

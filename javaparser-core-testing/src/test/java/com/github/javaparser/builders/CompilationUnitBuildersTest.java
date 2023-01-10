@@ -21,27 +21,26 @@
 
 package com.github.javaparser.builders;
 
-import static com.github.javaparser.StaticJavaParser.parseImport;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.ast.expr.Name;
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.ElementType;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.expr.Name;
+import static com.github.javaparser.StaticJavaParser.parseImport;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CompilationUnitBuildersTest {
   private final CompilationUnit cu = new CompilationUnit();
@@ -255,6 +254,17 @@ class CompilationUnitBuildersTest {
   }
 
   @Test
+  void testAddTypeWithRecordDeclaration() {
+    RecordDeclaration myRecordDeclaration = new RecordDeclaration(Modifier.createModifierList(PUBLIC), "test");
+    cu.addType(myRecordDeclaration);
+    assertEquals(1, cu.getTypes().size());
+    assertEquals("test", cu.getType(0).getNameAsString());
+    assertTrue(myRecordDeclaration.isPublic());
+    assertTrue(myRecordDeclaration.isFinal());
+    assertEquals(RecordDeclaration.class, cu.getType(0).getClass());
+  }
+
+  @Test
   void testGetClassByName() {
     assertEquals(cu.addClass("test"), cu.getClassByName("test").get());
   }
@@ -272,5 +282,11 @@ class CompilationUnitBuildersTest {
   @Test
   void testGetAnnotationDeclarationByName() {
     assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test").get());
+  }
+
+  @Test
+  void testGetRecordByName() {
+    assertEquals(cu.addType(new RecordDeclaration(Modifier.createModifierList(), "test")).getType(0),
+            cu.getRecordByName("test").get());
   }
 }

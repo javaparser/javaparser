@@ -20,11 +20,7 @@ package org.apache.commons.math3.optimization.general;
 import org.apache.commons.math3.analysis.MultivariateVectorFunction;
 import org.apache.commons.math3.analysis.differentiation.GradientFunction;
 import org.apache.commons.math3.analysis.differentiation.MultivariateDifferentiableFunction;
-import org.apache.commons.math3.optimization.ConvergenceChecker;
-import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.OptimizationData;
-import org.apache.commons.math3.optimization.InitialGuess;
-import org.apache.commons.math3.optimization.PointValuePair;
+import org.apache.commons.math3.optimization.*;
 import org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer;
 
 /**

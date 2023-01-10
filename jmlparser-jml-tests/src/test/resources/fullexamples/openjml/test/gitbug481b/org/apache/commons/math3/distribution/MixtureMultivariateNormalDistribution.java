@@ -16,13 +16,13 @@
  */
 package org.apache.commons.math3.distribution;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.NotPositiveException;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Multivariate normal mixture distribution.

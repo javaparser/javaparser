@@ -16,6 +16,8 @@
  */
 package org.apache.commons.collections4.bag;
 
+import org.apache.commons.collections4.SortedBag;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,8 +26,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.apache.commons.collections4.SortedBag;
 
 /**
  * Implements {@link SortedBag}, using a {@link TreeMap} to provide the data storage.

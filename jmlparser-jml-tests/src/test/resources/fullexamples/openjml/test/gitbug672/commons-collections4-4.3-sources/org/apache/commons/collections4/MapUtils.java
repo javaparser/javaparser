@@ -16,37 +16,13 @@
  */
 package org.apache.commons.collections4;
 
+import org.apache.commons.collections4.map.*;
+
 import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.apache.commons.collections4.map.AbstractMapDecorator;
-import org.apache.commons.collections4.map.AbstractSortedMapDecorator;
-import org.apache.commons.collections4.map.FixedSizeMap;
-import org.apache.commons.collections4.map.FixedSizeSortedMap;
-import org.apache.commons.collections4.map.LazyMap;
-import org.apache.commons.collections4.map.LazySortedMap;
-import org.apache.commons.collections4.map.ListOrderedMap;
-import org.apache.commons.collections4.map.MultiValueMap;
-import org.apache.commons.collections4.map.PredicatedMap;
-import org.apache.commons.collections4.map.PredicatedSortedMap;
-import org.apache.commons.collections4.map.TransformedMap;
-import org.apache.commons.collections4.map.TransformedSortedMap;
-import org.apache.commons.collections4.map.UnmodifiableMap;
-import org.apache.commons.collections4.map.UnmodifiableSortedMap;
 
 /**
  * Provides utility methods and decorators for

@@ -16,9 +16,9 @@
  */
 package org.apache.commons.math3.random;
 
-import java.io.Serializable;
-
 import org.apache.commons.math3.util.FastMath;
+
+import java.io.Serializable;
 
 
 /** This abstract class implements the WELL class of pseudo-random number generator

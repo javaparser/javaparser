@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.keyvalue;
 
-import java.util.Map;
-
 import org.apache.commons.collections4.KeyValue;
+
+import java.util.Map;
 
 /**
  * Provides a base decorator that allows additional functionality to be

@@ -16,9 +16,9 @@
  */
 package org.apache.commons.collections4.queue;
 
-import java.util.Queue;
-
 import org.apache.commons.collections4.collection.AbstractCollectionDecorator;
+
+import java.util.Queue;
 
 /**
  * Decorates another {@link Queue} to provide additional behaviour.
