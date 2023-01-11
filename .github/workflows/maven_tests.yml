@@ -87,6 +87,10 @@ jobs:
         uses: codecov/codecov-action@v3.1.1
         timeout-minutes: 10
         with:
+          # FIX for CodeCov upload error, that has been reported at:
+          # - https://github.com/codecov/codecov-action/issues/598
+          # - https://github.com/codecov/codecov-action/issues/678
+          version: 'v0.3.2'
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
           fail_ci_if_error: false # optional (default = false) -- fail the build if upload to codecov.io fails
           verbose: false # optional (default = false):
