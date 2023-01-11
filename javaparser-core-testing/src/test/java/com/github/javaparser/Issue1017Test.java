@@ -1,9 +1,8 @@
 package com.github.javaparser;
 
+import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ast.CompilationUnit;
 
 public class Issue1017Test {
 

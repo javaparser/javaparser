@@ -144,4 +144,9 @@ public class ResolvedTypeVariable implements ResolvedType {
     public ResolvedType solveGenericTypes(Context context) {
     	return context.solveGenericType(describe()).orElse(this);
     }
+
+    @Override
+    public String toDescriptor() {
+        return String.format("L%s;", qualifiedName());
+    }
 }

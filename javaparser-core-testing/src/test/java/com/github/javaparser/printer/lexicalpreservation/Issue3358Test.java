@@ -1,7 +1,3 @@
-package com.github.javaparser.printer.lexicalpreservation;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2019 The JavaParser Team.
@@ -23,10 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
+package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Modifier.Keyword;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Issue3358Test extends AbstractLexicalPreservingTest  {
     

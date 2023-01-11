@@ -1,10 +1,5 @@
 package com.github.javaparser.symbolsolver;
 
-import java.io.FileNotFoundException;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -14,6 +9,10 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
+import java.util.List;
 
 public class Issue2781Test extends AbstractResolutionTest {
     

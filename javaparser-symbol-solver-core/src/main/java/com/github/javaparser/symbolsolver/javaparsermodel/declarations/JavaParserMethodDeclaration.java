@@ -39,11 +39,11 @@ import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationC
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -169,5 +169,10 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
     @Override
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
+    }
+
+    @Override
+    public String toDescriptor() {
+        return wrappedNode.toDescriptor();
     }
 }

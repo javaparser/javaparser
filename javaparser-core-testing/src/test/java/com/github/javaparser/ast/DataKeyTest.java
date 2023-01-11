@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.jupiter.api.Test;
 

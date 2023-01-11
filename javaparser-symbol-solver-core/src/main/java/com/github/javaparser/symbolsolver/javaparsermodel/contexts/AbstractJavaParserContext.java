@@ -24,16 +24,8 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
-import com.github.javaparser.resolution.Context;
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.SymbolDeclarator;
-import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.*;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -46,7 +38,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 
 import java.util.*;
 
-import com.github.javaparser.resolution.Context;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Collections.singletonList;
 

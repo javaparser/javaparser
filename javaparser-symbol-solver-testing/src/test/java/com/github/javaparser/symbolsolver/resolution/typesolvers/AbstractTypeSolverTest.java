@@ -2,7 +2,6 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;

@@ -16,10 +16,7 @@ import java.util.List;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RecordDeclarationTest {
 
@@ -272,6 +269,26 @@ public class RecordDeclarationTest {
         String s = "record Point(int x, int y) { static int z; }";
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
+    }
+
+    @Test
+    void record_permitPublicStaticFieldInRecord1() {
+        String s = "public final record RecordPublicField() {" +
+                   "  public static final Object EMPTY = new Object();" +
+                   "}\n";
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    @Test
+    void record_permitPublicStaticFieldInNestedRecord() {
+        String s = "public final record RecordTopLevel(Object member) {\n" +
+                   "    private static record RecordNested() {\n" +
+                   "        public static final RecordNested EMPTY = new RecordNested();\n" +
+                   "    }\n" +
+                   "}\n";
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertTwoRecordDeclarations(cu);
     }
 
     @Test
@@ -719,5 +736,10 @@ public class RecordDeclarationTest {
     private void assertOneRecordDeclaration(CompilationUnit cu) {
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(1, recordDeclarations.size());
+    }
+
+    private void assertTwoRecordDeclarations(CompilationUnit cu) {
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(2, recordDeclarations.size());
     }
 }

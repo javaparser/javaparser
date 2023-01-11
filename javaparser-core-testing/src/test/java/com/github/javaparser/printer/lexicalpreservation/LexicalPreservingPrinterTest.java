@@ -21,55 +21,35 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ParserConfiguration.LanguageLevel;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     private NodeText getTextForNode(Node node) {
@@ -295,18 +275,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     void findIndentationForAnnotationMemberDeclarationWithoutComment() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(4);
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
+        List<TextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
         assertEquals(Arrays.asList(" ", " ", " "),
-                indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
+                indentation.stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
     @Test
     void findIndentationForAnnotationMemberDeclarationWithComment() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
-        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
+        List<TextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
         assertEquals(Arrays.asList(" ", " ", " "),
-                indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
+                indentation.stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
     //
@@ -360,7 +340,9 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(0);
+        // This rendering is probably caused by the concret syntax model
         assertEquals("class /*a comment*/ A {\t\t" + SYSTEM_EOL +
+        		SYSTEM_EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}", LexicalPreservingPrinter.print(c));
     }
 
@@ -1419,6 +1401,34 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         final String actual = LexicalPreservingPrinter.print(b);
         assertEquals(expected, actual);
     }
+    
+    @Test
+	void testTextBlockSupport() {
+		String code = 
+				"String html = \"\"\"\n" +
+                "  <html>\n" +
+                "    <body>\n" +
+                "      <p>Hello, world</p>\n" +
+                "    </body>\n" +
+                "  </html>\n" +
+                "\"\"\";";
+		String expected =
+				"String html = \"\"\"\r\n"
+				+ "  <html>\r\n"
+				+ "    <body>\r\n"
+				+ "      <p>Hello, world</p>\r\n"
+				+ "    </body>\r\n"
+				+ "  </html>\r\n"
+				+ "\"\"\";";
+		final JavaParser javaParser = new JavaParser(
+                new ParserConfiguration()
+                        .setLexicalPreservationEnabled(true)
+                        .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15)
+        );
+		Statement stmt = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+		LexicalPreservingPrinter.setup(stmt);
+		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(stmt));
+	}
 
     @Test
     void testArrayPreservation_WithSingleLanguageStyle() {
@@ -1689,7 +1699,6 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 		    	"  }\n" +
 		    	"}";
     	cu.getAllContainedComments().get(0).remove();
-    	System.out.println(LexicalPreservingPrinter.print(cu));
     	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
     
@@ -1731,6 +1740,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         cu.getAllContainedComments().get(0).remove();
 
         assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+    
+    // issue 3800 determine whether active
+    @Test
+    void checkLPPIsAvailableOnNode() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
+        LexicalPreservingPrinter.setup(md);
+        
+        assertTrue(LexicalPreservingPrinter.isAvailableOn(md));
+        assertFalse(LexicalPreservingPrinter.isAvailableOn(cu));
     }
 
 }

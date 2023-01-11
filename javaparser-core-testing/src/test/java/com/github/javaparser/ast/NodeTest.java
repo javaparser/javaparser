@@ -35,7 +35,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {

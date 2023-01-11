@@ -1,8 +1,5 @@
 package com.github.javaparser.resolution;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -10,6 +7,9 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface Solver {
 
