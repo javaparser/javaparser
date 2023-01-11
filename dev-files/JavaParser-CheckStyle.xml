@@ -39,5 +39,8 @@
 			<property name="severity" value="warning" />
 		</module>
 
+		<!-- Imports that are not used, should be removed -->
+		<module name="UnusedImports"/>
+
 	</module>
 </module>
