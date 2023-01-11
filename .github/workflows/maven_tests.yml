@@ -87,6 +87,7 @@ jobs:
         uses: codecov/codecov-action@v3.1.1
         timeout-minutes: 10
         with:
+          # Nothing
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
           fail_ci_if_error: false # optional (default = false) -- fail the build if upload to codecov.io fails
           verbose: false # optional (default = false):
