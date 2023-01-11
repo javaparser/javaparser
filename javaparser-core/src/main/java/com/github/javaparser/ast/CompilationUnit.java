@@ -21,10 +21,7 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.*;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
@@ -43,6 +40,7 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -53,6 +51,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import static com.github.javaparser.JavaToken.Kind.EOF;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
@@ -582,6 +581,15 @@ public class CompilationUnit extends Node {
      */
     public Optional<AnnotationDeclaration> getAnnotationDeclarationByName(String annotationName) {
         return getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName) && type instanceof AnnotationDeclaration).findFirst().map(t -> (AnnotationDeclaration) t);
+    }
+
+    /**
+     * Try to get a top level record declaration by its name
+     *
+     * @param recordName the enum name (case-sensitive)
+     */
+    public Optional<RecordDeclaration> getRecordByName(String recordName) {
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(recordName) && type instanceof RecordDeclaration).findFirst().map(t -> (RecordDeclaration) t);
     }
 
     @Override

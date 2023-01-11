@@ -2,13 +2,11 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

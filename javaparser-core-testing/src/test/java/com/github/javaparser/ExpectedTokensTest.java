@@ -26,7 +26,6 @@ import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.utils.ExtractingVisitors;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.utils.TestUtils.getNodeStartingAtPosition;

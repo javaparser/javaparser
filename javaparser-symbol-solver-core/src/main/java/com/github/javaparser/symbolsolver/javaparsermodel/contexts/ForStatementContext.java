@@ -23,11 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.resolution.TypeSolver;
@@ -37,10 +33,10 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 

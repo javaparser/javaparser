@@ -45,7 +45,7 @@ jobs:
     steps:
       ## Checkout the current version of the code from the repo.
       - name: Checkout latest code
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
         with:
           fetch-depth: "0"
 
@@ -88,7 +88,7 @@ jobs:
         timeout-minutes: 10
         with:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
-          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
+          fail_ci_if_error: false # optional (default = false) -- fail the build if upload to codecov.io fails
           verbose: false # optional (default = false):
           flags: javaparser-core,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
           env_vars: OS,JDK
@@ -98,7 +98,7 @@ jobs:
         timeout-minutes: 10
         with:
           file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
-          fail_ci_if_error: true # optional (default = false) -- fail the build if upload to codecov.io fails
+          fail_ci_if_error: false # optional (default = false) -- fail the build if upload to codecov.io fails
           verbose: false # optional (default = false):
           flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
           env_vars: OS,JDK
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout latest code
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
         with:
           fetch-depth: "0"
       - name: Set up JDK 11

@@ -57,4 +57,9 @@ public class ResolvedVoidType implements ResolvedType {
     public boolean isVoid() {
         return true;
     }
+
+    @Override
+    public String toDescriptor() {
+        return "V";
+    }
 }

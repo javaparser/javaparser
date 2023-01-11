@@ -31,16 +31,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.LazyType;
@@ -58,12 +49,7 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -442,8 +428,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         public Optional<Node> toAst() {
             return enumDeclaration.toAst();
         }
-    }
 
+        @Override
+        public String toDescriptor() {
+            return String.format("()%s", getReturnType().toDescriptor());
+        }
+    }
 
     /**
      * Needed by ContextHelper
@@ -562,6 +552,11 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         @Override
         public Optional<Node> toAst() {
             return enumDeclaration.toAst();
+        }
+
+        @Override
+        public String toDescriptor() {
+            return String.format("(Ljava/lang/String;)%s", getReturnType().toDescriptor());
         }
     }
 

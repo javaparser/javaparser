@@ -21,16 +21,15 @@
 
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.function.Predicate;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
+import org.junit.jupiter.api.Test;
+
+import java.util.function.Predicate;
+
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Some tests for finding descendant and ancestor nodes.

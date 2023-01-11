@@ -20,10 +20,13 @@
  */
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.utils.TypeUtils;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 
 /**
  * @author Federico Tomassetti
@@ -220,5 +223,10 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      */
     public boolean in(ResolvedPrimitiveType... types) {
         return Arrays.stream(types).anyMatch(type -> this == type);
+    }
+
+    @Override
+    public String toDescriptor() {
+        return TypeUtils.getPrimitiveTypeDescriptor(boxTypeClass);
     }
 }

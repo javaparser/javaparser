@@ -238,4 +238,22 @@ class ModuleDeclarationTest {
                 "    exports foo.bar.x to other.foo, other.bar;\n" +
                 "}\n", moduleDeclaration.toString());
     }
+    
+    @Test
+    void testModifierRequire() {
+        ModuleDeclaration moduleDeclaration = new CompilationUnit()
+                .setModule("com.laamella.base")
+                .addDirective("requires transitive java.desktop;");
+        ModuleRequiresDirective moduleRequiresStmt = moduleDeclaration.getDirectives().get(0).asModuleRequiresStmt();
+        assertTrue(moduleRequiresStmt.isTransitive());
+    }
+    
+    @Test
+    void testModifierStatic() {
+        ModuleDeclaration moduleDeclaration = new CompilationUnit()
+                .setModule("com.laamella.base")
+                .addDirective("requires static java.desktop;");
+        ModuleRequiresDirective moduleRequiresStmt = moduleDeclaration.getDirectives().get(0).asModuleRequiresStmt();
+        assertTrue(moduleRequiresStmt.isStatic());
+    }
 }
