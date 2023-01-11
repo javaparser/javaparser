@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2022 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -32,6 +32,7 @@ import com.github.javaparser.ast.type.VoidType;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.Keyword;
 import static com.github.javaparser.ast.Modifier.Keyword.*;
@@ -58,6 +59,8 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
     default BodyDeclaration<?> getMember(int i) {
         return getMembers().get(i);
     }
+
+    enum LocationType { ALL, FIELD, METHOD, CONSTRUCTOR}
 
     @SuppressWarnings("unchecked")
     default N setMember(int i, BodyDeclaration<?> member) {
@@ -113,6 +116,66 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
         fieldDeclaration.setModifiers(createModifierList(modifiers));
         getMembers().add(fieldDeclaration);
         return fieldDeclaration;
+    }
+
+    /**
+     * Add a field to this at the specified location, with options for before/after.
+     *
+     * @param type         the type of the field
+     * @param name         the name of the field
+     * @param position     the location in the to add the new one before/after
+     * @param locationType the type of location to insert the new field before/after
+     * @param after        whether the new field should be inserted before the specified point, or after it.
+     * @param modifiers    the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addFieldAtLocation(Type type, String name, Integer position,
+                                                LocationType locationType, boolean after,
+                                               Modifier.Keyword... modifiers) {
+        FieldDeclaration fieldDeclaration = new FieldDeclaration();
+        VariableDeclarator variable = new VariableDeclarator(type, name);
+        fieldDeclaration.getVariables().add(variable);
+        fieldDeclaration.setModifiers(createModifierList(modifiers));
+
+        // Switch statement to determine how we want to calculate the location to insert the method at
+        BodyDeclaration<?> tempNode = null;
+        switch (locationType){
+            case ALL:
+                tempNode = getMembers().get(position);
+                break;
+            case FIELD:
+                tempNode = getFields().get(position);
+                break;
+            case METHOD:
+                tempNode = getMethods().get(position);
+                break;
+            case CONSTRUCTOR:
+                tempNode = getConstructors().get(position);
+                break;
+        }
+        if (after) {
+            getMembers().addAfter(fieldDeclaration, tempNode);
+        } else {
+            getMembers().addBefore(fieldDeclaration, tempNode);
+        }
+        return fieldDeclaration;
+    }
+
+    /**
+     * Add a field to this at the specified location, with options for before/after.
+     *
+     * @param type         the type of the field
+     * @param name         the name of the field
+     * @param position     the location in the to add the new one before/after
+     * @param locationType the type of location to insert the new field before/after
+     * @param after        whether the new field should be inserted before the specified point, or after it.
+     * @param modifiers    the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addFieldAtLocation(String type, String name, Integer position,
+                                                LocationType locationType, boolean after,
+                                                Modifier.Keyword... modifiers) {
+        return addFieldAtLocation(parseType(type), name, position, locationType, after, modifiers);
     }
 
     /**
@@ -272,6 +335,48 @@ public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
         methodDeclaration.setType(new VoidType());
         methodDeclaration.setModifiers(createModifierList(modifiers));
         getMembers().add(methodDeclaration);
+        return methodDeclaration;
+    }
+
+    /**
+     * Add a field to this at the specified location, with options for before/after.
+     *
+     * @param methodName   the name of the method
+     * @param position     the location in the to add the new one before/after
+     * @param locationType the type of location to insert the new method before/after
+     * @param after        whether the new method should be inserted before the specified point, or after it.
+     * @param modifiers    the modifiers like {@link Modifier.Keyword#PUBLIC}
+     * @return the {@link MethodDeclaration} created
+     */
+    default MethodDeclaration addMethodAtLocation(String methodName, Integer position,
+                                                LocationType locationType, boolean after,
+                                                Modifier.Keyword... modifiers) {
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        methodDeclaration.setName(methodName);
+        methodDeclaration.setType(new VoidType());
+        methodDeclaration.setModifiers(createModifierList(modifiers));
+
+        // Switch statement to determine how we want to calculate the location to insert the method at
+        BodyDeclaration<?> tempNode = null;
+        switch (locationType){
+            case ALL:
+                tempNode = getMembers().get(position);
+                break;
+            case FIELD:
+                tempNode = getFields().get(position);
+                break;
+            case METHOD:
+                tempNode = getMethods().get(position);
+                break;
+            case CONSTRUCTOR:
+                tempNode = getConstructors().get(position);
+                break;
+        }
+        if (after) {
+            getMembers().addAfter(methodDeclaration, tempNode);
+        } else {
+            getMembers().addBefore(methodDeclaration, tempNode);
+        }
         return methodDeclaration;
     }
 
