@@ -39,6 +39,7 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
 
@@ -565,6 +566,12 @@ public class LexicalPreservingPrinter {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
         List<TextElement> indentation = findIndentation(node);
         boolean pendingIndentation = false;
+        // Add a comment and line separator if necessary
+        node.getComment().ifPresent(n -> {
+            LineSeparator lineSeparator = n.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
+            calculatedSyntaxModel.elements.add(0,new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
+            calculatedSyntaxModel.elements.add(0,new CsmChild(n));
+        });
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
