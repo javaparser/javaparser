@@ -194,20 +194,6 @@ class LexicalDifferenceCalculator {
                 child = csmSingleReference.getProperty().getValueAsSingleReference(node);
             }
             if (child != null) {
-                // fix issue #2374
-                // Add node comment if needed (it's not very elegant but it works)
-                // We need to be sure that the node is an ExpressionStmt because we can meet
-                // this class definition
-                // a line comment <This is my class, with my comment> followed by
-                // class A {}
-                // In this case keyworld [class] is considered as a token and [A] is a child element
-                // So if we don't care that the node is an ExpressionStmt we could try to generate a wrong definition
-                // like this [class // This is my class, with my comment A {}]
-                if (node.getComment().isPresent() && node instanceof ExpressionStmt) {
-                    LineSeparator lineSeparator = node.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-                    elements.add(new CsmChild(node.getComment().get()));
-                    elements.add(new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
-                }
                 elements.add(new CsmChild(child));
             }
         } else if (csm instanceof CsmNone) {
