@@ -31,6 +31,8 @@ import com.github.javaparser.ast.validator.Validators;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
+import static com.github.javaparser.ast.expr.EnclosedExpr.ensureNonEnclosedExpression;
+
 /**
  * Contains validations that are valid for every Java version.
  */
@@ -48,9 +50,7 @@ public class CommonValidators extends Validators {
         }), new SingleNodeTypeValidator<>(AssignExpr.class, (n, reporter) -> {
             // https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.26
             Expression target = n.getTarget();
-            while (target instanceof EnclosedExpr) {
-                target = ((EnclosedExpr) target).getInner();
-            }
+            target = ensureNonEnclosedExpression(target);
             if (target instanceof NameExpr || target instanceof ArrayAccessExpr || target instanceof FieldAccessExpr) {
                 return;
             }

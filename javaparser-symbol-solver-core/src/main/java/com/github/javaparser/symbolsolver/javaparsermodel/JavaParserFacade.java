@@ -50,6 +50,7 @@ import com.github.javaparser.utils.Log;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.expr.EnclosedExpr.ensureNonEnclosedExpression;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static com.github.javaparser.resolution.model.SymbolReference.solved;
 import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
@@ -71,7 +72,7 @@ public class JavaParserFacade {
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
      * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
@@ -242,6 +243,7 @@ public class JavaParserFacade {
                                 List<LambdaArgumentTypePlaceholder> placeholders) {
         int i = 0;
         for (Expression parameterValue : args) {
+            parameterValue = ensureNonEnclosedExpression(parameterValue);
             if (parameterValue.isLambdaExpr() || parameterValue.isMethodReferenceExpr()) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
                 argumentTypes.add(placeholder);
@@ -704,7 +706,7 @@ public class JavaParserFacade {
      * @param clazz The class to be converted.
      *
      * @return The class resolved.
-     * 
+     *
      * @deprecated instead consider SymbolSolver.classToResolvedType(Class<?> clazz)
      */
     @Deprecated

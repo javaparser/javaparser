@@ -159,4 +159,16 @@ public class EnclosedExpr extends Expression {
     public boolean isPolyExpression() {
         return getInner().isPolyExpression();
     }
+
+    /**
+     * Returns {@code expression} when it is not an {@link EnclosedExpr},
+     * otherwise the first non-{@link EnclosedExpr} following the "inner" path
+     * of the {@link EnclosedExpr} {@code expression}.
+     */
+    public static Expression ensureNonEnclosedExpression(Expression expression) {
+        while (expression instanceof EnclosedExpr) {
+            expression = ((EnclosedExpr) expression).getInner();
+        }
+        return expression;
+    }
 }
