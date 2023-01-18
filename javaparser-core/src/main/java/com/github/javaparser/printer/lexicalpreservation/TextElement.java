@@ -26,7 +26,7 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
-public abstract class TextElement implements TextElementMatcher {
+public abstract class TextElement implements TextElementMatcher, PrintableTextElement {
 
     abstract String expand();
 

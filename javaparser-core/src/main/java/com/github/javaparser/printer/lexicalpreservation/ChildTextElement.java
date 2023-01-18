@@ -133,4 +133,10 @@ class ChildTextElement extends TextElement {
     Optional<Range> getRange() {
         return child.getRange();
     }
+
+	@Override
+	public void accept(LexicalPreservingVisitor visitor) {
+		NodeText nodeText = getNodeTextForWrappedNode();
+		nodeText.getElements().forEach(element -> element.accept(visitor));
+	}
 }
