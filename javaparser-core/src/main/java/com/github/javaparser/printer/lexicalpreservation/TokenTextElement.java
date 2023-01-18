@@ -145,4 +145,9 @@ class TokenTextElement extends TextElement {
     Optional<Range> getRange() {
         return token.getRange();
     }
+
+	@Override
+	public void accept(LexicalPreservingVisitor visitor) {
+		visitor.visit(this);
+	}
 }

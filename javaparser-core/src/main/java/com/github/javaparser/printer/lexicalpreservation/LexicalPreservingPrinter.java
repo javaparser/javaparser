@@ -43,9 +43,6 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalcul
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -483,24 +480,11 @@ public class LexicalPreservingPrinter {
      * Print a Node into a String, preserving the lexical information.
      */
     public static String print(Node node) {
-        StringWriter writer = new StringWriter();
-        try {
-            print(node, writer);
-        } catch (IOException e) {
-            throw new RuntimeException("Unexpected IOException on a StringWriter", e);
-        }
-        return writer.toString();
-    }
-
-    /**
-     * Print a Node into a Writer, preserving the lexical information.
-     */
-    public static void print(Node node, Writer writer) throws IOException {
-        if (!node.containsData(NODE_TEXT_DATA)) {
-            getOrCreateNodeText(node);
-        }
-        final NodeText text = node.getData(NODE_TEXT_DATA);
-        writer.append(text.expand());
+    	LexicalPreservingVisitor visitor = new LexicalPreservingVisitor();
+    	final NodeText nodeText = getOrCreateNodeText(node);
+    	nodeText.getElements().forEach(element -> element.accept(visitor));
+        return visitor.toString();
+																					  
     }
 
     // 
