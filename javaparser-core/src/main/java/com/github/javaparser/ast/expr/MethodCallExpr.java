@@ -46,6 +46,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.github.javaparser.ast.expr.EnclosedExpr.ensureNonEnclosedExpression;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -337,7 +338,7 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Override
     public boolean isPolyExpression() {
         // A method invocation expression is a poly expression if all of the following are true:
-        // 
+        //
         // 1. The invocation appears in an assignment context or an invocation context (§5.2, §5.3).
         if (!(appearsInAssignmentContext() || appearsInInvocationContext())) {
             return false;
@@ -382,4 +383,24 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     protected boolean isInvocationContext() {
         return true;
     }
+
+    /**
+     * Returns the position(/index) of the {@code node} as an argument in
+     * this {@link MethodCallExpr}.
+     * <p>
+     * Throws an {@link IllegalArgumentException} when the {@code node} is not
+     * an argument in this {@link MethodCallExpr}.
+     */
+    public int argumentPosition(Node argument) {
+        int i = 0;
+        for (Expression p : getArguments()) {
+            p = ensureNonEnclosedExpression(p);
+            if (p == argument) {
+                return i;
+            }
+            i++;
+        }
+        throw new IllegalArgumentException();
+    }
+
 }

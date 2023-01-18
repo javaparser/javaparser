@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.Navigator.demandParentNodeSkipEnclosedExprs;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
@@ -64,7 +65,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
-    
+
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
@@ -191,7 +192,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
         return node.getThenExpr().accept(this, solveLambdas);
     }
-    
+
     private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
         return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
         || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
@@ -449,12 +450,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
+        Node parent = demandParentNodeSkipEnclosedExprs(node);
+        if (parent instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) parent;
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(parent.toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
 
@@ -636,14 +638,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
     }
-    
+
     private static int getParamPos(Node node) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
-            for (int i = 0; i < call.getArguments().size(); i++) {
-                if (call.getArguments().get(i) == node) return i;
-            }
-            throw new IllegalStateException();
+        Node parent = demandParentNodeSkipEnclosedExprs(node);
+        if (parent instanceof MethodCallExpr) {
+            return ((MethodCallExpr) parent).argumentPosition(node);
         }
         throw new IllegalArgumentException();
     }
