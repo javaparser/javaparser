@@ -71,7 +71,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      * Returns true if the specified type is a boxed type of a primitive type.
      */
     public static boolean isBoxType(ResolvedType type) {
-    	if (!type.getClass().isInstance(ResolvedReferenceType.class)) {
+    	if (!type.isReferenceType()) {
     		return false;
     	}
         String qName = type.asReferenceType().getQualifiedName();
