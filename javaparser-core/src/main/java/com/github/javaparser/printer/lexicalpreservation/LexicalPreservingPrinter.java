@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,12 +39,10 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -482,24 +480,11 @@ public class LexicalPreservingPrinter {
      * Print a Node into a String, preserving the lexical information.
      */
     public static String print(Node node) {
-        StringWriter writer = new StringWriter();
-        try {
-            print(node, writer);
-        } catch (IOException e) {
-            throw new RuntimeException("Unexpected IOException on a StringWriter", e);
-        }
-        return writer.toString();
-    }
-
-    /**
-     * Print a Node into a Writer, preserving the lexical information.
-     */
-    public static void print(Node node, Writer writer) throws IOException {
-        if (!node.containsData(NODE_TEXT_DATA)) {
-            getOrCreateNodeText(node);
-        }
-        final NodeText text = node.getData(NODE_TEXT_DATA);
-        writer.append(text.expand());
+    	LexicalPreservingVisitor visitor = new LexicalPreservingVisitor();
+    	final NodeText nodeText = getOrCreateNodeText(node);
+    	nodeText.getElements().forEach(element -> element.accept(visitor));
+        return visitor.toString();
+																					  
     }
 
     // 
@@ -565,6 +550,12 @@ public class LexicalPreservingPrinter {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
         List<TextElement> indentation = findIndentation(node);
         boolean pendingIndentation = false;
+        // Add a comment and line separator if necessary
+        node.getComment().ifPresent(n -> {
+            LineSeparator lineSeparator = n.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
+            calculatedSyntaxModel.elements.add(0,new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
+            calculatedSyntaxModel.elements.add(0,new CsmChild(n));
+        });
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
