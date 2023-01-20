@@ -24,10 +24,10 @@ public class Issue3859Test extends AbstractResolutionTest {
                 "    void foo(Consumer<String> arg) {}\n" +
                 "    void print(Object arg) {}\n" +
                 "    public void bar() {\n" +
-                "        foo(s->{s;});\n" +
+                "        foo(s->print(s));\n" +
                 "    }\n" +
                 "    public void baz() {\n" +
-                "        foo((s->{s;}));\n" +
+                "        foo((s->print(s)));\n" +
                 "    }\n" +
                 "}\n";
         ParserConfiguration configuration = new ParserConfiguration()
