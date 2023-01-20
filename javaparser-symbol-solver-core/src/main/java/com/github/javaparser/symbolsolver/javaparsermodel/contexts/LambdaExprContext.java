@@ -26,6 +26,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.CastExpr;
+import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -47,6 +48,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
@@ -54,6 +56,12 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
  * @author Federico Tomassetti
  */
 public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
+
+    /**
+     * Returns {@code true} when the Node to be tested is not an
+     * {@link EnclosedExpr}, {@code false} otherwise.
+     */
+    private static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
 
     public LambdaExprContext(LambdaExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -67,7 +75,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             for (ResolvedValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
-                    Node parentNode = demandParentNode(wrappedNode);
+                    Node parentNode = demandParentNode(wrappedNode, IS_NOT_ENCLOSED_EXPR);
                     if (parentNode instanceof MethodCallExpr) {
                         MethodCallExpr methodCallExpr = (MethodCallExpr) parentNode;
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
@@ -255,6 +263,9 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     private int pos(MethodCallExpr callExpr, Expression param) {
         int i = 0;
         for (Expression p : callExpr.getArguments()) {
+            while (p instanceof EnclosedExpr) {
+                p = ((EnclosedExpr) p).getInner();
+            }
             if (p == param) {
                 return i;
             }
