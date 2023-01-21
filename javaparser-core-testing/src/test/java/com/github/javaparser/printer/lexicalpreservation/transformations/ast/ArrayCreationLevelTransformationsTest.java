@@ -71,7 +71,7 @@ class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTes
     void addingAnnotation() {
         ArrayCreationLevel it = consider("[]");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()"+ Utils.SYSTEM_EOL +"[]", it);
+        assertTransformedToString("@myAnno"+ Utils.SYSTEM_EOL +"[]", it);
     }
 
     @Test
@@ -85,7 +85,7 @@ class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreservingTes
     void replacingAnnotation() {
         ArrayCreationLevel it = consider("@myAnno []");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
-        assertTransformedToString("@myOtherAnno() []", it);
+        assertTransformedToString("@myOtherAnno []", it);
     }
 
 }
