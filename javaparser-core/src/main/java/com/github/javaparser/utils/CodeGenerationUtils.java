@@ -81,9 +81,10 @@ public final class CodeGenerationUtils {
 
     /**
      * Calculates the path to a file in a package.
+     * <p><b>Note:</b> The {@link Path} is always using the {@link FileSystems#getDefault() default filesystem}.
      *
      * @param root the root directory in which the package resides
-     * @param pkg the package in which the file resides, like "com.laamella.parser"
+     * @param pkg  the package in which the file resides, like "com.laamella.parser"
      * @param file the filename of the file in the package.
      */
     public static Path fileInPackageAbsolutePath(String root, String pkg, String file) {
@@ -91,8 +92,18 @@ public final class CodeGenerationUtils {
         return Paths.get(root, pkg, file).normalize();
     }
 
+    /**
+     * Calculates the path to a file in a package.
+     * <p><b>Note:</b> Unlike {@link #fileInPackageAbsolutePath(String, String, String)}, the {@link Path} will use the
+     * same filesystem as the given path.
+     *
+     * @param root the root directory in which the package resides
+     * @param pkg  the package in which the file resides, like "com.laamella.parser"
+     * @param file the filename of the file in the package.
+     */
     public static Path fileInPackageAbsolutePath(Path root, String pkg, String file) {
-        return fileInPackageAbsolutePath(root.toString(), pkg, file);
+        pkg = packageToPath(pkg);
+        return root.resolve(pkg).resolve(file).normalize();
     }
 
     /**

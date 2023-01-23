@@ -80,4 +80,25 @@ class CodeGenerationUtilsTest {
             assertTrue(Files.exists(correctDefaultPath));
         }
     }
+
+    @Test
+    void testFileInPackageAbsolutePath() throws IOException {
+        final Path pathToZip = classLoaderRoot(CodeGenerationUtilsTest.class)
+                .resolve("com/github/javaparser/source_zip/test.zip");
+
+        try (FileSystem zfs = FileSystems.newFileSystem(pathToZip, (ClassLoader) null)) {
+            final Path zfsPath = zfs.getPath("/");
+            final Path wrongZipPath = fileInPackageAbsolutePath(pathToZip.toString(), "test_zip.dir.dir", "Qux.java");
+            final Path correctZipPath = fileInPackageAbsolutePath(zfsPath, "test_zip.dir.dir", "Qux.java");
+
+            final Path correctDefaultPath = fileInPackageAbsolutePath(rootDir, "com.github.javaparser.printer",
+                    "JavaConcepts.java");
+
+            //Test if files exists
+            assertTrue(Files.notExists(wrongZipPath));
+            assertTrue(Files.exists(correctZipPath));
+
+            assertTrue(Files.exists(correctDefaultPath));
+        }
+    }
 }
