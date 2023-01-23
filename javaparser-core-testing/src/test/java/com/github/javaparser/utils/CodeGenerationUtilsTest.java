@@ -64,12 +64,12 @@ class CodeGenerationUtilsTest {
     @Test
     void testPackageToAbsolutePath() throws IOException {
         final Path pathToZip = classLoaderRoot(CodeGenerationUtilsTest.class)
-                .resolve("com/github/javaparser/utils/MyActivity.zip");
+                .resolve("com/github/javaparser/source_zip/test.zip");
 
         try (FileSystem zfs = FileSystems.newFileSystem(pathToZip, (ClassLoader) null)) {
             final Path zfsPath = zfs.getPath("");
-            final Path wrongZipPath = packageAbsolutePath(pathToZip.toString(), "io.github.name");
-            final Path correctZipPath = packageAbsolutePath(zfsPath, "io.github.name");
+            final Path wrongZipPath = packageAbsolutePath(pathToZip.toString(), "test_zip.dir.dir");
+            final Path correctZipPath = packageAbsolutePath(zfsPath, "test_zip.dir.dir");
 
             final Path correctDefaultPath = packageAbsolutePath(rootDir, "com.github.javaparser.printer");
 
