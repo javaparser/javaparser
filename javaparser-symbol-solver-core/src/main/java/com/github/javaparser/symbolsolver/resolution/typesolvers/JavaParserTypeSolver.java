@@ -31,7 +31,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.cache.Cache;
 import com.github.javaparser.symbolsolver.cache.GuavaCache;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.utils.FileUtils;
 import com.google.common.cache.CacheBuilder;
 
 import java.io.File;
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -259,12 +257,11 @@ public class JavaParserTypeSolver implements TypeSolver {
         String[] nameElements = name.split("\\.");
 
         for (int i = nameElements.length; i > 0; i--) {
-            StringBuilder filePath = new StringBuilder(srcDir.toAbsolutePath().toString());
+            Path srcFile = srcDir;
             for (int j = 0; j < i; j++) {
-                filePath.append(File.separator)
-                        .append(nameElements[j]);
+                srcFile = srcFile.resolve(nameElements[j]);
             }
-            filePath.append(".java");
+            srcFile = srcFile.resolveSibling(nameElements[nameElements.length - 1] + ".java");
 
             StringBuilder typeName = new StringBuilder();
             for (int j = i - 1; j < nameElements.length; j++) {
@@ -274,10 +271,9 @@ public class JavaParserTypeSolver implements TypeSolver {
                 typeName.append(nameElements[j]);
             }
 
-            String dirToParse = null;
+            final Path dirToParse;
             // As an optimization we first try to look in the canonical position where we expect to find the file
-            if (FileUtils.isValidPath(filePath.toString())) {
-                Path srcFile = Paths.get(filePath.toString());
+            if (Files.exists(srcFile)) {
                 Optional<CompilationUnit> compilationUnit = parse(srcFile);
                 if (compilationUnit.isPresent()) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator
@@ -287,15 +283,15 @@ public class JavaParserTypeSolver implements TypeSolver {
                                 .solved(JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get()));
                     }
                 }
-                dirToParse = srcFile.getParent().normalize().toString();
+                dirToParse = srcFile.getParent().normalize();
             } else {
-                dirToParse = FileUtils.getParentPath(filePath.toString());
+                dirToParse = srcFile.getParent();
             }
 
             // If this is not possible we parse all files
             // We try just in the same package, for classes defined in a file not named as the class itself
-            if (FileUtils.isValidPath(dirToParse)) {
-                List<CompilationUnit> compilationUnits = parseDirectory(Paths.get(dirToParse));
+            if (Files.exists(dirToParse)) {
+                List<CompilationUnit> compilationUnits = parseDirectory(dirToParse);
                 for (CompilationUnit compilationUnit : compilationUnits) {
                     Optional<com.github.javaparser.ast.body.TypeDeclaration<?>> astTypeDeclaration = Navigator
                             .findType(compilationUnit, typeName.toString());
