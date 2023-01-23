@@ -24,6 +24,7 @@ package com.github.javaparser.resolution;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -145,6 +146,18 @@ public final class Navigator {
 
     public static Node demandParentNode(Node node) {
         return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
+    }
+
+    /**
+     * Same as {@link #demandParentNode(Node)} but it will skip any
+     * {@link EnclosedExpr} in the parent path.
+     */
+    public static Node demandParentNodeSkipEnclosedExprs(Node node) {
+        Node parent = node;
+        do {
+            parent = demandParentNode(parent);
+        } while (parent instanceof EnclosedExpr);
+        return parent;
     }
 
     public static ReturnStmt demandReturnStmt(MethodDeclaration method) {
