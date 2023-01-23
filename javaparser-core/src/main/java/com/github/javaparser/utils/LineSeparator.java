@@ -20,8 +20,6 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.JavaToken;
-
 import java.util.Optional;
 
 /**
