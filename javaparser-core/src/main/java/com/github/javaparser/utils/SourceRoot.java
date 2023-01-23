@@ -126,7 +126,8 @@ public class SourceRoot {
             Log.trace("Retrieving cached %s", () -> relativePath);
             return cache.get(relativePath);
         }
-        final Path path = root.resolve(relativePath);
+        //root might be from a different filesystem, resolve using a String
+        final Path path = root.resolve(relativePath.toString());
         Log.trace("Parsing %s", () -> path);
         final ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(path, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(path, configuration.getCharacterEncoding()));
@@ -476,7 +477,8 @@ public class SourceRoot {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache::size, () -> root);
         for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
-            final Path path = root.resolve(cu.getKey());
+            //cu.getKey() might be from a different filesystem, resolve using a String
+            final Path path = root.resolve(cu.getKey().toString());
             if (cu.getValue().getResult().isPresent()) {
                 Log.trace("Saving %s", () -> path);
                 save(cu.getValue().getResult().get(), path, encoding);
