@@ -22,6 +22,7 @@ package com.github.javaparser.utils;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -112,17 +113,28 @@ public final class CodeGenerationUtils {
 
     /**
      * Calculates the path of a package.
+     * <p><b>Note:</b> The {@link Path} is always using the {@link FileSystems#getDefault() default filesystem}.
      *
      * @param root the root directory in which the package resides
-     * @param pkg the package, like "com.laamella.parser"
+     * @param pkg  the package, like "com.laamella.parser"
+     * @return the {@link Path} of the package's directory
      */
     public static Path packageAbsolutePath(String root, String pkg) {
         pkg = packageToPath(pkg);
         return Paths.get(root, pkg).normalize();
     }
 
+    /**
+     * Calculates the path of a package.
+     * <p><b>Note:</b> Unlike {@link #packageAbsolutePath(String, String)}, the {@link Path} will use the same filesystem as the given path.
+     *
+     * @param root the root directory in which the package resides
+     * @param pkg  the package, like "com.laamella.parser"
+     * @return the {@link Path} of the package's directory
+     */
     public static Path packageAbsolutePath(Path root, String pkg) {
-        return packageAbsolutePath(root.toString(), pkg);
+        pkg = packageToPath(pkg);
+        return root.resolve(pkg).normalize();
     }
 
     /**
