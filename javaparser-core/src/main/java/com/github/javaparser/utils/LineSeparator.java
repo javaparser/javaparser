@@ -168,17 +168,17 @@ public enum LineSeparator {
         return text;
     }
 
-    // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
-    private Optional<JavaToken.Kind> asJavaTokenKind() {
-        if (this == CR) {
-            return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
-        } else if (this == LF) {
-            return Optional.of(JavaToken.Kind.UNIX_EOL);
-        } else if (this == CRLF) {
-            return Optional.of(JavaToken.Kind.WINDOWS_EOL);
-        }
-        return Optional.empty();
-    }
+//    // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
+//    private Optional<JavaToken.Kind> asJavaTokenKind() {
+//        if (this == CR) {
+//            return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
+//        } else if (this == LF) {
+//            return Optional.of(JavaToken.Kind.UNIX_EOL);
+//        } else if (this == CRLF) {
+//            return Optional.of(JavaToken.Kind.WINDOWS_EOL);
+//        }
+//        return Optional.empty();
+//    }
 
     @Override
     public String toString() {
