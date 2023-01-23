@@ -23,11 +23,18 @@ package com.github.javaparser.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CodeGenerationUtilsTest {
+    private final Path rootDir = CodeGenerationUtils.mavenModuleRoot(CodeGenerationUtilsTest.class).resolve("src/test/test_sourcecode");
+
     @Test
     void setters() {
         assertEquals("setValue", setterName("value"));
@@ -54,4 +61,23 @@ class CodeGenerationUtilsTest {
         assertEquals("Unexpected getterName 'value'", thrown.getMessage());
     }
 
+    @Test
+    void testPackageToAbsolutePath() throws IOException {
+        final Path pathToZip = classLoaderRoot(CodeGenerationUtilsTest.class)
+                .resolve("com/github/javaparser/utils/MyActivity.zip");
+
+        try (FileSystem zfs = FileSystems.newFileSystem(pathToZip, (ClassLoader) null)) {
+            final Path zfsPath = zfs.getPath("");
+            final Path wrongZipPath = packageAbsolutePath(pathToZip.toString(), "io.github.name");
+            final Path correctZipPath = packageAbsolutePath(zfsPath, "io.github.name");
+
+            final Path correctDefaultPath = packageAbsolutePath(rootDir, "com.github.javaparser.printer");
+
+            //Test if files exists
+            assertTrue(Files.notExists(wrongZipPath));
+            assertTrue(Files.exists(correctZipPath));
+
+            assertTrue(Files.exists(correctDefaultPath));
+        }
+    }
 }
