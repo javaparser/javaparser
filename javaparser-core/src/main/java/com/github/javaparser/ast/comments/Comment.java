@@ -222,4 +222,21 @@ public abstract class Comment extends Node {
     public Optional<LineComment> toLineComment() {
         return Optional.empty();
     }
+    
+    /*
+     * Header is "//" for line comment 
+     */
+    abstract public String getHeader(); 
+    
+    /*
+     * 
+     */
+    abstract public String getFooter();
+    
+    /*
+     * Returns the content of the comment with header and footer
+     */
+    public String asString() {
+    	return getHeader()+getContent()+getFooter();
+    }
 }

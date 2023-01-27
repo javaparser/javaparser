@@ -267,13 +267,13 @@ public class LexicalPreservingPrinter {
         
         private TokenTextElement makeCommentToken(Comment newComment) {
             if (newComment.isJavadocComment()) {
-                return new TokenTextElement(JAVADOC_COMMENT, "/**" + newComment.getContent() + "*/");
+                return new TokenTextElement(JAVADOC_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
             }
             if (newComment.isLineComment()) {
-                return new TokenTextElement(SINGLE_LINE_COMMENT, "//" + newComment.getContent());
+                return new TokenTextElement(SINGLE_LINE_COMMENT, newComment.getHeader() + newComment.getContent());
             }
             if (newComment.isBlockComment()) {
-                return new TokenTextElement(MULTI_LINE_COMMENT, "/*" + newComment.getContent() + "*/");
+                return new TokenTextElement(MULTI_LINE_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
             }
             throw new UnsupportedOperationException("Unknown type of comment: " + newComment.getClass().getSimpleName());
         }
@@ -330,11 +330,11 @@ public class LexicalPreservingPrinter {
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
             if (oldValue instanceof JavadocComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals("/**" + oldValue.getContent() + "*/")).collect(toList());
+                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
             } else if (oldValue instanceof BlockComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(MULTI_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals("/*" + oldValue.getContent() + "*/")).collect(toList());
+                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(MULTI_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
             } else {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(SINGLE_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().trim().equals(("//" + oldValue.getContent()).trim())).collect(toList());
+                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(SINGLE_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().trim().equals((oldValue.getHeader() + oldValue.getContent()).trim())).collect(toList());
             }
             if (matchingTokens.size() > 1) {
                 // Duplicate comments found, refine the result
@@ -549,15 +549,18 @@ public class LexicalPreservingPrinter {
             return;
         }
         if (node instanceof JavadocComment) {
-            nodeText.addToken(JAVADOC_COMMENT, "/**" + ((JavadocComment) node).getContent() + "*/");
+        	Comment comment = (JavadocComment) node;
+            nodeText.addToken(JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof BlockComment) {
-            nodeText.addToken(MULTI_LINE_COMMENT, "/*" + ((BlockComment) node).getContent() + "*/");
+        	Comment comment = (BlockComment) node;
+            nodeText.addToken(MULTI_LINE_COMMENT, comment.getHeader() + ((BlockComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof LineComment) {
-            nodeText.addToken(SINGLE_LINE_COMMENT, "//" + ((LineComment) node).getContent());
+        	Comment comment = (LineComment) node;
+            nodeText.addToken(SINGLE_LINE_COMMENT, comment.getHeader() + comment.getContent());
             return;
         }
         if (node instanceof Modifier) {
