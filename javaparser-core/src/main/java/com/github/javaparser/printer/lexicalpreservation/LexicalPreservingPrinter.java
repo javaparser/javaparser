@@ -20,11 +20,41 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.BOOLEAN;
+import static com.github.javaparser.GeneratedJavaParserConstants.BYTE;
+import static com.github.javaparser.GeneratedJavaParserConstants.CHAR;
+import static com.github.javaparser.GeneratedJavaParserConstants.DOUBLE;
+import static com.github.javaparser.GeneratedJavaParserConstants.FLOAT;
+import static com.github.javaparser.GeneratedJavaParserConstants.INT;
+import static com.github.javaparser.GeneratedJavaParserConstants.JAVADOC_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.LBRACKET;
+import static com.github.javaparser.GeneratedJavaParserConstants.LONG;
+import static com.github.javaparser.GeneratedJavaParserConstants.MULTI_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.RBRACKET;
+import static com.github.javaparser.GeneratedJavaParserConstants.SHORT;
+import static com.github.javaparser.GeneratedJavaParserConstants.SINGLE_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.decapitalize;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Optional;
+
 import com.github.javaparser.JavaToken;
-import com.github.javaparser.JavaToken.Kind;
-import com.github.javaparser.Position;
 import com.github.javaparser.Range;
-import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -41,22 +71,14 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.util.*;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.decapitalize;
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
