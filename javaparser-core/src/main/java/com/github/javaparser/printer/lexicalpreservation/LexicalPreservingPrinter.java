@@ -21,7 +21,10 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.JavaToken;
+import com.github.javaparser.JavaToken.Kind;
+import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -404,13 +407,13 @@ public class LexicalPreservingPrinter {
                 @Override
                 public void process(Node node) {
                     if (!node.isPhantom()) {
-                        LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
+                        storeInitialTextForOneNode(node, tokensByNode.get(node));
                     }
                 }
             }.visitBreadthFirst(root);
         });
     }
-
+    
     private static Optional<Node> findNodeForToken(Node node, Range tokenRange) {
         if (node.isPhantom()) {
             return Optional.empty();
@@ -551,10 +554,13 @@ public class LexicalPreservingPrinter {
         List<TextElement> indentation = findIndentation(node);
         boolean pendingIndentation = false;
         // Add a comment and line separator if necessary
-        node.getComment().ifPresent(n -> {
-            LineSeparator lineSeparator = n.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-            calculatedSyntaxModel.elements.add(0,new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
-            calculatedSyntaxModel.elements.add(0,new CsmChild(n));
+        node.getComment().ifPresent(comment -> {
+        	// new comment has no range so in this case we want to force the comment before the node 
+        	if (!comment.hasRange()) {
+        		LineSeparator lineSeparator = node.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
+        		calculatedSyntaxModel.elements.add(0,new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
+        		calculatedSyntaxModel.elements.add(0,new CsmChild(comment));
+        	}
         });
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
