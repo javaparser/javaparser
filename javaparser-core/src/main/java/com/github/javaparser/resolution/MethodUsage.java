@@ -20,14 +20,14 @@
  */
 package com.github.javaparser.resolution;
 
+import java.util.*;
+
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
-
-import java.util.*;
 
 /**
  * This is basically a MethodDeclaration with some TypeParameters defined.
@@ -50,12 +50,8 @@ public class MethodUsage implements ResolvedTypeParametrized {
     public MethodUsage(ResolvedMethodDeclaration declaration) {
         this.typeParametersMap = ResolvedTypeParametersMap.empty();
         this.declaration = declaration;
-        for (int i = 0; i < declaration.getNumberOfParams(); i++) {
-            paramTypes.add(declaration.getParam(i).getType());
-        }
-        for (int i = 0; i < declaration.getNumberOfSpecifiedExceptions(); i++) {
-            exceptionTypes.add(declaration.getSpecifiedException(i));
-        }
+        paramTypes.addAll(declaration.formalParameterTypes());
+        exceptionTypes.addAll(declaration.getSpecifiedExceptions());
         returnType = declaration.getReturnType();
     }
 
@@ -207,4 +203,5 @@ public class MethodUsage implements ResolvedTypeParametrized {
     public List<ResolvedType> exceptionTypes() {
         return exceptionTypes;
     }
+
 }
