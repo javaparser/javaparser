@@ -21,6 +21,13 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.model.SymbolReference.solved;
+import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
@@ -47,13 +54,6 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-import static com.github.javaparser.resolution.model.SymbolReference.solved;
-import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
-
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
  *
@@ -71,7 +71,7 @@ public class JavaParserFacade {
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
      * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
@@ -399,9 +399,9 @@ public class JavaParserFacade {
         }
 
         Optional<MethodUsage> result;
-        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration()
-                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
-                .getAllMethods();
+        ResolvedReferenceTypeDeclaration resolvedTypdeDecl = typeOfScope.asReferenceType().getTypeDeclaration()
+                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+        Set<MethodUsage> allMethods = resolvedTypdeDecl.getAllMethods();
 
         if (scope.isTypeExpr()) {
             // static methods should match all params
@@ -704,7 +704,7 @@ public class JavaParserFacade {
      * @param clazz The class to be converted.
      *
      * @return The class resolved.
-     * 
+     *
      * @deprecated instead consider SymbolSolver.classToResolvedType(Class<?> clazz)
      */
     @Deprecated
